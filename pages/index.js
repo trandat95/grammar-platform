@@ -23,6 +23,10 @@ export default function Home() {
   const [quizResults, setQuizResults] = useState(null); // { score, total, details: [...] }
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
+  // Single Question Realtime Check in Quiz: { [qId]: { checked: boolean, isCorrect: boolean, feedback: string } }
+  const [quizSingleChecks, setQuizSingleChecks] = useState({});
+  const [quizShowAnswers, setQuizShowAnswers] = useState({});
+
   // Mistakes Storage State (saved in localStorage)
   const [savedMistakes, setSavedMistakes] = useState([]);
   const [mistakeInputs, setMistakeInputs] = useState({});
@@ -75,6 +79,28 @@ export default function Home() {
     });
   };
 
+  // Human-readable type label in Vietnamese
+  const getQuestionTypeLabel = (type) => {
+    switch (type) {
+      case "FILL_IN_THE_BLANKS":
+        return "Điền từ vào chỗ trống";
+      case "REWRITE_SENTENCES":
+        return "Viết lại câu";
+      case "SENTENCE_TRANSFORMATION":
+        return "Chuyển đổi câu";
+      case "MULTIPLE_CHOICE":
+        return "Trắc nghiệm chọn đáp án";
+      case "WORD_FORMATION":
+        return "Chia dạng đúng của từ";
+      case "COMPLETE_SENTENCES":
+        return "Hoàn thành câu";
+      case "ERROR_CORRECTION":
+        return "Tìm và sửa lỗi sai";
+      default:
+        return type || "Bài tập ngữ pháp";
+    }
+  };
+
   // --- Study Exercise Handlers ---
   const handleInputChange = (questionId, value) => {
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
@@ -104,11 +130,12 @@ export default function Home() {
       },
     }));
 
-    // If incorrect, add to saved mistakes automatically
     if (!isCorrect) {
       addMistakeRecord({
         id: q.id,
         stem: q.stem,
+        starter_prompt: q.starter_prompt,
+        instruction: q.instruction || "",
         answers: answersList,
         explanation: q.explanation,
         topic_name: selectedChapter.title_vi,
@@ -165,10 +192,50 @@ export default function Home() {
     setQuizAnswers({});
     setQuizResults(null);
     setQuizSubmitted(false);
+    setQuizSingleChecks({});
+    setQuizShowAnswers({});
   };
 
   const handleQuizAnswerChange = (qId, val) => {
     setQuizAnswers((prev) => ({ ...prev, [qId]: val }));
+  };
+
+  // Immediate Single Question Check inside Quiz
+  const checkSingleQuizQuestion = (q) => {
+    const userAns = quizAnswers[q.id] || "";
+    if (!userAns.trim()) {
+      setQuizSingleChecks((prev) => ({
+        ...prev,
+        [q.id]: { checked: true, isCorrect: false, feedback: "Vui lòng nhập câu trả lời trước khi kiểm tra!" },
+      }));
+      return;
+    }
+
+    const isCorrect = isAnswerMatching(userAns, q.answers);
+    setQuizSingleChecks((prev) => ({
+      ...prev,
+      [q.id]: {
+        checked: true,
+        isCorrect: isCorrect,
+        feedback: isCorrect ? "Chính xác! 🎉" : "Chưa đúng, hãy thử kiểm tra lại hoặc xem đáp án!",
+      },
+    }));
+
+    if (!isCorrect) {
+      addMistakeRecord({
+        id: q.id,
+        stem: q.stem,
+        starter_prompt: q.starter_prompt,
+        instruction: q.instruction,
+        answers: q.answers,
+        explanation: q.explanation,
+        topic_name: q.topic_name,
+      });
+    }
+  };
+
+  const toggleQuizShowAnswer = (qId) => {
+    setQuizShowAnswers((prev) => ({ ...prev, [qId]: !prev[qId] }));
   };
 
   const submitQuiz = () => {
@@ -186,6 +253,8 @@ export default function Home() {
         newMistakesToAdd.push({
           id: q.id,
           stem: q.stem,
+          starter_prompt: q.starter_prompt,
+          instruction: q.instruction,
           answers: q.answers,
           explanation: q.explanation,
           topic_name: q.topic_name,
@@ -208,7 +277,6 @@ export default function Home() {
     });
     setQuizSubmitted(true);
 
-    // Save incorrect questions to Mistakes pool (avoid duplicates)
     if (newMistakesToAdd.length > 0) {
       const existingIds = new Set(savedMistakes.map((m) => m.id));
       const filtered = newMistakesToAdd.filter((m) => !existingIds.has(m.id));
@@ -333,7 +401,7 @@ export default function Home() {
       {currentView === "study" && (
         <div style={{ maxWidth: "1280px", margin: "2rem auto", padding: "0 1rem", display: "grid", gridTemplateColumns: "300px 1fr", gap: "1.5rem" }}>
           
-          {/* Sidebar - Chapters & Lessons */}
+          {/* Sidebar */}
           <aside style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <div style={{ backgroundColor: "#fff", padding: "1.25rem", borderRadius: "12px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #e2e8f0" }}>
               <h3 style={{ margin: "0 0 0.75rem 0", fontSize: "0.875rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748b", fontWeight: "600" }}>
@@ -628,7 +696,7 @@ export default function Home() {
               🎯 Bộ đề Quiz ngẫu nhiên 50 câu theo chủ đề
             </h2>
             <p style={{ margin: "0 0 1.25rem 0", color: "#64748b", fontSize: "0.9rem" }}>
-              Hệ thống sẽ lấy ngẫu nhiên 50 câu hỏi từ ngân hàng bài tập theo chủ đề bạn chọn. Các câu làm sai sẽ được tự động lưu lại vào mục <strong>"Câu sai cần ôn"</strong> để luyện lại.
+              Mỗi câu hỏi đều hiển thị rõ <strong>yêu cầu bài tập (Instruction)</strong> và <strong>gợi ý bắt đầu câu (Starter Prompt)</strong> nếu có. Bạn có thể bấm <strong>"Kiểm tra ngay"</strong> hoặc <strong>"Xem đáp án"</strong> từng câu bất cứ lúc nào!
             </p>
 
             <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -681,6 +749,8 @@ export default function Home() {
             {activeQuizQuestions.map((q, idx) => {
               const userAns = quizAnswers[q.id] || "";
               const detail = quizResults?.details?.find((d) => d.question.id === q.id);
+              const singleCheck = quizSingleChecks[q.id];
+              const isAnswerShown = quizShowAnswers[q.id];
 
               return (
                 <div
@@ -689,40 +759,123 @@ export default function Home() {
                     backgroundColor: "#fff",
                     padding: "1.25rem",
                     borderRadius: "10px",
-                    border: quizSubmitted ? (detail?.isCorrect ? "1px solid #86efac" : "1px solid #fca5a5") : "1px solid #e2e8f0",
+                    border: quizSubmitted
+                      ? (detail?.isCorrect ? "1px solid #86efac" : "1px solid #fca5a5")
+                      : singleCheck?.checked
+                      ? (singleCheck.isCorrect ? "1px solid #86efac" : "1px solid #fca5a5")
+                      : "1px solid #e2e8f0",
                     boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <span style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "600" }}>
+                  {/* Top Bar: Topic & Type Tag */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <span style={{ fontSize: "0.85rem", color: "#2563eb", fontWeight: "700" }}>
                       Câu {idx + 1} / {activeQuizQuestions.length} • {q.topic_name}
                     </span>
-                    <span style={{ fontSize: "0.75rem", backgroundColor: "#f1f5f9", padding: "0.2rem 0.5rem", borderRadius: "4px", color: "#475569" }}>
-                      {q.type}
+                    <span style={{ fontSize: "0.75rem", backgroundColor: "#f1f5f9", padding: "0.2rem 0.6rem", borderRadius: "4px", color: "#475569", fontWeight: "600" }}>
+                      {getQuestionTypeLabel(q.type)}
                     </span>
                   </div>
 
-                  <div style={{ fontSize: "1rem", color: "#0f172a", marginBottom: "0.75rem", lineHeight: "1.5" }}>
+                  {/* EXPLICIT INSTRUCTION BOX - Tells user what to do! */}
+                  {q.instruction && (
+                    <div style={{ backgroundColor: "#f0f9ff", borderLeft: "4px solid #0284c7", padding: "0.6rem 0.85rem", borderRadius: "4px", marginBottom: "0.75rem", fontSize: "0.875rem", color: "#0369a1" }}>
+                      <strong>📌 Yêu cầu bài tập:</strong> {q.instruction}
+                    </div>
+                  )}
+
+                  {/* Question Stem */}
+                  <div style={{ fontSize: "1rem", color: "#0f172a", marginBottom: "0.5rem", lineHeight: "1.5" }}>
                     {q.stem}
                   </div>
 
-                  <input
-                    type="text"
-                    disabled={quizSubmitted}
-                    value={userAns}
-                    placeholder="Gõ đáp án của bạn vào đây..."
-                    onChange={(e) => handleQuizAnswerChange(q.id, e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "0.6rem 0.75rem",
-                      borderRadius: "6px",
-                      border: "1px solid #cbd5e1",
-                      fontSize: "0.95rem",
-                      backgroundColor: quizSubmitted ? "#f8fafc" : "#fff",
-                      boxSizing: "border-box",
-                    }}
-                  />
+                  {/* Starter Prompt (Gợi ý từ đầu câu cho dạng viết lại câu) */}
+                  {q.starter_prompt && (
+                    <div style={{ backgroundColor: "#fefce8", border: "1px solid #fef08a", padding: "0.4rem 0.75rem", borderRadius: "6px", marginBottom: "0.75rem", fontSize: "0.875rem", color: "#854d0e" }}>
+                      <strong>👉 Viết tiếp câu bắt đầu bằng:</strong> <span style={{ fontWeight: "700", color: "#b45309" }}>"{q.starter_prompt}..."</span>
+                    </div>
+                  )}
 
+                  {/* Answer Input Field & Inline Check Action */}
+                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.75rem" }}>
+                    <input
+                      type="text"
+                      disabled={quizSubmitted}
+                      value={userAns}
+                      placeholder={q.starter_prompt ? `Viết tiếp từ "${q.starter_prompt}..."` : "Gõ đáp án của bạn vào đây..."}
+                      onChange={(e) => handleQuizAnswerChange(q.id, e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !quizSubmitted) checkSingleQuizQuestion(q);
+                      }}
+                      style={{
+                        flex: "1",
+                        minWidth: "260px",
+                        padding: "0.55rem 0.75rem",
+                        borderRadius: "6px",
+                        border: singleCheck?.checked
+                          ? (singleCheck.isCorrect ? "2px solid #22c55e" : "2px solid #ef4444")
+                          : "1px solid #cbd5e1",
+                        fontSize: "0.95rem",
+                        backgroundColor: quizSubmitted ? "#f8fafc" : "#fff",
+                      }}
+                    />
+                    
+                    {!quizSubmitted && (
+                      <>
+                        <button
+                          onClick={() => checkSingleQuizQuestion(q)}
+                          style={{
+                            backgroundColor: "#2563eb",
+                            color: "#fff",
+                            border: "none",
+                            padding: "0.55rem 1rem",
+                            borderRadius: "6px",
+                            fontSize: "0.85rem",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Kiểm tra
+                        </button>
+                        <button
+                          onClick={() => toggleQuizShowAnswer(q.id)}
+                          style={{
+                            backgroundColor: "#f1f5f9",
+                            color: "#475569",
+                            border: "1px solid #cbd5e1",
+                            padding: "0.55rem 0.85rem",
+                            borderRadius: "6px",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {isAnswerShown ? "Ẩn đáp án" : "Xem đáp án"}
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Realtime Single Check Feedback */}
+                  {!quizSubmitted && singleCheck?.checked && (
+                    <div style={{ marginTop: "0.5rem", fontSize: "0.875rem", fontWeight: "700", color: singleCheck.isCorrect ? "#15803d" : "#b91c1c" }}>
+                      {singleCheck.feedback}
+                    </div>
+                  )}
+
+                  {/* Realtime Single Answer Box (if toggled) */}
+                  {!quizSubmitted && isAnswerShown && (
+                    <div style={{ marginTop: "0.75rem", padding: "0.75rem", backgroundColor: "#eff6ff", borderRadius: "6px", border: "1px dashed #60a5fa" }}>
+                      <div style={{ fontSize: "0.85rem", color: "#1e40af", fontWeight: "600" }}>✅ Đáp án chính xác:</div>
+                      <div style={{ fontSize: "0.95rem", color: "#1d4ed8", fontWeight: "700", marginTop: "0.2rem" }}>
+                        {q.answers.join(" / ")}
+                      </div>
+                      {q.explanation && (
+                        <div style={{ fontSize: "0.8rem", color: "#475569", marginTop: "0.25rem" }}>💡 {q.explanation}</div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Submitted Quiz Final Review */}
                   {quizSubmitted && detail && (
                     <div style={{ marginTop: "0.75rem", padding: "0.75rem", borderRadius: "6px", backgroundColor: detail.isCorrect ? "#f0fdf4" : "#fef2f2" }}>
                       <div style={{ fontWeight: "700", color: detail.isCorrect ? "#166534" : "#991b1b", fontSize: "0.9rem" }}>
@@ -762,7 +915,7 @@ export default function Home() {
                   boxShadow: "0 4px 6px -1px rgba(16, 185, 129, 0.3)",
                 }}
               >
-                🏁 Nộp bài và chấm điểm
+                🏁 Nộp toàn bộ bài và tính điểm
               </button>
             </div>
           )}
@@ -832,9 +985,21 @@ export default function Home() {
                       </button>
                     </div>
 
-                    <div style={{ fontSize: "0.95rem", color: "#1e293b", marginBottom: "0.75rem", lineHeight: "1.5" }}>
+                    {item.instruction && (
+                      <div style={{ backgroundColor: "#f0f9ff", borderLeft: "3px solid #0284c7", padding: "0.4rem 0.6rem", borderRadius: "4px", marginBottom: "0.5rem", fontSize: "0.8rem", color: "#0369a1" }}>
+                        <strong>📌 Yêu cầu:</strong> {item.instruction}
+                      </div>
+                    )}
+
+                    <div style={{ fontSize: "0.95rem", color: "#1e293b", marginBottom: "0.5rem", lineHeight: "1.5" }}>
                       {item.stem}
                     </div>
+
+                    {item.starter_prompt && (
+                      <div style={{ backgroundColor: "#fefce8", padding: "0.3rem 0.6rem", borderRadius: "4px", marginBottom: "0.6rem", fontSize: "0.85rem", color: "#854d0e" }}>
+                        👉 Viết tiếp: <strong>"{item.starter_prompt}..."</strong>
+                      </div>
+                    )}
 
                     <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
                       <input
