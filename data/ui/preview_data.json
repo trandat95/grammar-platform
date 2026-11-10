@@ -1,0 +1,1813 @@
+{
+  "chapters": [
+    {
+      "id": "a8a9cfd3-5e8a-5202-aa59-fb1626eb4f95",
+      "number": 1,
+      "code": "CH01_TENSES",
+      "title_en": "Tenses",
+      "title_vi": "Các thì",
+      "lessons": [
+        {
+          "id": "ed940057-643a-5c6f-a57a-44c67e1b9846",
+          "code": "TENSE_PRES_SIMPLE",
+          "title_en": "The Present Simple Tense",
+          "title_vi": "Thì hiện tại đơn",
+          "rules": [
+            {
+              "title": "1. Thì hiện tại đơn (The Present Simple Tense)",
+              "formula": null,
+              "explanation_vi": "**1. Thì hiện tại đơn (The Present Simple Tense)**"
+            },
+            {
+              "title": "I, We, You, They + Verb (bare-infinitive) He, She, It + Verb + s/es",
+              "formula": "I, We, You, They + Verb (bare-infinitive) He, She, It + Verb + s/es",
+              "explanation_vi": null
+            },
+            {
+              "title": "Động từ chia ở hiện tại (V1). Nếu chủ ngữ ở ngôi 3 số ít, ta phải thêm *s* hoặc *es* vào sau động từ.",
+              "formula": null,
+              "explanation_vi": "Động từ chia ở hiện tại (V1). Nếu chủ ngữ ở ngôi 3 số ít, ta phải thêm *s* hoặc *es* vào sau động từ."
+            },
+            {
+              "title": "Thì hiện tại đơn diễn tả một chân lý, một sự thật hiển nhiên.",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại đơn diễn tả một chân lý, một sự thật hiển nhiên."
+            },
+            {
+              "title": "Thì hiện tại đơn diễn tả một thói quen, một hành động xảy ra thường xuyên ở hiện tại.",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại đơn diễn tả một thói quen, một hành động xảy ra thường xuyên ở hiện tại."
+            },
+            {
+              "title": "Thì hiện tại đơn còn được dùng để diên tả hành động, sự việc tương lai sẽ xảy ra theo thời gian biểu hoặc chương trình; ",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại đơn còn được dùng để diên tả hành động, sự việc tương lai sẽ xảy ra theo thời gian biểu hoặc chương trình; kế hoạch đã định theo thời gian biểu."
+            }
+          ],
+          "examples": [
+            {
+              "en": "The sun rises in the East.",
+              "vi": null
+            },
+            {
+              "en": "They live in England.",
+              "vi": null
+            },
+            {
+              "en": "I am a student.",
+              "vi": null
+            },
+            {
+              "en": "Mary often goes to school by bicycle.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "c282b298-7c8d-5fdf-95dd-b1f60c0bd2e1",
+          "code": "TENSE_PRES_CONT",
+          "title_en": "The Present Continuous Tense",
+          "title_vi": "Thì hiện tại tiếp diễn",
+          "rules": [
+            {
+              "title": "2. Thì hiên tại tiếp diễn (The Present eontinuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 2. Thì hiên tại tiếp diễn (The Present eontinuous Tense)"
+            },
+            {
+              "title": "+ am",
+              "formula": "+ am",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ is+ V-ing",
+              "formula": "+ is+ V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ are",
+              "formula": "+ are",
+              "explanation_vi": null
+            },
+            {
+              "title": "Thì hiện tại tiếp diễn diễn tả một hành động hay một sự việc đang diễn ra ngay lúc nói. Cách dùng này thường đi kèm với ",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hay một sự việc đang diễn ra ngay lúc nói. Cách dùng này thường đi kèm với các trạng từ hoặc trạng ngữ chỉ thời gian *now, right now, a"
+            },
+            {
+              "title": "Thì hiện tại tiếp diễn diễn tả một hành động hoặc sự việc nói chung đang diễn ra nhưng không nhất thiết phải thực sự diễ",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hoặc sự việc nói chung đang diễn ra nhưng không nhất thiết phải thực sự diễn ra ngay lúc nói. Cách dùng này thường đi kèm với *now, at "
+            }
+          ],
+          "examples": [
+            {
+              "en": "The children are playing football now.",
+              "vi": null
+            },
+            {
+              "en": "What are you doing at the moment?",
+              "vi": null
+            },
+            {
+              "en": "Be quiet! The baby is sleeping in the next room.",
+              "vi": null
+            },
+            {
+              "en": "I’m quite busy these days. I’m doing a course at college.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "97a9ba73-7f60-5a48-8781-cf7d07ea8af1",
+          "code": "TENSE_PRES_PERF",
+          "title_en": "The Present Perfect Tense",
+          "title_vi": "Thì hiện tại hoàn thành",
+          "rules": [
+            {
+              "title": "3. Thì hiện tại hoàn thành (The Present Perfect Tense)",
+              "formula": null,
+              "explanation_vi": "# 3. Thì hiện tại hoàn thành (The Present Perfect Tense)"
+            },
+            {
+              "title": "I, We, You, They + have",
+              "formula": "I, We, You, They + have",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ past participle (V3)",
+              "formula": "+ past participle (V3)",
+              "explanation_vi": null
+            },
+            {
+              "title": "He/ She/ It + has",
+              "formula": "He/ She/ It + has",
+              "explanation_vi": null
+            },
+            {
+              "title": "Thì hiện tại hoàn thành diễn tả một hành động hoặc sự việc vừa mới xảy ra.",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành diễn tả một hành động hoặc sự việc vừa mới xảy ra."
+            },
+            {
+              "title": "Thì hiện tại hoàn thành diễn tả một hành động được lặp đi lặp lại nhiều lần ở quá khứ và còn có thể được lặp lại ở hiện ",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành diễn tả một hành động được lặp đi lặp lại nhiều lần ở quá khứ và còn có thể được lặp lại ở hiện tại hoặc tương lai."
+            }
+          ],
+          "examples": [
+            {
+              "en": "I have just seen my sister in the park.",
+              "vi": null
+            },
+            {
+              "en": "She has finished her homework recently.",
+              "vi": null
+            },
+            {
+              "en": "Daisy has read that novel several times.",
+              "vi": null
+            },
+            {
+              "en": "I have seen “Titanic” three times.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "d819553b-ad9b-5649-b2ab-0151b3ed79b5",
+          "code": "TENSE_PRES_PERF_CONT",
+          "title_en": "The Present Perfect Continuous Tense",
+          "title_vi": "Thì hiện tại hoàn thành tiếp diễn",
+          "rules": [
+            {
+              "title": "4. Thì hiện tại hoàn thành tiếp diễn (The Present Perfect Continuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 4. Thì hiện tại hoàn thành tiếp diễn (The Present Perfect Continuous Tense)"
+            },
+            {
+              "title": "I, You, We, They + have",
+              "formula": "I, You, We, They + have",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ been + V-ing",
+              "formula": "+ been + V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "He, She, It + has",
+              "formula": "He, She, It + has",
+              "explanation_vi": null
+            },
+            {
+              "title": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động hoặc sự việc bắt đầu trong quá khứ và kéo dài *liên tục* đến hiệ",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động hoặc sự việc bắt đầu trong quá khứ và kéo dài *liên tục* đến hiện tại. Cách dùng này thường đi kèm với *since* + mốc thời gi"
+            },
+            {
+              "title": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động vừa mới kết thúc và có kết quả ở hiện tại.",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động vừa mới kết thúc và có kết quả ở hiện tại."
+            }
+          ],
+          "examples": [
+            {
+              "en": "I have been studying French for five years.",
+              "vi": null
+            },
+            {
+              "en": "They have been living in this city since 1995. How long have you been waiting for her?",
+              "vi": null
+            },
+            {
+              "en": "You’re out of breath. Have you been running?",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "2b4d81e8-b2e4-5438-90d7-cf6d74d36622",
+          "code": "TENSE_PAST_SIMPLE",
+          "title_en": "The Past Simple Tense",
+          "title_vi": "Thì quá khứ đơn",
+          "rules": [
+            {
+              "title": "5. Thì quá khứ đơn (The Past Simple Tense)",
+              "formula": null,
+              "explanation_vi": "# 5. Thì quá khứ đơn (The Past Simple Tense)"
+            },
+            {
+              "title": "Động từ có qui tắc: V-ed",
+              "formula": null,
+              "explanation_vi": "Động từ có qui tắc: V-ed"
+            },
+            {
+              "title": "+ V2/ V-ed",
+              "formula": "+ V2/ V-ed",
+              "explanation_vi": null
+            },
+            {
+              "title": "Động từ bất qui tắc: cột 2 (V2)",
+              "formula": null,
+              "explanation_vi": "Động từ bất qui tắc: cột 2 (V2)"
+            },
+            {
+              "title": "Thì quá khứ đơn diễn tả hành động đã xảy ra trong quá khứ, chấm dứt rồi và biết rõ thời gian.",
+              "formula": null,
+              "explanation_vi": "Thì quá khứ đơn diễn tả hành động đã xảy ra trong quá khứ, chấm dứt rồi và biết rõ thời gian."
+            },
+            {
+              "title": "Thì quá khứ đơn diễn tả hành động đã xảy ra suốt một khoảng thời gian trong quá khứ, nhưng nay đã",
+              "formula": null,
+              "explanation_vi": "Thì quá khứ đơn diễn tả hành động đã xảy ra suốt một khoảng thời gian trong quá khứ, nhưng nay đã"
+            }
+          ],
+          "examples": [
+            {
+              "en": "Tom went to Paris last summer.",
+              "vi": null
+            },
+            {
+              "en": "My mother left this city two years ago. He died in 1980.",
+              "vi": null
+            },
+            {
+              "en": "Mozart wrote more than 600 pieces of music.",
+              "vi": null
+            },
+            {
+              "en": "She worked as a secretary for five years before her marriage.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "d3576d3f-41af-5d79-8ace-6e7f6e0d31cc",
+          "code": "TENSE_PAST_CONT",
+          "title_en": "The Past Continuous Tense",
+          "title_vi": "Thì quá khứ tiếp diễn",
+          "rules": [
+            {
+              "title": "6. Thì quá khứ tiếp diên (The Past Continuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 6. Thì quá khứ tiếp diên (The Past Continuous Tense)"
+            },
+            {
+              "title": "+ was",
+              "formula": "+ was",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ V-ing",
+              "formula": "+ V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ were",
+              "formula": "+ were",
+              "explanation_vi": null
+            },
+            {
+              "title": "Hành động đã xảy ra và kéo dài một thời gian ở quá khứ.",
+              "formula": null,
+              "explanation_vi": "Hành động đã xảy ra và kéo dài một thời gian ở quá khứ."
+            },
+            {
+              "title": "Hành động đang xảy ra vào một thời điểm ở quá khứ.",
+              "formula": null,
+              "explanation_vi": "Hành động đang xảy ra vào một thời điểm ở quá khứ."
+            }
+          ],
+          "examples": [
+            {
+              "en": "Yesterday, Mr Moore was working in the laboratory all the afternoon.",
+              "vi": null
+            },
+            {
+              "en": "What were you doing from 3 p.m to 6 p.m yesterday?",
+              "vi": null
+            },
+            {
+              "en": "I was doing my homework at 6 p.m last Sunday.",
+              "vi": null
+            },
+            {
+              "en": "They were practising English at that time. What were you doing at this time yesterday?",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "4e272d6f-6f19-54a2-9cb0-26bc155c8050",
+          "code": "TENSE_PAST_PERF",
+          "title_en": "The Past Perfect Tense",
+          "title_vi": "Thì quá khứ hoàn thành / Tiền quá khứ",
+          "rules": [
+            {
+              "title": "7. Thì quá khứ hoàn thành/ Tiền quá khứ (The Past Perfect Tense)",
+              "formula": null,
+              "explanation_vi": "# 7. Thì quá khứ hoàn thành/ Tiền quá khứ (The Past Perfect Tense)"
+            },
+            {
+              "title": "Subject + had + past participle (V3)",
+              "formula": "Subject + had + past participle (V3)",
+              "explanation_vi": null
+            },
+            {
+              "title": "b. Cách dùng (Usage)",
+              "formula": null,
+              "explanation_vi": "# b. Cách dùng (Usage)\n\nThì quá khứ hoàn thành diễn tả một hành động quá khứ xảy ra trước một thời gian quá khứ hoặc trước một hành động quá khứ khác. (Nếu trong câu có hai hành độ"
+            }
+          ],
+          "examples": [
+            {
+              "en": "We had lived in Hue before 1975.",
+              "vi": null
+            },
+            {
+              "en": "When I got up this morning, my father had already left.",
+              "vi": null
+            },
+            {
+              "en": "After the children had finished their homework, they went to bed. It was the most difficult question that I had ever known.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "97c9789a-4040-5ea5-a3e5-0f2564470536",
+          "code": "TENSE_PAST_PERF_CONT",
+          "title_en": "The Past Perfect Continuous Tense",
+          "title_vi": "Thì quá khứ hoàn thành tiếp diễn",
+          "rules": [
+            {
+              "title": "8. Thì quá khứ hoàn thành tiếp diễn (The Past Perfect Continuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 8. Thì quá khứ hoàn thành tiếp diễn (The Past Perfect Continuous Tense)"
+            },
+            {
+              "title": "a. Cấu trúc (Form)",
+              "formula": null,
+              "explanation_vi": "**a. Cấu trúc (Form)**\n\nSubject + had + been + V-ing"
+            },
+            {
+              "title": "b. Cách dùng (Usage)",
+              "formula": null,
+              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì quá khứ hoàn thành tiếp diễn diễn tả một hành động quá khứ đã xảy ra và kéo dài liên tục cho đến khi hành động quá khứ thứ hai xảy ra (hành động thứ h"
+            }
+          ],
+          "examples": [
+            {
+              "en": "The men had been playing cards for 3 hours before I came.",
+              "vi": null
+            },
+            {
+              "en": "They had been living in London for 10 years when I met them.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "cb18128a-2a56-52c4-8761-5122d6165078",
+          "code": "TENSE_FUT_SIMPLE",
+          "title_en": "The Simple Future Tense",
+          "title_vi": "Thì tương lai đơn",
+          "rules": [
+            {
+              "title": "9. Thì tương lai đơn (The simple Future Tense)",
+              "formula": null,
+              "explanation_vi": "# 9. Thì tương lai đơn (The simple Future Tense)"
+            },
+            {
+              "title": "I, We + will/ shall",
+              "formula": "I, We + will/ shall",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ will",
+              "formula": "+ will",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ V (bare-inf.)",
+              "formula": "+ V (bare-inf.)",
+              "explanation_vi": null
+            },
+            {
+              "title": "will not = won’t shall not = shan’t",
+              "formula": null,
+              "explanation_vi": "will not = won’t shall not = shan’t"
+            },
+            {
+              "title": "Thì tương lai đơn thường diễn tả một hành động sẽ xảy ra ở tương lai.",
+              "formula": null,
+              "explanation_vi": "Thì tương lai đơn thường diễn tả một hành động sẽ xảy ra ở tương lai."
+            }
+          ],
+          "examples": [
+            {
+              "en": "He will come back next week.",
+              "vi": null
+            },
+            {
+              "en": "We will/ shall need the money on the 15th.",
+              "vi": null
+            },
+            {
+              "en": "I think Liverpool will win.",
+              "vi": null
+            },
+            {
+              "en": "I’ll phone you tonight.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "a70a252f-08aa-5099-96ca-e300f8456a3b",
+          "code": "TENSE_NEAR_FUT",
+          "title_en": "Near Future",
+          "title_vi": "Tương lai gần",
+          "rules": [
+            {
+              "title": "10. Tương lai gần (Near Future)",
+              "formula": null,
+              "explanation_vi": "# 10. Tương lai gần (Near Future)"
+            },
+            {
+              "title": "+",
+              "formula": "+",
+              "explanation_vi": null
+            },
+            {
+              "title": "We, You, They + I+",
+              "formula": "We, You, They + I+",
+              "explanation_vi": null
+            },
+            {
+              "title": "He, She, It+",
+              "formula": "He, She, It+",
+              "explanation_vi": null
+            },
+            {
+              "title": "We, You, They +",
+              "formula": "We, You, They +",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ going to + V(bare-inf)",
+              "formula": "+ going to + V(bare-inf)",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "My father is retiring.",
+              "vi": null
+            },
+            {
+              "en": "Where are you going to spend your holidays?",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "7bbef7f0-608a-54d8-bcd7-84b59846fc67",
+          "code": "TENSE_FUT_CONT",
+          "title_en": "The Future Continuous Tense",
+          "title_vi": "Thì tương lai tiếp diễn",
+          "rules": [
+            {
+              "title": "11. Thì tương lai tiếp diễn (The Future Continuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 11. Thì tương lai tiếp diễn (The Future Continuous Tense)"
+            },
+            {
+              "title": "Subject + will/shall + be + V-ing",
+              "formula": "Subject + will/shall + be + V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "Thì tương lai tiếp diễn diễn tả một hành động sẽ diễn ra và kéo dài suốt một khoảng thời gian ở tương",
+              "formula": null,
+              "explanation_vi": "Thì tương lai tiếp diễn diễn tả một hành động sẽ diễn ra và kéo dài suốt một khoảng thời gian ở tương"
+            },
+            {
+              "title": "Thì tương lai tiếp diễn diễn tả một hành động sẽ đang xảy ra vào một thời điểm ở tương lai.",
+              "formula": null,
+              "explanation_vi": "Thì tương lai tiếp diễn diễn tả một hành động sẽ đang xảy ra vào một thời điểm ở tương lai."
+            }
+          ],
+          "examples": [
+            {
+              "en": "Andrew can’t go to the party. He’ll be working all day tomorrow.",
+              "vi": null
+            },
+            {
+              "en": "He will be doing research at this time tomorrow.",
+              "vi": null
+            },
+            {
+              "en": "When you come today, I’ll be working at my desk. She will be living in this house in May (next year).",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "39030759-5e80-5ad6-b90a-a246786e25e7",
+          "code": "TENSE_FUT_PERF",
+          "title_en": "The Future Perfect Tense",
+          "title_vi": "Thì tương lai hoàn thành",
+          "rules": [
+            {
+              "title": "Subject + will/shall + have + V3",
+              "formula": "Subject + will/shall + have + V3",
+              "explanation_vi": null
+            },
+            {
+              "title": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một thời điểm ở tương lai. Cách dùng này thường được dù",
+              "formula": null,
+              "explanation_vi": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một thời điểm ở tương lai. Cách dùng này thường được dùng với các cụm từ chỉ thời gian bắt đầu bằng ***by***: *by +"
+            },
+            {
+              "title": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một hành động khác trong tương",
+              "formula": null,
+              "explanation_vi": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một hành động khác trong tương"
+            }
+          ],
+          "examples": [
+            {
+              "en": "I’ll have finished my work by noon.",
+              "vi": null
+            },
+            {
+              "en": "They’ll have built that house by July next year.",
+              "vi": null
+            },
+            {
+              "en": "When you come back, I’ll have written this letter.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "43c8255c-4c1b-590e-810b-cb031add9fe8",
+          "code": "TENSE_FUT_PERF_CONT",
+          "title_en": "The Future Perfect Continuous Tense",
+          "title_vi": "Thì tương lai hoàn thành tiếp diễn",
+          "rules": [
+            {
+              "title": "13. Thì tương lai hoàn thành tiếp diễn (The Future Perfect Continuous Tense)",
+              "formula": null,
+              "explanation_vi": "# 13. Thì tương lai hoàn thành tiếp diễn (The Future Perfect Continuous Tense)"
+            },
+            {
+              "title": "Subject + will/shall + have been + V-ing",
+              "formula": "Subject + will/shall + have been + V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "b. Cách dùng (Usage)",
+              "formula": null,
+              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì tương lai hoàn thành tiếp diễn diễn tả một hành động bắt đầu từ quá khứ và kéo dài liên tục đến một thời điểm nào đó trong tương lai.\n\nEx: By November"
+            },
+            {
+              "title": "GHI NHỚ:",
+              "formula": null,
+              "explanation_vi": "# GHI NHỚ:\n\n1. Không dùng các thì tiếp diễn (Continuous Tenses) với các động từ chỉ nhận thức, tri giác (*see, be, hear...*).\n\n2. Không dùng các thì tương lai (Future Tenses) trong"
+            }
+          ],
+          "examples": [
+            {
+              "en": "By November, we’ll have been living in this house for 10 years.",
+              "vi": null
+            },
+            {
+              "en": "By March 15th, I’ll have been working for this company for 6 years.",
+              "vi": null
+            }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "942c4f8b-6460-58cb-99aa-3085802c58ef",
+          "code": "TENSE_PRES_SIMPLE:EX_I",
+          "roman": "I",
+          "title": "Do Supply the correct verb form: The Simple Present Tense or The Present Continuous Tense.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "Be quiet! The baby (sleep)."
+            },
+            {
+              "num": 2,
+              "stem": "We seldom (eat) before 6:30."
+            },
+            {
+              "num": 3,
+              "stem": "Look! A man (run) after the train. He (want) to catch it."
+            },
+            {
+              "num": 4,
+              "stem": "The sun (set) in the West."
+            },
+            {
+              "num": 5,
+              "stem": "It (be) often hot in summer."
+            },
+            {
+              "num": 6,
+              "stem": "I (do) an exercise on the present tenses at this moment and I (think) that I (know) how to use it now."
+            },
+            {
+              "num": 7,
+              "stem": "My mother sometimes (buy) vegetables at this market."
+            },
+            {
+              "num": 8,
+              "stem": "It (be) very cold now."
+            }
+          ]
+        },
+        {
+          "id": "a2101ccf-8c61-58bc-9504-47f7509fcacc",
+          "code": "TENSE_PRES_SIMPLE:EX_II",
+          "roman": "II",
+          "title": "Supply the correct verb form: The Present Perfect or The Present Perfect Continuous.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "How long you (study) English? For 5 years."
+            },
+            {
+              "num": 2,
+              "stem": "I (wait) for two hours, but she (not come) yet."
+            },
+            {
+              "num": 3,
+              "stem": "They (live) in Ho Chi Minh City since 1975."
+            },
+            {
+              "num": 4,
+              "stem": "She (read) all the books written by Dickens. How many books you (read)?"
+            },
+            {
+              "num": 5,
+              "stem": "He (not, be) here since Christmas, I wonder where he (live) since then."
+            },
+            {
+              "num": 6,
+              "stem": "Jack (go) to Paris for a holiday. He never (be) there."
+            },
+            {
+              "num": 7,
+              "stem": "You (sleep) so far? I (ring) the bell for the last twenty minutes."
+            },
+            {
+              "num": 8,
+              "stem": "He (write) a novel for two years, but he (not finish) it yet."
+            }
+          ]
+        },
+        {
+          "id": "8bebc451-07af-5881-9ffc-b76ee27b84c5",
+          "code": "TENSE_PRES_SIMPLE:EX_III",
+          "roman": "III",
+          "title": "Supply the correct verb form: Present Tenses.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "Listen! I (think) someone (knock) at the door."
+            },
+            {
+              "num": 2,
+              "stem": "Up to the present, we (write) almost every lesson in the book."
+            },
+            {
+              "num": 3,
+              "stem": "The earth (circle) the sun once every 365 days."
+            },
+            {
+              "num": 4,
+              "stem": "The farmers (work) in the field at the moment."
+            },
+            {
+              "num": 5,
+              "stem": "How many times you (see) him since he went to Edinburgh?"
+            },
+            {
+              "num": 6,
+              "stem": "Rivers usually (flow) to the sea."
+            },
+            {
+              "num": 7,
+              "stem": "Look! The boy (cry)."
+            },
+            {
+              "num": 8,
+              "stem": "Do you know that man, who (smoke) there?"
+            }
+          ]
+        },
+        {
+          "id": "30caa1d2-ca8e-5273-b3af-f2c4cb7348c8",
+          "code": "TENSE_PRES_SIMPLE:EX_IV",
+          "roman": "IV",
+          "title": "Supply the correct verb form. Simple Past or Present Perfect",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "I (see) her before."
+            },
+            {
+              "num": 2,
+              "stem": "I (see) her last year."
+            },
+            {
+              "num": 3,
+              "stem": "Tom (never be) in Hanoi."
+            },
+            {
+              "num": 4,
+              "stem": "I (read) the novel written by Jack London several times before."
+            },
+            {
+              "num": 5,
+              "stem": "What you (do) yesterday?"
+            },
+            {
+              "num": 6,
+              "stem": "You (watch) TV last night?"
+            },
+            {
+              "num": 7,
+              "stem": "She (be) born in 1980."
+            },
+            {
+              "num": 8,
+              "stem": "He (write) a book since last year."
+            }
+          ]
+        },
+        {
+          "id": "9f5e195c-4669-52ba-9344-f8d8b79ffca4",
+          "code": "TENSE_PRES_SIMPLE:EX_V",
+          "roman": "V",
+          "title": "Supply the correct verb form: Simple Past or Past Continuous.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "When I (arrive) at this house, he still (sleep)."
+            },
+            {
+              "num": 2,
+              "stem": "The light (go) out while we (have) dinner."
+            },
+            {
+              "num": 3,
+              "stem": "Bill (have) breakfast when I (stop) at this house this morning."
+            },
+            {
+              "num": 4,
+              "stem": "As we (cross) the street, we (see) an accident."
+            },
+            {
+              "num": 5,
+              "stem": "Tom (see) a serious accident while he (stand) at the bus stop."
+            },
+            {
+              "num": 6,
+              "stem": "While my father (read) a newspaper, I (learn) my lesson and my sister (do) her homework."
+            },
+            {
+              "num": 7,
+              "stem": "The children (play) football when their mother (come) back home."
+            },
+            {
+              "num": 8,
+              "stem": "The bell (ring) while Tom (take) a bath."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e7cb4459-2d6b-50e4-ac27-bc6162cc4eec",
+      "number": 2,
+      "code": "CH02_SEQUENCE_OF_TENSES",
+      "title_en": "Sequence of Tenses",
+      "title_vi": "Sự phối hợp các thì",
+      "lessons": [
+        {
+          "id": "59d93d73-ed5f-5d06-974e-9edec3a8c8cc",
+          "code": "SEQ_MAIN_SUB",
+          "title_en": "Main Clause and Subordinate Clause",
+          "title_vi": "Sự phối hợp trong mệnh đề chính và mệnh đề phụ",
+          "rules": [
+            {
+              "title": "I. Sự phối hợp của các động từ trong mệnh đề chính (main clause) và mệnh đề phụ (subordinate clause):",
+              "formula": null,
+              "explanation_vi": "# I. Sự phối hợp của các động từ trong mệnh đề chính (main clause) và mệnh đề phụ (subordinate clause):\n\n|  |  |\n| --- | --- |\n| **MAIN CLAUSE** | **SUBORDINATE CLAUSE** |\n| Simple"
+            }
+          ],
+          "examples": [
+            {
+              "en": "People have said that London has fog.",
+              "vi": null
+            },
+            {
+              "en": "She says she has finished her homework already. She said she would visit me again. Tom says he will visit me again.",
+              "vi": null
+            },
+            {
+              "en": "They had done that was necessary. He says he was born in 1980.",
+              "vi": null
+            },
+            {
+              "en": "My teacher said that the sun rises in the East.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "30a59ac4-2902-5640-8525-2796a993e1a0",
+          "code": "SEQ_TIME_CLAUSES",
+          "title_en": "Main Clause and Adverbial Clause of Time",
+          "title_vi": "Sự phối hợp trong mệnh đề chính và mệnh đề trạng ngữ chỉ thời gian",
+          "rules": [
+            {
+              "title": "Present Tenses: Tất cả các thì hiện tại tùy theo ngữ cảnh của câu.",
+              "formula": null,
+              "explanation_vi": "Present Tenses: Tất cả các thì hiện tại tùy theo ngữ cảnh của câu."
+            },
+            {
+              "title": "Past Tenses: Tất cả các thì quá khứ tùy ngữ cảnh của câu.",
+              "formula": null,
+              "explanation_vi": "Past Tenses: Tất cả các thì quá khứ tùy ngữ cảnh của câu."
+            },
+            {
+              "title": "Future Tenses: Tất cả các thì tương lai tùy ngữ cảnh của câu.",
+              "formula": null,
+              "explanation_vi": "Future Tenses: Tất cả các thì tương lai tùy ngữ cảnh của câu."
+            },
+            {
+              "title": "when/ as: *khi* - until/ till: *cho đến khi*",
+              "formula": null,
+              "explanation_vi": "when/ as: *khi* - until/ till: *cho đến khi*"
+            },
+            {
+              "title": "just as: *ngay khi* - whenever: *bất cứ khi nào*",
+              "formula": null,
+              "explanation_vi": "just as: *ngay khi* - whenever: *bất cứ khi nào*"
+            },
+            {
+              "title": "while: *trong khi* - no sooner... than: *ngay khi*",
+              "formula": null,
+              "explanation_vi": "while: *trong khi* - no sooner... than: *ngay khi*"
+            }
+          ],
+          "examples": [
+            {
+              "en": "He never goes home before he has finished his work.",
+              "vi": null
+            },
+            {
+              "en": "I often read a newspaper while I am waiting for the bus.",
+              "vi": null
+            },
+            {
+              "en": "We will go as soon as you have finished your work. It was raining hard when I got there.",
+              "vi": null
+            },
+            {
+              "en": "The train had already left when I arrived at the station. Please wait here until I come back.",
+              "vi": null
+            }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "5b98df01-e91a-5031-8c5f-d09a69c40469",
+          "code": "SEQ_TIME_CLAUSES:EX_I",
+          "roman": "I",
+          "title": "Supply the correct verb forms.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "He thinks that it (rain) tonight."
+            },
+            {
+              "num": 2,
+              "stem": "She said that she (get) married soon."
+            },
+            {
+              "num": 3,
+              "stem": "Bill said that he (lose) his bicycle."
+            },
+            {
+              "num": 4,
+              "stem": "He knew that I (come) the following week."
+            },
+            {
+              "num": 5,
+              "stem": "She understood that we (promise) to go."
+            },
+            {
+              "num": 6,
+              "stem": "I was taught that the sun (be) bigger than the moon."
+            },
+            {
+              "num": 7,
+              "stem": "The boy knew that an hour (have) sixty minutes."
+            },
+            {
+              "num": 8,
+              "stem": "I didn’t know what time it (be), so I (turn) on the radio."
+            }
+          ]
+        },
+        {
+          "id": "ac9c422a-14ad-5308-a56c-c7c1a984a590",
+          "code": "SEQ_TIME_CLAUSES:EX_II",
+          "roman": "II",
+          "title": "Choose the correct forms of the verbs in parentheses.",
+          "type": "MULTIPLE_CHOICE",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "I see that Tom (writes/ is writing) his composition."
+            },
+            {
+              "num": 2,
+              "stem": "He says that he (looks/ will look) for a job next week."
+            },
+            {
+              "num": 3,
+              "stem": "They think he (was/ would be) here last night."
+            },
+            {
+              "num": 4,
+              "stem": "He tells us that he (was/ has been) to the mountains before."
+            },
+            {
+              "num": 5,
+              "stem": "I hope that he (will be/ would be) able to attend."
+            },
+            {
+              "num": 6,
+              "stem": "He wants to do it before his father (will come/ comes)."
+            },
+            {
+              "num": 7,
+              "stem": "People have said that the sun (rise) in the East."
+            },
+            {
+              "num": 8,
+              "stem": "He says he (does/ will do) it some time."
+            }
+          ]
+        },
+        {
+          "id": "60311a9d-2bec-5c90-adb3-4dbe84b472de",
+          "code": "SEQ_TIME_CLAUSES:EX_III",
+          "roman": "III",
+          "title": "Supply the correct verb forms.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "After (leave) (1) school when she was 18, Laura (go) (2) to Bristol university for three years. While she (be) (3) at university, Laura (join) (4) a university folk group and started singing. It was at this time that she (write) (5) her famous song “The Price of Peace”."
+            },
+            {
+              "num": 2,
+              "stem": "One of the first novels in history of literature (be) (1) written in England in 1719. It (be) (2) Robinson Crusoe by Daniel Dofoe. He (bear) (3) in London in a rich family. When Daniel (be) (4) a schoolboy, he (begin) (5) to write stories. After (leave) (6) school he (work) (7) in his father’s shop and (write) (8) articles for newspapers. Dofoe (visit) (9) many countries and (meet) (10) many people. That helped him much in his writings."
+            },
+            {
+              "num": 3,
+              "stem": "A friend of mine, Judith Nelson, (presently, work) (1) in the international sales division at an electronics firm. She (just, return) (2) from a trip to Japan. She (be) (3) asked to go there because she can speak Japanese. For four years, she (never have) (4) the opportunity to use her Japanese until she (go) (5) to Tokyo last month. While she (be) (6) there, she (speak) (7) Japanese everyday and (enjoy) (8) very much of it."
+            },
+            {
+              "num": 4,
+              "stem": "Ever since the day I (decide) (1) to move to London, I (worry) (2) whether the decision I (take) (3) was the right one. As I (already sell) (4) my house and (arrange) (5) a new job, it is too late to change my mind. However, since then I (hear) (6) a lot of negative things about living in the Capital and lately some of them (begin) (7) to bother me. I (grow) (8) up in a small town and have spent all my life there."
+            },
+            {
+              "num": 5,
+              "stem": "Mary (have) (1) to go to New York last week, but she almost (miss) (2) the plane. She (stand) (3) in the queue at the check-in desk when she suddenly (realize) (4) that she (leave) (5) her passport at home. Fortunately, she (not live) (6) very far from the airport so she (have) (7) time to go back home to get the passport. She (get) (8) back to the airport just in time for her flight."
+            },
+            {
+              "num": 6,
+              "stem": "Rob Fellow (come) (1) from England. He (come) (2) to Paris six months ago to learn French. He (start) (3) learning French at school in England when he was eleven so he (learn) (4) it for nearly 10 years. He just (take) (5) an exam. If he passes, he (move) (6) into the next class. He (be) (7) excited today because his parents (come) (8) tomorrow to stay with him for a few days."
+            },
+            {
+              "num": 7,
+              "stem": "(Bear) (1) in Scotland in 1847, Alexander Bell (become) (2) interested very early in the methods of human communication. He (influence) (3) by his father and grandfather, who (spend) (4) years working with deaf people and those with faulty speech. Bell’s father even (go) (5) so far as to develop a system of so-called “visible speech” for the deaf. He (use) (6) sketches of the different positions of the lips and tongue. This science of visible speech (form) (7) the foundation of young Bell’s knowledge of the mechanics of human speech. But the young boy’s knowledge of other subjects (not/ advance) (8) quite as rapidly."
+            },
+            {
+              "num": 8,
+              "stem": "While I (walk) (1) across the campus the other day, I (meet) (2) my old friend, John, whom I (not see)\n(3) since July 10. Naturally we (stop) (4) (talk) (5) to each other for a few minutes. I asked him how he (do)\n(6) in his classes this semester."
+            }
+          ]
+        },
+        {
+          "id": "1789c620-f4c5-5f59-b45f-a18d4ccecdff",
+          "code": "SEQ_TIME_CLAUSES:EX_IV",
+          "roman": "IV",
+          "title": "Complete each of the following sentences with an adverbial clause of time.",
+          "type": "COMPLETE_SENTENCES",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "Don’t bother me while I…"
+            },
+            {
+              "num": 2,
+              "stem": "You have to listen to your teacher while..."
+            },
+            {
+              "num": 3,
+              "stem": "You should do a good deed whenever..."
+            },
+            {
+              "num": 4,
+              "stem": "He set off for another journey as soon as..."
+            },
+            {
+              "num": 5,
+              "stem": "It began to rain just as..."
+            },
+            {
+              "num": 6,
+              "stem": "She had written three novels before..."
+            },
+            {
+              "num": 7,
+              "stem": "I’ll have taken three courses by the time..."
+            },
+            {
+              "num": 8,
+              "stem": "The dog has followed its master ever since..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bee1280f-94f5-5ce1-b3ff-0eba4f443e4f",
+      "number": 3,
+      "code": "CH03_CLAUSES_AND_PHRASES",
+      "title_en": "Clauses and Phrases",
+      "title_vi": "Mệnh đề và Cụm từ",
+      "lessons": [
+        {
+          "id": "2b7a3c8d-0da7-577d-92da-f02c59aaf4b3",
+          "code": "CLAUSE_CONDITION",
+          "title_en": "Clauses of Condition",
+          "title_vi": "Mệnh đề chỉ điều kiện",
+          "rules": [
+            {
+              "title": "CLAUSES AND PHRASES (MỆNH ĐỀ VÀ CỤM TỪ) CLAUSES OF CONDITION (MỆNH ĐỀ CHỈ ĐIỀU KIỆN)",
+              "formula": null,
+              "explanation_vi": "# CLAUSES AND PHRASES (MỆNH ĐỀ VÀ CỤM TỪ) CLAUSES OF CONDITION (MỆNH ĐỀ CHỈ ĐIỀU KIỆN)"
+            },
+            {
+              "title": "1. Mệnh đề điều kiện là mệnh đề phụ chỉ điều kiện, được nối với mệnh đề chính bởi liên từ IF nên còn được gọi là mệnh đề",
+              "formula": null,
+              "explanation_vi": "**1. Mệnh đề điều kiện là mệnh đề phụ chỉ điều kiện, được nối với mệnh đề chính bởi liên từ IF nên còn được gọi là mệnh đề if (*If-clause*). Câu có mệnh đề điều kiện được gọi là câ"
+            },
+            {
+              "title": " UNLESS",
+              "formula": " UNLESS",
+              "explanation_vi": null
+            },
+            {
+              "title": " khẳng định (mệnh đề chính không thay đổi)",
+              "formula": " khẳng định (mệnh đề chính không thay đổi)",
+              "explanation_vi": null
+            },
+            {
+              "title": " khẳng định (đổi động từ trong mệnh đề chính sang thể phủ định)",
+              "formula": " khẳng định (đổi động từ trong mệnh đề chính sang thể phủ định)",
+              "explanation_vi": null
+            },
+            {
+              "title": "3. Ta cũng có thể diễn tả câu điều kiện mà không cần dùng IF hay UNLESS bằng cách đảo chủ ngữ",
+              "formula": null,
+              "explanation_vi": "# 3. Ta cũng có thể diễn tả câu điều kiện mà không cần dùng IF hay UNLESS bằng cách đảo chủ ngữ\n\n**ra sau *should, were* hoặc *had*. Lưu ý không được làm với động từ khác.**\n\nEx: I"
+            }
+          ],
+          "examples": [
+            {
+              "en": "If I have time, I’ll help you.",
+              "vi": null
+            },
+            {
+              "en": "If you heat ice it turns/ will turn to water. If I were you, I would come there.",
+              "vi": null
+            },
+            {
+              "en": "He would have passed his exam if he had studied hard.",
+              "vi": null
+            },
+            {
+              "en": "If you don’t study hard, you’ll fail in the exam.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "f6b13b12-ec08-5350-8510-7d9548ff3375",
+          "code": "CLAUSE_WISH",
+          "title_en": "Clauses after Wish, If Only",
+          "title_vi": "Mệnh đề sau Wish, If Only",
+          "rules": [
+            {
+              "title": "CLAUSE AFTER WISH, IF ONLY",
+              "formula": null,
+              "explanation_vi": "# CLAUSE AFTER WISH, IF ONLY\n\n**(MỆNH ĐỀ SAU *WISH, IF ONLY*)**\n\nSau **wish** (*ước, ước gì, mong*) và **if only** (*ước gì, giá mà*), người ta thuờng dùng một mệnh đề chỉ một điều"
+            },
+            {
+              "title": "S + wish",
+              "formula": "S + wish",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ S + would/ could + V(bare-inf.)",
+              "formula": "+ S + would/ could + V(bare-inf.)",
+              "explanation_vi": null
+            },
+            {
+              "title": "S + wish",
+              "formula": "S + wish",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ S + V(Past simple/ Past subjunctive)",
+              "formula": "+ S + V(Past simple/ Past subjunctive)",
+              "explanation_vi": null
+            },
+            {
+              "title": "S + wish",
+              "formula": "S + wish",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "I wish it would stop raining!",
+              "vi": null
+            },
+            {
+              "en": "I wish I could attend your wedding next week.",
+              "vi": null
+            },
+            {
+              "en": "If only I could take the trip with you next Sunday. If only they would talk to each other.",
+              "vi": null
+            },
+            {
+              "en": "I wish I was/ were rich. (But I am poor now.) I can’t swim. I wish I could swim.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "7b31dbe0-5f6c-5fb2-a470-c632168a17d0",
+          "code": "CLAUSE_PURPOSE",
+          "title_en": "Phrases and Clauses of Purpose",
+          "title_vi": "Cụm từ và mệnh đề chỉ mục đích",
+          "rules": [
+            {
+              "title": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ MỤC ĐÍCH)",
+              "formula": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ MỤC ĐÍCH)",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ V(bare-inf.)",
+              "formula": "+ V(bare-inf.)",
+              "explanation_vi": null
+            },
+            {
+              "title": "2. Để diễn tả mục đích phủ định ta dùng một cụm từ bắt đầu bằng *so as not to* hoặc *in order not to*.",
+              "formula": null,
+              "explanation_vi": "2. Để diễn tả mục đích phủ định ta dùng một cụm từ bắt đầu bằng *so as not to* hoặc *in order not to*."
+            },
+            {
+              "title": "S + V",
+              "formula": "S + V",
+              "explanation_vi": null
+            },
+            {
+              "title": "in order that +",
+              "formula": "in order that +",
+              "explanation_vi": null
+            },
+            {
+              "title": "will/would S + can/could",
+              "formula": "will/would S + can/could",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "I try to study to pass my next exam.",
+              "vi": null
+            },
+            {
+              "en": "We worked very hard in order to complete the project in time. He does morning exercise regularly so as to improve his health.",
+              "vi": null
+            },
+            {
+              "en": "She got up early so as not to miss the bus.",
+              "vi": null
+            },
+            {
+              "en": "He studies hard so as not to fail in the exam.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "d2450053-6a9c-5196-8dc1-c42e9b9726d1",
+          "code": "CLAUSE_RESULT",
+          "title_en": "Phrases and Clauses of Result",
+          "title_vi": "Cụm từ và mệnh đề chỉ kết quả",
+          "rules": [
+            {
+              "title": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ KẾT QUẢ)",
+              "formula": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ KẾT QUẢ)",
+              "explanation_vi": null
+            },
+            {
+              "title": "I. Cụm từ chỉ kết quả (phrases of result)",
+              "formula": null,
+              "explanation_vi": "**I. Cụm từ chỉ kết quả (phrases of result)**\n\nCụm từ chỉ kết quả thường có TOO (*quá*) hoặc ENOUGH (*đủ*)."
+            },
+            {
+              "title": "S + be (look, seem, become, get...) + too + adj (+ for + O) + to-infinitive S + V(thường) + too + adv (+ for + O) + to-infinitive.",
+              "formula": "S + be (look, seem, become, get...) + too + adj (+ for + O) + to-infinitive S + V(thường) + too + adv (+ for + O) + to-infinitive.",
+              "explanation_vi": null
+            },
+            {
+              "title": "Lưu ý:",
+              "formula": null,
+              "explanation_vi": "Lưu ý:\n\n*Too* thường được dùng trong câu có nghĩa phủ định *(quá... không thể).*"
+            },
+            {
+              "title": "S + be + adj + enough (+ for + O) + to-infinitive",
+              "formula": "S + be + adj + enough (+ for + O) + to-infinitive",
+              "explanation_vi": null
+            },
+            {
+              "title": "S + V(thường) + adv + enough (+ for + O) + to-infinitive",
+              "formula": "S + V(thường) + adv + enough (+ for + O) + to-infinitive",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "He is too short to play basketball.",
+              "vi": null
+            },
+            {
+              "en": "Tom ran too slowly to become the winner of the race. This book is too dull for you to read.",
+              "vi": null
+            },
+            {
+              "en": "Mary isn’t old enough to drive a car.",
+              "vi": null
+            },
+            {
+              "en": "She speaks Spanish well enough to be an interpreter. It is cold enough to wear a heavy jacket.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "df1f9c6e-80c4-53df-ae1d-5f77d46bf455",
+          "code": "CLAUSE_REASON",
+          "title_en": "Phrases and Clauses of Reason",
+          "title_vi": "Cụm từ và mệnh đề chỉ lý do",
+          "rules": [
+            {
+              "title": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ LÝ DO)",
+              "formula": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ LÝ DO)",
+              "explanation_vi": null
+            },
+            {
+              "title": "because of/ due to/ owing to + noun/ pronoun/ gerund phrase",
+              "formula": "because of/ due to/ owing to + noun/ pronoun/ gerund phrase",
+              "explanation_vi": null
+            },
+            {
+              "title": "Because/ since/ As + S + V",
+              "formula": "Because/ since/ As + S + V",
+              "explanation_vi": null
+            },
+            {
+              "title": "Khi đổi từ mệnh đề sang cụm từ, nếu 2 chủ ngữ giống nhau ta có thể dùng Gerund phrase.",
+              "formula": null,
+              "explanation_vi": "Khi đổi từ mệnh đề sang cụm từ, nếu 2 chủ ngữ giống nhau ta có thể dùng Gerund phrase."
+            }
+          ],
+          "examples": [
+            {
+              "en": "The students arrived late because of/ due to the traffic jam.",
+              "vi": null
+            },
+            {
+              "en": "We were there because of him.",
+              "vi": null
+            },
+            {
+              "en": "She stayed at home because of feeling unwell.",
+              "vi": null
+            },
+            {
+              "en": "He came ten minutes late because he missed the first bus. Since/ As he missed the first bus, he came ten minutes late. She was worried because it started to rain.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "70508f51-c2e6-5854-8eec-cbec846605b6",
+          "code": "CLAUSE_CONCESSION",
+          "title_en": "Phrases and Clauses of Concession",
+          "title_vi": "Cụm từ và mệnh đề chỉ sự nhượng bộ",
+          "rules": [
+            {
+              "title": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ SỰ NHƯỢNG BỘ)",
+              "formula": "(CỤM TỪ VÀ MỆNH ĐỀ CHỈ SỰ NHƯỢNG BỘ)",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ noun/noun phrase/gerund phrase",
+              "formula": "+ noun/noun phrase/gerund phrase",
+              "explanation_vi": null
+            },
+            {
+              "title": "Cụm từ chỉ sự nhượng bộ có thể được đặt ở trước hoặc sau mệnh đề chính.",
+              "formula": null,
+              "explanation_vi": "Cụm từ chỉ sự nhượng bộ có thể được đặt ở trước hoặc sau mệnh đề chính."
+            },
+            {
+              "title": "although/ though/ even though + S + V",
+              "formula": "although/ though/ even though + S + V",
+              "explanation_vi": null
+            },
+            {
+              "title": "No matter + who/ what/ when/ where/ why/ how (adj, adv) + S + V Whatever (+ N) + S + V",
+              "formula": "No matter + who/ what/ when/ where/ why/ how (adj, adv) + S + V Whatever (+ N) + S + V",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "Despite his physical handicap, he has become a successful businessman.",
+              "vi": null
+            },
+            {
+              "en": "In spite of having a headache I enjoyed the film. We understood him in spite of his accent.",
+              "vi": null
+            },
+            {
+              "en": "Although the weather was very bad, we had a picnic. We took many pictures though the sky was cloudy.",
+              "vi": null
+            },
+            {
+              "en": "Even though I didn’t know anybody at the party, I had a nice time.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "58b2c554-c4af-5029-96c6-a732396b109b",
+          "code": "CLAUSE_AS_IF_TIME_RATHER",
+          "title_en": "Clauses after As If, As Though, It's High Time, Would Rather",
+          "title_vi": "Mệnh đề sau As If, As Though, It's Time, Would Rather",
+          "rules": [
+            {
+              "title": "CLAUSES AFTER AS IF, AS THOUGH, IT’S HIGH TIME, IT’S TIME, WOULD RATHER",
+              "formula": null,
+              "explanation_vi": "# CLAUSES AFTER AS IF, AS THOUGH, IT’S HIGH TIME, IT’S TIME, WOULD RATHER"
+            },
+            {
+              "title": "S + V(present)",
+              "formula": "S + V(present)",
+              "explanation_vi": null
+            },
+            {
+              "title": "+",
+              "formula": "+",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ S + V (past simple/ Past Subjunctive)",
+              "formula": "+ S + V (past simple/ Past Subjunctive)",
+              "explanation_vi": null
+            },
+            {
+              "title": "S + V(past) +",
+              "formula": "S + V(past) +",
+              "explanation_vi": null
+            },
+            {
+              "title": "+ (for + O) + to-infinitive",
+              "formula": "+ (for + O) + to-infinitive",
+              "explanation_vi": null
+            }
+          ],
+          "examples": [
+            {
+              "en": "The old lady dresses as if it was/ were winter even in the summer. (But it is not winter.) He behaves as though he owned the place. (But he doesn’t own it.)",
+              "vi": null
+            },
+            {
+              "en": "He acts as though he was/ were rich. (But he is not rich.)",
+              "vi": null
+            },
+            {
+              "en": "Tom looked tired as if he had worked very hard. (But he didn’t work hard.) The child ate as though he had been hungry for a long time.",
+              "vi": null
+            },
+            {
+              "en": "He looked as if he hadn’t taken a bath for months.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "d11ac599-a7fb-5863-a4eb-e12f2b4a00bf",
+          "code": "CLAUSE_NOUN",
+          "title_en": "Noun Clauses",
+          "title_vi": "Mệnh đề danh từ",
+          "rules": [
+            {
+              "title": "NOUN CLAUSES",
+              "formula": null,
+              "explanation_vi": "# NOUN CLAUSES\n\n**(MỆNH ĐỀ DANH TỪ)**\n\nMệnh đề danh từ (noun clause) là một mệnh đề phụ có chức năng của một danh từ. Mệnh đề danh từ được nối với mệnh đề chính bằng THAT hoặc các "
+            },
+            {
+              "title": "1. Mệnh đề danh từ làm chủ ngữ trong câu (Subject of a sentence)",
+              "formula": null,
+              "explanation_vi": "# 1. Mệnh đề danh từ làm chủ ngữ trong câu (Subject of a sentence)\n\nEx: What he said was not true.\n\nWhether the weather will change or not is difficult to tell. What you think is n"
+            },
+            {
+              "title": "2. Mệnh đề danh từ làm tân ngữ trong câu (Object of a sentence)",
+              "formula": null,
+              "explanation_vi": "# 2. Mệnh đề danh từ làm tân ngữ trong câu (Object of a sentence)\n\nEx: I’ll tell you where she is.\n\nI didn’t believe what he said.\n\nHe said that he had seen me before."
+            },
+            {
+              "title": "3. Mệnh đề danh từ làm bổ ngữ (Complement)",
+              "formula": null,
+              "explanation_vi": "# 3. Mệnh đề danh từ làm bổ ngữ (Complement)\n\nEx: I consider him what a man should be.\n\nMoney is what she needs."
+            },
+            {
+              "title": "4. Mệnh đề danh từ làm túc từ cho giới từ (Object of a preposition)",
+              "formula": null,
+              "explanation_vi": "# 4. Mệnh đề danh từ làm túc từ cho giới từ (Object of a preposition)\n\nEx: It all depends on when you come.\n\nYou are responsible for what you have done."
+            }
+          ],
+          "examples": [
+            {
+              "en": "What he said was not true.",
+              "vi": null
+            },
+            {
+              "en": "Whether the weather will change or not is difficult to tell. What you think is not my problem.",
+              "vi": null
+            },
+            {
+              "en": "I’ll tell you where she is.",
+              "vi": null
+            },
+            {
+              "en": "I didn’t believe what he said.",
+              "vi": null
+            }
+          ]
+        },
+        {
+          "id": "7394aa4c-482c-555d-88cb-30186a9943db",
+          "code": "CLAUSE_RELATIVE",
+          "title_en": "Relative Clauses",
+          "title_vi": "Mệnh đề quan hệ",
+          "rules": [
+            {
+              "title": "RELATIVE CLAUSES",
+              "formula": null,
+              "explanation_vi": "# RELATIVE CLAUSES\n\n**(MỆNH ĐỀ QUAN HỆ)**\n\nMệnh đề quan hệ (relative clause) còn được gọi là mệnh đề tính ngữ (adjective clause) vì nó là một mệnh đề phụ được dùng để bổ nghĩa cho "
+            },
+            {
+              "title": "I. Cách dùng đại từ quan hệ và trạng từ quan hệ trong mệnh đề quan hệ.",
+              "formula": null,
+              "explanation_vi": "# I. Cách dùng đại từ quan hệ và trạng từ quan hệ trong mệnh đề quan hệ."
+            },
+            {
+              "title": "1. WHO:** *Who* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm chủ ngữ (subject) hoặc tân",
+              "formula": null,
+              "explanation_vi": "**1. WHO:** *Who* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: The man who is standing over"
+            },
+            {
+              "title": "2. WHOM:** *Whom* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm tân ngữ (object) cho",
+              "formula": null,
+              "explanation_vi": "**2. WHOM:** *Whom* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm tân ngữ (object) cho\n\nđộng từ đứng sau nó.\n\nEx: The woman whom/ who you saw yesterday is my aunt."
+            },
+            {
+              "title": "3. WHICH**: *Which* là đại từ quan hệ chỉ vật, đứng sau danh từ chỉ vật để làm chủ ngữ (subject) hoặc tân",
+              "formula": null,
+              "explanation_vi": "**3. WHICH**: *Which* là đại từ quan hệ chỉ vật, đứng sau danh từ chỉ vật để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: This is the book which I lik"
+            },
+            {
+              "title": "4.* THAT:** *That* là đại từ quan hệ chỉ cả người lẫn vật. *That* có thể được dùng thay cho *who, whom, which",
+              "formula": null,
+              "explanation_vi": "***4.* THAT:** *That* là đại từ quan hệ chỉ cả người lẫn vật. *That* có thể được dùng thay cho *who, whom, which*\n\ntrong mệnh đề quan hệ xác định (defining relative clause).\n\nEx: T"
+            }
+          ],
+          "examples": [
+            {
+              "en": "The man who is standing over there is Mr. Pike.",
+              "vi": null
+            },
+            {
+              "en": "That is the girl who I told you about.",
+              "vi": null
+            },
+            {
+              "en": "The woman whom/ who you saw yesterday is my aunt.",
+              "vi": null
+            },
+            {
+              "en": "The boy whom/ who we are looking for is Tom.",
+              "vi": null
+            }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": "ba8e20f3-51b8-55de-8896-7b5dab989f3d",
+          "code": "CLAUSE_CONDITION:EX_I",
+          "roman": "I",
+          "title": "Put the verbs in brackets into the correct tenses.",
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "If I see him, I (give) him a gift."
+            },
+            {
+              "num": 2,
+              "stem": "If I had a typewriter, I (type) it myself."
+            },
+            {
+              "num": 3,
+              "stem": "If I had known that you were in hospital, I (visit) you."
+            },
+            {
+              "num": 4,
+              "stem": "You could make better progress if you (attend) class regularly."
+            },
+            {
+              "num": 5,
+              "stem": "If I (know) his telephone number, I’d give it to you."
+            },
+            {
+              "num": 6,
+              "stem": "If you (arrive) ten minutes earlier, you would have got a seat."
+            },
+            {
+              "num": 7,
+              "stem": "He could get a job easily if he (have) a degree."
+            },
+            {
+              "num": 8,
+              "stem": "I shouldn’t have believed it if I (not see) it with my own eyes."
+            }
+          ]
+        },
+        {
+          "id": "f1cfbe36-54d0-5033-8b3a-d93b515cf07c",
+          "code": "CLAUSE_CONDITION:EX_II",
+          "roman": "II",
+          "title": "Use UNLESS instead of IF.",
+          "type": "SENTENCE_TRANSFORMATION",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "If you are not careful, you will cut yourself with that knife."
+            },
+            {
+              "num": 2,
+              "stem": "If you do not like this one, I’ll bring you another."
+            },
+            {
+              "num": 3,
+              "stem": "I’ll not be able to do any work if I do not have a quiet room."
+            },
+            {
+              "num": 4,
+              "stem": "If she does not hurry, she’ll be late."
+            },
+            {
+              "num": 5,
+              "stem": "If we had more rain, our crops would be better."
+            },
+            {
+              "num": 6,
+              "stem": "The crops would have been ruined if the flood had risen higher."
+            },
+            {
+              "num": 7,
+              "stem": "If you had not sneezed, he wouldn’t have known that we were there."
+            },
+            {
+              "num": 8,
+              "stem": "If she did her hair differently, she would look quite nice."
+            }
+          ]
+        },
+        {
+          "id": "83609655-f7a2-5e29-9501-7d2c67d6dfcb",
+          "code": "CLAUSE_CONDITION:EX_III",
+          "roman": "III",
+          "title": "Make conditional sentences without conjunctions.",
+          "type": "SENTENCE_TRANSFORMATION",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "If I were you, I’d accept the job."
+            },
+            {
+              "num": 2,
+              "stem": "If you had told me that he never paid his debts, I wouldn’t have lent him money."
+            },
+            {
+              "num": 3,
+              "stem": "If he had known your telephone number he would have rung you."
+            },
+            {
+              "num": 4,
+              "stem": "If it were nice, we would go for a walk."
+            },
+            {
+              "num": 5,
+              "stem": "I would come to her wedding if I were invited."
+            },
+            {
+              "num": 6,
+              "stem": "Would you visit me if I were sent to prison?"
+            },
+            {
+              "num": 7,
+              "stem": "Would you have written to her if you had known her address?"
+            },
+            {
+              "num": 8,
+              "stem": "What would you do if today were a holiday?"
+            }
+          ]
+        },
+        {
+          "id": "593cdf10-62f7-5008-a734-ed9c807575c7",
+          "code": "CLAUSE_CONDITION:EX_IV",
+          "roman": "IV",
+          "title": "Complete the following sentences.",
+          "type": "COMPLETE_SENTENCES",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "If I were the Prime Minister, I..."
+            },
+            {
+              "num": 2,
+              "stem": "He could buy a new car if..."
+            },
+            {
+              "num": 3,
+              "stem": "If I had more time,..."
+            },
+            {
+              "num": 4,
+              "stem": "If he hadn’t been ill,..."
+            },
+            {
+              "num": 5,
+              "stem": "They could have passed the exam if they..."
+            },
+            {
+              "num": 6,
+              "stem": "We could have come with you if we..."
+            },
+            {
+              "num": 7,
+              "stem": "If her parents had been richer,..."
+            },
+            {
+              "num": 8,
+              "stem": "If he had come yesterday,..."
+            }
+          ]
+        },
+        {
+          "id": "6c5bd800-7f72-5724-ba8b-2acf0526573d",
+          "code": "CLAUSE_CONDITION:EX_V",
+          "roman": "V",
+          "title": "Make conditional sentences according to the facts provided.",
+          "type": "SENTENCE_TRANSFORMATION",
+          "questions": [
+            {
+              "num": 1,
+              "stem": "Keep silent or you’ll wake the baby up."
+            },
+            {
+              "num": 2,
+              "stem": "Because you don’t leave immediately, I call a policeman."
+            },
+            {
+              "num": 3,
+              "stem": "I don’t know her number, so I don’t ring her up."
+            },
+            {
+              "num": 4,
+              "stem": "Go right now or you’ll be late for the train."
+            },
+            {
+              "num": 5,
+              "stem": "As she is often absent from class, she can’t keep pace with her classmates."
+            },
+            {
+              "num": 6,
+              "stem": "I couldn’t write to Alice because I didn’t know her address."
+            },
+            {
+              "num": 7,
+              "stem": "I don’t know the answer, so I can’t tell you."
+            },
+            {
+              "num": 8,
+              "stem": "We got lost because we didn’t have a map."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_chapters": 3,
+    "total_lessons": 24,
+    "total_rules": 204,
+    "total_examples": 248,
+    "total_questions": 1036,
+    "total_answers": 1036
+  }
+}
