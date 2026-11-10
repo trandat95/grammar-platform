@@ -1,0 +1,616 @@
+// =============================================================================
+// PROJECT: English Grammar Learning Platform
+// Prisma ORM Schema (schema.prisma) — Compatible with Next.js API & Supabase
+// =============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres", "postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [pgcrypto, pg_trgm, unaccent]
+}
+
+enum BookSectionType {
+  CHAPTER_INTRO
+  LESSON_UNIT
+  THEORY_BLOCK
+  EXERCISE_BLOCK
+  ANSWER_KEY_BLOCK
+  PRACTICE_TEST_BLOCK
+
+  @@map("book_section_type")
+}
+
+enum LessonSectionType {
+  OVERVIEW
+  FORMULA_AND_FORM
+  USAGE
+  GRAMMAR_FORM
+  SIGNAL_WORDS
+  NOTE
+  CLASSIFICATION
+  FUNCTION
+  THEORY
+
+  @@map("lesson_section_type")
+}
+
+enum GrammarRuleType {
+  FORMULA
+  USAGE_RULE
+  CONSTRAINT_NOTE
+  THEORY_SUMMARY
+
+  @@map("grammar_rule_type")
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  FILL_IN_THE_BLANKS
+  COMPLETE_SENTENCES
+  SENTENCE_TRANSFORMATION
+  REWRITE_SENTENCES
+  ERROR_CORRECTION
+  WORD_FORMATION
+  SENTENCE_ARRANGEMENT
+  TRANSLATION
+  TRUE_FALSE
+  SHORT_ANSWER
+  MATCHING
+
+  @@map("question_type")
+}
+
+enum AnswerVerificationStatus {
+  VERIFIED
+  NEEDS_REVIEW
+  UNVERIFIED
+
+  @@map("answer_verification_status")
+}
+
+enum ExplanationSourceType {
+  BOOK_ANSWER_KEY
+  EDITORIAL_MANUAL
+  AI_GENERATED
+
+  @@map("explanation_source_type")
+}
+
+enum LearningProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  MASTERED
+
+  @@map("learning_progress_status")
+}
+
+model Book {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  authors     Json          @default("[]")
+  editionNote String?       @map("edition_note")
+  sourceFile  String        @unique @map("source_file")
+  totalLines  Int           @map("total_lines")
+  checksum    String
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamptz(6)
+
+  chapters    BookChapter[]
+  sections    BookSection[]
+
+  @@map("books")
+}
+
+model BookChapter {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookId          String          @map("book_id") @db.Uuid
+  chapterNumber   Int             @map("chapter_number")
+  code            String          @unique
+  titleEn         String          @map("title_en")
+  titleVi         String          @map("title_vi")
+  originalHeading String          @map("original_heading")
+  displayOrder    Int             @map("display_order")
+  sourceFile      String          @map("source_file")
+  startLine       Int             @map("start_line")
+  endLine         Int             @map("end_line")
+  checksum        String
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?       @map("deleted_at") @db.Timestamptz(6)
+
+  book            Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  sections        BookSection[]
+  topics          GrammarTopic[]
+  lessons         Lesson[]
+  exerciseGroups  ExerciseGroup[]
+
+  @@unique([bookId, chapterNumber])
+  @@index([bookId, displayOrder])
+  @@map("book_chapters")
+}
+
+model BookSection {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookId        String          @map("book_id") @db.Uuid
+  chapterId     String          @map("chapter_id") @db.Uuid
+  sectionNumber String          @map("section_number")
+  code          String          @unique
+  titleEn       String          @map("title_en")
+  titleVi       String          @map("title_vi")
+  sectionType   BookSectionType @default(LESSON_UNIT) @map("section_type")
+  displayOrder  Int             @map("display_order")
+  sourceFile    String          @map("source_file")
+  startLine     Int             @map("start_line")
+  endLine       Int             @map("end_line")
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?       @map("deleted_at") @db.Timestamptz(6)
+
+  book          Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  chapter       BookChapter     @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  lessons       Lesson[]
+
+  @@unique([chapterId, sectionNumber])
+  @@index([chapterId, displayOrder])
+  @@map("book_sections")
+}
+
+model GrammarCategory {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code          String         @unique
+  nameEn        String         @map("name_en")
+  nameVi        String         @map("name_vi")
+  descriptionEn String?        @map("description_en")
+  descriptionVi String?        @map("description_vi")
+  displayOrder  Int            @map("display_order")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  topics        GrammarTopic[]
+
+  @@map("grammar_categories")
+}
+
+model GrammarTopic {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId     String          @map("category_id") @db.Uuid
+  parentTopicId  String?         @map("parent_topic_id") @db.Uuid
+  chapterId      String?         @map("chapter_id") @db.Uuid
+  code           String          @unique
+  titleEn        String          @map("title_en")
+  titleVi        String          @map("title_vi")
+  hierarchyLevel Int             @default(1) @map("hierarchy_level")
+  displayOrder   Int             @map("display_order")
+  startLine      Int?            @map("start_line")
+  endLine        Int?            @map("end_line")
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?       @map("deleted_at") @db.Timestamptz(6)
+
+  category       GrammarCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  parentTopic    GrammarTopic?   @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: SetNull)
+  subtopics      GrammarTopic[]  @relation("TopicHierarchy")
+  chapter        BookChapter?    @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  lessons        Lesson[]
+  exerciseGroups ExerciseGroup[]
+  exercises      Exercise[]
+
+  @@index([categoryId, displayOrder])
+  @@index([parentTopicId, displayOrder])
+  @@map("grammar_topics")
+}
+
+model Lesson {
+  id             String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapterId      String               @map("chapter_id") @db.Uuid
+  bookSectionId  String               @map("book_section_id") @db.Uuid
+  topicId        String               @map("topic_id") @db.Uuid
+  code           String               @unique
+  titleEn        String               @map("title_en")
+  titleVi        String               @map("title_vi")
+  lessonOrder    Int                  @map("lesson_order")
+  hasTheory      Boolean              @default(true) @map("has_theory")
+  sourceFile     String               @map("source_file")
+  startLine      Int                  @map("start_line")
+  endLine        Int                  @map("end_line")
+  rawMarkdown    String?              @map("raw_markdown")
+  checksum       String?
+  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?            @map("deleted_at") @db.Timestamptz(6)
+
+  chapter        BookChapter          @relation(fields: [chapterId], references: [id], onDelete: Restrict)
+  bookSection    BookSection          @relation(fields: [bookSectionId], references: [id], onDelete: Restrict)
+  topic          GrammarTopic         @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  sections       LessonSection[]
+  rules          GrammarRule[]
+  examples       Example[]
+  tables         LessonTable[]
+  exerciseGroups ExerciseGroup[]
+  exercises      Exercise[]
+  userProgress   UserLessonProgress[]
+  bookmarks      UserBookmark[]
+
+  @@index([topicId, lessonOrder])
+  @@index([chapterId, lessonOrder])
+  @@map("lessons")
+}
+
+model LessonSection {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId         String            @map("lesson_id") @db.Uuid
+  code             String            @unique
+  title            String
+  sectionType      LessonSectionType @default(THEORY) @map("section_type")
+  displayOrder     Int               @map("display_order")
+  startLine        Int               @map("start_line")
+  endLine          Int               @map("end_line")
+  rawMarkdown      String            @map("raw_markdown")
+  structuredBlocks Json              @default("[]") @map("structured_blocks")
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  lesson           Lesson            @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  rules            GrammarRule[]
+  examples         Example[]
+
+  @@unique([lessonId, displayOrder])
+  @@index([lessonId, displayOrder])
+  @@map("lesson_sections")
+}
+
+model GrammarRule {
+  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId           String              @map("lesson_id") @db.Uuid
+  sectionId          String              @map("section_id") @db.Uuid
+  code               String              @unique
+  ruleType           GrammarRuleType     @default(USAGE_RULE) @map("rule_type")
+  title              String
+  explanationVi      String?             @map("explanation_vi")
+  explanationEn      String?             @map("explanation_en")
+  formula            String?
+  displayOrder       Int                 @map("display_order")
+  startLine          Int                 @map("start_line")
+  endLine            Int                 @map("end_line")
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  lesson             Lesson              @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  section            LessonSection       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  examples           Example[]
+  answerExplanations AnswerExplanation[]
+  bookmarks          UserBookmark[]
+
+  @@index([lessonId, displayOrder])
+  @@map("grammar_rules")
+}
+
+model Example {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId            String        @map("lesson_id") @db.Uuid
+  sectionId           String        @map("section_id") @db.Uuid
+  grammarRuleId       String?       @map("grammar_rule_id") @db.Uuid
+  code                String        @unique
+  sentenceEn          String        @map("sentence_en")
+  sentenceVi          String?       @map("sentence_vi")
+  negativeExampleNote String?       @map("negative_example_note")
+  displayOrder        Int           @map("display_order")
+  startLine           Int           @map("start_line")
+  endLine             Int           @map("end_line")
+  createdAt           DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  lesson              Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  section             LessonSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  grammarRule         GrammarRule?  @relation(fields: [grammarRuleId], references: [id], onDelete: SetNull)
+
+  @@index([lessonId, displayOrder])
+  @@index([grammarRuleId])
+  @@map("examples")
+}
+
+model LessonTable {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId    String   @map("lesson_id") @db.Uuid
+  startLine   Int      @map("start_line")
+  endLine     Int      @map("end_line")
+  rowCount    Int      @map("row_count")
+  rowsJson    Json     @default("[]") @map("rows_json")
+  rawMarkdown String   @map("raw_markdown")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("lesson_tables")
+}
+
+model ExerciseGroup {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapterId       String      @map("chapter_id") @db.Uuid
+  lessonId        String      @map("lesson_id") @db.Uuid
+  topicId         String      @map("topic_id") @db.Uuid
+  code            String      @unique
+  title           String
+  displayOrder    Int         @map("display_order")
+  sourceFile      String      @map("source_file")
+  startLine       Int         @map("start_line")
+  endLine         Int         @map("end_line")
+  answerStartLine Int         @map("answer_start_line")
+  answerEndLine   Int         @map("answer_end_line")
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?   @map("deleted_at") @db.Timestamptz(6)
+
+  chapter         BookChapter  @relation(fields: [chapterId], references: [id], onDelete: Restrict)
+  lesson          Lesson       @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  topic           GrammarTopic @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  exercises       Exercise[]
+
+  @@index([lessonId, displayOrder])
+  @@map("exercise_groups")
+}
+
+model Exercise {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  exerciseGroupId     String               @map("exercise_group_id") @db.Uuid
+  lessonId            String               @map("lesson_id") @db.Uuid
+  topicId             String               @map("topic_id") @db.Uuid
+  code                String               @unique
+  romanNumeral        String               @map("roman_numeral")
+  originalLabel       String               @map("original_label")
+  title               String
+  instructionEn       String               @map("instruction_en")
+  instructionVi       String?              @map("instruction_vi")
+  exerciseType        QuestionType         @map("exercise_type")
+  displayOrder        Int                  @map("display_order")
+  questionCount       Int                  @default(0) @map("question_count")
+  startLine           Int                  @map("start_line")
+  endLine             Int                  @map("end_line")
+  hasNumberingAnomaly Boolean              @default(false) @map("has_numbering_anomaly")
+  anomalyNote         String?              @map("anomaly_note")
+  createdAt           DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime?            @map("deleted_at") @db.Timestamptz(6)
+
+  exerciseGroup       ExerciseGroup        @relation(fields: [exerciseGroupId], references: [id], onDelete: Cascade)
+  lesson              Lesson               @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  topic               GrammarTopic         @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  questions           Question[]
+  questionAnswers     QuestionAnswer[]
+  userResults         UserExerciseResult[]
+
+  @@index([exerciseGroupId, displayOrder])
+  @@index([lessonId, exerciseType])
+  @@map("exercises")
+}
+
+model Question {
+  id                  String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  exerciseId          String                 @map("exercise_id") @db.Uuid
+  code                String                 @unique
+  questionNumber      Int                    @map("question_number")
+  originalNumberLabel String                 @map("original_number_label")
+  subCategory         String?                @map("sub_category")
+  questionType        QuestionType           @map("question_type")
+  stem                String
+  starterPrompt       String?                @map("starter_prompt")
+  blankCount          Int                    @default(1) @map("blank_count")
+  rootWord            String?                @map("root_word")
+  metadata            Json                   @default("{}")
+  startLine           Int                    @map("start_line")
+  endLine             Int                    @map("end_line")
+  hasAnomaly          Boolean                @default(false) @map("has_anomaly")
+  anomalyNote         String?                @map("anomaly_note")
+  createdAt           DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime?              @map("deleted_at") @db.Timestamptz(6)
+
+  exercise            Exercise               @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  options             QuestionOption[]
+  answers             QuestionAnswer[]
+  explanations        AnswerExplanation[]
+  userAttempts        UserQuestionAttempt[]
+  bookmarks           UserBookmark[]
+  reviewSchedules     ReviewSchedule[]
+
+  @@unique([exerciseId, questionNumber])
+  @@index([exerciseId, questionNumber])
+  @@index([questionType])
+  @@map("questions")
+}
+
+model QuestionOption {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId   String   @map("question_id") @db.Uuid
+  blankIndex   Int      @default(1) @map("blank_index")
+  optionLabel  String   @map("option_label")
+  optionText   String   @map("option_text")
+  isCorrect    Boolean  @default(false) @map("is_correct")
+  displayOrder Int      @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, blankIndex, optionLabel])
+  @@index([questionId, blankIndex, displayOrder])
+  @@map("question_options")
+}
+
+model QuestionAnswer {
+  id                 String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId         String                   @map("question_id") @db.Uuid
+  exerciseId         String                   @map("exercise_id") @db.Uuid
+  code               String                   @unique
+  blankIndex         Int                      @default(1) @map("blank_index")
+  originalAnswerText String                   @map("original_answer_text")
+  correctAnswer      String                   @map("correct_answer")
+  alternativeAnswers Json                     @default("[]") @map("alternative_answers")
+  isVerified         Boolean                  @default(true) @map("is_verified")
+  verificationStatus AnswerVerificationStatus @default(VERIFIED) @map("verification_status")
+  reviewNote         String?                  @map("review_note")
+  sourceLine         Int                      @map("source_line")
+  createdAt          DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime                 @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  question           Question                 @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  exercise           Exercise                 @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  explanations       AnswerExplanation[]
+  matchedAttempts    UserQuestionAttempt[]
+
+  @@unique([questionId, blankIndex])
+  @@index([questionId, blankIndex])
+  @@index([verificationStatus, isVerified])
+  @@map("question_answers")
+}
+
+model AnswerExplanation {
+  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionAnswerId String                @map("question_answer_id") @db.Uuid
+  questionId       String                @map("question_id") @db.Uuid
+  grammarRuleId    String?               @map("grammar_rule_id") @db.Uuid
+  explanationVi    String                @map("explanation_vi")
+  explanationEn    String?               @map("explanation_en")
+  sourceType       ExplanationSourceType @default(BOOK_ANSWER_KEY) @map("source_type")
+  isVerified       Boolean               @default(true) @map("is_verified")
+  createdAt        DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  questionAnswer   QuestionAnswer        @relation(fields: [questionAnswerId], references: [id], onDelete: Cascade)
+  question         Question              @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  grammarRule      GrammarRule?          @relation(fields: [grammarRuleId], references: [id], onDelete: SetNull)
+
+  @@index([questionAnswerId])
+  @@map("answer_explanations")
+}
+
+model User {
+  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email            String                @unique
+  displayName      String?               @map("display_name")
+  avatarUrl        String?               @map("avatar_url")
+  nativeLanguage   String                @default("vi") @map("native_language")
+  targetLevel      String?               @default("B2") @map("target_level")
+  createdAt        DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?             @map("deleted_at") @db.Timestamptz(6)
+
+  lessonProgress   UserLessonProgress[]
+  exerciseResults  UserExerciseResult[]
+  questionAttempts UserQuestionAttempt[]
+  bookmarks        UserBookmark[]
+  reviewSchedules  ReviewSchedule[]
+
+  @@map("users")
+}
+
+model UserLessonProgress {
+  id              String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String                 @map("user_id") @db.Uuid
+  lessonId        String                 @map("lesson_id") @db.Uuid
+  status          LearningProgressStatus @default(NOT_STARTED)
+  progressPercent Decimal                @default(0.00) @map("progress_percent") @db.Decimal(5, 2)
+  timeSpentSeconds Int                   @default(0) @map("time_spent_seconds")
+  lastAccessedAt  DateTime?              @map("last_accessed_at") @db.Timestamptz(6)
+  completedAt     DateTime?              @map("completed_at") @db.Timestamptz(6)
+  createdAt       DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson          Lesson                 @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId, status])
+  @@map("user_lesson_progress")
+}
+
+model UserExerciseResult {
+  id              String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String                @map("user_id") @db.Uuid
+  exerciseId      String                @map("exercise_id") @db.Uuid
+  totalQuestions  Int                   @map("total_questions")
+  correctCount    Int                   @map("correct_count")
+  scorePercent    Decimal               @map("score_percent") @db.Decimal(5, 2)
+  durationSeconds Int?                  @map("duration_seconds")
+  submittedAt     DateTime              @default(now()) @map("submitted_at") @db.Timestamptz(6)
+  createdAt       DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise        Exercise              @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  attempts        UserQuestionAttempt[]
+
+  @@index([userId, exerciseId, submittedAt(sort: Desc)])
+  @@map("user_exercise_results")
+}
+
+model UserQuestionAttempt {
+  id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String              @map("user_id") @db.Uuid
+  exerciseResultId String?             @map("exercise_result_id") @db.Uuid
+  questionId       String              @map("question_id") @db.Uuid
+  submittedAnswer  String              @map("submitted_answer")
+  submittedPayload Json?               @default("{}") @map("submitted_payload")
+  isCorrect        Boolean             @map("is_correct")
+  matchedAnswerId  String?             @map("matched_answer_id") @db.Uuid
+  timeTakenMs      Int?                @map("time_taken_ms")
+  attemptedAt      DateTime            @default(now()) @map("attempted_at") @db.Timestamptz(6)
+  createdAt        DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exerciseResult   UserExerciseResult? @relation(fields: [exerciseResultId], references: [id], onDelete: SetNull)
+  question         Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  matchedAnswer    QuestionAnswer?     @relation(fields: [matchedAnswerId], references: [id], onDelete: SetNull)
+
+  @@index([userId, questionId, attemptedAt(sort: Desc)])
+  @@map("user_question_attempts")
+}
+
+model UserBookmark {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String       @map("user_id") @db.Uuid
+  lessonId      String?      @map("lesson_id") @db.Uuid
+  grammarRuleId String?      @map("grammar_rule_id") @db.Uuid
+  questionId    String?      @map("question_id") @db.Uuid
+  personalNote  String?      @map("personal_note")
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson        Lesson?      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  grammarRule   GrammarRule? @relation(fields: [grammarRuleId], references: [id], onDelete: Cascade)
+  question      Question?    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("user_bookmarks")
+}
+
+model ReviewSchedule {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  questionId        String    @map("question_id") @db.Uuid
+  easinessFactor    Decimal   @default(2.50) @map("easiness_factor") @db.Decimal(4, 2)
+  intervalDays      Int       @default(1) @map("interval_days")
+  repetitions       Int       @default(0)
+  nextReviewAt      DateTime  @default(now()) @map("next_review_at") @db.Timestamptz(6)
+  lastReviewedAt    DateTime? @map("last_reviewed_at") @db.Timestamptz(6)
+  lastQualityRating Int?      @map("last_quality_rating") @db.SmallInt
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question          Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, nextReviewAt])
+  @@map("review_schedule")
+}
