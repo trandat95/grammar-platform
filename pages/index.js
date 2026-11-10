@@ -357,6 +357,12 @@ export default function Home() {
     return selectedChapter.exercises.reduce((acc, ex) => acc + (ex.questions?.length || 0), 0);
   }, [selectedChapter]);
 
+  // Total formulas in selected lesson
+  const totalLessonFormulas = useMemo(() => {
+    if (!selectedLesson?.sections) return 0;
+    return selectedLesson.sections.reduce((acc, s) => acc + (s.formulas?.length || 0), 0);
+  }, [selectedLesson]);
+
   // Quiz answered stats
   const answeredCount = useMemo(() => {
     return Object.keys(quizAnswers).filter((k) => quizAnswers[k]?.trim()).length;
@@ -411,6 +417,25 @@ export default function Home() {
         code, kbd, pre {
           font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 0.75rem 0;
+          font-size: 0.85rem;
+        }
+        th, td {
+          border: 1px solid #27272a;
+          padding: 0.65rem 0.85rem;
+          text-align: left;
+        }
+        th {
+          background-color: #18181b;
+          color: #fafafa;
+          font-weight: 600;
+        }
+        tr:nth-child(even) {
+          background-color: rgba(255, 255, 255, 0.02);
+        }
       `}</style>
 
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
@@ -464,7 +489,7 @@ export default function Home() {
                   color: "#a1a1aa",
                 }}
               >
-                v1.2
+                v1.2 PRO
               </span>
             </div>
           </div>
@@ -502,7 +527,7 @@ export default function Home() {
                 <path d="M6 6h10"/>
                 <path d="M6 10h10"/>
               </svg>
-              <span>12 Chuyên đề</span>
+              <span>12 Chuyên đề Lý thuyết</span>
             </button>
 
             <button
@@ -741,7 +766,7 @@ export default function Home() {
                                   {ls.title_vi}
                                 </span>
                                 <span style={{ fontSize: "0.68rem", color: "#52525b", fontFamily: "Geist Mono" }}>
-                                  {ls.rules?.length || 0} qt
+                                  {ls.sections?.length || 0} mục
                                 </span>
                               </div>
                             );
@@ -796,7 +821,7 @@ export default function Home() {
                         cursor: "pointer",
                       }}
                     >
-                      Lý thuyết & Quy tắc ({selectedLesson?.rules?.length || 0})
+                      Lý thuyết & Quy tắc ({selectedLesson?.sections?.length || 0} mục)
                     </button>
                     <button
                       onClick={() => setActiveTab("exercises")}
@@ -817,91 +842,315 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* TAB 1: THEORY CONTENT */}
+              {/* TAB 1: THEORY CONTENT (DEEP-DIVE PEDAGOGICAL VIEW) */}
               {activeTab === "theory" && (
                 <div>
-                  {selectedLesson?.rules && selectedLesson.rules.length > 0 ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                      {selectedLesson.rules.map((r, rIdx) => (
-                        <div
-                          key={rIdx}
-                          style={{
-                            backgroundColor: "#121215",
-                            border: "1px solid #27272a",
-                            borderRadius: "8px",
-                            padding: "1.25rem 1.5rem",
-                          }}
-                        >
-                          {r.title && (
-                            <h3 style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.5rem" }}>
-                              {r.title.replace(/^#+\s*/, "").replace(/\*\*/g, "")}
-                            </h3>
-                          )}
-
-                          {r.formula && (
-                            <div
-                              style={{
-                                backgroundColor: "#09090b",
-                                border: "1px solid #27272a",
-                                borderLeft: "3px solid #10b981",
-                                padding: "0.6rem 0.85rem",
-                                borderRadius: "4px",
-                                fontFamily: "Geist Mono",
-                                fontSize: "0.85rem",
-                                color: "#34d399",
-                                margin: "0.6rem 0",
-                              }}
-                            >
-                              <span style={{ color: "#71717a", marginRight: "0.5rem" }}>FORMULA:</span>
-                              {r.formula}
-                            </div>
-                          )}
-
-                          {r.explanation_vi && (
-                            <div
-                              style={{
-                                fontSize: "0.875rem",
-                                color: "#d4d4d8",
-                                lineHeight: "1.65",
-                                whiteSpace: "pre-line",
-                              }}
-                            >
-                              {r.explanation_vi.replace(/^#+\s*/gm, "").replace(/\*\*/g, "")}
-                            </div>
-                          )}
+                  {selectedLesson ? (
+                    <div>
+                      {/* Lesson Overview Badge Card */}
+                      <div
+                        style={{
+                          backgroundColor: "#121215",
+                          border: "1px solid #27272a",
+                          borderRadius: "8px",
+                          padding: "1.25rem 1.5rem",
+                          marginBottom: "1.5rem",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
+                          <span
+                            style={{
+                              fontSize: "0.72rem",
+                              fontFamily: "Geist Mono",
+                              backgroundColor: "#27272a",
+                              color: "#60a5fa",
+                              padding: "0.15rem 0.5rem",
+                              borderRadius: "4px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {selectedLesson.code}
+                          </span>
+                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            {selectedLesson.sections?.length || 0} Phân mục kiến thức
+                          </span>
+                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            {totalLessonFormulas} Công thức chuẩn
+                          </span>
+                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            {selectedLesson.examples?.length || 0} Ví dụ minh họa
+                          </span>
                         </div>
-                      ))}
 
-                      {/* Examples Section */}
+                        <p style={{ fontSize: "0.9rem", color: "#d4d4d8", lineHeight: "1.65", margin: 0 }}>
+                          {selectedLesson.overview}
+                        </p>
+
+                        {/* Quick Table of Contents Pills */}
+                        {selectedLesson.sections && selectedLesson.sections.length > 1 && (
+                          <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: "1px solid #1f1f23" }}>
+                            <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
+                              NỘI DUNG CHÍNH TRONG BÀI:
+                            </div>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                              {selectedLesson.sections.map((s, idx) => (
+                                <a
+                                  key={idx}
+                                  href={`#sec-${idx}`}
+                                  style={{
+                                    fontSize: "0.75rem",
+                                    backgroundColor: "#18181b",
+                                    border: "1px solid #27272a",
+                                    color: "#cbd5e1",
+                                    padding: "0.2rem 0.6rem",
+                                    borderRadius: "4px",
+                                    textDecoration: "none",
+                                  }}
+                                >
+                                  {s.title}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Sections List */}
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                        {selectedLesson.sections?.map((sec, secIdx) => (
+                          <section
+                            key={secIdx}
+                            id={`sec-${secIdx}`}
+                            style={{
+                              backgroundColor: "#121215",
+                              border: "1px solid #27272a",
+                              borderRadius: "8px",
+                              padding: "1.5rem",
+                            }}
+                          >
+                            {/* Section Header */}
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                              <span
+                                style={{
+                                  fontSize: "0.68rem",
+                                  fontFamily: "Geist Mono",
+                                  backgroundColor: "#18181b",
+                                  border: "1px solid #27272a",
+                                  color: "#a1a1aa",
+                                  padding: "0.1rem 0.4rem",
+                                  borderRadius: "4px",
+                                  fontWeight: "600",
+                                }}
+                              >
+                                {String(secIdx + 1).padStart(2, "0")}
+                              </span>
+                              <h2 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                                {sec.title}
+                              </h2>
+                            </div>
+
+                            {/* Formulas Box */}
+                            {sec.formulas && sec.formulas.length > 0 && (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.25rem" }}>
+                                {sec.formulas.map((f, fIdx) => (
+                                  <div
+                                    key={fIdx}
+                                    style={{
+                                      backgroundColor: "#09090b",
+                                      border: "1px solid #27272a",
+                                      borderLeft: f.type?.includes("(+)")
+                                        ? "3px solid #10b981"
+                                        : f.type?.includes("(-)")
+                                        ? "3px solid #f43f5e"
+                                        : "3px solid #38bdf8",
+                                      borderRadius: "6px",
+                                      padding: "0.7rem 1rem",
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      flexWrap: "wrap",
+                                      gap: "0.5rem",
+                                    }}
+                                  >
+                                    <div style={{ fontFamily: "Geist Mono", fontSize: "0.9rem", color: "#34d399", fontWeight: "600" }}>
+                                      {f.text}
+                                    </div>
+                                    <span
+                                      style={{
+                                        fontSize: "0.7rem",
+                                        fontFamily: "Geist Mono",
+                                        backgroundColor: "#18181b",
+                                        color: "#a1a1aa",
+                                        padding: "0.15rem 0.45rem",
+                                        borderRadius: "4px",
+                                        border: "1px solid #27272a",
+                                      }}
+                                    >
+                                      {f.type}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Paragraphs */}
+                            {sec.paragraphs && sec.paragraphs.length > 0 && (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", marginBottom: "1rem" }}>
+                                {sec.paragraphs.map((p, pIdx) => (
+                                  <p key={pIdx} style={{ fontSize: "0.9rem", color: "#d4d4d8", lineHeight: "1.7", margin: 0 }}>
+                                    {p}
+                                  </p>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Tables */}
+                            {sec.tables && sec.tables.length > 0 && (
+                              <div style={{ overflowX: "auto", margin: "1rem 0" }}>
+                                {sec.tables.map((tbl, tIdx) => (
+                                  <table key={tIdx}>
+                                    {tbl.headers && tbl.headers.some((h) => h) && (
+                                      <thead>
+                                        <tr>
+                                          {tbl.headers.map((h, hIdx) => (
+                                            <th key={hIdx}>{h}</th>
+                                          ))}
+                                        </tr>
+                                      </thead>
+                                    )}
+                                    <tbody>
+                                      {tbl.rows?.map((row, rIdx) => (
+                                        <tr key={rIdx}>
+                                          {row.map((cell, cIdx) => (
+                                            <td key={cIdx}>{cell}</td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Bullets List */}
+                            {sec.bullets && sec.bullets.length > 0 && (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", margin: "0.85rem 0" }}>
+                                {sec.bullets.map((b, bIdx) => (
+                                  <div
+                                    key={bIdx}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "flex-start",
+                                      gap: "0.6rem",
+                                      backgroundColor: "#18181b",
+                                      padding: "0.65rem 0.85rem",
+                                      borderRadius: "6px",
+                                      border: "1px solid #27272a",
+                                    }}
+                                  >
+                                    <span style={{ color: "#38bdf8", fontSize: "0.9rem", lineHeight: "1.4" }}>•</span>
+                                    <div style={{ fontSize: "0.875rem", color: "#e4e4e7", lineHeight: "1.6" }}>
+                                      {b}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Notes Alert Box */}
+                            {sec.notes && sec.notes.length > 0 && (
+                              <div style={{ margin: "1rem 0", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                {sec.notes.map((n, nIdx) => (
+                                  <div
+                                    key={nIdx}
+                                    style={{
+                                      backgroundColor: "rgba(245, 158, 11, 0.08)",
+                                      borderLeft: "3px solid #f59e0b",
+                                      borderRadius: "4px",
+                                      padding: "0.75rem 1rem",
+                                      fontSize: "0.85rem",
+                                      color: "#fcd34d",
+                                      lineHeight: "1.6",
+                                    }}
+                                  >
+                                    <strong style={{ color: "#fbbf24", marginRight: "0.4rem" }}>⚠️ Lưu ý:</strong>
+                                    {n}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Section Examples */}
+                            {sec.examples && sec.examples.length > 0 && (
+                              <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: "1px dashed #27272a" }}>
+                                <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem" }}>
+                                  Ví dụ minh họa:
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+                                  {sec.examples.map((ex, exIdx) => (
+                                    <div
+                                      key={exIdx}
+                                      style={{
+                                        backgroundColor: "#09090b",
+                                        padding: "0.5rem 0.75rem",
+                                        borderRadius: "4px",
+                                        border: "1px solid #27272a",
+                                        fontSize: "0.85rem",
+                                      }}
+                                    >
+                                      <span style={{ color: "#34d399", fontWeight: "600", marginRight: "0.5rem" }}>Ex:</span>
+                                      <span style={{ color: "#fafafa" }}>{ex.en}</span>
+                                      {ex.vi && <div style={{ color: "#a1a1aa", fontSize: "0.8rem", marginTop: "0.2rem" }}>→ {ex.vi}</div>}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </section>
+                        ))}
+                      </div>
+
+                      {/* Full Lesson Examples Library */}
                       {selectedLesson.examples && selectedLesson.examples.length > 0 && (
                         <div
                           style={{
                             backgroundColor: "#121215",
                             border: "1px solid #27272a",
                             borderRadius: "8px",
-                            padding: "1.25rem 1.5rem",
-                            marginTop: "0.5rem",
+                            padding: "1.5rem",
+                            marginTop: "2rem",
                           }}
                         >
-                          <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>
-                            VÍ DỤ MINH HỌA ({selectedLesson.examples.length})
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                            <div>
+                              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase" }}>
+                                TỔNG HỢP VÍ DỤ SONG NGỮ
+                              </div>
+                              <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: "0.2rem 0 0 0" }}>
+                                Kho câu ví dụ minh họa ({selectedLesson.examples.length} câu)
+                              </h3>
+                            </div>
                           </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
                             {selectedLesson.examples.map((ex, exIdx) => (
                               <div
                                 key={exIdx}
                                 style={{
                                   backgroundColor: "#18181b",
-                                  padding: "0.65rem 0.85rem",
+                                  padding: "0.75rem 1rem",
                                   borderRadius: "6px",
                                   border: "1px solid #27272a",
                                 }}
                               >
-                                <div style={{ fontSize: "0.875rem", color: "#fafafa", fontWeight: "500" }}>
+                                <div style={{ fontSize: "0.9rem", color: "#fafafa", fontWeight: "500" }}>
                                   • {ex.en}
                                 </div>
                                 {ex.vi && (
-                                  <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginTop: "0.2rem", paddingLeft: "0.85rem" }}>
+                                  <div style={{ fontSize: "0.825rem", color: "#a1a1aa", marginTop: "0.25rem", paddingLeft: "0.85rem" }}>
                                     → {ex.vi}
                                   </div>
                                 )}
@@ -910,6 +1159,40 @@ export default function Home() {
                           </div>
                         </div>
                       )}
+
+                      {/* Bottom Call to Action to Practice */}
+                      <div
+                        style={{
+                          marginTop: "2rem",
+                          padding: "1.5rem",
+                          backgroundColor: "#121215",
+                          border: "1px dashed #3b82f6",
+                          borderRadius: "8px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.4rem" }}>
+                          Đã nắm vững lý thuyết bài học này?
+                        </div>
+                        <p style={{ fontSize: "0.85rem", color: "#71717a", marginBottom: "1rem" }}>
+                          Chuyên đề "{selectedChapter?.title_vi}" có {selectedChapter?.exercises?.length || 0} bài tập thực hành ({totalChapterExerciseQuestions} câu hỏi) để bạn củng cố kiến thức.
+                        </p>
+                        <button
+                          onClick={() => setActiveTab("exercises")}
+                          style={{
+                            padding: "0.6rem 1.5rem",
+                            backgroundColor: "#2563eb",
+                            border: "none",
+                            borderRadius: "6px",
+                            color: "#ffffff",
+                            fontSize: "0.85rem",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Làm bài tập thực hành ngay →
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <div
@@ -922,7 +1205,7 @@ export default function Home() {
                         color: "#71717a",
                       }}
                     >
-                      Chọn một bài học từ danh mục bên trái hoặc chuyển sang tab "Bài tập thực hành".
+                      Chọn một bài học từ danh mục bên trái để bắt đầu nghiên cứu lý thuyết.
                     </div>
                   )}
                 </div>
