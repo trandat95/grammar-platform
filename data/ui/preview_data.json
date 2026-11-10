@@ -42,6 +42,16 @@
               "title": "Thì hiện tại đơn còn được dùng để diên tả hành động, sự việc tương lai sẽ xảy ra theo thời gian biểu hoặc chương trình; ",
               "formula": null,
               "explanation_vi": "Thì hiện tại đơn còn được dùng để diên tả hành động, sự việc tương lai sẽ xảy ra theo thời gian biểu hoặc chương trình; kế hoạch đã định theo thời gian biểu."
+            },
+            {
+              "title": "Lưu ý:",
+              "formula": null,
+              "explanation_vi": "# Lưu ý:\n\nTa thêm *es* sau các động từ tận cùng là: *o, s, x, ch, sh*."
+            },
+            {
+              "title": "often, usually, frequently : *thường*",
+              "formula": null,
+              "explanation_vi": "often, usually, frequently : *thường*"
             }
           ],
           "examples": [
@@ -59,6 +69,10 @@
             },
             {
               "en": "Mary often goes to school by bicycle.",
+              "vi": null
+            },
+            {
+              "en": "I get up early every morning. What do you do every night?",
               "vi": null
             }
           ]
@@ -92,12 +106,22 @@
             {
               "title": "Thì hiện tại tiếp diễn diễn tả một hành động hay một sự việc đang diễn ra ngay lúc nói. Cách dùng này thường đi kèm với ",
               "formula": null,
-              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hay một sự việc đang diễn ra ngay lúc nói. Cách dùng này thường đi kèm với các trạng từ hoặc trạng ngữ chỉ thời gian *now, right now, a"
+              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hay một sự việc đang diễn ra ngay lúc nói. Cách dùng này thường đi kèm với các trạng từ hoặc trạng ngữ chỉ thời gian *now, right now, at the moment, at thi"
             },
             {
               "title": "Thì hiện tại tiếp diễn diễn tả một hành động hoặc sự việc nói chung đang diễn ra nhưng không nhất thiết phải thực sự diễ",
               "formula": null,
-              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hoặc sự việc nói chung đang diễn ra nhưng không nhất thiết phải thực sự diễn ra ngay lúc nói. Cách dùng này thường đi kèm với *now, at "
+              "explanation_vi": "Thì hiện tại tiếp diễn diễn tả một hành động hoặc sự việc nói chung đang diễn ra nhưng không nhất thiết phải thực sự diễn ra ngay lúc nói. Cách dùng này thường đi kèm với *now, at the moment, today, t"
+            },
+            {
+              "title": "Thì hiện tại tiếp diễn còn được dùng để diễn tả một hành động sắp xảy ra (ở tương lai gần). Cách dùng này thường diễn tả",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại tiếp diễn còn được dùng để diễn tả một hành động sắp xảy ra (ở tương lai gần). Cách dùng này thường diễn tả một sự sắp xếp hoặc một kế hoạch đã định."
+            },
+            {
+              "title": "Lưu ý:",
+              "formula": null,
+              "explanation_vi": "# Lưu ý:\n\nKhông dùng thì hiện tại tiếp diễn với các động từ chỉ nhận thức, tri giác như: *to be, see, hear, understand, know, like, want, glance, feel, think, smell, love, hate, realize, seem, remembe"
             }
           ],
           "examples": [
@@ -115,6 +139,10 @@
             },
             {
               "en": "I’m quite busy these days. I’m doing a course at college.",
+              "vi": null
+            },
+            {
+              "en": "The company I work for isn’t doing so well this year.",
               "vi": null
             }
           ]
@@ -154,6 +182,16 @@
               "title": "Thì hiện tại hoàn thành diễn tả một hành động được lặp đi lặp lại nhiều lần ở quá khứ và còn có thể được lặp lại ở hiện ",
               "formula": null,
               "explanation_vi": "Thì hiện tại hoàn thành diễn tả một hành động được lặp đi lặp lại nhiều lần ở quá khứ và còn có thể được lặp lại ở hiện tại hoặc tương lai."
+            },
+            {
+              "title": "Thì hiện tại hoàn thành diễn tả một hành động bắt đầu ở quá khứ, kéo dài đến hiện tại và có khả năng tiếp tục ở tương la",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành diễn tả một hành động bắt đầu ở quá khứ, kéo dài đến hiện tại và có khả năng tiếp tục ở tương lai."
+            },
+            {
+              "title": "Thì hiện tại hoàn thành diễn tả hành động hoặc sự việc xảy ra trong quá khứ khi người nói không biết",
+              "formula": null,
+              "explanation_vi": "Thì hiện tại hoàn thành diễn tả hành động hoặc sự việc xảy ra trong quá khứ khi người nói không biết"
             }
           ],
           "examples": [
@@ -171,6 +209,10 @@
             },
             {
               "en": "I have seen “Titanic” three times.",
+              "vi": null
+            },
+            {
+              "en": "Mary has lived in this house for ten years.",
               "vi": null
             }
           ]
@@ -204,12 +246,17 @@
             {
               "title": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động hoặc sự việc bắt đầu trong quá khứ và kéo dài *liên tục* đến hiệ",
               "formula": null,
-              "explanation_vi": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động hoặc sự việc bắt đầu trong quá khứ và kéo dài *liên tục* đến hiện tại. Cách dùng này thường đi kèm với *since* + mốc thời gi"
+              "explanation_vi": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động hoặc sự việc bắt đầu trong quá khứ và kéo dài *liên tục* đến hiện tại. Cách dùng này thường đi kèm với *since* + mốc thời gian, *for* + khoảng t"
             },
             {
               "title": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động vừa mới kết thúc và có kết quả ở hiện tại.",
               "formula": null,
               "explanation_vi": "Thì hiện tại hoàn thành tiếp diễn diễn tả một hành động vừa mới kết thúc và có kết quả ở hiện tại."
+            },
+            {
+              "title": "Lưu ý:",
+              "formula": null,
+              "explanation_vi": "# Lưu ý:\n\nKhông dùng thì này với các động từ chỉ nhận thức, tri giác (xem các động từ đã nêu trong thì hiện tại tiếp diễn). Với các động từ này ta dùng Present Perfect."
             }
           ],
           "examples": [
@@ -262,6 +309,16 @@
               "title": "Thì quá khứ đơn diễn tả hành động đã xảy ra suốt một khoảng thời gian trong quá khứ, nhưng nay đã",
               "formula": null,
               "explanation_vi": "Thì quá khứ đơn diễn tả hành động đã xảy ra suốt một khoảng thời gian trong quá khứ, nhưng nay đã"
+            },
+            {
+              "title": "c. Các phó từ đi kèm:** last week/ month/ year/... (*tuần trước/ tháng trước/…),* ago (*cách đây*), yesterday (*hôm qua*",
+              "formula": null,
+              "explanation_vi": "**c. Các phó từ đi kèm:** last week/ month/ year/... (*tuần trước/ tháng trước/…),* ago (*cách đây*), yesterday (*hôm qua*)."
+            },
+            {
+              "title": "Đối với động từ đặc biệt, ta thêm ***not*** sau động từ.",
+              "formula": null,
+              "explanation_vi": "Đối với động từ đặc biệt, ta thêm ***not*** sau động từ."
             }
           ],
           "examples": [
@@ -279,6 +336,10 @@
             },
             {
               "en": "She worked as a secretary for five years before her marriage.",
+              "vi": null
+            },
+            {
+              "en": "He wasn’t absent from class yesterday. I couldn’t open the door last night.",
               "vi": null
             }
           ]
@@ -318,6 +379,16 @@
               "title": "Hành động đang xảy ra vào một thời điểm ở quá khứ.",
               "formula": null,
               "explanation_vi": "Hành động đang xảy ra vào một thời điểm ở quá khứ."
+            },
+            {
+              "title": "Hành động đang xảy ra (ở quá khứ) thì có một hành động khác xen vào (hành động nào kéo dài hơn",
+              "formula": null,
+              "explanation_vi": "Hành động đang xảy ra (ở quá khứ) thì có một hành động khác xen vào (hành động nào kéo dài hơn"
+            },
+            {
+              "title": "Hai hành động xảy ra đồng thời ở quá khứ.",
+              "formula": null,
+              "explanation_vi": "Hai hành động xảy ra đồng thời ở quá khứ."
             }
           ],
           "examples": [
@@ -335,6 +406,10 @@
             },
             {
               "en": "They were practising English at that time. What were you doing at this time yesterday?",
+              "vi": null
+            },
+            {
+              "en": "When I came yesterday, he was sleeping. What was she doing when you saw her?",
               "vi": null
             }
           ]
@@ -358,7 +433,7 @@
             {
               "title": "b. Cách dùng (Usage)",
               "formula": null,
-              "explanation_vi": "# b. Cách dùng (Usage)\n\nThì quá khứ hoàn thành diễn tả một hành động quá khứ xảy ra trước một thời gian quá khứ hoặc trước một hành động quá khứ khác. (Nếu trong câu có hai hành độ"
+              "explanation_vi": "# b. Cách dùng (Usage)\n\nThì quá khứ hoàn thành diễn tả một hành động quá khứ xảy ra trước một thời gian quá khứ hoặc trước một hành động quá khứ khác. (Nếu trong câu có hai hành động quá khứ, hành độn"
             }
           ],
           "examples": [
@@ -395,7 +470,7 @@
             {
               "title": "b. Cách dùng (Usage)",
               "formula": null,
-              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì quá khứ hoàn thành tiếp diễn diễn tả một hành động quá khứ đã xảy ra và kéo dài liên tục cho đến khi hành động quá khứ thứ hai xảy ra (hành động thứ h"
+              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì quá khứ hoàn thành tiếp diễn diễn tả một hành động quá khứ đã xảy ra và kéo dài liên tục cho đến khi hành động quá khứ thứ hai xảy ra (hành động thứ hai dùng Past Simple)"
             }
           ],
           "examples": [
@@ -444,6 +519,16 @@
               "title": "Thì tương lai đơn thường diễn tả một hành động sẽ xảy ra ở tương lai.",
               "formula": null,
               "explanation_vi": "Thì tương lai đơn thường diễn tả một hành động sẽ xảy ra ở tương lai."
+            },
+            {
+              "title": "Thì tương lai đơn được dùng diễn đạt ý kiến, đưa ra một lời hứa hoặc một quyết định tức thì.",
+              "formula": null,
+              "explanation_vi": "Thì tương lai đơn được dùng diễn đạt ý kiến, đưa ra một lời hứa hoặc một quyết định tức thì."
+            },
+            {
+              "title": "someday: *một ngày nào đó* + tomorrow: *ngày mai*",
+              "formula": null,
+              "explanation_vi": "someday: *một ngày nào đó* + tomorrow: *ngày mai*"
             }
           ],
           "examples": [
@@ -500,6 +585,16 @@
               "title": "+ going to + V(bare-inf)",
               "formula": "+ going to + V(bare-inf)",
               "explanation_vi": null
+            },
+            {
+              "title": "+ V-ing",
+              "formula": "+ V-ing",
+              "explanation_vi": null
+            },
+            {
+              "title": "b. Cách dùng (Usage)",
+              "formula": null,
+              "explanation_vi": "# b. Cách dùng (Usage)\n\n*Be going to* và *thì hiện tại tiếp diễn* (present continuous) được dùng để diễn tả một hành động sắp sửa xảy ra hoặc một dự định sắp tới (thường thường trong câu không có cụm "
             }
           ],
           "examples": [
@@ -569,7 +664,7 @@
             {
               "title": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một thời điểm ở tương lai. Cách dùng này thường được dù",
               "formula": null,
-              "explanation_vi": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một thời điểm ở tương lai. Cách dùng này thường được dùng với các cụm từ chỉ thời gian bắt đầu bằng ***by***: *by +"
+              "explanation_vi": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một thời điểm ở tương lai. Cách dùng này thường được dùng với các cụm từ chỉ thời gian bắt đầu bằng ***by***: *by + mốc thời gian, by t"
             },
             {
               "title": "Thì tương lai hoàn thành diễn tả một hành động sẽ hoàn tất trước một hành động khác trong tương",
@@ -611,12 +706,12 @@
             {
               "title": "b. Cách dùng (Usage)",
               "formula": null,
-              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì tương lai hoàn thành tiếp diễn diễn tả một hành động bắt đầu từ quá khứ và kéo dài liên tục đến một thời điểm nào đó trong tương lai.\n\nEx: By November"
+              "explanation_vi": "**b. Cách dùng (Usage)**\n\nThì tương lai hoàn thành tiếp diễn diễn tả một hành động bắt đầu từ quá khứ và kéo dài liên tục đến một thời điểm nào đó trong tương lai.\n\nEx: By November, we’ll have been li"
             },
             {
               "title": "GHI NHỚ:",
               "formula": null,
-              "explanation_vi": "# GHI NHỚ:\n\n1. Không dùng các thì tiếp diễn (Continuous Tenses) với các động từ chỉ nhận thức, tri giác (*see, be, hear...*).\n\n2. Không dùng các thì tương lai (Future Tenses) trong"
+              "explanation_vi": "# GHI NHỚ:\n\n1. Không dùng các thì tiếp diễn (Continuous Tenses) với các động từ chỉ nhận thức, tri giác (*see, be, hear...*).\n\n2. Không dùng các thì tương lai (Future Tenses) trong các mệnh đề trạng n"
             }
           ],
           "examples": [
@@ -637,39 +732,128 @@
           "code": "TENSE_PRES_SIMPLE:EX_I",
           "roman": "I",
           "title": "Do Supply the correct verb form: The Simple Present Tense or The Present Continuous Tense.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "0a6e5eeb-2643-5348-ba38-4b25d0a0e78e",
               "num": 1,
-              "stem": "Be quiet! The baby (sleep)."
+              "stem": "Be quiet! The baby (sleep).",
+              "answers": [
+                {
+                  "correct": "is sleeping",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is sleeping"
             },
             {
+              "id": "bd01b2f3-5663-53f8-ae2e-03580a59e9f6",
               "num": 2,
-              "stem": "We seldom (eat) before 6:30."
+              "stem": "We seldom (eat) before 6:30.",
+              "answers": [
+                {
+                  "correct": "eat",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: eat"
             },
             {
+              "id": "b4bf65b2-38de-5bfd-88ca-ff796fe097df",
               "num": 3,
-              "stem": "Look! A man (run) after the train. He (want) to catch it."
+              "stem": "Look! A man (run) after the train. He (want) to catch it.",
+              "answers": [
+                {
+                  "correct": "is running - wants",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is running - wants"
             },
             {
+              "id": "cdc39589-0d2b-597c-b261-ccc271b75214",
               "num": 4,
-              "stem": "The sun (set) in the West."
+              "stem": "The sun (set) in the West.",
+              "answers": [
+                {
+                  "correct": "sets",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: sets"
             },
             {
+              "id": "d2f19cab-e6d6-5712-82ff-fabd2bfffb64",
               "num": 5,
-              "stem": "It (be) often hot in summer."
+              "stem": "It (be) often hot in summer.",
+              "answers": [
+                {
+                  "correct": "is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is"
             },
             {
+              "id": "5b4a8d9c-d8be-5292-aa47-3f2f0d6aedf9",
               "num": 6,
-              "stem": "I (do) an exercise on the present tenses at this moment and I (think) that I (know) how to use it now."
+              "stem": "I (do) an exercise on the present tenses at this moment and I (think) that I (know) how to use it now.",
+              "answers": [
+                {
+                  "correct": "am doing - think - know",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: am doing - think - know"
             },
             {
+              "id": "c0258706-087e-5d2e-8c9a-32d5699b6fd7",
               "num": 7,
-              "stem": "My mother sometimes (buy) vegetables at this market."
+              "stem": "My mother sometimes (buy) vegetables at this market.",
+              "answers": [
+                {
+                  "correct": "buys",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: buys"
             },
             {
+              "id": "390d441e-e229-55b1-8f90-416fda99cd1f",
               "num": 8,
-              "stem": "It (be) very cold now."
+              "stem": "It (be) very cold now.",
+              "answers": [
+                {
+                  "correct": "is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is"
+            },
+            {
+              "id": "4c10c27e-c9a5-594a-985d-38baf96e78f2",
+              "num": 9,
+              "stem": "It (rain) much in summer. It (rain) now.",
+              "answers": [
+                {
+                  "correct": "rains - is raining",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: rains - is raining"
+            },
+            {
+              "id": "950eb39a-2afd-51cc-a41c-5ebdd0fcd0e4",
+              "num": 10,
+              "stem": "Daisy (cook) some food in the kitchen at present. She always (cook) in the morning.",
+              "answers": [
+                {
+                  "correct": "is cooking – cooks",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is cooking – cooks"
             }
           ]
         },
@@ -678,39 +862,132 @@
           "code": "TENSE_PRES_SIMPLE:EX_II",
           "roman": "II",
           "title": "Supply the correct verb form: The Present Perfect or The Present Perfect Continuous.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "99d05464-6794-51e9-903f-88d4fe56daf0",
               "num": 1,
-              "stem": "How long you (study) English? For 5 years."
+              "stem": "How long you (study) English? For 5 years.",
+              "answers": [
+                {
+                  "correct": "have you been studying",
+                  "alternatives": [
+                    "have you studied"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have you been studying/ have you studied"
             },
             {
+              "id": "c0e63e14-6c32-5146-b15a-191665346247",
               "num": 2,
-              "stem": "I (wait) for two hours, but she (not come) yet."
+              "stem": "I (wait) for two hours, but she (not come) yet.",
+              "answers": [
+                {
+                  "correct": "have been waiting - hasn’t come",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have been waiting - hasn’t come"
             },
             {
+              "id": "590ff160-4d49-516a-b7ac-959231de48b1",
               "num": 3,
-              "stem": "They (live) in Ho Chi Minh City since 1975."
+              "stem": "They (live) in Ho Chi Minh City since 1975.",
+              "answers": [
+                {
+                  "correct": "have been living",
+                  "alternatives": [
+                    "have lived"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have been living/ have lived"
             },
             {
+              "id": "9ac32535-b1f9-5200-a920-ef81afdf3ef5",
               "num": 4,
-              "stem": "She (read) all the books written by Dickens. How many books you (read)?"
+              "stem": "She (read) all the books written by Dickens. How many books you (read)?",
+              "answers": [
+                {
+                  "correct": "has read - have you read",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has read - have you read"
             },
             {
+              "id": "56b931eb-4d0b-5b0c-b62d-963ae96dfad6",
               "num": 5,
-              "stem": "He (not, be) here since Christmas, I wonder where he (live) since then."
+              "stem": "He (not, be) here since Christmas, I wonder where he (live) since then.",
+              "answers": [
+                {
+                  "correct": "hasn’t been - has been living",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: hasn’t been - has been living"
             },
             {
+              "id": "75c1ec98-1357-5e19-813d-6d6667bfadc8",
               "num": 6,
-              "stem": "Jack (go) to Paris for a holiday. He never (be) there."
+              "stem": "Jack (go) to Paris for a holiday. He never (be) there.",
+              "answers": [
+                {
+                  "correct": "has gone - has never been",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has gone - has never been"
             },
             {
+              "id": "8b1a9dd3-7690-5b77-9ff6-098254c46c19",
               "num": 7,
-              "stem": "You (sleep) so far? I (ring) the bell for the last twenty minutes."
+              "stem": "You (sleep) so far? I (ring) the bell for the last twenty minutes.",
+              "answers": [
+                {
+                  "correct": "Have you been sleeping - have been ringing",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Have you been sleeping - have been ringing"
             },
             {
+              "id": "9772088d-0dc1-5d13-9972-7726e8ccf403",
               "num": 8,
-              "stem": "He (write) a novel for two years, but he (not finish) it yet."
+              "stem": "He (write) a novel for two years, but he (not finish) it yet.",
+              "answers": [
+                {
+                  "correct": "has been writing - hasn’t finished",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has been writing - hasn’t finished"
+            },
+            {
+              "id": "35c36d73-2040-5407-b98e-30016d426da2",
+              "num": 9,
+              "stem": "Mary (lose) her hat and she (look) for it until now.",
+              "answers": [
+                {
+                  "correct": "has lost - has been looking",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has lost - has been looking"
+            },
+            {
+              "id": "7122f78c-9153-5be5-b82f-9ae76a3471c7",
+              "num": 10,
+              "stem": "I (see) that film several times because I like it.",
+              "answers": [
+                {
+                  "correct": "have seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have seen"
             }
           ]
         },
@@ -719,39 +996,154 @@
           "code": "TENSE_PRES_SIMPLE:EX_III",
           "roman": "III",
           "title": "Supply the correct verb form: Present Tenses.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "06ee9f22-9912-5c3d-807b-f0d41339c4aa",
               "num": 1,
-              "stem": "Listen! I (think) someone (knock) at the door."
+              "stem": "Listen! I (think) someone (knock) at the door.",
+              "answers": [
+                {
+                  "correct": "think - is knocking",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: think - is knocking"
             },
             {
+              "id": "c3324aa7-30b8-54f2-9f31-bc5d1d46394b",
               "num": 2,
-              "stem": "Up to the present, we (write) almost every lesson in the book."
+              "stem": "Up to the present, we (write) almost every lesson in the book.",
+              "answers": [
+                {
+                  "correct": "have written",
+                  "alternatives": [
+                    "have been writing"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have written/ have been writing"
             },
             {
+              "id": "0ccdea31-8da6-514b-b0c4-a76f11e1aaf9",
               "num": 3,
-              "stem": "The earth (circle) the sun once every 365 days."
+              "stem": "The earth (circle) the sun once every 365 days.",
+              "answers": [
+                {
+                  "correct": "circles",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: circles"
             },
             {
+              "id": "1ef1d7bd-b64f-5288-879a-a137324d5665",
               "num": 4,
-              "stem": "The farmers (work) in the field at the moment."
+              "stem": "The farmers (work) in the field at the moment.",
+              "answers": [
+                {
+                  "correct": "are working",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: are working"
             },
             {
+              "id": "d09aace5-36db-596f-afd2-8f03dc0b1382",
               "num": 5,
-              "stem": "How many times you (see) him since he went to Edinburgh?"
+              "stem": "How many times you (see) him since he went to Edinburgh?",
+              "answers": [
+                {
+                  "correct": "have you seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have you seen"
             },
             {
+              "id": "31e7d16c-a6ec-5b1a-98e6-74e299a387e6",
               "num": 6,
-              "stem": "Rivers usually (flow) to the sea."
+              "stem": "Rivers usually (flow) to the sea.",
+              "answers": [
+                {
+                  "correct": "flow",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: flow"
             },
             {
+              "id": "3cbef9fe-3f02-56a9-9ad0-07bfe28b7647",
               "num": 7,
-              "stem": "Look! The boy (cry)."
+              "stem": "Look! The boy (cry).",
+              "answers": [
+                {
+                  "correct": "is crying",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is crying"
             },
             {
+              "id": "05b21db9-76e0-5898-8be3-9494e714805b",
               "num": 8,
-              "stem": "Do you know that man, who (smoke) there?"
+              "stem": "Do you know that man, who (smoke) there?",
+              "answers": [
+                {
+                  "correct": "is smoking",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is smoking"
+            },
+            {
+              "id": "1ce0159c-45ff-5d84-abc8-94706ae2d369",
+              "num": 9,
+              "stem": "Mrs Green always (go) to work by bus.",
+              "answers": [
+                {
+                  "correct": "goes",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: goes"
+            },
+            {
+              "id": "898046aa-381e-5a2a-9d42-02b6839355d9",
+              "num": 10,
+              "stem": "We (be) from France. We (be) there for 20 years.",
+              "answers": [
+                {
+                  "correct": "are - have been",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: are - have been"
+            },
+            {
+              "id": "b8cae276-ceec-5b36-8393-7969678f624a",
+              "num": 11,
+              "stem": "That house (belong) to Mr. Green.",
+              "answers": [
+                {
+                  "correct": "belongs",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: belongs"
+            },
+            {
+              "id": "553c8a08-e9e4-5f25-8968-0f0b610cabdc",
+              "num": 12,
+              "stem": "Mai (lose) her dictionary.",
+              "answers": [
+                {
+                  "correct": "has lost",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has lost"
             }
           ]
         },
@@ -760,39 +1152,133 @@
           "code": "TENSE_PRES_SIMPLE:EX_IV",
           "roman": "IV",
           "title": "Supply the correct verb form. Simple Past or Present Perfect",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "8ee9ac32-8a30-5d6f-95a9-8eaa627bbfdf",
               "num": 1,
-              "stem": "I (see) her before."
+              "stem": "I (see) her before.",
+              "answers": [
+                {
+                  "correct": "have seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have seen"
             },
             {
+              "id": "7a5e399f-c724-54c7-ba95-f7b5ec9adc54",
               "num": 2,
-              "stem": "I (see) her last year."
+              "stem": "I (see) her last year.",
+              "answers": [
+                {
+                  "correct": "saw",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: saw"
             },
             {
+              "id": "d54d52b8-9de2-5ad2-9730-6f1ab98bb977",
               "num": 3,
-              "stem": "Tom (never be) in Hanoi."
+              "stem": "Tom (never be) in Hanoi.",
+              "answers": [
+                {
+                  "correct": "has never been",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has never been"
             },
             {
+              "id": "09e1c479-a9ff-51b5-a142-bc9668d4f4b6",
               "num": 4,
-              "stem": "I (read) the novel written by Jack London several times before."
+              "stem": "I (read) the novel written by Jack London several times before.",
+              "answers": [
+                {
+                  "correct": "have read",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have read"
             },
             {
+              "id": "bf365e36-55e9-5066-bdd1-6167f5f13fb0",
               "num": 5,
-              "stem": "What you (do) yesterday?"
+              "stem": "What you (do) yesterday?",
+              "answers": [
+                {
+                  "correct": "did you do",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: did you do"
             },
             {
+              "id": "7ff519ec-4b50-5ceb-a8b1-fdebde847241",
               "num": 6,
-              "stem": "You (watch) TV last night?"
+              "stem": "You (watch) TV last night?",
+              "answers": [
+                {
+                  "correct": "did you watch",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: did you watch"
             },
             {
+              "id": "0239f33a-a5cc-59e1-8b1d-6dad59ada607",
               "num": 7,
-              "stem": "She (be) born in 1980."
+              "stem": "She (be) born in 1980.",
+              "answers": [
+                {
+                  "correct": "was",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was"
             },
             {
+              "id": "1912e61b-d3ba-56ec-8142-a40c125c029a",
               "num": 8,
-              "stem": "He (write) a book since last year."
+              "stem": "He (write) a book since last year.",
+              "answers": [
+                {
+                  "correct": "has written",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has written"
+            },
+            {
+              "id": "b04e5b6c-3c46-5ffc-b0f3-fd5bc510565e",
+              "num": 9,
+              "stem": "Mr Green (teach) English in this school since he (graduate) from the university in 1986.",
+              "answers": [
+                {
+                  "correct": "has taught",
+                  "alternatives": [
+                    "has been teaching - graduated"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has taught/ has been teaching - graduated"
+            },
+            {
+              "id": "60dd71f6-ec5f-572a-a034-dd7c45afb7e3",
+              "num": 10,
+              "stem": "How long you (learn) English?",
+              "answers": [
+                {
+                  "correct": "have you been learning",
+                  "alternatives": [
+                    "have you learnt",
+                    "(learned)"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: have you been learning/ have you learnt/ (learned)"
             }
           ]
         },
@@ -801,39 +1287,518 @@
           "code": "TENSE_PRES_SIMPLE:EX_V",
           "roman": "V",
           "title": "Supply the correct verb form: Simple Past or Past Continuous.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "0eb139a5-bd8b-5569-a0fc-c4f2c4b10d9c",
               "num": 1,
-              "stem": "When I (arrive) at this house, he still (sleep)."
+              "stem": "When I (arrive) at this house, he still (sleep).",
+              "answers": [
+                {
+                  "correct": "arrived - was still sleeping",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: arrived - was still sleeping"
             },
             {
+              "id": "4cedf488-6439-5994-bf68-8b0a55f59a1c",
               "num": 2,
-              "stem": "The light (go) out while we (have) dinner."
+              "stem": "The light (go) out while we (have) dinner.",
+              "answers": [
+                {
+                  "correct": "went - were having",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: went - were having"
             },
             {
+              "id": "43d9de2c-1082-5ae6-8694-78487f01c04f",
               "num": 3,
-              "stem": "Bill (have) breakfast when I (stop) at this house this morning."
+              "stem": "Bill (have) breakfast when I (stop) at this house this morning.",
+              "answers": [
+                {
+                  "correct": "was having - stopped",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was having - stopped"
             },
             {
+              "id": "aac62b28-2a6c-5efe-9b44-9a8aa01d2f7b",
               "num": 4,
-              "stem": "As we (cross) the street, we (see) an accident."
+              "stem": "As we (cross) the street, we (see) an accident.",
+              "answers": [
+                {
+                  "correct": "were crossing - saw",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: were crossing - saw"
             },
             {
+              "id": "e260a37d-c7e1-5b43-a486-6cfc4ca34596",
               "num": 5,
-              "stem": "Tom (see) a serious accident while he (stand) at the bus stop."
+              "stem": "Tom (see) a serious accident while he (stand) at the bus stop.",
+              "answers": [
+                {
+                  "correct": "saw - was standing",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: saw - was standing"
             },
             {
+              "id": "65e4d0ef-75c4-5ae6-b995-0ae8159c1475",
               "num": 6,
-              "stem": "While my father (read) a newspaper, I (learn) my lesson and my sister (do) her homework."
+              "stem": "While my father (read) a newspaper, I (learn) my lesson and my sister (do) her homework.",
+              "answers": [
+                {
+                  "correct": "was reading - was learning - was doing",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was reading - was learning - was doing"
             },
             {
+              "id": "2057bf3a-0f9e-59b5-b22b-d32dd854ea20",
               "num": 7,
-              "stem": "The children (play) football when their mother (come) back home."
+              "stem": "The children (play) football when their mother (come) back home.",
+              "answers": [
+                {
+                  "correct": "were playing – came",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: were playing – came"
             },
             {
+              "id": "d286564a-4adb-5f57-b594-1ceafedcb383",
               "num": 8,
-              "stem": "The bell (ring) while Tom (take) a bath."
+              "stem": "The bell (ring) while Tom (take) a bath.",
+              "answers": [
+                {
+                  "correct": "rang - was taking",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: rang - was taking"
+            },
+            {
+              "id": "dcb04b1c-89c8-5dc5-91ff-3fca0fb75f3c",
+              "num": 9,
+              "stem": "I (be) very tired because I (work) all day yesterday.",
+              "answers": [
+                {
+                  "correct": "was - was working",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was - was working"
+            },
+            {
+              "id": "46bd347d-ffdf-512c-a33e-bd1730d704aa",
+              "num": 10,
+              "stem": "He (sit) in a cafe when I (see) him.",
+              "answers": [
+                {
+                  "correct": "was sitting – saw",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was sitting – saw"
+            }
+          ]
+        },
+        {
+          "id": "bd739709-32f3-59cd-bc96-96c92c22d6b4",
+          "code": "TENSE_PRES_SIMPLE:EX_VI",
+          "roman": "VI",
+          "title": "Give the right forms of the verbs in brackets: Simple Past or Past Perfect",
+          "instruction_vi": null,
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "id": "081a295c-74ca-5f91-abaa-f636da07ce44",
+              "num": 1,
+              "stem": "They (go) home after they (finish) their work.",
+              "answers": [
+                {
+                  "correct": "went - had finished",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: went - had finished"
+            },
+            {
+              "id": "20b20e52-00d3-5ece-848c-5594f1c6d805",
+              "num": 2,
+              "stem": "She said that she (already, see) Dr. Rice.",
+              "answers": [
+                {
+                  "correct": "had already seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had already seen"
+            },
+            {
+              "id": "d1910438-8ab7-57d7-91a2-35e49fe53317",
+              "num": 3,
+              "stem": "When we came to the stadium, the match (already, begin).",
+              "answers": [
+                {
+                  "correct": "had already begun",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had already begun"
+            },
+            {
+              "id": "705eef83-31dd-5e36-86fb-78d513b546b2",
+              "num": 4,
+              "stem": "They told me they (not, eat) such kind of food before.",
+              "answers": [
+                {
+                  "correct": "hadn’t eaten",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: hadn’t eaten"
+            },
+            {
+              "id": "66439f00-1498-5e94-88a5-020fbb0da154",
+              "num": 5,
+              "stem": "He (ask) why we (come) so early.",
+              "answers": [
+                {
+                  "correct": "asked - had come",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: asked - had come"
+            },
+            {
+              "id": "fc72e18c-837c-5fe8-8f23-4e9ee0f30e25",
+              "num": 6,
+              "stem": "After they had gone, I (sit) down and (rest).",
+              "answers": [
+                {
+                  "correct": "sat - rested",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: sat - rested"
+            },
+            {
+              "id": "92477fcb-04bc-5722-a7c2-7f8f7e662eae",
+              "num": 7,
+              "stem": "Before she (watch) TV, she (do) her homework.",
+              "answers": [
+                {
+                  "correct": "watched - had done",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: watched - had done"
+            },
+            {
+              "id": "530ef4ec-4a13-5344-ba5e-71271072183c",
+              "num": 8,
+              "stem": "After taking a bath, he (go) to bed.",
+              "answers": [
+                {
+                  "correct": "went",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: went"
+            },
+            {
+              "id": "f2c93fe1-d859-5754-af62-e2cc9530d94e",
+              "num": 9,
+              "stem": "What (be) he when he (be) young?",
+              "answers": [
+                {
+                  "correct": "was - was",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was - was"
+            },
+            {
+              "id": "ab5145db-22c5-5870-aa76-cfff864c7dcb",
+              "num": 10,
+              "stem": "It was the first time I (ever, see) such a beautiful girl.",
+              "answers": [
+                {
+                  "correct": "had ever seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had ever seen"
+            }
+          ]
+        },
+        {
+          "id": "97dca56a-cabc-5e6a-bc0c-69aa18d2b695",
+          "code": "TENSE_PRES_SIMPLE:EX_VII",
+          "roman": "VII",
+          "title": "Give the right forms of the verbs in brackets: Past Tenses.",
+          "instruction_vi": null,
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "id": "93be85b7-3393-5ad8-9c73-6670830c91a2",
+              "num": 1,
+              "stem": "Yesterday John (go) to the store before he (go) home.",
+              "answers": [
+                {
+                  "correct": "had gone - went",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had gone - went"
+            },
+            {
+              "id": "06f62da8-eb73-55ae-a84c-30b3776c5454",
+              "num": 2,
+              "stem": "Our teacher (tell) us yesterday that he (visit) England in 1970.",
+              "answers": [
+                {
+                  "correct": "told - visited",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: told - visited"
+            },
+            {
+              "id": "d6843dbe-e9f6-5692-9545-fa7b55668cc6",
+              "num": 3,
+              "stem": "When John and I got to the theatre, the movie (start) already.",
+              "answers": [
+                {
+                  "correct": "had already started",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had already started"
+            },
+            {
+              "id": "c2a94e85-2204-54f3-9c85-c58806ffa5f0",
+              "num": 4,
+              "stem": "Before Alice (go) to sleep, she (call) her family.",
+              "answers": [
+                {
+                  "correct": "went - had called",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: went - had called"
+            },
+            {
+              "id": "15c3e691-55e2-5258-818d-8b1513775ae5",
+              "num": 5,
+              "stem": "When the phone (ring), I (have) dinner.",
+              "answers": [
+                {
+                  "correct": "rang - was having",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: rang - was having"
+            },
+            {
+              "id": "602bc35e-67fc-5aae-bf94-1a6ec66ffac6",
+              "num": 6,
+              "stem": "Daisy (agree) with other members in the last meeting.",
+              "answers": [
+                {
+                  "correct": "agreed",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: agreed"
+            },
+            {
+              "id": "e4b2b11e-68d7-50a6-897f-7dcab075ab96",
+              "num": 7,
+              "stem": "What you (do) at 6 p.m yesterday?",
+              "answers": [
+                {
+                  "correct": "were you doing",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: were you doing"
+            },
+            {
+              "id": "a97eb095-74d4-55d0-9196-589b872c28ff",
+              "num": 8,
+              "stem": "The little girl asked what (happen) to her ice-cream.",
+              "answers": [
+                {
+                  "correct": "had happened",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had happened"
+            },
+            {
+              "id": "fc0a6210-1198-54d6-8ac1-48338845589a",
+              "num": 9,
+              "stem": "He (teach) in this school before he (leave) for England.",
+              "answers": [
+                {
+                  "correct": "had taught - left",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had taught - left"
+            },
+            {
+              "id": "a5b725b9-2e5a-5a6d-98c3-2ef4d179a1f6",
+              "num": 10,
+              "stem": "She (win) the gold medal in 1986.",
+              "answers": [
+                {
+                  "correct": "Won",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Won"
+            }
+          ]
+        },
+        {
+          "id": "fe31c17e-59a2-51e1-ae5d-c9b173884bdf",
+          "code": "TENSE_PRES_SIMPLE:EX_VIII",
+          "roman": "VIII",
+          "title": "Give the right forms of the verbs in brackets: Simple Future or Simple Present",
+          "instruction_vi": null,
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "id": "3f664bde-e860-5ee0-be5a-a15e4062e5a7",
+              "num": 1,
+              "stem": "We’ll go out when the rain (stop).",
+              "answers": [
+                {
+                  "correct": "stops",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: stops"
+            },
+            {
+              "id": "5561cbba-a3bd-5b2b-a117-f8147bf1386d",
+              "num": 2,
+              "stem": "I (stay) here until he (answer) me.",
+              "answers": [
+                {
+                  "correct": "will stay – answers",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will stay – answers"
+            },
+            {
+              "id": "9937e8ac-9a72-5faf-9871-97b209df88c8",
+              "num": 3,
+              "stem": "Wait until I (catch) you.",
+              "answers": [
+                {
+                  "correct": "catch",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: catch"
+            },
+            {
+              "id": "560d09ed-8a2e-5b06-8a50-ce7ce38e7f6b",
+              "num": 4,
+              "stem": "She (not come) until you (be) ready.",
+              "answers": [
+                {
+                  "correct": "won’t come - are",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: won’t come - are"
+            },
+            {
+              "id": "1328ff13-2e69-5840-af32-84137540b109",
+              "num": 5,
+              "stem": "Miss Helen (help) you as soon as she (finish) that letter tomorrow.",
+              "answers": [
+                {
+                  "correct": "will help – finishes",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will help – finishes"
+            },
+            {
+              "id": "ea8b96e2-839d-591b-907f-10f64b71ab8d",
+              "num": 6,
+              "stem": "After the class (be) over, ask the teacher about that sentence.",
+              "answers": [
+                {
+                  "correct": "is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is"
+            },
+            {
+              "id": "c5e7cc29-cb69-56e7-ac6c-0250627d2e1d",
+              "num": 7,
+              "stem": "I (come) and (see) you before I leave here.",
+              "answers": [
+                {
+                  "correct": "will come - see",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will come - see"
+            },
+            {
+              "id": "ccd4338f-6e98-56e3-a69a-3b26869bf29b",
+              "num": 8,
+              "stem": "We (go) home as soon as we have finished our work.",
+              "answers": [
+                {
+                  "correct": "will go",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will go"
+            },
+            {
+              "id": "fb18bad2-8301-588c-a887-220914eed4c6",
+              "num": 9,
+              "stem": "I (wait) here until you (come) back tomorrow.",
+              "answers": [
+                {
+                  "correct": "will wait - come",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will wait - come"
+            },
+            {
+              "id": "8c9cbb0b-d336-50db-a656-c3a9fa1b0022",
+              "num": 10,
+              "stem": "I (send) you some postcards as soon as I (arrive) in London.",
+              "answers": [
+                {
+                  "correct": "will send - arrive",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will send - arrive"
             }
           ]
         }
@@ -855,7 +1820,7 @@
             {
               "title": "I. Sự phối hợp của các động từ trong mệnh đề chính (main clause) và mệnh đề phụ (subordinate clause):",
               "formula": null,
-              "explanation_vi": "# I. Sự phối hợp của các động từ trong mệnh đề chính (main clause) và mệnh đề phụ (subordinate clause):\n\n|  |  |\n| --- | --- |\n| **MAIN CLAUSE** | **SUBORDINATE CLAUSE** |\n| Simple"
+              "explanation_vi": "# I. Sự phối hợp của các động từ trong mệnh đề chính (main clause) và mệnh đề phụ (subordinate clause):\n\n|  |  |\n| --- | --- |\n| **MAIN CLAUSE** | **SUBORDINATE CLAUSE** |\n| Simple Present | Simple Pr"
             }
           ],
           "examples": [
@@ -912,6 +1877,16 @@
               "title": "while: *trong khi* - no sooner... than: *ngay khi*",
               "formula": null,
               "explanation_vi": "while: *trong khi* - no sooner... than: *ngay khi*"
+            },
+            {
+              "title": "before: *trước khi* - hardly... when: *khó... khi*",
+              "formula": null,
+              "explanation_vi": "before: *trước khi* - hardly... when: *khó... khi*"
+            },
+            {
+              "title": "after: *sau khi* - as long as: *chừng nào, cho đến khi*",
+              "formula": null,
+              "explanation_vi": "after: *sau khi* - as long as: *chừng nào, cho đến khi*"
             }
           ],
           "examples": [
@@ -930,6 +1905,10 @@
             {
               "en": "The train had already left when I arrived at the station. Please wait here until I come back.",
               "vi": null
+            },
+            {
+              "en": "She has played the piano since she was ten years old.",
+              "vi": null
             }
           ]
         }
@@ -940,39 +1919,152 @@
           "code": "SEQ_TIME_CLAUSES:EX_I",
           "roman": "I",
           "title": "Supply the correct verb forms.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "c51fa834-f25e-5b01-beaf-96c031aa26cb",
               "num": 1,
-              "stem": "He thinks that it (rain) tonight."
+              "stem": "He thinks that it (rain) tonight.",
+              "answers": [
+                {
+                  "correct": "will rain",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will rain"
             },
             {
+              "id": "1d742476-7fbf-566d-ab25-59ea542959cd",
               "num": 2,
-              "stem": "She said that she (get) married soon."
+              "stem": "She said that she (get) married soon.",
+              "answers": [
+                {
+                  "correct": "would get",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would get"
             },
             {
+              "id": "7e473bf7-6842-5f27-9cbc-db611e573d99",
               "num": 3,
-              "stem": "Bill said that he (lose) his bicycle."
+              "stem": "Bill said that he (lose) his bicycle.",
+              "answers": [
+                {
+                  "correct": "had lost",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had lost"
             },
             {
+              "id": "087d10e6-c175-54ec-9c04-6cabc3bba08b",
               "num": 4,
-              "stem": "He knew that I (come) the following week."
+              "stem": "He knew that I (come) the following week.",
+              "answers": [
+                {
+                  "correct": "would come",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would come"
             },
             {
+              "id": "1610ce2e-ff98-58f5-80c7-ce9bd7de7b47",
               "num": 5,
-              "stem": "She understood that we (promise) to go."
+              "stem": "She understood that we (promise) to go.",
+              "answers": [
+                {
+                  "correct": "had promised",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had promised"
             },
             {
+              "id": "8a530a6e-d763-5718-9fa9-febd2730522f",
               "num": 6,
-              "stem": "I was taught that the sun (be) bigger than the moon."
+              "stem": "I was taught that the sun (be) bigger than the moon.",
+              "answers": [
+                {
+                  "correct": "is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is"
             },
             {
+              "id": "6dc89d1b-04f5-545e-9311-48cf1b318eac",
               "num": 7,
-              "stem": "The boy knew that an hour (have) sixty minutes."
+              "stem": "The boy knew that an hour (have) sixty minutes.",
+              "answers": [
+                {
+                  "correct": "has",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has"
             },
             {
+              "id": "0f2a2e76-e640-5726-92e8-72f05ba1acd6",
               "num": 8,
-              "stem": "I didn’t know what time it (be), so I (turn) on the radio."
+              "stem": "I didn’t know what time it (be), so I (turn) on the radio.",
+              "answers": [
+                {
+                  "correct": "was - turned",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was - turned"
+            },
+            {
+              "id": "cdcca009-c610-55d7-97da-aa75a135c6c4",
+              "num": 9,
+              "stem": "I wondered whether I (lock) the door or not.",
+              "answers": [
+                {
+                  "correct": "had locked",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had locked"
+            },
+            {
+              "id": "dc6303ee-8a22-55b5-b24c-f065f963f53d",
+              "num": 10,
+              "stem": "She says that she (live) in the country when she (be) a child.",
+              "answers": [
+                {
+                  "correct": "lived - was",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: lived - was"
+            },
+            {
+              "id": "9f512b21-6114-5001-ae7a-e1a9f4069c1e",
+              "num": 11,
+              "stem": "They hoped that they (end) soon.",
+              "answers": [
+                {
+                  "correct": "would end",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would end"
+            },
+            {
+              "id": "9307dbe1-2365-5d06-aed9-20d8c86fe874",
+              "num": 12,
+              "stem": "The teacher said that the shortest distance between two points (be) a straight line.",
+              "answers": [
+                {
+                  "correct": "is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is"
             }
           ]
         },
@@ -981,39 +2073,152 @@
           "code": "SEQ_TIME_CLAUSES:EX_II",
           "roman": "II",
           "title": "Choose the correct forms of the verbs in parentheses.",
+          "instruction_vi": null,
           "type": "MULTIPLE_CHOICE",
           "questions": [
             {
+              "id": "94159274-9eb9-5a24-83f8-3a7be3ddd102",
               "num": 1,
-              "stem": "I see that Tom (writes/ is writing) his composition."
+              "stem": "I see that Tom (writes/ is writing) his composition.",
+              "answers": [
+                {
+                  "correct": "is writing",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: is writing"
             },
             {
+              "id": "f00aec99-040a-57c9-82c5-81736b0ffca4",
               "num": 2,
-              "stem": "He says that he (looks/ will look) for a job next week."
+              "stem": "He says that he (looks/ will look) for a job next week.",
+              "answers": [
+                {
+                  "correct": "will look",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will look"
             },
             {
+              "id": "f2f2ac0c-4e50-56c5-8043-c970f1020950",
               "num": 3,
-              "stem": "They think he (was/ would be) here last night."
+              "stem": "They think he (was/ would be) here last night.",
+              "answers": [
+                {
+                  "correct": "was",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was"
             },
             {
+              "id": "3fda1d77-785a-5519-9762-3455ea2987b4",
               "num": 4,
-              "stem": "He tells us that he (was/ has been) to the mountains before."
+              "stem": "He tells us that he (was/ has been) to the mountains before.",
+              "answers": [
+                {
+                  "correct": "has been",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: has been"
             },
             {
+              "id": "68afff0f-eb2d-50ed-a180-513b75c44994",
               "num": 5,
-              "stem": "I hope that he (will be/ would be) able to attend."
+              "stem": "I hope that he (will be/ would be) able to attend.",
+              "answers": [
+                {
+                  "correct": "would be",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would be"
             },
             {
+              "id": "43331d5c-3b47-5667-ac78-00e9be66fe98",
               "num": 6,
-              "stem": "He wants to do it before his father (will come/ comes)."
+              "stem": "He wants to do it before his father (will come/ comes).",
+              "answers": [
+                {
+                  "correct": "comes",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: comes"
             },
             {
+              "id": "1a466168-ba56-57f0-9636-ec26400750c8",
               "num": 7,
-              "stem": "People have said that the sun (rise) in the East."
+              "stem": "People have said that the sun (rise) in the East.",
+              "answers": [
+                {
+                  "correct": "rises",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: rises"
             },
             {
+              "id": "d9ea7ad6-48da-5458-8e38-85bd82747321",
               "num": 8,
-              "stem": "He says he (does/ will do) it some time."
+              "stem": "He says he (does/ will do) it some time.",
+              "answers": [
+                {
+                  "correct": "will do",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will do"
+            },
+            {
+              "id": "9003b661-f7b6-5ff2-81a4-9db473fbe547",
+              "num": 9,
+              "stem": "He asked the guard what time the train usually (starts/ started).",
+              "answers": [
+                {
+                  "correct": "started",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: started"
+            },
+            {
+              "id": "6b96f6ee-1a1b-5223-b37d-fece3e8594cd",
+              "num": 10,
+              "stem": "He told me the morning that he (is going/ was going) with us the following day.",
+              "answers": [
+                {
+                  "correct": "was going",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: was going"
+            },
+            {
+              "id": "f36625a7-1775-5fc2-a8d1-265c127b142e",
+              "num": 11,
+              "stem": "He says that he (finished/ will finish) the project by May.",
+              "answers": [
+                {
+                  "correct": "will finish",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will finish"
+            },
+            {
+              "id": "a19a647d-f3f8-5fbb-a123-9ec4dcf438c7",
+              "num": 12,
+              "stem": "I realized that they (are/ were) older than they looked.",
+              "answers": [
+                {
+                  "correct": "were",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: were"
             }
           ]
         },
@@ -1022,39 +2227,158 @@
           "code": "SEQ_TIME_CLAUSES:EX_III",
           "roman": "III",
           "title": "Supply the correct verb forms.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "764a18e3-64cb-58a9-acba-6ddb5e181e14",
               "num": 1,
-              "stem": "After (leave) (1) school when she was 18, Laura (go) (2) to Bristol university for three years. While she (be) (3) at university, Laura (join) (4) a university folk group and started singing. It was at this time that she (write) (5) her famous song “The Price of Peace”."
+              "stem": "After (leave) (1) school when she was 18, Laura (go) (2) to Bristol university for three years. While she (be) (3) at university, Laura (join) (4) a university folk group and started singing. It was at this time that she (write) (5) her famous song “The Price of Peace”.",
+              "answers": [
+                {
+                  "correct": "1. leaving 2. went 3. was 4. joined 5. wrote",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. leaving 2. went 3. was 4. joined 5. wrote"
             },
             {
+              "id": "a4e1ae22-3b8c-5a42-850c-9f37e09f6e53",
               "num": 2,
-              "stem": "One of the first novels in history of literature (be) (1) written in England in 1719. It (be) (2) Robinson Crusoe by Daniel Dofoe. He (bear) (3) in London in a rich family. When Daniel (be) (4) a schoolboy, he (begin) (5) to write stories. After (leave) (6) school he (work) (7) in his father’s shop and (write) (8) articles for newspapers. Dofoe (visit) (9) many countries and (meet) (10) many people. That helped him much in his writings."
+              "stem": "One of the first novels in history of literature (be) (1) written in England in 1719. It (be) (2) Robinson Crusoe by Daniel Dofoe. He (bear) (3) in London in a rich family. When Daniel (be) (4) a schoolboy, he (begin) (5) to write stories. After (leave) (6) school he (work) (7) in his father’s shop and (write) (8) articles for newspapers. Dofoe (visit) (9) many countries and (meet) (10) many people. That helped him much in his writings.",
+              "answers": [
+                {
+                  "correct": "1. was 2. was 3. was born 4. was 5. began came 6. will move",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was 2. was 3. was born 4. was 5. began came 6. will move"
             },
             {
+              "id": "c1447e98-e8ec-5e69-b307-a45bf9dc43b2",
               "num": 3,
-              "stem": "A friend of mine, Judith Nelson, (presently, work) (1) in the international sales division at an electronics firm. She (just, return) (2) from a trip to Japan. She (be) (3) asked to go there because she can speak Japanese. For four years, she (never have) (4) the opportunity to use her Japanese until she (go) (5) to Tokyo last month. While she (be) (6) there, she (speak) (7) Japanese everyday and (enjoy) (8) very much of it."
+              "stem": "A friend of mine, Judith Nelson, (presently, work) (1) in the international sales division at an electronics firm. She (just, return) (2) from a trip to Japan. She (be) (3) asked to go there because she can speak Japanese. For four years, she (never have) (4) the opportunity to use her Japanese until she (go) (5) to Tokyo last month. While she (be) (6) there, she (speak) (7) Japanese everyday and (enjoy) (8) very much of it.",
+              "answers": [
+                {
+                  "correct": "1. is presently working 2. has just returned 3. was 4. had never had started 7. is",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. is presently working 2. has just returned 3. was 4. had never had started 7. is"
             },
             {
+              "id": "a72e830e-1599-587d-b2fb-e88315c95a24",
               "num": 4,
-              "stem": "Ever since the day I (decide) (1) to move to London, I (worry) (2) whether the decision I (take) (3) was the right one. As I (already sell) (4) my house and (arrange) (5) a new job, it is too late to change my mind. However, since then I (hear) (6) a lot of negative things about living in the Capital and lately some of them (begin) (7) to bother me. I (grow) (8) up in a small town and have spent all my life there."
+              "stem": "Ever since the day I (decide) (1) to move to London, I (worry) (2) whether the decision I (take) (3) was the right one. As I (already sell) (4) my house and (arrange) (5) a new job, it is too late to change my mind. However, since then I (hear) (6) a lot of negative things about living in the Capital and lately some of them (begin) (7) to bother me. I (grow) (8) up in a small town and have spent all my life there.",
+              "answers": [
+                {
+                  "correct": "1. decided 2. have worried 3. took 4. have already sold 5. arranged 6. have heard 7. have begun 8. grew has learnt",
+                  "alternatives": [
+                    "has been learning 8. will come",
+                    "are coming",
+                    "are going to come stopped 5. to talk 6. had done wrote 5. traveled 6. helped stopped 5. asked 6. was rented 5. spent 6. understood"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. decided 2. have worried 3. took 4. have already sold 5. arranged 6. have heard 7. have begun 8. grew has learnt/ has been learning 8. will come/ are coming / are going to come stopped 5. to talk 6. had done wrote 5. traveled 6. helped stopped 5. asked 6. was rented 5. spent 6. understood"
             },
             {
+              "id": "a2495080-3753-545b-98ff-cd2be14ae751",
               "num": 5,
-              "stem": "Mary (have) (1) to go to New York last week, but she almost (miss) (2) the plane. She (stand) (3) in the queue at the check-in desk when she suddenly (realize) (4) that she (leave) (5) her passport at home. Fortunately, she (not live) (6) very far from the airport so she (have) (7) time to go back home to get the passport. She (get) (8) back to the airport just in time for her flight."
+              "stem": "Mary (have) (1) to go to New York last week, but she almost (miss) (2) the plane. She (stand) (3) in the queue at the check-in desk when she suddenly (realize) (4) that she (leave) (5) her passport at home. Fortunately, she (not live) (6) very far from the airport so she (have) (7) time to go back home to get the passport. She (get) (8) back to the airport just in time for her flight.",
+              "answers": [
+                {
+                  "correct": "went 6. was 7. spoke 8. enjoyed 1. had 2. missed 3. was standing 4. realized had left 6. doesn’t live 7. had 8. got went 6. used 7. formed 8. didn’t advance was 6. stopped 7. asked 8. had been following will look 6. told 7. looked 8. give to take 6. felt 7. looked 8. saw appeared 6. was living arrived 6. has been was 6. was working 7. were playing saw 6. greeted 7. asked realized 6. had made 7. plays 8. has topped is more widely spoken 6. speak 7. is spoken 8. found",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: went 6. was 7. spoke 8. enjoyed 1. had 2. missed 3. was standing 4. realized had left 6. doesn’t live 7. had 8. got went 6. used 7. formed 8. didn’t advance was 6. stopped 7. asked 8. had been following will look 6. told 7. looked 8. give to take 6. felt 7. looked 8. saw appeared 6. was living arrived 6. has been was 6. was working 7. were playing saw 6. greeted 7. asked realized 6. had made 7. plays 8. has topped is more widely spoken 6. speak 7. is spoken 8. found"
             },
             {
+              "id": "98d9c019-618e-5823-93e9-fa6c7d315876",
               "num": 6,
-              "stem": "Rob Fellow (come) (1) from England. He (come) (2) to Paris six months ago to learn French. He (start) (3) learning French at school in England when he was eleven so he (learn) (4) it for nearly 10 years. He just (take) (5) an exam. If he passes, he (move) (6) into the next class. He (be) (7) excited today because his parents (come) (8) tomorrow to stay with him for a few days."
+              "stem": "Rob Fellow (come) (1) from England. He (come) (2) to Paris six months ago to learn French. He (start) (3) learning French at school in England when he was eleven so he (learn) (4) it for nearly 10 years. He just (take) (5) an exam. If he passes, he (move) (6) into the next class. He (be) (7) excited today because his parents (come) (8) tomorrow to stay with him for a few days.",
+              "answers": [
+                {
+                  "correct": "leaving 7. worked 8. wrote 9. had visited 10. had met 1. comes 5. has just taken",
+                  "alternatives": [
+                    "took explained 7. was standing 8. told 9. had traveled"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: leaving 7. worked 8. wrote 9. had visited 10. had met 1. comes 5. has just taken/ took explained 7. was standing 8. told 9. had traveled"
             },
             {
+              "id": "f81ddeb0-29d0-56cf-8cc5-acebe6bf7601",
               "num": 7,
-              "stem": "(Bear) (1) in Scotland in 1847, Alexander Bell (become) (2) interested very early in the methods of human communication. He (influence) (3) by his father and grandfather, who (spend) (4) years working with deaf people and those with faulty speech. Bell’s father even (go) (5) so far as to develop a system of so-called “visible speech” for the deaf. He (use) (6) sketches of the different positions of the lips and tongue. This science of visible speech (form) (7) the foundation of young Bell’s knowledge of the mechanics of human speech. But the young boy’s knowledge of other subjects (not/ advance) (8) quite as rapidly."
+              "stem": "(Bear) (1) in Scotland in 1847, Alexander Bell (become) (2) interested very early in the methods of human communication. He (influence) (3) by his father and grandfather, who (spend) (4) years working with deaf people and those with faulty speech. Bell’s father even (go) (5) so far as to develop a system of so-called “visible speech” for the deaf. He (use) (6) sketches of the different positions of the lips and tongue. This science of visible speech (form) (7) the foundation of young Bell’s knowledge of the mechanics of human speech. But the young boy’s knowledge of other subjects (not/ advance) (8) quite as rapidly.",
+              "answers": [
+                {
+                  "correct": "1. born 2. became 3. was influenced 4. spent had 8. were broken 9. was leaked",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. born 2. became 3. was influenced 4. spent had 8. were broken 9. was leaked"
             },
             {
+              "id": "918b8598-2d51-513e-b44e-9d083b293cc9",
               "num": 8,
-              "stem": "While I (walk) (1) across the campus the other day, I (meet) (2) my old friend, John, whom I (not see)\n(3) since July 10. Naturally we (stop) (4) (talk) (5) to each other for a few minutes. I asked him how he (do)\n(6) in his classes this semester."
+              "stem": "While I (walk) (1) across the campus the other day, I (meet) (2) my old friend, John, whom I (not see)\n(3) since July 10. Naturally we (stop) (4) (talk) (5) to each other for a few minutes. I asked him how he (do)\n(6) in his classes this semester.",
+              "answers": [
+                {
+                  "correct": "1. was walking 2. met 3. hadn’t seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was walking 2. met 3. hadn’t seen"
+            },
+            {
+              "id": "7ab37624-8ceb-509b-9e32-3ace7622bf27",
+              "num": 9,
+              "stem": "Jack London (bear) (1) in San Francisco on January 12, 1876. He (begin) (2) his education at the university of California, but (not finish) (3) it there, he (write) (4) a lot of adventure books. He (travel) (5) much, and his experience in his trips (help) (6) him write many famous books.",
+              "answers": [
+                {
+                  "correct": "1. was born 2. began 3. didn’t finish apologized 10. told 11. had mistaken was 10. must know",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was born 2. began 3. didn’t finish apologized 10. told 11. had mistaken was 10. must know"
+            },
+            {
+              "id": "83201e75-a5bb-55b5-8a49-7173215b35c6",
+              "num": 10,
+              "stem": "A: Tell us what happened to you yesterday?\nB: I (walk) (1) along Piccadilly when I (realize) (2) that a man with a black beard, whom I (see) (3) three time already that afternoon, (follow) (4) me. I (be) (5) very annoyed, and at last I (stop) (6) him and (ask) (7) him why he (follow) (8) me. The man (apologize) (9) and (tell) (10) me he (mistake) (11) me for one of his friends.",
+              "answers": [
+                {
+                  "correct": "1. was walking 2. realized 3.had seen 4. was following",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was walking 2. realized 3.had seen 4. was following"
+            },
+            {
+              "id": "8ed91e60-2cb8-5dae-b1b0-23e5cee8cfe8",
+              "num": 11,
+              "stem": "Last Sunday, Mrs Hay (drive) (1) along a small country road when she (see) (2) a man at the side of the road. He (wave) (3) and pointing at his car. Mrs Hay (stop) (4) and (ask) (5) the man if he (be) (6) all right. “My car’s broken down”, said the man.",
+              "answers": [
+                {
+                  "correct": "1. was driving 2. saw 3. was waving",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was driving 2. saw 3. was waving"
+            },
+            {
+              "id": "f2d3ff19-c052-5948-9b59-7c8718204c80",
+              "num": 12,
+              "stem": "I’d just parked my car in the street near a football stadium in Liverpool. It (be) (1) ten minutes before the start of the match and I (be) (2) in a hurry. Two little boys (come) (3) up to me and (say) (4), “Give me some money and we (look) (5) after your car while you are at the match”. I (tell) (6) them to clear off, and one of them (look) (7) at me with big, round eyes said, “Unless you (give) (8) us the money, something might happen to your car while you are away, you know, a scratch or a flat or something like that”.",
+              "answers": [
+                {
+                  "correct": "1. was 2. was 3. came 4. said",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: 1. was 2. was 3. came 4. said"
             }
           ]
         },
@@ -1063,39 +2387,128 @@
           "code": "SEQ_TIME_CLAUSES:EX_IV",
           "roman": "IV",
           "title": "Complete each of the following sentences with an adverbial clause of time.",
+          "instruction_vi": null,
           "type": "COMPLETE_SENTENCES",
           "questions": [
             {
+              "id": "88d83a34-e053-5c40-8e23-2ec112b3c465",
               "num": 1,
-              "stem": "Don’t bother me while I…"
+              "stem": "Don’t bother me while I…",
+              "answers": [
+                {
+                  "correct": "Don’t bother me while I am doing my homework.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Don’t bother me while I am doing my homework."
             },
             {
+              "id": "b6bd1593-7d37-5942-8ed7-ac49d9eddc6d",
               "num": 2,
-              "stem": "You have to listen to your teacher while..."
+              "stem": "You have to listen to your teacher while...",
+              "answers": [
+                {
+                  "correct": "You have to listen to your teacher while she is explaining the lesson.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: You have to listen to your teacher while she is explaining the lesson."
             },
             {
+              "id": "c6524769-c64c-54cc-94cd-26d64c529765",
               "num": 3,
-              "stem": "You should do a good deed whenever..."
+              "stem": "You should do a good deed whenever...",
+              "answers": [
+                {
+                  "correct": "You should do a good deed whenever you have a chance.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: You should do a good deed whenever you have a chance."
             },
             {
+              "id": "04daf460-318d-5654-b1c2-d02561f2f049",
               "num": 4,
-              "stem": "He set off for another journey as soon as..."
+              "stem": "He set off for another journey as soon as...",
+              "answers": [
+                {
+                  "correct": "He set off for another journey as soon as he had finished his first journey.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: He set off for another journey as soon as he had finished his first journey."
             },
             {
+              "id": "eadb6af8-a452-5798-ab93-507d4bd434fc",
               "num": 5,
-              "stem": "It began to rain just as..."
+              "stem": "It began to rain just as...",
+              "answers": [
+                {
+                  "correct": "It began to rain just as we left home.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: It began to rain just as we left home."
             },
             {
+              "id": "725fbf81-197c-5e35-9981-45d5ddacb409",
               "num": 6,
-              "stem": "She had written three novels before..."
+              "stem": "She had written three novels before...",
+              "answers": [
+                {
+                  "correct": "She had written three novels before she came here.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: She had written three novels before she came here."
             },
             {
+              "id": "6fe8b827-ccf9-5f22-b2b6-fdf12c9ec141",
               "num": 7,
-              "stem": "I’ll have taken three courses by the time..."
+              "stem": "I’ll have taken three courses by the time...",
+              "answers": [
+                {
+                  "correct": "I’ll have taken three courses by the time you arrive in this city.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I’ll have taken three courses by the time you arrive in this city."
             },
             {
+              "id": "b960b6e4-68e3-55f6-9352-98f66697363d",
               "num": 8,
-              "stem": "The dog has followed its master ever since..."
+              "stem": "The dog has followed its master ever since...",
+              "answers": [
+                {
+                  "correct": "The dog has followed its master ever since it was born.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The dog has followed its master ever since it was born."
+            },
+            {
+              "id": "942688e1-3a4d-514b-a9ec-081f12aeb996",
+              "num": 9,
+              "stem": "The train had just left when I...",
+              "answers": [
+                {
+                  "correct": "The train had just left when I arrived at the station.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The train had just left when I arrived at the station."
+            },
+            {
+              "id": "37eb8006-7101-5563-8fc8-5b6f48d63420",
+              "num": 10,
+              "stem": "What were you doing when your father...",
+              "answers": [
+                {
+                  "correct": "What were you doing when your father came home from work?",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: What were you doing when your father came home from work?"
             }
           ]
         }
@@ -1122,7 +2535,7 @@
             {
               "title": "1. Mệnh đề điều kiện là mệnh đề phụ chỉ điều kiện, được nối với mệnh đề chính bởi liên từ IF nên còn được gọi là mệnh đề",
               "formula": null,
-              "explanation_vi": "**1. Mệnh đề điều kiện là mệnh đề phụ chỉ điều kiện, được nối với mệnh đề chính bởi liên từ IF nên còn được gọi là mệnh đề if (*If-clause*). Câu có mệnh đề điều kiện được gọi là câ"
+              "explanation_vi": "**1. Mệnh đề điều kiện là mệnh đề phụ chỉ điều kiện, được nối với mệnh đề chính bởi liên từ IF nên còn được gọi là mệnh đề if (*If-clause*). Câu có mệnh đề điều kiện được gọi là câu điều kiện (*condit"
             },
             {
               "title": " UNLESS",
@@ -1142,7 +2555,12 @@
             {
               "title": "3. Ta cũng có thể diễn tả câu điều kiện mà không cần dùng IF hay UNLESS bằng cách đảo chủ ngữ",
               "formula": null,
-              "explanation_vi": "# 3. Ta cũng có thể diễn tả câu điều kiện mà không cần dùng IF hay UNLESS bằng cách đảo chủ ngữ\n\n**ra sau *should, were* hoặc *had*. Lưu ý không được làm với động từ khác.**\n\nEx: I"
+              "explanation_vi": "# 3. Ta cũng có thể diễn tả câu điều kiện mà không cần dùng IF hay UNLESS bằng cách đảo chủ ngữ\n\n**ra sau *should, were* hoặc *had*. Lưu ý không được làm với động từ khác.**\n\nEx: If you should run int"
+            },
+            {
+              "title": "4. *Provided* (that), *On condition* (that), *As long as, so long as* (miễn là, với điều kiện là), *Suppose, Supposing* ",
+              "formula": null,
+              "explanation_vi": "**4. *Provided* (that), *On condition* (that), *As long as, so long as* (miễn là, với điều kiện là), *Suppose, Supposing* (giả sử như), *In case* (trong trường búp), *Even if* (ngay cả khi, dù cho)..."
             }
           ],
           "examples": [
@@ -1161,6 +2579,10 @@
             {
               "en": "If you don’t study hard, you’ll fail in the exam.",
               "vi": null
+            },
+            {
+              "en": "Unless you study hard, you’ll fail in the exam. If she doesn’t water these trees, they will die.",
+              "vi": null
             }
           ]
         },
@@ -1173,7 +2595,7 @@
             {
               "title": "CLAUSE AFTER WISH, IF ONLY",
               "formula": null,
-              "explanation_vi": "# CLAUSE AFTER WISH, IF ONLY\n\n**(MỆNH ĐỀ SAU *WISH, IF ONLY*)**\n\nSau **wish** (*ước, ước gì, mong*) và **if only** (*ước gì, giá mà*), người ta thuờng dùng một mệnh đề chỉ một điều"
+              "explanation_vi": "# CLAUSE AFTER WISH, IF ONLY\n\n**(MỆNH ĐỀ SAU *WISH, IF ONLY*)**\n\nSau **wish** (*ước, ước gì, mong*) và **if only** (*ước gì, giá mà*), người ta thuờng dùng một mệnh đề chỉ một điều ao uớc, một điều kh"
             },
             {
               "title": "S + wish",
@@ -1199,6 +2621,16 @@
               "title": "S + wish",
               "formula": "S + wish",
               "explanation_vi": null
+            },
+            {
+              "title": "+ S",
+              "formula": "+ S",
+              "explanation_vi": null
+            },
+            {
+              "title": "could have + V3",
+              "formula": "could have + V3",
+              "explanation_vi": null
             }
           ],
           "examples": [
@@ -1216,6 +2648,10 @@
             },
             {
               "en": "I wish I was/ were rich. (But I am poor now.) I can’t swim. I wish I could swim.",
+              "vi": null
+            },
+            {
+              "en": "If only Ben was/ were here. (Bee isn’t here.)",
               "vi": null
             }
           ]
@@ -1255,6 +2691,16 @@
               "title": "will/would S + can/could",
               "formula": "will/would S + can/could",
               "explanation_vi": null
+            },
+            {
+              "title": "+ V (bare-inf.)",
+              "formula": "+ V (bare-inf.)",
+              "explanation_vi": null
+            },
+            {
+              "title": "Lưu ý:",
+              "formula": null,
+              "explanation_vi": "# Lưu ý:\n\nNếu chủ ngữ của mệnh đề chính và mệnh đề chỉ mục đích khác nhau ta không được dùng cụm từ chỉ mục đích (*phrase of purpose*)."
             }
           ],
           "examples": [
@@ -1272,6 +2718,10 @@
             },
             {
               "en": "He studies hard so as not to fail in the exam.",
+              "vi": null
+            },
+            {
+              "en": "I try all my best to study English in order that I can find a better job.",
               "vi": null
             }
           ]
@@ -1311,6 +2761,16 @@
               "title": "S + V(thường) + adv + enough (+ for + O) + to-infinitive",
               "formula": "S + V(thường) + adv + enough (+ for + O) + to-infinitive",
               "explanation_vi": null
+            },
+            {
+              "title": "II. Mệnh đề trạng ngữ chỉ kết quả (Adverbial clauses off result)",
+              "formula": null,
+              "explanation_vi": "# II. Mệnh đề trạng ngữ chỉ kết quả (Adverbial clauses off result)\n\nMệnh đề trạng ngữ chỉ kết quả là mệnh đề phụ được dùng để chỉ kết quả do hành động của mệnh đề\n\nchính gây ra."
+            },
+            {
+              "title": "1.* SO ... THAT** *(quá ... đến nỗi)",
+              "formula": null,
+              "explanation_vi": "***1.* SO ... THAT** *(quá ... đến nỗi)*\n\nS + be + so +adj\n\n+\n\nthat + S + V\n\nmain clause\n\nadverbial clause of result\n\nS + V (thường) + so + adv+\n\nthat + S + V\n\nEx: It was so dark that I couldn’t see a"
             }
           ],
           "examples": [
@@ -1328,6 +2788,10 @@
             },
             {
               "en": "She speaks Spanish well enough to be an interpreter. It is cold enough to wear a heavy jacket.",
+              "vi": null
+            },
+            {
+              "en": "It was so dark that I couldn’t see anything.",
               "vi": null
             }
           ]
@@ -1374,6 +2838,10 @@
             },
             {
               "en": "He came ten minutes late because he missed the first bus. Since/ As he missed the first bus, he came ten minutes late. She was worried because it started to rain.",
+              "vi": null
+            },
+            {
+              "en": "They didn’t take part in the trip because the weather was bad.",
               "vi": null
             }
           ]
@@ -1426,6 +2894,10 @@
             {
               "en": "Even though I didn’t know anybody at the party, I had a nice time.",
               "vi": null
+            },
+            {
+              "en": "No matter who you are, I still love you.",
+              "vi": null
             }
           ]
         },
@@ -1464,6 +2936,16 @@
               "title": "+ (for + O) + to-infinitive",
               "formula": "+ (for + O) + to-infinitive",
               "explanation_vi": null
+            },
+            {
+              "title": "S + would rather (that) + S + V(past simple/ past",
+              "formula": "S + would rather (that) + S + V(past simple/ past",
+              "explanation_vi": null
+            },
+            {
+              "title": "S + would rather (that) + S + V past perfect",
+              "formula": "S + would rather (that) + S + V past perfect",
+              "explanation_vi": null
             }
           ],
           "examples": [
@@ -1482,6 +2964,10 @@
             {
               "en": "He looked as if he hadn’t taken a bath for months.",
               "vi": null
+            },
+            {
+              "en": "It’s time you started to work.",
+              "vi": null
             }
           ]
         },
@@ -1494,12 +2980,12 @@
             {
               "title": "NOUN CLAUSES",
               "formula": null,
-              "explanation_vi": "# NOUN CLAUSES\n\n**(MỆNH ĐỀ DANH TỪ)**\n\nMệnh đề danh từ (noun clause) là một mệnh đề phụ có chức năng của một danh từ. Mệnh đề danh từ được nối với mệnh đề chính bằng THAT hoặc các "
+              "explanation_vi": "# NOUN CLAUSES\n\n**(MỆNH ĐỀ DANH TỪ)**\n\nMệnh đề danh từ (noun clause) là một mệnh đề phụ có chức năng của một danh từ. Mệnh đề danh từ được nối với mệnh đề chính bằng THAT hoặc các từ WHO, WHAT, WHICH,"
             },
             {
               "title": "1. Mệnh đề danh từ làm chủ ngữ trong câu (Subject of a sentence)",
               "formula": null,
-              "explanation_vi": "# 1. Mệnh đề danh từ làm chủ ngữ trong câu (Subject of a sentence)\n\nEx: What he said was not true.\n\nWhether the weather will change or not is difficult to tell. What you think is n"
+              "explanation_vi": "# 1. Mệnh đề danh từ làm chủ ngữ trong câu (Subject of a sentence)\n\nEx: What he said was not true.\n\nWhether the weather will change or not is difficult to tell. What you think is not my problem."
             },
             {
               "title": "2. Mệnh đề danh từ làm tân ngữ trong câu (Object of a sentence)",
@@ -1533,6 +3019,10 @@
             {
               "en": "I didn’t believe what he said.",
               "vi": null
+            },
+            {
+              "en": "He said that he had seen me before.",
+              "vi": null
             }
           ]
         },
@@ -1545,7 +3035,7 @@
             {
               "title": "RELATIVE CLAUSES",
               "formula": null,
-              "explanation_vi": "# RELATIVE CLAUSES\n\n**(MỆNH ĐỀ QUAN HỆ)**\n\nMệnh đề quan hệ (relative clause) còn được gọi là mệnh đề tính ngữ (adjective clause) vì nó là một mệnh đề phụ được dùng để bổ nghĩa cho "
+              "explanation_vi": "# RELATIVE CLAUSES\n\n**(MỆNH ĐỀ QUAN HỆ)**\n\nMệnh đề quan hệ (relative clause) còn được gọi là mệnh đề tính ngữ (adjective clause) vì nó là một mệnh đề phụ được dùng để bổ nghĩa cho danh từ đứng trước n"
             },
             {
               "title": "I. Cách dùng đại từ quan hệ và trạng từ quan hệ trong mệnh đề quan hệ.",
@@ -1555,22 +3045,32 @@
             {
               "title": "1. WHO:** *Who* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm chủ ngữ (subject) hoặc tân",
               "formula": null,
-              "explanation_vi": "**1. WHO:** *Who* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: The man who is standing over"
+              "explanation_vi": "**1. WHO:** *Who* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: The man who is standing over there is Mr. Pike.\n"
             },
             {
               "title": "2. WHOM:** *Whom* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm tân ngữ (object) cho",
               "formula": null,
-              "explanation_vi": "**2. WHOM:** *Whom* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm tân ngữ (object) cho\n\nđộng từ đứng sau nó.\n\nEx: The woman whom/ who you saw yesterday is my aunt."
+              "explanation_vi": "**2. WHOM:** *Whom* là đại từ quan hệ chỉ người, đứng sau danh từ chỉ người để làm tân ngữ (object) cho\n\nđộng từ đứng sau nó.\n\nEx: The woman whom/ who you saw yesterday is my aunt.\n\nThe boy whom/ who "
             },
             {
               "title": "3. WHICH**: *Which* là đại từ quan hệ chỉ vật, đứng sau danh từ chỉ vật để làm chủ ngữ (subject) hoặc tân",
               "formula": null,
-              "explanation_vi": "**3. WHICH**: *Which* là đại từ quan hệ chỉ vật, đứng sau danh từ chỉ vật để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: This is the book which I lik"
+              "explanation_vi": "**3. WHICH**: *Which* là đại từ quan hệ chỉ vật, đứng sau danh từ chỉ vật để làm chủ ngữ (subject) hoặc tân\n\nngữ (object) cho động từ đứng sau nó.\n\nEx: This is the book which I like best.\n\nThe hat whi"
             },
             {
               "title": "4.* THAT:** *That* là đại từ quan hệ chỉ cả người lẫn vật. *That* có thể được dùng thay cho *who, whom, which",
               "formula": null,
-              "explanation_vi": "***4.* THAT:** *That* là đại từ quan hệ chỉ cả người lẫn vật. *That* có thể được dùng thay cho *who, whom, which*\n\ntrong mệnh đề quan hệ xác định (defining relative clause).\n\nEx: T"
+              "explanation_vi": "***4.* THAT:** *That* là đại từ quan hệ chỉ cả người lẫn vật. *That* có thể được dùng thay cho *who, whom, which*\n\ntrong mệnh đề quan hệ xác định (defining relative clause).\n\nEx: That is the book that"
+            },
+            {
+              "title": "5. WHOSE**: *Whose* là đại từ quan hệ chỉ sự sở hữu. *Whose* đứng sau danh từ chỉ người hoặc vật và thay cho tính từ sở ",
+              "formula": null,
+              "explanation_vi": "**5. WHOSE**: *Whose* là đại từ quan hệ chỉ sự sở hữu. *Whose* đứng sau danh từ chỉ người hoặc vật và thay cho tính từ sở hữu trước danh từ. *Whose* luôn đi kèm với một danh từ.\n\nEx: The boy whose bic"
+            },
+            {
+              "title": "6.* WHEN**: *When* là trạng từ quan hệ chỉ thời gian, đứng sau danh từ chỉ thời gian. *When* được dùng thay cho *at / on",
+              "formula": null,
+              "explanation_vi": "***6.* WHEN**: *When* là trạng từ quan hệ chỉ thời gian, đứng sau danh từ chỉ thời gian. *When* được dùng thay cho *at / on / in which, then.*\n\nEx: May Day is the day when (on which) people hold a mee"
             }
           ],
           "examples": [
@@ -1589,6 +3089,10 @@
             {
               "en": "The boy whom/ who we are looking for is Tom.",
               "vi": null
+            },
+            {
+              "en": "The woman you saw yesterday is my aunt.",
+              "vi": null
             }
           ]
         }
@@ -1599,39 +3103,156 @@
           "code": "CLAUSE_CONDITION:EX_I",
           "roman": "I",
           "title": "Put the verbs in brackets into the correct tenses.",
+          "instruction_vi": null,
           "type": "FILL_IN_THE_BLANKS",
           "questions": [
             {
+              "id": "dc2f1ecb-5c70-5d33-b4fa-17b7d991d61a",
               "num": 1,
-              "stem": "If I see him, I (give) him a gift."
+              "stem": "If I see him, I (give) him a gift.",
+              "answers": [
+                {
+                  "correct": "will",
+                  "alternatives": [
+                    "shall give"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: will/ shall give"
             },
             {
+              "id": "542947a7-5758-5104-a5c3-6ae59554f6c5",
               "num": 2,
-              "stem": "If I had a typewriter, I (type) it myself."
+              "stem": "If I had a typewriter, I (type) it myself.",
+              "answers": [
+                {
+                  "correct": "would type",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would type"
             },
             {
+              "id": "cbaeff4e-a630-5315-8b02-e9a85ac39774",
               "num": 3,
-              "stem": "If I had known that you were in hospital, I (visit) you."
+              "stem": "If I had known that you were in hospital, I (visit) you.",
+              "answers": [
+                {
+                  "correct": "would have visited",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would have visited"
             },
             {
+              "id": "95fc823d-4c5e-5faa-a661-0cac55149275",
               "num": 4,
-              "stem": "You could make better progress if you (attend) class regularly."
+              "stem": "You could make better progress if you (attend) class regularly.",
+              "answers": [
+                {
+                  "correct": "attended",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: attended"
             },
             {
+              "id": "242c9e96-af14-5490-85fe-57ac5d34c9ee",
               "num": 5,
-              "stem": "If I (know) his telephone number, I’d give it to you."
+              "stem": "If I (know) his telephone number, I’d give it to you.",
+              "answers": [
+                {
+                  "correct": "knew",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: knew"
             },
             {
+              "id": "57a47dcf-7c7b-5edd-bd7e-29ee7252a3b5",
               "num": 6,
-              "stem": "If you (arrive) ten minutes earlier, you would have got a seat."
+              "stem": "If you (arrive) ten minutes earlier, you would have got a seat.",
+              "answers": [
+                {
+                  "correct": "had arrived",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had arrived"
             },
             {
+              "id": "c4fd2330-2c07-574e-9822-cc0a0da0d0d5",
               "num": 7,
-              "stem": "He could get a job easily if he (have) a degree."
+              "stem": "He could get a job easily if he (have) a degree.",
+              "answers": [
+                {
+                  "correct": "had",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had"
             },
             {
+              "id": "13e26266-b904-570b-849f-2e1a143d09d1",
               "num": 8,
-              "stem": "I shouldn’t have believed it if I (not see) it with my own eyes."
+              "stem": "I shouldn’t have believed it if I (not see) it with my own eyes.",
+              "answers": [
+                {
+                  "correct": "hadn’t seen",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: hadn’t seen"
+            },
+            {
+              "id": "14d3836b-c94d-5b6e-999f-518e5b60eda8",
+              "num": 9,
+              "stem": "If he (study) hard, he can pass the exam.",
+              "answers": [
+                {
+                  "correct": "studies",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: studies"
+            },
+            {
+              "id": "6fdfc4e7-9de3-52ae-8689-60f1f892445a",
+              "num": 10,
+              "stem": "If she had asked you, you (accept)?",
+              "answers": [
+                {
+                  "correct": "would you have accepted?",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would you have accepted?"
+            },
+            {
+              "id": "3ef5f78f-e65e-5922-9aa1-ce8e77c46989",
+              "num": 11,
+              "stem": "Rice plants (grow) well if there is enough rain.",
+              "answers": [
+                {
+                  "correct": "grow",
+                  "alternatives": [
+                    "will grow"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: grow/will grow"
+            },
+            {
+              "id": "712217e4-2958-51b2-b78f-f6bac0e74804",
+              "num": 12,
+              "stem": "He might get fat if he (stop) smoking.",
+              "answers": [
+                {
+                  "correct": "stopped",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: stopped"
             }
           ]
         },
@@ -1640,39 +3261,128 @@
           "code": "CLAUSE_CONDITION:EX_II",
           "roman": "II",
           "title": "Use UNLESS instead of IF.",
+          "instruction_vi": null,
           "type": "SENTENCE_TRANSFORMATION",
           "questions": [
             {
+              "id": "229510c3-c163-503e-a9ac-ec3ec5f3eea8",
               "num": 1,
-              "stem": "If you are not careful, you will cut yourself with that knife."
+              "stem": "If you are not careful, you will cut yourself with that knife.",
+              "answers": [
+                {
+                  "correct": "Unless you are careful, you ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless you are careful, you ..."
             },
             {
+              "id": "4205d034-91a8-5ab2-9c61-56612056aaaf",
               "num": 2,
-              "stem": "If you do not like this one, I’ll bring you another."
+              "stem": "If you do not like this one, I’ll bring you another.",
+              "answers": [
+                {
+                  "correct": "Unless you like this one, I’ll...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless you like this one, I’ll..."
             },
             {
+              "id": "56784b18-c3fa-5567-b591-481f0baccd92",
               "num": 3,
-              "stem": "I’ll not be able to do any work if I do not have a quiet room."
+              "stem": "I’ll not be able to do any work if I do not have a quiet room.",
+              "answers": [
+                {
+                  "correct": "I’ll not be able to do any work unless I have a quiet room.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I’ll not be able to do any work unless I have a quiet room."
             },
             {
+              "id": "e073e94d-34a8-58ef-a82b-92556018a4a7",
               "num": 4,
-              "stem": "If she does not hurry, she’ll be late."
+              "stem": "If she does not hurry, she’ll be late.",
+              "answers": [
+                {
+                  "correct": "Unless she hurries, she’ll...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless she hurries, she’ll..."
             },
             {
+              "id": "da648ae0-3795-5a82-9f98-73e118526537",
               "num": 5,
-              "stem": "If we had more rain, our crops would be better."
+              "stem": "If we had more rain, our crops would be better.",
+              "answers": [
+                {
+                  "correct": "Unless we had more rain, our crops wouldn’t be better.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless we had more rain, our crops wouldn’t be better."
             },
             {
+              "id": "34a25726-11c5-53c2-9057-08ce0e185a02",
               "num": 6,
-              "stem": "The crops would have been ruined if the flood had risen higher."
+              "stem": "The crops would have been ruined if the flood had risen higher.",
+              "answers": [
+                {
+                  "correct": "The crops wouldn’t have been ruined unless the flood had risen higher.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The crops wouldn’t have been ruined unless the flood had risen higher."
             },
             {
+              "id": "71031353-5f34-5633-9c22-275546bfb537",
               "num": 7,
-              "stem": "If you had not sneezed, he wouldn’t have known that we were there."
+              "stem": "If you had not sneezed, he wouldn’t have known that we were there.",
+              "answers": [
+                {
+                  "correct": "Unless you had sneezed, he ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless you had sneezed, he ..."
             },
             {
+              "id": "83f649e8-c01e-5924-b8dc-6c67b7621fbc",
               "num": 8,
-              "stem": "If she did her hair differently, she would look quite nice."
+              "stem": "If she did her hair differently, she would look quite nice.",
+              "answers": [
+                {
+                  "correct": "Unless she did her hair differently she wouldn’t look quite nice.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless she did her hair differently she wouldn’t look quite nice."
+            },
+            {
+              "id": "2cd708d9-bdcd-529a-987b-07aae425c532",
+              "num": 9,
+              "stem": "If John had played for our football team, we would not have lost the game.",
+              "answers": [
+                {
+                  "correct": "Unless John had played for our football team, we would have lost the game.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless John had played for our football team, we would have lost the game."
+            },
+            {
+              "id": "1b3a2e4e-4a6b-51b7-90d8-c618dbef6d6a",
+              "num": 10,
+              "stem": "If I won a big prize in a lottery, I’d give up my job.",
+              "answers": [
+                {
+                  "correct": "Unless I won a big prize in a lottery, I’d not give up my job.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Unless I won a big prize in a lottery, I’d not give up my job."
             }
           ]
         },
@@ -1681,39 +3391,128 @@
           "code": "CLAUSE_CONDITION:EX_III",
           "roman": "III",
           "title": "Make conditional sentences without conjunctions.",
+          "instruction_vi": null,
           "type": "SENTENCE_TRANSFORMATION",
           "questions": [
             {
+              "id": "21233559-4a43-5104-a187-f25c0bbcd47e",
               "num": 1,
-              "stem": "If I were you, I’d accept the job."
+              "stem": "If I were you, I’d accept the job.",
+              "answers": [
+                {
+                  "correct": "Were I...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were I..."
             },
             {
+              "id": "aa84f2f2-8568-51ce-805a-503570b60e3b",
               "num": 2,
-              "stem": "If you had told me that he never paid his debts, I wouldn’t have lent him money."
+              "stem": "If you had told me that he never paid his debts, I wouldn’t have lent him money.",
+              "answers": [
+                {
+                  "correct": "Had you ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Had you ..."
             },
             {
+              "id": "cbcad0bf-176c-5c1f-94ae-07d7e45ba5e5",
               "num": 3,
-              "stem": "If he had known your telephone number he would have rung you."
+              "stem": "If he had known your telephone number he would have rung you.",
+              "answers": [
+                {
+                  "correct": "Had he ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Had he ..."
             },
             {
+              "id": "89d25edc-3fe4-52f9-977b-9eaad3ac9411",
               "num": 4,
-              "stem": "If it were nice, we would go for a walk."
+              "stem": "If it were nice, we would go for a walk.",
+              "answers": [
+                {
+                  "correct": "Were it...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were it..."
             },
             {
+              "id": "74c049d6-ab4f-50ed-8704-bc688240e09a",
               "num": 5,
-              "stem": "I would come to her wedding if I were invited."
+              "stem": "I would come to her wedding if I were invited.",
+              "answers": [
+                {
+                  "correct": "Were I...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were I..."
             },
             {
+              "id": "b7ed11ff-b1f4-5c2b-87fa-ec46903f29d6",
               "num": 6,
-              "stem": "Would you visit me if I were sent to prison?"
+              "stem": "Would you visit me if I were sent to prison?",
+              "answers": [
+                {
+                  "correct": "Were I...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were I..."
             },
             {
+              "id": "6a47da47-d1b8-58d2-8208-e83baeba4148",
               "num": 7,
-              "stem": "Would you have written to her if you had known her address?"
+              "stem": "Would you have written to her if you had known her address?",
+              "answers": [
+                {
+                  "correct": "Had you ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Had you ..."
             },
             {
+              "id": "8f278206-b5b0-51fb-8af4-2d99ad16d90a",
               "num": 8,
-              "stem": "What would you do if today were a holiday?"
+              "stem": "What would you do if today were a holiday?",
+              "answers": [
+                {
+                  "correct": "Were today...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were today..."
+            },
+            {
+              "id": "c5c523a5-27de-5ded-a1fe-b3e2aa5e110c",
+              "num": 9,
+              "stem": "If they had asked me I would have helped them.",
+              "answers": [
+                {
+                  "correct": "Had they ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Had they ..."
+            },
+            {
+              "id": "31845bdb-2119-565d-b7b7-df72459ca2df",
+              "num": 10,
+              "stem": "Scientists think that men could live on the moon if there were air and water on it.",
+              "answers": [
+                {
+                  "correct": "Were there ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Were there ..."
             }
           ]
         },
@@ -1722,39 +3521,128 @@
           "code": "CLAUSE_CONDITION:EX_IV",
           "roman": "IV",
           "title": "Complete the following sentences.",
+          "instruction_vi": null,
           "type": "COMPLETE_SENTENCES",
           "questions": [
             {
+              "id": "65bc594d-f83c-540e-a1c2-bce1cefc0f8c",
               "num": 1,
-              "stem": "If I were the Prime Minister, I..."
+              "stem": "If I were the Prime Minister, I...",
+              "answers": [
+                {
+                  "correct": "I would help the poor.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I would help the poor."
             },
             {
+              "id": "51a01971-d838-5b52-b200-7097bd66f953",
               "num": 2,
-              "stem": "He could buy a new car if..."
+              "stem": "He could buy a new car if...",
+              "answers": [
+                {
+                  "correct": "he had enough money.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: he had enough money."
             },
             {
+              "id": "7e7fba01-e5d3-5e96-9696-465928f503b6",
               "num": 3,
-              "stem": "If I had more time,..."
+              "stem": "If I had more time,...",
+              "answers": [
+                {
+                  "correct": ", I would take you to the circus.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: , I would take you to the circus."
             },
             {
+              "id": "bc377c8f-3cb0-5538-9741-e4adb0809eca",
               "num": 4,
-              "stem": "If he hadn’t been ill,..."
+              "stem": "If he hadn’t been ill,...",
+              "answers": [
+                {
+                  "correct": ", he would have taken part in the trip with me.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: , he would have taken part in the trip with me."
             },
             {
+              "id": "3af4acf6-6ad8-5bca-8637-2aac089606fe",
               "num": 5,
-              "stem": "They could have passed the exam if they..."
+              "stem": "They could have passed the exam if they...",
+              "answers": [
+                {
+                  "correct": "had studied hard.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had studied hard."
             },
             {
+              "id": "5ed181ed-41ca-53cf-a752-68c60c72b513",
               "num": 6,
-              "stem": "We could have come with you if we..."
+              "stem": "We could have come with you if we...",
+              "answers": [
+                {
+                  "correct": "had been free.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had been free."
             },
             {
+              "id": "9f0abebc-1e35-5b0b-bf0f-7ea578e2c22e",
               "num": 7,
-              "stem": "If her parents had been richer,..."
+              "stem": "If her parents had been richer,...",
+              "answers": [
+                {
+                  "correct": ", they would have bought her a new car.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: , they would have bought her a new car."
             },
             {
+              "id": "207cd9d4-5ea3-5127-92e1-c094be517556",
               "num": 8,
-              "stem": "If he had come yesterday,..."
+              "stem": "If he had come yesterday,...",
+              "answers": [
+                {
+                  "correct": ", he would have met you.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: , he would have met you."
+            },
+            {
+              "id": "f5a65889-88f7-5855-bd76-a6a04f6c39a5",
+              "num": 9,
+              "stem": "If it hadn’t rained,...",
+              "answers": [
+                {
+                  "correct": ", we would have gone swimming.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: , we would have gone swimming."
+            },
+            {
+              "id": "8de6e329-fcb3-5d54-88a8-dbb8672f674e",
+              "num": 10,
+              "stem": "The world would be a better place if...",
+              "answers": [
+                {
+                  "correct": "there were no war.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: there were no war."
             }
           ]
         },
@@ -1763,39 +3651,592 @@
           "code": "CLAUSE_CONDITION:EX_V",
           "roman": "V",
           "title": "Make conditional sentences according to the facts provided.",
+          "instruction_vi": null,
           "type": "SENTENCE_TRANSFORMATION",
           "questions": [
             {
+              "id": "bc219ca9-2776-5874-8f26-ff8c48a1bc43",
               "num": 1,
-              "stem": "Keep silent or you’ll wake the baby up."
+              "stem": "Keep silent or you’ll wake the baby up.",
+              "answers": [
+                {
+                  "correct": "If you don’t keep silent, you’ll wake the baby up.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If you don’t keep silent, you’ll wake the baby up."
             },
             {
+              "id": "11ebc861-9aac-5df1-9471-18f3392a8df1",
               "num": 2,
-              "stem": "Because you don’t leave immediately, I call a policeman."
+              "stem": "Because you don’t leave immediately, I call a policeman.",
+              "answers": [
+                {
+                  "correct": "If you left immediately, I wouldn’t call a policeman.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If you left immediately, I wouldn’t call a policeman."
             },
             {
+              "id": "e3051fe0-dc9e-5a34-9e93-e088ad197ffd",
               "num": 3,
-              "stem": "I don’t know her number, so I don’t ring her up."
+              "stem": "I don’t know her number, so I don’t ring her up.",
+              "answers": [
+                {
+                  "correct": "If I knew her number, I would ring her up.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If I knew her number, I would ring her up."
             },
             {
+              "id": "fad750bd-9884-53f5-96d5-3e171466e753",
               "num": 4,
-              "stem": "Go right now or you’ll be late for the train."
+              "stem": "Go right now or you’ll be late for the train.",
+              "answers": [
+                {
+                  "correct": "If you don’t go right now, you’ll be late for the train.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If you don’t go right now, you’ll be late for the train."
             },
             {
+              "id": "50b806c2-257d-5436-99c7-83a9d896f041",
               "num": 5,
-              "stem": "As she is often absent from class, she can’t keep pace with her classmates."
+              "stem": "As she is often absent from class, she can’t keep pace with her classmates.",
+              "answers": [
+                {
+                  "correct": "If she weren’t often absent from class, she could keep pace ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If she weren’t often absent from class, she could keep pace ..."
             },
             {
+              "id": "7a60c3f9-f895-51f8-a449-c377fa69b19c",
               "num": 6,
-              "stem": "I couldn’t write to Alice because I didn’t know her address."
+              "stem": "I couldn’t write to Alice because I didn’t know her address.",
+              "answers": [
+                {
+                  "correct": "If I had known her address, I would have written to Alice.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If I had known her address, I would have written to Alice."
             },
             {
+              "id": "33ae6b83-0b97-56a4-b31f-74b063ce8128",
               "num": 7,
-              "stem": "I don’t know the answer, so I can’t tell you."
+              "stem": "I don’t know the answer, so I can’t tell you.",
+              "answers": [
+                {
+                  "correct": "If I knew the answer, I could tell you.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If I knew the answer, I could tell you."
             },
             {
+              "id": "1f8a0d9b-6d3c-5cce-bb48-2001fc8962f7",
               "num": 8,
-              "stem": "We got lost because we didn’t have a map."
+              "stem": "We got lost because we didn’t have a map.",
+              "answers": [
+                {
+                  "correct": "If we had had a map, we wouldn’t have got lost.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If we had had a map, we wouldn’t have got lost."
+            },
+            {
+              "id": "fd5ec58c-aa4d-51aa-99fa-184dd507f1e1",
+              "num": 9,
+              "stem": "His friends were so late, so they missed the train.",
+              "answers": [
+                {
+                  "correct": "If his friends hadn’t been so late, they wouldn’t have missed the train.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If his friends hadn’t been so late, they wouldn’t have missed the train."
+            },
+            {
+              "id": "5f9c3c3c-93ca-50d2-9091-be992edee1c7",
+              "num": 10,
+              "stem": "Today isn’t Sunday, so the pupils can’t go swimming.",
+              "answers": [
+                {
+                  "correct": "If today were Sunday, the pupils could go swimming.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If today were Sunday, the pupils could go swimming."
+            },
+            {
+              "id": "60e35c24-2e78-550f-a8c2-e50d297ce764",
+              "num": 11,
+              "stem": "The heavy rain kept everybody from going out.",
+              "answers": [
+                {
+                  "correct": "If it hadn’t rained heavily, everybody would have gone out.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If it hadn’t rained heavily, everybody would have gone out."
+            },
+            {
+              "id": "4653501e-fc87-55ed-8b8f-98fd8f110086",
+              "num": 12,
+              "stem": "This chair is too heavy for him to move.",
+              "answers": [
+                {
+                  "correct": "If this chair weren’t too heavy, he could move it.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: If this chair weren’t too heavy, he could move it."
+            }
+          ]
+        },
+        {
+          "id": "3b36d902-1e91-5ac7-a91b-a496015aca65",
+          "code": "CLAUSE_WISH:EX_I",
+          "roman": "I",
+          "title": "Give the correct forms of the verbs in the parentheses.",
+          "instruction_vi": null,
+          "type": "FILL_IN_THE_BLANKS",
+          "questions": [
+            {
+              "id": "69736d7d-4385-5946-96b8-4d69c9f733ed",
+              "num": 1,
+              "stem": "She wishes her father (be) here now to help hen",
+              "answers": [
+                {
+                  "correct": "were",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: were"
+            },
+            {
+              "id": "1f9fa468-29d8-56da-a435-f2caf5725ebe",
+              "num": 2,
+              "stem": "I wish you (not give) them my phone number yesterday",
+              "answers": [
+                {
+                  "correct": "hadn’t given",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: hadn’t given"
+            },
+            {
+              "id": "3314dd15-1bab-5020-a60e-a8b78fef9359",
+              "num": 3,
+              "stem": "I wish they (visit) us when they were in town.",
+              "answers": [
+                {
+                  "correct": "had visited",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had visited"
+            },
+            {
+              "id": "b5506cf0-e78b-5946-9c10-70b59a4088a9",
+              "num": 4,
+              "stem": "I wish someone (give) me a job next month.",
+              "answers": [
+                {
+                  "correct": "Would give",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Would give"
+            },
+            {
+              "id": "fcedf2b3-195f-528e-85db-ea55fbc209e7",
+              "num": 5,
+              "stem": "If only I (can take) the trip to Hanoi with her next summer.",
+              "answers": [
+                {
+                  "correct": "could take",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: could take"
+            },
+            {
+              "id": "42cb0966-39ad-5796-be43-8ef5ce838d57",
+              "num": 6,
+              "stem": "We wish we (understand) all the teacher’s explanation yesterday.",
+              "answers": [
+                {
+                  "correct": "had understood",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had understood"
+            },
+            {
+              "id": "11de2f49-67ef-5aef-a664-22ca54e77302",
+              "num": 7,
+              "stem": "He missed an exciting football match on TV last night. He wishes he (watch) it.",
+              "answers": [
+                {
+                  "correct": "Had watched",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Had watched"
+            },
+            {
+              "id": "de14d44a-1edb-51a6-9195-fcddecf1ad39",
+              "num": 8,
+              "stem": "If only I (have) more time to do this job.",
+              "answers": [
+                {
+                  "correct": "had",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had"
+            },
+            {
+              "id": "1c2bf34a-0dd1-524e-89b0-d91ff3f88868",
+              "num": 9,
+              "stem": "I wish she (come) to see me yesterday.",
+              "answers": [
+                {
+                  "correct": "had come",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: had come"
+            },
+            {
+              "id": "fcbed868-7b06-5300-9ad1-a1793fdf89aa",
+              "num": 10,
+              "stem": "I wish that someday I (be) able to marry her.",
+              "answers": [
+                {
+                  "correct": "would be",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: would be"
+            }
+          ]
+        },
+        {
+          "id": "f9c6103c-cd37-57a4-818f-f2b30ed1de7e",
+          "code": "CLAUSE_WISH:EX_II",
+          "roman": "II",
+          "title": "Rewrite the sentences below, using WISH or IF ONLY to express washes.",
+          "instruction_vi": null,
+          "type": "REWRITE_SENTENCES",
+          "questions": [
+            {
+              "id": "6a8b7051-76dd-581b-a89b-94ab893b33d3",
+              "num": 1,
+              "stem": "My father isn’t here now. I want him to be here now.",
+              "answers": [
+                {
+                  "correct": "I wish my father were here now.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish my father were here now."
+            },
+            {
+              "id": "4cabcd3a-9480-5180-b183-76e1534da76e",
+              "num": 2,
+              "stem": "You talk more than you work. The teacher wants you to work more than to talk.",
+              "answers": [
+                {
+                  "correct": "The teacher wishes you worked more than you talked.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The teacher wishes you worked more than you talked."
+            },
+            {
+              "id": "42f4320a-3a09-50cf-a55d-b7a78c807c89",
+              "num": 3,
+              "stem": "John would like to be an astronaut when he grows up.",
+              "answers": [
+                {
+                  "correct": "John wishes he would be an astronaut in the future.",
+                  "alternatives": [
+                    "when he grew up"
+                  ]
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: John wishes he would be an astronaut in the future (when he grew up)."
+            },
+            {
+              "id": "b1ae48f4-fafc-597c-b7fb-22878975b8fd",
+              "num": 4,
+              "stem": "I’m sorry I didn’t help you yesterday.",
+              "answers": [
+                {
+                  "correct": "I wish I had helped you yesterday.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish I had helped you yesterday."
+            },
+            {
+              "id": "11d322f9-8e88-54e3-91a1-673ddab4f3a1",
+              "num": 5,
+              "stem": "I regret that you didn’t give me a chance to tell you the truth.",
+              "answers": [
+                {
+                  "correct": "I wish you had given me a chance ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish you had given me a chance ..."
+            },
+            {
+              "id": "53176866-08b3-51c9-9ae0-36eb843a3a2d",
+              "num": 6,
+              "stem": "Mary is afraid she won’t be able to attend your wedding next week.",
+              "answers": [
+                {
+                  "correct": "Mary wishes she would be able to attend ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Mary wishes she would be able to attend ..."
+            },
+            {
+              "id": "910a608d-7ccd-5f6e-9e9b-be9f42295778",
+              "num": 7,
+              "stem": "We regret that we didn’t have enough money to buy that house.",
+              "answers": [
+                {
+                  "correct": "We wish we had had enough money ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: We wish we had had enough money ..."
+            },
+            {
+              "id": "15c3a643-e18a-5977-b4a4-90df42d1b6ce",
+              "num": 8,
+              "stem": "You drive too fast. I’d like you to drive more slowly.",
+              "answers": [
+                {
+                  "correct": "I wish you drove more slowly.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish you drove more slowly."
+            },
+            {
+              "id": "cd6c503d-78d0-58c9-8995-383c91b0e2f7",
+              "num": 9,
+              "stem": "You are too lazy. The teacher wants you to be more studious.",
+              "answers": [
+                {
+                  "correct": "The teacher wishes you were more studious.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The teacher wishes you were more studious."
+            },
+            {
+              "id": "85919c6b-7dc0-5ac9-ae8b-978622ec53ed",
+              "num": 10,
+              "stem": "I’m afraid he won’t get over his illness soon.",
+              "answers": [
+                {
+                  "correct": "I wish he would get over ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish he would get over ..."
+            },
+            {
+              "id": "121eb9e4-f2de-5a0b-ac8a-daa62f17623d",
+              "num": 11,
+              "stem": "I’m not a doctor.",
+              "answers": [
+                {
+                  "correct": "I wish I were a doctor.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish I were a doctor."
+            },
+            {
+              "id": "6d158d75-e876-5343-a606-3ed38fb8251a",
+              "num": 12,
+              "stem": "I haven’t enough money to buy this book.",
+              "answers": [
+                {
+                  "correct": "I wish I had enough money ...",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I wish I had enough money ..."
+            }
+          ]
+        },
+        {
+          "id": "58021837-c306-5fd3-867e-45ad55878dbd",
+          "code": "CLAUSE_PURPOSE:EX_I",
+          "roman": "I",
+          "title": "Use a phrase or clause of purpose to combine each pair of sentences below.",
+          "instruction_vi": null,
+          "type": "SENTENCE_TRANSFORMATION",
+          "questions": [
+            {
+              "id": "49cb0466-577b-5115-b05c-ce3c2f9334e8",
+              "num": 1,
+              "stem": "The boy stood on the benches. They wanted to get a better view.",
+              "answers": [
+                {
+                  "correct": "The boy stood on the benches to get a better view. The boy stood on the benches so that he could get a better view.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The boy stood on the benches to get a better view. The boy stood on the benches so that he could get a better view."
+            },
+            {
+              "id": "9939cdf6-3652-559e-a548-0424854d0e5c",
+              "num": 2,
+              "stem": "We lower the volume of the radio. We don’t want to bother our neighbours.",
+              "answers": [
+                {
+                  "correct": "We lower the volume of the radio so as not to bother our neighbours. We lower the volume of the radio so that we will not bother our neighbours.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: We lower the volume of the radio so as not to bother our neighbours. We lower the volume of the radio so that we will not bother our neighbours."
+            },
+            {
+              "id": "dcf98f88-08cd-5ed9-aa65-d1ba2200046f",
+              "num": 3,
+              "stem": "I’ll write to you. I want you to know my decision soon.",
+              "answers": [
+                {
+                  "correct": "I’ll write to you in order that you’ll know my decision soon. I’ll write to you in order for you to know my decision soon.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: I’ll write to you in order that you’ll know my decision soon. I’ll write to you in order for you to know my decision soon."
+            },
+            {
+              "id": "048ef00a-1564-5082-a1d1-1d2ed144e082",
+              "num": 4,
+              "stem": "These men were talking in whispers. They didn’t want anyone to hear their conversation.",
+              "answers": [
+                {
+                  "correct": "These men were talking in whispers in order that nobody could hear their conversation. These men were talking in whispers in order for nobody to hear their conversation.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: These men were talking in whispers in order that nobody could hear their conversation. These men were talking in whispers in order for nobody to hear their conversation."
+            },
+            {
+              "id": "3241e8b1-d64d-584a-9028-d9e8dc580e24",
+              "num": 5,
+              "stem": "The boy feigned to be sick. He hoped we didn’t make him work.",
+              "answers": [
+                {
+                  "correct": "The boy feigned to be sick so that we wouldn’t make him work.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The boy feigned to be sick so that we wouldn’t make him work."
+            },
+            {
+              "id": "4d27ab88-7b7b-5076-b0a2-c4a917f7ce23",
+              "num": 6,
+              "stem": "The man spoke loudly. He wanted everybody to hear him clearly.",
+              "answers": [
+                {
+                  "correct": "The man spoke loudly so that everybody could hear him clearly.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The man spoke loudly so that everybody could hear him clearly."
+            },
+            {
+              "id": "c160ab4d-5692-5c07-89cd-9b92baef482c",
+              "num": 7,
+              "stem": "Doris often goes home as soon as the class is over. She doesn’t want her mother to wait for her.",
+              "answers": [
+                {
+                  "correct": "Doris often goes home as soon as the class is over so that her mother won’t wait for her.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Doris often goes home as soon as the class is over so that her mother won’t wait for her."
+            },
+            {
+              "id": "1d7ec82c-c463-52c1-ae8c-67167936653f",
+              "num": 8,
+              "stem": "John gets up early. He doesn’t want to be late for class.",
+              "answers": [
+                {
+                  "correct": "John gets up early so that he won’t be late for class.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: John gets up early so that he won’t be late for class."
+            },
+            {
+              "id": "8acffdce-df3b-574a-8946-e58ca92de0d9",
+              "num": 9,
+              "stem": "Mary hid the novel under her pillow. She didn’t want her father to see it.",
+              "answers": [
+                {
+                  "correct": "Mary hid the novel under her pillow so that her father wouldn’t see it.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Mary hid the novel under her pillow so that her father wouldn’t see it."
+            },
+            {
+              "id": "a1fddf9e-521e-505e-a193-ea50b162dc0c",
+              "num": 10,
+              "stem": "Alice prepares her lesson carefully. She wants to get high marks in class.",
+              "answers": [
+                {
+                  "correct": "Alice prepares her lesson carefully in order that she will get high marks in class.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: Alice prepares her lesson carefully in order that she will get high marks in class."
+            },
+            {
+              "id": "a9831fee-90be-59b7-a7f6-0820079b940a",
+              "num": 11,
+              "stem": "The robber changed his address all the time. He didn’t want the police to find him.",
+              "answers": [
+                {
+                  "correct": "The robber changed his address all the time in order that the police couldn’t find him.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: The robber changed his address all the time in order that the police couldn’t find him."
+            },
+            {
+              "id": "e576e1e1-7c1d-53b7-8a7c-bdb1218d4014",
+              "num": 12,
+              "stem": "They did their jobs well. They hoped the boss would increase their salary.",
+              "answers": [
+                {
+                  "correct": "They did their jobs well so that the boss would increase their salary.",
+                  "alternatives": []
+                }
+              ],
+              "explanation": "Đáp án gốc trong sách: They did their jobs well so that the boss would increase their salary."
             }
           ]
         }

@@ -6,10 +6,101 @@ export default function Home() {
   const [selectedLesson, setSelectedLesson] = useState(previewData.chapters[0]?.lessons[0] || null);
   const [activeTab, setActiveTab] = useState("theory"); // 'theory' | 'exercises'
 
+  // Exercise interaction state: { [questionId]: string }
+  const [userInputs, setUserInputs] = useState({});
+  // Check results: { [questionId]: { checked: boolean, isCorrect: boolean, feedback: string } }
+  const [results, setResults] = useState({});
+  // Show answer toggle: { [questionId]: boolean }
+  const [showAnswers, setShowAnswers] = useState({});
+
   const handleSelectChapter = (ch) => {
     setSelectedChapter(ch);
     setSelectedLesson(ch.lessons[0] || null);
     setActiveTab("theory");
+  };
+
+  const handleInputChange = (questionId, value) => {
+    setUserInputs((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }));
+  };
+
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return text
+      .trim()
+      .toLowerCase()
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+      .replace(/\s+/g, " ");
+  };
+
+  const checkSingleQuestion = (q) => {
+    const userInput = userInputs[q.id] || "";
+    const cleanUser = normalizeText(userInput);
+
+    if (!cleanUser) {
+      setResults((prev) => ({
+        ...prev,
+        [q.id]: {
+          checked: true,
+          isCorrect: false,
+          feedback: "Vui lòng nhập câu trả lời trước khi kiểm tra!",
+        },
+      }));
+      return;
+    }
+
+    const correctList = q.answers.map((a) => a.correct);
+    const alternativesList = q.answers.flatMap((a) => a.alternatives || []);
+    const allAcceptable = [...correctList, ...alternativesList];
+
+    // Check match
+    const isCorrect = allAcceptable.some((acc) => {
+      // Split multi-blanks or slash options
+      const parts = acc.split("/").map((p) => normalizeText(p));
+      return parts.includes(cleanUser) || normalizeText(acc) === cleanUser;
+    });
+
+    setResults((prev) => ({
+      ...prev,
+      [q.id]: {
+        checked: true,
+        isCorrect: isCorrect,
+        feedback: isCorrect ? "Chính xác! 🎉" : "Chưa chính xác, thử lại nhé!",
+      },
+    }));
+  };
+
+  const toggleShowAnswer = (qId) => {
+    setShowAnswers((prev) => ({
+      ...prev,
+      [qId]: !prev[qId],
+    }));
+  };
+
+  const checkAllQuestions = (exercise) => {
+    exercise.questions.forEach((q) => {
+      checkSingleQuestion(q);
+    });
+  };
+
+  const resetExercise = (exercise) => {
+    setUserInputs((prev) => {
+      const next = { ...prev };
+      exercise.questions.forEach((q) => delete next[q.id]);
+      return next;
+    });
+    setResults((prev) => {
+      const next = { ...prev };
+      exercise.questions.forEach((q) => delete next[q.id]);
+      return next;
+    });
+    setShowAnswers((prev) => {
+      const next = { ...prev };
+      exercise.questions.forEach((q) => delete next[q.id]);
+      return next;
+    });
   };
 
   return (
@@ -30,8 +121,8 @@ export default function Home() {
             <div><strong style={{ color: "#38bdf8" }}>53</strong> Bài học</div>
             <div><strong style={{ color: "#38bdf8" }}>982</strong> Quy tắc</div>
             <div><strong style={{ color: "#38bdf8" }}>2,939</strong> Câu hỏi</div>
-            <span style={{ backgroundColor: "#0284c7", color: "#fff", padding: "0.2rem 0.6rem", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: "600" }}>
-              Phase 1 Live
+            <span style={{ backgroundColor: "#10b981", color: "#fff", padding: "0.2rem 0.6rem", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: "600" }}>
+              Interactive Mode ✨
             </span>
           </div>
         </div>
@@ -45,7 +136,7 @@ export default function Home() {
           {/* Chapter Selector */}
           <div style={{ backgroundColor: "#fff", padding: "1.25rem", borderRadius: "12px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #e2e8f0" }}>
             <h3 style={{ margin: "0 0 0.75rem 0", fontSize: "0.875rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748b", fontWeight: "600" }}>
-              Danh mục chương (Preview)
+              Danh mục chương (Interactive)
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {previewData.chapters.map((ch) => {
@@ -166,7 +257,7 @@ export default function Home() {
                     boxShadow: activeTab === "exercises" ? "0 1px 2px rgba(0,0,0,0.05)" : "none"
                   }}
                 >
-                  ✏️ Bài tập thực hành ({selectedChapter?.exercises.length || 0})
+                  ✏️ Luyện tập có chấm điểm ({selectedChapter?.exercises.length || 0})
                 </button>
               </div>
             </div>
@@ -235,37 +326,156 @@ export default function Home() {
             </div>
           )}
 
-          {/* Tab Content: Exercises */}
+          {/* Tab Content: Interactive Exercises */}
           {activeTab === "exercises" && selectedChapter && (
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               <div style={{ backgroundColor: "#fff", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)", border: "1px solid #e2e8f0" }}>
-                <h3 style={{ margin: "0 0 1rem 0", fontSize: "1.1rem", color: "#0f172a" }}>
-                  Bài tập thuộc Chương {selectedChapter.number}: {selectedChapter.title_vi}
-                </h3>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                  <h3 style={{ margin: 0, fontSize: "1.2rem", color: "#0f172a" }}>
+                    Luyện tập: Chương {selectedChapter.number} - {selectedChapter.title_vi}
+                  </h3>
+                </div>
 
                 {selectedChapter.exercises.length === 0 ? (
                   <p style={{ color: "#94a3b8", fontStyle: "italic" }}>Chưa có bài tập mẫu trong chương này.</p>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                     {selectedChapter.exercises.map((ex) => (
-                      <div key={ex.id} style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem", backgroundColor: "#fff" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", borderBottom: "1px solid #f1f5f9", paddingBottom: "0.5rem" }}>
-                          <span style={{ fontWeight: "700", color: "#1e40af", fontSize: "1rem" }}>
-                            Exercise {ex.roman}: {ex.title}
-                          </span>
-                          <span style={{ backgroundColor: "#e0f2fe", color: "#0369a1", padding: "0.2rem 0.6rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: "600" }}>
-                            {ex.type}
-                          </span>
+                      <div key={ex.id} style={{ border: "1px solid #cbd5e1", borderRadius: "10px", padding: "1.5rem", backgroundColor: "#ffffff", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+                        
+                        {/* Exercise Header */}
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", borderBottom: "2px solid #f1f5f9", paddingBottom: "0.75rem" }}>
+                          <div>
+                            <span style={{ fontWeight: "800", color: "#1d4ed8", fontSize: "1.1rem" }}>
+                              Exercise {ex.roman}: {ex.title}
+                            </span>
+                            {ex.instruction_vi && (
+                              <p style={{ margin: "0.25rem 0 0 0", color: "#64748b", fontSize: "0.875rem" }}>
+                                {ex.instruction_vi}
+                              </p>
+                            )}
+                          </div>
+                          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                            <span style={{ backgroundColor: "#eff6ff", color: "#2563eb", padding: "0.25rem 0.6rem", borderRadius: "6px", fontSize: "0.75rem", fontWeight: "700" }}>
+                              {ex.type}
+                            </span>
+                            <button
+                              onClick={() => checkAllQuestions(ex)}
+                              style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", padding: "0.35rem 0.75rem", borderRadius: "6px", fontSize: "0.8rem", fontWeight: "600", cursor: "pointer" }}
+                            >
+                              Chấm điểm tất cả
+                            </button>
+                            <button
+                              onClick={() => resetExercise(ex)}
+                              style={{ backgroundColor: "#f1f5f9", color: "#475569", border: "none", padding: "0.35rem 0.75rem", borderRadius: "6px", fontSize: "0.8rem", fontWeight: "600", cursor: "pointer" }}
+                            >
+                              Làm lại
+                            </button>
+                          </div>
                         </div>
 
                         {/* Questions list */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                          {ex.questions.map((q) => (
-                            <div key={q.num} style={{ padding: "0.6rem 0.8rem", backgroundColor: "#f8fafc", borderRadius: "6px", fontSize: "0.9rem", color: "#334155" }}>
-                              <strong style={{ color: "#2563eb", marginRight: "0.5rem" }}>{q.num}.</strong>
-                              <span>{q.stem}</span>
-                            </div>
-                          ))}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                          {ex.questions.map((q) => {
+                            const res = results[q.id];
+                            const isAnswerShown = showAnswers[q.id];
+                            const currentVal = userInputs[q.id] || "";
+
+                            return (
+                              <div
+                                key={q.id}
+                                style={{
+                                  padding: "1rem",
+                                  backgroundColor: res?.checked ? (res.isCorrect ? "#f0fdf4" : "#fef2f2") : "#f8fafc",
+                                  border: res?.checked ? (res.isCorrect ? "1px solid #86efac" : "1px solid #fca5a5") : "1px solid #e2e8f0",
+                                  borderRadius: "8px",
+                                  transition: "all 0.2s ease"
+                                }}
+                              >
+                                {/* Question Stem */}
+                                <div style={{ fontSize: "0.95rem", color: "#1e293b", marginBottom: "0.75rem", lineHeight: "1.5" }}>
+                                  <strong style={{ color: "#2563eb", marginRight: "0.5rem" }}>{q.num}.</strong>
+                                  <span>{q.stem}</span>
+                                </div>
+
+                                {/* Answer Input Field & Actions */}
+                                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                                  <input
+                                    type="text"
+                                    value={currentVal}
+                                    placeholder="Nhập câu trả lời / từ cần điền vào đây..."
+                                    onChange={(e) => handleInputChange(q.id, e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") checkSingleQuestion(q);
+                                    }}
+                                    style={{
+                                      flex: "1",
+                                      minWidth: "260px",
+                                      padding: "0.5rem 0.75rem",
+                                      borderRadius: "6px",
+                                      border: res?.checked ? (res.isCorrect ? "2px solid #22c55e" : "2px solid #ef4444") : "1px solid #cbd5e1",
+                                      fontSize: "0.9rem",
+                                      outline: "none",
+                                      backgroundColor: "#fff"
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => checkSingleQuestion(q)}
+                                    style={{
+                                      backgroundColor: "#3b82f6",
+                                      color: "#fff",
+                                      border: "none",
+                                      padding: "0.5rem 1rem",
+                                      borderRadius: "6px",
+                                      fontSize: "0.85rem",
+                                      fontWeight: "600",
+                                      cursor: "pointer"
+                                    }}
+                                  >
+                                    Kiểm tra
+                                  </button>
+                                  <button
+                                    onClick={() => toggleShowAnswer(q.id)}
+                                    style={{
+                                      backgroundColor: "#f1f5f9",
+                                      color: "#475569",
+                                      border: "1px solid #cbd5e1",
+                                      padding: "0.5rem 0.75rem",
+                                      borderRadius: "6px",
+                                      fontSize: "0.85rem",
+                                      cursor: "pointer"
+                                    }}
+                                  >
+                                    {isAnswerShown ? "Ẩn đáp án" : "Xem đáp án"}
+                                  </button>
+                                </div>
+
+                                {/* Feedback Message */}
+                                {res?.checked && (
+                                  <div style={{ marginTop: "0.5rem", fontSize: "0.875rem", fontWeight: "600", color: res.isCorrect ? "#15803d" : "#b91c1c" }}>
+                                    {res.feedback}
+                                  </div>
+                                )}
+
+                                {/* Correct Answer Box (if toggled or incorrect) */}
+                                {isAnswerShown && (
+                                  <div style={{ marginTop: "0.75rem", padding: "0.75rem", backgroundColor: "#eff6ff", borderRadius: "6px", border: "1px dashed #60a5fa" }}>
+                                    <div style={{ fontSize: "0.85rem", color: "#1e40af", fontWeight: "600" }}>
+                                      ✅ Đáp án chính xác:
+                                    </div>
+                                    <div style={{ fontSize: "0.95rem", color: "#1d4ed8", fontWeight: "700", marginTop: "0.2rem" }}>
+                                      {q.answers.map((a) => a.correct).join(" / ") || "Đang cập nhật"}
+                                    </div>
+                                    {q.explanation && (
+                                      <div style={{ fontSize: "0.8rem", color: "#475569", marginTop: "0.25rem" }}>
+                                        💡 {q.explanation}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}
