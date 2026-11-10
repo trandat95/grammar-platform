@@ -8,18 +8,20 @@ export default function Home() {
   const [currentView, setCurrentView] = useState("study");
 
   // Study View State
-  const [selectedChapterId, setSelectedChapterId] = useState(previewData.chapters[0]?.id || 1);
+  const [selectedChapterId, setSelectedChapterId] = useState(previewData.chapters[0]?.id || "");
   const selectedChapter = useMemo(
     () => previewData.chapters.find((c) => c.id === selectedChapterId) || previewData.chapters[0],
     [selectedChapterId]
   );
+
   const [selectedLessonId, setSelectedLessonId] = useState(
-    previewData.chapters[0]?.lessons[0]?.id || 1
+    previewData.chapters[0]?.lessons[0]?.id || ""
   );
-  const selectedLesson = useMemo(
-    () => selectedChapter?.lessons.find((l) => l.id === selectedLessonId) || selectedChapter?.lessons[0],
-    [selectedChapter, selectedLessonId]
-  );
+  const selectedLesson = useMemo(() => {
+    if (!selectedChapter?.lessons?.length) return null;
+    return selectedChapter.lessons.find((l) => l.id === selectedLessonId) || selectedChapter.lessons[0];
+  }, [selectedChapter, selectedLessonId]);
+
   const [activeTab, setActiveTab] = useState("theory"); // 'theory' | 'exercises'
   const [chapterSearch, setChapterSearch] = useState("");
 
@@ -67,7 +69,7 @@ export default function Home() {
 
   const handleSelectChapter = (ch) => {
     setSelectedChapterId(ch.id);
-    setSelectedLessonId(ch.lessons[0]?.id || null);
+    setSelectedLessonId(ch.lessons[0]?.id || "");
     setActiveTab("theory");
   };
 
@@ -115,7 +117,7 @@ export default function Home() {
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const checkSingleQuestion = (q) => {
+  const checkSingleQuestion = (q, exerciseType = "") => {
     const userInput = userInputs[q.id] || "";
     if (!userInput.trim()) {
       setResults((prev) => ({
@@ -133,7 +135,7 @@ export default function Home() {
       [q.id]: {
         checked: true,
         isCorrect: isCorrect,
-        feedback: isCorrect ? "Chính xác! Đáp án hoàn toàn đúng." : "Chưa chính xác. Thử lại hoặc xem đáp án mẫu.",
+        feedback: isCorrect ? "Chính xác! Đáp án hoàn toàn đúng." : "Chưa chính xác. Xem đáp án mẫu bên dưới.",
       },
     }));
 
@@ -142,12 +144,16 @@ export default function Home() {
         id: q.id,
         stem: q.stem,
         starter_prompt: q.starter_prompt,
-        instruction: q.instruction || "",
+        instruction: q.instruction || exerciseType || "",
         answers: answersList,
         explanation: q.explanation,
         topic_name: selectedChapter.title_vi,
       });
     }
+  };
+
+  const checkAllQuestions = (exercise) => {
+    exercise.questions.forEach((q) => checkSingleQuestion(q, exercise.instruction_vi || exercise.title));
   };
 
   const toggleShowAnswer = (qId) => {
@@ -218,7 +224,7 @@ export default function Home() {
       [q.id]: {
         checked: true,
         isCorrect: isCorrect,
-        feedback: isCorrect ? "Chính xác! Đáp án hoàn toàn đúng." : "Chưa chính xác. Xem đáp án hoặc chỉnh sửa câu trả lời.",
+        feedback: isCorrect ? "Chính xác! Đáp án hoàn toàn đúng." : "Chưa chính xác. Xem gợi ý hoặc đối chiếu đáp án.",
       },
     }));
 
@@ -327,7 +333,7 @@ export default function Home() {
       (c) =>
         c.title_vi.toLowerCase().includes(term) ||
         c.title_en.toLowerCase().includes(term) ||
-        `chương ${c.chapter_number}`.includes(term) ||
+        `chương ${c.number}`.includes(term) ||
         c.lessons.some((l) => l.title_vi.toLowerCase().includes(term))
     );
   }, [chapterSearch]);
@@ -344,6 +350,12 @@ export default function Home() {
     });
     return Array.from(set);
   }, [savedMistakes]);
+
+  // Total exercise questions in current chapter
+  const totalChapterExerciseQuestions = useMemo(() => {
+    if (!selectedChapter?.exercises) return 0;
+    return selectedChapter.exercises.reduce((acc, ex) => acc + (ex.questions?.length || 0), 0);
+  }, [selectedChapter]);
 
   // Quiz answered stats
   const answeredCount = useMemo(() => {
@@ -382,7 +394,6 @@ export default function Home() {
         ::placeholder {
           color: #71717a;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
           width: 6px;
           height: 6px;
@@ -404,7 +415,7 @@ export default function Home() {
 
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
         
-        {/* Top Navbar — Minimalist Dev Studio Bar */}
+        {/* Top Navbar */}
         <header
           style={{
             height: "56px",
@@ -559,7 +570,7 @@ export default function Home() {
             </button>
           </nav>
 
-          {/* Source Tag & Metadata */}
+          {/* Source Info */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
               Tài liệu: Mai Lan Hương & Hà Thanh Uyên
@@ -639,11 +650,13 @@ export default function Home() {
                     marginBottom: "0.25rem",
                   }}
                 >
-                  Danh mục 12 Chuyên đề ({filteredChapters.length})
+                  DANH MỤC 12 CHUYÊN ĐỀ ({filteredChapters.length})
                 </div>
 
                 {filteredChapters.map((ch) => {
-                  const isSelected = ch.id === selectedChapter.id;
+                  const isSelected = ch.id === selectedChapter?.id;
+                  const chapterNum = String(ch.number || "").padStart(2, "0");
+
                   return (
                     <div key={ch.id} style={{ marginBottom: "0.25rem" }}>
                       <div
@@ -651,41 +664,42 @@ export default function Home() {
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between",
                           padding: "0.5rem 0.65rem",
                           borderRadius: "6px",
                           cursor: "pointer",
                           backgroundColor: isSelected ? "#18181b" : "transparent",
                           border: isSelected ? "1px solid #27272a" : "1px solid transparent",
                           transition: "all 0.12s ease",
+                          gap: "0.65rem",
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", minWidth: 0 }}>
-                          <span
-                            style={{
-                              fontSize: "0.7rem",
-                              fontFamily: "Geist Mono",
-                              color: isSelected ? "#fafafa" : "#71717a",
-                              fontWeight: "600",
-                              width: "20px",
-                              flexShrink: 0,
-                            }}
-                          >
-                            {String(ch.chapter_number).padStart(2, "0")}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: "0.825rem",
-                              color: isSelected ? "#fafafa" : "#d4d4d8",
-                              fontWeight: isSelected ? "600" : "400",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {ch.title_vi}
-                          </span>
-                        </div>
+                        <span
+                          style={{
+                            fontSize: "0.72rem",
+                            fontFamily: "Geist Mono",
+                            color: isSelected ? "#60a5fa" : "#71717a",
+                            fontWeight: "700",
+                            minWidth: "22px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {chapterNum}
+                        </span>
+
+                        <span
+                          style={{
+                            fontSize: "0.835rem",
+                            color: isSelected ? "#fafafa" : "#d4d4d8",
+                            fontWeight: isSelected ? "600" : "400",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            flex: 1,
+                          }}
+                        >
+                          {ch.title_vi}
+                        </span>
+
                         <span
                           style={{
                             fontSize: "0.68rem",
@@ -694,19 +708,22 @@ export default function Home() {
                             flexShrink: 0,
                           }}
                         >
-                          {ch.lessons.length} bài
+                          {ch.lessons?.length || 0} bài
                         </span>
                       </div>
 
                       {/* Expanded Sub-lessons if chapter is selected */}
-                      {isSelected && (
+                      {isSelected && ch.lessons && ch.lessons.length > 0 && (
                         <div style={{ marginLeft: "1.75rem", paddingLeft: "0.6rem", borderLeft: "1px solid #27272a", marginTop: "0.2rem", marginBottom: "0.4rem" }}>
-                          {ch.lessons.map((ls) => {
+                          {ch.lessons.map((ls, idx) => {
                             const isLessonActive = selectedLesson?.id === ls.id;
                             return (
                               <div
                                 key={ls.id}
-                                onClick={() => setSelectedLessonId(ls.id)}
+                                onClick={() => {
+                                  setSelectedLessonId(ls.id);
+                                  setActiveTab("theory");
+                                }}
                                 style={{
                                   padding: "0.35rem 0.5rem",
                                   borderRadius: "4px",
@@ -724,7 +741,7 @@ export default function Home() {
                                   {ls.title_vi}
                                 </span>
                                 <span style={{ fontSize: "0.68rem", color: "#52525b", fontFamily: "Geist Mono" }}>
-                                  {ls.exercises?.length || 0} bt
+                                  {ls.rules?.length || 0} qt
                                 </span>
                               </div>
                             );
@@ -740,12 +757,12 @@ export default function Home() {
             {/* Main Content Area */}
             <main style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem", maxWidth: "980px" }}>
               
-              {/* Breadcrumbs & Title */}
+              {/* Breadcrumbs & Header */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.8rem", color: "#71717a", marginBottom: "0.5rem" }}>
-                  <span>Chương {selectedChapter.chapter_number}</span>
+                  <span>Chương {selectedChapter?.number}</span>
                   <span>/</span>
-                  <span style={{ color: "#a1a1aa" }}>{selectedChapter.title_vi}</span>
+                  <span style={{ color: "#a1a1aa" }}>{selectedChapter?.title_vi}</span>
                   {selectedLesson && (
                     <>
                       <span>/</span>
@@ -757,133 +774,143 @@ export default function Home() {
                 <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
                     <h1 style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: "#fafafa" }}>
-                      {selectedLesson ? selectedLesson.title_vi : selectedChapter.title_vi}
+                      {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập thực hành: ${selectedChapter?.title_vi}`}
                     </h1>
                     <div style={{ fontSize: "0.875rem", color: "#71717a", marginTop: "0.2rem" }}>
-                      {selectedLesson ? selectedLesson.title_en : selectedChapter.title_en}
+                      {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_en : selectedChapter?.title_en) : `${selectedChapter?.exercises?.length || 0} bài tập tổng hợp (${totalChapterExerciseQuestions} câu)`}
                     </div>
                   </div>
 
                   {/* Tab Switcher: Theory vs Exercises */}
-                  {selectedLesson && (
-                    <div style={{ display: "flex", backgroundColor: "#18181b", padding: "3px", borderRadius: "6px", border: "1px solid #27272a" }}>
-                      <button
-                        onClick={() => setActiveTab("theory")}
-                        style={{
-                          padding: "0.35rem 0.85rem",
-                          borderRadius: "4px",
-                          border: "none",
-                          fontSize: "0.8rem",
-                          fontWeight: activeTab === "theory" ? "600" : "500",
-                          color: activeTab === "theory" ? "#fafafa" : "#71717a",
-                          backgroundColor: activeTab === "theory" ? "#27272a" : "transparent",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Lý thuyết & Quy tắc
-                      </button>
-                      <button
-                        onClick={() => setActiveTab("exercises")}
-                        style={{
-                          padding: "0.35rem 0.85rem",
-                          borderRadius: "4px",
-                          border: "none",
-                          fontSize: "0.8rem",
-                          fontWeight: activeTab === "exercises" ? "600" : "500",
-                          color: activeTab === "exercises" ? "#fafafa" : "#71717a",
-                          backgroundColor: activeTab === "exercises" ? "#27272a" : "transparent",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Bài tập thực hành ({selectedLesson.exercises?.length || 0})
-                      </button>
-                    </div>
-                  )}
+                  <div style={{ display: "flex", backgroundColor: "#18181b", padding: "3px", borderRadius: "6px", border: "1px solid #27272a" }}>
+                    <button
+                      onClick={() => setActiveTab("theory")}
+                      style={{
+                        padding: "0.35rem 0.85rem",
+                        borderRadius: "4px",
+                        border: "none",
+                        fontSize: "0.8rem",
+                        fontWeight: activeTab === "theory" ? "600" : "500",
+                        color: activeTab === "theory" ? "#fafafa" : "#71717a",
+                        backgroundColor: activeTab === "theory" ? "#27272a" : "transparent",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Lý thuyết & Quy tắc ({selectedLesson?.rules?.length || 0})
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("exercises")}
+                      style={{
+                        padding: "0.35rem 0.85rem",
+                        borderRadius: "4px",
+                        border: "none",
+                        fontSize: "0.8rem",
+                        fontWeight: activeTab === "exercises" ? "600" : "500",
+                        color: activeTab === "exercises" ? "#fafafa" : "#71717a",
+                        backgroundColor: activeTab === "exercises" ? "#27272a" : "transparent",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bài tập thực hành ({selectedChapter?.exercises?.length || 0})
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* TAB 1: THEORY CONTENT */}
               {activeTab === "theory" && (
                 <div>
-                  {selectedLesson?.sections && selectedLesson.sections.length > 0 ? (
-                    selectedLesson.sections.map((sec, idx) => (
-                      <div
-                        key={sec.id || idx}
-                        style={{
-                          backgroundColor: "#121215",
-                          border: "1px solid #27272a",
-                          borderRadius: "8px",
-                          padding: "1.5rem",
-                          marginBottom: "1.5rem",
-                        }}
-                      >
-                        <h2 style={{ fontSize: "1.15rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.85rem" }}>
-                          {sec.title_vi}
-                        </h2>
+                  {selectedLesson?.rules && selectedLesson.rules.length > 0 ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      {selectedLesson.rules.map((r, rIdx) => (
+                        <div
+                          key={rIdx}
+                          style={{
+                            backgroundColor: "#121215",
+                            border: "1px solid #27272a",
+                            borderRadius: "8px",
+                            padding: "1.25rem 1.5rem",
+                          }}
+                        >
+                          {r.title && (
+                            <h3 style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.5rem" }}>
+                              {r.title.replace(/^#+\s*/, "").replace(/\*\*/g, "")}
+                            </h3>
+                          )}
 
-                        {sec.content_vi && (
-                          <div style={{ fontSize: "0.925rem", color: "#d4d4d8", lineHeight: "1.7", marginBottom: "1rem" }}>
-                            {sec.content_vi}
+                          {r.formula && (
+                            <div
+                              style={{
+                                backgroundColor: "#09090b",
+                                border: "1px solid #27272a",
+                                borderLeft: "3px solid #10b981",
+                                padding: "0.6rem 0.85rem",
+                                borderRadius: "4px",
+                                fontFamily: "Geist Mono",
+                                fontSize: "0.85rem",
+                                color: "#34d399",
+                                margin: "0.6rem 0",
+                              }}
+                            >
+                              <span style={{ color: "#71717a", marginRight: "0.5rem" }}>FORMULA:</span>
+                              {r.formula}
+                            </div>
+                          )}
+
+                          {r.explanation_vi && (
+                            <div
+                              style={{
+                                fontSize: "0.875rem",
+                                color: "#d4d4d8",
+                                lineHeight: "1.65",
+                                whiteSpace: "pre-line",
+                              }}
+                            >
+                              {r.explanation_vi.replace(/^#+\s*/gm, "").replace(/\*\*/g, "")}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {/* Examples Section */}
+                      {selectedLesson.examples && selectedLesson.examples.length > 0 && (
+                        <div
+                          style={{
+                            backgroundColor: "#121215",
+                            border: "1px solid #27272a",
+                            borderRadius: "8px",
+                            padding: "1.25rem 1.5rem",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>
+                            VÍ DỤ MINH HỌA ({selectedLesson.examples.length})
                           </div>
-                        )}
-
-                        {/* Rules List */}
-                        {sec.rules && sec.rules.length > 0 && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1rem" }}>
-                            {sec.rules.map((r, rIdx) => (
+                          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                            {selectedLesson.examples.map((ex, exIdx) => (
                               <div
-                                key={r.id || rIdx}
+                                key={exIdx}
                                 style={{
                                   backgroundColor: "#18181b",
-                                  borderLeft: "3px solid #3b82f6",
-                                  padding: "0.85rem 1rem",
-                                  borderRadius: "4px",
+                                  padding: "0.65rem 0.85rem",
+                                  borderRadius: "6px",
+                                  border: "1px solid #27272a",
                                 }}
                               >
-                                <div style={{ fontSize: "0.875rem", fontWeight: "600", color: "#93c5fd", marginBottom: "0.35rem" }}>
-                                  {r.rule_name_vi || `Quy tắc ${rIdx + 1}`}
+                                <div style={{ fontSize: "0.875rem", color: "#fafafa", fontWeight: "500" }}>
+                                  • {ex.en}
                                 </div>
-                                <div style={{ fontSize: "0.85rem", color: "#d4d4d8", lineHeight: "1.6" }}>
-                                  {r.explanation_vi}
-                                </div>
-
-                                {r.formula && (
-                                  <div
-                                    style={{
-                                      marginTop: "0.6rem",
-                                      backgroundColor: "#09090b",
-                                      border: "1px solid #27272a",
-                                      padding: "0.5rem 0.75rem",
-                                      borderRadius: "4px",
-                                      fontFamily: "Geist Mono",
-                                      fontSize: "0.825rem",
-                                      color: "#34d399",
-                                    }}
-                                  >
-                                    <span style={{ color: "#71717a", marginRight: "0.5rem" }}>FORMULA:</span>
-                                    {r.formula}
-                                  </div>
-                                )}
-
-                                {r.examples && r.examples.length > 0 && (
-                                  <div style={{ marginTop: "0.75rem", borderTop: "1px dashed #27272a", paddingTop: "0.6rem" }}>
-                                    <div style={{ fontSize: "0.75rem", color: "#71717a", marginBottom: "0.35rem", fontWeight: "600" }}>
-                                      VÍ DỤ MINH HỌA:
-                                    </div>
-                                    {r.examples.map((ex, eIdx) => (
-                                      <div key={eIdx} style={{ fontSize: "0.825rem", marginBottom: "0.3rem" }}>
-                                        <div style={{ color: "#f4f4f5", fontWeight: "500" }}>• {ex.en}</div>
-                                        {ex.vi && <div style={{ color: "#a1a1aa", marginLeft: "0.85rem" }}>→ {ex.vi}</div>}
-                                      </div>
-                                    ))}
+                                {ex.vi && (
+                                  <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginTop: "0.2rem", paddingLeft: "0.85rem" }}>
+                                    → {ex.vi}
                                   </div>
                                 )}
                               </div>
                             ))}
                           </div>
-                        )}
-                      </div>
-                    ))
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <div
                       style={{
@@ -904,8 +931,8 @@ export default function Home() {
               {/* TAB 2: EXERCISES PRACTICE */}
               {activeTab === "exercises" && (
                 <div>
-                  {selectedLesson?.exercises && selectedLesson.exercises.length > 0 ? (
-                    selectedLesson.exercises.map((ex, eIdx) => (
+                  {selectedChapter?.exercises && selectedChapter.exercises.length > 0 ? (
+                    selectedChapter.exercises.map((ex, eIdx) => (
                       <div
                         key={ex.id || eIdx}
                         style={{
@@ -917,50 +944,67 @@ export default function Home() {
                         }}
                       >
                         {/* Exercise Header */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
                           <div>
                             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.35rem" }}>
                               <span
                                 style={{
-                                  fontSize: "0.7rem",
+                                  fontSize: "0.72rem",
                                   fontFamily: "Geist Mono",
                                   padding: "0.15rem 0.45rem",
                                   borderRadius: "4px",
                                   backgroundColor: "#27272a",
                                   color: "#fafafa",
-                                  fontWeight: "600",
+                                  fontWeight: "700",
                                 }}
                               >
-                                EXERCISE {eIdx + 1}
+                                EXERCISE {ex.roman || (eIdx + 1)}
                               </span>
                               <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
                                 {ex.questions?.length || 0} câu hỏi
                               </span>
                             </div>
-                            <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#fafafa" }}>
-                              {ex.instruction_vi || ex.instruction_en}
+                            <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa" }}>
+                              {ex.instruction_vi || ex.title}
                             </div>
-                            {ex.instruction_en && ex.instruction_vi && (
-                              <div style={{ fontSize: "0.8rem", color: "#71717a", marginTop: "0.2rem" }}>
-                                {ex.instruction_en}
+                            {ex.instruction_vi && ex.title && (
+                              <div style={{ fontSize: "0.825rem", color: "#71717a", marginTop: "0.2rem" }}>
+                                {ex.title}
                               </div>
                             )}
                           </div>
 
-                          <button
-                            onClick={() => resetExercise(ex)}
-                            style={{
-                              padding: "0.35rem 0.65rem",
-                              borderRadius: "4px",
-                              backgroundColor: "transparent",
-                              border: "1px solid #27272a",
-                              color: "#a1a1aa",
-                              fontSize: "0.75rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Làm lại bài
-                          </button>
+                          <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <button
+                              onClick={() => checkAllQuestions(ex)}
+                              style={{
+                                padding: "0.4rem 0.75rem",
+                                borderRadius: "4px",
+                                backgroundColor: "#27272a",
+                                border: "1px solid #3f3f46",
+                                color: "#fafafa",
+                                fontSize: "0.75rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Chấm điểm tất cả
+                            </button>
+                            <button
+                              onClick={() => resetExercise(ex)}
+                              style={{
+                                padding: "0.4rem 0.65rem",
+                                borderRadius: "4px",
+                                backgroundColor: "transparent",
+                                border: "1px solid #27272a",
+                                color: "#a1a1aa",
+                                fontSize: "0.75rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Làm lại
+                            </button>
+                          </div>
                         </div>
 
                         {/* Questions List */}
@@ -969,7 +1013,7 @@ export default function Home() {
                             const res = results[q.id];
                             const isAnswerOpen = showAnswers[q.id];
                             const inputVal = userInputs[q.id] || "";
-                            const typeInfo = getQuestionTypeInfo(q.type);
+                            const typeInfo = getQuestionTypeInfo(ex.type);
 
                             return (
                               <div
@@ -987,7 +1031,7 @@ export default function Home() {
                               >
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
                                   <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", fontWeight: "600" }}>
-                                    CÂU {qIdx + 1}
+                                    CÂU {q.num || (qIdx + 1)}
                                   </span>
                                   <span
                                     style={{
@@ -1038,7 +1082,7 @@ export default function Home() {
                                     placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
                                     onChange={(e) => handleInputChange(q.id, e.target.value)}
                                     onKeyDown={(e) => {
-                                      if (e.key === "Enter") checkSingleQuestion(q);
+                                      if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title);
                                     }}
                                     style={{
                                       flex: 1,
@@ -1058,7 +1102,7 @@ export default function Home() {
                                   />
 
                                   <button
-                                    onClick={() => checkSingleQuestion(q)}
+                                    onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title)}
                                     style={{
                                       padding: "0.5rem 0.9rem",
                                       backgroundColor: "#27272a",
@@ -1135,7 +1179,7 @@ export default function Home() {
                     ))
                   ) : (
                     <div style={{ padding: "3rem", textAlign: "center", backgroundColor: "#121215", border: "1px dashed #27272a", borderRadius: "8px", color: "#71717a" }}>
-                      Bài học này chưa có câu hỏi thực hành riêng biệt.
+                      Chuyên đề này chưa có bài tập thực hành.
                     </div>
                   )}
                 </div>
