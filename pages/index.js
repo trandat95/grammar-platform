@@ -4,8 +4,8 @@ import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 
 export default function Home() {
-  // Navigation mode: 'study' | 'quiz' | 'mistakes'
-  const [currentView, setCurrentView] = useState("study");
+  // Navigation mode: 'study' | 'quiz' | 'mistakes' | 'dashboard'
+  const [currentView, setCurrentView] = useState("dashboard");
 
   // Study View State
   const [selectedChapterId, setSelectedChapterId] = useState(previewData.chapters[0]?.id || "");
@@ -46,17 +46,116 @@ export default function Home() {
   const [showMistakeAnswers, setShowMistakeAnswers] = useState({});
   const [mistakeFilterTopic, setMistakeFilterTopic] = useState("ALL");
 
-  // Load mistakes from localStorage on client mount
+  // Duolingo-style Learning Tracker State
+  const [userTracker, setUserTracker] = useState({
+    streak: 1,
+    lastActiveDate: "",
+    activeDays: [],
+    xp: 50,
+    completedLessons: [],
+    completedQuestions: [],
+    dailyGoal: { targetQuestions: 10, solvedToday: 0, date: "" }
+  });
+  const [xpToast, setXpToast] = useState(null);
+
+  // Helper date strings
+  const getTodayDateStr = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+
+  const getYesterdayDateStr = () => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+
+  // Toast notification for XP gain
+  const triggerXpGain = (amount, msg) => {
+    setXpToast({ amount, message: msg || `+${amount} XP` });
+    setTimeout(() => setXpToast(null), 2800);
+  };
+
+  // Load Tracker and Mistakes from localStorage on client mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("grammar_platform_mistakes");
-      if (stored) {
-        setSavedMistakes(JSON.parse(stored));
+      // 1. Load mistakes
+      const storedMistakes = localStorage.getItem("grammar_platform_mistakes");
+      if (storedMistakes) {
+        setSavedMistakes(JSON.parse(storedMistakes));
+      }
+
+      // 2. Load and verify Duolingo tracker
+      const today = getTodayDateStr();
+      const yesterday = getYesterdayDateStr();
+      const storedTracker = localStorage.getItem("grammar_platform_tracker");
+
+      if (storedTracker) {
+        const parsed = JSON.parse(storedTracker);
+        let newStreak = parsed.streak || 1;
+        let newActiveDays = parsed.activeDays || [];
+
+        if (!parsed.lastActiveDate) {
+          newStreak = 1;
+        } else if (parsed.lastActiveDate === today) {
+          // already active today
+        } else if (parsed.lastActiveDate === yesterday) {
+          // consecutive active day!
+          newStreak = (parsed.streak || 0) + 1;
+        } else {
+          // streak broken
+          newStreak = 1;
+        }
+
+        if (!newActiveDays.includes(today)) {
+          newActiveDays.push(today);
+        }
+
+        let dailyGoal = parsed.dailyGoal || { targetQuestions: 10, solvedToday: 0, date: today };
+        if (dailyGoal.date !== today) {
+          dailyGoal = { targetQuestions: 10, solvedToday: 0, date: today };
+        }
+
+        const updated = {
+          ...parsed,
+          streak: newStreak,
+          lastActiveDate: today,
+          activeDays: newActiveDays,
+          dailyGoal: dailyGoal
+        };
+        setUserTracker(updated);
+        localStorage.setItem("grammar_platform_tracker", JSON.stringify(updated));
+      } else {
+        // Initial setup for new learner
+        const initial = {
+          streak: 1,
+          lastActiveDate: today,
+          activeDays: [today],
+          xp: 50, // Welcome gift
+          completedLessons: [],
+          completedQuestions: [],
+          dailyGoal: { targetQuestions: 10, solvedToday: 0, date: today }
+        };
+        setUserTracker(initial);
+        localStorage.setItem("grammar_platform_tracker", JSON.stringify(initial));
       }
     } catch (e) {
-      console.error("Failed to load saved mistakes", e);
+      console.error("Failed to initialize user tracker", e);
     }
   }, []);
+
+  // Persist tracker updates helper
+  const persistTracker = (updater) => {
+    setUserTracker((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : { ...prev, ...updater };
+      try {
+        localStorage.setItem("grammar_platform_tracker", JSON.stringify(next));
+      } catch (e) {
+        console.error("Failed to save tracker", e);
+      }
+      return next;
+    });
+  };
 
   const persistMistakes = (newMistakes) => {
     setSavedMistakes(newMistakes);
@@ -65,6 +164,53 @@ export default function Home() {
     } catch (e) {
       console.error("Failed to save mistakes", e);
     }
+  };
+
+  // Toggle mark lesson as completed
+  const toggleLessonCompletion = (lessonId) => {
+    const isDone = userTracker.completedLessons.includes(lessonId);
+    persistTracker((prev) => {
+      let nextList = [...prev.completedLessons];
+      let xpGain = 0;
+      if (isDone) {
+        nextList = nextList.filter((id) => id !== lessonId);
+      } else {
+        nextList.push(lessonId);
+        xpGain = 25;
+        triggerXpGain(25, "Đã hoàn thành bài học: +25 XP!");
+      }
+      return {
+        ...prev,
+        xp: prev.xp + xpGain,
+        completedLessons: nextList,
+      };
+    });
+  };
+
+  // Record correct question answered
+  const recordCorrectQuestion = (questionId, isQuiz = false) => {
+    const xpReward = isQuiz ? 15 : 10;
+    persistTracker((prev) => {
+      const today = getTodayDateStr();
+      const alreadyDone = prev.completedQuestions.includes(questionId);
+      const nextQuestions = alreadyDone ? prev.completedQuestions : [...prev.completedQuestions, questionId];
+      const todaySolved = (prev.dailyGoal?.date === today ? (prev.dailyGoal?.solvedToday || 0) : 0) + 1;
+      
+      if (!alreadyDone) {
+        triggerXpGain(xpReward, isQuiz ? "Chính xác câu Quiz: +15 XP!" : "Đúng bài tập: +10 XP!");
+      }
+
+      return {
+        ...prev,
+        xp: prev.xp + (alreadyDone ? 0 : xpReward),
+        completedQuestions: nextQuestions,
+        dailyGoal: {
+          targetQuestions: prev.dailyGoal?.targetQuestions || 10,
+          solvedToday: todaySolved,
+          date: today
+        }
+      };
+    });
   };
 
   const handleSelectChapter = (ch) => {
@@ -139,7 +285,9 @@ export default function Home() {
       },
     }));
 
-    if (!isCorrect) {
+    if (isCorrect) {
+      recordCorrectQuestion(q.id, false);
+    } else {
       addMistakeRecord({
         id: q.id,
         stem: q.stem,
@@ -228,7 +376,9 @@ export default function Home() {
       },
     }));
 
-    if (!isCorrect) {
+    if (isCorrect) {
+      recordCorrectQuestion(q.id, true);
+    } else {
       addMistakeRecord({
         id: q.id,
         stem: q.stem,
@@ -256,6 +406,7 @@ export default function Home() {
 
       if (isCorrect) {
         correctCount += 1;
+        recordCorrectQuestion(q.id, true);
       } else {
         newMistakesToAdd.push({
           id: q.id,
@@ -323,6 +474,10 @@ export default function Home() {
         feedback: isCorrect ? "Rất tốt! Bạn đã trả lời đúng câu này." : "Vẫn chưa đúng. Hãy đối chiếu đáp án mẫu bên dưới.",
       },
     }));
+
+    if (isCorrect) {
+      recordCorrectQuestion(item.id, false);
+    }
   };
 
   // Filtered chapters for search
@@ -351,6 +506,93 @@ export default function Home() {
     return Array.from(set);
   }, [savedMistakes]);
 
+  // Overall progression calculations
+  const totalLessonsCount = 53;
+  const totalQuestionsCount = 2939;
+  const overallLessonsProgress = Math.round(
+    ((userTracker.completedLessons?.length || 0) / totalLessonsCount) * 100
+  );
+
+  // User Rank / Level based on XP
+  const userRank = useMemo(() => {
+    const xp = userTracker.xp || 0;
+    if (xp >= 1500) return { title: "Bậc Thầy Anh Ngữ", level: 5, badge: "💎 Diamond", nextXp: 2000 };
+    if (xp >= 800) return { title: "Chiến Binh Ngữ Pháp", level: 4, badge: "🏆 Platinum", nextXp: 1500 };
+    if (xp >= 400) return { title: "Cao Thủ Cú Vọ", level: 3, badge: "🥇 Gold", nextXp: 800 };
+    if (xp >= 150) return { title: "Học Viên Tích Cực", level: 2, badge: "🥈 Silver", nextXp: 400 };
+    return { title: "Tập Sự Khởi Đầu", level: 1, badge: "🥉 Bronze", nextXp: 150 };
+  }, [userTracker.xp]);
+
+  // Smart Daily Recommendation Algorithm
+  const dailyRecommendation = useMemo(() => {
+    // 1. If there are saved mistakes, recommend reviewing that chapter first
+    if (savedMistakes.length > 0) {
+      const topMistake = savedMistakes[0];
+      const targetCh = previewData.chapters.find((c) => c.title_vi === topMistake.topic_name) || previewData.chapters[0];
+      const targetLs = targetCh.lessons[0] || null;
+      return {
+        chapter: targetCh,
+        lesson: targetLs,
+        reason: `Cần phục thù: Bạn đang có ${savedMistakes.length} câu làm sai cần củng cố ở chuyên đề này.`,
+        tag: "ÔN TẬP CỦNG CỐ",
+        tagColor: "#f59e0b"
+      };
+    }
+
+    // 2. Next uncompleted lesson in sequential order
+    for (const ch of previewData.chapters) {
+      for (const ls of ch.lessons) {
+        if (!userTracker.completedLessons.includes(ls.id)) {
+          return {
+            chapter: ch,
+            lesson: ls,
+            reason: `Tiếp nối lộ trình học tập: Chuyên đề ${ch.number} - ${ch.title_vi}.`,
+            tag: "BÀI HỌC TIẾP THEO",
+            tagColor: "#38bdf8"
+          };
+        }
+      }
+    }
+
+    // 3. All completed fallback
+    return {
+      chapter: previewData.chapters[0],
+      lesson: previewData.chapters[0].lessons[0],
+      reason: "Xuất sắc! Bạn đã hoàn thành toàn bộ 53 bài học. Hãy làm đề Quiz 50 câu để duy trì phong độ!",
+      tag: "LUYỆN TẬP NÂNG CAO",
+      tagColor: "#10b981"
+    };
+  }, [savedMistakes, userTracker.completedLessons]);
+
+  const startRecommendedLesson = () => {
+    if (dailyRecommendation?.chapter && dailyRecommendation?.lesson) {
+      setSelectedChapterId(dailyRecommendation.chapter.id);
+      setSelectedLessonId(dailyRecommendation.lesson.id);
+      setActiveTab("theory");
+      setCurrentView("study");
+    }
+  };
+
+  // 7-day mini calendar for streak
+  const last7Days = useMemo(() => {
+    const days = [];
+    const today = new Date();
+    const dayNames = ["CN", "Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7"];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const str = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      days.push({
+        dateStr: str,
+        dayName: dayNames[d.getDay()],
+        dayNum: d.getDate(),
+        isActive: userTracker.activeDays?.includes(str) || false,
+        isToday: i === 0,
+      });
+    }
+    return days;
+  }, [userTracker.activeDays]);
+
   // Total exercise questions in current chapter
   const totalChapterExerciseQuestions = useMemo(() => {
     if (!selectedChapter?.exercises) return 0;
@@ -367,6 +609,8 @@ export default function Home() {
   const answeredCount = useMemo(() => {
     return Object.keys(quizAnswers).filter((k) => quizAnswers[k]?.trim()).length;
   }, [quizAnswers]);
+
+  const isCurrentLessonDone = userTracker.completedLessons.includes(selectedLesson?.id);
 
   return (
     <>
@@ -438,9 +682,39 @@ export default function Home() {
         }
       `}</style>
 
+      {/* Floating XP Toast */}
+      {xpToast && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            right: "2rem",
+            zIndex: 100,
+            backgroundColor: "#18181b",
+            border: "1px solid #10b981",
+            boxShadow: "0 10px 25px -5px rgba(16, 185, 129, 0.3)",
+            color: "#fafafa",
+            padding: "0.75rem 1.25rem",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.6rem",
+            animation: "slideIn 0.3s ease",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>⚡</span>
+          <div>
+            <div style={{ fontWeight: "700", color: "#34d399", fontSize: "0.95rem" }}>
+              {xpToast.message}
+            </div>
+            <div style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>Điểm kinh nghiệm đã cộng</div>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
         
-        {/* Top Navbar */}
+        {/* Top Navbar — Duolingo-style Streak & XP Bar */}
         <header
           style={{
             height: "56px",
@@ -489,7 +763,7 @@ export default function Home() {
                   color: "#a1a1aa",
                 }}
               >
-                v1.2 PRO
+                v1.3 PRO
               </span>
             </div>
           </div>
@@ -505,6 +779,33 @@ export default function Home() {
               gap: "2px",
             }}
           >
+            {/* Tab 0: Duolingo Dashboard */}
+            <button
+              onClick={() => setCurrentView("dashboard")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.45rem",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "6px",
+                fontSize: "0.825rem",
+                fontWeight: currentView === "dashboard" ? "600" : "500",
+                color: currentView === "dashboard" ? "#fafafa" : "#a1a1aa",
+                backgroundColor: currentView === "dashboard" ? "#27272a" : "transparent",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <path d="M3 9h18"/>
+                <path d="M9 21V9"/>
+              </svg>
+              <span>Lộ trình & Streak</span>
+            </button>
+
+            {/* Tab 1: 12 Chapters Study */}
             <button
               onClick={() => setCurrentView("study")}
               style={{
@@ -527,9 +828,10 @@ export default function Home() {
                 <path d="M6 6h10"/>
                 <path d="M6 10h10"/>
               </svg>
-              <span>12 Chuyên đề Lý thuyết</span>
+              <span>12 Chuyên đề</span>
             </button>
 
+            {/* Tab 2: Quiz Engine */}
             <button
               onClick={() => {
                 setCurrentView("quiz");
@@ -557,6 +859,7 @@ export default function Home() {
               <span>Quiz Engine (50 câu)</span>
             </button>
 
+            {/* Tab 3: Sổ tay câu sai */}
             <button
               onClick={() => setCurrentView("mistakes")}
               style={{
@@ -595,13 +898,380 @@ export default function Home() {
             </button>
           </nav>
 
-          {/* Source Info */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
-              Tài liệu: Mai Lan Hương & Hà Thanh Uyên
-            </span>
+          {/* Duolingo Gamification Stats Pill Bar */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {/* Streak Pill */}
+            <div
+              onClick={() => setCurrentView("dashboard")}
+              title="Chuỗi ngày học liên tiếp"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                backgroundColor: "#1c1917",
+                border: "1px solid #78350f",
+                padding: "0.25rem 0.65rem",
+                borderRadius: "999px",
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: "0.9rem" }}>🔥</span>
+              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#f59e0b" }}>
+                {userTracker.streak} ngày
+              </span>
+            </div>
+
+            {/* XP Pill */}
+            <div
+              onClick={() => setCurrentView("dashboard")}
+              title="Tổng điểm kinh nghiệm tích lũy"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                backgroundColor: "#141c2b",
+                border: "1px solid #1e3a8a",
+                padding: "0.25rem 0.65rem",
+                borderRadius: "999px",
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: "0.9rem" }}>⚡</span>
+              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#60a5fa" }}>
+                {userTracker.xp} XP
+              </span>
+            </div>
+
+            {/* Overall Progress Pill */}
+            <div
+              style={{
+                fontSize: "0.75rem",
+                color: "#71717a",
+                fontFamily: "Geist Mono",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+              }}
+            >
+              <span>Tiến độ:</span>
+              <strong style={{ color: "#34d399" }}>{overallLessonsProgress}%</strong>
+            </div>
           </div>
         </header>
+
+        {/* ============================================================== */}
+        {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
+        {/* ============================================================== */}
+        {currentView === "dashboard" && (
+          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+            <div style={{ maxWidth: "980px", margin: "0 auto" }}>
+              
+              {/* Hero Banner: Streak & Rank */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #27272a",
+                  borderRadius: "12px",
+                  padding: "1.75rem 2rem",
+                  marginBottom: "1.75rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1.5rem",
+                  background: "linear-gradient(135deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.95) 100%)",
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
+                    <span style={{ fontSize: "1.6rem" }}>🔥</span>
+                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#fafafa", margin: 0 }}>
+                      Chuỗi học tập {userTracker.streak} ngày liên tiếp!
+                    </h1>
+                  </div>
+                  <p style={{ fontSize: "0.9rem", color: "#a1a1aa", margin: "0 0 1rem 0" }}>
+                    Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
+                  </p>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                    <span
+                      style={{
+                        backgroundColor: "#18181b",
+                        border: "1px solid #27272a",
+                        color: "#fafafa",
+                        fontSize: "0.78rem",
+                        padding: "0.25rem 0.65rem",
+                        borderRadius: "6px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {userRank.badge} • Cấp {userRank.level} ({userRank.title})
+                    </span>
+
+                    <span style={{ fontSize: "0.78rem", color: "#71717a" }}>
+                      Mục tiêu cấp tiếp theo: <strong style={{ color: "#60a5fa" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
+                    </span>
+                  </div>
+                </div>
+
+                {/* 7-Day Mini Calendar */}
+                <div
+                  style={{
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    padding: "1rem 1.25rem",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
+                    LỊCH HOẠT ĐỘNG 7 NGÀY
+                  </div>
+                  <div style={{ display: "flex", gap: "0.6rem" }}>
+                    {last7Days.map((d, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: "0.35rem",
+                        }}
+                      >
+                        <span style={{ fontSize: "0.68rem", color: d.isToday ? "#fafafa" : "#71717a", fontWeight: d.isToday ? "700" : "500" }}>
+                          {d.dayName}
+                        </span>
+                        <div
+                          style={{
+                            width: "32px",
+                            height: "32px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: d.isActive ? "#f59e0b" : "#27272a",
+                            color: d.isActive ? "#09090b" : "#71717a",
+                            fontSize: "0.85rem",
+                            fontWeight: "700",
+                            border: d.isToday ? "2px solid #38bdf8" : "none",
+                          }}
+                        >
+                          {d.isActive ? "🔥" : d.dayNum}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* SMART DAILY RECOMMENDATION CARD */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #3b82f6",
+                  borderRadius: "12px",
+                  padding: "1.5rem 1.75rem",
+                  marginBottom: "1.75rem",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
+                      <span
+                        style={{
+                          fontSize: "0.7rem",
+                          fontFamily: "Geist Mono",
+                          backgroundColor: `${dailyRecommendation.tagColor}20`,
+                          color: dailyRecommendation.tagColor,
+                          border: `1px solid ${dailyRecommendation.tagColor}50`,
+                          padding: "0.15rem 0.5rem",
+                          borderRadius: "4px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {dailyRecommendation.tag}
+                      </span>
+                      <span style={{ fontSize: "0.8rem", color: "#71717a" }}>Đề xuất học hôm nay</span>
+                    </div>
+
+                    <h2 style={{ fontSize: "1.35rem", fontWeight: "700", color: "#fafafa", margin: "0.35rem 0" }}>
+                      Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
+                    </h2>
+
+                    <p style={{ fontSize: "0.875rem", color: "#a1a1aa", margin: "0.2rem 0 0.85rem 0" }}>
+                      {dailyRecommendation.reason}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={startRecommendedLesson}
+                    style={{
+                      padding: "0.65rem 1.5rem",
+                      backgroundColor: "#2563eb",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "0.875rem",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 15px rgba(37, 99, 235, 0.35)",
+                    }}
+                  >
+                    Bắt đầu học ngay hôm nay →
+                  </button>
+                </div>
+
+                {/* Daily Goal Progress Bar */}
+                <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #1f1f23" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8rem", marginBottom: "0.4rem" }}>
+                    <span style={{ color: "#a1a1aa" }}>
+                      🎯 Mục tiêu hàng ngày: <strong>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
+                    </span>
+                    <span style={{ color: "#34d399", fontFamily: "Geist Mono", fontWeight: "600" }}>
+                      {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
+                    </span>
+                  </div>
+                  <div style={{ width: "100%", height: "6px", backgroundColor: "#27272a", borderRadius: "999px", overflow: "hidden" }}>
+                    <div
+                      style={{
+                        width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
+                        height: "100%",
+                        backgroundColor: "#10b981",
+                        borderRadius: "999px",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4 Analytics Metrics Grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                    Bài học đã hoàn thành
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                    {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalLessonsCount}</span>
+                  </div>
+                  <div style={{ fontSize: "0.8rem", color: "#34d399" }}>
+                    {overallLessonsProgress}% toàn bộ khóa học
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                    Câu hỏi đã giải đúng
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                    {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalQuestionsCount}</span>
+                  </div>
+                  <div style={{ fontSize: "0.8rem", color: "#60a5fa" }}>
+                    Tích lũy từ bài tập & Quiz
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                    Tổng điểm kinh nghiệm
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                    {userTracker.xp} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>XP</span>
+                  </div>
+                  <div style={{ fontSize: "0.8rem", color: "#f59e0b" }}>
+                    {userRank.title}
+                  </div>
+                </div>
+
+                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                    Sổ tay câu sai cần ôn
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "#fb7185" : "#fafafa", margin: "0.4rem 0" }}>
+                    {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>câu</span>
+                  </div>
+                  <div
+                    onClick={() => setCurrentView("mistakes")}
+                    style={{ fontSize: "0.8rem", color: "#fb7185", cursor: "pointer", textDecoration: "underline" }}
+                  >
+                    Xem và luyện lại ngay →
+                  </div>
+                </div>
+              </div>
+
+              {/* 12 Chapters Mastery Map */}
+              <div style={{ marginBottom: "2rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem" }}>
+                  <div>
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                      Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
+                    </h3>
+                    <p style={{ fontSize: "0.85rem", color: "#71717a", margin: "0.2rem 0 0 0" }}>
+                      Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương theo chuẩn sách Mai Lan Hương.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+                  {previewData.chapters.map((ch) => {
+                    const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
+                    const pct = Math.round((doneLessons / ch.lessons.length) * 100);
+
+                    return (
+                      <div
+                        key={ch.id}
+                        onClick={() => {
+                          handleSelectChapter(ch);
+                          setCurrentView("study");
+                        }}
+                        style={{
+                          backgroundColor: "#121215",
+                          border: "1px solid #27272a",
+                          borderRadius: "8px",
+                          padding: "1.1rem 1.25rem",
+                          cursor: "pointer",
+                          transition: "border-color 0.15s ease",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                          <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#60a5fa", fontWeight: "700" }}>
+                            CHƯƠNG {String(ch.number).padStart(2, "0")}
+                          </span>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: pct === 100 ? "#34d399" : "#a1a1aa" }}>
+                            {doneLessons} / {ch.lessons.length} bài
+                          </span>
+                        </div>
+
+                        <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {ch.title_vi}
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div style={{ width: "100%", height: "4px", backgroundColor: "#27272a", borderRadius: "999px", overflow: "hidden", marginBottom: "0.5rem" }}>
+                          <div
+                            style={{
+                              width: `${pct}%`,
+                              height: "100%",
+                              backgroundColor: pct === 100 ? "#10b981" : "#3b82f6",
+                              borderRadius: "999px",
+                            }}
+                          />
+                        </div>
+
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#71717a" }}>
+                          <span>{ch.exercises?.length || 0} bài tập</span>
+                          <span style={{ color: pct > 0 ? "#fafafa" : "#71717a" }}>{pct}% hoàn thành</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* ============================================================== */}
         {/* VIEW 1: STUDY MODE (12 CHAPTERS & LESSONS EXPLORER)             */}
@@ -742,6 +1412,8 @@ export default function Home() {
                         <div style={{ marginLeft: "1.75rem", paddingLeft: "0.6rem", borderLeft: "1px solid #27272a", marginTop: "0.2rem", marginBottom: "0.4rem" }}>
                           {ch.lessons.map((ls, idx) => {
                             const isLessonActive = selectedLesson?.id === ls.id;
+                            const isLessonCompleted = userTracker.completedLessons?.includes(ls.id);
+
                             return (
                               <div
                                 key={ls.id}
@@ -753,7 +1425,7 @@ export default function Home() {
                                   padding: "0.35rem 0.5rem",
                                   borderRadius: "4px",
                                   fontSize: "0.78rem",
-                                  color: isLessonActive ? "#38bdf8" : "#a1a1aa",
+                                  color: isLessonActive ? "#38bdf8" : isLessonCompleted ? "#34d399" : "#a1a1aa",
                                   backgroundColor: isLessonActive ? "#0f172a" : "transparent",
                                   cursor: "pointer",
                                   fontWeight: isLessonActive ? "600" : "400",
@@ -762,7 +1434,8 @@ export default function Home() {
                                   justifyContent: "space-between",
                                 }}
                               >
-                                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                  {isLessonCompleted && <span style={{ color: "#10b981", fontSize: "0.7rem" }}>✓</span>}
                                   {ls.title_vi}
                                 </span>
                                 <span style={{ fontSize: "0.68rem", color: "#52525b", fontFamily: "Geist Mono" }}>
@@ -847,42 +1520,64 @@ export default function Home() {
                 <div>
                   {selectedLesson ? (
                     <div>
-                      {/* Lesson Overview Badge Card */}
+                      {/* Lesson Overview & Mark Completion Bar */}
                       <div
                         style={{
                           backgroundColor: "#121215",
-                          border: "1px solid #27272a",
+                          border: isCurrentLessonDone ? "1px solid #10b981" : "1px solid #27272a",
                           borderRadius: "8px",
                           padding: "1.25rem 1.5rem",
                           marginBottom: "1.5rem",
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "0.65rem" }}>
-                          <span
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+                            <span
+                              style={{
+                                fontSize: "0.72rem",
+                                fontFamily: "Geist Mono",
+                                backgroundColor: "#27272a",
+                                color: "#60a5fa",
+                                padding: "0.15rem 0.5rem",
+                                borderRadius: "4px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {selectedLesson.code}
+                            </span>
+                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                              {selectedLesson.sections?.length || 0} Phân mục
+                            </span>
+                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                              {totalLessonFormulas} Công thức
+                            </span>
+                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                              {selectedLesson.examples?.length || 0} Ví dụ
+                            </span>
+                          </div>
+
+                          {/* Duolingo Mark as Completed Button */}
+                          <button
+                            onClick={() => toggleLessonCompletion(selectedLesson.id)}
                             style={{
-                              fontSize: "0.72rem",
-                              fontFamily: "Geist Mono",
-                              backgroundColor: "#27272a",
-                              color: "#60a5fa",
-                              padding: "0.15rem 0.5rem",
-                              borderRadius: "4px",
-                              fontWeight: "700",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.4rem",
+                              padding: "0.4rem 0.9rem",
+                              borderRadius: "6px",
+                              border: isCurrentLessonDone ? "1px solid #10b981" : "1px solid #3f3f46",
+                              backgroundColor: isCurrentLessonDone ? "rgba(16, 185, 129, 0.15)" : "#18181b",
+                              color: isCurrentLessonDone ? "#34d399" : "#fafafa",
+                              fontSize: "0.8rem",
+                              fontWeight: "600",
+                              cursor: "pointer",
                             }}
                           >
-                            {selectedLesson.code}
-                          </span>
-                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
-                            {selectedLesson.sections?.length || 0} Phân mục kiến thức
-                          </span>
-                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
-                            {totalLessonFormulas} Công thức chuẩn
-                          </span>
-                          <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                          <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
-                            {selectedLesson.examples?.length || 0} Ví dụ minh họa
-                          </span>
+                            <span>{isCurrentLessonDone ? "✓ Đã học xong (+25 XP)" : "Đánh dấu đã học xong (+25 XP)"}</span>
+                          </button>
                         </div>
 
                         <p style={{ fontSize: "0.9rem", color: "#d4d4d8", lineHeight: "1.65", margin: 0 }}>
@@ -1160,38 +1855,57 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* Bottom Call to Action to Practice */}
+                      {/* Bottom Completion & Practice Bar */}
                       <div
                         style={{
                           marginTop: "2rem",
-                          padding: "1.5rem",
+                          padding: "1.75rem",
                           backgroundColor: "#121215",
-                          border: "1px dashed #3b82f6",
+                          border: isCurrentLessonDone ? "1px solid #10b981" : "1px dashed #3b82f6",
                           borderRadius: "8px",
                           textAlign: "center",
                         }}
                       >
-                        <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.4rem" }}>
-                          Đã nắm vững lý thuyết bài học này?
+                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", marginBottom: "0.4rem" }}>
+                          {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
                         </div>
-                        <p style={{ fontSize: "0.85rem", color: "#71717a", marginBottom: "1rem" }}>
+                        <p style={{ fontSize: "0.85rem", color: "#71717a", marginBottom: "1.25rem" }}>
                           Chuyên đề "{selectedChapter?.title_vi}" có {selectedChapter?.exercises?.length || 0} bài tập thực hành ({totalChapterExerciseQuestions} câu hỏi) để bạn củng cố kiến thức.
                         </p>
-                        <button
-                          onClick={() => setActiveTab("exercises")}
-                          style={{
-                            padding: "0.6rem 1.5rem",
-                            backgroundColor: "#2563eb",
-                            border: "none",
-                            borderRadius: "6px",
-                            color: "#ffffff",
-                            fontSize: "0.85rem",
-                            fontWeight: "600",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Làm bài tập thực hành ngay →
-                        </button>
+
+                        <div style={{ display: "flex", justifyContent: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                          <button
+                            onClick={() => toggleLessonCompletion(selectedLesson.id)}
+                            style={{
+                              padding: "0.6rem 1.25rem",
+                              backgroundColor: isCurrentLessonDone ? "#10b981" : "#18181b",
+                              border: isCurrentLessonDone ? "none" : "1px solid #3f3f46",
+                              borderRadius: "6px",
+                              color: isCurrentLessonDone ? "#042f1a" : "#fafafa",
+                              fontSize: "0.85rem",
+                              fontWeight: "700",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {isCurrentLessonDone ? "✓ Đã đánh dấu hoàn thành" : "✓ Đánh dấu đã học xong (+25 XP)"}
+                          </button>
+
+                          <button
+                            onClick={() => setActiveTab("exercises")}
+                            style={{
+                              padding: "0.6rem 1.5rem",
+                              backgroundColor: "#2563eb",
+                              border: "none",
+                              borderRadius: "6px",
+                              color: "#ffffff",
+                              fontSize: "0.85rem",
+                              fontWeight: "700",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Làm bài tập thực hành ngay →
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ) : (
