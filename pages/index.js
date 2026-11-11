@@ -22,7 +22,21 @@ import {
   getAllProfiles,
   updateProfileRoleOrStatus,
   getActiveSession,
+  logActivity,
+  getActivityLogs,
+  getAllProfilesWithTrackers,
 } from "../lib/supabase/client";
+
+// Guest (Unauthenticated Visitor) Template
+const GUEST_USER = {
+  id: "guest",
+  name: "Khách (Chưa đăng nhập)",
+  email: "guest@grammarpro.com",
+  role: "FREE",
+  status: "ACTIVE",
+  createdAt: "2026-11-11",
+  isGuest: true,
+};
 
 // Default Pre-seeded User Database (Synchronized with Supabase Auth & PostgreSQL 17)
 const DEFAULT_USERS = [
@@ -67,7 +81,8 @@ export default function Home() {
 
   // --- Auth & User State ---
   const [usersList, setUsersList] = useState(DEFAULT_USERS);
-  const [currentUser, setCurrentUser] = useState(DEFAULT_USERS[2]); // Default as Free student
+  const [currentUser, setCurrentUser] = useState(GUEST_USER); // Default: Guest (Not Admin!)
+  const [adminActivityLogs, setAdminActivityLogs] = useState([]);
   const [accessPolicy, setAccessPolicy] = useState(DEFAULT_ACCESS_POLICY);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login"); // 'login' | 'register'
@@ -198,10 +213,12 @@ export default function Home() {
       }
 
       const storedActiveUserId = localStorage.getItem("grammar_active_user_id");
-      if (storedActiveUserId) {
+      if (storedActiveUserId && storedActiveUserId !== "guest") {
         const uList = storedUsers ? JSON.parse(storedUsers) : DEFAULT_USERS;
         const found = uList.find((u) => u.id === storedActiveUserId);
         if (found) setCurrentUser(found);
+      } else {
+        setCurrentUser(GUEST_USER);
       }
     } catch (e) {
       console.error("Failed to load initial local user DB", e);
@@ -210,8 +227,8 @@ export default function Home() {
     // Connect & Sync with Supabase Cloud
     (async () => {
       try {
-        // Fetch Live Profiles from Supabase Postgres 17
-        const liveProfiles = await getAllProfiles();
+        // Fetch Live Profiles with Trackers from Supabase Postgres 17
+        const liveProfiles = await getAllProfilesWithTrackers();
         if (liveProfiles && liveProfiles.length > 0) {
           const mapped = liveProfiles.map((p) => ({
             id: p.id,
@@ -220,11 +237,16 @@ export default function Home() {
             password: p.role === "ADMIN" ? "admin" : p.role === "VIP" ? "vip" : "free",
             role: p.role || "FREE",
             status: p.status || "ACTIVE",
+            tracker: p.tracker,
             createdAt: p.created_at ? p.created_at.split("T")[0] : getTodayDateStr(),
           }));
           setUsersList(mapped);
           localStorage.setItem("grammar_users_db", JSON.stringify(mapped));
         }
+
+        // Fetch Live Activity Logs
+        const logs = await getActivityLogs(30);
+        if (logs) setAdminActivityLogs(logs);
 
         // Fetch Live System Policy
         const livePolicy = await getSystemPolicy();
@@ -252,6 +274,12 @@ export default function Home() {
           };
           setCurrentUser(activeUser);
           localStorage.setItem("grammar_active_user_id", activeUser.id);
+        } else {
+          // If no active auth session on Supabase, ensure guest mode
+          const savedId = localStorage.getItem("grammar_active_user_id");
+          if (!savedId || savedId === "guest") {
+            setCurrentUser(GUEST_USER);
+          }
         }
       } catch (err) {
         console.warn("Supabase initial cloud fetch warning:", err?.message || err);
@@ -709,6 +737,8 @@ export default function Home() {
         setAuthEmail("");
         setAuthPassword("");
         triggerXpGain(10, `Chào mừng ${loggedUser.name}! (Supabase Auth)`);
+        // Log Login Activity for Admin Audit
+        logActivity(loggedUser.id, loggedUser.email, "LOGIN", { name: loggedUser.name, role: loggedUser.role });
         return;
       }
     } catch (authErr) {
@@ -730,6 +760,7 @@ export default function Home() {
         setAuthEmail("");
         setAuthPassword("");
         triggerXpGain(10, `Chào mừng ${localUser.name}!`);
+        logActivity(localUser.id, localUser.email, "LOGIN", { name: localUser.name, role: localUser.role, offline: true });
         return;
       }
 
@@ -774,6 +805,7 @@ export default function Home() {
         setAuthEmail("");
         setAuthPassword("");
         triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
+        logActivity(data.user.id, email, "REGISTER", { full_name: name });
         return;
       }
     } catch (err) {
@@ -799,26 +831,26 @@ export default function Home() {
       setAuthEmail("");
       setAuthPassword("");
       triggerXpGain(50, `Chào mừng ${localNewUser.name} (+50 XP)!`);
+      logActivity(localNewUser.id, email, "REGISTER", { full_name: name, offline: true });
     }
   };
 
-  const quickSwitchUser = async (targetUser) => {
-    if (targetUser.status === "LOCKED") {
-      alert("Tài khoản này đã bị khóa!");
-      return;
-    }
-    // Attempt real Supabase login in background
-    if (targetUser.email && targetUser.password) {
-      try {
-        await signInWithSupabase(targetUser.email, targetUser.password);
-      } catch (err) {
-        console.warn("Quick switch Supabase login background:", err.message);
+  const handleLogout = async () => {
+    try {
+      if (currentUser?.id && !currentUser.isGuest) {
+        logActivity(currentUser.id, currentUser.email, "LOGOUT", { message: "Người dùng đăng xuất" });
       }
+      await signOutSupabase();
+    } catch (err) {
+      console.warn("Logout error:", err);
     }
-    setCurrentUser(targetUser);
-    localStorage.setItem("grammar_active_user_id", targetUser.id);
+    localStorage.removeItem("grammar_active_user_id");
+    setCurrentUser(GUEST_USER);
+    if (currentView === "admin") {
+      setCurrentView("dashboard");
+    }
     setAuthModalOpen(false);
-    triggerXpGain(10, `Đã chuyển sang ${targetUser.name} (${targetUser.role})`);
+    triggerXpGain(0, "Đã đăng xuất tài khoản thành công!");
   };
 
   // --- Admin Management Handlers (Live Supabase Postgres 17) ---
@@ -877,7 +909,7 @@ export default function Home() {
 
   const refreshAdminFromSupabase = async () => {
     try {
-      const liveProfiles = await getAllProfiles();
+      const liveProfiles = await getAllProfilesWithTrackers();
       if (liveProfiles && liveProfiles.length > 0) {
         const mapped = liveProfiles.map((p) => ({
           id: p.id,
@@ -886,11 +918,15 @@ export default function Home() {
           password: p.role === "ADMIN" ? "admin" : p.role === "VIP" ? "vip" : "free",
           role: p.role || "FREE",
           status: p.status || "ACTIVE",
+          tracker: p.tracker,
           createdAt: p.created_at ? p.created_at.split("T")[0] : getTodayDateStr(),
         }));
         setUsersList(mapped);
         localStorage.setItem("grammar_users_db", JSON.stringify(mapped));
       }
+      const logs = await getActivityLogs(30);
+      if (logs) setAdminActivityLogs(logs);
+
       const livePolicy = await getSystemPolicy();
       if (livePolicy) {
         const pol = {
@@ -901,7 +937,7 @@ export default function Home() {
         setAdminPolicyForm(pol);
         localStorage.setItem("grammar_access_policy", JSON.stringify(pol));
       }
-      triggerXpGain(5, "Đã làm mới dữ liệu từ Supabase Cloud!");
+      triggerXpGain(5, "Đã làm mới dữ liệu & nhật ký hoạt động từ Supabase Cloud!");
     } catch (err) {
       alert("Không thể kết nối đến Supabase để làm mới: " + err.message);
     }
@@ -971,6 +1007,9 @@ export default function Home() {
         nextList.push(lessonId);
         xpGain = 25;
         triggerXpGain(25, "Đã hoàn thành bài học: +25 XP!");
+        if (currentUser?.id && !currentUser.isGuest) {
+          logActivity(currentUser.id, currentUser.email, "STUDY_LESSON", { lesson_id: lessonId });
+        }
       }
       return {
         ...prev,
@@ -1249,6 +1288,15 @@ export default function Home() {
       details: details,
     });
     setQuizSubmitted(true);
+
+    if (currentUser?.id && !currentUser.isGuest) {
+      logActivity(currentUser.id, currentUser.email, "SUBMIT_QUIZ", {
+        topic: selectedQuizTopic,
+        score: correctCount,
+        total: activeQuizQuestions.length,
+        percentage: Math.round((correctCount / activeQuizQuestions.length) * 100),
+      });
+    }
 
     // Increment quizzes completed today for free limit tracker
     persistTracker((prev) => ({
@@ -1566,6 +1614,33 @@ export default function Home() {
                 ✕
               </button>
             </div>
+
+            {/* Currently Logged In Box with Logout Action */}
+            {!currentUser.isGuest && (
+              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: "#18181b", borderRadius: "8px", border: "1px solid #27272a", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div style={{ fontSize: "0.72rem", color: "#71717a", textTransform: "uppercase" }}>Đang đăng nhập:</div>
+                  <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#fafafa" }}>{currentUser.name} ({currentUser.role})</div>
+                  <div style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>{currentUser.email}</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  style={{
+                    padding: "0.4rem 0.8rem",
+                    backgroundColor: "#ef444420",
+                    border: "1px solid #ef444450",
+                    color: "#f87171",
+                    borderRadius: "6px",
+                    fontSize: "0.75rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  🚪 Đăng xuất
+                </button>
+              </div>
+            )}
 
             {/* Error Message */}
             {authError && (
@@ -2390,8 +2465,8 @@ export default function Home() {
               )}
             </button>
 
-            {/* Tab 4: Admin Panel (Only for ADMIN users) */}
-            {currentUser.role === "ADMIN" && (
+            {/* Tab 4: Admin Panel (Only for authenticated ADMIN users) */}
+            {!currentUser.isGuest && currentUser.role === "ADMIN" && (
               <button
                 onClick={() => setCurrentView("admin")}
                 style={{
@@ -2528,59 +2603,106 @@ export default function Home() {
               <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#60a5fa" }}>{userTracker.xp} XP</span>
             </div>
 
-            {/* User Account Dropdown / Trigger */}
-            <div
-              onClick={() => setAuthModalOpen(true)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                backgroundColor: "#18181b",
-                border: "1px solid #27272a",
-                padding: "0.3rem 0.65rem",
-                borderRadius: "8px",
-                cursor: "pointer",
-              }}
-            >
-              <div
+            {/* User Account / Sign In / Sign Out Section */}
+            {currentUser.isGuest ? (
+              <button
+                onClick={() => { setAuthTab("login"); setAuthModalOpen(true); }}
                 style={{
-                  width: "22px",
-                  height: "22px",
-                  borderRadius: "50%",
-                  backgroundColor: currentUser.role === "ADMIN" ? "#ef4444" : currentUser.role === "VIP" ? "#f59e0b" : "#3b82f6",
-                  color: "#09090b",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.75rem",
-                  fontWeight: "800",
+                  gap: "0.45rem",
+                  backgroundColor: "#2563eb",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "0.4rem 0.95rem",
+                  borderRadius: "8px",
+                  fontSize: "0.825rem",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  boxShadow: "0 2px 8px rgba(37, 99, 235, 0.35)",
                 }}
               >
-                {currentUser.name.charAt(0)}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "#fafafa", maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {currentUser.name}
-                </span>
-                <span
+                <span>🔑</span>
+                <span>Đăng nhập</span>
+              </button>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <div
+                  onClick={() => setAuthModalOpen(true)}
+                  title="Thông tin tài khoản"
                   style={{
-                    fontSize: "0.65rem",
-                    fontFamily: "Geist Mono",
-                    color: currentUser.role === "ADMIN" ? "#f87171" : currentUser.role === "VIP" ? "#fbbf24" : "#94a3b8",
-                    fontWeight: "700",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    padding: "0.3rem 0.65rem",
+                    borderRadius: "8px",
+                    cursor: "pointer",
                   }}
                 >
-                  {currentUser.role === "ADMIN" ? "🛡️ ADMIN" : currentUser.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
-                </span>
+                  <div
+                    style={{
+                      width: "22px",
+                      height: "22px",
+                      borderRadius: "50%",
+                      backgroundColor: currentUser.role === "ADMIN" ? "#ef4444" : currentUser.role === "VIP" ? "#f59e0b" : "#3b82f6",
+                      color: "#09090b",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.75rem",
+                      fontWeight: "800",
+                    }}
+                  >
+                    {currentUser.name.charAt(0)}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "#fafafa", maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {currentUser.name}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.65rem",
+                        fontFamily: "Geist Mono",
+                        color: currentUser.role === "ADMIN" ? "#f87171" : currentUser.role === "VIP" ? "#fbbf24" : "#94a3b8",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {currentUser.role === "ADMIN" ? "🛡️ ADMIN" : currentUser.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  title="Đăng xuất tài khoản"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    backgroundColor: "#18181b",
+                    border: "1px solid #3f3f46",
+                    color: "#f87171",
+                    padding: "0.38rem 0.65rem",
+                    borderRadius: "8px",
+                    fontSize: "0.75rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span>🚪</span>
+                  <span>Đăng xuất</span>
+                </button>
               </div>
-            </div>
+            )}
           </div>
         </header>
 
         {/* ============================================================== */}
         {/* VIEW 4: ADMIN MANAGEMENT PANEL (QUẢN TRỊ VIÊN HỆ THỐNG)        */}
         {/* ============================================================== */}
-        {currentView === "admin" && currentUser.role === "ADMIN" && (
+        {currentView === "admin" && !currentUser.isGuest && currentUser.role === "ADMIN" && (
           <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
               
@@ -2756,6 +2878,7 @@ export default function Home() {
                       <tr>
                         <th>Họ tên & Email</th>
                         <th>Vai trò (Role)</th>
+                        <th>Tiến độ học tập</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
                         <th>Hành động thay đổi quyền</th>
@@ -2793,6 +2916,18 @@ export default function Home() {
                               >
                                 {u.role === "ADMIN" ? "🛡️ ADMIN" : u.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
                               </span>
+                            </td>
+
+                            <td>
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                                  <span style={{ fontSize: "0.75rem", color: "#f59e0b", fontWeight: "700" }}>🔥 {u.tracker?.streak || 1} ngày</span>
+                                  <span style={{ fontSize: "0.75rem", color: "#60a5fa", fontWeight: "700" }}>⚡ {u.tracker?.xp || 0} XP</span>
+                                </div>
+                                <div style={{ fontSize: "0.72rem", color: "#a1a1aa" }}>
+                                  📖 {u.tracker?.completed_lessons?.length || 0} bài học đã học
+                                </div>
+                              </div>
                             </td>
 
                             <td>
@@ -2866,6 +3001,103 @@ export default function Home() {
                     </tbody>
                   </table>
                 </div>
+              </div>
+
+              {/* Real-time Activity Logs Card */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #27272a",
+                  borderRadius: "10px",
+                  padding: "1.5rem",
+                  marginTop: "2rem",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ fontSize: "1.2rem" }}>📜</span>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                      Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})
+                    </h3>
+                  </div>
+                  <button
+                    onClick={refreshAdminFromSupabase}
+                    style={{
+                      padding: "0.3rem 0.65rem",
+                      backgroundColor: "#18181b",
+                      border: "1px solid #3f3f46",
+                      color: "#a1a1aa",
+                      borderRadius: "6px",
+                      fontSize: "0.75rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🔄 Cập nhật log
+                  </button>
+                </div>
+
+                {adminActivityLogs.length === 0 ? (
+                  <div style={{ padding: "2rem", textAlign: "center", color: "#71717a", fontSize: "0.85rem" }}>
+                    Chưa có nhật ký hoạt động nào được ghi nhận trên Supabase.
+                  </div>
+                ) : (
+                  <div style={{ overflowX: "auto" }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Thời gian</th>
+                          <th>Học viên</th>
+                          <th>Hành động</th>
+                          <th>Chi tiết hoạt động</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {adminActivityLogs.map((log) => {
+                          const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
+                          return (
+                            <tr key={log.id}>
+                              <td style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", whiteSpace: "nowrap" }}>
+                                {dateStr}
+                              </td>
+                              <td style={{ fontSize: "0.8rem", fontWeight: "600", color: "#fafafa" }}>
+                                {log.user_email || log.user_id?.substring(0, 8)}
+                              </td>
+                              <td>
+                                <span
+                                  style={{
+                                    fontSize: "0.7rem",
+                                    fontFamily: "Geist Mono",
+                                    fontWeight: "700",
+                                    padding: "0.15rem 0.5rem",
+                                    borderRadius: "4px",
+                                    backgroundColor:
+                                      log.action_type === "LOGIN" ? "#10b98120"
+                                      : log.action_type === "LOGOUT" ? "#ef444420"
+                                      : log.action_type === "SUBMIT_QUIZ" ? "#f59e0b20"
+                                      : log.action_type === "STUDY_LESSON" ? "#3b82f620"
+                                      : "#8b5cf620",
+                                    color:
+                                      log.action_type === "LOGIN" ? "#34d399"
+                                      : log.action_type === "LOGOUT" ? "#f87171"
+                                      : log.action_type === "SUBMIT_QUIZ" ? "#fbbf24"
+                                      : log.action_type === "STUDY_LESSON" ? "#60a5fa"
+                                      : "#a78bfa",
+                                  }}
+                                >
+                                  {log.action_type}
+                                </span>
+                              </td>
+                              <td style={{ fontSize: "0.75rem", color: "#a1a1aa", fontFamily: "Geist Mono" }}>
+                                {JSON.stringify(log.details || {})}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
               </div>
 
             </div>
