@@ -3,6 +3,10 @@ import TimelineVisualization from "./TimelineVisualization";
 import DecisionTreeVisualization from "./DecisionTreeVisualization";
 import TransformationDiagram from "./TransformationDiagram";
 import ConversionFlowVisualization from "./ConversionFlowVisualization";
+import SentenceTreeVisualization from "./SentenceTreeVisualization";
+import ComparisonScaleVisualization from "./ComparisonScaleVisualization";
+import ModalMatrixVisualization from "./ModalMatrixVisualization";
+import WordFamilyTreeVisualization from "./WordFamilyTreeVisualization";
 
 export default function VisualizationRenderer({ type, data, isLight = false }) {
   if (!data) {
@@ -29,6 +33,14 @@ export default function VisualizationRenderer({ type, data, isLight = false }) {
       return <TransformationDiagram data={data} isLight={isLight} />;
     case "conversion-flow":
       return <ConversionFlowVisualization data={data} isLight={isLight} />;
+    case "sentence-tree":
+      return <SentenceTreeVisualization data={data} isLight={isLight} />;
+    case "comparison-scale":
+      return <ComparisonScaleVisualization data={data} isLight={isLight} />;
+    case "modal-matrix":
+      return <ModalMatrixVisualization data={data} isLight={isLight} />;
+    case "word-family-tree":
+      return <WordFamilyTreeVisualization data={data} isLight={isLight} />;
     default:
       return (
         <div
