@@ -130,7 +130,7 @@ export default function VisualizationLegend({ type, isLight = false }) {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
           <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Hơn (>): -er / more ... than</span>
+          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Hơn (&gt;): -er / more ... than</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
           <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#8b5cf6" }} />
