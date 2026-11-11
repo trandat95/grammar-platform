@@ -445,29 +445,68 @@ export default function Home() {
     }
   };
 
-  // Global mouseup & click listener for word lookup
+  // Word lookup listener: ONLY triggers on intentional selection (bôi đen) or double-click in learning content!
   useEffect(() => {
     if (!dictEnabled) return;
 
-    const handleGlobalClick = (e) => {
-      // Ignore if clicking inside interactive components or popup
+    // Helper to verify text is English and not Vietnamese
+    const isEnglishWord = (str) => {
+      if (!str || str.length < 2 || str.length > 40) return false;
+      const vietnameseRegex = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ]/;
+      if (vietnameseRegex.test(str)) return false;
+      return /^[a-zA-Z\s'-]+$/.test(str.trim());
+    };
+
+    // 1. Selection handler: Triggers ONLY when user highlights / selects text inside learning content
+    const handleSelectionMouseUp = (e) => {
+      // Strictly ignore if click is inside UI controls, sidebar, header, navbar, modals, buttons
       if (
         e.target.closest(
-          "#dict-popup, #vocab-modal, #auth-modal, #new-user-modal, button, input, textarea, select, a, [role='button'], nav"
+          "aside, header, nav, #chapter-sidebar, #auth-modal, #new-user-modal, #vocab-modal, #dict-popup, button, input, textarea, select, a, [role='button'], [data-no-dict='true']"
         )
       ) {
         return;
       }
 
-      // 1. Check user text selection
+      // Must be inside learning content area (theory, exercises, quiz, mistakes, formulas)
+      const contentArea = e.target.closest("#learning-content-area, #quiz-area, #mistakes-area, [data-dict-area='true']");
+      if (!contentArea) {
+        setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
+        return;
+      }
+
       const sel = window.getSelection();
       const selStr = sel ? sel.toString().trim() : "";
-      if (selStr && selStr.length < 35 && /^[a-zA-Z\s'-]+$/.test(selStr)) {
+      if (selStr && isEnglishWord(selStr)) {
         triggerLookup(selStr, e.clientX, e.clientY);
         return;
       }
 
-      // 2. Caret position under cursor
+      // Clicked on neutral content background without selection: close dict popup
+      setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
+    };
+
+    // 2. Double-Click handler: Triggers when user double clicks on an English word in learning content
+    const handleDoubleClick = (e) => {
+      if (
+        e.target.closest(
+          "aside, header, nav, #chapter-sidebar, #auth-modal, #new-user-modal, #vocab-modal, #dict-popup, button, input, textarea, select, a, [role='button'], [data-no-dict='true']"
+        )
+      ) {
+        return;
+      }
+
+      const contentArea = e.target.closest("#learning-content-area, #quiz-area, #mistakes-area, [data-dict-area='true']");
+      if (!contentArea) return;
+
+      const sel = window.getSelection();
+      const selStr = sel ? sel.toString().trim() : "";
+      if (selStr && isEnglishWord(selStr)) {
+        triggerLookup(selStr, e.clientX, e.clientY);
+        return;
+      }
+
+      // Caret lookup ONLY on explicit double-click
       let textNode = null;
       let offset = 0;
       if (document.caretRangeFromPoint) {
@@ -486,19 +525,19 @@ export default function Home() {
 
       if (textNode && textNode.nodeType === Node.TEXT_NODE) {
         const text = textNode.textContent;
+        // Skip if containing Vietnamese characters
+        if (/[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(text)) {
+          return;
+        }
         let start = offset;
         let end = offset;
         while (start > 0 && /[a-zA-Z0-9'-]/.test(text[start - 1])) start--;
         while (end < text.length && /[a-zA-Z0-9'-]/.test(text[end])) end++;
         const word = text.slice(start, end).trim().replace(/^[^a-zA-Z]+|[^a-zA-Z]+$/g, "");
-        if (word && word.length >= 2 && /^[a-zA-Z]/.test(word)) {
+        if (word && word.length >= 2 && isEnglishWord(word)) {
           triggerLookup(word, e.clientX, e.clientY);
-          return;
         }
       }
-
-      // Clicked on neutral background: close dict popup
-      setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
     };
 
     const handleKeyDown = (e) => {
@@ -508,15 +547,17 @@ export default function Home() {
       }
     };
 
-    document.addEventListener("mouseup", handleGlobalClick);
+    document.addEventListener("mouseup", handleSelectionMouseUp);
+    document.addEventListener("dblclick", handleDoubleClick);
     document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener("mouseup", handleGlobalClick);
+      document.removeEventListener("mouseup", handleSelectionMouseUp);
+      document.removeEventListener("dblclick", handleDoubleClick);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [dictEnabled]);
 
-  // Load user vocabulary on user change
+    // Load user vocabulary on user change
   useEffect(() => {
     if (!currentUser?.id) return;
     try {
@@ -1247,6 +1288,8 @@ export default function Home() {
       {/* Auth Modal (Login / Register / Quick Switch) */}
       {authModalOpen && (
         <div
+          id="auth-modal"
+          data-no-dict="true"
           style={{
             position: "fixed",
             inset: 0,
@@ -1482,6 +1525,8 @@ export default function Home() {
       {/* Admin: Modal Add New User */}
       {newUserModalOpen && (
         <div
+          id="new-user-modal"
+          data-no-dict="true"
           style={{
             position: "fixed",
             inset: 0,
@@ -2233,7 +2278,7 @@ export default function Home() {
                 cursor: "pointer",
               }}
             >
-              <span>{dictEnabled ? "⚡ Click tra từ: BẬT" : "💤 Tra từ: TẮT"}</span>
+              <span>{dictEnabled ? "⚡ Tra từ: BẬT" : "💤 Tra từ: TẮT"}</span>
             </button>
 
             {/* Saved Vocab Notebook Pill */}
@@ -2923,6 +2968,8 @@ export default function Home() {
             
             {/* Left Sidebar — Chapters & Lessons Tree */}
             <aside
+              id="chapter-sidebar"
+              data-no-dict="true"
               style={{
                 width: "320px",
                 borderRight: "1px solid #27272a",
@@ -3095,7 +3142,7 @@ export default function Home() {
             </aside>
 
             {/* Main Content Area */}
-            <main style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem", maxWidth: "980px" }}>
+            <main id="learning-content-area" data-dict-area="true" style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem", maxWidth: "980px" }}>
               
               {/* Breadcrumbs & Header */}
               <div style={{ marginBottom: "1.5rem" }}>
@@ -4032,7 +4079,7 @@ export default function Home() {
         {/* VIEW 2: QUIZ ENGINE (50 RANDOM QUESTIONS BY TOPIC)             */}
         {/* ============================================================== */}
         {currentView === "quiz" && (
-          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div id="quiz-area" data-dict-area="true" style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Daily Quiz Limit Notice for Free User */}
@@ -4451,7 +4498,7 @@ export default function Home() {
         {/* VIEW 3: MISTAKES NOTEBOOK (SỔ TAY CÂU SAI ĐỂ ÔN LẠI)            */}
         {/* ============================================================== */}
         {currentView === "mistakes" && (
-          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div id="mistakes-area" data-dict-area="true" style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Notebook Header Card */}
