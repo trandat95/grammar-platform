@@ -1,4 +1,4 @@
-import { supabaseServer } from "../../../lib/supabase/server";
+import { getServerClient } from "../../../lib/supabase/server";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -11,9 +11,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid request payload: userId and items array required" });
   }
 
+  const supabaseClient = getServerClient(req);
+
   try {
     // 1. Fetch current tracker from database
-    const { data: currentTracker } = await supabaseServer
+    const { data: currentTracker } = await supabaseClient
       .from("user_learning_trackers")
       .select("*")
       .eq("user_id", userId)
@@ -144,7 +146,7 @@ export default async function handler(req, res) {
       updated_at: new Date().toISOString(),
     };
 
-    const { data: savedTracker, error: saveErr } = await supabaseServer
+    const { data: savedTracker, error: saveErr } = await supabaseClient
       .from("user_learning_trackers")
       .upsert(updatedTrackerPayload, { onConflict: "user_id" })
       .select()
@@ -154,15 +156,15 @@ export default async function handler(req, res) {
 
     // 5. Batch insert mistakes, quiz attempts, and vocabularies
     if (mistakesToInsert.length > 0) {
-      await supabaseServer.from("user_mistakes").insert(mistakesToInsert);
+      await supabaseClient.from("user_mistakes").insert(mistakesToInsert);
     }
 
     if (quizAttemptsToInsert.length > 0) {
-      await supabaseServer.from("quiz_attempts").insert(quizAttemptsToInsert);
+      await supabaseClient.from("quiz_attempts").insert(quizAttemptsToInsert);
     }
 
     if (vocabToInsert.length > 0) {
-      await supabaseServer.from("user_vocabularies").insert(vocabToInsert);
+      await supabaseClient.from("user_vocabularies").insert(vocabToInsert);
     }
 
     return res.status(200).json({
