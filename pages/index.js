@@ -16,8 +16,11 @@ import MasteryIntelligenceDashboard from "../components/learning/MasteryIntellig
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
 import GamificationHub from "../components/gamification/GamificationHub";
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
+import MonetizationHub from "../components/monetization/MonetizationHub";
+import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
+import AdminMonetizationPanel from "../components/admin/AdminMonetizationPanel";
 import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
 import StepUpConfirmModal from "../components/admin/StepUpConfirmModal";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
@@ -269,6 +272,8 @@ export default function Home() {
     leaderboard_visibility: "public",
     reduced_motion: false,
   });
+  const [smartPaywall, setSmartPaywall] = useState({ open: false, context: null, preview: null });
+  const [paywallPsych, setPaywallPsych] = useState({});
   const [syncState, setSyncState] = useState({ status: "SYNCED", lastSyncTime: null });
 
   // Helper date strings
@@ -1439,6 +1444,77 @@ export default function Home() {
       (gam.newlyUnlockedAchievements && gam.newlyUnlockedAchievements.length > 0)
     ) {
       setGamificationCelebration(gam);
+    }
+  };
+
+  const handleServerEntitlementSync = (ent) => {
+    if (!ent?.effectiveRole) return;
+    setCurrentUser((prev) => {
+      if (!prev || prev.isGuest || prev.role === "ADMIN") return prev;
+      if (prev.role === ent.effectiveRole) return prev;
+      const updated = { ...prev, role: ent.effectiveRole };
+      try {
+        localStorage.setItem("grammar_active_user", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const openContextualSmartPaywall = async (triggerKey = "vip_feature_click", preview = null) => {
+    if (currentUser?.role === "VIP" || currentUser?.role === "ADMIN") return;
+    if (currentUser?.isGuest || !currentUser?.id) {
+      setSmartPaywall({
+        open: true,
+        context: {
+          variantKey: "progress_anchored",
+          config: {
+            trigger_key: triggerKey,
+            title_vi: preview?.title || "Mở khóa Hệ sinh thái Ngữ pháp Cá nhân hóa VIP",
+            subtitle_vi: "Đăng ký miễn phí và kích hoạt dùng thử VIP 7 ngày để trải nghiệm trọn bộ 2,939 câu hỏi & AI Coach.",
+          },
+        },
+        preview,
+      });
+      return;
+    }
+
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
+      };
+      fetch("/api/monetization/overview", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          action: "track_event",
+          user_id: currentUser.id,
+          event_name: "VIP_FEATURE_CLICKED",
+          metadata: { triggerKey },
+        }),
+      }).catch(() => {});
+
+      const [pwRes, ovRes] = await Promise.all([
+        fetch("/api/monetization/overview", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ action: "check_paywall", user_id: currentUser.id, trigger_key: triggerKey }),
+        }),
+        fetch(`/api/monetization/overview?user_id=${encodeURIComponent(currentUser.id)}`, {
+          headers: activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {},
+        }),
+      ]);
+      const pwJson = await pwRes.json();
+      const ovJson = await ovRes.json();
+      if (ovJson?.psychology) setPaywallPsych(ovJson.psychology);
+
+      if (pwJson?.shouldShow) {
+        setSmartPaywall({ open: true, context: pwJson, preview });
+      } else {
+        setCurrentView("vip");
+      }
+    } catch {
+      setCurrentView("vip");
     }
   };
 
@@ -3270,6 +3346,27 @@ export default function Home() {
               <span>🏆 Thành tích</span>
             </button>
 
+            {/* Tab 3.6: Gói VIP & Lộ trình Chuyên sâu (Milestone 2.12) */}
+            <button
+              onClick={() => setCurrentView("vip")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "6px",
+                fontSize: "0.825rem",
+                fontWeight: currentView === "vip" ? "700" : "600",
+                color: currentView === "vip" ? T.text : T.accent,
+                backgroundColor: currentView === "vip" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "vip" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span>{currentUser.role === "VIP" ? "⭐ VIP" : "💎 Nâng cấp VIP"}</span>
+            </button>
+
             {/* Tab 4: Admin Panel (Only for authenticated ADMIN users) */}
             {!currentUser.isGuest && currentUser.role === "ADMIN" && (
               <button
@@ -3779,11 +3876,14 @@ export default function Home() {
               {/* TAB 0: REAL-TIME OPERATIONAL HEALTH OVERVIEW              */}
               {/* ========================================================= */}
               {adminActiveTab === "overview" && (
-                <AdminOverviewPanel
-                  authHeaders={adminAuthHeaders}
-                  isLight={isLight}
-                  onNavigateTab={setAdminActiveTab}
-                />
+                <>
+                  <AdminOverviewPanel
+                    authHeaders={adminAuthHeaders}
+                    isLight={isLight}
+                    onNavigateTab={setAdminActiveTab}
+                  />
+                  <AdminMonetizationPanel authToken={activeAuthToken} isLight={isLight} />
+                </>
               )}
 
               {/* ========================================================= */}
@@ -4503,6 +4603,55 @@ export default function Home() {
           reducedMotion={gamificationPreferences.reduced_motion}
         />
 
+        <SmartPaywallModal
+          isOpen={smartPaywall.open}
+          onClose={() => setSmartPaywall((p) => ({ ...p, open: false }))}
+          onDismiss={(tKey) => {
+            if (!currentUser?.isGuest && currentUser?.id) {
+              fetch("/api/monetization/overview", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
+                },
+                body: JSON.stringify({
+                  action: "check_paywall",
+                  user_id: currentUser.id,
+                  trigger_key: tKey,
+                  action_taken: "dismissed",
+                }),
+              }).catch(() => {});
+            }
+          }}
+          paywallContext={smartPaywall.context}
+          psychology={paywallPsych}
+          abVariant={smartPaywall.context?.variantKey || "control"}
+          featurePreview={smartPaywall.preview}
+          onOpenFullPricing={() => setCurrentView("vip")}
+          onStartTrial={() => {
+            setSmartPaywall((p) => ({ ...p, open: false }));
+            setCurrentView("vip");
+          }}
+          isLight={isLight}
+        />
+
+        {/* ============================================================== */}
+        {/* VIEW 7: INTELLIGENT MONETIZATION & VIP HUB (MILESTONE 2.12)    */}
+        {/* ============================================================== */}
+        {currentView === "vip" && (
+          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+            <div style={{ maxWidth: "1020px", margin: "0 auto" }}>
+              <MonetizationHub
+                userId={!currentUser?.isGuest ? currentUser?.id : null}
+                authToken={activeAuthToken}
+                isLight={isLight}
+                onEntitlementSync={handleServerEntitlementSync}
+                onRequireLogin={() => setAuthModalOpen(true)}
+              />
+            </div>
+          </div>
+        )}
+
         {/* ============================================================== */}
         {/* VIEW 6: INTELLIGENT GAMIFICATION & LEADERBOARD (MILESTONE 2.10)*/}
         {/* ============================================================== */}
@@ -4590,7 +4739,7 @@ export default function Home() {
 
                     {currentUser.role === "FREE" && (
                       <span
-                        onClick={() => setAuthModalOpen(true)}
+                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
                         style={{
                           fontSize: "0.75rem",
                           color: "#fbbf24",
@@ -5995,7 +6144,7 @@ export default function Home() {
 
                     {currentUser.role === "FREE" && (
                       <button
-                        onClick={() => setAuthModalOpen(true)}
+                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Mở khóa 100% Bài tập Chuyên đề", description: "Không còn bị giới hạn 10 câu mỗi chương. Học và sửa lỗi chi tiết toàn bộ 2,939 câu." })}
                         style={{
                           backgroundColor: "#f59e0b",
                           color: "#09090b",
@@ -6127,7 +6276,7 @@ export default function Home() {
                                         Tài khoản Miễn phí được trải nghiệm tối đa {accessPolicy.freeExerciseLimit} câu đầu tiên. Hãy nâng cấp lên VIP để mở khóa toàn bộ câu hỏi và đáp án giải thích chi tiết!
                                       </p>
                                       <button
-                                        onClick={() => setAuthModalOpen(true)}
+                                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: `Mở khóa Câu ${questionGlobalIdx + 1} & Toàn bộ Chuyên đề`, description: "Truy cập không giới hạn kho 2,939 câu kèm lời giải sư phạm 5 trường." })}
                                         style={{
                                           padding: "0.35rem 0.85rem",
                                           backgroundColor: "#f59e0b",
@@ -6139,7 +6288,7 @@ export default function Home() {
                                           cursor: "pointer",
                                         }}
                                       >
-                                        Nâng cấp VIP ngay (Hoặc chuyển tài khoản)
+                                        Nâng cấp VIP ngay (Hoặc xem gói ưu đãi)
                                       </button>
                                     </div>
                                   );
@@ -6372,7 +6521,7 @@ export default function Home() {
                     Tài khoản Miễn phí được làm tối đa {accessPolicy.freeDailyQuizLimit} đề Quiz mỗi ngày (Bạn đã làm {userTracker.quizzesCompletedToday || 0}/{accessPolicy.freeDailyQuizLimit} đề). Nâng cấp lên VIP để làm bài thi không giới hạn!
                   </p>
                   <button
-                    onClick={() => setAuthModalOpen(true)}
+                    onClick={() => openContextualSmartPaywall("milestone_100_q", { title: "Luyện Thi Quiz & Đề Thích Ứng Không Giới Hạn", description: "Gỡ bỏ giới hạn Quiz trong ngày và sử dụng bộ trộn đề 50/30/20 không giới hạn." })}
                     style={{
                       padding: "0.55rem 1.25rem",
                       backgroundColor: "#f59e0b",

@@ -72,6 +72,7 @@ STRICT_TOKEN_DIRS = [
     "components/admin",
     "components/sync",
     "components/gamification",
+    "components/monetization",
     "components/learning/SpacedRepetitionPanel.jsx",
     "components/learning/RemedialRecommendationCard.jsx",
     "components/learning/MasteryIntelligenceDashboard.jsx",
