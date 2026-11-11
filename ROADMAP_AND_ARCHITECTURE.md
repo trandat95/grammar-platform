@@ -210,6 +210,7 @@ erDiagram
   - Thẻ giải thích 3 tầng (Dấu hiệu, Quy tắc, Dịch nghĩa) được tối ưu màu sắc tương phản cao cho cả hai chế độ Sáng / Tối.
 - [x] Bổ sung nút chuyển đổi 1-click `☀️ Sáng / 🌙 Tối` trên Header Navbar, chuyển đổi mượt mà không cần reload trang.
 - [x] Đồng bộ White Mode trên toàn bộ các phân hệ: Header, Sidebar 12 Chuyên đề, Study View (Lý thuyết & Bài tập), Quiz Engine, Sổ tay câu sai, Sổ từ vựng, Popup Tra từ điển nhanh và Admin Dashboard.
+- [x] **Tối ưu hóa triệt để White Mode cho Quiz Engine & Bài tập:** Loại bỏ hoàn toàn các thanh đen/khối màu tối (Instruction box `q.instruction`, Question Type badges, Starter prompt, Answer reveal box, Exercise inputs & buttons), làm sạch triệt để lỗi ký tự markdown gạch dưới bị escape (`\_\_\_\_` -> `____`) trong 2.939 câu hỏi, và đồng bộ giao diện Sáng cho Bảng điều khiển Quản trị viên (Admin Panel) và Header user pills.
 
 #### 🔹 Milestone 2.7: Mở rộng & Hoàn thiện Học liệu Sư phạm 12 Chuyên đề (Deep-dive Pedagogical Content & Presentation)
 - [x] **Chuẩn hóa cấu trúc sư phạm 12 Chuyên đề & 53 bài học:** Khắc phục triệt để các tiêu đề phân mục bị vỡ (OCR artifacts từ bản gốc), chuẩn hóa ma trận công thức 3 thể (Khẳng định `(+)`, Phủ định `(-)`, Nghi vấn `(?)`) chuẩn xác cho 13 thì và các cấu trúc ngữ pháp trọng điểm.

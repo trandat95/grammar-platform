@@ -2868,13 +2868,13 @@ export default function Home() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.3rem",
-                backgroundColor: dictEnabled ? "#064e3b35" : "#18181b",
-                border: dictEnabled ? "1px solid #05966990" : "1px solid #27272a",
+                backgroundColor: dictEnabled ? (isLight ? "#ecfdf5" : "#064e3b35") : (isLight ? "#ffffff" : "#18181b"),
+                border: dictEnabled ? `1px solid ${isLight ? "#a7f3d0" : "#05966990"}` : `1px solid ${T.border}`,
                 borderRadius: "999px",
                 padding: "0.25rem 0.65rem",
                 fontSize: "0.75rem",
                 fontWeight: "600",
-                color: dictEnabled ? "#34d399" : "#71717a",
+                color: dictEnabled ? (isLight ? "#047857" : "#34d399") : T.textSecondary,
                 cursor: "pointer",
               }}
             >
@@ -2912,13 +2912,13 @@ export default function Home() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.3rem",
-                backgroundColor: savedVocab.length > 0 ? "#451a0335" : "#18181b",
-                border: savedVocab.length > 0 ? "1px solid #d9770690" : "1px solid #27272a",
+                backgroundColor: savedVocab.length > 0 ? (isLight ? "#fffbeb" : "#451a0335") : (isLight ? "#ffffff" : "#18181b"),
+                border: savedVocab.length > 0 ? `1px solid ${isLight ? "#fde68a" : "#d9770690"}` : `1px solid ${T.border}`,
                 borderRadius: "999px",
                 padding: "0.25rem 0.65rem",
                 fontSize: "0.75rem",
                 fontWeight: "600",
-                color: savedVocab.length > 0 ? "#fbbf24" : "#a1a1aa",
+                color: savedVocab.length > 0 ? (isLight ? "#b45309" : "#fbbf24") : T.textSecondary,
                 cursor: "pointer",
               }}
             >
@@ -2932,7 +2932,7 @@ export default function Home() {
             <div
               onClick={() => setCurrentView("dashboard")}
               title="Chuỗi ngày học liên tiếp"
-              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: "#1c1917", border: "1px solid #78350f", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
+              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: isLight ? "#fffbeb" : "#1c1917", border: `1px solid ${isLight ? "#fde68a" : "#78350f"}`, color: isLight ? "#b45309" : "#f59e0b", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
             >
               <span>🔥</span>
               <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#f59e0b" }}>{userTracker.streak} ngày</span>
@@ -2941,10 +2941,19 @@ export default function Home() {
             <div
               onClick={() => setCurrentView("dashboard")}
               title="Tổng điểm XP"
-              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: "#141c2b", border: "1px solid #1e3a8a", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                backgroundColor: isLight ? "#eff6ff" : "#141c2b",
+                border: `1px solid ${isLight ? "#bfdbfe" : "#1e3a8a"}`,
+                padding: "0.25rem 0.65rem",
+                borderRadius: "999px",
+                cursor: "pointer",
+              }}
             >
               <span>⚡</span>
-              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#60a5fa" }}>{userTracker.xp} XP</span>
+              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: isLight ? "#2563eb" : "#60a5fa" }}>{userTracker.xp} XP</span>
             </div>
 
             {/* User Account / Sign In / Sign Out Section */}
@@ -2978,11 +2987,12 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: isLight ? "#ffffff" : "#18181b",
+                    border: `1px solid ${T.border}`,
                     padding: "0.3rem 0.65rem",
                     borderRadius: "8px",
                     cursor: "pointer",
+                    boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
                   }}
                 >
                   <div
@@ -2991,7 +3001,7 @@ export default function Home() {
                       height: "22px",
                       borderRadius: "50%",
                       backgroundColor: currentUser.role === "ADMIN" ? "#ef4444" : currentUser.role === "VIP" ? "#f59e0b" : "#3b82f6",
-                      color: "#09090b",
+                      color: "#ffffff",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -3002,14 +3012,14 @@ export default function Home() {
                     {currentUser.name.charAt(0)}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "#fafafa", maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <span style={{ fontSize: "0.78rem", fontWeight: "600", color: T.text, maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {currentUser.name}
                     </span>
                     <span
                       style={{
                         fontSize: "0.65rem",
                         fontFamily: "Geist Mono",
-                        color: currentUser.role === "ADMIN" ? "#f87171" : currentUser.role === "VIP" ? "#fbbf24" : "#94a3b8",
+                        color: currentUser.role === "ADMIN" ? (isLight ? "#dc2626" : "#f87171") : currentUser.role === "VIP" ? (isLight ? "#d97706" : "#fbbf24") : (isLight ? "#475569" : "#94a3b8"),
                         fontWeight: "700",
                       }}
                     >
@@ -3025,9 +3035,9 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     gap: "0.35rem",
-                    backgroundColor: "#18181b",
-                    border: "1px solid #3f3f46",
-                    color: "#f87171",
+                    backgroundColor: isLight ? "#fef2f2" : "#18181b",
+                    border: `1px solid ${isLight ? "#fecaca" : "#3f3f46"}`,
+                    color: isLight ? "#dc2626" : "#f87171",
                     padding: "0.38rem 0.65rem",
                     borderRadius: "8px",
                     fontSize: "0.75rem",
@@ -3076,9 +3086,9 @@ export default function Home() {
                       style={{
                         fontSize: "0.7rem",
                         fontFamily: "Geist Mono",
-                        backgroundColor: "#064e3b40",
-                        color: "#34d399",
-                        border: "1px solid #05966960",
+                        backgroundColor: isLight ? "#ecfdf5" : "#064e3b40",
+                        color: isLight ? "#047857" : "#34d399",
+                        border: `1px solid ${isLight ? "#a7f3d0" : "#05966960"}`,
                         padding: "0.2rem 0.55rem",
                         borderRadius: "999px",
                         fontWeight: "700",
@@ -3161,7 +3171,7 @@ export default function Home() {
                       max="100"
                       value={adminPolicyForm.freeExerciseLimit}
                       onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeExerciseLimit: parseInt(e.target.value) || 10 })}
-                      style={{ padding: "0.5rem 0.75rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa", width: "160px" }}
+                      style={{ padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "160px" }}
                     />
                     <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 10 câu (Câu thứ 11 sẽ bị khóa VIP)</div>
                   </div>
@@ -3176,7 +3186,7 @@ export default function Home() {
                       max="20"
                       value={adminPolicyForm.freeDailyQuizLimit}
                       onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeDailyQuizLimit: parseInt(e.target.value) || 2 })}
-                      style={{ padding: "0.5rem 0.75rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa", width: "160px" }}
+                      style={{ padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "160px" }}
                     />
                     <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
                   </div>
@@ -3353,17 +3363,18 @@ export default function Home() {
               {/* Real-time Activity Logs Card */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "10px",
                   padding: "1.5rem",
                   marginTop: "2rem",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                     <span style={{ fontSize: "1.2rem" }}>📜</span>
-                    <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: 0 }}>
                       Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})
                     </h3>
                   </div>
@@ -3371,9 +3382,9 @@ export default function Home() {
                     onClick={refreshAdminFromSupabase}
                     style={{
                       padding: "0.3rem 0.65rem",
-                      backgroundColor: "#18181b",
-                      border: "1px solid #3f3f46",
-                      color: "#a1a1aa",
+                      backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                      border: `1px solid ${T.border}`,
+                      color: T.textSecondary,
                       borderRadius: "6px",
                       fontSize: "0.75rem",
                       cursor: "pointer",
@@ -3406,7 +3417,7 @@ export default function Home() {
                               <td style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", whiteSpace: "nowrap" }}>
                                 {dateStr}
                               </td>
-                              <td style={{ fontSize: "0.8rem", fontWeight: "600", color: "#fafafa" }}>
+                              <td style={{ fontSize: "0.8rem", fontWeight: "600", color: T.text }}>
                                 {log.user_email || log.user_id?.substring(0, 8)}
                               </td>
                               <td>
@@ -3548,7 +3559,7 @@ export default function Home() {
                           gap: "0.35rem",
                         }}
                       >
-                        <span style={{ fontSize: "0.68rem", color: d.isToday ? "#fafafa" : "#71717a", fontWeight: d.isToday ? "700" : "500" }}>
+                        <span style={{ fontSize: "0.68rem", color: d.isToday ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#64748b" : "#71717a"), fontWeight: d.isToday ? "700" : "500" }}>
                           {d.dayName}
                         </span>
                         <div
@@ -3635,7 +3646,7 @@ export default function Home() {
                 </div>
 
                 {/* Daily Goal Progress Bar */}
-                <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid #1f1f23" }}>
+                <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: `1px solid ${T.border}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8rem", marginBottom: "0.4rem" }}>
                     <span style={{ color: "#a1a1aa" }}>
                       🎯 Mục tiêu hàng ngày: <strong>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
@@ -3700,7 +3711,7 @@ export default function Home() {
                   <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
                     Sổ tay câu sai cần ôn
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "#fb7185" : "#fafafa", margin: "0.4rem 0" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "#fb7185" : T.text, margin: "0.4rem 0" }}>
                     {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>câu</span>
                   </div>
                   <div
@@ -3774,7 +3785,7 @@ export default function Home() {
 
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#71717a" }}>
                           <span>{ch.exercises?.length || 0} bài tập</span>
-                          <span style={{ color: pct > 0 ? "#fafafa" : "#71717a" }}>{pct}% hoàn thành</span>
+                          <span style={{ color: pct > 0 ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#64748b" : "#71717a") }}>{pct}% hoàn thành</span>
                         </div>
                       </div>
                     );
@@ -4313,9 +4324,9 @@ export default function Home() {
                                     style={{
                                       fontSize: "0.78rem",
                                       fontFamily: "Geist Mono",
-                                      backgroundColor: "#18181f",
-                                      border: "1px solid #3f3f4e",
-                                      color: "#818cf8",
+                                      backgroundColor: isLight ? "#eff6ff" : "#18181f",
+                                      border: `1px solid ${isLight ? "#bfdbfe" : "#3f3f4e"}`,
+                                      color: isLight ? "#2563eb" : "#818cf8",
                                       padding: "0.2rem 0.55rem",
                                       borderRadius: "6px",
                                       fontWeight: "800",
@@ -4986,11 +4997,12 @@ export default function Home() {
                                         style={{
                                           fontSize: "0.68rem",
                                           fontFamily: "Geist Mono",
-                                          padding: "0.1rem 0.4rem",
-                                          borderRadius: "3px",
-                                          backgroundColor: "#09090b",
-                                          color: "#a1a1aa",
-                                          border: "1px solid #27272a",
+                                          padding: "0.15rem 0.45rem",
+                                          borderRadius: "4px",
+                                          backgroundColor: isLight ? "#f1f5f9" : "#09090b",
+                                          color: isLight ? "#334155" : "#a1a1aa",
+                                          border: `1px solid ${T.border}`,
+                                          fontWeight: "700",
                                         }}
                                       >
                                         {typeInfo.tag}
@@ -5028,16 +5040,16 @@ export default function Home() {
                                           display: "flex",
                                           alignItems: "center",
                                           gap: "0.5rem",
-                                          backgroundColor: "#1c1917",
-                                          border: "1px solid #44403c",
+                                          backgroundColor: isLight ? "#fffbeb" : "#1c1917",
+                                          border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
                                           padding: "0.45rem 0.75rem",
-                                          borderRadius: "4px",
+                                          borderRadius: "6px",
                                           fontSize: "0.825rem",
-                                          color: "#f59e0b",
+                                          color: isLight ? "#b45309" : "#f59e0b",
                                           marginBottom: "0.75rem",
                                         }}
                                       >
-                                        <span style={{ color: "#a8a29e", fontSize: "0.75rem", fontWeight: "600" }}>GỢI Ý MỞ ĐẦU:</span>
+                                        <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.75rem", fontWeight: "700" }}>GỢI Ý MỞ ĐẦU:</span>
                                         <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
                                       </div>
                                     )}
@@ -5056,14 +5068,14 @@ export default function Home() {
                                           flex: 1,
                                           minWidth: "220px",
                                           padding: "0.5rem 0.75rem",
-                                          backgroundColor: "#09090b",
+                                          backgroundColor: isLight ? "#ffffff" : "#09090b",
                                           border: res?.checked
                                             ? res.isCorrect
                                               ? "1px solid #10b981"
                                               : "1px solid #f43f5e"
-                                            : "1px solid #27272a",
+                                            : `1px solid ${T.border}`,
                                           borderRadius: "5px",
-                                          color: "#fafafa",
+                                          color: T.text,
                                           fontSize: "0.875rem",
                                           outline: "none",
                                         }}
@@ -5073,10 +5085,10 @@ export default function Home() {
                                         onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx)}
                                         style={{
                                           padding: "0.5rem 0.9rem",
-                                          backgroundColor: "#27272a",
-                                          border: "1px solid #3f3f46",
+                                          backgroundColor: isLight ? "#2563eb" : "#27272a",
+                                          border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
                                           borderRadius: "5px",
-                                          color: "#fafafa",
+                                          color: "#ffffff",
                                           fontSize: "0.8rem",
                                           fontWeight: "600",
                                           cursor: "pointer",
@@ -5089,11 +5101,12 @@ export default function Home() {
                                         onClick={() => toggleShowAnswer(q.id)}
                                         style={{
                                           padding: "0.5rem 0.75rem",
-                                          backgroundColor: "transparent",
-                                          border: "1px solid #27272a",
+                                          backgroundColor: isLight ? "#f8fafc" : "transparent",
+                                          border: `1px solid ${T.border}`,
                                           borderRadius: "5px",
-                                          color: "#71717a",
+                                          color: T.textSecondary,
                                           fontSize: "0.8rem",
+                                          fontWeight: "500",
                                           cursor: "pointer",
                                         }}
                                       >
@@ -5121,15 +5134,15 @@ export default function Home() {
                                         style={{
                                           marginTop: "0.75rem",
                                           padding: "0.75rem 0.95rem",
-                                          backgroundColor: "#09090b",
-                                          border: "1px solid #27272a",
+                                          backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                                          border: `1px solid ${T.border}`,
                                           borderRadius: "6px",
                                         }}
                                       >
-                                        <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
+                                        <div style={{ fontSize: "0.72rem", color: isLight ? "#475569" : "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
                                           Đáp án chính xác:
                                         </div>
-                                        <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                                        <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                                           {q.answers.map((a) => a.correct).join("  /  ")}
                                         </div>
                                         {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
@@ -5376,11 +5389,12 @@ export default function Home() {
                           style={{
                             fontSize: "0.68rem",
                             fontFamily: "Geist Mono",
-                            padding: "0.1rem 0.4rem",
-                            borderRadius: "3px",
-                            backgroundColor: "#18181b",
-                            color: "#a1a1aa",
-                            border: "1px solid #27272a",
+                            padding: "0.15rem 0.45rem",
+                            borderRadius: "4px",
+                            backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                            color: isLight ? "#334155" : "#a1a1aa",
+                            border: `1px solid ${T.border}`,
+                            fontWeight: "700",
                           }}
                         >
                           {typeInfo.tag}
@@ -5391,23 +5405,25 @@ export default function Home() {
                       {q.instruction && (
                         <div
                           style={{
-                            backgroundColor: "#0d1b2a",
-                            borderLeft: "3px solid #38bdf8",
+                            backgroundColor: isLight ? "#eff6ff" : "#0d1b2a",
+                            borderLeft: isLight ? "4px solid #2563eb" : "3px solid #38bdf8",
+                            border: isLight ? `1px solid #bfdbfe` : "none",
                             padding: "0.5rem 0.85rem",
-                            borderRadius: "4px",
+                            borderRadius: "6px",
                             marginBottom: "0.85rem",
                             fontSize: "0.825rem",
-                            color: "#bae6fd",
+                            color: isLight ? "#1e40af" : "#bae6fd",
                             lineHeight: "1.5",
+                            boxShadow: isLight ? "0 1px 2px rgba(37,99,235,0.05)" : "none",
                           }}
                         >
-                          <strong style={{ color: "#7dd3fc" }}>Yêu cầu:</strong> {q.instruction}
+                          <strong style={{ color: isLight ? "#1d4ed8" : "#7dd3fc" }}>Yêu cầu:</strong> {q.instruction}
                         </div>
                       )}
 
                       {/* Stem */}
-                      <div style={{ fontSize: "0.975rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem" }}>
-                        {q.stem}
+                      <div style={{ fontSize: "0.975rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem", fontWeight: "500" }}>
+                        {typeof q.stem === 'string' ? q.stem.replace(/\\_/g, '_') : q.stem}
                       </div>
 
                       {/* Starter Prompt Box */}
@@ -5417,16 +5433,16 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             gap: "0.5rem",
-                            backgroundColor: "#1c1917",
-                            border: "1px solid #44403c",
+                            backgroundColor: isLight ? "#fffbeb" : "#1c1917",
+                            border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
                             padding: "0.45rem 0.75rem",
-                            borderRadius: "4px",
+                            borderRadius: "6px",
                             fontSize: "0.825rem",
-                            color: "#f59e0b",
+                            color: isLight ? "#b45309" : "#f59e0b",
                             marginBottom: "0.85rem",
                           }}
                         >
-                          <span style={{ color: "#a8a29e", fontSize: "0.72rem", fontWeight: "600" }}>BẮT ĐẦU VỚI:</span>
+                          <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
                           <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
                         </div>
                       )}
@@ -5479,12 +5495,13 @@ export default function Home() {
                             <button
                               onClick={() => toggleQuizShowAnswer(q.id)}
                               style={{
-                                backgroundColor: "transparent",
-                                color: "#71717a",
-                                border: "1px solid #27272a",
+                                backgroundColor: isLight ? "#f8fafc" : "transparent",
+                                color: T.textSecondary,
+                                border: `1px solid ${T.border}`,
                                 padding: "0.55rem 0.85rem",
                                 borderRadius: "6px",
                                 fontSize: "0.8rem",
+                                fontWeight: "500",
                                 cursor: "pointer",
                               }}
                             >
@@ -5514,15 +5531,15 @@ export default function Home() {
                           style={{
                             marginTop: "0.75rem",
                             padding: "0.75rem 0.95rem",
-                            backgroundColor: "#09090b",
-                            border: "1px solid #27272a",
+                            backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                            border: `1px solid ${T.border}`,
                             borderRadius: "6px",
                           }}
                         >
-                          <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
+                          <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase" }}>
                             Đáp án chính xác:
                           </div>
-                          <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                          <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                             {q.answers.join("  /  ")}
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
@@ -5732,16 +5749,17 @@ export default function Home() {
                         {item.instruction && (
                           <div
                             style={{
-                              backgroundColor: "#0d1b2a",
-                              borderLeft: "3px solid #38bdf8",
+                              backgroundColor: isLight ? "#eff6ff" : "#0d1b2a",
+                              borderLeft: isLight ? "4px solid #2563eb" : "3px solid #38bdf8",
+                              border: isLight ? `1px solid #bfdbfe` : "none",
                               padding: "0.45rem 0.75rem",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               marginBottom: "0.75rem",
                               fontSize: "0.8rem",
-                              color: "#bae6fd",
+                              color: isLight ? "#1e40af" : "#bae6fd",
                             }}
                           >
-                            <strong>Yêu cầu:</strong> {item.instruction}
+                            <strong style={{ color: isLight ? "#1d4ed8" : "#7dd3fc" }}>Yêu cầu:</strong> {item.instruction}
                           </div>
                         )}
 
@@ -5755,16 +5773,16 @@ export default function Home() {
                               display: "flex",
                               alignItems: "center",
                               gap: "0.5rem",
-                              backgroundColor: "#1c1917",
-                              border: "1px solid #44403c",
+                              backgroundColor: isLight ? "#fffbeb" : "#1c1917",
+                              border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
                               padding: "0.45rem 0.75rem",
-                              borderRadius: "4px",
+                              borderRadius: "6px",
                               fontSize: "0.825rem",
-                              color: "#f59e0b",
+                              color: isLight ? "#b45309" : "#f59e0b",
                               marginBottom: "0.75rem",
                             }}
                           >
-                            <span style={{ color: "#a8a29e", fontSize: "0.72rem", fontWeight: "600" }}>BẮT ĐẦU VỚI:</span>
+                            <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
                             <span style={{ fontWeight: "600" }}>"{item.starter_prompt}..."</span>
                           </div>
                         )}
@@ -5799,9 +5817,9 @@ export default function Home() {
                           <button
                             onClick={() => checkSingleMistake(item)}
                             style={{
-                              backgroundColor: "#27272a",
-                              color: "#fafafa",
-                              border: "1px solid #3f3f46",
+                              backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                              color: T.text,
+                              border: `1px solid ${T.border}`,
                               padding: "0.55rem 1rem",
                               borderRadius: "6px",
                               fontSize: "0.8rem",
@@ -5815,12 +5833,13 @@ export default function Home() {
                           <button
                             onClick={() => setShowMistakeAnswers((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
                             style={{
-                              backgroundColor: "transparent",
-                              color: "#71717a",
-                              border: "1px solid #27272a",
+                              backgroundColor: isLight ? "#f8fafc" : "transparent",
+                              color: T.textSecondary,
+                              border: `1px solid ${T.border}`,
                               padding: "0.55rem 0.85rem",
                               borderRadius: "6px",
                               fontSize: "0.8rem",
+                              fontWeight: "500",
                               cursor: "pointer",
                             }}
                           >
@@ -5846,15 +5865,15 @@ export default function Home() {
                             style={{
                               marginTop: "0.75rem",
                               padding: "0.75rem 0.95rem",
-                              backgroundColor: "#09090b",
-                              border: "1px solid #27272a",
+                              backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                              border: `1px solid ${T.border}`,
                               borderRadius: "6px",
                             }}
                           >
-                            <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
+                            <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase" }}>
                               Đáp án chuẩn:
                             </div>
-                            <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                            <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                               {item.answers.join("  /  ")}
                             </div>
                             {renderPedagogicalExplanation(item.explanation, item.pedagogy)}

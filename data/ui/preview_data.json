@@ -9366,7 +9366,7 @@
             {
               "id": "a397a40d-0ff7-5667-908b-259553bf08a6",
               "num": 1,
-              "stem": "She gave \\_\\_\\_\\_\\_\\_\\_\\_ thought to her future.",
+              "stem": "She gave \_\_\_\_\_\_\_\_ thought to her future.",
               "answers": [
                 {
                   "correct": "little",
@@ -9383,7 +9383,7 @@
             {
               "id": "363500de-8c8c-5afd-82e0-4b94d1de52b6",
               "num": 2,
-              "stem": "Would you like \\_\\_\\_\\_\\_\\_\\_\\_ coffee? Yes, please. But put sugar in it.",
+              "stem": "Would you like \_\_\_\_\_\_\_\_ coffee? Yes, please. But put sugar in it.",
               "answers": [
                 {
                   "correct": "a little – little",
@@ -9400,7 +9400,7 @@
             {
               "id": "5eddc653-52a2-5ae8-b23d-a5b6918ac32c",
               "num": 3,
-              "stem": "\\_\\_\\_\\_\\_\\_\\_\\_ your friends will have to repeat the course owing to their weakness.",
+              "stem": "\_\_\_\_\_\_\_\_ your friends will have to repeat the course owing to their weakness.",
               "answers": [
                 {
                   "correct": "a few of",
@@ -9417,7 +9417,7 @@
             {
               "id": "d99b7137-7258-5f09-8693-b8ceb9f2985a",
               "num": 4,
-              "stem": "Can you speak French? Just \\_\\_\\_\\_\\_\\_\\_\\_.",
+              "stem": "Can you speak French? Just \_\_\_\_\_\_\_\_.",
               "answers": [
                 {
                   "correct": "a little",
@@ -9434,7 +9434,7 @@
             {
               "id": "ccf10e94-971e-5741-8c68-8b228ec79137",
               "num": 5,
-              "stem": "If you have \\_\\_\\_\\_\\_\\_\\_\\_ knowledge of English grammar, you can’t make correct sentences.",
+              "stem": "If you have \_\_\_\_\_\_\_\_ knowledge of English grammar, you can’t make correct sentences.",
               "answers": [
                 {
                   "correct": "little",
@@ -9451,7 +9451,7 @@
             {
               "id": "6bcc44ba-557f-5ed1-ac70-b3826ac86e9c",
               "num": 6,
-              "stem": "I had \\_\\_\\_\\_\\_\\_\\_\\_ time to look after my children.",
+              "stem": "I had \_\_\_\_\_\_\_\_ time to look after my children.",
               "answers": [
                 {
                   "correct": "little",
@@ -9468,7 +9468,7 @@
             {
               "id": "6c419097-196b-53bd-91fd-7c2fd3cbf12e",
               "num": 7,
-              "stem": "She just spends \\_\\_\\_\\_\\_\\_\\_\\_ her money on clothes.",
+              "stem": "She just spends \_\_\_\_\_\_\_\_ her money on clothes.",
               "answers": [
                 {
                   "correct": "little of",
@@ -9485,7 +9485,7 @@
             {
               "id": "76d23111-c1dd-570f-8aee-c0e4a9feee42",
               "num": 8,
-              "stem": "\\_\\_\\_\\_\\_\\_\\_\\_ these children will go to work at a garage.",
+              "stem": "\_\_\_\_\_\_\_\_ these children will go to work at a garage.",
               "answers": [
                 {
                   "correct": "a few of",
@@ -9502,7 +9502,7 @@
             {
               "id": "c8c385d6-5ae6-5e04-bc03-c4509cd79aac",
               "num": 9,
-              "stem": "The windows are so small that the room gets \\_\\_\\_\\_\\_\\_\\_\\_ air.",
+              "stem": "The windows are so small that the room gets \_\_\_\_\_\_\_\_ air.",
               "answers": [
                 {
                   "correct": "little",
@@ -9519,7 +9519,7 @@
             {
               "id": "095a0a97-d5f2-519a-9c68-8dbb70a71d45",
               "num": 10,
-              "stem": "He is not popular. He has \\_\\_\\_\\_\\_\\_\\_\\_ friends.",
+              "stem": "He is not popular. He has \_\_\_\_\_\_\_\_ friends.",
               "answers": [
                 {
                   "correct": "few",
@@ -21739,7 +21739,7 @@
             {
               "id": "dba1fb41-e488-5d77-a840-b9792ff150ca",
               "num": 1,
-              "stem": "He is a \\_\\_\\_\\_\\_\\_\\_\\_ boy. He is always asking questions. (curiosity)",
+              "stem": "He is a \_\_\_\_\_\_\_\_ boy. He is always asking questions. (curiosity)",
               "answers": [
                 {
                   "correct": "curious",
@@ -21756,7 +21756,7 @@
             {
               "id": "e5b9a58a-f79d-525e-91e9-f2062d7f3d24",
               "num": 2,
-              "stem": "All the pupils have done the exercises \\_\\_\\_\\_\\_\\_\\_\\_. (easy)",
+              "stem": "All the pupils have done the exercises \_\_\_\_\_\_\_\_. (easy)",
               "answers": [
                 {
                   "correct": "easily",
@@ -21773,7 +21773,7 @@
             {
               "id": "baf1b884-ece4-5505-8129-a65f2124a0b3",
               "num": 3,
-              "stem": "Keep \\_\\_\\_\\_\\_\\_\\_\\_! The teacher is explaining the lesson. (silence)",
+              "stem": "Keep \_\_\_\_\_\_\_\_! The teacher is explaining the lesson. (silence)",
               "answers": [
                 {
                   "correct": "silent",
@@ -21790,7 +21790,7 @@
             {
               "id": "ac370bc2-1fb7-5425-91d7-6de6579d05bf",
               "num": 4,
-              "stem": "Be \\_\\_\\_\\_\\_\\_\\_\\_ in your work! (care)",
+              "stem": "Be \_\_\_\_\_\_\_\_ in your work! (care)",
               "answers": [
                 {
                   "correct": "careful",
@@ -21807,7 +21807,7 @@
             {
               "id": "73a3e10b-db51-559a-9669-78fc79c75dd2",
               "num": 5,
-              "stem": "Time passes \\_\\_\\_\\_\\_\\_\\_\\_ when you are alone. (slow)",
+              "stem": "Time passes \_\_\_\_\_\_\_\_ when you are alone. (slow)",
               "answers": [
                 {
                   "correct": "slowly",
@@ -21824,7 +21824,7 @@
             {
               "id": "fb2f7f58-1b0c-5df6-a962-3b22d7ca95d0",
               "num": 6,
-              "stem": "He \\_\\_\\_\\_\\_\\_\\_\\_ carefully. He rarely has accident. (drive)",
+              "stem": "He \_\_\_\_\_\_\_\_ carefully. He rarely has accident. (drive)",
               "answers": [
                 {
                   "correct": "drives",
@@ -21841,7 +21841,7 @@
             {
               "id": "ded10d97-25b9-5023-9941-5aa9173bd476",
               "num": 7,
-              "stem": "Ho Chi Minh city is an important \\_\\_\\_\\_\\_\\_\\_\\_ center. (commerce)",
+              "stem": "Ho Chi Minh city is an important \_\_\_\_\_\_\_\_ center. (commerce)",
               "answers": [
                 {
                   "correct": "commercial",
@@ -21858,7 +21858,7 @@
             {
               "id": "b7b53ddf-79ad-5a57-82fb-14895f08b875",
               "num": 8,
-              "stem": "We have a \\_\\_\\_\\_\\_\\_\\_\\_ newspaper in this town. (week)",
+              "stem": "We have a \_\_\_\_\_\_\_\_ newspaper in this town. (week)",
               "answers": [
                 {
                   "correct": "weekly",
@@ -21875,7 +21875,7 @@
             {
               "id": "b78ba119-5d23-5ed3-b4ba-9eb9c127b801",
               "num": 9,
-              "stem": "This exercise seems \\_\\_\\_\\_\\_\\_\\_\\_. (difficulty)",
+              "stem": "This exercise seems \_\_\_\_\_\_\_\_. (difficulty)",
               "answers": [
                 {
                   "correct": "difficult",
@@ -21892,7 +21892,7 @@
             {
               "id": "5fdc9f9c-e66c-53ae-ac46-1bdafe8d761e",
               "num": 10,
-              "stem": "Mrs Green can help Alice to make a good \\_\\_\\_\\_\\_\\_\\_\\_. (choose)",
+              "stem": "Mrs Green can help Alice to make a good \_\_\_\_\_\_\_\_. (choose)",
               "answers": [
                 {
                   "correct": "choice",
@@ -21909,7 +21909,7 @@
             {
               "id": "32390c51-5006-509e-807c-73a14e67fc9a",
               "num": 11,
-              "stem": "He has \\_\\_\\_\\_\\_\\_\\_\\_ bought a new car. (recent)",
+              "stem": "He has \_\_\_\_\_\_\_\_ bought a new car. (recent)",
               "answers": [
                 {
                   "correct": "recently",
@@ -21926,7 +21926,7 @@
             {
               "id": "a224901c-e836-560a-b4c3-f2ba6f60459d",
               "num": 12,
-              "stem": "How \\_\\_\\_\\_\\_\\_\\_\\_ the dress is! (expensive)",
+              "stem": "How \_\_\_\_\_\_\_\_ the dress is! (expensive)",
               "answers": [
                 {
                   "correct": "expensive",
@@ -21953,7 +21953,7 @@
             {
               "id": "884c0186-a6d1-5f3c-9f5b-f7b02dedd73f",
               "num": 1,
-              "stem": "She was furious that she was being \\_\\_\\_\\_\\_\\_\\_\\_.",
+              "stem": "She was furious that she was being \_\_\_\_\_\_\_\_.",
               "answers": [
                 {
                   "correct": "made fun of",
@@ -21970,7 +21970,7 @@
             {
               "id": "6b0f817f-5e4b-5520-895e-5d41153d426f",
               "num": 2,
-              "stem": "The house has been remodeled and \\_\\_\\_\\_\\_\\_\\_\\_.",
+              "stem": "The house has been remodeled and \_\_\_\_\_\_\_\_.",
               "answers": [
                 {
                   "correct": "made use of",
@@ -21987,7 +21987,7 @@
             {
               "id": "5925576e-4d35-509c-ac56-ee1036af13de",
               "num": 3,
-              "stem": "He left home without \\_\\_\\_\\_\\_\\_\\_\\_ anybody.",
+              "stem": "He left home without \_\_\_\_\_\_\_\_ anybody.",
               "answers": [
                 {
                   "correct": "taking leave of",
@@ -22004,7 +22004,7 @@
             {
               "id": "28777cf5-63bc-53a2-bd7c-a631fd3cc6db",
               "num": 4,
-              "stem": "The woman \\_\\_\\_\\_\\_\\_\\_\\_ whom you \\_\\_\\_\\_\\_\\_\\_\\_ on the bus this morning is my aunt.",
+              "stem": "The woman \_\_\_\_\_\_\_\_ whom you \_\_\_\_\_\_\_\_ on the bus this morning is my aunt.",
               "answers": [
                 {
                   "correct": "to - gave place",
@@ -22023,7 +22023,7 @@
             {
               "id": "bac5ae8c-5650-5950-94d6-fb234630065d",
               "num": 5,
-              "stem": "The baby \\_\\_\\_\\_\\_\\_\\_\\_ whom she’s going to \\_\\_\\_\\_\\_\\_\\_\\_ will bring her happiness.",
+              "stem": "The baby \_\_\_\_\_\_\_\_ whom she’s going to \_\_\_\_\_\_\_\_ will bring her happiness.",
               "answers": [
                 {
                   "correct": "of- take care",
@@ -22040,7 +22040,7 @@
             {
               "id": "a1d1a99b-ea2e-52ae-82c1-0138476c1575",
               "num": 6,
-              "stem": "I \\_\\_\\_\\_\\_\\_\\_\\_ having deceived her.",
+              "stem": "I \_\_\_\_\_\_\_\_ having deceived her.",
               "answers": [
                 {
                   "correct": "feel regret for",
@@ -22057,7 +22057,7 @@
             {
               "id": "58902508-510c-5f22-afcf-90ea6380e44c",
               "num": 7,
-              "stem": "Tom and Dick are carrying on a discussion which I want to \\_\\_\\_\\_\\_\\_\\_\\_.",
+              "stem": "Tom and Dick are carrying on a discussion which I want to \_\_\_\_\_\_\_\_.",
               "answers": [
                 {
                   "correct": "put an end to",
@@ -22074,7 +22074,7 @@
             {
               "id": "d14912df-bd9f-52d7-8614-c63b21fe92f5",
               "num": 8,
-              "stem": "This is a rare opportunity \\_\\_\\_\\_\\_\\_\\_\\_ which you should \\_\\_\\_\\_\\_\\_\\_\\_ to get a better job.",
+              "stem": "This is a rare opportunity \_\_\_\_\_\_\_\_ which you should \_\_\_\_\_\_\_\_ to get a better job.",
               "answers": [
                 {
                   "correct": "of- take advantage",
@@ -22091,7 +22091,7 @@
             {
               "id": "b510c6fb-2365-5eb8-91f5-c368168ead2a",
               "num": 9,
-              "stem": "Mr Smith is my old teacher \\_\\_\\_\\_\\_\\_\\_\\_ whom I have \\_\\_\\_\\_\\_\\_\\_\\_ for a long time. I do not know his\npresent address.",
+              "stem": "Mr Smith is my old teacher \_\_\_\_\_\_\_\_ whom I have \_\_\_\_\_\_\_\_ for a long time. I do not know his\npresent address.",
               "answers": [
                 {
                   "correct": "with – lost touch",
@@ -22108,7 +22108,7 @@
             {
               "id": "aef9bac5-e345-5dc3-b786-31caf79538bf",
               "num": 10,
-              "stem": "Who will \\_\\_\\_\\_\\_\\_\\_\\_ the children when you are away?",
+              "stem": "Who will \_\_\_\_\_\_\_\_ the children when you are away?",
               "answers": [
                 {
                   "correct": "take care of",
@@ -22125,7 +22125,7 @@
             {
               "id": "7ca7c5bf-1afe-5220-9427-6b546c8d6bad",
               "num": 11,
-              "stem": "My father does not like politics. He does not \\_\\_\\_\\_\\_\\_\\_\\_ political problems and current events.",
+              "stem": "My father does not like politics. He does not \_\_\_\_\_\_\_\_ political problems and current events.",
               "answers": [
                 {
                   "correct": "pay attention to",
@@ -22144,7 +22144,7 @@
             {
               "id": "3ad09848-d764-5a7e-b510-b73807d80c1e",
               "num": 12,
-              "stem": "She always \\_\\_\\_\\_\\_\\_\\_\\_ the increase of the price of goods.",
+              "stem": "She always \_\_\_\_\_\_\_\_ the increase of the price of goods.",
               "answers": [
                 {
                   "correct": "pays attention to",
