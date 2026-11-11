@@ -4,6 +4,8 @@ import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 import { SyncManager } from "../lib/sync/sync-manager";
 import { getThemeTokens } from "../lib/tokens/design-tokens";
+import GrammarVisualization from "../components/grammar-visualization/GrammarVisualization";
+import { speechService } from "../lib/audio/speech.service";
 import {
   supabase,
   getProfile,
@@ -493,22 +495,10 @@ export default function Home() {
   };
 
   const speakSpeechSynthesis = (word, onDone) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      try {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(word);
-        utter.lang = "en-US";
-        utter.rate = 0.88;
-        utter.pitch = 1.0;
-        utter.onend = () => onDone && onDone();
-        utter.onerror = () => onDone && onDone();
-        window.speechSynthesis.speak(utter);
-      } catch (err) {
-        onDone && onDone();
-      }
-    } else {
-      onDone && onDone();
-    }
+    speechService.speak(word, {
+      onEnd: () => onDone && onDone(),
+      onError: () => onDone && onDone(),
+    });
   };
 
   const playWordAudio = (word, audioUrl) => {
@@ -4075,7 +4065,7 @@ export default function Home() {
                       Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
                     </h1>
                   </div>
-                  <p style={{ fontSize: "0.9rem", color: "#a1a1aa", margin: "0 0 1rem 0" }}>
+                  <p style={{ fontSize: "0.9rem", color: T.textMuted, margin: "0 0 1rem 0" }}>
                     Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
                   </p>
 
@@ -4198,14 +4188,14 @@ export default function Home() {
                       >
                         {dailyRecommendation.tag}
                       </span>
-                      <span style={{ fontSize: "0.8rem", color: "#71717a" }}>Đề xuất học hôm nay</span>
+                      <span style={{ fontSize: "0.8rem", color: isLight ? "#1d4ed8" : "#93c5fd", fontWeight: "600" }}>Đề xuất học hôm nay</span>
                     </div>
 
                     <h2 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, margin: "0.35rem 0" }}>
                       Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
                     </h2>
 
-                    <p style={{ fontSize: "0.875rem", color: "#a1a1aa", margin: "0.2rem 0 0.85rem 0" }}>
+                    <p style={{ fontSize: "0.875rem", color: T.textMuted, margin: "0.2rem 0 0.85rem 0" }}>
                       {dailyRecommendation.reason}
                     </p>
                   </div>
@@ -4259,7 +4249,7 @@ export default function Home() {
                     Bài học đã hoàn thành
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalLessonsCount}</span>
+                    {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>/ {totalLessonsCount}</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#34d399" }}>
                     {overallLessonsProgress}% toàn bộ khóa học
@@ -4267,11 +4257,11 @@ export default function Home() {
                 </div>
 
                 <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
                     Câu hỏi đã giải đúng
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalQuestionsCount}</span>
+                    {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>/ {totalQuestionsCount}</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#60a5fa" }}>
                     Tích lũy từ bài tập & Quiz
@@ -4279,11 +4269,11 @@ export default function Home() {
                 </div>
 
                 <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
                     Tổng điểm kinh nghiệm
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.xp} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>XP</span>
+                    {userTracker.xp} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>XP</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#f59e0b" }}>
                     {userRank.title}
@@ -4291,11 +4281,11 @@ export default function Home() {
                 </div>
 
                 <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
+                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
                     Sổ tay câu sai cần ôn
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "#fb7185" : T.text, margin: "0.4rem 0" }}>
-                    {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>câu</span>
+                    {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>câu</span>
                   </div>
                   <div
                     onClick={() => setCurrentView("mistakes")}
@@ -4567,10 +4557,10 @@ export default function Home() {
               
               {/* Breadcrumbs & Header */}
               <div style={{ marginBottom: "1.5rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.8rem", color: "#71717a", marginBottom: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.8rem", color: T.textMuted, marginBottom: "0.5rem" }}>
                   <span>Chương {selectedChapter?.number}</span>
                   <span>/</span>
-                  <span style={{ color: "#a1a1aa" }}>{selectedChapter?.title_vi}</span>
+                  <span style={{ color: T.textSecondary }}>{selectedChapter?.title_vi}</span>
                   {selectedLesson && (
                     <>
                       <span>/</span>
@@ -4584,7 +4574,7 @@ export default function Home() {
                     <h1 style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: T.text }}>
                       {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập thực hành: ${selectedChapter?.title_vi}`}
                     </h1>
-                    <div style={{ fontSize: "0.875rem", color: "#71717a", marginTop: "0.2rem" }}>
+                    <div style={{ fontSize: "0.875rem", color: T.textMuted, marginTop: "0.2rem" }}>
                       {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_en : selectedChapter?.title_en) : `${selectedChapter?.exercises?.length || 0} bài tập tổng hợp (${totalChapterExerciseQuestions} câu)`}
                     </div>
                   </div>
@@ -4870,6 +4860,13 @@ export default function Home() {
                           )}
                         </div>
                       )}
+
+                      {/* Interactive Grammar Visualization Engine (Milestone 2.7) */}
+                      <GrammarVisualization
+                        lesson={selectedLesson}
+                        chapter={selectedChapter}
+                        isLight={isLight}
+                      />
 
                       {/* Sections List */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
@@ -5809,7 +5806,7 @@ export default function Home() {
                     <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
                       Bộ đề Quiz 50 câu ngẫu nhiên
                     </h1>
-                    <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem", lineHeight: "1.5" }}>
+                    <p style={{ fontSize: "0.85rem", color: T.textMuted, marginTop: "0.35rem", lineHeight: "1.5" }}>
                       Hệ thống tự động rút trích 50 câu hỏi từ ngân hàng 2,900+ bài tập. Các câu trả lời sai sẽ được ghi nhận vào Sổ tay của {currentUser.name}.
                     </p>
                   </div>
@@ -5855,7 +5852,7 @@ export default function Home() {
                 {/* Topic Selector & Progress Bar */}
                 <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid #1f1f23", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <label style={{ fontSize: "0.8rem", color: "#71717a", fontWeight: "500" }}>Chủ đề kiểm tra:</label>
+                    <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Chủ đề kiểm tra:</label>
                     <select
                       disabled={isQuizLimitReached}
                       value={selectedQuizTopic}
@@ -5961,11 +5958,11 @@ export default function Home() {
                       {/* Question meta header */}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#a1a1aa", fontWeight: "600" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, fontWeight: "600" }}>
                             CÂU {idx + 1} / {activeQuizQuestions.length}
                           </span>
                           <span style={{ fontSize: "0.75rem", color: "#52525b" }}>•</span>
-                          <span style={{ fontSize: "0.75rem", color: "#71717a" }}>{q.topic_name}</span>
+                          <span style={{ fontSize: "0.75rem", color: T.textMuted }}>{q.topic_name}</span>
                         </div>
 
                         <span
@@ -6227,7 +6224,7 @@ export default function Home() {
                 {/* Filter Topic bar */}
                 {savedMistakes.length > 0 && (
                   <div style={{ marginTop: "1.25rem", paddingTop: "1rem", borderTop: "1px solid #1f1f23", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <span style={{ fontSize: "0.8rem", color: "#71717a" }}>Lọc theo chủ đề:</span>
+                    <span style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Lọc theo chủ đề:</span>
                     <select
                       value={mistakeFilterTopic}
                       onChange={(e) => setMistakeFilterTopic(e.target.value)}
@@ -6267,7 +6264,7 @@ export default function Home() {
                   <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.5rem" }}>
                     Chưa có câu sai nào trong sổ tay của bạn
                   </div>
-                  <p style={{ fontSize: "0.85rem", color: "#71717a", maxWidth: "420px", margin: "0 auto 1.25rem auto" }}>
+                  <p style={{ fontSize: "0.85rem", color: T.textMuted, maxWidth: "420px", margin: "0 auto 1.25rem auto" }}>
                     Khi bạn làm bài tập ở mục "12 Chuyên đề" hoặc làm bài kiểm tra ở "Quiz Engine", những câu chưa đúng sẽ tự động xuất hiện tại đây để bạn ôn luyện lại.
                   </p>
                   <button
@@ -6312,7 +6309,7 @@ export default function Home() {
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#a1a1aa", fontWeight: "600" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, fontWeight: "600" }}>
                             CÂU {idx + 1} • {item.topic_name}
                           </span>
                           <button
@@ -6320,7 +6317,7 @@ export default function Home() {
                             style={{
                               backgroundColor: "transparent",
                               border: "none",
-                              color: "#71717a",
+                              color: T.textMuted,
                               fontSize: "0.75rem",
                               cursor: "pointer",
                             }}

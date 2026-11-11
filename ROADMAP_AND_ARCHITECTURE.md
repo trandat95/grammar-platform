@@ -46,7 +46,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Management** | **2.4** | **Enterprise Admin Dashboard & Server Audit Logs** | **P1 (High)** | ✅ Hoàn thành |
 | **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | 🔄 Nâng cấp |
 | **Design** | **2.6** | **Design Token System & White/Dark Mode WCAG AA** | **P2 (Medium)**| ✅ Hoàn thành |
-| **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | 🔄 Nâng cấp |
+| **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ⏳ Kế tiếp |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning, Mastery Tracking & Reassessment**| **P2 (High)** | ⏳ Kế tiếp |
 | **Gamification** | **2.10**| **Achievement, Level & Gamification System** | **P2 (Medium)**| ⏳ Kế tiếp |
@@ -575,9 +575,9 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
 - [x] Bổ sung Skeleton Loading và các trạng thái Empty / Error đồng bộ.
 
 ### 🔹 Milestone 2.7: Xây dựng Grammar Visualization Engine & Audio Service (P1)
-- [ ] Thiết kế sơ đồ trực quan hóa đặc thù cho từng nhóm ngữ pháp: Timeline (13 thì), Decision Tree (Câu điều kiện), Transformation Diagram (Câu bị động), Conversion Flow (Câu gián tiếp).
-- [ ] Cho phép học viên tương tác click chọn từng thành phần trên sơ đồ trực quan.
-- [ ] Chuẩn hóa `lib/audio/speech.service.js` với tùy chọn giọng đọc UK/US và thanh chỉnh tốc độ đọc (`0.75x`, `1.0x`, `1.25x`).
+- [x] Thiết kế sơ đồ trực quan hóa đặc thù cho từng nhóm ngữ pháp: Timeline (13 thì), Decision Tree (Câu điều kiện), Transformation Diagram (Câu bị động), Conversion Flow (Câu gián tiếp).
+- [x] Cho phép học viên tương tác click chọn từng thành phần trên sơ đồ trực quan, so sánh đối chiếu đa chiều.
+- [x] Chuẩn hóa `lib/audio/speech.service.js` với tùy chọn giọng đọc UK/US và thanh chỉnh tốc độ đọc (`0.75x`, `1.0x`, `1.25x`), lưu trữ tùy chọn localStorage và chống phát âm chồng lấn.
 
 ### 🔹 Milestone 2.8: AI-Powered Grammar Diagnostic & Personalized Learning Roadmap (P1 - Central Module)
 - [ ] **2.8.1 Diagnostic Assessment Engine:**
