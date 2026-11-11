@@ -15,9 +15,9 @@
          ✅ HOÀN THÀNH                                ✅ CORE LIVE TRÊN PROD                         🚀 SẴN SÀNG TRIỂN KHAI TỪNG MILESTONE
 ```
 
-* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3, 2.4, 2.5, 2.6, 2.8 & 2.9 (ADAPTIVE MASTERY & UNIFIED EVENT BUS) — TIẾP TỤC TRIỂN KHAI PHASE 3 (2.10–2.12)**.
+* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 (INTELLIGENT GAMIFICATION & UNIFIED EVENT BUS) — SẴN SÀNG TRIỂN KHAI PHASE CUỐI (2.11–2.12)**.
 * **Hiện trạng Thực tế trên Production (`https://grammar-platform.vercel.app`):**
-  1. **Database PostgreSQL 17 Live (30 Bảng & 100% RLS):** Đã vận hành 10 bảng Core/Auth/Audit + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence, Knowledge Graph & Event Bus (`learning_event_logs`) + 2 bảng Enterprise Sync/Policy Versioning trên Supabase (`wtvlbbcyvtqqygtojxay`).
+  1. **Database PostgreSQL 17 Live (37 Bảng & 100% RLS):** Đã vận hành 12 bảng Core/Auth/Audit (+`user_achievements` upgraded) + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard trên Supabase (`wtvlbbcyvtqqygtojxay`).
   2. **Layered Architecture Bảo mật:** Tách biệt hoàn toàn Browser Client (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) và Server Admin Client (`SUPABASE_SERVICE_ROLE_KEY`), Repositories (`7 files`), Services (`7 files`), Server Guard (`admin-guard.js`).
   3. **Các Phân hệ Enhanced Đã Hoàn Thành 100% Live:**
      - **Milestone 2.3 Enhanced:** Multi-Store IndexedDB v2, SyncEvent v1.0 + `idempotency_key`, Multi-Tab Web Locks/BroadcastChannel, Full Jitter Backoff, `/api/health`, `/api/sync/batch|pull|status`, `SyncStatusIndicator.jsx`, PWA Service Worker `sw.js`.
@@ -27,7 +27,8 @@
      - **Milestone 2.7:** Đầy đủ 8 sơ đồ trực quan tương tác + Audio Service US/UK (0.75x/1.0x/1.25x).
      - **Milestone 2.8 Enhanced:** Root Cause DAG Analysis (`lib/diagnostic/knowledge.graph.js`), Adaptive Dynamic Adjustment & Versioning (`adaptive.learning.engine.js`, `/api/diagnostic/adaptive/adjust`, `roadmap_versions`), Multi-Attempt Growth Analytics (`/api/diagnostic/analytics`, `retention.tracker.js`), Conversational AI Study Coach (`AiAdvisorDrawer.jsx`, `/api/ai-advisor/ask`, `ai_advisor_logs`) với Anti-Hallucination Guardrails.
      - **Milestone 2.9 & Section 8D.1 (Live):** 5-State Memory Machine (`New/Learning/Review/Relearning/Mastered`) + Response-Time SM-2/FSRS (`spaced-repetition.js`), Forgetting Curve 1-3-7-14-30d, 6-Factor Anti-Gaming 12-Topic Mastery (`mastery-tracker.js`), Dynamic 50/30/20 Adaptive Mix + Anti-Consecutive Interleaving (`/api/learning/adaptive-mix`, `adaptive-question-engine.js`), Unified Idempotent Event Bus (`POST /api/learning/events`, `learning_event_logs`), SVG 12-Topic Radar + Heatmap (`MasteryIntelligenceDashboard.jsx`) & 8-Scenario Validation Suite (`tests/mastery-engine.test.mjs`, `scripts/validate-mastery-engine.py`).
-  4. **Các Phân hệ Kế Tiếp Sẵn sàng Triển khai:** Gamification (`2.10`), Pre-Prod Verification (`2.11`), Monetization (`2.12`).
+     - **Milestone 2.10 (Live):** Server-Authoritative XP Ledger & Race-Safe Sum (`xp_transactions` + `user_xp` + `xp-level-engine.js`, chặn farm câu Mastered), 6 Level Tiers (`Beginner Lv 1-5` .. `Grammar Legend Lv 41+`), 20-Badge 4-Category/4-Tier Engine + Hidden Masking (`achievement-engine.js`), Timezone UTC+7 Streak/Freeze Recovery & Daily/Weekly Challenges (`challenge-streak-engine.js`), 5-Mode Leaderboard + Privacy Masking (`/api/gamification/summary|leaderboard`, `GamificationHub.jsx`, `GamificationCelebrationModal.jsx`).
+  4. **Các Phân hệ Kế Tiếp Sẵn sàng Triển khai:** Pre-Prod Verification (`2.11`), Monetization (`2.12`).
 * **Thông tin Môi trường kết nối:**
   - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
   - 🐙 **GitHub Repository:** [doanphuongtanthoihiep-crypto/grammar-platform](https://github.com/doanphuongtanthoihiep-crypto/grammar-platform)
@@ -56,7 +57,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine (8 Models)** | **P1 (High)** | ✅ Hoàn thành (100%) |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành (100% — Enhanced Spec Live) |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ✅ Hoàn thành (100% — Live on Prod) |
-| **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ⏳ Kế tiếp (Gamification Spec Active) |
+| **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ✅ Hoàn thành (100% — Live on Prod) |
 | **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ⏳ Kế tiếp (Monetization Spec Active) |
 
@@ -93,6 +94,9 @@ grammar-platform/
 │   │   └── GrammarDiagnosticEngine.jsx      # Bộ điều phối trung tâm Adaptive Diagnostic Engine
 │   ├── explanation/
 │   │   └── StructuredExplanation.jsx        # Thẻ hiển thị lời giải sư phạm 5 trường & Feedback Loop (Live)
+│   ├── gamification/                        # Milestone 2.10 Intelligent Gamification UI (Live)
+│   │   ├── GamificationHub.jsx              # XP/Level Progress, 20-Badge Gallery, Challenges, Streak & 5-Board Leaderboard
+│   │   └── GamificationCelebrationModal.jsx # Level Up & Badge Unlock Accessible Modal (Reduced Motion Ready)
 │   ├── grammar-visualization/               # Milestone 2.7 Grammar Visualization Engine — 8 Mô hình (Live)
 │   │   ├── GrammarVisualization.jsx         # Master Container & Catalog Switcher tích hợp Study View
 │   │   ├── VisualizationRenderer.jsx        # Bộ điều phối dynamic render theo registry
@@ -135,6 +139,11 @@ grammar-platform/
 │   ├── learning/                            # Milestone 2.5 & 2.9 Adaptive Mastery Engine (Live)
 │   │   ├── adaptive-question-engine.js      # Phân phối Đề 50/30/20, Anti-Consecutive & Coach Recs (Live)
 │   │   └── mastery-tracker.js               # 6-Factor Anti-Gaming Mastery (6 Tiers) & 5%/wk Decay (Live)
+│   ├── gamification/                        # Milestone 2.10 Server-Authoritative Gamification (Live)
+│   │   ├── xp-level-engine.js               # XP Rewards, 6 Level Tiers (Lv 1-41+) & Anti-Farming Guard
+│   │   ├── achievement-engine.js            # 20 Huy hiệu 4 nhóm/4 hạng + Hidden Badge Masking
+│   │   ├── challenge-streak-engine.js       # Streak Timezone UTC+7, Freeze Recovery & Daily/Weekly Missions
+│   │   └── gamification-processor.js        # Bộ điều phối Section 8D.1 Race-Safe Ledger & Auto-Unlock
 │   ├── diagnostic/                          # Milestone 2.8 Core & Adaptive Modules (Live)
 │   │   ├── diagnostic.blueprint.js          # Ma trận 30 câu chuẩn hóa & 10 nhóm kiến thức
 │   │   ├── diagnostic.scoring.js            # Deterministic Assessment Scoring & Weakness Detection
@@ -197,6 +206,9 @@ grammar-platform/
 │   │   │   ├── knowledge-graph.js           # API truy vấn DAG 53 bài học & tiên quyết < 5ms (Live)
 │   │   │   ├── mastery.js                   # API điểm thành thạo 12 chuyên đề, Forgetting Curve & SM-2 (Live)
 │   │   │   └── remedial-recommendations.js  # API tạo & quản lý khuyến nghị học bù đắp (Live)
+│   │   ├── gamification/
+│   │   │   ├── leaderboard.js               # API 5 Bảng xếp hạng (Top 10/50, Tie-break, Privacy, Snapshot) (Live)
+│   │   │   └── summary.js                   # API XP/Level, Huy hiệu, Challenge Swap & Streak Recovery (Live)
 │   │   ├── questions/
 │   │   │   └── [questionId]/explanation.js  # API trả về lời giải JSON 5 trường theo trình độ (Live)
 │   │   ├── sync/
@@ -217,17 +229,20 @@ grammar-platform/
 │   ├── benchmark-adaptation.mjs             # Kiểm thử hiệu năng adaptExplanationForLevel (< 1ms/câu)
 │   ├── validate-design-tokens.py            # Kiểm định tương phản WCAG 2.2 AA & rà soát HEX (Live)
 │   ├── validate-design-tokens.mjs           # Node validator tương phản Light/Dark Mode
+│   ├── validate-gamification-engine.py      # Bộ kiểm thử M2.10 (XP, Level, Badges, Streak, RLS, Live)
 │   └── validate-mastery-engine.py           # Bộ kiểm thử M2.9 (8 kịch bản + dữ liệu 2,939 câu, Live)
 ├── styles/
 │   └── design-system.css                    # Focus Ring WCAG 2.2 (2.4.11/2.5.8), Skeleton & Reduced Motion
 ├── tests/
+│   ├── gamification-engine.test.mjs         # Suite M2.10 Node/CI Validation (Live)
 │   ├── mastery-engine.test.mjs              # Suite 8 kịch bản M2.9 Node/CI Validation (Live)
 │   └── visual-regression.spec.mjs           # Playwright Snapshot Matrix (Mobile/Tablet/Desktop × Light/Dark)
 ├── docs/design-system/README.md             # Tài liệu Governance Design System v2.6
 ├── database/migrations/
 │   ├── 002_milestones_23_24_25_enhanced.sql # Migration 6 bảng M2.3-2.5, Immutable Trigger & Composite Indexes
 │   ├── 003_milestone_28_adaptive_roadmap.sql # Migration 2 bảng M2.8: roadmap_versions & ai_advisor_logs
-│   └── 004_milestone_29_adaptive_mastery.sql # Migration M2.9: learning_event_logs + SR/Mastery extensions
+│   ├── 004_milestone_29_adaptive_mastery.sql # Migration M2.9: learning_event_logs + SR/Mastery extensions
+│   └── 005_milestone_210_gamification.sql   # Migration M2.10: 7 bảng Gamification + nâng cấp user_achievements
 ├── data/
 │   ├── grammar-visualizations/              # 8 Bộ dữ liệu Sư phạm Chuẩn hóa (Live)
 │   │   ├── tenses.data.js, conditionals.data.js, passive-voice.data.js, reported-speech.data.js
@@ -241,13 +256,13 @@ grammar-platform/
 ```
 
 > **Thư mục Mở rộng Dự kiến cho Các Milestone Tiếp theo (`[Planned Modules]`):**  
-> • `lib/gamification/`, `lib/monetization/` (Spec 2.10, 2.12)
+> • `lib/monetization/` (Spec 2.12)
 
 ---
 
-## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (30 LIVE TABLES & RLS ARCHITECTURE)
+## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (37 LIVE TABLES & RLS ARCHITECTURE)
 
-### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (30 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
+### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (37 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
 
 ```mermaid
 erDiagram
@@ -441,10 +456,11 @@ erDiagram
     }
 ```
 
-> **Danh sách Đầy đủ 30 Bảng Live trên Supabase (`public` schema — 30/30 RLS enabled):**  
-> • **Core / Auth / Audit (12):** `profiles`, `user_learning_trackers`, `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements`, `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
+> **Danh sách Đầy đủ 37 Bảng Live trên Supabase (`public` schema — 37/37 RLS enabled):**  
+> • **Core / Auth / Audit (12):** `profiles`, `user_learning_trackers`, `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements` (+`tier`, `category`, `is_hidden`, `xp_bonus`, `UNIQUE(user_id, achievement_code)`), `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
 > • **Diagnostic, Adaptive Roadmap & AI Coach (8):** `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps` (+`current_version`, `last_adjusted_at`), `roadmap_items`, `roadmap_versions`, `ai_advisor_logs`.  
 > • **Learning Events, Pedagogical Intelligence & Knowledge Graph (10):** `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress` (+`mastery_score`, `mastery_tier`, `consistency_score`, `retention_score`, `difficulty_weight`, `recency_score`, `topic_coverage_score`, `unique_questions_seen`, `last_reviewed_at`, `next_review_at`), `concepts`, `concept_dependencies`, `spaced_repetition_queue` (+`memory_state`, `response_time_ms`, `correct_history`, `difficulty_rating`, `stability_score`, `retrievability_score`), `error_taxonomy_registry`, `learning_event_logs` (`UNIQUE(user_id, idempotency_key)` — Section `8D.1`).
+> • **Intelligent Gamification & Competitive Learning (7):** `user_xp`, `xp_transactions` (`UNIQUE(user_id, idempotency_key)`), `achievements` (20 badges seeded), `daily_challenges` (Daily/Weekly templates), `user_challenges` (`UNIQUE(user_id, challenge_id, period_key)`), `user_streaks` (+`freeze_tokens`), `leaderboard_snapshots` (`5` boards indexed).
 
 ### 4.2. RLS Security Model (Chống Đệ quy & Phân quyền Độc lập)
 
@@ -1440,9 +1456,9 @@ Hỗ trợ 4 hạng huy hiệu (**Bronze / Silver / Gold / Diamond**), **Hidden 
 - **Streak & Learning Habit System:** Chỉ tính Streak khi hoàn thành hoạt động học tập thực thụ (không tính đăng nhập suông); xử lý chính xác ranh giới chuyển ngày theo timezone người dùng; hỗ trợ *Streak Recovery Mechanism* và *Weekly Activity Calendar*.
 - **Leaderboard & Competitive Learning:** 5 bảng xếp hạng (Weekly XP, Monthly XP, All-Time XP, Weekly Consistency, Grammar Mastery Ranking); phân trang Top 10 / Top 50; xử lý đồng điểm (tie-breaking); hỗ trợ chế độ ẩn danh hoặc tắt tham gia Leaderboard; chống gian lận từ Backend.
 
-### 8B.5. Kiến trúc Dữ liệu Chống Gian lận & Thông báo Thành tích (`8 Tables & Anti-Abuse - P0`)
-- **8 Bảng Cơ sở Dữ liệu Chuyên dụng:** `user_xp`, `xp_transactions` (Atomic + Idempotency Key), `achievements`, `user_achievements` *(đã có bảng Live cơ bản, cần nâng cấp thêm `tier`, `category`, `UNIQUE(user_id, achievement_code)`)*, `daily_challenges`, `user_challenges`, `user_streaks`, `leaderboard_snapshots` (có Composite Indexes tối ưu).
-- **Gamification UI/UX (P2):** Achievement Unlock Popup, Level Up Animation, XP Gain Flyout, Streak Celebration, Badge Collection Gallery, Reward History. Tuân thủ WCAG Accessibility, Responsive Mobile/Desktop và hỗ trợ tắt hiệu ứng (Reduced Motion).
+### 8B.5. Kiến trúc Dữ liệu Chống Gian lận & Thông báo Thành tích (`8 Tables Live & Anti-Abuse - P0`)
+- **8 Bảng Cơ sở Dữ liệu Live (100% RLS Server-Authoritative):** `user_xp`, `xp_transactions` (Atomic Ledger + `UNIQUE(user_id, idempotency_key)`), `achievements` (20 badges seeded), `user_achievements` *(đã nâng cấp thêm `tier`, `category`, `is_hidden`, `xp_bonus`, `UNIQUE(user_id, achievement_code)` + `RESTRICTIVE` anti-client insert)*, `daily_challenges`, `user_challenges`, `user_streaks`, `leaderboard_snapshots` (có Composite Indexes tối ưu).
+- **Gamification UI/UX (Live):** `GamificationCelebrationModal.jsx` (Achievement Unlock Modal + Level Up Celebration + Streak Milestone), `GamificationHub.jsx` (XP/Level Banner, Badge Gallery, Daily/Weekly Challenges + Swap, 5-Board Leaderboard Top 10/50, Reward History). Tuân thủ WCAG 2.2 AA (0 HEX violations) và hỗ trợ tắt hiệu ứng (Reduced Motion).
 
 ---
 
@@ -2004,15 +2020,15 @@ Liên kết trực tiếp với hệ thống `auth.users`, `profiles` & `system_
 
 > **Mục tiêu:** Xây dựng hệ thống Gamification thông minh tạo động lực học tập bền vững, gắn kết chặt chẽ với chất lượng học tập thực tế (thông qua Mastery Engine của 2.9). Tuyệt đối không cho phép cộng điểm hoặc mở khóa thành tích bằng cách cày câu hỏi dễ hay can thiệp từ client.
 
-- [ ] **2.10.1 Server-side XP & Experience Point Engine (P0):**
+- [x] **2.10.1 Server-side XP & Experience Point Engine (P0):**
   * Toàn bộ điểm kinh nghiệm XP được tính toán và xác thực tại Backend qua bảng `xp_transactions` với `idempotency_key` chống gian lận và chống cộng trùng.
   * Bảng định mức thưởng XP chuẩn hóa: Hoàn thành câu (5 XP), Trả lời đúng (+5 XP), Hoàn thành Quiz (20 XP), Độ chính xác $\ge 90\%$ (+20 XP), Hoàn thành phiên ôn tập ngày (30 XP), Hoàn thành Thử thách ngày (50 XP), Thành thạo chuyên đề (100 XP), Hoàn thành mục tiêu tuần (150 XP).
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.1):** Mọi giao dịch XP đều có bản ghi truy vết lịch sử; không thể tự sửa điểm từ Browser Console hay DevTools.
-- [ ] **2.10.2 Level Progression & Danh hiệu Học viên (P1):**
+- [x] **2.10.2 Level Progression & Danh hiệu Học viên (P1):**
   * Hệ thống cấp độ tự động tính theo ngưỡng XP tích lũy: *Beginner (Lv 1-5)* $\rightarrow$ *Grammar Explorer (Lv 6-10)* $\rightarrow$ *Grammar Fighter (Lv 11-20)* $\rightarrow$ *Grammar Expert (Lv 21-30)* $\rightarrow$ *Grammar Master (Lv 31-40)* $\rightarrow$ *Grammar Legend (Lv 41+)*.
   * Hiệu ứng Level Up Animation mượt mà, lưu vết lịch sử thăng hạng và hỗ trợ điều chỉnh ngưỡng cấu hình tập trung.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.2):** Tự động thăng cấp ngay khi đạt đủ ngưỡng XP; hiển thị thanh tiến độ chuẩn xác đến cấp kế tiếp.
-- [ ] **2.10.3 Achievement & Badge Unlocking Engine (P0):**
+- [x] **2.10.3 Achievement & Badge Unlocking Engine (P0):**
   * Tự động mở khóa danh mục huy hiệu đa cấp độ (*Bronze / Silver / Gold / Diamond*) thuộc 4 nhóm thành tích:
     * *Learning Consistency:* First Step, Daily Learner (3 ngày), 7-Day Streak, 30-Day Warrior, Consistency Master (100 ngày).
     * *Grammar Mastery:* Tense Explorer, Master of 13 Tenses, Conditional Expert, Passive Voice Master, Grammar Legend (Mastery cao cả 12 chuyên đề).
@@ -2020,24 +2036,24 @@ Liên kết trực tiếp với hệ thống `auth.users`, `profiles` & `system_
     * *Learning Milestones:* Quiz Starter (10 bài), Century Club (100 bài), Knowledge Collector (1,000 câu hỏi), Review Master (100 phiên ôn tập).
   * Hỗ trợ danh hiệu bí ẩn (Hidden Achievements), nâng cấp bảng Live `user_achievements` bổ sung `tier`, `category`, `is_hidden` và ràng buộc chống cấp trùng.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.3):** Huy hiệu tự động mở khóa chính xác khi đạt điều kiện; không xảy ra hiện tượng duplicate notification.
-- [ ] **2.10.4 Daily & Weekly Challenges Engine (P1):**
+- [x] **2.10.4 Daily & Weekly Challenges Engine (P1):**
   * Tự động sinh thử thách học tập hàng ngày và hàng tuần phù hợp với năng lực học viên; tự động reset theo timezone người dùng.
   * Theo dõi tiến độ thời gian thực (realtime progress) và trao thưởng XP tự động khi hoàn thành.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.4):** Thử thách ngày reset chuẩn xác vào 00:00 UTC+7; không thể nhận thưởng lặp lại cho cùng một thử thách.
-- [ ] **2.10.5 Streak & Learning Habit System (P1):**
+- [x] **2.10.5 Streak & Learning Habit System (P1):**
   * Theo dõi chuỗi ngày học tập liên tục (Current Streak / Longest Streak) dựa trên timezone của học viên; chỉ tính streak khi có hoạt động học tập hợp lệ (không tính đăng nhập suông).
   * Cơ chế khôi phục chuỗi (Streak Recovery Mechanism) và thông báo nhắc nhở duy trì chuỗi lửa.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.5):** Không bị mất streak vô lý khi học sát giờ chuyển ngày; chống cộng dồn streak nhiều lần trong ngày.
-- [ ] **2.10.6 Leaderboard & Competitive Learning (P1):**
+- [x] **2.10.6 Leaderboard & Competitive Learning (P1):**
   * 5 bảng xếp hạng độc lập: *Weekly XP*, *Monthly XP*, *All-Time XP*, *Learning Consistency*, và *Grammar Mastery Ranking*.
   * Hỗ trợ phân trang Top 10 / Top 50, hiển thị thứ hạng cá nhân, cơ chế phân định đồng điểm (tie-breaking).
   * Hỗ trợ tùy chọn bảo mật: hiển thị ẩn danh (Anonymous Mode) hoặc tắt tham gia bảng xếp hạng.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.6):** Bảng xếp hạng phản ánh số liệu thực tế được cache tối ưu (< 50ms query time); cơ chế chống cheat server-side ngăn chặn request giả mạo.
-- [ ] **2.10.7 Gamification UI/UX & Accessible Reward Experience (P2):**
+- [x] **2.10.7 Gamification UI/UX & Accessible Reward Experience (P2):**
   * Bộ component giao diện: Achievement Unlock Modal, Level Up Celebration Animation, XP Gain Flyout, Streak Milestone Toast, Badge Gallery, Reward History.
   * Tối ưu hiệu năng, hỗ trợ Reduced Motion và tuân thủ WCAG 2.2 AA.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.7):** Hiệu ứng chạy mượt mà trên cả điện thoại cấu hình yếu; có thể bật/tắt hiệu ứng trong trang cài đặt.
-- [ ] **2.10.8 Gamification Data Architecture & Anti-Abuse Hardening (P0):**
+- [x] **2.10.8 Gamification Data Architecture & Anti-Abuse Hardening (P0):**
   * Thiết lập và tối ưu 8 bảng dữ liệu (`user_xp`, `xp_transactions`, `achievements`, mở rộng bảng Live `user_achievements`, `daily_challenges`, `user_challenges`, `user_streaks`, `leaderboard_snapshots`).
   * Ràng buộc toàn vẹn cơ sở dữ liệu, RLS chặt chẽ, Audit Logs và Transactional Integrity.
   * **Tiêu chuẩn Nghiệm thu (AC-2.10.8):** 100% giao dịch XP và mở khóa huy hiệu vượt qua kiểm thử tấn công đồng thời (Concurrency & Race Condition test).
