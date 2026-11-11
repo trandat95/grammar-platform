@@ -48,9 +48,9 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Design** | **2.6** | **Enterprise-Grade Design System & WCAG 2.2 AA** | **P2 (Medium)**| ✅ Core Live / Design System Spec Active |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành |
-| **Intelligence** | **2.9** | **Continuous Adaptive Learning, Mastery Tracking & Reassessment**| **P2 (High)** | ⏳ Kế tiếp |
-| **Gamification** | **2.10**| **Achievement, Level & Gamification System** | **P2 (Medium)**| ⏳ Kế tiếp |
-| **Quality** | **2.11**| **Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp |
+| **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ⏳ Kế tiếp (Adaptive Spec Active) |
+| **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ⏳ Kế tiếp (Gamification Spec Active) |
+| **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
 
 ---
 
@@ -1311,6 +1311,183 @@ components/
 
 ---
 
+## 🧠 8.5. MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & INTELLIGENT MASTERY TRACKING (P2)
+
+> **Sứ mệnh cốt lõi:** Xây dựng hệ thống theo dõi năng lực học tập liên tục, đo lường khả năng ghi nhớ kiến thức dài hạn và tự động điều phối nội dung luyện tập dựa trên hiệu suất thực tế của từng học viên. Hệ thống không chỉ đếm số câu đúng mà phải trả lời được: *Học viên thực sự hiểu bản chất hay chỉ nhớ vẹt đáp án? Kiến thức nào đã thành thạo và kiến thức nào đang rơi rụng theo thời gian?*
+
+### 8.5.1. Động cơ Ôn tập Lặp lại Ngắt quãng Thông minh (`Intelligent Spaced Repetition Engine - P0`)
+- **Máy trạng thái Ghi nhớ (Memory State Machine):** Phân loại từng câu hỏi theo 5 trạng thái:
+  1. `New`: Câu hỏi chưa từng xuất hiện trong lịch sử học viên.
+  2. `Learning`: Đang trong giai đoạn tiếp thu ban đầu.
+  3. `Review`: Đạt ngưỡng ổn định và đang chờ đến lịch ôn tập định kỳ.
+  4. `Relearning`: Học viên từng làm đúng nhưng vừa trả lời sai trở lại, cần nạp lại kiến thức.
+  5. `Mastered`: Đã vượt qua đủ chu kỳ ôn tập dài hạn với tốc độ phản hồi nhanh và ổn định.
+- **Thuật toán SM-2 / FSRS Biến thể:** Tính toán thời điểm ôn tập tiếp theo dựa trên thời gian suy nghĩ (`response_time_ms`), lịch sử đúng/sai và mức độ tự tin; tự động giãn khoảng thời gian ôn (`review_interval`) khi trả lời đúng liên tục hoặc thu hẹp về 1 ngày khi xuất hiện dấu hiệu quên kiến thức. Hỗ trợ **Manual Review** để học viên tự chọn ôn chuyên đề mong muốn.
+- **12 Trường Dữ liệu Theo dõi Chuẩn (`public.spaced_repetition_cards`):**
+  `question_id`, `user_id`, `topic_id`, `attempts_count`, `correct_history`, `response_time_ms`, `last_reviewed_at`, `next_review_at`, `difficulty_rating`, `stability_score`, `retrievability_score`, `review_interval_days`.
+
+### 8.5.2. Phân tích Độ bền Kiến thức & Đường cong Quên lãng (`Knowledge Retention & Forgetting Curve - P1`)
+- Đo lường tỷ lệ duy trì kiến thức tại 5 mốc thời gian chuẩn: **1 ngày $\rightarrow$ 3 ngày $\rightarrow$ 7 ngày $\rightarrow$ 14 ngày $\rightarrow$ 30 ngày**.
+- Phân tách rõ 3 chỉ số sư phạm độc lập:
+  - **Short-term Learning:** Hiệu suất ngay sau khi học lý thuyết.
+  - **Long-term Retention:** Tỷ lệ chính xác khi gặp lại câu hỏi sau $\ge 14$ ngày.
+  - **Consistency Index:** Mức độ ổn định qua nhiều phiên luyện tập khác nhau.
+- **Chỉ số Đầu ra trên Dashboard:** Overall Knowledge Retention (%), Topics at Risk (Chuyên đề có nguy cơ rơi rụng), Topics Successfully Mastered, Upcoming Review Schedule, và Biểu đồ xu hướng Retention Trend.
+
+### 8.5.3. Động cơ Điều chỉnh Độ khó & Phân phối Câu hỏi Thích ứng (`Adaptive Difficulty Engine - P0`)
+- Liên tục phân tích cửa sổ làm bài gần nhất và độ chính xác theo từng chuyên đề để cân chỉnh tỷ lệ câu hỏi động.
+- **Tỷ lệ Phân phối Câu hỏi Mặc định (Configurable Adaptive Mix):**
+  - **50% Weak Topics:** Ưu tiên các chuyên đề học viên đang có Mastery Score thấp.
+  - **30% Knowledge Retention Review:** Các câu hỏi đến hạn ôn tập từ Spaced Repetition Engine.
+  - **20% New Knowledge & Challenge:** Kiến thức mới hoặc câu hỏi độ khó cao hơn để mở rộng giới hạn năng lực.
+- Ngăn chặn hiện tượng học thuộc đáp án bằng cách trộn câu hỏi mới có cùng điểm ngữ pháp và tránh đưa liên tiếp hai câu hỏi có cấu trúc giống hệt nhau.
+
+### 8.5.4. Hệ thống Đánh giá Thành thạo 12 Chuyên đề (`12-Topic Mastery Tracking System - P0`)
+Cập nhật bảng xếp hạng năng lực 12 chuyên đề realtime sau mỗi sự kiện học tập với 6 cấp độ chuẩn:
+
+| Khoảng điểm Mastery Score | Cấp độ (Level) | Mô tả Sư phạm (Description) |
+| :---: | :--- | :--- |
+| **0 – 19%** | **Beginner** | Chưa nắm được quy tắc cốt lõi |
+| **20 – 39%** | **Basic** | Bắt đầu nhận diện được dấu hiệu và công thức cơ bản |
+| **40 – 59%** | **Intermediate** | Có thể vận dụng giải bài tập ở mức trung bình |
+| **60 – 74%** | **Advanced** | Khả năng vận dụng khá tốt, ít mắc bẫy thông thường |
+| **75 – 89%** | **Proficient** | Thành thạo phần lớn kiến thức chuyên đề |
+| **90 – 100%** | **Master** | Thành thạo xuất sắc và duy trì độ bền vững dài hạn |
+
+> **Quy tắc Chống Gian lận Thuật toán Mastery:** Điểm Mastery không chỉ tính bằng `(Số câu đúng / Tổng số câu)`. Hệ thống kết hợp 6 trọng số: **Accuracy (Độ chính xác) + Consistency (Độ ổn định) + Retention (Độ bền dài hạn) + Difficulty (Độ khó câu hỏi) + Recency (Trọng số thời gian gần) + Topic Coverage (Độ bao phủ số bài trong chuyên đề)**. Lặp lại các câu hỏi dễ đã thuộc sẽ không tạo ra tăng trưởng Mastery Score ảo.
+
+### 8.5.5. Phân tích Tiến độ, Đề xuất Cá nhân hóa & Bảng điều khiển Trực quan (`Analytics & Mastery UI - P1`)
+- **Learning Analytics Intelligence:** Daily/Weekly/Monthly statistics, Tổng thời gian học, Accuracy Trend, Learning Velocity (Tốc độ hoàn thành kiến thức), Improvement Rate (So sánh giai đoạn trước/sau).
+- **Personalized Recommendations Engine:** Sinh khuyến nghị hành động tức thì dựa trên dữ liệu thực tế (*"Bạn đang yếu ở chuyên đề Conditional Sentences"*, *"Bạn có dấu hiệu quên kiến thức Passive Voice — Nên hoàn thành 15 câu ôn tập hôm nay"*).
+- **Mastery Dashboard Components:** 12-Topic Mastery Radar Chart, Knowledge Retention Curve Chart, Learning Progress Timeline, Weakest/Strongest Topics Widgets, Upcoming Review Calendar, Daily Activity Heatmap và Mastery Level Progress Bars.
+
+---
+
+## 🏆 8.6. MILESTONE 2.10: ACHIEVEMENT, LEVEL PROGRESSION & INTELLIGENT GAMIFICATION SYSTEM (P2)
+
+> **Sứ mệnh cốt lõi:** Xây dựng hệ thống Gamification thông minh gắn kết chặt chẽ với chất lượng học tập thực tế (thông qua Mastery Engine của 2.9). Không cho phép tăng điểm hoặc mở khóa thành tích bằng cách spam câu hỏi dễ hay can thiệp từ phía trình duyệt.
+
+### 8.6.1. Động cơ Điểm Kinh nghiệm XP (`XP & Experience Point Engine - P0`)
+Mọi giao dịch XP đều được tính toán xác thực trên **Backend (Server-side Authoritative)** với `idempotency_key` chống cộng trùng:
+
+| Hoạt động Học tập Hợp lệ (Activity) | Mức thưởng (XP Reward) | Điều kiện Ghi nhận |
+| :--- | :---: | :--- |
+| Hoàn thành 1 câu hỏi | **5 XP** | Trạng thái câu hỏi mới hoặc đến hạn ôn tập hợp lệ |
+| Trả lời chính xác (Correct bonus) | **+5 XP** | Xác thực đáp án đúng tại API Backend |
+| Hoàn thành 1 đề Quiz | **20 XP** | Hoàn thành tối thiểu 100% số câu trong phiên Quiz |
+| Đạt Độ chính xác cao ($\ge 90\%$) | **+20 XP** | Thưởng chất lượng cho phiên luyện tập/Quiz |
+| Hoàn thành phiên Ôn tập Hàng ngày | **30 XP** | Đạt đủ chỉ tiêu câu hỏi từ Spaced Repetition Queue |
+| Hoàn thành Thử thách Ngày (Daily Challenge) | **50 XP** | Vượt qua mục tiêu thử thách trong khung giờ ngày |
+| Thành thạo 1 Chuyên đề (Master Topic) | **100 XP** | Đạt mốc Mastery $\ge 90\%$ lần đầu cho chuyên đề |
+| Hoàn thành Mục tiêu Tuần (Weekly Goal) | **150 XP** | Duy trì chuỗi học và hoàn thành chỉ tiêu tuần |
+
+### 8.6.2. Hệ thống Cấp độ & Danh hiệu Tiến trình (`Level & Progression System - P1`)
+Tự động nâng cấp bậc, kích hoạt hiệu ứng **Level Up Animation** và lưu lịch sử thăng hạng dựa trên bảng cấu hình tập trung (Database-driven Thresholds):
+
+| Cấp độ (Level) | Danh hiệu Học viên (Title) | Ngưỡng XP Tích lũy (Required XP) |
+| :---: | :--- | :---: |
+| **Lv 1 – 5** | **Beginner** | `0 – 500 XP` |
+| **Lv 6 – 10** | **Grammar Explorer** | `501 – 1,500 XP` |
+| **Lv 11 – 20** | **Grammar Fighter** | `1,501 – 5,000 XP` |
+| **Lv 21 – 30** | **Grammar Expert** | `5,001 – 12,000 XP` |
+| **Lv 31 – 40** | **Grammar Master** | `12,001 – 25,000 XP` |
+| **Lv 41+** | **Grammar Legend** | `25,001+ XP` |
+
+### 8.6.3. Hệ thống Huy hiệu Thành tích Tự động (`Achievement & Badge Unlocking Engine - P0`)
+Hỗ trợ 4 hạng huy hiệu (**Bronze / Silver / Gold / Diamond**), **Hidden Achievements** (huy hiệu bí ẩn), không bao giờ cấp trùng và được mở khóa tự động theo 4 nhóm điều kiện:
+- **A. Learning Consistency:** *First Step* (câu đầu tiên), *Daily Learner* (3 ngày), *7-Day Streak*, *30-Day Warrior*, *Consistency Master* (100 ngày).
+- **B. Grammar Mastery:** *Tense Explorer*, *Master of 13 Tenses*, *Conditional Expert*, *Passive Voice Master*, *Grammar Legend* (đạt Mastery cao trên cả 12 chuyên đề).
+- **C. Accuracy & Performance:** *Perfect Score* (100% 1 bài test), *Sharp Shooter* ($\ge 90\%$ 5 bài liên tiếp), *Error Hunter* (xử lý thành công 100 câu từng sai), *Comeback King* (cải thiện ngoạn mục ở chuyên đề yếu).
+- **D. Learning Milestones:** *Quiz Starter* (10 bài), *Century Club* (100 bài), *Knowledge Collector* (1,000 câu hỏi), *Review Master* (100 phiên ôn tập).
+
+### 8.6.4. Thử thách Ngày/Tuần, Chuỗi Học tập & Bảng Xếp hạng (`Challenges, Streaks & Leaderboard - P1`)
+- **Daily & Weekly Challenges Engine:** Tự động sinh thử thách phù hợp trình độ (VD Daily: 20 câu, Accuracy $\ge 85\%$, ôn 10 câu sai; Weekly: 100 câu, học 5 ngày, tăng Mastery 2 chuyên đề, 3 phiên Spaced Repetition). Hỗ trợ thay thế Challenge không phù hợp và chặn nhận thưởng kép.
+- **Streak & Learning Habit System:** Chỉ tính Streak khi hoàn thành hoạt động học tập thực thụ (không tính đăng nhập suông); xử lý chính xác ranh giới chuyển ngày theo timezone người dùng; hỗ trợ *Streak Recovery Mechanism* và *Weekly Activity Calendar*.
+- **Leaderboard & Competitive Learning:** 5 bảng xếp hạng (Weekly XP, Monthly XP, All-Time XP, Weekly Consistency, Grammar Mastery Ranking); phân trang Top 10 / Top 50; xử lý đồng điểm (tie-breaking); hỗ trợ chế độ ẩn danh hoặc tắt tham gia Leaderboard; chống gian lận từ Backend.
+
+### 8.6.5. Kiến trúc Dữ liệu Chống Gian lận & Thông báo Thành tích (`8 Tables & Anti-Abuse - P0`)
+- **8 Bảng Cơ sở Dữ liệu Chuyên dụng:** `user_xp`, `xp_transactions` (Atomic + Idempotency Key), `achievements`, `user_achievements` (Unique constraint), `daily_challenges`, `user_challenges`, `user_streaks`, `leaderboard_snapshots` (có Composite Indexes tối ưu).
+- **Gamification UI/UX (P2):** Achievement Unlock Popup, Level Up Animation, XP Gain Flyout, Streak Celebration, Badge Collection Gallery, Reward History. Tuân thủ WCAG Accessibility, Responsive Mobile/Desktop và hỗ trợ tắt hiệu ứng (Reduced Motion).
+
+---
+
+## 🛡️ 8.7. MILESTONE 2.11: PERFORMANCE OPTIMIZATION, SECURITY HARDENING & PRE-PRODUCTION VERIFICATION (P0)
+
+> **Sứ mệnh cốt lõi:** Chuyển hóa hệ thống từ trạng thái *Feature Complete* sang tiêu chuẩn **Production Ready** tuyệt đối — kiểm chứng toàn diện từ Frontend, Backend API, Database PostgreSQL, Xác thực/Phân quyền đến Sao lưu và Khả năng Phục hồi Thảm họa.
+
+### 8.7.1. Đánh giá Kiến trúc Bảo mật & Kiểm thử Xâm nhập (`Security & RLS Pentest - P0`)
+- **Threat Modeling (STRIDE & OWASP Top 10):** Lập bản đồ toàn bộ Attack Surface, Security Assessment Report, Risk Register phân loại Critical / High / Medium / Low.
+- **Database RLS Penetration Testing:** Kiểm thử kịch bản IDOR, Horizontal/Vertical Privilege Escalation, JWT Manipulation, Mass Assignment, Direct Database Access và Anonymous bypass trên toàn bộ các bảng chứa dữ liệu user. Đảm bảo `SUPABASE_SERVICE_ROLE_KEY` không bao giờ lọt vào client bundle.
+- **OWASP API Security Top 10 & Session Hardening:** Kiểm thử BOLA, BFLA, Input Validation, SQLi/XSS/CSRF, Rate Limiting, Brute Force Protection, Replay Attacks, Account Enumeration Protection, Refresh Token Rotation và Session Revocation.
+
+### 8.7.2. Tối ưu Hóa Cơ sở Dữ liệu, Core Web Vitals & Load Testing (`Performance Engineering - P0/P1`)
+- **Database Optimization (`EXPLAIN ANALYZE`):** Kiểm toán toàn bộ query; triệt tiêu N+1 queries và Full Table Scans trên bảng lớn; tối ưu hóa JOINs, Pagination, Leaderboard Aggregations, Mastery Calculations; cấu hình Connection Pooling và kiểm soát Lock Contention.
+- **Google Lighthouse & Core Web Vitals Targets (Áp dụng cho MỌI trang trọng yếu trên Mobile & Desktop + Slow 4G):**
+
+| Tiêu chí Hiệu năng (Lighthouse & CWV) | Ngưỡng Mục tiêu Bắt buộc (Target) |
+| :--- | :---: |
+| **Lighthouse Performance** | **$\ge 90$** |
+| **Lighthouse Accessibility** | **$\ge 95$** |
+| **Lighthouse Best Practices** | **$\ge 95$** |
+| **Lighthouse SEO** | **$\ge 90$** |
+| **LCP (Largest Contentful Paint)** | **$\le 2.5\text{s}$** |
+| **INP (Interaction to Next Paint)** | **$\le 200\text{ms}$** |
+| **CLS (Cumulative Layout Shift)** | **$\le 0.1$** |
+| **FCP (First Contentful Paint)** | **$\le 1.8\text{s}$** |
+| **TTFB (Time to First Byte)** | **$\le 800\text{ms}$** |
+
+- **Backend Load, Stress, Spike & Endurance Testing (P1):** Đo lường P95/P99 Latency, Requests Per Second (RPS) và Error Rate cho 9 nhóm API cốt lõi (Auth, Questions, Quiz Submit, History, Mastery Dashboard, Spaced Repetition, Leaderboard, Achievement, Challenges).
+
+### 8.7.3. Độ Tin cậy, Giám sát, Sao lưu & Chiến lược Rollback (`Reliability, Backup & CI/CD - P0`)
+- **Observability & Error Resilience:** Centralized Error Logging với Request Correlation ID, Health Checks, giám sát 8 tình huống lỗi (API Timeout, DB disconnect, Network drop giữa chừng khi nộp Quiz, Duplicate submission, Partial sync).
+- **Automated Backup & Disaster Recovery:** Chính sách Daily / Weekly / Monthly Backup có mã hóa; xác định rõ RPO/RTO; **bắt buộc thực hiện Restore Testing thực tế** để chứng minh dữ liệu phục hồi toàn vẹn 100%.
+- **CI/CD 9-Step Pipeline & Rollback Strategy:** Development $\rightarrow$ Staging $\rightarrow$ Production kèm Automated Build, Lint, Unit/Integration/E2E Tests, Dependency Security Scan, Smoke Tests và Quy trình Rollback khẩn cấp an toàn cả App lẫn Database Migrations.
+
+### 8.7.4. Cổng Nghiệm thu Phát hành Production & Tài liệu Vận hành (`Release Gate & Documentation - P0/P1`)
+- **Cross-Browser & WCAG 2.2 AA:** Kiểm thử trên Chrome, Edge, Firefox, Safari (Desktop/Tablet/Mobile); điều hướng bàn phím hoàn chỉnh, Screen Reader, Accessible Charts/Modals.
+- **18 Critical User Journeys E2E Regression:** Kiểm thử toàn bộ vòng đời từ Đăng ký $\rightarrow$ Chẩn đoán $\rightarrow$ Luyện tập $\rightarrow$ Thi Quiz $\rightarrow$ Mastery/Spaced Repetition $\rightarrow$ Gamification $\rightarrow$ Sync Offline/Online.
+- **Production Release Gate (Không đạt 100% $\rightarrow$ KHÔNG ĐƯỢC RELEASE):** 0 lỗi Security Critical/High còn tồn đọng; 100% bảng nhạy cảm bật RLS; 100% Critical Tests Pass; Backup & Restore verified; Rollback tested; Bộ **12 Tài liệu Vận hành Production** (System Architecture, Schema Docs, API Docs, Security Report, Performance Benchmark, Backup & Recovery Guide, Rollback Runbook, Incident Response...).
+
+---
+
+## 🔗 8.8. KIẾN TRÚC TÍCH HỢP XUYÊN SUỐT (MILESTONES 2.9 – 2.11 ARCHITECTURAL ALIGNMENT)
+
+### 8.8.1. Kiến trúc Sự kiện Học tập Thống nhất (`Unified Learning Event System`)
+Để tránh trùng lặp logic và đảm bảo dữ liệu đồng nhất giữa **Milestone 2.9 (Adaptive Learning)** và **Milestone 2.10 (Gamification)**, toàn bộ hệ thống giao tiếp qua luồng sự kiện tập trung:
+
+```text
+           [ Hành vi Học tập Hợp lệ: Trả lời câu hỏi / Nộp bài Quiz ]
+                                       │
+                                       ▼ (Server-side Verified)
+                    [ Event Bus: QUESTION_ANSWERED / QUIZ_COMPLETED ]
+                                       │
+       ┌───────────────┬───────────────┼───────────────┬───────────────┐
+       ▼               ▼               ▼               ▼               ▼
+[2.9 Mastery]  [2.9 Spaced Rep]   [2.10 XP]   [2.10 Achievement] [2.9/2.11 Analytics]
+   Engine           Engine          Engine     & Challenge Engine     & Telemetry
+       │               │               │               │               │
+       └───────────────┴───────────────┼───────────────┴───────────────┘
+                                       ▼
+                [ Atomic Transaction trên Supabase PostgreSQL 17 ]
+                   (Bảo vệ bởi Idempotency Key & RLS Strict Guard)
+```
+
+### 8.8.2. 3 Nguyên tắc Kiến trúc Cốt lõi Bắt buộc
+1. **Event-Driven Shared Pipeline:** Một sự kiện `QUESTION_ANSWERED` tự động kích hoạt đồng thời cập nhật Mastery Score, tính lịch Spaced Repetition, cộng XP, xét duyệt huy hiệu, cập nhật Challenge Progress và ghi nhận Analytics mà không tách rời logic phân mảnh.
+2. **Backend là Nguồn Sự Thật Duy Nhất (Single Source of Truth):** Tuyệt đối **KHÔNG** tính toán Mastery Score, XP, Level hay điều kiện Achievement chính thức ở Frontend; Client chỉ đóng vai trò hiển thị trạng thái do Backend xác thực trả về.
+3. **Nhúng Sẵn Bảo mật 2.11 Xuyên suốt Quá trình Phát triển:** Việc rà soát RLS, Auth, Input Validation, Idempotency và Index Database của Milestone 2.11 phải được thực thi **song song ngay khi xây dựng từng tính năng ở 2.9 và 2.10**, không đợi đến cuối dự án mới kiểm thử.
+
+### 8.8.3. Ma trận Phụ thuộc & 8 Nguyên tắc Triển khai
+| Milestone | Độ ưu tiên | Trách nhiệm Chính | Phụ thuộc Hệ thống (Dependencies) |
+| :---: | :---: | :--- | :--- |
+| **2.9** | **P2 (High)** | Adaptive Learning, Spaced Repetition & Mastery Intelligence | Quiz Engine, Learning History, Knowledge Graph (2.5/2.8) |
+| **2.10** | **P2 (Medium)** | Achievement, XP/Level Progression & Intelligent Gamification | User System, Quiz Engine, Mastery Engine (2.9) |
+| **2.11** | **P0 (Pre-Prod)**| Security Hardening, Performance Optimization & Prod Readiness | Toàn bộ các phân hệ Cốt lõi (2.1 – 2.10) |
+
+> **8 Nguyên tắc Bất biến khi Triển khai:** (1) Data Integrity First (Backend Auth & Calc); (2) No Duplicate Transactions (Idempotency Key); (3) Scalable & Decoupled Engines; (4) Reuse Existing Services/Hooks; (5) Database-Driven Configuration; (6) Audit Codebase Before Implementing; (7) 100% Backward Compatibility với dữ liệu cũ; (8) Production-Oriented Engineering (Loading/Empty/Error States + Automated Tests).
+
+---
+
 ## 🛡️ 9. ENGINEERING QUALITY GATES (TIÊU CHUẨN NGHIỆM THU BẮT BUỘC)
 
 | Quality Gate | Tiêu chuẩn Đánh giá | Bằng chứng Bắt buộc (Verification Evidence) |
@@ -1655,20 +1832,152 @@ components/
   * `AC-14 -> AC-17`: Tự động điều chỉnh thích ứng, theo dõi 10 competency mastery, lịch ôn tập ngắt quãng, so sánh tăng trưởng trước/sau.
   * `AC-18 -> AC-20`: Lưu trữ toàn vẹn trên Supabase PostgreSQL 17, bảo mật RLS, UI/UX chuẩn WCAG 2.2 AA.
 
-### 🔹 Milestone 2.9: Continuous Adaptive Learning & Mastery Tracking (P2)
-- [ ] Theo dõi độ bền vững của kiến thức (Spaced Repetition Review) cho các câu hỏi hay làm sai.
-- [ ] Cập nhật bảng xếp hạng thành thạo 12 chuyên đề realtime theo thời gian thực.
+### 🔹 Milestone 2.9: Continuous Adaptive Learning & Intelligent Mastery Tracking (P2)
 
-### 🔹 Milestone 2.10: Achievement, Level & Gamification System (P2)
-- [ ] Hệ thống huy hiệu thành tích mở khóa tự động (Ví dụ: "Bậc thầy 13 Thì", "Chiến binh Chẩn đoán", "Chuỗi lửa 7 ngày").
-- [ ] Bảng xếp hạng học tập (Leaderboard) tuần và tháng tạo động lực thi đua.
-- [ ] Thử thách hàng ngày (Daily Challenges) nhận thêm điểm kinh nghiệm XP.
+> **Mục tiêu:** Xây dựng hệ thống theo dõi năng lực học tập liên tục, đánh giá mức độ ghi nhớ kiến thức dài hạn và tự động điều chỉnh nội dung luyện tập dựa trên hiệu suất thực tế của từng người dùng; phân biệt rõ người dùng thực sự hiểu bản chất hay chỉ nhớ vẹt đáp án.
 
-### 🔹 Milestone 2.11: Performance, Security Hardening & Pre-Production Verification (P0)
-- [ ] Kiểm thử bảo mật RLS và API Authorization (Penetration testing mô phỏng tấn công chiếm quyền).
-- [ ] Tối ưu hóa truy vấn cơ sở dữ liệu, kiểm tra EXPLAIN ANALYZE các query phức tạp.
-- [ ] Đạt điểm số Google Lighthouse tối thiểu 90+ trên cả Mobile và Desktop.
-- [ ] Thiết lập quy trình sao lưu định kỳ (Automated Backup) và kịch bản Rollback khi có sự cố.
+- [ ] **2.9.1 Intelligent Spaced Repetition Engine (P0):**
+  * Triển khai thuật toán Spaced Repetition (SM-2 / FSRS) tự động lên lịch thời điểm ôn tập tối ưu.
+  * Máy trạng thái 5 mức ghi nhớ câu hỏi: `New`, `Learning`, `Review`, `Relearning`, `Mastered`.
+  * Tự động điều chỉnh khoảng cách ngày ôn tập (`review_interval`) dựa trên tốc độ phản hồi (`response_time_ms`) và độ chính xác; thu hẹp về 1 ngày khi có dấu hiệu rơi rụng kiến thức.
+  * Hỗ trợ chế độ ôn tập chủ động (Manual Topic Review).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.1):** Lịch ôn tập được tạo và cập nhật tự động sau mỗi phiên làm bài; câu hỏi làm sai được đưa ngay vào danh sách ưu tiên ôn tập kế tiếp.
+- [ ] **2.9.2 Knowledge Retention & Forgetting Curve Analysis (P1):**
+  * Theo dõi độ bền vững kiến thức tại 5 mốc thời gian: 1 ngày, 3 ngày, 7 ngày, 14 ngày và 30 ngày.
+  * Phân tách 3 chỉ số sư phạm độc lập: *Short-term Learning* (ngay sau khi học), *Long-term Retention* (sau $\ge 14$ ngày), và *Consistency* (độ ổn định qua các lần kiểm tra).
+  * Phát hiện kịp thời các chuyên đề có nguy cơ quên kiến thức (Topics at Risk).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.2):** Biểu đồ đường cong quên lãng phản ánh chính xác tỷ lệ lưu giữ kiến thức thực tế của học viên trên Dashboard.
+- [ ] **2.9.3 Adaptive Difficulty & Dynamic Question Recommendation (P0):**
+  * Tự động điều chỉnh độ khó và lựa chọn câu hỏi tiếp theo dựa trên phân tích kết quả làm bài gần nhất.
+  * Áp dụng tỷ lệ phân phối câu hỏi thích ứng: **50% Weak Topics** (chuyên đề yếu) + **30% Knowledge Retention Review** (ôn tập câu hỏi cũ) + **20% New Knowledge & Challenge** (kiến thức mới mở rộng).
+  * Cơ chế chống học vẹt: trộn biến thể câu hỏi và ngăn chặn xuất hiện liên tiếp 2 câu cùng cấu trúc cú pháp.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.3):** Học viên có trình độ cao tự động nhận câu hỏi khó hơn; học viên đang yếu được tập trung củng cố kiến thức nền tảng mà không bị quá tải.
+- [ ] **2.9.4 12-Topic Mastery Tracking System (P0):**
+  * Theo dõi điểm thành thạo Mastery Score (0 - 100%) thời gian thực cho toàn bộ 12 chuyên đề ngữ pháp Mai Lan Hương.
+  * Phân loại 6 cấp bậc chuẩn: *Beginner (0-19%)*, *Basic (20-39%)*, *Intermediate (40-59%)*, *Advanced (60-74%)*, *Proficient (75-89%)*, *Master (90-100%)*.
+  * Thuật toán đa nhân tố: kết hợp *Accuracy*, *Consistency*, *Retention*, *Difficulty*, *Recency*, và *Topic Coverage*. Chống gian lận: không thể cày điểm bằng cách lặp lại câu hỏi dễ.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.4):** Điểm Mastery phản ánh trung thực năng lực vận dụng ngữ pháp, lưu trữ an toàn trong `user_concept_progress` và cập nhật tức thì sau mỗi lượt submit.
+- [ ] **2.9.5 Learning Analytics & Progress Intelligence (P1):**
+  * Tổng hợp thống kê Daily / Weekly / Monthly: tổng câu hỏi, thời gian học, xu hướng chính xác, tốc độ học tập (Learning Velocity) và tỷ lệ tiến bộ so với giai đoạn trước.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.5):** Báo cáo phân tích hiển thị đầy đủ các chiều thông tin so sánh năng lực học tập qua từng tuần.
+- [ ] **2.9.6 Personalized Review & Learning Recommendations (P1):**
+  * Recommendation Engine phân tích dữ liệu thực tế để đưa ra lời khuyên hành động tức thời (*"Bạn đang yếu ở Conditional Sentences"*, *"Passive Voice có nguy cơ bị quên — Hãy ôn tập 15 câu hôm nay"*).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.6):** Khuyến nghị được cá nhân hóa 100% theo dữ liệu của từng user, có nút 1-click dẫn thẳng vào bài luyện tập tương ứng.
+- [ ] **2.9.7 Mastery Dashboard & Visualizations (P1):**
+  * Xây dựng cụm thành phần giao diện trực quan: Biểu đồ Radar 12 chuyên đề, Biểu đồ đường cong ghi nhớ, Heatmap hoạt động hàng ngày, Thẻ chuyên đề mạnh nhất/yếu nhất, Lịch ôn tập sắp tới.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.7):** Giao diện responsive trên Mobile/Desktop, hỗ trợ hoàn hảo cả Light Mode và Dark Mode đạt chuẩn WCAG AA.
+- [ ] **2.9.8 Mastery Engine Validation, Anti-Duplicate & Multi-Device Testing (P0):**
+  * Bộ kiểm thử tự động 8 kịch bản: trả lời đúng liên tục, sai liên tục, nghỉ học nhiều ngày, ôn tập câu đã thành thạo, submit trùng lặp (duplicate submissions), học đồng thời trên nhiều thiết bị.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.9.8):** 100% test cases vượt qua; không phát sinh race condition hay sai lệch điểm số khi đổi thiết bị.
+
+---
+
+### 🔹 Milestone 2.10: Achievement, Level Progression & Intelligent Gamification System (P2)
+
+> **Mục tiêu:** Xây dựng hệ thống Gamification thông minh tạo động lực học tập bền vững, gắn kết chặt chẽ với chất lượng học tập thực tế (thông qua Mastery Engine của 2.9). Tuyệt đối không cho phép cộng điểm hoặc mở khóa thành tích bằng cách cày câu hỏi dễ hay can thiệp từ client.
+
+- [ ] **2.10.1 Server-side XP & Experience Point Engine (P0):**
+  * Toàn bộ điểm kinh nghiệm XP được tính toán và xác thực tại Backend qua bảng `xp_transactions` với `idempotency_key` chống gian lận và chống cộng trùng.
+  * Bảng định mức thưởng XP chuẩn hóa: Hoàn thành câu (5 XP), Trả lời đúng (+5 XP), Hoàn thành Quiz (20 XP), Độ chính xác $\ge 90\%$ (+20 XP), Hoàn thành phiên ôn tập ngày (30 XP), Hoàn thành Thử thách ngày (50 XP), Thành thạo chuyên đề (100 XP), Hoàn thành mục tiêu tuần (150 XP).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.1):** Mọi giao dịch XP đều có bản ghi truy vết lịch sử; không thể tự sửa điểm từ Browser Console hay DevTools.
+- [ ] **2.10.2 Level Progression & Danh hiệu Học viên (P1):**
+  * Hệ thống cấp độ tự động tính theo ngưỡng XP tích lũy: *Beginner (Lv 1-5)* $\rightarrow$ *Grammar Explorer (Lv 6-10)* $\rightarrow$ *Grammar Fighter (Lv 11-20)* $\rightarrow$ *Grammar Expert (Lv 21-30)* $\rightarrow$ *Grammar Master (Lv 31-40)* $\rightarrow$ *Grammar Legend (Lv 41+)*.
+  * Hiệu ứng Level Up Animation mượt mà, lưu vết lịch sử thăng hạng và hỗ trợ điều chỉnh ngưỡng cấu hình tập trung.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.2):** Tự động thăng cấp ngay khi đạt đủ ngưỡng XP; hiển thị thanh tiến độ chuẩn xác đến cấp kế tiếp.
+- [ ] **2.10.3 Achievement & Badge Unlocking Engine (P0):**
+  * Tự động mở khóa danh mục huy hiệu đa cấp độ (*Bronze / Silver / Gold / Diamond*) thuộc 4 nhóm thành tích:
+    * *Learning Consistency:* First Step, Daily Learner (3 ngày), 7-Day Streak, 30-Day Warrior, Consistency Master (100 ngày).
+    * *Grammar Mastery:* Tense Explorer, Master of 13 Tenses, Conditional Expert, Passive Voice Master, Grammar Legend (Mastery cao cả 12 chuyên đề).
+    * *Accuracy & Performance:* Perfect Score (100%), Sharp Shooter ($\ge 90\%$ 5 bài liên tiếp), Error Hunter (xử lý 100 câu sai), Comeback King.
+    * *Learning Milestones:* Quiz Starter (10 bài), Century Club (100 bài), Knowledge Collector (1,000 câu hỏi), Review Master (100 phiên ôn tập).
+  * Hỗ trợ danh hiệu bí ẩn (Hidden Achievements), lưu trữ tại `user_achievements` với ràng buộc chống cấp trùng.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.3):** Huy hiệu tự động mở khóa chính xác khi đạt điều kiện; không xảy ra hiện tượng duplicate notification.
+- [ ] **2.10.4 Daily & Weekly Challenges Engine (P1):**
+  * Tự động sinh thử thách học tập hàng ngày và hàng tuần phù hợp với năng lực học viên; tự động reset theo timezone người dùng.
+  * Theo dõi tiến độ thời gian thực (realtime progress) và trao thưởng XP tự động khi hoàn thành.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.4):** Thử thách ngày reset chuẩn xác vào 00:00 UTC+7; không thể nhận thưởng lặp lại cho cùng một thử thách.
+- [ ] **2.10.5 Streak & Learning Habit System (P1):**
+  * Theo dõi chuỗi ngày học tập liên tục (Current Streak / Longest Streak) dựa trên timezone của học viên; chỉ tính streak khi có hoạt động học tập hợp lệ (không tính đăng nhập suông).
+  * Cơ chế khôi phục chuỗi (Streak Recovery Mechanism) và thông báo nhắc nhở duy trì chuỗi lửa.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.5):** Không bị mất streak vô lý khi học sát giờ chuyển ngày; chống cộng dồn streak nhiều lần trong ngày.
+- [ ] **2.10.6 Leaderboard & Competitive Learning (P1):**
+  * 5 bảng xếp hạng độc lập: *Weekly XP*, *Monthly XP*, *All-Time XP*, *Learning Consistency*, và *Grammar Mastery Ranking*.
+  * Hỗ trợ phân trang Top 10 / Top 50, hiển thị thứ hạng cá nhân, cơ chế phân định đồng điểm (tie-breaking).
+  * Hỗ trợ tùy chọn bảo mật: hiển thị ẩn danh (Anonymous Mode) hoặc tắt tham gia bảng xếp hạng.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.6):** Bảng xếp hạng phản ánh số liệu thực tế được cache tối ưu (< 50ms query time); cơ chế chống cheat server-side ngăn chặn request giả mạo.
+- [ ] **2.10.7 Gamification UI/UX & Accessible Reward Experience (P2):**
+  * Bộ component giao diện: Achievement Unlock Modal, Level Up Celebration Animation, XP Gain Flyout, Streak Milestone Toast, Badge Gallery, Reward History.
+  * Tối ưu hiệu năng, hỗ trợ Reduced Motion và tuân thủ WCAG 2.2 AA.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.7):** Hiệu ứng chạy mượt mà trên cả điện thoại cấu hình yếu; có thể bật/tắt hiệu ứng trong trang cài đặt.
+- [ ] **2.10.8 Gamification Data Architecture & Anti-Abuse Hardening (P0):**
+  * Thiết lập và tối ưu 8 bảng dữ liệu: `user_xp`, `xp_transactions`, `achievements`, `user_achievements`, `daily_challenges`, `user_challenges`, `user_streaks`, `leaderboard_snapshots`.
+  * Ràng buộc toàn vẹn cơ sở dữ liệu, RLS chặt chẽ, Audit Logs và Transactional Integrity.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.10.8):** 100% giao dịch XP và mở khóa huy hiệu vượt qua kiểm thử tấn công đồng thời (Concurrency & Race Condition test).
+
+---
+
+### 🔹 Milestone 2.11: Performance Optimization, Security Hardening & Pre-Production Verification (P0)
+
+> **Mục tiêu:** Chuyển hóa toàn bộ nền tảng sang trạng thái **Production Ready** — đảm bảo tính bảo mật, hiệu năng chịu tải cao, khả năng sao lưu phục hồi thảm họa và quy trình CI/CD tự động trước khi công bố chính thức.
+
+- [ ] **2.11.1 Security Architecture Review & STRIDE Threat Modeling (P0):**
+  * Đánh giá toàn diện Attack Surface của ứng dụng; lập mô hình đe dọa (Threat Model) theo khung STRIDE và tiêu chuẩn OWASP Top 10.
+  * Xuất bản báo cáo đánh giá an ninh (Security Assessment Report) và sổ đăng ký rủi ro (Risk Register) phân cấp Critical / High / Medium / Low.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.1):** 100% các lỗ hổng Critical và High được khắc phục triệt để trước khi phát hành.
+- [ ] **2.11.2 Database Security & RLS Penetration Testing (P0):**
+  * Kiểm thử xâm nhập Row-Level Security trên toàn bộ các bảng chứa dữ liệu người dùng (`profiles`, `user_*`, `diagnostic_*`, `audit_logs`).
+  * Xác minh ngăn chặn tuyệt đối các kịch bản: IDOR (Insecure Direct Object Reference), Horizontal/Vertical Privilege Escalation, JWT Manipulation, Anonymous Bypass, và rò rỉ `SUPABASE_SERVICE_ROLE_KEY` ở Frontend.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.2):** User A không thể đọc/ghi bất kỳ bản ghi nào của User B; không bảng nhạy cảm nào bị thiếu RLS.
+- [ ] **2.11.3 API Security & OWASP Top 10 Hardening (P0):**
+  * Kiểm thử bảo mật toàn diện trên tất cả các Serverless API Routes: kiểm tra Authentication, Role Authorization (RBAC), Input Sanitization chống SQL Injection, XSS, CSRF, Rate Limiting (30-60 req/min), Brute Force Protection và Replay Attacks.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.3):** Mọi request không hợp lệ nhận mã lỗi chuẩn (401/403/422/429); không để lộ stack trace hay thông tin máy chủ nội bộ.
+- [ ] **2.11.4 Authentication & Session Security Hardening (P0):**
+  * Tăng cường an ninh phiên đăng nhập: cơ chế hết hạn phiên (Session Expiration), xoay vòng Refresh Token (Token Rotation), bảo vệ quên mật khẩu an toàn, chống dò quét tài khoản (Account Enumeration Protection).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.4):** JWT hết hạn bị từ chối tức thì; đăng xuất thu hồi phiên hoàn toàn trên mọi tab.
+- [ ] **2.11.5 Database Performance Optimization & EXPLAIN ANALYZE (P0):**
+  * Kiểm toán toàn bộ truy vấn cơ sở dữ liệu bằng `EXPLAIN ANALYZE`; triệt tiêu hoàn toàn các truy vấn N+1 và Full Table Scans trên các bảng lớn; bổ sung Composite Indexes cho các bộ lọc tìm kiếm và bảng xếp hạng.
+  * Cấu hình Connection Pooling và kiểm soát Lock Contention.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.5):** 95% các truy vấn cơ sở dữ liệu thực thi dưới 50ms trên tập dữ liệu mô phỏng 50,000 học viên.
+- [ ] **2.11.6 Frontend Performance & Core Web Vitals Optimization (P0):**
+  * Tối ưu hóa Code Splitting, Dynamic Imports, Lazy Loading hình ảnh/âm thanh, Tree Shaking, Bundle Size (< 150KB initial JS), tối ưu hóa font chữ và bộ nhớ đệm (Caching Strategy).
+  * Đạt chỉ số Google Lighthouse trên cả Mobile và Desktop:
+    * **Performance $\ge 90$** | **Accessibility $\ge 95$** | **Best Practices $\ge 95$** | **SEO $\ge 90$**.
+    * **Core Web Vitals:** LCP $\le 2.5\text{s}$, INP $\le 200\text{ms}$, CLS $\le 0.1$, FCP $\le 1.8\text{s}$, TTFB $\le 800\text{ms}$.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.6):** Điểm Lighthouse đo trên trang chủ, bài học, làm quiz và dashboard đều đạt $\ge 90$ trên môi trường Slow 4G.
+- [ ] **2.11.7 Backend & API Load & Stress Testing (P1):**
+  * Kiểm thử tải (Load/Stress/Endurance Testing) trên 9 cụm API trọng yếu dưới tải mô phỏng 500 - 1,000 người dùng đồng thời: Auth, Questions, Quiz Submit, Learning History, Mastery Dashboard, Spaced Repetition, Leaderboard, Achievement, Challenges.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.7):** Thời gian phản hồi API P95 < 500ms, P99 < 1,000ms; tỷ lệ lỗi HTTP 5xx < 0.05% trong suốt bài kiểm tra tải.
+- [ ] **2.11.8 Reliability, Error Monitoring & Observability (P0):**
+  * Thiết lập hệ thống giám sát lỗi tập trung (Centralized Error Logging) với Request Correlation ID, Health Checks định kỳ và cảnh báo tự động khi phát sinh lỗi bất thường.
+  * Xử lý an toàn 8 tình huống sự cố: API timeout, mất kết nối DB, ngắt mạng khi nộp Quiz, request trùng lặp, lỗi background jobs.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.8):** Học viên không bị mất kết quả thi khi rớt mạng; tự động lưu cục bộ và thử lại khi có kết nối.
+- [ ] **2.11.9 Automated Backup, Integrity Verification & Disaster Recovery (P0):**
+  * Xây dựng lịch sao lưu tự động (Daily / Weekly / Monthly) có mã hóa và chính sách lưu trữ phiên bản.
+  * Xác định rõ RPO (Recovery Point Objective $\le 1\text{h}$) và RTO (Recovery Time Objective $\le 30\text{m}$).
+  * **Tiến hành diễn tập phục hồi thực tế (Restore Testing):** Xác minh tính toàn vẹn 100% của dữ liệu sau khi khôi phục từ bản backup.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.9):** Biên bản diễn tập khôi phục chứng minh hệ thống phục hồi hoàn hảo mà không mất mát dữ liệu học tập.
+- [ ] **2.11.10 CI/CD Deployment Pipeline & Automated Rollback Strategy (P0):**
+  * Thiết lập quy trình phát hành 9 bước: Code Review $\rightarrow$ Lint & Typecheck $\rightarrow$ Unit/Integration Tests $\rightarrow$ Security Scan $\rightarrow$ Staging Deploy $\rightarrow$ Smoke Tests $\rightarrow$ Production Deploy $\rightarrow$ Post-deploy Verification $\rightarrow$ Rollback khẩn cấp nếu lỗi.
+  * Kịch bản Rollback an toàn cho cả mã nguồn ứng dụng và Database Migrations mà không làm mất dữ liệu người dùng mới.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.10):** Thời gian kích hoạt và hoàn tất Rollback về phiên bản ổn định trước đó $\le 5$ phút.
+- [ ] **2.11.11 Cross-Browser & Device Compatibility Testing (P1):**
+  * Kiểm thử tương thích trên 4 trình duyệt lớn: Chrome, Edge, Firefox, Safari trên các thiết bị Desktop, Laptop, Tablet và Mobile.
+  * Kiểm tra đầy đủ: Quiz Engine, Audio Playback, Sổ tay câu sai, Bản đồ 12 chuyên đề và Lưu trữ ngoại tuyến.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.11):** 100% tính năng hoạt động đồng nhất, không phát sinh lỗi vỡ layout hay lỗi JavaScript trên bất kỳ nền tảng nào.
+- [ ] **2.11.12 Accessibility & WCAG 2.2 Level AA Compliance Audit (P1):**
+  * Đánh giá toàn diện theo tiêu chuẩn quốc tế WCAG 2.2 AA: điều hướng hoàn toàn bằng bàn phím (Keyboard Navigation), tương thích Screen Reader, Focus Management, Semantic HTML, tỷ lệ tương phản màu $\ge 4.5:1$, và hỗ trợ tùy chọn Reduced Motion.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.12):** Báo cáo kiểm định không còn lỗi vi phạm Accessibility mức nghiêm trọng (Zero Critical A11y Issues).
+- [ ] **2.11.13 Pre-Production E2E Regression & Final Release Gate (P0):**
+  * Thực hiện kiểm thử hồi quy tự động trên 18 luồng người dùng trọng yếu (Critical User Journeys): từ Đăng ký, Đăng nhập, Chẩn đoán 30 câu, Học 53 bài, Luyện Quiz 50 câu, Mastery, Spaced Repetition, Thử thách ngày, Bảng xếp hạng, đến Đồng bộ ngoại tuyến.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.13 - Production Release Gate):**
+    * 100% Critical Test Cases vượt qua (Zero Failures).
+    * 0 lỗi Security Critical / High còn mở.
+    * 100% bảng nhạy cảm có RLS hoạt động chuẩn xác.
+    * Lighthouse Performance $\ge 90$ và Core Web Vitals đạt chuẩn.
+    * Diễn tập Backup & Restore thành công.
+- [ ] **2.11.14 Hoàn Thiện Bộ 12 Tài Liệu Vận Hành Production (P1):**
+  * Xuất bản đầy đủ bộ tài liệu bàn giao: System Architecture, Database Schema Docs, API Documentation, Security Assessment Report, Performance Benchmark Report, Backup & Recovery Guide, Deployment Guide, Rollback Runbook, Incident Response Procedure, Production Configuration, Known Limitations.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.11.14):** Bộ tài liệu hoàn chỉnh sẵn sàng cho đội ngũ vận hành và bảo trì dài hạn.
 
 ---
 
