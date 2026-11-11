@@ -15,9 +15,9 @@
          ✅ HOÀN THÀNH                                ✅ CORE LIVE TRÊN PROD                         🚀 SẴN SÀNG TRIỂN KHAI TỪNG MILESTONE
 ```
 
-* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 (INTELLIGENT GAMIFICATION & UNIFIED EVENT BUS) — SẴN SÀNG TRIỂN KHAI PHASE CUỐI (2.11–2.12)**.
+* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 & 2.12 (INTELLIGENT MONETIZATION & CONVERSION ENGINE) — CHỜ CỔNG KIỂM ĐỊNH PRE-PROD CUỐI CÙNG (MILESTONE 2.11)**.
 * **Hiện trạng Thực tế trên Production (`https://grammar-platform.vercel.app`):**
-  1. **Database PostgreSQL 17 Live (37 Bảng & 100% RLS):** Đã vận hành 12 bảng Core/Auth/Audit (+`user_achievements` upgraded) + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard trên Supabase (`wtvlbbcyvtqqygtojxay`).
+  1. **Database PostgreSQL 17 Live (55 Bảng & 100% RLS):** Đã vận hành 12 bảng Core/Auth/Audit (+`user_achievements` upgraded) + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard + 18 bảng Monetization/Behavioral/A-B/Subscriptions trên Supabase (`wtvlbbcyvtqqygtojxay`).
   2. **Layered Architecture Bảo mật:** Tách biệt hoàn toàn Browser Client (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) và Server Admin Client (`SUPABASE_SERVICE_ROLE_KEY`), Repositories (`7 files`), Services (`7 files`), Server Guard (`admin-guard.js`).
   3. **Các Phân hệ Enhanced Đã Hoàn Thành 100% Live:**
      - **Milestone 2.3 Enhanced:** Multi-Store IndexedDB v2, SyncEvent v1.0 + `idempotency_key`, Multi-Tab Web Locks/BroadcastChannel, Full Jitter Backoff, `/api/health`, `/api/sync/batch|pull|status`, `SyncStatusIndicator.jsx`, PWA Service Worker `sw.js`.
@@ -28,7 +28,9 @@
      - **Milestone 2.8 Enhanced:** Root Cause DAG Analysis (`lib/diagnostic/knowledge.graph.js`), Adaptive Dynamic Adjustment & Versioning (`adaptive.learning.engine.js`, `/api/diagnostic/adaptive/adjust`, `roadmap_versions`), Multi-Attempt Growth Analytics (`/api/diagnostic/analytics`, `retention.tracker.js`), Conversational AI Study Coach (`AiAdvisorDrawer.jsx`, `/api/ai-advisor/ask`, `ai_advisor_logs`) với Anti-Hallucination Guardrails.
      - **Milestone 2.9 & Section 8D.1 (Live):** 5-State Memory Machine (`New/Learning/Review/Relearning/Mastered`) + Response-Time SM-2/FSRS (`spaced-repetition.js`), Forgetting Curve 1-3-7-14-30d, 6-Factor Anti-Gaming 12-Topic Mastery (`mastery-tracker.js`), Dynamic 50/30/20 Adaptive Mix + Anti-Consecutive Interleaving (`/api/learning/adaptive-mix`, `adaptive-question-engine.js`), Unified Idempotent Event Bus (`POST /api/learning/events`, `learning_event_logs`), SVG 12-Topic Radar + Heatmap (`MasteryIntelligenceDashboard.jsx`) & 8-Scenario Validation Suite (`tests/mastery-engine.test.mjs`, `scripts/validate-mastery-engine.py`).
      - **Milestone 2.10 (Live):** Server-Authoritative XP Ledger & Race-Safe Sum (`xp_transactions` + `user_xp` + `xp-level-engine.js`, chặn farm câu Mastered), 6 Level Tiers (`Beginner Lv 1-5` .. `Grammar Legend Lv 41+`), 20-Badge 4-Category/4-Tier Engine + Hidden Masking (`achievement-engine.js`), Timezone UTC+7 Streak/Freeze Recovery & Daily/Weekly Challenges (`challenge-streak-engine.js`), 5-Mode Leaderboard + Privacy Masking (`/api/gamification/summary|leaderboard`, `GamificationHub.jsx`, `GamificationCelebrationModal.jsx`).
-  4. **Các Phân hệ Kế Tiếp Sẵn sàng Triển khai:** Pre-Prod Verification (`2.11`), Monetization (`2.12`).
+     - **Milestone 2.12 (Live):** 18 Bảng Monetization & Server-Authoritative Entitlement Engine (`entitlement-engine.js`, HTTP `403` VIP Export Guard `/api/monetization/export-report`), VNPay/MoMo/Stripe Adapter + HMAC-SHA256 Webhooks (`webhook.js`, `checkout.js`), Behavioral 23-Event Tracking/9 Segments/Purchase Intent (`behavioral-engine.js`), Contextual 6-Trigger Smart Paywall + Anti-Dark-Pattern FTC Guard + A/B Z-Test (`paywall-ab-engine.js`), `MonetizationHub.jsx`, `SmartPaywallModal.jsx`, Admin MRR/ARR/LTV & 14-Stage Funnel (`AdminMonetizationPanel.jsx`, `/api/admin/monetization`).
+  4. **Phân hệ Kiểm định Cuối cùng Sẵn sàng Triển khai:** Pre-Prod Verification & Release Gate (`2.11`).
+  *(Ghi chú Vận hành: Mọi thao tác ghi Server-Authoritative trên Production yêu cầu bổ sung `SUPABASE_SERVICE_ROLE_KEY` vào Vercel Environment Variables của project `grammar-platform`).*
 * **Thông tin Môi trường kết nối:**
   - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
   - 🐙 **GitHub Repository:** [doanphuongtanthoihiep-crypto/grammar-platform](https://github.com/doanphuongtanthoihiep-crypto/grammar-platform)
@@ -59,7 +61,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ✅ Hoàn thành (100% — Live on Prod) |
 | **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
-| **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ⏳ Kế tiếp (Monetization Spec Active) |
+| **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 
 ---
 
@@ -70,7 +72,8 @@ Hệ thống Next.js Pages Router được phân tầng rõ rệt nhằm triệt
 ```text
 grammar-platform/
 ├── components/
-│   ├── admin/                               # Milestone 2.4 & 2.5 Enterprise Admin UI (Live)
+│   ├── admin/                               # Milestone 2.4, 2.5 & 2.12 Enterprise Admin UI (Live)
+│   │   ├── AdminMonetizationPanel.jsx       # Dashboard MRR/ARR/LTV, 14-Stage Funnel & A/B Z-Test (Live)
 │   │   ├── AdminOverviewPanel.jsx           # Dashboard vận hành thời gian thực (/api/admin/overview)
 │   │   ├── PedagogicalQualityDashboard.jsx  # Kiểm duyệt lời giải 5 trường & Batch Ingest 2,939 câu
 │   │   └── StepUpConfirmModal.jsx           # Hộp thoại xác thực cấp 2 (CONFIRM_SECURITY_ACTION)
@@ -114,6 +117,9 @@ grammar-platform/
 │   │   ├── MasteryIntelligenceDashboard.jsx # M2.9 12-Topic Radar, Forgetting Curve & 14d Heatmap (Live)
 │   │   ├── RemedialRecommendationCard.jsx   # Thẻ khuyến nghị bài học bù đắp 1-click (Live)
 │   │   └── SpacedRepetitionPanel.jsx        # Thẻ ôn tập SM-2 (1->3->7->14->30d), Knowledge Decay & DAG (Live)
+│   ├── monetization/                        # Milestone 2.12 Conversion & Behavioral UX UI (Live)
+│   │   ├── MonetizationHub.jsx              # 4 Gói VIP, Checkout VNPay/MoMo/Stripe, Coupon & Cancel 2 Chạm
+│   │   └── SmartPaywallModal.jsx            # Contextual Smart Paywall (6 Triggers, Anti-Dark-Pattern)
 │   └── sync/
 │       └── SyncStatusIndicator.jsx          # Huy hiệu trạng thái đồng bộ đa thiết bị & Telemetry (Live)
 ├── lib/
@@ -144,6 +150,11 @@ grammar-platform/
 │   │   ├── achievement-engine.js            # 20 Huy hiệu 4 nhóm/4 hạng + Hidden Badge Masking
 │   │   ├── challenge-streak-engine.js       # Streak Timezone UTC+7, Freeze Recovery & Daily/Weekly Missions
 │   │   └── gamification-processor.js        # Bộ điều phối Section 8D.1 Race-Safe Ledger & Auto-Unlock
+│   ├── monetization/                        # Milestone 2.12 Monetization & Behavioral Psychology (Live)
+│   │   ├── behavioral-engine.js             # 23 Events, 9 Segments, Purchase Intent Score & Positive Framing
+│   │   ├── entitlement-engine.js            # Server-side VIP Access & Grace/Expiry Enforcement
+│   │   ├── payment-provider-adapter.js      # VNPay/MoMo/Stripe Pricing & HMAC-SHA256 Signatures
+│   │   └── paywall-ab-engine.js             # 6-Trigger Paywall Capping, A/B Z-Test & Anti-Dark-Patterns
 │   ├── diagnostic/                          # Milestone 2.8 Core & Adaptive Modules (Live)
 │   │   ├── diagnostic.blueprint.js          # Ma trận 30 câu chuẩn hóa & 10 nhóm kiến thức
 │   │   ├── diagnostic.scoring.js            # Deterministic Assessment Scoring & Weakness Detection
@@ -189,6 +200,7 @@ grammar-platform/
 │   │   │   │   ├── batch-ingest.js          # Đồng bộ hàng loạt 2,939 lời giải lên Supabase
 │   │   │   │   └── [questionId].js          # Editor chỉnh sửa & xuất bản JSON 5 trường theo Version
 │   │   │   ├── overview.js                  # API sức khỏe vận hành thời gian thực (Edge Cache 30s)
+│   │   │   ├── monetization.js              # API quản trị MRR/ARR/LTV, Funnel, A/B & Paywall Toggle (Live)
 │   │   │   ├── users.js                     # API quản trị, lọc Streak & xuất CSV UTF-8 BOM + Step-Up
 │   │   │   ├── policy.js                    # API cập nhật hạn mức & Policy Versioning + Step-Up
 │   │   │   └── audit-logs.js                # API lấy lịch sử kiểm toán bất biến (RBAC Guarded)
@@ -209,6 +221,11 @@ grammar-platform/
 │   │   ├── gamification/
 │   │   │   ├── leaderboard.js               # API 5 Bảng xếp hạng (Top 10/50, Tie-break, Privacy, Snapshot) (Live)
 │   │   │   └── summary.js                   # API XP/Level, Huy hiệu, Challenge Swap & Streak Recovery (Live)
+│   │   ├── monetization/
+│   │   │   ├── checkout.js                  # API Checkout VNPay/MoMo/Stripe, Free Trial 7d & Cancel 2 Chạm (Live)
+│   │   │   ├── export-report.js             # Protected VIP Export API (HTTP 403 cho FREE user) (Live)
+│   │   │   ├── overview.js                  # API Bảng giá, Psychology, Smart Paywall Cap & Coupon Check (Live)
+│   │   │   └── webhook.js                   # API HMAC-SHA256 Payment Webhook Idempotent (Live)
 │   │   ├── questions/
 │   │   │   └── [questionId]/explanation.js  # API trả về lời giải JSON 5 trường theo trình độ (Live)
 │   │   ├── sync/
@@ -230,19 +247,22 @@ grammar-platform/
 │   ├── validate-design-tokens.py            # Kiểm định tương phản WCAG 2.2 AA & rà soát HEX (Live)
 │   ├── validate-design-tokens.mjs           # Node validator tương phản Light/Dark Mode
 │   ├── validate-gamification-engine.py      # Bộ kiểm thử M2.10 (XP, Level, Badges, Streak, RLS, Live)
-│   └── validate-mastery-engine.py           # Bộ kiểm thử M2.9 (8 kịch bản + dữ liệu 2,939 câu, Live)
+│   ├── validate-mastery-engine.py           # Bộ kiểm thử M2.9 (8 kịch bản + dữ liệu 2,939 câu, Live)
+│   └── validate-monetization-engine.py      # Bộ kiểm thử M2.12 (15 kịch bản MON-001..015, Live)
 ├── styles/
 │   └── design-system.css                    # Focus Ring WCAG 2.2 (2.4.11/2.5.8), Skeleton & Reduced Motion
 ├── tests/
 │   ├── gamification-engine.test.mjs         # Suite M2.10 Node/CI Validation (Live)
 │   ├── mastery-engine.test.mjs              # Suite 8 kịch bản M2.9 Node/CI Validation (Live)
+│   ├── monetization-engine.test.mjs         # Suite 15 kịch bản M2.12 Node/CI Validation (Live)
 │   └── visual-regression.spec.mjs           # Playwright Snapshot Matrix (Mobile/Tablet/Desktop × Light/Dark)
 ├── docs/design-system/README.md             # Tài liệu Governance Design System v2.6
 ├── database/migrations/
 │   ├── 002_milestones_23_24_25_enhanced.sql # Migration 6 bảng M2.3-2.5, Immutable Trigger & Composite Indexes
 │   ├── 003_milestone_28_adaptive_roadmap.sql # Migration 2 bảng M2.8: roadmap_versions & ai_advisor_logs
 │   ├── 004_milestone_29_adaptive_mastery.sql # Migration M2.9: learning_event_logs + SR/Mastery extensions
-│   └── 005_milestone_210_gamification.sql   # Migration M2.10: 7 bảng Gamification + nâng cấp user_achievements
+│   ├── 005_milestone_210_gamification.sql   # Migration M2.10: 7 bảng Gamification + nâng cấp user_achievements
+│   └── 006_milestone_212_monetization.sql   # Migration M2.12: 18 bảng Monetization, Funnel, Webhooks & A/B
 ├── data/
 │   ├── grammar-visualizations/              # 8 Bộ dữ liệu Sư phạm Chuẩn hóa (Live)
 │   │   ├── tenses.data.js, conditionals.data.js, passive-voice.data.js, reported-speech.data.js
@@ -255,14 +275,11 @@ grammar-platform/
 └── ROADMAP_AND_ARCHITECTURE.md              # SINGLE SOURCE OF TRUTH
 ```
 
-> **Thư mục Mở rộng Dự kiến cho Các Milestone Tiếp theo (`[Planned Modules]`):**  
-> • `lib/monetization/` (Spec 2.12)
-
 ---
 
-## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (37 LIVE TABLES & RLS ARCHITECTURE)
+## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (55 LIVE TABLES & RLS ARCHITECTURE)
 
-### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (37 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
+### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (55 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
 
 ```mermaid
 erDiagram
@@ -456,11 +473,12 @@ erDiagram
     }
 ```
 
-> **Danh sách Đầy đủ 37 Bảng Live trên Supabase (`public` schema — 37/37 RLS enabled):**  
+> **Danh sách Đầy đủ 55 Bảng Live trên Supabase (`public` schema — 55/55 RLS enabled):**  
 > • **Core / Auth / Audit (12):** `profiles`, `user_learning_trackers`, `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements` (+`tier`, `category`, `is_hidden`, `xp_bonus`, `UNIQUE(user_id, achievement_code)`), `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
 > • **Diagnostic, Adaptive Roadmap & AI Coach (8):** `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps` (+`current_version`, `last_adjusted_at`), `roadmap_items`, `roadmap_versions`, `ai_advisor_logs`.  
 > • **Learning Events, Pedagogical Intelligence & Knowledge Graph (10):** `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress` (+`mastery_score`, `mastery_tier`, `consistency_score`, `retention_score`, `difficulty_weight`, `recency_score`, `topic_coverage_score`, `unique_questions_seen`, `last_reviewed_at`, `next_review_at`), `concepts`, `concept_dependencies`, `spaced_repetition_queue` (+`memory_state`, `response_time_ms`, `correct_history`, `difficulty_rating`, `stability_score`, `retrievability_score`), `error_taxonomy_registry`, `learning_event_logs` (`UNIQUE(user_id, idempotency_key)` — Section `8D.1`).
 > • **Intelligent Gamification & Competitive Learning (7):** `user_xp`, `xp_transactions` (`UNIQUE(user_id, idempotency_key)`), `achievements` (20 badges seeded), `daily_challenges` (Daily/Weekly templates), `user_challenges` (`UNIQUE(user_id, challenge_id, period_key)`), `user_streaks` (+`freeze_tokens`), `leaderboard_snapshots` (`5` boards indexed).
+> • **Intelligent Monetization, Behavioral Analytics & Conversion (18):** `subscription_plans`, `feature_entitlements`, `plan_entitlements`, `user_subscriptions`, `subscription_events`, `payment_transactions` (`UNIQUE(user_id, idempotency_key)`), `payment_webhook_events` (`UNIQUE(provider, external_event_id)`), `pricing_campaigns`, `discount_coupons`, `user_coupons`, `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
 
 ### 4.2. RLS Security Model (Chống Đệ quy & Phân quyền Độc lập)
 
@@ -2128,69 +2146,69 @@ Liên kết trực tiếp với hệ thống `auth.users`, `profiles` & `system_
 > **Mục tiêu:** Xây dựng hệ thống Monetization thông minh dựa trên dữ liệu học tập thực tế (từ 2.5, 2.7, 2.9, 2.10), Tâm lý học hành vi (Progress Principle, Goal Gradient, Self-Determination, Endowed Progress), Smart Paywall theo ngữ cảnh và Hạ tầng Thanh toán/Phân quyền an toàn tuyệt đối (100% Backend-verified, tuân thủ nguyên tắc chống Dark Patterns).
 
 #### 📦 Phase 2.12-A: Business Model, Database 18 Tables & Server-side Entitlement (P0)
-- [ ] **2.12.1 Freemium & Premium Business Model Architecture (P0):**
+- [x] **2.12.1 Freemium & Premium Business Model Architecture (P0):**
   * Xây dựng ma trận quyền lợi FREE (thu hút, tạo thói quen, chứng minh giá trị) vs VIP (nhân rộng giá trị, cá nhân hóa, tiết kiệm thời gian).
   * Thiết lập các gói đăng ký: `VIP Monthly`, `VIP Quarterly`, `VIP Yearly`, `VIP Lifetime` với giá bán và hạn mức được cấu hình động từ Backend/Admin Panel (không hardcode Frontend).
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.1):** Admin có thể thay đổi hạn mức gói FREE và giá gói VIP trực tiếp trên hệ thống mà không cần deploy lại code.
-- [ ] **2.12.2 Monetization Database Architecture (18 Tables - P0):**
+- [x] **2.12.2 Monetization Database Architecture (18 Tables - P0):**
   * Triển khai và chuẩn hóa 18 bảng PostgreSQL/Supabase liên kết chặt chẽ với `auth.users`: `subscription_plans`, `user_subscriptions`, `subscription_events`, `feature_entitlements`, `plan_entitlements`, `payment_transactions`, `payment_webhook_events`, `pricing_campaigns`, `discount_coupons`, `user_coupons`, `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
   * Bảo vệ toàn diện bằng Foreign Keys, Composite Indexes, RLS Policies, Audit Logs và Idempotency Key.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.2):** Không trùng lặp bảng User hiện hữu; 100% bảng mới bật RLS chặt chẽ.
-- [ ] **2.12.3 Server-side Entitlement Engine (`Entitlement Verification - P0`):**
+- [x] **2.12.3 Server-side Entitlement Engine (`Entitlement Verification - P0`):**
   * Xây dựng Middleware và Service xác thực quyền VIP hoàn toàn tại Backend trước khi trả về dữ liệu (AI Tutor, Advanced Analytics, Personalized Roadmap, Full Mock Tests, PDF Export).
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.3):** 100% Protected APIs từ chối FREE user truy cập trái phép (HTTP 403) dù sửa LocalStorage hay JWT ở Frontend.
 
 #### 💳 Phase 2.12-B: Payment Integration, Subscription Lifecycle & Webhook Security (P0)
-- [ ] **2.12.4 Subscription Management & Payment Provider Adapter (P0):**
+- [x] **2.12.4 Subscription Management & Payment Provider Adapter (P0):**
   * Hỗ trợ đầy đủ vòng đời Subscription: Create, Activate, Renew, Cancel (dễ dàng, minh bạch), Expire, Upgrade/Downgrade, Grace Period, Payment History, Refund Handling.
   * Thiết kế Payment Provider Adapter hỗ trợ tích hợp đa cổng thanh toán: **VNPay**, **MoMo**, **Stripe**.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.4):** Thanh toán thành công kích hoạt VIP ngay lập tức; hủy đăng ký minh bạch chỉ với 2 chạm và giữ nguyên toàn bộ lịch sử học tập.
-- [ ] **2.12.5 Webhook Security, Idempotency & Reconciliation (P0):**
+- [x] **2.12.5 Webhook Security, Idempotency & Reconciliation (P0):**
   * Triển khai xác thực chữ ký HMAC Webhook (`Verify Webhook Signature`), chống xử lý thanh toán lặp lại (`Idempotent Payment Processing`), ghi nhật ký sự kiện webhook và tự động đối soát trạng thái thất bại.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.5):** Độ tin cậy Webhook $\ge 99.9\%$; 0 giao dịch thanh toán bị xử lý trùng lặp (`Duplicate Payment Processing = 0`).
 
 #### 🧠 Phase 2.12-C: Behavioral Psychology, Analytics, Intent Scoring & Smart Paywall (P0)
-- [ ] **2.12.6 Behavioral Psychology & Dopamine Engagement Loops (P0):**
+- [x] **2.12.6 Behavioral Psychology & Dopamine Engagement Loops (P0):**
   * Ứng dụng thực tế: *Progress Principle* (hiển thị tiến bộ Accuracy/Mastery), *Goal Gradient Effect* (cách mục tiêu $N$ chuyên đề), *Variable Rewards* (huy hiệu/XP dựa trên bài làm thực), *Self-Determination* (Autonomy/Competence/Relatedness), và *Endowed Progress* (roadmap sau Placement Test).
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.6):** Không tạo tiến độ giả hoặc ép đăng nhập liên tục bằng hình phạt gây lo lắng.
-- [ ] **2.12.7 User Behavioral Tracking, 9 Segments & Intent Scoring (P0):**
+- [x] **2.12.7 User Behavioral Tracking, 9 Segments & Intent Scoring (P0):**
   * Tracking 23 sự kiện (8 Learning, 6 Engagement, 9 Monetization) kèm session/metadata.
   * Tự động phân nhóm 9 phân khúc (*New Explorer*, *Active Learner*, *High Performer*, *Struggling Learner*, *Exam-Oriented*, *Power User*, *Dormant User*, *Purchase Intent*, *Churn Risk*).
   * Tính Purchase Intent Score (0–100) hiệu chỉnh bằng dữ liệu chuyển đổi thực; cấm dùng điểm số để phân biệt giá bán.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.7):** Sự kiện được ghi nhận chính xác, cập nhật phân khúc người dùng và thông điệp gợi ý phù hợp theo ngữ cảnh.
-- [ ] **2.12.8 Contextual Smart Paywall Engine (`6 Triggers & Frequency Capping - P0`):**
+- [x] **2.12.8 Contextual Smart Paywall Engine (`6 Triggers & Frequency Capping - P0`):**
   * Xây dựng 6 ngữ cảnh kích hoạt Paywall: (1) Sau Placement Test 30 câu, (2) Click tính năng VIP (kèm Feature Preview), (3) Đạt Learning Milestone (100 câu), (4) Đạt Mastery 90%, (5) Cần ôn tập chuyên sâu nhiều lỗi sai, (6) Hoàn thành Daily Challenge.
   * Áp dụng luật Anti-Spam: giới hạn tần suất (Frequency Capping), thời gian chờ sau khi đóng, không chặn nội dung FREE đang học dở, cá nhân hóa nội dung theo điểm yếu.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.8):** Paywall không hiện lặp lại gây phiền nhiễu; Admin tùy biến được trigger từ bảng điều khiển.
 
 #### 🧪 Phase 2.12-D: Ethical FOMO, Pricing Psychology, Free Trial & A/B Testing (P1)
-- [ ] **2.12.9 Ethical FOMO, Scarcity & Loss Aversion Engine (P1):**
+- [x] **2.12.9 Ethical FOMO, Scarcity & Loss Aversion Engine (P1):**
   * Áp dụng FOMO qua giá trị thực và *Feature Preview*, *Social Proof* có thể kiểm chứng (số lượt học, đánh giá VIP thật), và chiến dịch khan hiếm có thời hạn thật (không countdown giả tự reset).
   * *Loss Aversion* tích cực dựa trên thời gian đã đầu tư; tuyệt đối không dọa mất dữ liệu hoặc mất streak nếu không mua VIP.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.9):** 100% chiến dịch tuân thủ chuẩn mực chống Dark Patterns của FTC.
-- [ ] **2.12.10 Pricing Psychology & Free Trial Onboarding Journey (P0/P1):**
+- [x] **2.12.10 Pricing Psychology & Free Trial Onboarding Journey (P0/P1):**
   * Thiết kế 3 gói hiển thị rõ *Price Anchoring* & *Annual Savings* (Monthly / Quarterly / Yearly Best Value) kèm ưu đãi linh hoạt (Welcome / Annual Upgrade / Win-back / Student).
   * Hỗ trợ chiến dịch *Free Trial 3/7 ngày* theo hành trình Day 0 $\rightarrow$ Day 7 (công bố rõ giá, ngày trừ tiền và cách hủy trước khi user xác nhận).
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.10):** Điều khoản gia hạn và giá bán minh bạch 100% trước bước xác nhận thanh toán.
-- [ ] **2.12.11 A/B Testing & Conversion Optimization Engine (P0):**
+- [x] **2.12.11 A/B Testing & Conversion Optimization Engine (P0):**
   * Hỗ trợ kiểm chứng A/B đồng thời cho Paywall Design, Pricing Order, CTA Wording, Paywall Timing và Offer Framing.
   * Gán biến thể ngẫu nhiên bền vững (`ab_assignments`), theo dõi Conversion Rate, Retention, Refund Rate và đánh giá *Statistical Significance*.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.11):** Phân nhóm thử nghiệm nhất quán giữa các phiên; báo cáo có kiểm định ý nghĩa thống kê trước khi kết luận phiên bản thắng.
 
 #### 📈 Phase 2.12-E: Conversion Funnel, Lifecycle Marketing, Admin Revenue & Verification (P0/P1)
-- [ ] **2.12.12 14-Stage Conversion Funnel & Monetization UX/UI System (P0/P1):**
+- [x] **2.12.12 14-Stage Conversion Funnel & Monetization UX/UI System (P0/P1):**
   * Theo dõi phễu 14 bước (`VISITOR` $\rightarrow$ `SUBSCRIPTION RETENTION`) và phân tích điểm rơi (*Drop-off Analysis*).
   * Xây dựng 11 màn hình chuẩn Design Tokens (Milestone 2.6): VIP Landing Page, Pricing Comparison, Feature Preview, Personalized Paywall, Checkout, Subscription Management, Payment History, VIP Dashboard, Upgrade Success, Trial Expiration, Cancellation Flow.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.12):** Giao diện Responsive, Accessibility WCAG 2.2 AA, rõ ràng value hierarchy (không dùng thiết kế lòe loẹt hay popup ép buộc).
-- [ ] **2.12.13 Personalized Lifecycle Marketing & Notification Automation (P1):**
+- [x] **2.12.13 Personalized Lifecycle Marketing & Notification Automation (P1):**
   * Tự động hóa 9 chiến dịch theo hành vi (Getting Started, Placement Follow-up, 7-Day Milestone, Abandoned Checkout, Trial Expiration, Re-engagement, Cancellation Feedback, Renewal Reminder) qua In-App / Email / Push.
   * Hỗ trợ đầy đủ *Frequency Capping*, *User Consent* và *1-click Unsubscribe*.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.13):** Học viên toàn quyền bật/tắt thông báo marketing và không bị spam.
-- [ ] **2.12.14 Monetization Admin Revenue & Campaign Dashboard (P1):**
+- [x] **2.12.14 Monetization Admin Revenue & Campaign Dashboard (P1):**
   * Bảng điều khiển quản trị kinh doanh: Total Revenue, MRR, ARR, Active Subscribers, Conversion Rate, Trial Conversion, Churn Rate, Renewal Rate, ARPPU, LTV.
   * Công cụ bật/tắt chiến dịch, quản lý coupon, cấu hình FREE/VIP Feature Matrix và kiểm tra lịch sử entitlement.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.14):** Số liệu doanh thu và phễu chuyển đổi đồng bộ chính xác với bảng giao dịch thực tế.
-- [ ] **2.12.15 Monetization Security, Consumer Protection & 15 E2E Verification Cases (`MON-001 -> MON-015` - P0):**
+- [x] **2.12.15 Monetization Security, Consumer Protection & 15 E2E Verification Cases (`MON-001 -> MON-015` - P0):**
   * Thực thi đầy đủ 15 kịch bản kiểm thử bắt buộc:
     * `MON-001 -> MON-004`: Phân quyền FREE/VIP, Upgrade prompt, Thu hồi quyền khi hết hạn.
     * `MON-005 -> MON-010`: Thanh toán thành công/thất bại, Duplicate webhook, Hủy subscription, Trial expires, Invalid coupon.

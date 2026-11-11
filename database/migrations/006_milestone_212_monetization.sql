@@ -297,6 +297,11 @@ BEGIN
   ) THEN
     CREATE POLICY coupons_auth_read ON public.discount_coupons FOR SELECT TO authenticated USING (is_active = true OR public.is_admin());
   END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'discount_coupons' AND policyname = 'coupons_anon_active_read'
+  ) THEN
+    CREATE POLICY coupons_anon_active_read ON public.discount_coupons FOR SELECT TO anon USING (is_active = true);
+  END IF;
 END
 $$;
 
