@@ -1,0 +1,9 @@
+{
+  "name": "Grammar Engine - Ngữ pháp Tiếng Anh Toàn diện",
+  "short_name": "Grammar Engine",
+  "description": "Nền tảng Tự học & Luyện thi Ngữ pháp Tiếng Anh Mai Lan Hương & Hà Thanh Uyên",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#2563eb"
+}

@@ -1,12 +1,9 @@
-import { verifyAdmin } from "../../../lib/supabase/middleware";
+import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
 
 export default async function handler(req, res) {
-  // Check Admin Authorization
-  const adminContext = await verifyAdmin(req);
-  if (!adminContext) {
-    return res.status(403).json({ success: false, error: "Unauthorized: Admin privileges required." });
-  }
+  const adminContext = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_audit_read" });
+  if (!adminContext) return;
 
   if (req.method === "GET") {
     try {

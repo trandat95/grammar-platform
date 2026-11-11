@@ -3,12 +3,19 @@ import { useState, useEffect, useMemo } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 import { SyncManager } from "../lib/sync/sync-manager";
+import { SYNC_EVENT_TYPES } from "../lib/sync/sync-queue";
+import { StorageAdapter } from "../lib/sync/indexed-db";
+import SyncStatusIndicator from "../components/sync/SyncStatusIndicator";
 import { getThemeTokens } from "../lib/tokens/design-tokens";
 import GrammarVisualization from "../components/grammar-visualization/GrammarVisualization";
 import { speechService } from "../lib/audio/speech.service";
 import StructuredExplanation from "../components/explanation/StructuredExplanation";
 import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
+import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
+import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
+import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
+import StepUpConfirmModal from "../components/admin/StepUpConfirmModal";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import {
@@ -79,8 +86,11 @@ const DEFAULT_USERS = [
 ];
 
 const DEFAULT_ACCESS_POLICY = {
+  policyVersion: 1,
   freeExerciseLimit: 10, // Max 10 questions per chapter for free users
   freeDailyQuizLimit: 2, // Max 2 quizzes per day for free users
+  diagnosticCooldownDays: 7,
+  offlineSyncMaxBatch: 50,
 };
 
 export default function Home() {
@@ -91,6 +101,7 @@ export default function Home() {
   // --- Auth & User State ---
   const [usersList, setUsersList] = useState(DEFAULT_USERS);
   const [currentUser, setCurrentUser] = useState(GUEST_USER); // Default: Guest (Not Admin!)
+  const [activeAuthToken, setActiveAuthToken] = useState(null);
   const [adminActivityLogs, setAdminActivityLogs] = useState([]);
   const [accessPolicy, setAccessPolicy] = useState(DEFAULT_ACCESS_POLICY);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -108,14 +119,25 @@ export default function Home() {
   const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserRole, setNewUserRole] = useState("FREE");
 
-  // Admin Search, Filters, and Server Audit Logs (Milestone 2.4)
+  // Admin Search, Filters, Step-Up Auth, and Server Audit Logs (Milestone 2.4)
   const [adminSearchQuery, setAdminSearchQuery] = useState("");
   const [adminRoleFilter, setAdminRoleFilter] = useState("ALL");
   const [adminStatusFilter, setAdminStatusFilter] = useState("ALL");
-  const [adminActiveTab, setAdminActiveTab] = useState("users"); // 'users' | 'policy' | 'audit' | 'activity'
+  const [adminStreakFilter, setAdminStreakFilter] = useState("ALL");
+  const [adminActiveTab, setAdminActiveTab] = useState("overview"); // 'overview' | 'users' | 'policy' | 'pedagogy' | 'audit' | 'activity'
   const [serverAuditLogs, setServerAuditLogs] = useState([]);
   const [auditActionFilter, setAuditActionFilter] = useState("ALL");
   const [isLoadingAudit, setIsLoadingAudit] = useState(false);
+  const [stepUpModal, setStepUpModal] = useState({
+    open: false,
+    title: "",
+    description: "",
+    targetLabel: "",
+    onExecute: null,
+  });
+  const [stepUpSubmitting, setStepUpSubmitting] = useState(false);
+  const [stepUpError, setStepUpError] = useState("");
+  const [activeRemedialMap, setActiveRemedialMap] = useState({});
 
     // --- Theme State (Dark vs Light / White Mode) ---
   const [themeMode, setThemeMode] = useState("dark");
@@ -182,6 +204,15 @@ export default function Home() {
     if (!selectedChapter?.lessons?.length) return null;
     return selectedChapter.lessons.find((l) => l.id === selectedLessonId) || selectedChapter.lessons[0];
   }, [selectedChapter, selectedLessonId]);
+
+  useEffect(() => {
+    if (selectedLesson?.id) {
+      StorageAdapter.cacheLessonData(selectedLesson.id, {
+        chapterId: selectedChapter?.id,
+        lesson: selectedLesson,
+      }).catch(() => {});
+    }
+  }, [selectedLesson?.id, selectedChapter?.id]);
 
   const [activeTab, setActiveTab] = useState("theory"); // 'theory' | 'exercises'
   const [chapterSearch, setChapterSearch] = useState("");
@@ -299,8 +330,11 @@ export default function Home() {
         const livePolicy = await getSystemPolicy();
         if (livePolicy) {
           const pol = {
+            policyVersion: livePolicy.policy_version ?? 1,
             freeExerciseLimit: livePolicy.free_exercise_limit ?? 10,
             freeDailyQuizLimit: livePolicy.free_daily_quiz_limit ?? 2,
+            diagnosticCooldownDays: livePolicy.diagnostic_cooldown_days ?? 7,
+            offlineSyncMaxBatch: livePolicy.offline_sync_max_batch ?? 50,
           };
           setAccessPolicy(pol);
           setAdminPolicyForm(pol);
@@ -309,6 +343,9 @@ export default function Home() {
 
         // Check active Supabase Auth session
         const session = await getActiveSession();
+        if (session?.access_token) {
+          setActiveAuthToken(session.access_token);
+        }
         if (session?.user) {
           const profile = await getProfile(session.user.id);
           const activeUser = {
@@ -334,12 +371,49 @@ export default function Home() {
     })();
   }, []);
 
-  // Offline Sync Engine Initialization
+  // Offline Sync Engine & Multi-Device Pull Initialization (Milestone 2.3)
   useEffect(() => {
     if (currentUser?.id && currentUser.id !== "guest" && !currentUser.isGuest) {
-      SyncManager.init(currentUser.id, (state) => {
-        setSyncState(state);
-      });
+      SyncManager.init(
+        currentUser.id,
+        (state) => setSyncState(state),
+        (pulled) => {
+          if (pulled?.policy && pulled.policy.policy_version > (accessPolicy.policyVersion || 1)) {
+            const pol = {
+              policyVersion: pulled.policy.policy_version ?? 1,
+              freeExerciseLimit: pulled.policy.free_exercise_limit ?? 10,
+              freeDailyQuizLimit: pulled.policy.free_daily_quiz_limit ?? 2,
+              diagnosticCooldownDays: pulled.policy.diagnostic_cooldown_days ?? 7,
+              offlineSyncMaxBatch: pulled.policy.offline_sync_max_batch ?? 50,
+            };
+            setAccessPolicy(pol);
+            setAdminPolicyForm(pol);
+            localStorage.setItem("grammar_access_policy", JSON.stringify(pol));
+          }
+          if (Array.isArray(pulled?.mistakes) && pulled.mistakes.length > 0) {
+            setSavedMistakes((prev) => {
+              const map = new Map(prev.map((m) => [m.id, m]));
+              for (const rm of pulled.mistakes) {
+                if (rm.deleted_at) {
+                  map.delete(rm.question_id);
+                } else {
+                  map.set(rm.question_id, {
+                    id: rm.question_id,
+                    stem: rm.stem,
+                    answers: rm.answers || [],
+                    explanation: rm.explanation || "",
+                    topic_name: rm.topic_name || "Ngữ pháp",
+                  });
+                }
+              }
+              return Array.from(map.values());
+            });
+          }
+        }
+      );
+      getActiveSession().then((s) => {
+        if (s?.access_token) setActiveAuthToken(s.access_token);
+      }).catch(() => {});
     }
   }, [currentUser?.id]);
 
@@ -478,23 +552,37 @@ export default function Home() {
   const toggleSaveWord = (wordData) => {
     if (!wordData || !wordData.word) return;
     const clean = wordData.word.trim().toLowerCase();
-    const exists = savedVocab.some((v) => v.word.toLowerCase() === clean);
+    const existingItem = savedVocab.find((v) => v.word.toLowerCase() === clean);
     let next;
-    if (exists) {
+    if (existingItem) {
       next = savedVocab.filter((v) => v.word.toLowerCase() !== clean);
+      if (currentUser?.id && !currentUser.isGuest) {
+        SyncManager.recordAction(SYNC_EVENT_TYPES.VOCABULARY_DELETED, {
+          word: existingItem.word,
+        }).catch(() => {});
+      }
     } else {
-      next = [
-        {
-          id: `voc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-          word: wordData.word,
-          phonetic: wordData.phonetic || `/${clean}/`,
-          vietnamese: wordData.vietnamese || clean,
-          partOfSpeech: wordData.partOfSpeech || "word",
-          audioUrl: wordData.audioUrl || null,
-          addedAt: new Date().toLocaleDateString("vi-VN"),
-        },
-        ...savedVocab,
-      ];
+      const created = {
+        id: `voc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        word: wordData.word,
+        phonetic: wordData.phonetic || `/${clean}/`,
+        vietnamese: wordData.vietnamese || clean,
+        partOfSpeech: wordData.partOfSpeech || "word",
+        audioUrl: wordData.audioUrl || null,
+        addedAt: new Date().toLocaleDateString("vi-VN"),
+      };
+      next = [created, ...savedVocab];
+      if (currentUser?.id && !currentUser.isGuest) {
+        SyncManager.recordAction(SYNC_EVENT_TYPES.VOCABULARY_SAVED, {
+          vocab: {
+            word: created.word,
+            phonetic: created.phonetic,
+            vietnamese: created.vietnamese,
+            partOfSpeech: created.partOfSpeech,
+            audioUrl: created.audioUrl,
+          },
+        }).catch(() => {});
+      }
     }
     persistSavedVocab(next);
   };
@@ -900,6 +988,12 @@ export default function Home() {
   };
 
   // --- Admin Computed Analytics & Filtering (Milestone 2.4) ---
+  const adminAuthHeaders = useMemo(() => {
+    const h = {};
+    if (activeAuthToken) h["Authorization"] = `Bearer ${activeAuthToken}`;
+    return h;
+  }, [activeAuthToken]);
+
   const filteredAdminUsers = useMemo(() => {
     return usersList.filter((u) => {
       const q = adminSearchQuery.trim().toLowerCase();
@@ -910,10 +1004,11 @@ export default function Home() {
 
       const matchRole = adminRoleFilter === "ALL" || u.role === adminRoleFilter;
       const matchStatus = adminStatusFilter === "ALL" || u.status === adminStatusFilter;
+      const matchStreak = adminStreakFilter === "ALL" || (u.tracker?.streak || 0) >= 7;
 
-      return matchSearch && matchRole && matchStatus;
+      return matchSearch && matchRole && matchStatus && matchStreak;
     });
-  }, [usersList, adminSearchQuery, adminRoleFilter, adminStatusFilter]);
+  }, [usersList, adminSearchQuery, adminRoleFilter, adminStatusFilter, adminStreakFilter]);
 
   const adminStats = useMemo(() => {
     const total = usersList.length;
@@ -945,17 +1040,22 @@ export default function Home() {
     return serverAuditLogs.filter((log) => log.action_type === auditActionFilter);
   }, [serverAuditLogs, auditActionFilter]);
 
+  const getVerifiedAdminHeaders = async (includeJson = true) => {
+    const session = await getActiveSession();
+    if (session?.access_token) {
+      setActiveAuthToken(session.access_token);
+    }
+    const headers = includeJson ? { "Content-Type": "application/json" } : {};
+    if (session?.access_token) {
+      headers["Authorization"] = `Bearer ${session.access_token}`;
+    }
+    return headers;
+  };
+
   const fetchServerAuditLogs = async () => {
     setIsLoadingAudit(true);
     try {
-      const session = await getActiveSession();
-      const headers = { "Content-Type": "application/json" };
-      if (session?.access_token) {
-        headers["Authorization"] = `Bearer ${session.access_token}`;
-      }
-      if (currentUser?.email === "admin@grammarpro.com") {
-        headers["x-admin-email"] = "admin@grammarpro.com";
-      }
+      const headers = await getVerifiedAdminHeaders(true);
       const res = await fetch("/api/admin/audit-logs?limit=50", { headers });
       if (res.ok) {
         const json = await res.json();
@@ -972,36 +1072,90 @@ export default function Home() {
 
   useEffect(() => {
     if (currentView === "admin" && currentUser?.role === "ADMIN") {
+      getActiveSession().then((s) => {
+        if (s?.access_token) setActiveAuthToken(s.access_token);
+      }).catch(() => {});
       fetchServerAuditLogs();
     }
   }, [currentView, currentUser?.role]);
 
-  // --- Admin Management Handlers (Live Supabase Postgres 17 with Server API & Audit Logs) ---
-  const handleUpdateUserRole = async (userId, newRole) => {
-    // 1. Optimistic UI update
+  const openStepUpDialog = ({ title, description, targetLabel, onExecute }) => {
+    setStepUpError("");
+    setStepUpSubmitting(false);
+    setStepUpModal({ open: true, title, description, targetLabel, onExecute });
+  };
+
+  const handleConfirmStepUp = async (confirmationText) => {
+    if (!stepUpModal.onExecute) return;
+    setStepUpSubmitting(true);
+    setStepUpError("");
+    try {
+      await stepUpModal.onExecute(confirmationText);
+      setStepUpModal({ open: false, title: "", description: "", targetLabel: "", onExecute: null });
+    } catch (err) {
+      setStepUpError(err.message || "Xác thực bước 2 thất bại.");
+    } finally {
+      setStepUpSubmitting(false);
+    }
+  };
+
+  const executeUpdateUserRole = async (userId, newRole, confirmationText = null) => {
+    const headers = await getVerifiedAdminHeaders(true);
+    const res = await fetch("/api/admin/users", {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ userId, role: newRole, confirmationText }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(json.error || `HTTP ${res.status}`);
+    }
     const updated = usersList.map((u) => (u.id === userId ? { ...u, role: newRole } : u));
     persistUsersList(updated);
     if (currentUser.id === userId) {
       setCurrentUser((prev) => ({ ...prev, role: newRole }));
     }
-    // 2. Synchronize to Server-side API with Audit Logging
-    try {
-      const session = await getActiveSession();
-      const headers = { "Content-Type": "application/json" };
-      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
-      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
+    fetchServerAuditLogs();
+    triggerXpGain(5, `Đã cập nhật quyền ${newRole} cho học viên thành công!`);
+  };
 
-      await fetch("/api/admin/users", {
-        method: "PATCH",
-        headers,
-        body: JSON.stringify({ userId, role: newRole }),
+  const handleUpdateUserRole = async (userId, newRole) => {
+    const target = usersList.find((u) => u.id === userId);
+    if (newRole === "ADMIN") {
+      openStepUpDialog({
+        title: "Cấp quyền Quản trị viên (ADMIN)",
+        description: "Nâng quyền ADMIN cho phép toàn quyền truy cập hệ thống quản trị và nhật ký kiểm toán.",
+        targetLabel: target?.email || userId,
+        onExecute: (phrase) => executeUpdateUserRole(userId, newRole, phrase),
       });
-      await updateProfileRoleOrStatus(userId, { role: newRole });
-      fetchServerAuditLogs();
-      triggerXpGain(5, `Đã cập nhật quyền ${newRole} cho học viên thành công!`);
-    } catch (err) {
-      console.warn("Could not update role on Supabase:", err.message);
+      return;
     }
+    try {
+      await executeUpdateUserRole(userId, newRole);
+    } catch (err) {
+      alert(`Không thể cập nhật vai trò trên Server: ${err.message}`);
+    }
+  };
+
+  const executeToggleUserStatus = async (userId, newStatus, confirmationText = null) => {
+    const headers = await getVerifiedAdminHeaders(true);
+    const res = await fetch("/api/admin/users", {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ userId, status: newStatus, confirmationText }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(json.error || `HTTP ${res.status}`);
+    }
+    const updated = usersList.map((u) => (u.id === userId ? { ...u, status: newStatus } : u));
+    persistUsersList(updated);
+    if (currentUser.id === userId && newStatus === "LOCKED") {
+      alert("Tài khoản hiện tại của bạn đã bị khóa.");
+      setCurrentUser(DEFAULT_USERS[2]);
+    }
+    fetchServerAuditLogs();
+    triggerXpGain(5, `Đã ${newStatus === "LOCKED" ? "khóa" : "mở khóa"} tài khoản thành công!`);
   };
 
   const handleToggleUserStatus = async (userId) => {
@@ -1012,54 +1166,74 @@ export default function Home() {
       return;
     }
     const newStatus = target.status === "ACTIVE" ? "LOCKED" : "ACTIVE";
-    // 1. Optimistic UI update
-    const updated = usersList.map((u) => (u.id === userId ? { ...u, status: newStatus } : u));
-    persistUsersList(updated);
-    if (currentUser.id === userId && newStatus === "LOCKED") {
-      alert("Tài khoản hiện tại của bạn đã bị khóa.");
-      setCurrentUser(DEFAULT_USERS[2]);
-    }
-    // 2. Synchronize to Server-side API with Audit Logging
-    try {
-      const session = await getActiveSession();
-      const headers = { "Content-Type": "application/json" };
-      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
-      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
-
-      await fetch("/api/admin/users", {
-        method: "PATCH",
-        headers,
-        body: JSON.stringify({ userId, status: newStatus }),
+    if (newStatus === "LOCKED") {
+      openStepUpDialog({
+        title: "Xác nhận Khóa tài khoản Học viên (BAN_USER)",
+        description: "Học viên bị khóa sẽ không thể sử dụng tính năng Cloud cho đến khi được Quản trị viên mở khóa lại.",
+        targetLabel: `${target.name} (${target.email})`,
+        onExecute: (phrase) => executeToggleUserStatus(userId, newStatus, phrase),
       });
-      await updateProfileRoleOrStatus(userId, { status: newStatus });
-      fetchServerAuditLogs();
-      triggerXpGain(5, `Đã ${newStatus === "LOCKED" ? "khóa" : "mở khóa"} tài khoản thành công!`);
+      return;
+    }
+    try {
+      await executeToggleUserStatus(userId, newStatus);
     } catch (err) {
-      console.warn("Could not update status on Supabase:", err.message);
+      alert(`Không thể cập nhật trạng thái trên Server: ${err.message}`);
     }
   };
 
   const handleSavePolicy = async (e) => {
     e.preventDefault();
-    setAccessPolicy(adminPolicyForm);
-    localStorage.setItem("grammar_access_policy", JSON.stringify(adminPolicyForm));
-    // Synchronize to Supabase Server API with Audit Logging
-    try {
-      const session = await getActiveSession();
-      const headers = { "Content-Type": "application/json" };
-      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
-      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
+    openStepUpDialog({
+      title: "Xác nhận Cập nhật Chính sách Hạn mức (Policy Versioning)",
+      description: `Thay đổi hạn mức sẽ tạo phiên bản Policy v${(adminPolicyForm.policyVersion || 1) + 1} và áp dụng cho toàn hệ thống.`,
+      targetLabel: `Free Quiz: ${adminPolicyForm.freeDailyQuizLimit}/ngày • Bài tập: ${adminPolicyForm.freeExerciseLimit}/chương`,
+      onExecute: async (confirmationText) => {
+        const headers = await getVerifiedAdminHeaders(true);
+        const res = await fetch("/api/admin/policy", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ ...adminPolicyForm, confirmationText }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || `HTTP ${res.status}`);
+        }
+        const savedPol = {
+          policyVersion: json.policy?.policy_version ?? (adminPolicyForm.policyVersion || 1) + 1,
+          freeExerciseLimit: json.policy?.free_exercise_limit ?? adminPolicyForm.freeExerciseLimit,
+          freeDailyQuizLimit: json.policy?.free_daily_quiz_limit ?? adminPolicyForm.freeDailyQuizLimit,
+          diagnosticCooldownDays: json.policy?.diagnostic_cooldown_days ?? adminPolicyForm.diagnosticCooldownDays ?? 7,
+          offlineSyncMaxBatch: json.policy?.offline_sync_max_batch ?? adminPolicyForm.offlineSyncMaxBatch ?? 50,
+        };
+        setAccessPolicy(savedPol);
+        setAdminPolicyForm(savedPol);
+        localStorage.setItem("grammar_access_policy", JSON.stringify(savedPol));
+        fetchServerAuditLogs();
+        alert(`Đã phát hành chính sách Policy v${savedPol.policyVersion} lên Supabase và ghi Audit Log bất biến!`);
+      },
+    });
+  };
 
-      await fetch("/api/admin/policy", {
-        method: "POST",
-        headers,
-        body: JSON.stringify(adminPolicyForm),
-      });
-      await updateSystemPolicy(adminPolicyForm);
-      fetchServerAuditLogs();
-      alert("Đã cập nhật chính sách phân quyền lên Supabase và ghi nhận Audit Log!");
+  const handleExportUsersCsv = async () => {
+    try {
+      const headers = await getVerifiedAdminHeaders(false);
+      const res = await fetch("/api/admin/users?format=csv", { headers });
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `HTTP ${res.status}`);
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `grammar-users-${getTodayDateStr()}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert("Đã lưu chính sách phân quyền cục bộ!");
+      alert(`Không thể xuất CSV: ${err.message}`);
     }
   };
 
@@ -1087,8 +1261,11 @@ export default function Home() {
       const livePolicy = await getSystemPolicy();
       if (livePolicy) {
         const pol = {
+          policyVersion: livePolicy.policy_version ?? 1,
           freeExerciseLimit: livePolicy.free_exercise_limit ?? 10,
           freeDailyQuizLimit: livePolicy.free_daily_quiz_limit ?? 2,
+          diagnosticCooldownDays: livePolicy.diagnostic_cooldown_days ?? 7,
+          offlineSyncMaxBatch: livePolicy.offline_sync_max_batch ?? 50,
         };
         setAccessPolicy(pol);
         setAdminPolicyForm(pol);
@@ -1213,6 +1390,55 @@ export default function Home() {
       setActiveTab("theory");
       setCurrentView("study");
     }
+  };
+
+  const openLessonByCode = (lessonCode) => {
+    if (!lessonCode) return;
+    for (const ch of previewData.chapters || []) {
+      const match = (ch.lessons || []).find((l) => l.code === lessonCode || l.id === lessonCode);
+      if (match) {
+        handleSelectChapter(ch);
+        setSelectedLessonId(match.id);
+        setActiveTab("theory");
+        setCurrentView("study");
+        return;
+      }
+    }
+  };
+
+  const syncQuestionMastery = (question, isCorrect, errorCategory = null) => {
+    if (!question?.id || !currentUser?.id || currentUser.isGuest) return;
+    const headers = {
+      "Content-Type": "application/json",
+      ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
+    };
+    fetch("/api/learning/mastery", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        question_id: question.id,
+        is_correct: Boolean(isCorrect),
+        error_category: errorCategory,
+      }),
+    }).catch(() => {});
+  };
+
+  const computeAndAttachRemedial = (question, userInput, correctAns, chapterTitleFallback = "Ngữ pháp") => {
+    if (!question?.id) return;
+    try {
+      const rec = generateRemedialRecommendation(
+        { ...question, topic_name: question.topic_name || chapterTitleFallback },
+        userInput,
+        correctAns,
+        previewData,
+        userTracker
+      );
+      if (rec) {
+        setActiveRemedialMap((prev) => ({ ...prev, [question.id]: rec }));
+      }
+      syncQuestionMastery(question, false, rec?.detected_error || null);
+    } catch {}
   };
 
   const handleNavigateToDiagnosticLesson = (chapterNumber, lessonId) => {
@@ -1448,6 +1674,8 @@ export default function Home() {
 
     if (isCorrect) {
       recordCorrectQuestion(q.id, false);
+      setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }));
+      syncQuestionMastery(q, true);
     } else {
       addMistakeRecord({
         id: q.id,
@@ -1459,6 +1687,7 @@ export default function Home() {
         pedagogy: q.pedagogy,
         topic_name: selectedChapter.title_vi,
       });
+      computeAndAttachRemedial(q, userInput, answersList[0] || "", selectedChapter?.title_vi);
     }
   };
 
@@ -1554,6 +1783,8 @@ export default function Home() {
 
     if (isCorrect) {
       recordCorrectQuestion(q.id, true);
+      setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }));
+      syncQuestionMastery(q, true);
     } else {
       addMistakeRecord({
         id: q.id,
@@ -1565,6 +1796,7 @@ export default function Home() {
         pedagogy: q.pedagogy,
         topic_name: q.topic_name,
       });
+      computeAndAttachRemedial(q, userAns, q.answers?.[0] || "", q.topic_name);
     }
   };
 
@@ -1584,6 +1816,7 @@ export default function Home() {
       if (isCorrect) {
         correctCount += 1;
         recordCorrectQuestion(q.id, true);
+        syncQuestionMastery(q, true);
       } else {
         newMistakesToAdd.push({
           id: q.id,
@@ -1594,6 +1827,7 @@ export default function Home() {
           explanation: q.explanation,
           topic_name: q.topic_name,
         });
+        computeAndAttachRemedial(q, userAns, q.answers?.[0] || "", q.topic_name);
       }
 
       details.push({
@@ -1619,6 +1853,14 @@ export default function Home() {
         total: activeQuizQuestions.length,
         percentage: Math.round((correctCount / activeQuizQuestions.length) * 100),
       });
+      SyncManager.recordAction(SYNC_EVENT_TYPES.QUIZ_SUBMITTED, {
+        quiz: {
+          topic: selectedQuizTopic,
+          score: correctCount,
+          totalQuestions: activeQuizQuestions.length,
+          incorrectQuestionIds: newMistakesToAdd.map((m) => m.id),
+        },
+      }).catch(() => {});
     }
 
     // Increment quizzes completed today for free limit tracker
@@ -1632,6 +1874,11 @@ export default function Home() {
       const filtered = newMistakesToAdd.filter((m) => !existingIds.has(m.id));
       if (filtered.length > 0) {
         persistMistakes([...savedMistakes, ...filtered]);
+        if (currentUser?.id && !currentUser.isGuest) {
+          filtered.slice(0, 10).forEach((m) => {
+            SyncManager.recordAction(SYNC_EVENT_TYPES.MISTAKE_RECORDED, { mistake: m }).catch(() => {});
+          });
+        }
       }
     }
   };
@@ -1640,17 +1887,29 @@ export default function Home() {
   const addMistakeRecord = (item) => {
     if (!savedMistakes.some((m) => m.id === item.id)) {
       persistMistakes([...savedMistakes, item]);
+      if (currentUser?.id && !currentUser.isGuest) {
+        SyncManager.recordAction(SYNC_EVENT_TYPES.MISTAKE_RECORDED, { mistake: item }).catch(() => {});
+      }
     }
   };
 
   const removeMistakeRecord = (id) => {
     const updated = savedMistakes.filter((m) => m.id !== id);
     persistMistakes(updated);
+    if (currentUser?.id && !currentUser.isGuest) {
+      SyncManager.recordAction(SYNC_EVENT_TYPES.MISTAKE_RESOLVED, { questionId: id }).catch(() => {});
+    }
   };
 
   const clearAllMistakes = () => {
     if (confirm("Xác nhận xóa toàn bộ danh sách câu hỏi trong sổ tay câu sai của bạn?")) {
+      const oldIds = savedMistakes.map((m) => m.id);
       persistMistakes([]);
+      if (currentUser?.id && !currentUser.isGuest) {
+        oldIds.slice(0, 20).forEach((qid) => {
+          SyncManager.recordAction(SYNC_EVENT_TYPES.MISTAKE_RESOLVED, { questionId: qid }).catch(() => {});
+        });
+      }
     }
   };
 
@@ -1669,6 +1928,9 @@ export default function Home() {
 
     if (isCorrect) {
       recordCorrectQuestion(item.id, false);
+      syncQuestionMastery(item, true);
+    } else {
+      syncQuestionMastery(item, false);
     }
   };
 
@@ -2852,86 +3114,13 @@ export default function Home() {
 
           {/* Quick Dictionary & Vocab Tools */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {/* Live Offline Sync Engine Status Pill */}
-            <div
-              onClick={() => SyncManager.triggerSync()}
-              title={
-                syncState.status === "SYNCED"
-                  ? `Đã đồng bộ an toàn với Supabase Cloud lúc ${syncState.lastSyncTime || "vừa xong"}. Bấm để đồng bộ lại.`
-                  : syncState.status === "SYNCING"
-                  ? "Đang gửi dữ liệu mẻ lên Supabase Postgres 17..."
-                  : syncState.status === "PENDING"
-                  ? "Có thay đổi mới đang chờ gửi lên Cloud. Bấm để đồng bộ ngay."
-                  : syncState.status === "OFFLINE"
-                  ? "Đang ở chế độ ngoại tuyến (Offline). Dữ liệu được lưu trong LocalStorage/IndexedDB và sẽ tự động đồng bộ khi có mạng."
-                  : "Đồng bộ thất bại. Bấm để thử lại."
-              }
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                backgroundColor:
-                  syncState.status === "SYNCED"
-                    ? (isLight ? "#ecfdf5" : "#064e3b30")
-                    : syncState.status === "SYNCING"
-                    ? (isLight ? "#eff6ff" : "#1e3a8a30")
-                    : syncState.status === "PENDING"
-                    ? (isLight ? "#fffbeb" : "#78350f30")
-                    : syncState.status === "OFFLINE"
-                    ? (isLight ? "#f1f5f9" : "#27272a")
-                    : (isLight ? "#fef2f2" : "#450a0a30"),
-                border: `1px solid ${
-                  syncState.status === "SYNCED"
-                    ? (isLight ? "#a7f3d0" : "#05966980")
-                    : syncState.status === "SYNCING"
-                    ? (isLight ? "#bfdbfe" : "#3b82f680")
-                    : syncState.status === "PENDING"
-                    ? (isLight ? "#fde68a" : "#f59e0b80")
-                    : syncState.status === "OFFLINE"
-                    ? T.border
-                    : (isLight ? "#fecaca" : "#ef444480")
-                }`,
-                borderRadius: "999px",
-                padding: "0.22rem 0.65rem",
-                fontSize: "0.72rem",
-                fontWeight: "700",
-                color:
-                  syncState.status === "SYNCED"
-                    ? (isLight ? "#047857" : "#34d399")
-                    : syncState.status === "SYNCING"
-                    ? (isLight ? "#1d4ed8" : "#60a5fa")
-                    : syncState.status === "PENDING"
-                    ? (isLight ? "#b45309" : "#fbbf24")
-                    : syncState.status === "OFFLINE"
-                    ? T.textMuted
-                    : (isLight ? "#dc2626" : "#f87171"),
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <span style={{ fontSize: "0.65rem" }}>
-                {syncState.status === "SYNCED"
-                  ? "🟢"
-                  : syncState.status === "SYNCING"
-                  ? "🟡"
-                  : syncState.status === "PENDING"
-                  ? "🟠"
-                  : syncState.status === "OFFLINE"
-                  ? "⚪"
-                  : "🔴"}
-              </span>
-              <span>
-                {syncState.status === "SYNCED"
-                  ? "Đã đồng bộ"
-                  : syncState.status === "SYNCING"
-                  ? "Đang đồng bộ..."
-                  : syncState.status === "PENDING"
-                  ? "Chờ đồng bộ"
-                  : syncState.status === "OFFLINE"
-                  ? "Offline"
-                  : "Thử lại"}
-              </span>
-            </div>
+            {/* Live Offline-First Multi-Device Sync Indicator (Milestone 2.3) */}
+            <SyncStatusIndicator
+              syncState={syncState}
+              isLight={isLight}
+              onTriggerSync={() => SyncManager.triggerSync()}
+              onPullRemote={() => SyncManager.pullRemoteChanges()}
+            />
 
             {/* Quick Word Search Box */}
             <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
@@ -3371,9 +3560,11 @@ export default function Home() {
                 }}
               >
                 {[
+                  { id: "overview", label: "📊 Tổng quan Vận hành" },
                   { id: "users", label: `👥 Quản lý Người dùng (${filteredAdminUsers.length})` },
-                  { id: "policy", label: "⚙️ Cấu hình Hạn mức Truy cập" },
-                  { id: "audit", label: `🛡️ Lịch sử Kiểm toán Server (${serverAuditLogs.length})` },
+                  { id: "policy", label: `⚙️ Chính sách Truy cập (v${adminPolicyForm.policyVersion || 1})` },
+                  { id: "pedagogy", label: "🎓 Kiểm duyệt Sư phạm" },
+                  { id: "audit", label: `🛡️ Kiểm toán Server (${serverAuditLogs.length})` },
                   { id: "activity", label: `📜 Hoạt động Realtime (${adminActivityLogs.length})` },
                 ].map((tab) => {
                   const isActive = adminActiveTab === tab.id;
@@ -3402,6 +3593,17 @@ export default function Home() {
                   );
                 })}
               </div>
+
+              {/* ========================================================= */}
+              {/* TAB 0: REAL-TIME OPERATIONAL HEALTH OVERVIEW              */}
+              {/* ========================================================= */}
+              {adminActiveTab === "overview" && (
+                <AdminOverviewPanel
+                  authHeaders={adminAuthHeaders}
+                  isLight={isLight}
+                  onNavigateTab={setAdminActiveTab}
+                />
+              )}
 
               {/* ========================================================= */}
               {/* TAB 1: USERS MANAGEMENT & ADVANCED FILTERING              */}
@@ -3514,6 +3716,42 @@ export default function Home() {
                             {s === "ALL" ? "Tất cả" : s === "ACTIVE" ? "✓ Hoạt động" : "✕ Đã khóa"}
                           </button>
                         ))}
+                      </div>
+
+                      {/* Streak Filter & CSV UTF-8 BOM Export */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                        <button
+                          type="button"
+                          onClick={() => setAdminStreakFilter((prev) => (prev === "STREAK_7" ? "ALL" : "STREAK_7"))}
+                          style={{
+                            padding: "0.25rem 0.6rem",
+                            fontSize: "0.72rem",
+                            fontWeight: "700",
+                            borderRadius: "4px",
+                            backgroundColor: adminStreakFilter === "STREAK_7" ? T.warningBg : T.bgElevated,
+                            color: adminStreakFilter === "STREAK_7" ? T.warning : T.textMuted,
+                            border: `1px solid ${adminStreakFilter === "STREAK_7" ? T.warningBorder : T.border}`,
+                            cursor: "pointer",
+                          }}
+                        >
+                          🔥 Streak ≥ 7 ngày
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleExportUsersCsv}
+                          style={{
+                            padding: "0.25rem 0.65rem",
+                            fontSize: "0.72rem",
+                            fontWeight: "700",
+                            borderRadius: "4px",
+                            backgroundColor: T.accentBg,
+                            color: T.accent,
+                            border: `1px solid ${T.accentBorder}`,
+                            cursor: "pointer",
+                          }}
+                        >
+                          📥 Xuất CSV (UTF-8)
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -3732,6 +3970,36 @@ export default function Home() {
                       <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
                     </div>
 
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.825rem", color: T.textSecondary, fontWeight: "600", marginBottom: "0.35rem" }}>
+                        Cooldown Diagnostic Test (Ngày):
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="30"
+                        value={adminPolicyForm.diagnosticCooldownDays ?? 7}
+                        onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, diagnosticCooldownDays: parseInt(e.target.value) || 0 })}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
+                      />
+                      <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 7 ngày / lần</div>
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.825rem", color: T.textSecondary, fontWeight: "600", marginBottom: "0.35rem" }}>
+                        Giới hạn Batch Sync Offline (Items):
+                      </label>
+                      <input
+                        type="number"
+                        min="10"
+                        max="200"
+                        value={adminPolicyForm.offlineSyncMaxBatch ?? 50}
+                        onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, offlineSyncMaxBatch: parseInt(e.target.value) || 50 })}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
+                      />
+                      <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 50 sự kiện/lần</div>
+                    </div>
+
                     <button
                       type="submit"
                       style={{
@@ -3747,10 +4015,17 @@ export default function Home() {
                         boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
                       }}
                     >
-                      Lưu cấu hình hạn mức
+                      🛡️ Lưu Policy v{(adminPolicyForm.policyVersion || 1) + 1} (Step-Up)
                     </button>
                   </form>
                 </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 2.5: PEDAGOGICAL QUALITY & EXPLANATION REVIEW         */}
+              {/* ========================================================= */}
+              {adminActiveTab === "pedagogy" && (
+                <PedagogicalQualityDashboard authHeaders={adminAuthHeaders} isLight={isLight} />
               )}
 
               {/* ========================================================= */}
@@ -3768,11 +4043,26 @@ export default function Home() {
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
                     <div>
-                      <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                        🛡️ Nhật ký Kiểm toán Quản trị Server ({filteredAuditLogs.length})
-                      </h3>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", flexWrap: "wrap" }}>
+                        <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
+                          🛡️ Nhật ký Kiểm toán Quản trị Server ({filteredAuditLogs.length})
+                        </h3>
+                        <span
+                          style={{
+                            fontSize: "0.7rem",
+                            fontWeight: "800",
+                            padding: "0.18rem 0.55rem",
+                            borderRadius: "999px",
+                            backgroundColor: T.successBg,
+                            border: `1px solid ${T.successBorder}`,
+                            color: T.success,
+                          }}
+                        >
+                          🔒 Trigger Bất biến DB Active (Append-Only)
+                        </span>
+                      </div>
                       <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
-                        Ghi nhận toàn bộ thao tác thay đổi vai trò, khóa tài khoản và điều chỉnh hạn mức được bảo vệ bởi Server-side Service Role.
+                        Ghi nhận toàn bộ thao tác thay đổi vai trò, khóa tài khoản, sửa lời giải 5-field và điều chỉnh hạn mức được bảo vệ bởi DB Trigger chống UPDATE/DELETE.
                       </p>
                     </div>
 
@@ -3795,6 +4085,8 @@ export default function Home() {
                         <option value="BAN_USER">Khóa tài khoản (Ban)</option>
                         <option value="UNBAN_USER">Mở khóa tài khoản (Unban)</option>
                         <option value="UPDATE_SYSTEM_POLICY">Thay đổi hạn mức (Policy)</option>
+                        <option value="EDIT_EXPLANATION">Sửa lời giải 5-Field (Pedagogy)</option>
+                        <option value="BATCH_INGEST_EXPLANATIONS">Đồng bộ hàng loạt Lời giải</option>
                       </select>
 
                       <button
@@ -4005,6 +4297,24 @@ export default function Home() {
           </div>
         )}
 
+        {/* Step-Up High-Risk Admin Action Modal (Milestone 2.4.9) */}
+        <StepUpConfirmModal
+          isOpen={stepUpModal.open}
+          title={stepUpModal.title}
+          description={stepUpModal.description}
+          targetLabel={stepUpModal.targetLabel}
+          isSubmitting={stepUpSubmitting}
+          errorMsg={stepUpError}
+          onConfirm={handleConfirmStepUp}
+          onCancel={() => {
+            if (!stepUpSubmitting) {
+              setStepUpModal({ open: false, title: "", description: "", targetLabel: "", onExecute: null });
+              setStepUpError("");
+            }
+          }}
+          isLight={isLight}
+        />
+
         {/* ============================================================== */}
         {/* VIEW 5: DIAGNOSTIC & PERSONALIZED LEARNING ROADMAP (MILESTONE 2.8) */}
         {/* ============================================================== */}
@@ -4208,6 +4518,16 @@ export default function Home() {
                   <span>Khám phá trình độ ngay</span>
                   <span>➔</span>
                 </button>
+              </div>
+
+              {/* MILESTONE 2.5: SPACED REPETITION & KNOWLEDGE GRAPH MASTERY PANEL */}
+              <div style={{ marginBottom: "1.75rem" }}>
+                <SpacedRepetitionPanel
+                  userId={!currentUser?.isGuest ? currentUser?.id : null}
+                  authToken={activeAuthToken}
+                  isLight={isLight}
+                  onOpenLessonByCode={openLessonByCode}
+                />
               </div>
 
               {/* SMART DAILY RECOMMENDATION CARD */}
@@ -5747,7 +6067,7 @@ export default function Home() {
                                       </button>
                                     </div>
 
-                                    {/* Instant Result Message */}
+                                    {/* Instant Result Message + Adaptive Remedial Recommendation */}
                                     {res?.checked && (
                                       <div
                                         style={{
@@ -5759,6 +6079,15 @@ export default function Home() {
                                       >
                                         {res.feedback}
                                       </div>
+                                    )}
+
+                                    {res?.checked && !res.isCorrect && activeRemedialMap[q.id] && (
+                                      <RemedialRecommendationCard
+                                        recommendation={activeRemedialMap[q.id]}
+                                        onAccept={handleAcceptRemedial}
+                                        onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }))}
+                                        isLight={isLight}
+                                      />
                                     )}
 
                                     {/* Correct Answer Box */}
@@ -6175,7 +6504,7 @@ export default function Home() {
                           <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                             {q.answers.join("  /  ")}
                           </div>
-                          {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
+                          {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
                         </div>
                       )}
 
@@ -6196,7 +6525,15 @@ export default function Home() {
                           <div style={{ fontSize: "0.825rem", color: "#d4d4d8", marginTop: "0.25rem" }}>
                             Đáp án chuẩn: <strong style={{ color: T.text }}>{q.answers.join(" / ")}</strong>
                           </div>
-                          {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
+                          {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
+                          {!detail.isCorrect && activeRemedialMap[q.id] && (
+                            <RemedialRecommendationCard
+                              recommendation={activeRemedialMap[q.id]}
+                              onAccept={handleAcceptRemedial}
+                              onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }))}
+                              isLight={isLight}
+                            />
+                          )}
                         </div>
                       )}
                     </div>
