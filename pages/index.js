@@ -99,7 +99,86 @@ export default function Home() {
   const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserRole, setNewUserRole] = useState("FREE");
 
-    // --- Dictionary & Quick Word Lookup State ---
+    // --- Theme State (Dark vs Light / White Mode) ---
+  const [themeMode, setThemeMode] = useState("dark");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("grammar_theme");
+      if (saved === "light" || saved === "dark") {
+        setThemeMode(saved);
+      }
+    } catch (e) {}
+  }, []);
+
+  const toggleTheme = () => {
+    setThemeMode((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem("grammar_theme", next);
+      } catch (e) {}
+      return next;
+    });
+  };
+
+  const isLight = themeMode === "light";
+
+  const T = useMemo(() => {
+    if (isLight) {
+      return {
+        isLight: true,
+        bg: "#f8fafc",
+        bgSub: "#ffffff",
+        bgElevated: "#f1f5f9",
+        bgActive: "#e2e8f0",
+        card: "#ffffff",
+        cardSubtle: "#f8fafc",
+        cardBorder: "#e2e8f0",
+        border: "#e2e8f0",
+        borderSubtle: "#edf2f7",
+        borderStrong: "#cbd5e1",
+        text: "#0f172a",
+        textSecondary: "#475569",
+        textMuted: "#64748b",
+        textHeading: "#0f172a",
+        hoverBg: "#f1f5f9",
+        inputBg: "#ffffff",
+        formulaBg: "#f8fafc",
+        formulaBorder: "#cbd5e1",
+        shadow: "0 2px 10px rgba(0, 0, 0, 0.04)",
+        shadowElevated: "0 10px 25px rgba(0, 0, 0, 0.08)",
+        codeBg: "#f1f5f9",
+        calloutBg: "#f8fafc",
+      };
+    }
+    return {
+      isLight: false,
+      bg: "#09090b",
+      bgSub: "#121215",
+      bgElevated: "#18181b",
+      bgActive: "#27272a",
+      card: "#111115",
+      cardSubtle: "#15151b",
+      cardBorder: "#23232a",
+      border: "#27272a",
+      borderSubtle: "#1f1f26",
+      borderStrong: "#3f3f46",
+      text: "#fafafa",
+      textSecondary: "#a1a1aa",
+      textMuted: "#71717a",
+      textHeading: "#f8fafc",
+      hoverBg: "#18181f",
+      inputBg: "#09090b",
+      formulaBg: "#09090d",
+      formulaBorder: "#272732",
+      shadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+      shadowElevated: "0 12px 30px rgba(0, 0, 0, 0.4)",
+      codeBg: "#09090d",
+      calloutBg: "#121215",
+    };
+  }, [isLight]);
+
+  // --- Dictionary & Quick Word Lookup State ---
   const [dictEnabled, setDictEnabled] = useState(true);
   const [dictSearchInput, setDictSearchInput] = useState("");
   const [dictPopup, setDictPopup] = useState({
@@ -1121,8 +1200,8 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           gap: "0.55rem",
-          backgroundColor: "#0d1117",
-          border: "1px solid #1e293b",
+          backgroundColor: isLight ? "#f8fafc" : "#0d1117",
+          border: `1px solid ${isLight ? "#e2e8f0" : "#1e293b"}`,
           borderRadius: "8px",
           padding: "0.85rem 1rem",
         }}
@@ -1133,9 +1212,9 @@ export default function Home() {
               style={{
                 fontSize: "0.68rem",
                 fontFamily: "Geist Mono",
-                backgroundColor: "#f59e0b20",
-                color: "#fbbf24",
-                border: "1px solid #f59e0b50",
+                backgroundColor: isLight ? "#fffbeb" : "#f59e0b20",
+                color: isLight ? "#b45309" : "#fbbf24",
+                border: `1px solid ${isLight ? "#fde68a" : "#f59e0b50"}`,
                 padding: "0.15rem 0.45rem",
                 borderRadius: "4px",
                 fontWeight: "700",
@@ -1146,7 +1225,7 @@ export default function Home() {
             >
               🔍 Dấu hiệu & Ngữ cảnh
             </span>
-            <span style={{ fontSize: "0.835rem", color: "#fef3c7", lineHeight: "1.5" }}>{signal}</span>
+            <span style={{ fontSize: "0.835rem", color: isLight ? "#92400e" : "#fef3c7", lineHeight: "1.5" }}>{signal}</span>
           </div>
         )}
         {rule && (
@@ -1155,9 +1234,9 @@ export default function Home() {
               style={{
                 fontSize: "0.68rem",
                 fontFamily: "Geist Mono",
-                backgroundColor: "#3b82f620",
-                color: "#60a5fa",
-                border: "1px solid #3b82f650",
+                backgroundColor: isLight ? "#eff6ff" : "#3b82f620",
+                color: isLight ? "#1d4ed8" : "#60a5fa",
+                border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f650"}`,
                 padding: "0.15rem 0.45rem",
                 borderRadius: "4px",
                 fontWeight: "700",
@@ -1168,7 +1247,7 @@ export default function Home() {
             >
               📐 Quy tắc áp dụng
             </span>
-            <span style={{ fontSize: "0.835rem", color: "#dbeafe", lineHeight: "1.5" }}>{rule}</span>
+            <span style={{ fontSize: "0.835rem", color: isLight ? "#1e40af" : "#dbeafe", lineHeight: "1.5" }}>{rule}</span>
           </div>
         )}
         {translation && (
@@ -1177,9 +1256,9 @@ export default function Home() {
               style={{
                 fontSize: "0.68rem",
                 fontFamily: "Geist Mono",
-                backgroundColor: "#10b98120",
-                color: "#34d399",
-                border: "1px solid #10b98150",
+                backgroundColor: isLight ? "#f0fdf4" : "#10b98120",
+                color: isLight ? "#059669" : "#34d399",
+                border: `1px solid ${isLight ? "#bbf7d0" : "#10b98150"}`,
                 padding: "0.15rem 0.45rem",
                 borderRadius: "4px",
                 fontWeight: "700",
@@ -1190,7 +1269,7 @@ export default function Home() {
             >
               🇻🇳 Dịch câu hoàn chỉnh
             </span>
-            <span style={{ fontSize: "0.835rem", color: "#d1fae5", fontStyle: "italic", lineHeight: "1.5" }}>"{translation}"</span>
+            <span style={{ fontSize: "0.835rem", color: isLight ? "#065f46" : "#d1fae5", fontStyle: "italic", lineHeight: "1.5" }}>"{translation}"</span>
           </div>
         )}
       </div>
@@ -1605,11 +1684,20 @@ export default function Home() {
           padding: 0;
         }
         html, body {
-          background-color: #09090b;
-          color: #fafafa;
+          background-color: ${T.bg};
+          color: ${T.text};
           font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+          transition: background-color 0.15s ease, color 0.15s ease;
+        }
+        .theme-light input, .theme-light select, .theme-light textarea {
+          background-color: #ffffff !important;
+          color: #0f172a !important;
+          border-color: #cbd5e1 !important;
+        }
+        .theme-light input::placeholder, .theme-light textarea::placeholder {
+          color: #94a3b8 !important;
         }
         input, button, select, textarea {
           font-family: inherit;
@@ -2420,14 +2508,14 @@ export default function Home() {
       )}
 
       {/* Main Content Layout */}
-      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
+      <div className={isLight ? "theme-light" : "theme-dark"} style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: T.bg, color: T.text, transition: "background-color 0.15s ease, color 0.15s ease" }}>
         
         {/* Top Navbar */}
         <header
           style={{
             height: "56px",
-            borderBottom: "1px solid #27272a",
-            backgroundColor: "#09090b",
+            borderBottom: `1px solid ${T.border}`,
+            backgroundColor: T.bg,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -2668,6 +2756,29 @@ export default function Home() {
               }}
             >
               <span>{dictEnabled ? "⚡ Tra từ: BẬT" : "💤 Tra từ: TẮT"}</span>
+            </button>
+
+            {/* White / Dark Mode Switcher */}
+            <button
+              onClick={toggleTheme}
+              title={isLight ? "Chuyển sang giao diện Tối (Dark Mode)" : "Chuyển sang giao diện Sáng (White Mode)"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                backgroundColor: isLight ? "#ffffff" : "#18181b",
+                border: `1px solid ${isLight ? "#cbd5e1" : "#27272a"}`,
+                boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                borderRadius: "999px",
+                padding: "0.25rem 0.75rem",
+                fontSize: "0.75rem",
+                fontWeight: "700",
+                color: isLight ? "#0f172a" : "#f8fafc",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span>{isLight ? "☀️ Sáng" : "🌙 Tối"}</span>
             </button>
 
             {/* Saved Vocab Notebook Pill */}
@@ -3557,8 +3668,8 @@ export default function Home() {
               data-no-dict="true"
               style={{
                 width: "320px",
-                borderRight: "1px solid #27272a",
-                backgroundColor: "#0c0c0e",
+                borderRight: `1px solid ${T.border}`,
+                backgroundColor: T.bgSub,
                 display: "flex",
                 flexDirection: "column",
                 flexShrink: 0,
@@ -3636,8 +3747,8 @@ export default function Home() {
                           padding: "0.5rem 0.65rem",
                           borderRadius: "6px",
                           cursor: "pointer",
-                          backgroundColor: isSelected ? "#18181b" : "transparent",
-                          border: isSelected ? "1px solid #27272a" : "1px solid transparent",
+                          backgroundColor: isSelected ? (isLight ? "#f1f5f9" : "#18181b") : "transparent",
+                          border: isSelected ? `1px solid ${T.border}` : "1px solid transparent",
                           transition: "all 0.12s ease",
                           gap: "0.65rem",
                         }}
@@ -3658,7 +3769,7 @@ export default function Home() {
                         <span
                           style={{
                             fontSize: "0.835rem",
-                            color: isSelected ? "#fafafa" : "#d4d4d8",
+                            color: isSelected ? T.text : T.textSecondary,
                             fontWeight: isSelected ? "600" : "400",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
@@ -3699,8 +3810,8 @@ export default function Home() {
                                   padding: "0.35rem 0.5rem",
                                   borderRadius: "4px",
                                   fontSize: "0.78rem",
-                                  color: isLessonActive ? "#38bdf8" : isLessonCompleted ? "#34d399" : "#a1a1aa",
-                                  backgroundColor: isLessonActive ? "#0f172a" : "transparent",
+                                  color: isLessonActive ? (isLight ? "#0284c7" : "#38bdf8") : isLessonCompleted ? "#10b981" : T.textMuted,
+                                  backgroundColor: isLessonActive ? (isLight ? "#eff6ff" : "#0f172a") : "transparent",
                                   cursor: "pointer",
                                   fontWeight: isLessonActive ? "600" : "400",
                                   display: "flex",
@@ -3738,14 +3849,14 @@ export default function Home() {
                   {selectedLesson && (
                     <>
                       <span>/</span>
-                      <span style={{ color: "#fafafa", fontWeight: "500" }}>{selectedLesson.title_vi}</span>
+                      <span style={{ color: T.text, fontWeight: "600" }}>{selectedLesson.title_vi}</span>
                     </>
                   )}
                 </div>
 
                 <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
-                    <h1 style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: "#fafafa" }}>
+                    <h1 style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: T.text }}>
                       {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập thực hành: ${selectedChapter?.title_vi}`}
                     </h1>
                     <div style={{ fontSize: "0.875rem", color: "#71717a", marginTop: "0.2rem" }}>
@@ -3754,7 +3865,7 @@ export default function Home() {
                   </div>
 
                   {/* Tab Switcher: Theory vs Exercises */}
-                  <div style={{ display: "flex", backgroundColor: "#18181b", padding: "3px", borderRadius: "6px", border: "1px solid #27272a" }}>
+                  <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", border: `1px solid ${T.border}` }}>
                     <button
                       onClick={() => setActiveTab("theory")}
                       style={{
@@ -3763,8 +3874,8 @@ export default function Home() {
                         border: "none",
                         fontSize: "0.8rem",
                         fontWeight: activeTab === "theory" ? "600" : "500",
-                        color: activeTab === "theory" ? "#fafafa" : "#71717a",
-                        backgroundColor: activeTab === "theory" ? "#27272a" : "transparent",
+                        color: activeTab === "theory" ? T.text : T.textMuted,
+                        backgroundColor: activeTab === "theory" ? (isLight ? "#ffffff" : "#27272a") : "transparent", boxShadow: activeTab === "theory" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                         cursor: "pointer",
                       }}
                     >
@@ -3778,8 +3889,8 @@ export default function Home() {
                         border: "none",
                         fontSize: "0.8rem",
                         fontWeight: activeTab === "exercises" ? "600" : "500",
-                        color: activeTab === "exercises" ? "#fafafa" : "#71717a",
-                        backgroundColor: activeTab === "exercises" ? "#27272a" : "transparent",
+                        color: activeTab === "exercises" ? T.text : T.textMuted,
+                        backgroundColor: activeTab === "exercises" ? (isLight ? "#ffffff" : "#27272a") : "transparent", boxShadow: activeTab === "exercises" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                         cursor: "pointer",
                       }}
                     >
@@ -3902,11 +4013,11 @@ export default function Home() {
                               key={secIdx}
                               id={`sec-${secIdx}`}
                               style={{
-                                backgroundColor: "#111115",
-                                border: "1px solid #23232a",
+                                backgroundColor: T.card,
+                                border: `1px solid ${T.cardBorder}`,
                                 borderRadius: "12px",
                                 padding: "1.5rem 1.75rem",
-                                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                                boxShadow: T.shadow,
                               }}
                             >
                               {/* Section Header with Number Badge & Category Pill */}
@@ -3927,7 +4038,7 @@ export default function Home() {
                                   >
                                     {String(secIdx + 1).padStart(2, "0")}
                                   </span>
-                                  <h2 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#f8fafc", margin: 0, letterSpacing: "-0.01em" }}>
+                                  <h2 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.textHeading, margin: 0, letterSpacing: "-0.01em" }}>
                                     {sec.title}
                                   </h2>
                                 </div>
@@ -4010,8 +4121,8 @@ export default function Home() {
                                     <div
                                       key={rIdx}
                                       style={{
-                                        backgroundColor: "#15151b",
-                                        border: "1px solid #282834",
+                                        backgroundColor: T.cardSubtle,
+                                        border: `1px solid ${T.border}`,
                                         borderRadius: "10px",
                                         padding: "1rem 1.25rem",
                                       }}
@@ -4036,14 +4147,14 @@ export default function Home() {
                                         >
                                           {rule.num || String(rIdx + 1)}
                                         </span>
-                                        <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                                        <h3 style={{ fontSize: "1rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
                                           {rule.title}
                                         </h3>
                                       </div>
 
                                       {/* Rule Content */}
                                       {rule.content && (
-                                        <p style={{ fontSize: "0.92rem", color: "#cbd5e1", lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
+                                        <p style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
                                           {rule.content}
                                         </p>
                                       )}
@@ -4055,18 +4166,19 @@ export default function Home() {
                                             <div
                                               key={exIdx}
                                               style={{
-                                                backgroundColor: "#0d0d12",
-                                                border: "1px solid #1f1f28",
+                                                backgroundColor: isLight ? "#ffffff" : "#0d0d12",
+                                                border: `1px solid ${isLight ? "#e2e8f0" : "#1f1f28"}`,
                                                 borderRadius: "6px",
                                                 padding: "0.55rem 0.85rem",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "space-between",
                                                 gap: "0.75rem",
+                                                boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
                                               }}
                                             >
                                               <div>
-                                                <div style={{ fontSize: "0.92rem", fontWeight: "600", color: "#f1f5f9" }}>
+                                                <div style={{ fontSize: "0.92rem", fontWeight: "600", color: T.text }}>
                                                   {ex.en}
                                                 </div>
                                                 {ex.vi && (
@@ -4191,14 +4303,15 @@ export default function Home() {
                                         display: "flex",
                                         alignItems: "flex-start",
                                         gap: "0.7rem",
-                                        backgroundColor: "#14141a",
+                                        backgroundColor: T.cardSubtle,
                                         padding: "0.7rem 0.95rem",
                                         borderRadius: "8px",
-                                        border: "1px solid #23232c",
+                                        border: `1px solid ${T.border}`,
+                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
                                       }}
                                     >
                                       <span style={{ color: "#38bdf8", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
-                                      <div style={{ fontSize: "0.9rem", color: "#e2e8f0", lineHeight: "1.65" }}>
+                                      <div style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65" }}>
                                         {b}
                                       </div>
                                     </div>
@@ -4847,7 +4960,7 @@ export default function Home() {
                     <div
                       key={q.id || idx}
                       style={{
-                        backgroundColor: "#121215",
+                        backgroundColor: T.card,
                         border: quizSubmitted
                           ? detail?.isCorrect
                             ? "1px solid #10b981"
@@ -4856,9 +4969,10 @@ export default function Home() {
                           ? singleCheck.isCorrect
                             ? "1px solid #10b981"
                             : "1px solid #f43f5e"
-                          : "1px solid #27272a",
+                          : `1px solid ${T.border}`,
                         borderRadius: "8px",
                         padding: "1.25rem 1.5rem",
+                        boxShadow: T.shadow,
                       }}
                     >
                       {/* Question meta header */}
@@ -4905,7 +5019,7 @@ export default function Home() {
                       )}
 
                       {/* Stem */}
-                      <div style={{ fontSize: "0.975rem", color: "#fafafa", lineHeight: "1.6", marginBottom: "0.75rem" }}>
+                      <div style={{ fontSize: "0.975rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem" }}>
                         {q.stem}
                       </div>
 
@@ -5197,14 +5311,15 @@ export default function Home() {
                       <div
                         key={item.id || idx}
                         style={{
-                          backgroundColor: "#121215",
+                          backgroundColor: T.card,
                           border: res?.checked
                             ? res.isCorrect
                               ? "1px solid #10b981"
                               : "1px solid #f43f5e"
-                            : "1px solid #27272a",
+                            : `1px solid ${T.border}`,
                           borderRadius: "8px",
                           padding: "1.25rem 1.5rem",
+                          boxShadow: T.shadow,
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>

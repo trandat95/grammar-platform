@@ -201,7 +201,22 @@ erDiagram
   - 🇻🇳 **Dịch nghĩa câu hoàn chỉnh:** Dịch trọn vẹn ngữ nghĩa câu bài tập sang tiếng Việt để người học thấu hiểu bản chất.
 - [x] Tích hợp `renderPedagogicalExplanation` vào giao diện Study View (Tab Bài tập thực hành), Quiz View (Xem đáp án & Chấm điểm nộp bài) và Mistakes View (Sổ tay câu sai).
 
-#### 🔹 Milestone 2.6: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
+#### 🔹 Milestone 2.6: Hệ thống Giao diện White Mode / Light Theme & Tối ưu Trải nghiệm Đọc (White Mode Enhancement)
+- [x] Thiết lập kiến trúc Theme Palette linh hoạt (`themeMode: "dark" | "light"`), tự động ghi nhớ trạng thái người dùng trong `localStorage.getItem("grammar_theme")`.
+- [x] Thiết kế giao diện White Mode (Light Theme) hiện đại, độ tương phản cao, bảo vệ mắt khi học ban ngày:
+  - Nền trang sáng chuẩn Apple/Stripe (`#f8fafc`), bề mặt thẻ Card trắng tinh khôi (`#ffffff`), viền tinh tế (`#e2e8f0`).
+  - Phối màu chữ phân cấp rõ ràng: Tiêu đề & nội dung chính `#0f172a`, mô tả phụ `#475569`, ghi chú `#64748b`.
+  - Khung công thức cú pháp, bảng quy tắc ngữ pháp và ví dụ song ngữ hiển thị sắc nét trên nền sáng.
+  - Thẻ giải thích 3 tầng (Dấu hiệu, Quy tắc, Dịch nghĩa) được tối ưu màu sắc tương phản cao cho cả hai chế độ Sáng / Tối.
+- [x] Bổ sung nút chuyển đổi 1-click `☀️ Sáng / 🌙 Tối` trên Header Navbar, chuyển đổi mượt mà không cần reload trang.
+- [x] Đồng bộ White Mode trên toàn bộ các phân hệ: Header, Sidebar 12 Chuyên đề, Study View (Lý thuyết & Bài tập), Quiz Engine, Sổ tay câu sai, Sổ từ vựng, Popup Tra từ điển nhanh và Admin Dashboard.
+
+#### 🔹 Milestone 2.7: Mở rộng & Hoàn thiện Học liệu Sư phạm 12 Chuyên đề (Deep-dive Content Expansion)
+- [ ] Tiếp tục đối soát và làm giàu nội dung chi tiết cho các chuyên đề nâng cao: Câu điều kiện hỗn hợp, Đảo ngữ với phó từ phủ định, Giới từ chỉ nơi chốn/thời gian phức hợp, Danh động từ & Động từ nguyên mẫu.
+- [ ] Bổ sung sơ đồ tóm tắt ngữ pháp trực quan (Cheat-sheet syntax summary) ở đầu mỗi bài học.
+- [ ] Mở rộng tính năng xuất bản bài học ra PDF/In ấn định dạng chuẩn giáo án cho giáo viên và học sinh.
+
+#### 🔹 Milestone 2.8: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
 - [ ] Tải dữ liệu từ `data/normalized/full_import_data.json` lên các bảng `lessons`, `grammar_rules`, `questions`, `question_answers` trên Supabase để hỗ trợ Full-Text Search PostgreSQL (`tsvector`).
 
 ---
