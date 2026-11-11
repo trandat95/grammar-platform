@@ -1,8 +1,8 @@
-import { supabaseServer } from "../../lib/supabase/server";
-import { supabase } from "../../lib/supabase/client";
-import { generateRemedialRecommendation } from "../../lib/explanation/remedial-engine";
-import quizData from "../../data/ui/quiz_bank.json";
-import previewData from "../../data/ui/preview_data.json";
+import { supabaseServer } from "../../../lib/supabase/server";
+import { supabase } from "../../../lib/supabase/client";
+import { generateRemedialRecommendation } from "../../../lib/explanation/remedial-engine";
+import quizData from "../../../data/ui/quiz_bank.json";
+import previewData from "../../../data/ui/preview_data.json";
 
 export default async function handler(req, res) {
   const dbClient = supabaseServer || supabase;
