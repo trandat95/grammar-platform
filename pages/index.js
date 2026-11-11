@@ -62,6 +62,29 @@ export default function Home() {
   const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserRole, setNewUserRole] = useState("FREE");
 
+    // --- Dictionary & Quick Word Lookup State ---
+  const [dictEnabled, setDictEnabled] = useState(true);
+  const [dictSearchInput, setDictSearchInput] = useState("");
+  const [dictPopup, setDictPopup] = useState({
+    open: false,
+    loading: false,
+    word: "",
+    phonetic: "",
+    vietnamese: "",
+    partOfSpeech: "",
+    detailedMeanings: [],
+    audioUrl: null,
+    englishDefinition: "",
+    examples: [],
+    x: 100,
+    y: 100,
+    isPlayingAudio: false,
+    error: null,
+  });
+  const [savedVocab, setSavedVocab] = useState([]);
+  const [vocabModalOpen, setVocabModalOpen] = useState(false);
+  const [vocabSearchFilter, setVocabSearchFilter] = useState("");
+
   // Study View State
   const [selectedChapterId, setSelectedChapterId] = useState(previewData.chapters[0]?.id || "");
   const selectedChapter = useMemo(
@@ -277,6 +300,257 @@ export default function Home() {
       console.error("Failed to save users DB", e);
     }
   };
+
+    // --- Dictionary & Vocabulary Handlers ---
+  const persistSavedVocab = (newVocab) => {
+    setSavedVocab(newVocab);
+    if (!currentUser?.id) return;
+    try {
+      localStorage.setItem(`grammar_vocab_${currentUser.id}`, JSON.stringify(newVocab));
+    } catch (e) {
+      console.error("Failed to save vocabulary", e);
+    }
+  };
+
+  const toggleSaveWord = (wordData) => {
+    if (!wordData || !wordData.word) return;
+    const clean = wordData.word.trim().toLowerCase();
+    const exists = savedVocab.some((v) => v.word.toLowerCase() === clean);
+    let next;
+    if (exists) {
+      next = savedVocab.filter((v) => v.word.toLowerCase() !== clean);
+    } else {
+      next = [
+        {
+          id: `voc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+          word: wordData.word,
+          phonetic: wordData.phonetic || `/${clean}/`,
+          vietnamese: wordData.vietnamese || clean,
+          partOfSpeech: wordData.partOfSpeech || "word",
+          audioUrl: wordData.audioUrl || null,
+          addedAt: new Date().toLocaleDateString("vi-VN"),
+        },
+        ...savedVocab,
+      ];
+    }
+    persistSavedVocab(next);
+  };
+
+  const speakSpeechSynthesis = (word, onDone) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(word);
+        utter.lang = "en-US";
+        utter.rate = 0.88;
+        utter.pitch = 1.0;
+        utter.onend = () => onDone && onDone();
+        utter.onerror = () => onDone && onDone();
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        onDone && onDone();
+      }
+    } else {
+      onDone && onDone();
+    }
+  };
+
+  const playWordAudio = (word, audioUrl) => {
+    setDictPopup((prev) => ({ ...prev, isPlayingAudio: true }));
+
+    const finish = () => {
+      setDictPopup((prev) => ({ ...prev, isPlayingAudio: false }));
+    };
+
+    if (audioUrl) {
+      try {
+        const audio = new Audio(audioUrl);
+        audio.onended = finish;
+        audio.onerror = () => speakSpeechSynthesis(word, finish);
+        audio.play().catch(() => speakSpeechSynthesis(word, finish));
+        return;
+      } catch (e) {
+        // fallback
+      }
+    }
+
+    speakSpeechSynthesis(word, finish);
+  };
+
+  const triggerLookup = async (rawWord, clientX, clientY) => {
+    const clean = rawWord.trim().replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "").toLowerCase();
+    if (!clean || clean.length < 2) return;
+
+    // Calculate popup coordinate to stay nicely inside screen
+    const popupWidth = 330;
+    const popupHeight = 280;
+    let x = typeof clientX === "number" ? clientX - popupWidth / 2 : (typeof window !== "undefined" ? window.innerWidth / 2 - popupWidth / 2 : 100);
+    let y = typeof clientY === "number" ? clientY + 16 : 120;
+
+    if (typeof window !== "undefined") {
+      if (x < 12) x = 12;
+      if (x + popupWidth > window.innerWidth - 12) {
+        x = window.innerWidth - popupWidth - 12;
+      }
+      if (y + popupHeight > window.innerHeight - 20) {
+        y = Math.max(12, (clientY || 200) - popupHeight - 16);
+      }
+    }
+
+    setDictPopup({
+      open: true,
+      loading: true,
+      word: clean,
+      phonetic: "",
+      vietnamese: "",
+      partOfSpeech: "",
+      detailedMeanings: [],
+      audioUrl: null,
+      englishDefinition: "",
+      examples: [],
+      x,
+      y,
+      isPlayingAudio: false,
+      error: null,
+    });
+
+    try {
+      const res = await fetch(`/api/dictionary?word=${encodeURIComponent(clean)}`);
+      if (!res.ok) throw new Error("Tra từ thất bại");
+      const data = await res.json();
+      setDictPopup((prev) => ({
+        ...prev,
+        loading: false,
+        word: data.word || clean,
+        phonetic: data.phonetic || `/${clean}/`,
+        vietnamese: data.vietnamese || "Chưa có nghĩa tiếng Việt",
+        partOfSpeech: data.partOfSpeech || "từ vựng",
+        detailedMeanings: data.detailedMeanings || [],
+        audioUrl: data.audioUrl || null,
+        englishDefinition: data.englishDefinition || "",
+        examples: data.examples || [],
+      }));
+    } catch (err) {
+      console.error("Lookup error:", err);
+      setDictPopup((prev) => ({
+        ...prev,
+        loading: false,
+        word: clean,
+        phonetic: `/${clean}/`,
+        vietnamese: clean,
+        partOfSpeech: "từ vựng",
+        audioUrl: null,
+        error: "Không thể kết nối đến từ điển",
+      }));
+    }
+  };
+
+  // Global mouseup & click listener for word lookup
+  useEffect(() => {
+    if (!dictEnabled) return;
+
+    const handleGlobalClick = (e) => {
+      // Ignore if clicking inside interactive components or popup
+      if (
+        e.target.closest(
+          "#dict-popup, #vocab-modal, #auth-modal, #new-user-modal, button, input, textarea, select, a, [role='button'], nav"
+        )
+      ) {
+        return;
+      }
+
+      // 1. Check user text selection
+      const sel = window.getSelection();
+      const selStr = sel ? sel.toString().trim() : "";
+      if (selStr && selStr.length < 35 && /^[a-zA-Z\s'-]+$/.test(selStr)) {
+        triggerLookup(selStr, e.clientX, e.clientY);
+        return;
+      }
+
+      // 2. Caret position under cursor
+      let textNode = null;
+      let offset = 0;
+      if (document.caretRangeFromPoint) {
+        const range = document.caretRangeFromPoint(e.clientX, e.clientY);
+        if (range) {
+          textNode = range.startContainer;
+          offset = range.startOffset;
+        }
+      } else if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+        if (pos) {
+          textNode = pos.offsetNode;
+          offset = pos.offset;
+        }
+      }
+
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        const text = textNode.textContent;
+        let start = offset;
+        let end = offset;
+        while (start > 0 && /[a-zA-Z0-9'-]/.test(text[start - 1])) start--;
+        while (end < text.length && /[a-zA-Z0-9'-]/.test(text[end])) end++;
+        const word = text.slice(start, end).trim().replace(/^[^a-zA-Z]+|[^a-zA-Z]+$/g, "");
+        if (word && word.length >= 2 && /^[a-zA-Z]/.test(word)) {
+          triggerLookup(word, e.clientX, e.clientY);
+          return;
+        }
+      }
+
+      // Clicked on neutral background: close dict popup
+      setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setDictPopup((prev) => ({ ...prev, open: false }));
+        setVocabModalOpen(false);
+      }
+    };
+
+    document.addEventListener("mouseup", handleGlobalClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mouseup", handleGlobalClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [dictEnabled]);
+
+  // Load user vocabulary on user change
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    try {
+      const stored = localStorage.getItem(`grammar_vocab_${currentUser.id}`);
+      if (stored) {
+        setSavedVocab(JSON.parse(stored));
+      } else {
+        const initialVocab = [
+          {
+            id: "voc_1",
+            word: "continuous",
+            phonetic: "/kənˈtɪn.ju.əs/",
+            vietnamese: "tiếp diễn, liên tục",
+            partOfSpeech: "adjective",
+            audioUrl: "https://api.dictionaryapi.dev/media/pronunciations/en/continuous-us.mp3",
+            addedAt: new Date().toLocaleDateString("vi-VN"),
+          },
+          {
+            id: "voc_2",
+            word: "architect",
+            phonetic: "/ˈɑːkɪtɛkt/",
+            vietnamese: "kiến trúc sư",
+            partOfSpeech: "noun",
+            audioUrl: "https://api.dictionaryapi.dev/media/pronunciations/en/architect-us.mp3",
+            addedAt: new Date().toLocaleDateString("vi-VN"),
+          },
+        ];
+        setSavedVocab(initialVocab);
+        localStorage.setItem(`grammar_vocab_${currentUser.id}`, JSON.stringify(initialVocab));
+      }
+    } catch (e) {
+      console.error("Failed to load user vocab", e);
+    }
+  }, [currentUser?.id]);
 
   // --- Auth Handlers ---
   const handleLogin = (e) => {
@@ -1299,6 +1573,438 @@ export default function Home() {
         </div>
       )}
 
+      {/* ============================================================== */}
+      {/* DICTIONARY POPUP (CLICK TRA TỪ NHANH + PHIÊN ÂM IPA + AUDIO)  */}
+      {/* ============================================================== */}
+      {dictPopup.open && (
+        <div
+          id="dict-popup"
+          style={{
+            position: "fixed",
+            left: `${dictPopup.x}px`,
+            top: `${dictPopup.y}px`,
+            width: "330px",
+            backgroundColor: "#0f172a",
+            border: "1px solid #38bdf860",
+            boxShadow: "0 20px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2)",
+            borderRadius: "14px",
+            zIndex: 9999,
+            padding: "1rem 1.15rem",
+            color: "#f8fafc",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* Header: Word + POS Badge + Close */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem", flexWrap: "wrap" }}>
+              <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "800", color: "#38bdf8", letterSpacing: "-0.01em" }}>
+                {dictPopup.word}
+              </h3>
+              {dictPopup.partOfSpeech && (
+                <span
+                  style={{
+                    fontSize: "0.68rem",
+                    fontFamily: "Geist Mono",
+                    backgroundColor: "#1e293b",
+                    color: "#93c5fd",
+                    border: "1px solid #334155",
+                    padding: "0.1rem 0.45rem",
+                    borderRadius: "4px",
+                    fontWeight: "700",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {dictPopup.partOfSpeech}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setDictPopup((prev) => ({ ...prev, open: false }))}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#94a3b8",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                padding: "0.1rem 0.3rem",
+                lineHeight: 1,
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Content / Loading state */}
+          {dictPopup.loading ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "1.25rem 0", color: "#94a3b8", fontSize: "0.85rem" }}>
+              <span style={{ fontSize: "1.2rem" }}>⏳</span>
+              <span>Đang tra cứu từ điển & phiên âm IPA...</span>
+            </div>
+          ) : (
+            <>
+              {/* Phonetics & Audio Pronunciation Section */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  backgroundColor: "#020617",
+                  border: "1px solid #1e293b",
+                  borderRadius: "8px",
+                  padding: "0.45rem 0.75rem",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <span style={{ fontSize: "0.72rem", color: "#64748b", fontWeight: "700" }}>IPA:</span>
+                  <span style={{ fontFamily: "Geist Mono", fontSize: "0.9rem", color: "#38bdf8", fontWeight: "700" }}>
+                    {dictPopup.phonetic || `/${dictPopup.word}/`}
+                  </span>
+                </div>
+
+                {/* Audio Speaker Button */}
+                <button
+                  onClick={() => playWordAudio(dictPopup.word, dictPopup.audioUrl)}
+                  disabled={dictPopup.isPlayingAudio}
+                  title="Nghe phát âm chuẩn tiếng Anh (Audio API)"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    backgroundColor: dictPopup.isPlayingAudio ? "#0284c7" : "#0284c725",
+                    border: "1px solid #0284c770",
+                    color: "#38bdf8",
+                    borderRadius: "6px",
+                    padding: "0.25rem 0.55rem",
+                    fontSize: "0.75rem",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span>{dictPopup.isPlayingAudio ? "🔊 Đang đọc..." : "🔊 Nghe phát âm"}</span>
+                </button>
+              </div>
+
+              {/* Vietnamese Meaning Box */}
+              <div
+                style={{
+                  backgroundColor: "#064e3b25",
+                  border: "1px solid #05966950",
+                  borderRadius: "8px",
+                  padding: "0.65rem 0.75rem",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                <div style={{ fontSize: "0.7rem", color: "#34d399", fontWeight: "700", marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  🇻🇳 Nghĩa tiếng Việt
+                </div>
+                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: "#ecfdf5", lineHeight: 1.35 }}>
+                  {dictPopup.vietnamese}
+                </div>
+                {dictPopup.detailedMeanings.length > 0 && dictPopup.detailedMeanings[0].meanings.length > 1 && (
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.75rem", color: "#a7f3d0" }}>
+                    Từ đồng nghĩa: {dictPopup.detailedMeanings[0].meanings.slice(1, 4).join(", ")}
+                  </div>
+                )}
+              </div>
+
+              {/* English Definition (if available) */}
+              {dictPopup.englishDefinition && (
+                <div style={{ fontSize: "0.75rem", color: "#94a3b8", lineHeight: 1.4, marginBottom: "0.75rem", fontStyle: "italic", borderLeft: "2px solid #334155", paddingLeft: "0.5rem" }}>
+                  "{dictPopup.englishDefinition}"
+                </div>
+              )}
+
+              {/* Footer Toolbar: Save Vocab + Cambridge Link */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid #1e293b", gap: "0.5rem" }}>
+                {(() => {
+                  const isSaved = savedVocab.some((v) => v.word.toLowerCase() === dictPopup.word.toLowerCase());
+                  return (
+                    <button
+                      onClick={() => toggleSaveWord(dictPopup)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.35rem",
+                        backgroundColor: isSaved ? "#f59e0b25" : "#1e293b",
+                        border: isSaved ? "1px solid #f59e0b70" : "1px solid #334155",
+                        color: isSaved ? "#fbbf24" : "#cbd5e1",
+                        borderRadius: "6px",
+                        padding: "0.3rem 0.6rem",
+                        fontSize: "0.75rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <span>{isSaved ? "★ Đã lưu vào Sổ từ" : "☆ Lưu vào Sổ từ"}</span>
+                    </button>
+                  );
+                })()}
+
+                {/* Direct Link to Cambridge Audio & Dictionary */}
+                <a
+                  href={`https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(dictPopup.word)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Tra cứu chi tiết trên Cambridge Dictionary"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.25rem",
+                    fontSize: "0.72rem",
+                    color: "#94a3b8",
+                    textDecoration: "none",
+                    padding: "0.3rem 0.5rem",
+                    borderRadius: "6px",
+                    backgroundColor: "#020617",
+                    border: "1px solid #1e293b",
+                  }}
+                >
+                  <span>Cambridge ↗</span>
+                </a>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* VOCABULARY NOTEBOOK MODAL (SỔ TAY TỪ VỰNG CÁ NHÂN)             */}
+      {/* ============================================================== */}
+      {vocabModalOpen && (
+        <div
+          id="vocab-modal"
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(6px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#111827",
+              border: "1px solid #374151",
+              borderRadius: "14px",
+              width: "100%",
+              maxWidth: "680px",
+              maxHeight: "85vh",
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8)",
+              overflow: "hidden",
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: "1.25rem 1.5rem",
+                borderBottom: "1px solid #1f2937",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#0f172a",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <span style={{ fontSize: "1.3rem" }}>📚</span>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700", color: "#f9fafb" }}>
+                    Sổ tay từ vựng của {currentUser.name}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: "0.78rem", color: "#9ca3af" }}>
+                    Lưu trữ các từ đã tra cứu, phiên âm IPA và audio phát âm
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setVocabModalOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#9ca3af",
+                  fontSize: "1.25rem",
+                  cursor: "pointer",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Filter Search Input */}
+            <div style={{ padding: "0.75rem 1.5rem", borderBottom: "1px solid #1f2937", backgroundColor: "#111827" }}>
+              <input
+                type="text"
+                value={vocabSearchFilter}
+                onChange={(e) => setVocabSearchFilter(e.target.value)}
+                placeholder="🔍 Tìm kiếm trong sổ từ vựng..."
+                style={{
+                  width: "100%",
+                  height: "36px",
+                  padding: "0 0.85rem",
+                  backgroundColor: "#1f2937",
+                  border: "1px solid #374151",
+                  borderRadius: "8px",
+                  fontSize: "0.85rem",
+                  color: "#f3f4f6",
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            {/* Words List */}
+            <div style={{ flex: 1, overflowY: "auto", padding: "1.25rem 1.5rem" }}>
+              {(() => {
+                const filtered = savedVocab.filter(
+                  (v) =>
+                    v.word.toLowerCase().includes(vocabSearchFilter.toLowerCase()) ||
+                    (v.vietnamese && v.vietnamese.toLowerCase().includes(vocabSearchFilter.toLowerCase()))
+                );
+
+                if (filtered.length === 0) {
+                  return (
+                    <div style={{ textAlign: "center", padding: "3rem 1rem", color: "#6b7280" }}>
+                      <div style={{ fontSize: "2.5rem", marginBottom: "0.75rem" }}>📖</div>
+                      <p style={{ fontSize: "0.95rem", fontWeight: "600", color: "#9ca3af", marginBottom: "0.5rem" }}>
+                        Chưa có từ vựng nào trong sổ
+                      </p>
+                      <p style={{ fontSize: "0.8rem", color: "#6b7280", maxWidth: "380px", margin: "0 auto" }}>
+                        Khi học lý thuyết hoặc giải bài tập, bạn chỉ cần click trực tiếp vào bất kỳ từ tiếng Anh nào để tra nghĩa, nghe phát âm và bấm "Lưu vào Sổ từ".
+                      </p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    {filtered.map((item) => (
+                      <div
+                        key={item.id}
+                        style={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                          borderRadius: "10px",
+                          padding: "0.85rem 1rem",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: "1rem",
+                        }}
+                      >
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                          <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+                            <span style={{ fontSize: "1.05rem", fontWeight: "700", color: "#60a5fa" }}>
+                              {item.word}
+                            </span>
+                            <span style={{ fontFamily: "Geist Mono", fontSize: "0.82rem", color: "#38bdf8" }}>
+                              {item.phonetic}
+                            </span>
+                            {item.partOfSpeech && (
+                              <span
+                                style={{
+                                  fontSize: "0.65rem",
+                                  backgroundColor: "#111827",
+                                  border: "1px solid #4b5563",
+                                  color: "#9ca3af",
+                                  padding: "0.05rem 0.35rem",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                {item.partOfSpeech}
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ fontSize: "0.9rem", fontWeight: "600", color: "#34d399" }}>
+                            🇻🇳 {item.vietnamese}
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          {/* Audio button */}
+                          <button
+                            onClick={() => playWordAudio(item.word, item.audioUrl)}
+                            title="Nghe phát âm"
+                            style={{
+                              backgroundColor: "#0284c725",
+                              border: "1px solid #0284c770",
+                              color: "#38bdf8",
+                              borderRadius: "6px",
+                              padding: "0.35rem 0.65rem",
+                              fontSize: "0.75rem",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.3rem",
+                            }}
+                          >
+                            <span>🔊 Nghe</span>
+                          </button>
+
+                          {/* Delete from vocab */}
+                          <button
+                            onClick={() => toggleSaveWord(item)}
+                            title="Xóa khỏi sổ từ vựng"
+                            style={{
+                              backgroundColor: "#374151",
+                              border: "none",
+                              color: "#ef4444",
+                              borderRadius: "6px",
+                              padding: "0.35rem 0.55rem",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                            }}
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: "0.85rem 1.5rem",
+                borderTop: "1px solid #1f2937",
+                backgroundColor: "#0f172a",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ fontSize: "0.78rem", color: "#9ca3af" }}>
+                Tổng cộng: <strong style={{ color: "#f3f4f6" }}>{savedVocab.length}</strong> từ vựng
+              </span>
+              <button
+                onClick={() => setVocabModalOpen(false)}
+                style={{
+                  backgroundColor: "#2563eb",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "0.4rem 1rem",
+                  fontSize: "0.8rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Layout */}
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
         
@@ -1477,6 +2183,80 @@ export default function Home() {
               </button>
             )}
           </nav>
+
+          {/* Quick Dictionary & Vocab Tools */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {/* Quick Word Search Box */}
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <input
+                type="text"
+                value={dictSearchInput}
+                onChange={(e) => setDictSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && dictSearchInput.trim()) {
+                    triggerLookup(dictSearchInput.trim(), null, null);
+                  }
+                }}
+                placeholder="🔍 Tra từ nhanh..."
+                style={{
+                  height: "30px",
+                  padding: "0 0.75rem 0 1.85rem",
+                  backgroundColor: "#18181b",
+                  border: "1px solid #3f3f46",
+                  borderRadius: "20px",
+                  fontSize: "0.78rem",
+                  color: "#f4f4f5",
+                  width: "135px",
+                  outline: "none",
+                }}
+              />
+              <span style={{ position: "absolute", left: "0.6rem", fontSize: "0.75rem", pointerEvents: "none", color: "#a1a1aa" }}>
+                📖
+              </span>
+            </div>
+
+            {/* Click-to-lookup Toggle Pill */}
+            <button
+              onClick={() => setDictEnabled(!dictEnabled)}
+              title={dictEnabled ? "Chế độ click tra từ nhanh đang BẬT. Click để tắt." : "Click để bật chế độ tra từ khi click vào chữ"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.3rem",
+                backgroundColor: dictEnabled ? "#064e3b35" : "#18181b",
+                border: dictEnabled ? "1px solid #05966990" : "1px solid #27272a",
+                borderRadius: "999px",
+                padding: "0.25rem 0.65rem",
+                fontSize: "0.75rem",
+                fontWeight: "600",
+                color: dictEnabled ? "#34d399" : "#71717a",
+                cursor: "pointer",
+              }}
+            >
+              <span>{dictEnabled ? "⚡ Click tra từ: BẬT" : "💤 Tra từ: TẮT"}</span>
+            </button>
+
+            {/* Saved Vocab Notebook Pill */}
+            <button
+              onClick={() => setVocabModalOpen(true)}
+              title="Mở Sổ tay từ vựng đã lưu"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.3rem",
+                backgroundColor: savedVocab.length > 0 ? "#451a0335" : "#18181b",
+                border: savedVocab.length > 0 ? "1px solid #d9770690" : "1px solid #27272a",
+                borderRadius: "999px",
+                padding: "0.25rem 0.65rem",
+                fontSize: "0.75rem",
+                fontWeight: "600",
+                color: savedVocab.length > 0 ? "#fbbf24" : "#a1a1aa",
+                cursor: "pointer",
+              }}
+            >
+              <span>⭐ Sổ từ ({savedVocab.length})</span>
+            </button>
+          </div>
 
           {/* User Profile & Role Badge & Quick Switch */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
