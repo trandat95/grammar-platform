@@ -1710,10 +1710,10 @@ export default function Home() {
           height: 6px;
         }
         ::-webkit-scrollbar-track {
-          background: #09090b;
+          background: ${isLight ? "#f1f5f9" : "#09090b"};
         }
         ::-webkit-scrollbar-thumb {
-          background: #27272a;
+          background: ${isLight ? "#cbd5e1" : "#27272a"};
           border-radius: 999px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -1729,17 +1729,17 @@ export default function Home() {
           font-size: 0.85rem;
         }
         th, td {
-          border: 1px solid #27272a;
+          border: 1px solid ${T.border};
           padding: 0.65rem 0.85rem;
           text-align: left;
         }
         th {
-          background-color: #18181b;
-          color: #fafafa;
-          font-weight: 600;
+          background-color: ${isLight ? "#f8fafc" : "#18181b"};
+          color: ${T.textHeading};
+          font-weight: 700;
         }
         tr:nth-child(even) {
-          background-color: rgba(255, 255, 255, 0.02);
+          background-color: ${isLight ? "rgba(0, 0, 0, 0.02)" : "rgba(255, 255, 255, 0.02)"};
         }
       `}</style>
 
@@ -1791,18 +1791,18 @@ export default function Home() {
         >
           <div
             style={{
-              backgroundColor: "#121215",
-              border: "1px solid #27272a",
+              backgroundColor: T.card,
+              border: `1px solid ${T.border}`,
               borderRadius: "12px",
               padding: "2rem",
               width: "100%",
               maxWidth: "460px",
-              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+              boxShadow: T.shadowElevated,
             }}
           >
             {/* Modal Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-              <div style={{ fontSize: "1.2rem", fontWeight: "700", color: "#fafafa" }}>
+              <div style={{ fontSize: "1.2rem", fontWeight: "700", color: T.text }}>
                 {authTab === "login" ? "Đăng nhập tài khoản" : "Đăng ký thành viên"}
               </div>
               <button
@@ -1815,11 +1815,11 @@ export default function Home() {
 
             {/* Currently Logged In Box with Logout Action */}
             {!currentUser.isGuest && (
-              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: "#18181b", borderRadius: "8px", border: "1px solid #27272a", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: isLight ? "#f8fafc" : "#18181b", borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                  <div style={{ fontSize: "0.72rem", color: "#71717a", textTransform: "uppercase" }}>Đang đăng nhập:</div>
-                  <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#fafafa" }}>{currentUser.name} ({currentUser.role})</div>
-                  <div style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>{currentUser.email}</div>
+                  <div style={{ fontSize: "0.72rem", color: T.textMuted, textTransform: "uppercase" }}>Đang đăng nhập:</div>
+                  <div style={{ fontSize: "0.85rem", fontWeight: "700", color: T.text }}>{currentUser.name} ({currentUser.role})</div>
+                  <div style={{ fontSize: "0.75rem", color: T.textSecondary }}>{currentUser.email}</div>
                 </div>
                 <button
                   type="button"
@@ -1848,7 +1848,7 @@ export default function Home() {
             )}
 
             {/* Form Tabs */}
-            <div style={{ display: "flex", backgroundColor: "#18181b", padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
+            <div style={{ display: "flex", backgroundColor: isLight ? "#f1f5f9" : "#18181b", padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
               <button
                 type="button"
                 onClick={() => { setAuthTab("login"); setAuthError(""); }}
@@ -1859,8 +1859,9 @@ export default function Home() {
                   border: "none",
                   fontSize: "0.825rem",
                   fontWeight: authTab === "login" ? "600" : "400",
-                  backgroundColor: authTab === "login" ? "#27272a" : "transparent",
-                  color: authTab === "login" ? "#fafafa" : "#71717a",
+                  backgroundColor: authTab === "login" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                  color: authTab === "login" ? T.text : T.textMuted,
+                  boxShadow: authTab === "login" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                   cursor: "pointer",
                 }}
               >
@@ -1876,8 +1877,9 @@ export default function Home() {
                   border: "none",
                   fontSize: "0.825rem",
                   fontWeight: authTab === "register" ? "600" : "400",
-                  backgroundColor: authTab === "register" ? "#27272a" : "transparent",
-                  color: authTab === "register" ? "#fafafa" : "#71717a",
+                  backgroundColor: authTab === "register" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                  color: authTab === "register" ? T.text : T.textMuted,
+                  boxShadow: authTab === "register" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                   cursor: "pointer",
                 }}
               >
@@ -1997,16 +1999,17 @@ export default function Home() {
         >
           <div
             style={{
-              backgroundColor: "#121215",
-              border: "1px solid #27272a",
+              backgroundColor: T.card,
+              border: `1px solid ${T.border}`,
               borderRadius: "12px",
               padding: "2rem",
               width: "100%",
               maxWidth: "460px",
+              boxShadow: T.shadowElevated,
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-              <div style={{ fontSize: "1.15rem", fontWeight: "700", color: "#fafafa" }}>
+              <div style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text }}>
                 Thêm người dùng mới vào hệ thống
               </div>
               <button
@@ -2025,38 +2028,38 @@ export default function Home() {
                   required
                   value={newUserName}
                   onChange={(e) => setNewUserName(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
                 />
               </div>
 
               <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Email:</label>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Email:</label>
                 <input
                   type="email"
                   required
                   value={newUserEmail}
                   onChange={(e) => setNewUserEmail(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
                 />
               </div>
 
               <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Mật khẩu:</label>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Mật khẩu:</label>
                 <input
                   type="password"
                   required
                   value={newUserPassword}
                   onChange={(e) => setNewUserPassword(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
                 />
               </div>
 
               <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Quyền tài khoản:</label>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Quyền tài khoản:</label>
                 <select
                   value={newUserRole}
                   onChange={(e) => setNewUserRole(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
                 >
                   <option value="FREE">FREE (Miễn phí - Giới hạn 10 câu/chương & 2 quiz)</option>
                   <option value="VIP">VIP (Toàn quyền 2,900+ câu & không giới hạn)</option>
@@ -2729,13 +2732,14 @@ export default function Home() {
                 style={{
                   height: "30px",
                   padding: "0 0.75rem 0 1.85rem",
-                  backgroundColor: "#18181b",
-                  border: "1px solid #3f3f46",
+                  backgroundColor: isLight ? "#ffffff" : "#18181b",
+                  border: `1px solid ${T.border}`,
                   borderRadius: "20px",
                   fontSize: "0.78rem",
-                  color: "#f4f4f5",
+                  color: T.text,
                   width: "135px",
                   outline: "none",
+                  boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
                 }}
               />
               <span style={{ position: "absolute", left: "0.6rem", fontSize: "0.75rem", pointerEvents: "none", color: "#a1a1aa" }}>
@@ -2930,14 +2934,14 @@ export default function Home() {
         {/* VIEW 4: ADMIN MANAGEMENT PANEL (QUẢN TRỊ VIÊN HỆ THỐNG)        */}
         {/* ============================================================== */}
         {currentView === "admin" && !currentUser.isGuest && currentUser.role === "ADMIN" && (
-          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
               
               {/* Admin Header */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #ef444450",
+                  backgroundColor: T.card,
+                  border: `1px solid ${isLight ? "#fca5a5" : "#ef444450"}`,
                   borderRadius: "12px",
                   padding: "1.75rem 2rem",
                   marginBottom: "2rem",
@@ -2946,12 +2950,13 @@ export default function Home() {
                   alignItems: "center",
                   flexWrap: "wrap",
                   gap: "1rem",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                     <span style={{ fontSize: "1.5rem" }}>🛡️</span>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#fafafa", margin: 0 }}>
+                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: T.text, margin: 0 }}>
                       Bảng điều khiển Quản trị viên (Admin Panel)
                     </h1>
                     <span
@@ -2984,9 +2989,9 @@ export default function Home() {
                     title="Làm mới dữ liệu từ Supabase Cloud"
                     style={{
                       padding: "0.6rem 1rem",
-                      backgroundColor: "#18181b",
-                      color: "#a1a1aa",
-                      border: "1px solid #27272a",
+                      backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                      color: T.text,
+                      border: `1px solid ${T.border}`,
                       borderRadius: "6px",
                       fontWeight: "600",
                       fontSize: "0.85rem",
@@ -3020,14 +3025,15 @@ export default function Home() {
               {/* Access Policy Configuration Card */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "10px",
                   padding: "1.5rem",
                   marginBottom: "2rem",
+                  boxShadow: T.shadow,
                 }}
               >
-                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: "0 0 1rem 0" }}>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: "0 0 1rem 0" }}>
                   ⚙️ Cấu hình Quyền & Hạn mức truy cập cho User Default (FREE)
                 </h3>
                 
@@ -3084,14 +3090,15 @@ export default function Home() {
               {/* Users Table Card */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "10px",
                   padding: "1.5rem",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                  <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                  <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: 0 }}>
                     👥 Danh sách Người dùng ({usersList.length})
                   </h3>
                   <div style={{ fontSize: "0.8rem", color: "#71717a" }}>
@@ -3117,7 +3124,7 @@ export default function Home() {
                         return (
                           <tr key={u.id}>
                             <td>
-                              <div style={{ fontWeight: "600", color: "#fafafa", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                              <div style={{ fontWeight: "600", color: T.text, display: "flex", alignItems: "center", gap: "0.4rem" }}>
                                 {u.name}
                                 {isCurrent && (
                                   <span style={{ fontSize: "0.68rem", backgroundColor: "#27272a", padding: "0.1rem 0.35rem", borderRadius: "3px", color: "#60a5fa" }}>
@@ -3636,12 +3643,12 @@ export default function Home() {
                           </span>
                         </div>
 
-                        <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        <div style={{ fontSize: "0.95rem", fontWeight: "700", color: T.text, marginBottom: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                           {ch.title_vi}
                         </div>
 
                         {/* Progress Bar */}
-                        <div style={{ width: "100%", height: "4px", backgroundColor: "#27272a", borderRadius: "999px", overflow: "hidden", marginBottom: "0.5rem" }}>
+                        <div style={{ width: "100%", height: "4px", backgroundColor: isLight ? "#e2e8f0" : "#27272a", borderRadius: "999px", overflow: "hidden", marginBottom: "0.5rem" }}>
                           <div
                             style={{
                               width: `${pct}%`,
@@ -3686,19 +3693,20 @@ export default function Home() {
               }}
             >
               {/* Search Filter Header */}
-              <div style={{ padding: "0.85rem 1rem", borderBottom: "1px solid #1f1f23" }}>
+              <div style={{ padding: "0.85rem 1rem", borderBottom: `1px solid ${T.border}` }}>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",
-                    backgroundColor: "#141417",
-                    border: "1px solid #27272a",
+                    backgroundColor: isLight ? "#ffffff" : "#141417",
+                    border: `1px solid ${T.border}`,
                     borderRadius: "6px",
                     padding: "0.4rem 0.65rem",
+                    boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
                   }}
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.textMuted} strokeWidth="2">
                     <circle cx="11" cy="11" r="8"/>
                     <path d="m21 21-4.3-4.3"/>
                   </svg>
@@ -3711,7 +3719,7 @@ export default function Home() {
                       backgroundColor: "transparent",
                       border: "none",
                       outline: "none",
-                      color: "#fafafa",
+                      color: T.text,
                       fontSize: "0.8rem",
                       width: "100%",
                     }}
@@ -3918,11 +3926,12 @@ export default function Home() {
                       {/* Lesson Overview & Mark Completion Bar */}
                       <div
                         style={{
-                          backgroundColor: "#121215",
-                          border: isCurrentLessonDone ? "1px solid #10b981" : "1px solid #27272a",
-                          borderRadius: "8px",
+                          backgroundColor: T.card,
+                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px solid ${T.border}`,
+                          borderRadius: "10px",
                           padding: "1.25rem 1.5rem",
                           marginBottom: "1.5rem",
+                          boxShadow: T.shadow,
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "0.75rem" }}>
@@ -3931,8 +3940,8 @@ export default function Home() {
                               style={{
                                 fontSize: "0.72rem",
                                 fontFamily: "Geist Mono",
-                                backgroundColor: "#27272a",
-                                color: "#60a5fa",
+                                backgroundColor: isLight ? "#eff6ff" : "#27272a",
+                                color: isLight ? "#1d4ed8" : "#60a5fa",
                                 padding: "0.15rem 0.5rem",
                                 borderRadius: "4px",
                                 fontWeight: "700",
@@ -3941,15 +3950,15 @@ export default function Home() {
                               {selectedLesson.code}
                             </span>
                             <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {selectedLesson.sections?.length || 0} Phân mục
                             </span>
                             <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {totalLessonFormulas} Công thức
                             </span>
                             <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
-                            <span style={{ fontSize: "0.75rem", color: "#d4d4d8" }}>
+                            <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {selectedLesson.examples?.length || 0} Ví dụ
                             </span>
                           </div>
@@ -3963,9 +3972,9 @@ export default function Home() {
                               gap: "0.4rem",
                               padding: "0.4rem 0.9rem",
                               borderRadius: "6px",
-                              border: isCurrentLessonDone ? "1px solid #10b981" : "1px solid #3f3f46",
-                              backgroundColor: isCurrentLessonDone ? "rgba(16, 185, 129, 0.15)" : "#18181b",
-                              color: isCurrentLessonDone ? "#34d399" : "#fafafa",
+                              border: isCurrentLessonDone ? "1px solid #10b981" : `1px solid ${T.border}`,
+                              backgroundColor: isCurrentLessonDone ? (isLight ? "#ecfdf5" : "rgba(16, 185, 129, 0.15)") : (isLight ? "#f8fafc" : "#18181b"),
+                              color: isCurrentLessonDone ? "#059669" : T.text,
                               fontSize: "0.8rem",
                               fontWeight: "600",
                               cursor: "pointer",
@@ -3975,14 +3984,14 @@ export default function Home() {
                           </button>
                         </div>
 
-                        <p style={{ fontSize: "0.9rem", color: "#d4d4d8", lineHeight: "1.65", margin: 0 }}>
+                        <p style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65", margin: 0 }}>
                           {selectedLesson.overview}
                         </p>
 
                         {/* Quick Table of Contents Pills */}
                         {selectedLesson.sections && selectedLesson.sections.length > 1 && (
-                          <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: "1px solid #1f1f23" }}>
-                            <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
+                          <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: `1px solid ${T.border}` }}>
+                            <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
                               NỘI DUNG CHÍNH TRONG BÀI:
                             </div>
                             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
@@ -3992,12 +4001,13 @@ export default function Home() {
                                   href={`#sec-${idx}`}
                                   style={{
                                     fontSize: "0.75rem",
-                                    backgroundColor: "#18181b",
-                                    border: "1px solid #27272a",
-                                    color: "#cbd5e1",
-                                    padding: "0.2rem 0.6rem",
+                                    backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                                    border: `1px solid ${T.border}`,
+                                    color: isLight ? "#1e293b" : "#cbd5e1",
+                                    padding: "0.25rem 0.65rem",
                                     borderRadius: "4px",
                                     textDecoration: "none",
+                                    fontWeight: "500",
                                   }}
                                 >
                                   {s.title}
@@ -4011,12 +4021,19 @@ export default function Home() {
                       {/* Sections List */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
                         {selectedLesson.sections?.map((sec, secIdx) => {
-                          const badgeColor = 
+                          const badgeColor = isLight ? (
+                            sec.badge?.includes("CÔNG THỨC") ? { bg: "#ecfdf5", border: "#a7f3d0", text: "#047857" } :
+                            sec.badge?.includes("LƯU Ý") ? { bg: "#fffbeb", border: "#fde68a", text: "#b45309" } :
+                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "#faf5ff", border: "#e9d5ff", text: "#7e22ce" } :
+                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "#eff6ff", border: "#bfdbfe", text: "#1d4ed8" } :
+                            { bg: "#f1f5f9", border: "#cbd5e1", text: "#334155" }
+                          ) : (
                             sec.badge?.includes("CÔNG THỨC") ? { bg: "#064e3b30", border: "#05966970", text: "#34d399" } :
                             sec.badge?.includes("LƯU Ý") ? { bg: "#451a0330", border: "#d9770670", text: "#fbbf24" } :
                             sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "#3b076430", border: "#9333ea70", text: "#c084fc" } :
                             sec.badge?.includes("CÁCH DÙNG") ? { bg: "#0c4a6e30", border: "#0284c770", text: "#38bdf8" } :
-                            { bg: "#1e1b4b30", border: "#6366f170", text: "#a5b4fc" };
+                            { bg: "#1e1b4b30", border: "#6366f170", text: "#a5b4fc" }
+                          );
 
                           return (
                             <section
@@ -4083,8 +4100,8 @@ export default function Home() {
                                     <div
                                       key={fIdx}
                                       style={{
-                                        backgroundColor: "#09090d",
-                                        border: "1px solid #272732",
+                                        backgroundColor: isLight ? "#f8fafc" : "#09090d",
+                                        border: `1px solid ${isLight ? "#cbd5e1" : "#272732"}`,
                                         borderLeft: f.type?.includes("(+)")
                                           ? "4px solid #10b981"
                                           : f.type?.includes("(-)")
@@ -4097,20 +4114,21 @@ export default function Home() {
                                         alignItems: "center",
                                         flexWrap: "wrap",
                                         gap: "0.75rem",
+                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
                                       }}
                                     >
-                                      <div style={{ fontFamily: "Geist Mono", fontSize: "0.95rem", color: "#34d399", fontWeight: "700", letterSpacing: "0.02em" }}>
+                                      <div style={{ fontFamily: "Geist Mono", fontSize: "0.95rem", color: isLight ? "#065f46" : "#34d399", fontWeight: "700", letterSpacing: "0.02em" }}>
                                         {f.text}
                                       </div>
                                       <span
                                         style={{
                                           fontSize: "0.7rem",
                                           fontFamily: "Geist Mono",
-                                          backgroundColor: "#18181f",
-                                          color: f.type?.includes("(+)") ? "#34d399" : f.type?.includes("(-)") ? "#fb7185" : "#38bdf8",
+                                          backgroundColor: isLight ? "#ffffff" : "#18181f",
+                                          color: f.type?.includes("(+)") ? (isLight ? "#059669" : "#34d399") : f.type?.includes("(-)") ? "#fb7185" : "#38bdf8",
                                           padding: "0.2rem 0.55rem",
                                           borderRadius: "6px",
-                                          border: "1px solid #333342",
+                                          border: `1px solid ${isLight ? "#cbd5e1" : "#333342"}`,
                                           fontWeight: "700",
                                         }}
                                       >
@@ -4227,7 +4245,7 @@ export default function Home() {
                               {sec.paragraphs && sec.paragraphs.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1rem" }}>
                                   {sec.paragraphs.map((p, pIdx) => (
-                                    <p key={pIdx} style={{ fontSize: "0.92rem", color: "#d4d4d8", lineHeight: "1.75", margin: 0 }}>
+                                    <p key={pIdx} style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.75", margin: 0, fontWeight: "400" }}>
                                       {p}
                                     </p>
                                   ))}
@@ -4244,23 +4262,24 @@ export default function Home() {
                                         width: "100%",
                                         borderCollapse: "separate",
                                         borderSpacing: 0,
-                                        backgroundColor: "#0d0d12",
-                                        border: "1px solid #272733",
+                                        backgroundColor: isLight ? "#ffffff" : "#0d0d12",
+                                        border: `1px solid ${T.border}`,
                                         borderRadius: "8px",
                                         overflow: "hidden",
                                         fontSize: "0.86rem",
+                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
                                       }}
                                     >
                                       {tbl.headers && tbl.headers.some((h) => h) && (
                                         <thead>
-                                          <tr style={{ backgroundColor: "#181822" }}>
+                                          <tr style={{ backgroundColor: isLight ? "#f8fafc" : "#181822" }}>
                                             {tbl.headers.map((h, hIdx) => (
                                               <th
                                                 key={hIdx}
                                                 style={{
                                                   padding: "0.7rem 0.9rem",
-                                                  borderBottom: "1px solid #272733",
-                                                  color: "#60a5fa",
+                                                  borderBottom: `1px solid ${T.border}`,
+                                                  color: isLight ? "#1d4ed8" : "#60a5fa",
                                                   fontWeight: "700",
                                                   textAlign: "left",
                                                   fontFamily: "Geist Mono",
@@ -4279,7 +4298,7 @@ export default function Home() {
                                           <tr
                                             key={rIdx}
                                             style={{
-                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : "#14141d",
+                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : (isLight ? "#f8fafc" : "#14141d"),
                                             }}
                                           >
                                             {row.map((cell, cIdx) => (
@@ -4287,8 +4306,8 @@ export default function Home() {
                                                 key={cIdx}
                                                 style={{
                                                   padding: "0.65rem 0.9rem",
-                                                  borderBottom: "1px solid #1e1e28",
-                                                  color: "#e2e8f0",
+                                                  borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1e1e28"}`,
+                                                  color: isLight ? "#334155" : "#e2e8f0",
                                                   lineHeight: "1.55",
                                                 }}
                                               >
@@ -4336,20 +4355,21 @@ export default function Home() {
                                     <div
                                       key={nIdx}
                                       style={{
-                                        backgroundColor: "rgba(245, 158, 11, 0.08)",
-                                        border: "1px solid rgba(245, 158, 11, 0.4)",
+                                        backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.08)",
+                                        border: isLight ? "1px solid #fde68a" : "1px solid rgba(245, 158, 11, 0.4)",
                                         borderLeft: "4px solid #f59e0b",
                                         borderRadius: "8px",
                                         padding: "0.85rem 1.15rem",
+                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.02)" : "none",
                                       }}
                                     >
                                       <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
                                         <span style={{ fontSize: "1.05rem" }}>⚠️</span>
-                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: isLight ? "#b45309" : "#fbbf24", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                           LƯU Ý QUAN TRỌNG & BẪY THI CỬ:
                                         </span>
                                       </div>
-                                      <div style={{ fontSize: "0.9rem", color: "#fef3c7", lineHeight: "1.65" }}>
+                                      <div style={{ fontSize: "0.9rem", color: isLight ? "#78350f" : "#fef3c7", lineHeight: "1.65" }}>
                                         {n}
                                       </div>
                                     </div>
@@ -4366,16 +4386,19 @@ export default function Home() {
                         style={{
                           marginTop: "2rem",
                           padding: "1.75rem",
-                          backgroundColor: "#121215",
-                          border: isCurrentLessonDone ? "1px solid #10b981" : "1px dashed #3b82f6",
+                          backgroundColor: T.card,
+                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px dashed ${isLight ? "#3b82f6" : "#3b82f6"}`, borderRadius: "10px", textAlign: "center", boxShadow: T.shadow }} > <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.4rem" }}>,
                           borderRadius: "8px",
                           textAlign: "center",
                         }}
                       >
-                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", marginBottom: "0.4rem" }}>
+                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: <p style={{ fontSize: "0.85rem", color: T.textMuted,, marginBottom: "0.4rem" }}>
                           {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
                         </div>
-                        <p style={{ fontSize: "0.85rem", color: "#71717a", marginBottom: "1.25rem" }}>
+                        <p style={{ fontSize: "0.85rem", color: (isLight ? "#10b981" : "#10b981") : (isLight ? "#f1f5f9" : "#18181b")
+                          {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
+                        </div>
+                        `1px solid ${T.border}`, marginBottom: "1.25rem" }}>
                           Chuyên đề "{selectedChapter?.title_vi}" có {selectedChapter?.exercises?.length || 0} bài tập thực hành ({totalChapterExerciseQuestions} câu hỏi) để bạn củng cố kiến thức.
                         </p>
 
@@ -4384,10 +4407,7 @@ export default function Home() {
                             onClick={() => toggleLessonCompletion(selectedLesson.id)}
                             style={{
                               padding: "0.6rem 1.25rem",
-                              backgroundColor: isCurrentLessonDone ? "#10b981" : "#18181b",
-                              border: isCurrentLessonDone ? "none" : "1px solid #3f3f46",
-                              borderRadius: "6px",
-                              color: isCurrentLessonDone ? "#042f1a" : "#fafafa",
+                              backgroundColor: isCurrentLessonDone ? (isLight ? "#ffffff" : "#042f1a") : T.text,
                               fontSize: "0.85rem",
                               fontWeight: "700",
                               cursor: "pointer",
@@ -4489,11 +4509,12 @@ export default function Home() {
                           <div
                             key={ex.id || eIdx}
                             style={{
-                              backgroundColor: "#121215",
-                              border: "1px solid #27272a",
-                              borderRadius: "8px",
+                              backgroundColor: T.card,
+                              border: `1px solid ${T.border}`,
+                              borderRadius: "10px",
                               padding: "1.5rem",
                               marginBottom: "2rem",
+                              boxShadow: T.shadow,
                             }}
                           >
                             {/* Exercise Header */}
@@ -4517,7 +4538,7 @@ export default function Home() {
                                     {ex.questions?.length || 0} câu hỏi
                                   </span>
                                 </div>
-                                <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa" }}>
+                                <div style={{ fontSize: "1rem", fontWeight: "700", color: T.text }}>
                                   {ex.instruction_vi || ex.title}
                                 </div>
                                 {ex.instruction_vi && ex.title && (
@@ -4612,12 +4633,12 @@ export default function Home() {
                                   <div
                                     key={q.id || qIdx}
                                     style={{
-                                      backgroundColor: "#18181b",
+                                      backgroundColor: isLight ? "#f8fafc" : "#18181b",
                                       border: res?.checked
                                         ? res.isCorrect
                                           ? "1px solid #10b981"
                                           : "1px solid #f43f5e"
-                                        : "1px solid #27272a",
+                                        : `1px solid ${T.border}`,
                                       borderRadius: "6px",
                                       padding: "1.1rem",
                                     }}
@@ -4642,7 +4663,7 @@ export default function Home() {
                                     </div>
 
                                     {/* Stem */}
-                                    <div style={{ fontSize: "0.95rem", color: "#fafafa", lineHeight: "1.6", marginBottom: "0.75rem" }}>
+                                    <div style={{ fontSize: "0.95rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem" }}>
                                       {q.stem}
                                     </div>
 
@@ -4835,7 +4856,7 @@ export default function Home() {
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
-                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: "#fafafa", letterSpacing: "-0.015em" }}>
+                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
                       Bộ đề Quiz 50 câu ngẫu nhiên
                     </h1>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem", lineHeight: "1.5" }}>
@@ -4893,11 +4914,11 @@ export default function Home() {
                         startNewQuiz(e.target.value);
                       }}
                       style={{
-                        backgroundColor: "#18181b",
-                        border: "1px solid #27272a",
+                        backgroundColor: isLight ? "#ffffff" : "#18181b",
+                        border: `1px solid ${T.border}`,
                         borderRadius: "6px",
                         padding: "0.45rem 0.75rem",
-                        color: "#fafafa",
+                        color: T.text,
                         fontSize: "0.825rem",
                         outline: "none",
                         cursor: isQuizLimitReached ? "not-allowed" : "pointer",
@@ -4915,7 +4936,7 @@ export default function Home() {
                   {activeQuizQuestions.length > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                       <span style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#a1a1aa" }}>
-                        Đã làm: <strong style={{ color: "#fafafa" }}>{answeredCount}</strong> / {activeQuizQuestions.length}
+                        Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
                       </span>
                     </div>
                   )}
@@ -4926,12 +4947,13 @@ export default function Home() {
               {quizSubmitted && quizResults && (
                 <div
                   style={{
-                    backgroundColor: "#121215",
+                    backgroundColor: T.card,
                     border: quizResults.percentage >= 80 ? "1px solid #10b981" : "1px solid #f43f5e",
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     padding: "1.75rem",
                     marginBottom: "1.75rem",
                     textAlign: "center",
+                    boxShadow: T.shadow,
                   }}
                 >
                   <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", letterSpacing: "0.05em" }}>
@@ -5075,10 +5097,10 @@ export default function Home() {
                               ? singleCheck.isCorrect
                                 ? "1px solid #10b981"
                                 : "1px solid #f43f5e"
-                              : "1px solid #27272a",
+                              : `1px solid ${T.border}`,
                             fontSize: "0.875rem",
-                            backgroundColor: "#09090b",
-                            color: "#fafafa",
+                            backgroundColor: isLight ? "#ffffff" : "#09090b",
+                            color: T.text,
                             outline: "none",
                           }}
                         />
@@ -5088,9 +5110,9 @@ export default function Home() {
                             <button
                               onClick={() => checkSingleQuizQuestion(q)}
                               style={{
-                                backgroundColor: "#27272a",
-                                color: "#fafafa",
-                                border: "1px solid #3f3f46",
+                                backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                                color: T.text,
+                                border: `1px solid ${T.border}`,
                                 padding: "0.55rem 1rem",
                                 borderRadius: "6px",
                                 fontSize: "0.8rem",
@@ -5168,7 +5190,7 @@ export default function Home() {
                             {detail.isCorrect ? "✓ Chính xác" : "✕ Chưa đúng"}
                           </div>
                           <div style={{ fontSize: "0.825rem", color: "#d4d4d8", marginTop: "0.25rem" }}>
-                            Đáp án chuẩn: <strong style={{ color: "#fafafa" }}>{q.answers.join(" / ")}</strong>
+                            Đáp án chuẩn: <strong style={{ color: T.text }}>{q.answers.join(" / ")}</strong>
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
                         </div>
@@ -5222,7 +5244,7 @@ export default function Home() {
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
-                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: "#fafafa", letterSpacing: "-0.015em" }}>
+                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
                       Sổ tay câu hỏi cần ôn lại của {currentUser.name}
                     </h1>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem" }}>
@@ -5256,11 +5278,11 @@ export default function Home() {
                       value={mistakeFilterTopic}
                       onChange={(e) => setMistakeFilterTopic(e.target.value)}
                       style={{
-                        backgroundColor: "#18181b",
-                        border: "1px solid #27272a",
+                        backgroundColor: isLight ? "#ffffff" : "#18181b",
+                        border: `1px solid ${T.border}`,
                         borderRadius: "6px",
                         padding: "0.35rem 0.65rem",
-                        color: "#fafafa",
+                        color: T.text,
                         fontSize: "0.8rem",
                         outline: "none",
                       }}
@@ -5282,12 +5304,13 @@ export default function Home() {
                   style={{
                     padding: "4rem 2rem",
                     textAlign: "center",
-                    backgroundColor: "#121215",
-                    border: "1px dashed #27272a",
-                    borderRadius: "8px",
+                    backgroundColor: T.card,
+                    border: `1px dashed ${T.border}`,
+                    borderRadius: "10px",
+                    boxShadow: T.shadow,
                   }}
                 >
-                  <div style={{ fontSize: "1.1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.5rem" }}>
+                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.5rem" }}>
                     Chưa có câu sai nào trong sổ tay của bạn
                   </div>
                   <p style={{ fontSize: "0.85rem", color: "#71717a", maxWidth: "420px", margin: "0 auto 1.25rem auto" }}>
@@ -5368,7 +5391,7 @@ export default function Home() {
                           </div>
                         )}
 
-                        <div style={{ fontSize: "0.95rem", color: "#fafafa", lineHeight: "1.6", marginBottom: "0.75rem" }}>
+                        <div style={{ fontSize: "0.95rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem" }}>
                           {item.stem}
                         </div>
 
@@ -5411,10 +5434,10 @@ export default function Home() {
                                 ? res.isCorrect
                                   ? "1px solid #10b981"
                                   : "1px solid #f43f5e"
-                                : "1px solid #27272a",
+                                : `1px solid ${T.border}`,
                               fontSize: "0.875rem",
-                              backgroundColor: "#09090b",
-                              color: "#fafafa",
+                              backgroundColor: isLight ? "#ffffff" : "#09090b",
+                              color: T.text,
                               outline: "none",
                             }}
                           />
