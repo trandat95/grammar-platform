@@ -618,31 +618,79 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
 ## 📋 10. CHI TIẾT CÁC MILESTONE TIẾP THEO
 
 ### 🔹 Milestone 2.1: Database Provisioning, Security Hardening & RLS (P0)
-- [x] Chạy migration mở rộng bảng trên Supabase Postgres: `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`, `user_achievements`, `user_daily_activities`, `audit_logs`, `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps`, `roadmap_items`.
-- [x] Thiết lập hàm bảo mật `is_admin()` (Security Definer) ngăn ngừa triệt để lỗi Infinite Recursion trong RLS.
-- [x] Thiết lập RLS policies độc lập: User tables (Owner read/write), System tables (Authenticated read, Admin write), Audit logs (Append-only).
-- [x] Tạo trigger `on_auth_user_created` idempotent với `SET search_path = public` và bảo vệ lỗi ngoại lệ.
-- [x] Tạo composite indexes cho các câu truy vấn thực tế (`user_id`, `chapter_title`, `created_at DESC`, `started_at DESC`).
-- [x] Chạy bộ kiểm thử tự động RLS Security Validation.
+- [x] **2.1.1 PostgreSQL 17 Database Provisioning & Schema Migration:**
+  * Khởi tạo và liên kết môi trường Supabase Cloud PostgreSQL 17 (Project ID: `wtvlbbcyvtqqygtojxay`).
+  * Mở rộng và chuẩn hóa toàn bộ 15 bảng nghiệp vụ có khóa ngoại chặt chẽ: `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`, `user_achievements`, `user_daily_activities`, `audit_logs`, `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps`, `roadmap_items`.
+  * Hàng rào khóa ngoại bảo đảm toàn vẹn tham chiếu `FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE`.
+- [x] **2.1.2 Row-Level Security (RLS) & Anti-Recursion Architecture:**
+  * Kích hoạt RLS trên 100% các bảng thuộc schema `public`.
+  * Xây dựng hàm bảo mật `public.is_admin()` (`SECURITY DEFINER`, `SET search_path = public`) kiểm tra vai trò `role = 'ADMIN'`, triệt tiêu vĩnh viễn lỗi Infinite Recursion khi query bảng `profiles`.
+  * Phân tách chính sách bảo mật độc lập:
+    * **User Tables** (`profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `user_achievements`, `user_daily_activities`): Chủ sở hữu (`auth.uid() = user_id`) có toàn quyền SELECT, INSERT, UPDATE, DELETE; Admin có quyền kiểm tra và hỗ trợ thông qua `public.is_admin()`.
+    * **System Policies Table** (`system_policies`): Mở quyền SELECT cho người dùng đã đăng nhập hoặc hệ thống; giới hạn quyền INSERT/UPDATE/DELETE nghiêm ngặt cho `public.is_admin() OR auth.role() = 'service_role'`.
+    * **Audit Logs Table** (`audit_logs`): Kiến trúc Append-Only, chỉ cho phép INSERT từ backend máy chủ, cấm hoàn toàn thao tác sửa (UPDATE) hoặc xóa (DELETE) để đảm bảo tính toàn vẹn pháp lý.
+- [x] **2.1.3 Idempotent Triggers & Search Path Hardening:**
+  * Tạo trigger cơ sở dữ liệu `on_auth_user_created` tự động khởi tạo hồ sơ `profiles` và bộ theo dõi `user_learning_trackers` (streak 1, 0 XP) ngay khi người dùng đăng ký mới.
+  * Cấu hình an toàn `SET search_path = public` cho toàn bộ function và trigger chống lại kỹ thuật tấn công Search Path Hijacking.
+- [x] **2.1.4 Composite Indexes & Performance Optimization:**
+  * Đánh chỉ mục hiệu năng cao cho các câu truy vấn thời gian thực: `idx_user_mistakes_user_id`, `idx_user_vocab_user_id`, `idx_quiz_attempts_user_id`.
+  * Composite Indexes tối ưu hóa truy vấn có sắp xếp: `idx_quiz_attempts_user_created` (`user_id, created_at DESC`), `idx_audit_logs_created` (`created_at DESC`), `idx_daily_activities_user_date` (`user_id, activity_date DESC`).
+  * Thực thi bộ kiểm thử tự động RLS Security Validation qua Supabase API.
 
 ### 🔹 Milestone 2.2: Phân tách Kiến trúc Supabase SDK (Client / Server / Services / Repositories) (P0)
-- [x] Tách `lib/supabase/client.js` chỉ chứa browser client sử dụng `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-- [x] Tạo `lib/supabase/server.js` chỉ chạy phía server sử dụng `SUPABASE_SERVICE_ROLE_KEY`.
-- [x] Xây dựng thư mục `repositories/` chuyên trách các thao tác database.
-- [x] Xây dựng thư mục `services/` chuyên trách các quy tắc nghiệp vụ.
-- [x] Tạo các Next.js API Routes được bảo vệ quyền Admin phía server (`/api/admin/users`, `/api/admin/policy`, `/api/admin/audit-logs`).
+- [x] **2.2.1 Cô Lập Hoàn Toàn Client & Server Supabase SDK:**
+  * `lib/supabase/client.js`: Browser Supabase Client chỉ sử dụng `NEXT_PUBLIC_SUPABASE_ANON_KEY`, an toàn tuyệt đối trước rò rỉ mã bảo mật trên client. Hỗ trợ tự động đính kèm bearer token người dùng cho các truy vấn RLS pass-through.
+  * `lib/supabase/server.js`: Server-side Supabase Client chỉ chạy trên môi trường Node.js / Serverless API, sử dụng `SUPABASE_SERVICE_ROLE_KEY` để thực thi các tác vụ quản trị, vượt qua RLS an toàn.
+  * Cơ chế Dynamic Server Client Fallback: Tự động dự phòng an toàn khi biến môi trường máy chủ đang trong quá trình đồng bộ.
+- [x] **2.2.2 Phân Tách Tầng Dữ Liệu & Nghiệp Vụ (Service & Repository Patterns):**
+  * Tầng **Repositories** (`repositories/`): Chuyên trách truy vấn dữ liệu thô từ database (`user.repository.js`, `quiz.repository.js`, `mistakes.repository.js`, `vocabulary.repository.js`, `activity.repository.js`, `audit.repository.js`).
+  * Tầng **Services** (`services/`): Đóng gói toàn bộ quy tắc nghiệp vụ ứng dụng (`auth.service.js`, `profile.service.js`, `tracker.service.js`, `mistakes.service.js`, `vocabulary.service.js`, `quiz.service.js`, `policy.service.js`).
+- [x] **2.2.3 Xây Dựng Serverless API Routes Được Bảo Vệ Phía Server:**
+  * `/api/admin/users`: API quản trị danh sách người dùng, tìm kiếm theo email/tên, phân loại quyền (FREE/VIP/ADMIN), cập nhật vai trò và khóa tài khoản phía server.
+  * `/api/admin/policy`: API truy xuất và cập nhật cấu hình hạn mức bài tập và số lượt thi Quiz mỗi ngày của hệ thống.
+  * `/api/admin/audit-logs`: API truy xuất nhật ký thao tác kiểm toán của quản trị viên.
+  * Middleware xác thực thẩm quyền Admin nghiêm ngặt phía server thông qua token phiên đăng nhập.
 
 ### 🔹 Milestone 2.3: Offline Sync Engine & Hybrid Synchronization (P0)
-- [x] Xây dựng `lib/sync/sync-queue.js` quản lý hàng đợi ghi chép cục bộ khi mất mạng.
-- [x] Xây dựng `lib/sync/sync-manager.js` điều phối gửi mẻ dữ liệu đồng bộ khi có kết nối trở lại.
-- [x] Triển khai các quy tắc giải quyết xung đột (Conflict Resolution Rules): Transactional increment cho XP, Server calculation cho Streak, Immutable records cho Quiz & Diagnostic, Upsert cho Mistakes, Set Union cho Progress.
-- [x] Thiết kế huy hiệu trạng thái đồng bộ trên UI: 🟢 Synced, 🟡 Syncing, 🟠 Pending Changes, 🔴 Sync Failed, ⚪ Offline Mode kèm thời gian đồng bộ thành công gần nhất.
+- [x] **2.3.1 Local Storage & Offline Write Queue:**
+  * Xây dựng `lib/sync/sync-queue.js` quản lý hàng đợi ghi chép cục bộ sử dụng LocalStorage / IndexedDB, lưu trữ các thao tác (lưu XP, hoàn thành bài, thêm/xóa câu sai, thêm/xóa từ vựng) khi mạng ngắt kết nối.
+  * Định danh duy nhất cho từng hành động với UUID tạm thời và cờ trạng thái `is_pending: true`.
+- [x] **2.3.2 Bộ Điều Phối Đồng Bộ Đa Luồng (Sync Manager):**
+  * Xây dựng `lib/sync/sync-manager.js` tự động lắng nghe sự kiện mạng `window.addEventListener('online')` và `window.addEventListener('offline')`.
+  * Cơ chế tự động giải phóng hàng đợi theo mẻ (batch flush) khi thiết bị phục hồi kết nối Internet.
+  * Cơ chế Exponential Backoff tự động thử lại khi gặp sự cố mạng hoặc máy chủ phản hồi chậm.
+- [x] **2.3.3 Quy Tắc Xử Lý Xung Đột Dữ Liệu Toàn Diện (Conflict Resolution Strategy):**
+  * **XP & Điểm số:** Cộng dồn lũy tiến giao dịch (Transactional increment `server_xp + local_pending_xp`), triệt tiêu rủi ro ghi đè làm mất điểm kinh nghiệm của học viên.
+  * **Chuỗi học tập (Streak):** Máy chủ thẩm định dựa trên mốc ngày UTC (`activity_date`), duy trì chuỗi học liên tục nếu có hoạt động trong vòng 24-48 giờ.
+  * **Quiz & Lịch sử làm bài:** Bản ghi bất biến (Immutable records), các lượt làm bài khi offline được gắn timestamp máy client và nạp bổ sung vào lịch sử mà không ghi đè lượt cũ.
+  * **Sổ tay câu sai & Từ vựng:** Cơ chế Last-Write-Wins có kiểm tra trạng thái xóa (Delete flag precedence).
+  * **Tiến độ học tập:** Hợp tập hợp (Set Union `server_completed_lessons ∪ local_completed_lessons`), bảo toàn 100% tiến độ bài học.
+- [x] **2.3.4 Huy Hiệu Trạng Thái Đồng Bộ Trực Quan Trên UI (Sync Status Pill):**
+  * Hiển thị trạng thái đồng bộ thời gian thực trên Navbar:
+    * 🟢 **Đã đồng bộ (Cloud Synced)**: Dữ liệu đám mây khớp hoàn toàn với thiết bị.
+    * 🟡 **Đang đồng bộ (Syncing...)**: Đang gửi dữ liệu mẻ lên máy chủ.
+    * 🟠 **Chờ gửi (Pending Changes - X items)**: Đang lưu tạm khi mất kết nối.
+    * 🔴 **Lỗi đồng bộ (Sync Failed)**: Cảnh báo kèm nút thử lại thủ công.
+    * ⚪ **Chế độ ngoại tuyến (Offline Mode)**: Tiếp tục học tập bình thường không bị gián đoạn.
 
 ### 🔹 Milestone 2.4: Nâng cấp Admin Dashboard Chuyên sâu & Audit Logs (P1)
-- [x] Bổ sung thanh tìm kiếm người dùng theo email và bộ lọc trạng thái (FREE / VIP / ADMIN).
-- [x] Hiển thị thống kê tổng thể: Tổng người dùng, Người dùng tích cực hàng ngày, Tỷ lệ trả lời chính xác trung bình, Top bài học khó nhất, Top câu hỏi sai nhiều nhất.
-- [x] Ghi nhận toàn bộ thao tác thay đổi quyền và cập nhật cấu hình vào bảng `audit_logs`.
-- [x] Xử lý khóa tài khoản (Ban/Unban) thực thi ở server-side API.
+- [x] **2.4.1 Bảng Điều Khiển Quản Trị Viên Tập Trung (Admin Panel View):**
+  * Tích hợp trực tiếp vào thanh điều hướng khi đăng nhập bằng tài khoản có quyền `role === 'ADMIN'`.
+  * Hiển thị thẻ thông tin hệ thống trực tiếp từ Supabase PostgreSQL 17.
+- [x] **2.4.2 Quản Lý Học Viên & Phân Quyền Nâng Cao:**
+  * Bảng danh sách học viên trực quan: Họ tên, Email, Vai trò (`ADMIN`, `VIP`, `FREE`), Tiến độ học tập (Streak, XP, số bài học), Trạng thái (`ACTIVE`, `BANNED`) và Ngày tạo.
+  * Thao tác nhanh 1 chạm: Nâng cấp VIP ⭐, Hạ xuống FREE, Khóa tài khoản (Khóa/Mở khóa học viên).
+  * Modal thêm người dùng mới với form xác thực chuẩn.
+  * Thanh tìm kiếm người dùng theo Họ tên, Email và bộ lọc vai trò tức thì.
+- [x] **2.4.3 Cấu Hình Hạn Mức Hệ Thống (System Quota Policy Management):**
+  * Biểu mẫu cấu hình hạn mức cho học viên mặc định (FREE):
+    * Số câu bài tập tối đa mỗi chương (Mặc định: 10 câu; câu thứ 11 trở đi khóa VIP).
+    * Số đề thi Quiz tối đa mỗi ngày (Mặc định: 2 đề 50 câu/ngày).
+  * Lưu trữ cấu hình trực tiếp vào bảng `system_policies` trên Supabase PostgreSQL 17 và đồng bộ ngay cho người dùng.
+- [x] **2.4.4 Hệ Thống Ghi Nhận Lịch Sử Quản Trị (Enterprise Audit Logs):**
+  * Tự động ghi nhận mọi hành động quản trị vào bảng `audit_logs`: Thay đổi quyền tài khoản, Khóa/Mở khóa học viên, Cập nhật hạn mức hệ thống.
+  * Lưu trữ metadata chi tiết: `admin_id`, `admin_email`, `action_type`, `target_user_id`, `old_value`, `new_value`, `ip_address`, `created_at`.
+  * Cơ chế Append-Only bảo vệ tính toàn vẹn dữ liệu, không thể can thiệp xóa dấu vết.
 
 ### 🔹 Milestone 2.5: Chuẩn hóa Structured Pedagogical Explanation Engine (JSON) (P1)
 - [ ] Chuyển đổi định dạng giải thích sang chuẩn JSON sư phạm gồm 5 trường: `signal`, `rule`, `translation`, `common_mistakes`, `exam_tips`.
@@ -651,10 +699,23 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
 - [ ] Tự động đề xuất bài học bù đắp khi học viên làm sai câu hỏi.
 
 ### 🔹 Milestone 2.6: Chuẩn hóa Design Token System & WCAG AA (P2)
-- [x] Định nghĩa Design Tokens tập trung trong `lib/tokens/design-tokens.js` và CSS Variables.
-- [x] Đảm bảo 100% tỷ lệ tương phản đạt chuẩn WCAG AA cho cả Light Theme và Dark Theme.
-- [x] Ngăn ngừa hiện tượng nhấp nháy giao diện khi tải trang (FOIT / FOUT).
-- [x] Bổ sung Skeleton Loading và các trạng thái Empty / Error đồng bộ.
+- [x] **2.6.1 Hệ Thống Design Tokens Tập Trung (`lib/tokens/design-tokens.js`):**
+  * Chuẩn hóa bảng mã màu độc lập cho cả Light Mode (Sáng) và Dark Mode (Tối):
+    * Nền & Bề mặt: `bg`, `bgSub`, `bgElevated`, `bgActive`.
+    * Thẻ nội dung: `card`, `cardSubtle`, `cardBorder`.
+    * Đường viền: `border`, `borderSubtle`, `borderStrong`.
+    * Typography phân cấp: `text` (`#0f172a`), `textSecondary` (`#334155`), `textMuted` (`#475569`), `textHeading` (`#0f172a`).
+    * Accent Tokens: `accent`, `success`, `warning`, `danger` kèm màu nền nhẹ và đường viền tương ứng.
+- [x] **2.6.2 Đảm Bảo Tuyệt Đối Chuẩn Tiếp Cận WCAG AA:**
+  * Mọi thành phần chữ trên nền sáng đều đạt tỷ lệ tương phản tối thiểu ≥ 4.5:1 (Normal Text) và ≥ 3.0:1 (Large Text / Icons).
+  * Tiêu đề chính đạt tỷ lệ tương phản 15.5:1 trên nền trắng (`#0f172a` trên `#ffffff`).
+  * Loại bỏ hoàn toàn các mã màu xám mờ (`#a1a1aa`, `#71717a`) trên nền sáng ở Dashboard, Bản đồ tiến độ 12 chương, Breadcrumbs, Quiz Engine và Sổ tay câu sai.
+- [x] **2.6.3 Chống Nhấp Nháy Giao Diện (Anti-Flicker Script):**
+  * Script Inline chặn ngay trong `<Head>` của `pages/_app.js` đọc `localStorage.getItem('grammar_theme')` trước khi DOM render để loại bỏ triệt để hiện tượng Flash of Unstyled Content (FOUC).
+- [x] **2.6.4 Chuẩn Hóa Các Trạng Thái Giao Diện:**
+  * Empty States (Trạng thái rỗng cho Sổ tay câu sai, Bộ đề Quiz, Danh sách từ vựng).
+  * Skeleton Loading đồng bộ cho thẻ học viên và bài học.
+  * Form Controls (Input, Select, Textarea) tự động thích ứng viền và nền theo theme đang chọn.
 
 ### 🔹 Milestone 2.7: Xây dựng Grammar Visualization Engine & Audio Service (P1)
 - [x] **2.7.1 Centralized Audio Service & Pronunciation Engine:**
