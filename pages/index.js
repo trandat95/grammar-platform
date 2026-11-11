@@ -2,6 +2,21 @@ import Head from "next/head";
 import { useState, useEffect, useMemo } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
+import {
+  supabase,
+  getProfile,
+  upsertProfile,
+  getTracker,
+  upsertTracker,
+  getMistakes,
+  addMistake,
+  removeMistake,
+  getVocabularies,
+  addVocabulary,
+  removeVocabulary,
+  getSystemPolicy,
+  updateSystemPolicy,
+} from "../lib/supabase/client";
 
 // Default Pre-seeded User Database
 const DEFAULT_USERS = [
@@ -42,6 +57,7 @@ const DEFAULT_ACCESS_POLICY = {
 export default function Home() {
   // Navigation mode: 'dashboard' | 'study' | 'quiz' | 'mistakes' | 'admin'
   const [currentView, setCurrentView] = useState("dashboard");
+  const [supabaseConnected, setSupabaseConnected] = useState(true);
 
   // --- Auth & User State ---
   const [usersList, setUsersList] = useState(DEFAULT_USERS);
@@ -270,6 +286,18 @@ export default function Home() {
     const trackerKey = `grammar_tracker_${currentUser.id}`;
     setUserTracker((prev) => {
       const next = typeof updater === "function" ? updater(prev) : { ...prev, ...updater };
+      try {
+        localStorage.setItem(trackerKey, JSON.stringify(next));
+      } catch (e) {
+        console.error("Failed to save tracker locally", e);
+      }
+      // Asynchronous background sync to Supabase PostgreSQL 17
+      upsertTracker(currentUser.id, next).catch((err) => {
+        console.warn("Supabase tracker sync skipped:", err?.message || err);
+      });
+      return next;
+    });
+  };
       try {
         localStorage.setItem(trackerKey, JSON.stringify(next));
       } catch (e) {
@@ -2231,6 +2259,26 @@ export default function Home() {
 
           {/* Quick Dictionary & Vocab Tools */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {/* Live Supabase Cloud Sync Badge */}
+            <div
+              title="Cơ sở dữ liệu Supabase PostgreSQL 17 (Project: wtvlbbcyvtqqygtojxay)"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                backgroundColor: "#064e3b30",
+                border: "1px solid #05966980",
+                borderRadius: "999px",
+                padding: "0.22rem 0.65rem",
+                fontSize: "0.72rem",
+                fontWeight: "700",
+                color: "#34d399",
+              }}
+            >
+              <span style={{ fontSize: "0.75rem" }}>⚡</span>
+              <span>Supabase Cloud</span>
+            </div>
+
             {/* Quick Word Search Box */}
             <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
               <input

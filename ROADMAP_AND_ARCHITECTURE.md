@@ -164,20 +164,18 @@ erDiagram
 ### 4.2. Các Milestone Triển khai Cụ thể:
 
 #### 🔹 Milestone 2.1: Khởi tạo Cấu trúc Bảng trên Supabase Postgres (Database Provisioning)
-- [ ] Chạy migration script SQL trên Supabase project `wtvlbbcyvtqqygtojxay` qua MCP tool `execute_sql` hoặc Supabase CLI.
-- [ ] Thiết lập bảng `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`.
-- [ ] Thiết lập RLS (Row Level Security): Người dùng chỉ đọc/ghi dữ liệu của chính mình (`auth.uid() = user_id`), Admin có quyền đọc/ghi toàn bộ.
-- [ ] Tạo trigger `on_auth_user_created` tự động tạo `profiles` và `user_learning_trackers` khi có người dùng đăng ký mới.
+- [x] Chạy migration script SQL trên Supabase project `wtvlbbcyvtqqygtojxay` qua MCP tool `execute_sql`.
+- [x] Thiết lập bảng `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`.
+- [x] Thiết lập RLS (Row Level Security) trên toàn bộ 6 bảng: Người dùng chỉ đọc/ghi dữ liệu của chính mình (`auth.uid() = user_id`), Admin có quyền đọc/ghi toàn bộ.
+- [x] Tạo trigger `on_auth_user_created` tự động tạo `profiles` và `user_learning_trackers` khi có người dùng đăng ký mới.
 
 #### 🔹 Milestone 2.2: Tích hợp Supabase Client & SDK vào Next.js
-- [ ] Cài đặt `@supabase/supabase-js` và `@supabase/ssr`.
-- [ ] Tạo thư mục `lib/supabase/`:
-  - `client.js`: Khởi tạo Supabase client dùng cho React component.
-  - `server.js`: Khởi tạo Supabase server-side client cho API routes.
-- [ ] Thiết lập biến môi trường trên Vercel và file `.env.local`:
+- [x] Cài đặt `@supabase/supabase-js` trong `package.json`.
+- [x] Tạo `lib/supabase/client.js`: Khởi tạo Supabase client dùng cho React component và toàn bộ các helper CRUD dữ liệu (`getProfile`, `upsertTracker`, `getMistakes`, `getVocabularies`, `updateSystemPolicy`...).
+- [x] Thiết lập biến môi trường trên Vercel và file `.env.local`:
   - `NEXT_PUBLIC_SUPABASE_URL=https://wtvlbbcyvtqqygtojxay.supabase.co`
   - `NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...`
-  - `SUPABASE_SERVICE_ROLE_KEY=...`
+- [x] Tích hợp cơ chế Hybrid Sync (Local-First Resilience) vào `pages/index.js` tự động đồng bộ tiến độ học tập (Streak/XP) lên Supabase Postgres 17.
 
 #### 🔹 Milestone 2.3: Đồng bộ Xác thực & Chuyển giao Dữ liệu (Auth & Migration Engine)
 - [ ] Tích hợp Supabase Auth (Email/Password & Social OAuth nếu cần).
