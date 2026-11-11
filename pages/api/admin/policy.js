@@ -43,7 +43,7 @@ export default async function handler(req, res) {
         .from("system_policies")
         .select("*")
         .eq("key", "default")
-        .single();
+        .maybeSingle();
 
       const payload = {
         key: "default",

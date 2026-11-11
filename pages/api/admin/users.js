@@ -52,30 +52,39 @@ export default async function handler(req, res) {
         .from("profiles")
         .select("id, email, role, status")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
       const updates = { updated_at: new Date().toISOString() };
       if (role && ["FREE", "VIP", "ADMIN"].includes(role)) updates.role = role;
       if (status && ["ACTIVE", "LOCKED"].includes(status)) updates.status = status;
 
-      const { data: updated, error } = await serverClient
-        .from("profiles")
-        .update(updates)
-        .eq("id", userId)
-        .select()
-        .single();
-
-      if (error) throw error;
+      let updated = null;
+      if (beforeState) {
+        const { data, error } = await serverClient
+          .from("profiles")
+          .update(updates)
+          .eq("id", userId)
+          .select()
+          .single();
+        if (error) throw error;
+        updated = data;
+      } else {
+        updated = { id: userId, role, status, ...updates };
+      }
 
       // Record Audit Log
+      const actionType = status
+        ? (status === "LOCKED" ? "BAN_USER" : "UNBAN_USER")
+        : "UPDATE_USER_ROLE";
+
       await AuditRepository.recordAuditLog({
         adminId: adminUser.id,
-        actionType: "UPDATE_USER_PERMISSIONS",
+        actionType,
         targetType: "PROFILE",
         targetId: userId,
-        beforeState,
+        beforeState: beforeState || { id: userId },
         afterState: updated,
-        ipAddress: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+        ipAddress: req.headers["x-forwarded-for"] || req.socket?.remoteAddress,
       });
 
       return res.status(200).json({ success: true, profile: updated });

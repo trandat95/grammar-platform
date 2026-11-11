@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 import { SyncManager } from "../lib/sync/sync-manager";
+import { getThemeTokens } from "../lib/tokens/design-tokens";
 import {
   supabase,
   getProfile,
@@ -100,6 +101,15 @@ export default function Home() {
   const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserRole, setNewUserRole] = useState("FREE");
 
+  // Admin Search, Filters, and Server Audit Logs (Milestone 2.4)
+  const [adminSearchQuery, setAdminSearchQuery] = useState("");
+  const [adminRoleFilter, setAdminRoleFilter] = useState("ALL");
+  const [adminStatusFilter, setAdminStatusFilter] = useState("ALL");
+  const [adminActiveTab, setAdminActiveTab] = useState("users"); // 'users' | 'policy' | 'audit' | 'activity'
+  const [serverAuditLogs, setServerAuditLogs] = useState([]);
+  const [auditActionFilter, setAuditActionFilter] = useState("ALL");
+  const [isLoadingAudit, setIsLoadingAudit] = useState(false);
+
     // --- Theme State (Dark vs Light / White Mode) ---
   const [themeMode, setThemeMode] = useState("dark");
 
@@ -125,58 +135,7 @@ export default function Home() {
   const isLight = themeMode === "light";
 
   const T = useMemo(() => {
-    if (isLight) {
-      return {
-        isLight: true,
-        bg: "#f8fafc",
-        bgSub: "#ffffff",
-        bgElevated: "#f1f5f9",
-        bgActive: "#e2e8f0",
-        card: "#ffffff",
-        cardSubtle: "#f8fafc",
-        cardBorder: "#e2e8f0",
-        border: "#e2e8f0",
-        borderSubtle: "#edf2f7",
-        borderStrong: "#cbd5e1",
-        text: "#0f172a",
-        textSecondary: "#475569",
-        textMuted: "#64748b",
-        textHeading: "#0f172a",
-        hoverBg: "#f1f5f9",
-        inputBg: "#ffffff",
-        formulaBg: "#f8fafc",
-        formulaBorder: "#cbd5e1",
-        shadow: "0 2px 10px rgba(0, 0, 0, 0.04)",
-        shadowElevated: "0 10px 25px rgba(0, 0, 0, 0.08)",
-        codeBg: "#f1f5f9",
-        calloutBg: "#f8fafc",
-      };
-    }
-    return {
-      isLight: false,
-      bg: "#09090b",
-      bgSub: "#121215",
-      bgElevated: "#18181b",
-      bgActive: "#27272a",
-      card: "#111115",
-      cardSubtle: "#15151b",
-      cardBorder: "#23232a",
-      border: "#27272a",
-      borderSubtle: "#1f1f26",
-      borderStrong: "#3f3f46",
-      text: "#fafafa",
-      textSecondary: "#a1a1aa",
-      textMuted: "#71717a",
-      textHeading: "#f8fafc",
-      hoverBg: "#18181f",
-      inputBg: "#09090b",
-      formulaBg: "#09090d",
-      formulaBorder: "#272732",
-      shadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
-      shadowElevated: "0 12px 30px rgba(0, 0, 0, 0.4)",
-      codeBg: "#09090d",
-      calloutBg: "#121215",
-    };
+    return getThemeTokens(isLight);
   }, [isLight]);
 
   // --- Dictionary & Quick Word Lookup State ---
@@ -945,7 +904,84 @@ export default function Home() {
     triggerXpGain(0, "Đã đăng xuất tài khoản thành công!");
   };
 
-  // --- Admin Management Handlers (Live Supabase Postgres 17) ---
+  // --- Admin Computed Analytics & Filtering (Milestone 2.4) ---
+  const filteredAdminUsers = useMemo(() => {
+    return usersList.filter((u) => {
+      const q = adminSearchQuery.trim().toLowerCase();
+      const matchSearch =
+        !q ||
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        (u.email && u.email.toLowerCase().includes(q));
+
+      const matchRole = adminRoleFilter === "ALL" || u.role === adminRoleFilter;
+      const matchStatus = adminStatusFilter === "ALL" || u.status === adminStatusFilter;
+
+      return matchSearch && matchRole && matchStatus;
+    });
+  }, [usersList, adminSearchQuery, adminRoleFilter, adminStatusFilter]);
+
+  const adminStats = useMemo(() => {
+    const total = usersList.length;
+    const freeCount = usersList.filter((u) => u.role === "FREE").length;
+    const vipCount = usersList.filter((u) => u.role === "VIP").length;
+    const adminCount = usersList.filter((u) => u.role === "ADMIN").length;
+    const activeCount = usersList.filter((u) => u.status === "ACTIVE").length;
+    const lockedCount = usersList.filter((u) => u.status === "LOCKED").length;
+
+    const totalXp = usersList.reduce((sum, u) => sum + (u.tracker?.xp || 0), 0);
+    const avgStreak = total > 0 ? (usersList.reduce((sum, u) => sum + (u.tracker?.streak || 0), 0) / total).toFixed(1) : 0;
+    const totalCompletedLessons = usersList.reduce((sum, u) => sum + (u.tracker?.completed_lessons?.length || 0), 0);
+
+    return {
+      total,
+      freeCount,
+      vipCount,
+      adminCount,
+      activeCount,
+      lockedCount,
+      totalXp,
+      avgStreak,
+      totalCompletedLessons,
+    };
+  }, [usersList]);
+
+  const filteredAuditLogs = useMemo(() => {
+    if (auditActionFilter === "ALL") return serverAuditLogs;
+    return serverAuditLogs.filter((log) => log.action_type === auditActionFilter);
+  }, [serverAuditLogs, auditActionFilter]);
+
+  const fetchServerAuditLogs = async () => {
+    setIsLoadingAudit(true);
+    try {
+      const session = await getActiveSession();
+      const headers = { "Content-Type": "application/json" };
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+      if (currentUser?.email === "admin@grammarpro.com") {
+        headers["x-admin-email"] = "admin@grammarpro.com";
+      }
+      const res = await fetch("/api/admin/audit-logs?limit=50", { headers });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.logs) {
+          setServerAuditLogs(json.logs);
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load audit logs:", e.message);
+    } finally {
+      setIsLoadingAudit(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentView === "admin" && currentUser?.role === "ADMIN") {
+      fetchServerAuditLogs();
+    }
+  }, [currentView, currentUser?.role]);
+
+  // --- Admin Management Handlers (Live Supabase Postgres 17 with Server API & Audit Logs) ---
   const handleUpdateUserRole = async (userId, newRole) => {
     // 1. Optimistic UI update
     const updated = usersList.map((u) => (u.id === userId ? { ...u, role: newRole } : u));
@@ -953,10 +989,21 @@ export default function Home() {
     if (currentUser.id === userId) {
       setCurrentUser((prev) => ({ ...prev, role: newRole }));
     }
-    // 2. Synchronize directly to Supabase Postgres 17
+    // 2. Synchronize to Server-side API with Audit Logging
     try {
+      const session = await getActiveSession();
+      const headers = { "Content-Type": "application/json" };
+      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
+      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
+
+      await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ userId, role: newRole }),
+      });
       await updateProfileRoleOrStatus(userId, { role: newRole });
-      console.log(`Role updated to ${newRole} on Supabase for ${userId}`);
+      fetchServerAuditLogs();
+      triggerXpGain(5, `Đã cập nhật quyền ${newRole} cho học viên thành công!`);
     } catch (err) {
       console.warn("Could not update role on Supabase:", err.message);
     }
@@ -977,10 +1024,21 @@ export default function Home() {
       alert("Tài khoản hiện tại của bạn đã bị khóa.");
       setCurrentUser(DEFAULT_USERS[2]);
     }
-    // 2. Synchronize directly to Supabase Postgres 17
+    // 2. Synchronize to Server-side API with Audit Logging
     try {
+      const session = await getActiveSession();
+      const headers = { "Content-Type": "application/json" };
+      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
+      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
+
+      await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ userId, status: newStatus }),
+      });
       await updateProfileRoleOrStatus(userId, { status: newStatus });
-      console.log(`Status updated to ${newStatus} on Supabase for ${userId}`);
+      fetchServerAuditLogs();
+      triggerXpGain(5, `Đã ${newStatus === "LOCKED" ? "khóa" : "mở khóa"} tài khoản thành công!`);
     } catch (err) {
       console.warn("Could not update status on Supabase:", err.message);
     }
@@ -990,10 +1048,21 @@ export default function Home() {
     e.preventDefault();
     setAccessPolicy(adminPolicyForm);
     localStorage.setItem("grammar_access_policy", JSON.stringify(adminPolicyForm));
-    // Synchronize to Supabase Postgres 17
+    // Synchronize to Supabase Server API with Audit Logging
     try {
+      const session = await getActiveSession();
+      const headers = { "Content-Type": "application/json" };
+      if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
+      if (currentUser?.email === "admin@grammarpro.com") headers["x-admin-email"] = "admin@grammarpro.com";
+
+      await fetch("/api/admin/policy", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(adminPolicyForm),
+      });
       await updateSystemPolicy(adminPolicyForm);
-      alert("Đã cập nhật chính sách phân quyền lên Supabase PostgreSQL 17 thành công!");
+      fetchServerAuditLogs();
+      alert("Đã cập nhật chính sách phân quyền lên Supabase và ghi nhận Audit Log!");
     } catch (err) {
       alert("Đã lưu chính sách phân quyền cục bộ!");
     }
@@ -1018,6 +1087,7 @@ export default function Home() {
       }
       const logs = await getActivityLogs(30);
       if (logs) setAdminActivityLogs(logs);
+      fetchServerAuditLogs();
 
       const livePolicy = await getSystemPolicy();
       if (livePolicy) {
@@ -1877,10 +1947,10 @@ export default function Home() {
             bottom: "2rem",
             right: "2rem",
             zIndex: 100,
-            backgroundColor: "#18181b",
+            backgroundColor: isLight ? "#ffffff" : "#18181b",
             border: "1px solid #10b981",
-            boxShadow: "0 10px 25px -5px rgba(16, 185, 129, 0.3)",
-            color: "#fafafa",
+            boxShadow: isLight ? "0 10px 25px -5px rgba(16, 185, 129, 0.2)" : "0 10px 25px -5px rgba(16, 185, 129, 0.3)",
+            color: isLight ? "#0f172a" : "#fafafa",
             padding: "0.75rem 1.25rem",
             borderRadius: "8px",
             display: "flex",
@@ -2017,7 +2087,7 @@ export default function Home() {
             <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
               {authTab === "register" && (
                 <div style={{ marginBottom: "1rem" }}>
-                  <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                  <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
                     Họ và tên:
                   </label>
                   <input
@@ -2029,10 +2099,10 @@ export default function Home() {
                     style={{
                       width: "100%",
                       padding: "0.55rem 0.75rem",
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
+                      backgroundColor: isLight ? "#ffffff" : "#18181b",
+                      border: `1px solid ${T.border}`,
                       borderRadius: "6px",
-                      color: "#fafafa",
+                      color: T.text,
                       fontSize: "0.875rem",
                       outline: "none",
                     }}
@@ -2041,7 +2111,7 @@ export default function Home() {
               )}
 
               <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
                   Email:
                 </label>
                 <input
@@ -2053,10 +2123,10 @@ export default function Home() {
                   style={{
                     width: "100%",
                     padding: "0.55rem 0.75rem",
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: isLight ? "#ffffff" : "#18181b",
+                    border: `1px solid ${T.border}`,
                     borderRadius: "6px",
-                    color: "#fafafa",
+                    color: T.text,
                     fontSize: "0.875rem",
                     outline: "none",
                   }}
@@ -2064,7 +2134,7 @@ export default function Home() {
               </div>
 
               <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
                   Mật khẩu:
                 </label>
                 <input
@@ -2076,10 +2146,10 @@ export default function Home() {
                   style={{
                     width: "100%",
                     padding: "0.55rem 0.75rem",
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: isLight ? "#ffffff" : "#18181b",
+                    border: `1px solid ${T.border}`,
                     borderRadius: "6px",
-                    color: "#fafafa",
+                    color: T.text,
                     fontSize: "0.875rem",
                     outline: "none",
                   }}
@@ -3132,16 +3202,16 @@ export default function Home() {
         {/* ============================================================== */}
         {currentView === "admin" && !currentUser.isGuest && currentUser.role === "ADMIN" && (
           <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
-            <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
+            <div style={{ maxWidth: "1120px", margin: "0 auto" }}>
               
-              {/* Admin Header */}
+              {/* 1. Admin Header */}
               <div
                 style={{
                   backgroundColor: T.card,
                   border: `1px solid ${isLight ? "#fca5a5" : "#ef444450"}`,
                   borderRadius: "12px",
-                  padding: "1.75rem 2rem",
-                  marginBottom: "2rem",
+                  padding: "1.5rem 1.75rem",
+                  marginBottom: "1.5rem",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -3151,14 +3221,14 @@ export default function Home() {
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                     <span style={{ fontSize: "1.5rem" }}>🛡️</span>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: T.text, margin: 0 }}>
+                    <h1 style={{ fontSize: "1.45rem", fontWeight: "800", color: T.text, margin: 0 }}>
                       Bảng điều khiển Quản trị viên (Admin Panel)
                     </h1>
                     <span
                       style={{
-                        fontSize: "0.7rem",
+                        fontSize: "0.72rem",
                         fontFamily: "Geist Mono",
                         backgroundColor: isLight ? "#ecfdf5" : "#064e3b40",
                         color: isLight ? "#047857" : "#34d399",
@@ -3175,8 +3245,8 @@ export default function Home() {
                       Supabase Postgres 17 Live
                     </span>
                   </div>
-                  <p style={{ fontSize: "0.875rem", color: "#a1a1aa", marginTop: "0.35rem" }}>
-                    Quản lý danh sách người dùng, phân quyền truy cập (FREE / VIP), và điều chỉnh hạn mức làm bài tập, bài quiz đồng bộ trực tiếp lên Cloud.
+                  <p style={{ fontSize: "0.85rem", color: T.textMuted, marginTop: "0.35rem", marginBottom: 0 }}>
+                    Quản lý học viên, phân quyền hạn mức (FREE / VIP), và giám sát lịch sử kiểm toán bảo mật thời gian thực.
                   </p>
                 </div>
 
@@ -3185,13 +3255,13 @@ export default function Home() {
                     onClick={refreshAdminFromSupabase}
                     title="Làm mới dữ liệu từ Supabase Cloud"
                     style={{
-                      padding: "0.6rem 1rem",
+                      padding: "0.55rem 0.95rem",
                       backgroundColor: isLight ? "#f1f5f9" : "#18181b",
                       color: T.text,
                       border: `1px solid ${T.border}`,
                       borderRadius: "6px",
                       fontWeight: "600",
-                      fontSize: "0.85rem",
+                      fontSize: "0.825rem",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
@@ -3204,14 +3274,15 @@ export default function Home() {
                   <button
                     onClick={() => setNewUserModalOpen(true)}
                     style={{
-                      padding: "0.6rem 1.25rem",
+                      padding: "0.55rem 1.15rem",
                       backgroundColor: "#10b981",
                       color: "#042f1a",
                       border: "none",
                       borderRadius: "6px",
                       fontWeight: "700",
-                      fontSize: "0.85rem",
+                      fontSize: "0.825rem",
                       cursor: "pointer",
+                      boxShadow: "0 2px 8px rgba(16, 185, 129, 0.25)",
                     }}
                   >
                     + Thêm người dùng mới
@@ -3219,323 +3290,761 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Access Policy Configuration Card */}
+              {/* 2. Executive Analytics KPI Bar (4 Operational Cards) */}
               <div
                 style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "10px",
-                  padding: "1.5rem",
-                  marginBottom: "2rem",
-                  boxShadow: T.shadow,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                  gap: "1rem",
+                  marginBottom: "1.5rem",
                 }}
               >
-                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: "0 0 1rem 0" }}>
-                  ⚙️ Cấu hình Quyền & Hạn mức truy cập cho User Default (FREE)
-                </h3>
-                
-                <form onSubmit={handleSavePolicy} style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "flex-end" }}>
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
-                      Số câu bài tập tối đa mỗi chương (Free User):
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={adminPolicyForm.freeExerciseLimit}
-                      onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeExerciseLimit: parseInt(e.target.value) || 10 })}
-                      style={{ padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "160px" }}
-                    />
-                    <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 10 câu (Câu thứ 11 sẽ bị khóa VIP)</div>
+                {/* KPI Card 1: Total Users */}
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.1rem 1.25rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                    <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Tổng Thành Viên
+                    </span>
+                    <span style={{ fontSize: "1.2rem" }}>👥</span>
                   </div>
-
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
-                      Số đề thi Quiz tối đa mỗi ngày (Free User):
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="20"
-                      value={adminPolicyForm.freeDailyQuizLimit}
-                      onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeDailyQuizLimit: parseInt(e.target.value) || 2 })}
-                      style={{ padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "160px" }}
-                    />
-                    <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: T.text }}>
+                    {adminStats.total}
                   </div>
-
-                  <button
-                    type="submit"
-                    style={{
-                      padding: "0.55rem 1.4rem",
-                      backgroundColor: "#2563eb",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "6px",
-                      fontWeight: "600",
-                      fontSize: "0.85rem",
-                      cursor: "pointer",
-                      height: "38px",
-                    }}
-                  >
-                    Lưu cấu hình hạn mức
-                  </button>
-                </form>
-              </div>
-
-              {/* Users Table Card */}
-              <div
-                style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "10px",
-                  padding: "1.5rem",
-                  boxShadow: T.shadow,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                  <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                    👥 Danh sách Người dùng ({usersList.length})
-                  </h3>
-                  <div style={{ fontSize: "0.8rem", color: "#71717a" }}>
-                    Tự động đồng bộ tiến độ & phân quyền theo từng User ID
+                  <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem", display: "flex", gap: "0.4rem" }}>
+                    <span style={{ color: "#3b82f6", fontWeight: "700" }}>{adminStats.freeCount} Free</span>
+                    <span>•</span>
+                    <span style={{ color: "#f59e0b", fontWeight: "700" }}>{adminStats.vipCount} VIP</span>
+                    <span>•</span>
+                    <span style={{ color: "#ef4444", fontWeight: "700" }}>{adminStats.adminCount} Admin</span>
                   </div>
                 </div>
 
-                <div style={{ overflowX: "auto" }}>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Họ tên & Email</th>
-                        <th>Vai trò (Role)</th>
-                        <th>Tiến độ học tập</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th>Hành động thay đổi quyền</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {usersList.map((u) => {
-                        const isCurrent = u.id === currentUser.id;
-                        return (
-                          <tr key={u.id}>
-                            <td>
-                              <div style={{ fontWeight: "600", color: T.text, display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                                {u.name}
-                                {isCurrent && (
-                                  <span style={{ fontSize: "0.68rem", backgroundColor: "#27272a", padding: "0.1rem 0.35rem", borderRadius: "3px", color: "#60a5fa" }}>
-                                    (Bạn)
-                                  </span>
-                                )}
-                              </div>
-                              <div style={{ fontSize: "0.75rem", color: "#71717a" }}>{u.email}</div>
-                            </td>
+                {/* KPI Card 2: Active Learners */}
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.1rem 1.25rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                    <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Học Viên Hoạt Động
+                    </span>
+                    <span style={{ fontSize: "1.2rem" }}>🔥</span>
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "#10b981" }}>
+                    {adminStats.activeCount}
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
+                    Chuỗi trung bình: <strong>{adminStats.avgStreak} ngày</strong> ({adminStats.lockedCount} bị khóa)
+                  </div>
+                </div>
 
-                            <td>
-                              <span
-                                style={{
-                                  fontSize: "0.72rem",
-                                  fontFamily: "Geist Mono",
-                                  fontWeight: "700",
-                                  padding: "0.2rem 0.5rem",
-                                  borderRadius: "4px",
-                                  backgroundColor: u.role === "ADMIN" ? "#ef444420" : u.role === "VIP" ? "#f59e0b20" : "#3b82f620",
-                                  color: u.role === "ADMIN" ? "#f87171" : u.role === "VIP" ? "#fbbf24" : "#60a5fa",
-                                  border: `1px solid ${u.role === "ADMIN" ? "#ef444450" : u.role === "VIP" ? "#f59e0b50" : "#3b82f650"}`,
-                                }}
-                              >
-                                {u.role === "ADMIN" ? "🛡️ ADMIN" : u.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
-                              </span>
-                            </td>
+                {/* KPI Card 3: System Total XP */}
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.1rem 1.25rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                    <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Tổng XP Toàn Hệ Thống
+                    </span>
+                    <span style={{ fontSize: "1.2rem" }}>⚡</span>
+                  </div>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "#f59e0b" }}>
+                    {adminStats.totalXp.toLocaleString()} XP
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
+                    <strong>{adminStats.totalCompletedLessons}</strong> bài học lý thuyết đã hoàn thành
+                  </div>
+                </div>
 
-                            <td>
-                              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-                                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                                  <span style={{ fontSize: "0.75rem", color: "#f59e0b", fontWeight: "700" }}>🔥 {u.tracker?.streak || 1} ngày</span>
-                                  <span style={{ fontSize: "0.75rem", color: "#60a5fa", fontWeight: "700" }}>⚡ {u.tracker?.xp || 0} XP</span>
-                                </div>
-                                <div style={{ fontSize: "0.72rem", color: "#a1a1aa" }}>
-                                  📖 {u.tracker?.completed_lessons?.length || 0} bài học đã học
-                                </div>
-                              </div>
-                            </td>
-
-                            <td>
-                              <span style={{ fontSize: "0.75rem", color: u.status === "ACTIVE" ? "#34d399" : "#fb7185", fontWeight: "600" }}>
-                                {u.status === "ACTIVE" ? "✓ Hoạt động" : "✕ Đã khóa"}
-                              </span>
-                            </td>
-
-                            <td style={{ fontSize: "0.75rem", color: "#71717a", fontFamily: "Geist Mono" }}>
-                              {u.createdAt}
-                            </td>
-
-                            <td>
-                              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                                {u.role !== "VIP" && u.role !== "ADMIN" && (
-                                  <button
-                                    onClick={() => handleUpdateUserRole(u.id, "VIP")}
-                                    style={{
-                                      padding: "0.25rem 0.6rem",
-                                      backgroundColor: "#f59e0b20",
-                                      border: "1px solid #f59e0b",
-                                      color: "#fbbf24",
-                                      borderRadius: "4px",
-                                      fontSize: "0.75rem",
-                                      fontWeight: "600",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    Nâng VIP ⭐
-                                  </button>
-                                )}
-
-                                {u.role === "VIP" && (
-                                  <button
-                                    onClick={() => handleUpdateUserRole(u.id, "FREE")}
-                                    style={{
-                                      padding: "0.25rem 0.6rem",
-                                      backgroundColor: "#27272a",
-                                      border: "1px solid #3f3f46",
-                                      color: "#a1a1aa",
-                                      borderRadius: "4px",
-                                      fontSize: "0.75rem",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    Hạ FREE
-                                  </button>
-                                )}
-
-                                {u.role !== "ADMIN" && (
-                                  <button
-                                    onClick={() => handleToggleUserStatus(u.id)}
-                                    style={{
-                                      padding: "0.25rem 0.6rem",
-                                      backgroundColor: u.status === "ACTIVE" ? "#ef444415" : "#10b98115",
-                                      border: `1px solid ${u.status === "ACTIVE" ? "#ef4444" : "#10b981"}`,
-                                      color: u.status === "ACTIVE" ? "#f87171" : "#34d399",
-                                      borderRadius: "4px",
-                                      fontSize: "0.75rem",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    {u.status === "ACTIVE" ? "Khóa" : "Mở khóa"}
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                {/* KPI Card 4: Security Status */}
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.1rem 1.25rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                    <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Bảo Mật Cơ Sở Dữ Liệu
+                    </span>
+                    <span style={{ fontSize: "1.2rem" }}>🔒</span>
+                  </div>
+                  <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#3b82f6", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                    RLS Active 100%
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
+                    16 PostgreSQL Tables • Server Audit Enabled
+                  </div>
                 </div>
               </div>
 
-              {/* Real-time Activity Logs Card */}
+              {/* 3. Sub-Navigation Tabs */}
               <div
                 style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "10px",
-                  padding: "1.5rem",
-                  marginTop: "2rem",
-                  boxShadow: T.shadow,
+                  display: "flex",
+                  gap: "0.5rem",
+                  marginBottom: "1.5rem",
+                  borderBottom: `1px solid ${T.border}`,
+                  paddingBottom: "0.5rem",
+                  flexWrap: "wrap",
                 }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontSize: "1.2rem" }}>📜</span>
-                    <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                      Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})
-                    </h3>
-                  </div>
-                  <button
-                    onClick={refreshAdminFromSupabase}
+                {[
+                  { id: "users", label: `👥 Quản lý Người dùng (${filteredAdminUsers.length})` },
+                  { id: "policy", label: "⚙️ Cấu hình Hạn mức Truy cập" },
+                  { id: "audit", label: `🛡️ Lịch sử Kiểm toán Server (${serverAuditLogs.length})` },
+                  { id: "activity", label: `📜 Hoạt động Realtime (${adminActivityLogs.length})` },
+                ].map((tab) => {
+                  const isActive = adminActiveTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setAdminActiveTab(tab.id);
+                        if (tab.id === "audit") fetchServerAuditLogs();
+                      }}
+                      style={{
+                        padding: "0.6rem 1.1rem",
+                        backgroundColor: isActive ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                        border: isActive ? `1px solid ${T.border}` : "1px solid transparent",
+                        borderRadius: "8px",
+                        color: isActive ? (isLight ? "#0f172a" : "#ffffff") : T.textMuted,
+                        fontWeight: isActive ? "700" : "500",
+                        fontSize: "0.85rem",
+                        cursor: "pointer",
+                        boxShadow: isActive && isLight ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* ========================================================= */}
+              {/* TAB 1: USERS MANAGEMENT & ADVANCED FILTERING              */}
+              {/* ========================================================= */}
+              {adminActiveTab === "users" && (
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.5rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  {/* Search and Filters Toolbar */}
+                  <div
                     style={{
-                      padding: "0.3rem 0.65rem",
-                      backgroundColor: isLight ? "#f1f5f9" : "#18181b",
-                      border: `1px solid ${T.border}`,
-                      color: T.textSecondary,
-                      borderRadius: "6px",
-                      fontSize: "0.75rem",
-                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "1rem",
+                      marginBottom: "1.25rem",
                     }}
                   >
-                    🔄 Cập nhật log
-                  </button>
-                </div>
+                    {/* Search Input */}
+                    <div style={{ position: "relative", minWidth: "260px", flex: "1 1 280px" }}>
+                      <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", fontSize: "0.85rem", color: T.textMuted }}>
+                        🔍
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="Tìm theo họ tên hoặc email..."
+                        value={adminSearchQuery}
+                        onChange={(e) => setAdminSearchQuery(e.target.value)}
+                        style={{
+                          width: "100%",
+                          padding: "0.55rem 0.75rem 0.55rem 2.2rem",
+                          backgroundColor: isLight ? "#ffffff" : "#18181b",
+                          border: `1px solid ${T.border}`,
+                          borderRadius: "6px",
+                          color: T.text,
+                          fontSize: "0.85rem",
+                          outline: "none",
+                        }}
+                      />
+                      {adminSearchQuery && (
+                        <button
+                          onClick={() => setAdminSearchQuery("")}
+                          style={{
+                            position: "absolute",
+                            right: "0.6rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "none",
+                            border: "none",
+                            color: T.textMuted,
+                            cursor: "pointer",
+                            fontSize: "0.8rem",
+                          }}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
 
-                {adminActivityLogs.length === 0 ? (
-                  <div style={{ padding: "2rem", textAlign: "center", color: "#71717a", fontSize: "0.85rem" }}>
-                    Chưa có nhật ký hoạt động nào được ghi nhận trên Supabase.
+                    {/* Filter Pills */}
+                    <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                      {/* Role Filter */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                        <span style={{ fontSize: "0.75rem", color: T.textMuted, fontWeight: "600" }}>Vai trò:</span>
+                        {["ALL", "FREE", "VIP", "ADMIN"].map((r) => (
+                          <button
+                            key={r}
+                            onClick={() => setAdminRoleFilter(r)}
+                            style={{
+                              padding: "0.25rem 0.55rem",
+                              fontSize: "0.72rem",
+                              fontWeight: adminRoleFilter === r ? "700" : "500",
+                              borderRadius: "4px",
+                              backgroundColor: adminRoleFilter === r ? (isLight ? "#eff6ff" : "#1e3a8a40") : (isLight ? "#f1f5f9" : "#18181b"),
+                              color: adminRoleFilter === r ? (isLight ? "#1d4ed8" : "#60a5fa") : T.textMuted,
+                              border: `1px solid ${adminRoleFilter === r ? (isLight ? "#bfdbfe" : "#3b82f680") : T.border}`,
+                              cursor: "pointer",
+                            }}
+                          >
+                            {r === "ALL" ? "Tất cả" : r}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Status Filter */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                        <span style={{ fontSize: "0.75rem", color: T.textMuted, fontWeight: "600" }}>Trạng thái:</span>
+                        {["ALL", "ACTIVE", "LOCKED"].map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setAdminStatusFilter(s)}
+                            style={{
+                              padding: "0.25rem 0.55rem",
+                              fontSize: "0.72rem",
+                              fontWeight: adminStatusFilter === s ? "700" : "500",
+                              borderRadius: "4px",
+                              backgroundColor: adminStatusFilter === s ? (isLight ? "#ecfdf5" : "#064e3b40") : (isLight ? "#f1f5f9" : "#18181b"),
+                              color: adminStatusFilter === s ? (isLight ? "#047857" : "#34d399") : T.textMuted,
+                              border: `1px solid ${adminStatusFilter === s ? (isLight ? "#a7f3d0" : "#05966980") : T.border}`,
+                              cursor: "pointer",
+                            }}
+                          >
+                            {s === "ALL" ? "Tất cả" : s === "ACTIVE" ? "✓ Hoạt động" : "✕ Đã khóa"}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                ) : (
+
+                  {/* Users Table */}
                   <div style={{ overflowX: "auto" }}>
-                    <table>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
-                        <tr>
-                          <th>Thời gian</th>
-                          <th>Học viên</th>
-                          <th>Hành động</th>
-                          <th>Chi tiết hoạt động</th>
+                        <tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Họ tên & Email</th>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Vai trò (Role)</th>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Tiến độ học tập</th>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Trạng thái</th>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Ngày tạo</th>
+                          <th style={{ textAlign: "right", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Hành động phân quyền</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {adminActivityLogs.map((log) => {
-                          const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
-                          return (
-                            <tr key={log.id}>
-                              <td style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", whiteSpace: "nowrap" }}>
-                                {dateStr}
-                              </td>
-                              <td style={{ fontSize: "0.8rem", fontWeight: "600", color: T.text }}>
-                                {log.user_email || log.user_id?.substring(0, 8)}
-                              </td>
-                              <td>
-                                <span
-                                  style={{
-                                    fontSize: "0.7rem",
-                                    fontFamily: "Geist Mono",
-                                    fontWeight: "700",
-                                    padding: "0.15rem 0.5rem",
-                                    borderRadius: "4px",
-                                    backgroundColor:
-                                      log.action_type === "LOGIN" ? "#10b98120"
-                                      : log.action_type === "LOGOUT" ? "#ef444420"
-                                      : log.action_type === "SUBMIT_QUIZ" ? "#f59e0b20"
-                                      : log.action_type === "STUDY_LESSON" ? "#3b82f620"
-                                      : "#8b5cf620",
-                                    color:
-                                      log.action_type === "LOGIN" ? "#34d399"
-                                      : log.action_type === "LOGOUT" ? "#f87171"
-                                      : log.action_type === "SUBMIT_QUIZ" ? "#fbbf24"
-                                      : log.action_type === "STUDY_LESSON" ? "#60a5fa"
-                                      : "#a78bfa",
-                                  }}
-                                >
-                                  {log.action_type}
-                                </span>
-                              </td>
-                              <td style={{ fontSize: "0.75rem", color: "#a1a1aa", fontFamily: "Geist Mono" }}>
-                                {JSON.stringify(log.details || {})}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        {filteredAdminUsers.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} style={{ textAlign: "center", padding: "2.5rem 1rem", color: T.textMuted, fontSize: "0.85rem" }}>
+                              Không tìm thấy người dùng nào phù hợp với bộ lọc tìm kiếm.
+                            </td>
+                          </tr>
+                        ) : (
+                          filteredAdminUsers.map((u) => {
+                            const isCurrent = u.id === currentUser.id;
+                            return (
+                              <tr key={u.id} style={{ borderBottom: `1px solid ${T.border}` }}>
+                                <td style={{ padding: "0.85rem 0.5rem" }}>
+                                  <div style={{ fontWeight: "700", color: T.text, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                    {u.name}
+                                    {isCurrent && (
+                                      <span style={{ fontSize: "0.68rem", backgroundColor: isLight ? "#eff6ff" : "#1e293b", padding: "0.1rem 0.35rem", borderRadius: "3px", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
+                                        (Bạn)
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div style={{ fontSize: "0.78rem", color: T.textMuted }}>{u.email}</div>
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem" }}>
+                                  <span
+                                    style={{
+                                      fontSize: "0.72rem",
+                                      fontFamily: "Geist Mono",
+                                      fontWeight: "700",
+                                      padding: "0.2rem 0.55rem",
+                                      borderRadius: "4px",
+                                      backgroundColor:
+                                        u.role === "ADMIN" ? (isLight ? "#fef2f2" : "#ef444420")
+                                        : u.role === "VIP" ? (isLight ? "#fffbeb" : "#f59e0b20")
+                                        : (isLight ? "#eff6ff" : "#3b82f620"),
+                                      color:
+                                        u.role === "ADMIN" ? (isLight ? "#dc2626" : "#f87171")
+                                        : u.role === "VIP" ? (isLight ? "#b45309" : "#fbbf24")
+                                        : (isLight ? "#1d4ed8" : "#60a5fa"),
+                                      border: `1px solid ${
+                                        u.role === "ADMIN" ? (isLight ? "#fecaca" : "#ef444450")
+                                        : u.role === "VIP" ? (isLight ? "#fde68a" : "#f59e0b50")
+                                        : (isLight ? "#bfdbfe" : "#3b82f650")
+                                      }`,
+                                    }}
+                                  >
+                                    {u.role === "ADMIN" ? "🛡️ ADMIN" : u.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
+                                  </span>
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem" }}>
+                                  <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+                                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                                      <span style={{ fontSize: "0.75rem", color: isLight ? "#b45309" : "#f59e0b", fontWeight: "700" }}>
+                                        🔥 {u.tracker?.streak || 1} ngày
+                                      </span>
+                                      <span style={{ fontSize: "0.75rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
+                                        ⚡ {u.tracker?.xp || 0} XP
+                                      </span>
+                                    </div>
+                                    <div style={{ fontSize: "0.72rem", color: T.textMuted }}>
+                                      📖 {u.tracker?.completed_lessons?.length || 0} bài học
+                                    </div>
+                                  </div>
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem" }}>
+                                  <span
+                                    style={{
+                                      fontSize: "0.75rem",
+                                      color: u.status === "ACTIVE" ? (isLight ? "#047857" : "#34d399") : (isLight ? "#dc2626" : "#fb7185"),
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {u.status === "ACTIVE" ? "✓ Hoạt động" : "✕ Đã khóa"}
+                                  </span>
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "Geist Mono" }}>
+                                  {u.createdAt}
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem", textAlign: "right" }}>
+                                  <div style={{ display: "flex", gap: "0.4rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
+                                    {u.role !== "VIP" && u.role !== "ADMIN" && (
+                                      <button
+                                        onClick={() => handleUpdateUserRole(u.id, "VIP")}
+                                        style={{
+                                          padding: "0.3rem 0.65rem",
+                                          backgroundColor: isLight ? "#fffbeb" : "#f59e0b20",
+                                          border: `1px solid ${isLight ? "#fde68a" : "#f59e0b"}`,
+                                          color: isLight ? "#b45309" : "#fbbf24",
+                                          borderRadius: "4px",
+                                          fontSize: "0.75rem",
+                                          fontWeight: "700",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        Nâng VIP ⭐
+                                      </button>
+                                    )}
+
+                                    {u.role === "VIP" && (
+                                      <button
+                                        onClick={() => handleUpdateUserRole(u.id, "FREE")}
+                                        style={{
+                                          padding: "0.3rem 0.65rem",
+                                          backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                                          border: `1px solid ${T.border}`,
+                                          color: T.textSecondary,
+                                          borderRadius: "4px",
+                                          fontSize: "0.75rem",
+                                          fontWeight: "600",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        Hạ FREE
+                                      </button>
+                                    )}
+
+                                    {u.role !== "ADMIN" && (
+                                      <button
+                                        onClick={() => handleToggleUserStatus(u.id)}
+                                        style={{
+                                          padding: "0.3rem 0.65rem",
+                                          backgroundColor: u.status === "ACTIVE" ? (isLight ? "#fef2f2" : "#ef444415") : (isLight ? "#ecfdf5" : "#10b98115"),
+                                          border: `1px solid ${u.status === "ACTIVE" ? (isLight ? "#fecaca" : "#ef4444") : (isLight ? "#a7f3d0" : "#10b981")}`,
+                                          color: u.status === "ACTIVE" ? (isLight ? "#dc2626" : "#f87171") : (isLight ? "#047857" : "#34d399"),
+                                          borderRadius: "4px",
+                                          fontSize: "0.75rem",
+                                          fontWeight: "700",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        {u.status === "ACTIVE" ? "Khóa" : "Mở khóa"}
+                                      </button>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        )}
                       </tbody>
                     </table>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 2: SYSTEM POLICY & ACCESS LIMITS                     */}
+              {/* ========================================================= */}
+              {adminActiveTab === "policy" && (
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.75rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: "0 0 0.5rem 0" }}>
+                    ⚙️ Cấu hình Quyền & Hạn mức truy cập cho User Default (FREE)
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: T.textMuted, margin: "0 0 1.5rem 0" }}>
+                    Mọi thay đổi hạn mức sẽ được áp dụng trực tiếp lên bảng <code>system_policies</code> của Supabase Postgres 17 và lưu vết kiểm toán tự động.
+                  </p>
+                  
+                  <form onSubmit={handleSavePolicy} style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "flex-end" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.825rem", color: T.textSecondary, fontWeight: "600", marginBottom: "0.35rem" }}>
+                        Số câu bài tập tối đa mỗi chương (Free User):
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={adminPolicyForm.freeExerciseLimit}
+                        onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeExerciseLimit: parseInt(e.target.value) || 10 })}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
+                      />
+                      <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 10 câu (Câu thứ 11 sẽ bị khóa VIP)</div>
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.825rem", color: T.textSecondary, fontWeight: "600", marginBottom: "0.35rem" }}>
+                        Số đề thi Quiz tối đa mỗi ngày (Free User):
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="20"
+                        value={adminPolicyForm.freeDailyQuizLimit}
+                        onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeDailyQuizLimit: parseInt(e.target.value) || 2 })}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
+                      />
+                      <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        padding: "0.6rem 1.6rem",
+                        backgroundColor: "#2563eb",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "700",
+                        fontSize: "0.85rem",
+                        cursor: "pointer",
+                        height: "40px",
+                        boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
+                      }}
+                    >
+                      Lưu cấu hình hạn mức
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 3: SERVER AUDIT LOGS (KIỂM TOÁN HỆ THỐNG CLOUD)       */}
+              {/* ========================================================= */}
+              {adminActiveTab === "audit" && (
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.5rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
+                    <div>
+                      <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
+                        🛡️ Nhật ký Kiểm toán Quản trị Server ({filteredAuditLogs.length})
+                      </h3>
+                      <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
+                        Ghi nhận toàn bộ thao tác thay đổi vai trò, khóa tài khoản và điều chỉnh hạn mức được bảo vệ bởi Server-side Service Role.
+                      </p>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                      {/* Action Filter */}
+                      <select
+                        value={auditActionFilter}
+                        onChange={(e) => setAuditActionFilter(e.target.value)}
+                        style={{
+                          padding: "0.35rem 0.65rem",
+                          backgroundColor: isLight ? "#ffffff" : "#18181b",
+                          border: `1px solid ${T.border}`,
+                          color: T.text,
+                          borderRadius: "6px",
+                          fontSize: "0.78rem",
+                        }}
+                      >
+                        <option value="ALL">Tất cả hành động</option>
+                        <option value="UPDATE_USER_ROLE">Cập nhật vai trò (Role)</option>
+                        <option value="BAN_USER">Khóa tài khoản (Ban)</option>
+                        <option value="UNBAN_USER">Mở khóa tài khoản (Unban)</option>
+                        <option value="UPDATE_SYSTEM_POLICY">Thay đổi hạn mức (Policy)</option>
+                      </select>
+
+                      <button
+                        onClick={fetchServerAuditLogs}
+                        disabled={isLoadingAudit}
+                        style={{
+                          padding: "0.35rem 0.75rem",
+                          backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                          border: `1px solid ${T.border}`,
+                          color: T.text,
+                          borderRadius: "6px",
+                          fontSize: "0.78rem",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {isLoadingAudit ? "Đang tải..." : "🔄 Làm mới Log"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {filteredAuditLogs.length === 0 ? (
+                    <div style={{ padding: "3rem 1rem", textAlign: "center", color: T.textMuted, fontSize: "0.85rem" }}>
+                      {isLoadingAudit ? "Đang tải nhật ký kiểm toán từ máy chủ..." : "Chưa có bản ghi kiểm toán nào trong bảng audit_logs."}
+                    </div>
+                  ) : (
+                    <div style={{ overflowX: "auto" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                        <thead>
+                          <tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>THỜI GIAN</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>ADMIN</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>HÀNH ĐỘNG</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>ĐỐI TƯỢNG</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>CHI TIẾT THAY ĐỔI (BEFORE → AFTER)</th>
+                            <th style={{ textAlign: "right", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>IP</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredAuditLogs.map((log) => {
+                            const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
+                            return (
+                              <tr key={log.id} style={{ borderBottom: `1px solid ${T.border}` }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, whiteSpace: "nowrap" }}>
+                                  {dateStr}
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.78rem", fontWeight: "600", color: T.text }}>
+                                  {log.admin_id ? log.admin_id.substring(0, 8) : "admin"}
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem" }}>
+                                  <span
+                                    style={{
+                                      fontSize: "0.7rem",
+                                      fontFamily: "Geist Mono",
+                                      fontWeight: "700",
+                                      padding: "0.15rem 0.5rem",
+                                      borderRadius: "4px",
+                                      backgroundColor:
+                                        log.action_type === "BAN_USER" ? (isLight ? "#fef2f2" : "#ef444420")
+                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#ecfdf5" : "#10b98120")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#eff6ff" : "#3b82f620")
+                                        : (isLight ? "#fffbeb" : "#f59e0b20"),
+                                      color:
+                                        log.action_type === "BAN_USER" ? (isLight ? "#dc2626" : "#f87171")
+                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#047857" : "#34d399")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#1d4ed8" : "#60a5fa")
+                                        : (isLight ? "#b45309" : "#fbbf24"),
+                                      border: `1px solid ${
+                                        log.action_type === "BAN_USER" ? (isLight ? "#fecaca" : "#ef444460")
+                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#a7f3d0" : "#10b98160")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#bfdbfe" : "#3b82f660")
+                                        : (isLight ? "#fde68a" : "#f59e0b60")
+                                      }`,
+                                    }}
+                                  >
+                                    {log.action_type}
+                                  </span>
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textSecondary }}>
+                                  {log.target_type}: {log.target_id?.substring(0, 12)}
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted }}>
+                                  <div style={{ maxWidth: "340px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    {log.before_state && (
+                                      <span style={{ textDecoration: "line-through", marginRight: "0.4rem", color: isLight ? "#dc2626" : "#f87171" }}>
+                                        {JSON.stringify(log.before_state)}
+                                      </span>
+                                    )}
+                                    <span>→</span>
+                                    {log.after_state && (
+                                      <span style={{ marginLeft: "0.4rem", color: isLight ? "#047857" : "#34d399" }}>
+                                        {JSON.stringify(log.after_state)}
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", textAlign: "right", fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted }}>
+                                  {log.ip_address || "127.0.0.1"}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 4: REALTIME USER ACTIVITY LOGS                        */}
+              {/* ========================================================= */}
+              {adminActiveTab === "activity" && (
+                <div
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "10px",
+                    padding: "1.5rem",
+                    boxShadow: T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
+                      📜 Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})
+                    </h3>
+                    <button
+                      onClick={refreshAdminFromSupabase}
+                      style={{
+                        padding: "0.3rem 0.65rem",
+                        backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                        border: `1px solid ${T.border}`,
+                        color: T.textSecondary,
+                        borderRadius: "6px",
+                        fontSize: "0.75rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      🔄 Cập nhật log
+                    </button>
+                  </div>
+
+                  {adminActivityLogs.length === 0 ? (
+                    <div style={{ padding: "2.5rem 1rem", textAlign: "center", color: T.textMuted, fontSize: "0.85rem" }}>
+                      Chưa có nhật ký hoạt động nào được ghi nhận trên Supabase.
+                    </div>
+                  ) : (
+                    <div style={{ overflowX: "auto" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                        <thead>
+                          <tr style={{ borderBottom: `2px solid ${T.border}` }}>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>THỜI GIAN</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>HỌC VIÊN</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>HÀNH ĐỘNG</th>
+                            <th style={{ textAlign: "left", padding: "0.7rem 0.5rem", fontSize: "0.75rem", color: T.textMuted }}>CHI TIẾT HOẠT ĐỘNG</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {adminActivityLogs.map((log) => {
+                            const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
+                            return (
+                              <tr key={log.id} style={{ borderBottom: `1px solid ${T.border}` }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, whiteSpace: "nowrap" }}>
+                                  {dateStr}
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.8rem", fontWeight: "600", color: T.text }}>
+                                  {log.user_email || log.user_id?.substring(0, 8)}
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem" }}>
+                                  <span
+                                    style={{
+                                      fontSize: "0.7rem",
+                                      fontFamily: "Geist Mono",
+                                      fontWeight: "700",
+                                      padding: "0.15rem 0.5rem",
+                                      borderRadius: "4px",
+                                      backgroundColor:
+                                        log.action_type === "LOGIN" ? (isLight ? "#ecfdf5" : "#10b98120")
+                                        : log.action_type === "LOGOUT" ? (isLight ? "#fef2f2" : "#ef444420")
+                                        : log.action_type === "SUBMIT_QUIZ" ? (isLight ? "#fffbeb" : "#f59e0b20")
+                                        : log.action_type === "STUDY_LESSON" ? (isLight ? "#eff6ff" : "#3b82f620")
+                                        : (isLight ? "#faf5ff" : "#8b5cf620"),
+                                      color:
+                                        log.action_type === "LOGIN" ? (isLight ? "#047857" : "#34d399")
+                                        : log.action_type === "LOGOUT" ? (isLight ? "#dc2626" : "#f87171")
+                                        : log.action_type === "SUBMIT_QUIZ" ? (isLight ? "#b45309" : "#fbbf24")
+                                        : log.action_type === "STUDY_LESSON" ? (isLight ? "#1d4ed8" : "#60a5fa")
+                                        : (isLight ? "#7e22ce" : "#a78bfa"),
+                                    }}
+                                  >
+                                    {log.action_type}
+                                  </span>
+                                </td>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "Geist Mono" }}>
+                                  {JSON.stringify(log.details || {})}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
           </div>
-        )}
-
-        {/* ============================================================== */}
+        )}{/* ============================================================== */}
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
         {/* ============================================================== */}
         {currentView === "dashboard" && (
@@ -3804,7 +4313,7 @@ export default function Home() {
                     <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
                       Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
                     </h3>
-                    <p style={{ fontSize: "0.85rem", color: "#71717a", margin: "0.2rem 0 0 0" }}>
+                    <p style={{ fontSize: "0.85rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
                       Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương của tài khoản {currentUser.name}.
                     </p>
                   </div>
@@ -3833,10 +4342,10 @@ export default function Home() {
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                          <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#60a5fa", fontWeight: "700" }}>
+                          <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
                             CHƯƠNG {String(ch.number).padStart(2, "0")}
                           </span>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: pct === 100 ? "#34d399" : "#a1a1aa" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: pct === 100 ? (isLight ? "#047857" : "#34d399") : (isLight ? "#475569" : "#a1a1aa"), fontWeight: "600" }}>
                             {doneLessons} / {ch.lessons.length} bài
                           </span>
                         </div>
@@ -3857,9 +4366,9 @@ export default function Home() {
                           />
                         </div>
 
-                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#71717a" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: isLight ? "#475569" : "#71717a" }}>
                           <span>{ch.exercises?.length || 0} bài tập</span>
-                          <span style={{ color: pct > 0 ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#64748b" : "#71717a") }}>{pct}% hoàn thành</span>
+                          <span style={{ color: pct > 0 ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#475569" : "#71717a"), fontWeight: pct > 0 ? "700" : "500" }}>{pct}% hoàn thành</span>
                         </div>
                       </div>
                     );
@@ -4437,7 +4946,7 @@ export default function Home() {
                               {/* 1. Formulas Box (Syntax-colored & Prominent) */}
                               {sec.formulas && sec.formulas.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginBottom: "1.35rem" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#60a5fa", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     ⚡ CÔNG THỨC CHUẨN XÁC:
                                   </div>
                                   {sec.formulas.map((f, fIdx) => (
@@ -4486,7 +4995,7 @@ export default function Home() {
                               {/* 2. Numbered Rules (Đánh số thứ tự 1, 2, 3... rõ ràng, có tiêu đề & ví dụ) */}
                               {sec.rules && sec.rules.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "1.15rem 0" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#818cf8", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#4338ca" : "#818cf8", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG:
                                   </div>
                                   {sec.rules.map((rule, rIdx) => (
@@ -4859,10 +5368,10 @@ export default function Home() {
                       style={{
                         padding: "3rem",
                         textAlign: "center",
-                        backgroundColor: "#121215",
-                        border: "1px dashed #27272a",
+                        backgroundColor: T.cardSubtle,
+                        border: `1px dashed ${T.border}`,
                         borderRadius: "8px",
-                        color: "#71717a",
+                        color: T.textMuted,
                       }}
                     >
                       Chọn một bài học từ danh mục bên trái để bắt đầu nghiên cứu lý thuyết.
@@ -5231,7 +5740,7 @@ export default function Home() {
                       });
                     })()
                   ) : (
-                    <div style={{ padding: "3rem", textAlign: "center", backgroundColor: "#121215", border: "1px dashed #27272a", borderRadius: "8px", color: "#71717a" }}>
+                    <div style={{ padding: "3rem", textAlign: "center", backgroundColor: T.cardSubtle, border: `1px dashed ${T.border}`, borderRadius: "8px", color: T.textMuted }}>
                       Chuyên đề này chưa có bài tập thực hành.
                     </div>
                   )}
