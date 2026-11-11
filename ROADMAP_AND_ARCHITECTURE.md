@@ -60,6 +60,18 @@ Hệ thống Next.js Pages Router được phân tầng rõ rệt nhằm triệt
 
 ```
 grammar-platform/
+├── components/
+│   ├── audio/
+│   │   └── AudioPlayer.jsx              # Reusable Audio Player (Compact Inline & Full Card, US/UK, 0.75x/1.0x/1.25x)
+│   └── grammar-visualization/
+│       ├── GrammarVisualization.jsx     # Master Container trực quan hóa tích hợp Study View
+│       ├── VisualizationRenderer.jsx    # Bộ điều phối dynamic render theo registry
+│       ├── VisualizationLegend.jsx      # Bảng chú giải màu sắc, thể thì và loại nút
+│       ├── VisualizationControls.jsx    # Phím phóng to, thu nhỏ, đặt lại góc nhìn
+│       ├── TimelineVisualization.jsx    # Trục thời gian 13 thì, lọc thể, so sánh đối chiếu đa chiều
+│       ├── DecisionTreeVisualization.jsx# Cây quyết định câu điều kiện kèm lịch sử rẽ nhánh
+│       ├── TransformationDiagram.jsx    # Sơ đồ biến đổi câu chủ động sang bị động S-V-O
+│       └── ConversionFlowVisualization.jsx # Luồng 7 giai đoạn câu gián tiếp, ma trận lùi thì & trạng từ
 ├── lib/
 │   ├── supabase/
 │   │   ├── client.js            # Browser Supabase Client (Chỉ dùng NEXT_PUBLIC_SUPABASE_ANON_KEY)
@@ -74,10 +86,14 @@ grammar-platform/
 │   │   ├── scoring-engine.js    # Layer 1: Deterministic Assessment & Confidence Scoring
 │   │   └── roadmap-generator.js # Layer 2: Liên kết điểm yếu với 53 bài học & 51 bài tập
 │   ├── audio/
-│   │   ├── audio.service.js     # Trình phát âm thanh & Cache
-│   │   └── speech.service.js    # Web Speech API & TTS Fallback (US / UK accents, Playback speed)
+│   │   ├── speech.constants.js  # Voice dictionaries (US/UK), rate multipliers, storage keys
+│   │   ├── speech.utils.js      # Sanitizer tách Markdown, phiên âm, dịch nghĩa trước TTS
+│   │   └── speech.service.js    # Singleton Web Speech API, chống nói đè, lưu preference
+│   ├── visualization/
+│   │   ├── visualization.registry.js # Registry ánh xạ chuyên đề vào loại sơ đồ
+│   │   └── visualization.utils.js    # Tính toán tọa độ và mã màu cho trục thời gian
 │   └── tokens/
-│       └── design-tokens.js     # Bảng mã màu, khoảng cách, typography tập trung
+│       └── design-tokens.js     # Bảng mã màu, khoảng cách, typography tập trung WCAG AA
 ├── services/
 │   ├── auth.service.js          # Nghiệp vụ đăng ký, đăng nhập, phân quyền
 │   ├── profile.service.js       # Nghiệp vụ thông tin tài khoản & vai trò
@@ -112,6 +128,11 @@ grammar-platform/
 │   ├── _app.js                  # Global wrappers, Theme Provider & Offline Sync Provider
 │   └── index.js                 # Single-Page Application (Navigation, Dashboard, Study, Quiz, Mistakes, Admin, Diagnostic)
 ├── data/
+│   ├── grammar-visualizations/
+│   │   ├── tenses.data.js               # Dữ liệu 13 thì, vector tọa độ, thể, công thức, bẫy sai
+│   │   ├── conditionals.data.js         # Dữ liệu cây quyết định, đảo ngữ, giải thích logic
+│   │   ├── passive-voice.data.js        # Dữ liệu quy trình 5 bước, công thức BE, quy tắc lược bỏ
+│   │   └── reported-speech.data.js      # Dữ liệu 7 giai đoạn, ma trận lùi thì, trạng từ, ngoại lệ
 │   ├── normalized/
 │   │   └── full_import_data.json # 7.2MB quan hệ gốc 53 lessons, 982 rules
 │   └── ui/
@@ -394,26 +415,87 @@ Toàn bộ giải thích câu hỏi bài tập và đề thi được chuẩn h�
 
 ---
 
-## 🎨 7. GRAMMAR VISUALIZATION ENGINE & AUDIO ARCHITECTURE
+## 🎨 7. GRAMMAR VISUALIZATION ENGINE & AUDIO ARCHITECTURE (MILESTONE 2.7)
 
-### 7.1. Trực quan Hóa Tương tác Theo Từng Chủ điểm
+### 7.1. Bảng Trực quan Hóa Tương tác Theo Từng Chủ điểm
 
-| Chủ điểm Ngữ pháp | Hình thức Trực quan Hóa | Trải nghiệm Tương tác |
-| :--- | :--- | :--- |
-| **13 Thì tiếng Anh (Tenses)** | **Dòng thời gian (Timeline Axis)** | Trục thời gian Quá khứ - Hiện tại - Tương lai kèm điểm mốc và khoảng hành động. |
-| **Câu điều kiện (Conditionals)** | **Cây quyết định (Decision Tree)** | Phân nhánh theo tính khả thi: Có thật ở hiện tại -> Loại 1; Giả định hiện tại -> Loại 2; Giả định quá khứ -> Loại 3. |
-| **Câu bị động (Passive Voice)** | **Sơ đồ Biến đổi (Transformation Diagram)** | Mũi tên chuyển vị trí S -> By O, O -> S, và động từ V -> Be + V3 sinh động. |
-| **Câu gián tiếp (Reported Speech)** | **Bảng Lùi thì & Chuyển đổi (Conversion Flow)** | Luồng lùi thì mũi tên (Present -> Past -> Past Perfect) và quy tắc đổi đại từ/thời gian. |
-| **Mệnh đề quan hệ (Relative Clauses)** | **Sơ đồ Cấu trúc Câu (Sentence Tree)** | Highlight danh từ đi trước và liên kết với đại từ quan hệ (Who, Whom, Which, Whose, That). |
-| **So sánh (Comparisons)** | **Thẻ So sánh Đa cấp (Comparison Scale)** | Biểu diễn trực quan tỷ lệ Bằng nhau (=), Hơn (>), Nhất (MAX). |
-| **Động từ khuyết thiếu (Modal Verbs)**| **Ma trận Cấp độ Nghĩa (Meaning Matrix)** | Thang đo độ chắc chắn từ 0% đến 100% (Might -> May -> Could -> Should -> Must). |
-| **Từ loại & Cấu tạo từ (Word Forms)** | **Cây Họ từ (Word Family Tree)** | Cây phân nhánh Gốc từ -> Danh từ -> Động từ -> Tính từ -> Trạng từ kèm hậu tố. |
+| Chủ điểm Ngữ pháp | Hình thức Trực quan Hóa | Trạng thái | Trải nghiệm Tương tác & Chi tiết Sư phạm |
+| :--- | :--- | :--- | :--- |
+| **13 Thì tiếng Anh (Tenses)** | **Dòng thời gian (Timeline Axis)** | ✅ **Đã hoàn thành** | Trục thời gian 3 miền (Past - Present - Future) kết hợp 4 thể (Simple, Continuous, Perfect, Perfect Continuous); chế độ Side-by-side Compare Mode; vector tọa độ trực quan; phát âm bản ngữ. |
+| **Câu điều kiện (Conditionals)** | **Cây quyết định (Decision Tree)** | ✅ **Đã hoàn thành** | Cây phân nhánh logic Zero, Loại 1, 2, 3 và Mixed; breadcrumbs lưu vết lựa chọn; hỗ trợ Back/Reset; bảng công thức đảo ngữ; phân tích *"Vì sao chọn kết quả này?"*. |
+| **Câu bị động (Passive Voice)** | **Sơ đồ Biến đổi (Transformation Diagram)** | ✅ **Đã hoàn thành** | Pipeline 5 bước; highlight màu sắc chuẩn S (Blue), V (Amber), O (Green); mũi tên dịch chuyển vị trí S ➔ By O và O ➔ S mới; tab chuyển đổi thì; cẩm nang quy tắc lược bỏ *By + O*. |
+| **Câu gián tiếp (Reported Speech)** | **Luồng Chuyển đổi (Conversion Flow)** | ✅ **Đã hoàn thành** | Quy trình 7 giai đoạn liên hoàn; Ma trận Lùi thì (Backshift Matrix); Bảng chuyển đổi trạng từ thời gian & nơi chốn; Cảnh báo các trường hợp ngoại lệ không lùi thì. |
+| **Mệnh đề quan hệ (Relative Clauses)** | **Sơ đồ Cấu trúc Câu (Sentence Tree)** | ⏳ Lộ trình P2 | Highlight danh từ đi trước và liên kết với đại từ quan hệ (Who, Whom, Which, Whose, That). |
+| **So sánh (Comparisons)** | **Thẻ So sánh Đa cấp (Comparison Scale)** | ⏳ Lộ trình P2 | Biểu diễn trực quan tỷ lệ Bằng nhau (=), Hơn (>), Nhất (MAX). |
+| **Động từ khuyết thiếu (Modal Verbs)**| **Ma trận Cấp độ Nghĩa (Meaning Matrix)** | ⏳ Lộ trình P2 | Thang đo độ chắc chắn từ 0% đến 100% (Might -> May -> Could -> Should -> Must). |
+| **Từ loại & Cấu tạo từ (Word Forms)** | **Cây Họ từ (Word Family Tree)** | ⏳ Lộ trình P2 | Cây phân nhánh Gốc từ -> Danh từ -> Động từ -> Tính từ -> Trạng từ kèm hậu tố. |
 
-### 7.2. Chuẩn hóa Audio Engine
-- **Tập trung hóa:** `lib/audio/speech.service.js` và `lib/audio/pronunciation.service.js`.
-- **Đa dạng ngữ điệu:** Hỗ trợ tùy chọn giọng đọc Anh - Anh (UK) và Anh - Mỹ (US).
-- **Điều chỉnh tốc độ:** `0.75x`, `1.0x`, `1.25x`.
-- **Bộ nhớ đệm âm thanh (Audio Caching):** Lưu cache URL phát âm, chống tải trùng lặp.
+### 7.2. Kiến trúc Registry & Phân Tách Dữ liệu Sư phạm
+
+Nhằm tránh hiện tượng "hardcoded diagrams" trong từng trang bài học, hệ thống áp dụng mô hình **Data-Driven Registry**:
+1. **Dữ liệu cấu trúc hóa độc lập (`data/grammar-visualizations/`):**
+   * Toàn bộ nội dung lý thuyết, công thức, vector tọa độ, câu ví dụ và bẫy sai được định nghĩa dưới dạng JS/JSON schema chuẩn hóa (`tenses.data.js`, `conditionals.data.js`, `passive-voice.data.js`, `reported-speech.data.js`).
+2. **Dynamic Registry Dispatcher (`lib/visualization/visualization.registry.js`):**
+   * Hàm `getVisualizationForLesson(lesson, chapter)` tự động phân giải mã bài học (`code`) hoặc số chương (`number`) để nạp mô hình trực quan tương ứng:
+     * Chương 1 hoặc `TENSE_*` ➔ `timeline`
+     * Chương 3 hoặc `CLAUSE_CONDITION` ➔ `decision-tree`
+     * Chương 10 hoặc `PASSIVE_*` ➔ `transformation`
+     * Chương 9 hoặc `REP_*` ➔ `conversion-flow`
+3. **Thành phần Dựng hình Đa tầng (`components/grammar-visualization/`):**
+   * `GrammarVisualization.jsx`: Container chính tích hợp trực tiếp vào Study View (`pages/index.js`) với hiệu ứng accordion đóng/mở mượt mà, lưu trạng thái thu gọn.
+   * `VisualizationRenderer.jsx`: Trình điều phối render động các visualizer theo type từ Registry.
+   * `VisualizationControls.jsx`: Bộ công cụ thu nhỏ/phóng to giao diện và nút đặt lại góc nhìn ban đầu.
+   * `VisualizationLegend.jsx`: Bảng giải thích màu sắc, hình khối và ký hiệu sư phạm đồng bộ.
+
+### 7.3. Chi tiết Kỹ thuật 4 Mô Hình Trực Quan Hóa Lõi
+
+#### 1. Dòng thời gian 13 Thì (TimelineVisualization.jsx)
+* **Phân định miền thời gian (Time Spheres):** Quá khứ (`past`), Hiện tại (`present`), Tương lai (`future`).
+* **Bốn thể ngữ pháp (Aspects):** Đơn (`simple` - chấm mốc), Tiếp diễn (`continuous` - dải sóng kéo dài), Hoàn thành (`perfect` - cầu nối sự kiện), Hoàn thành tiếp diễn (`perfect_continuous` - dải kéo dài liên tục đến mốc mốc).
+* **So sánh đối chiếu 2 thì (Compare Mode):** Cho phép đặt 2 thì bất kỳ cạnh nhau (ví dụ: *Past Simple vs Present Perfect*) để so sánh trực diện công thức, cách dùng và ngữ cảnh thi cử.
+* **Tích hợp phát âm câu mẫu:** Nút loa bản ngữ trực tiếp cho câu ví dụ của từng thì.
+
+#### 2. Cây quyết định câu điều kiện (DecisionTreeVisualization.jsx)
+* **Cấu trúc rẽ nhánh:** Bắt đầu từ câu hỏi gốc (Sự thật hiển nhiên ➔ Zero; Có thể xảy ra ở hiện tại/tương lai ➔ Type 1; Giả định trái ngược hiện tại ➔ Type 2; Giả định trái ngược quá khứ ➔ Type 3; Giả định hỗn hợp ➔ Mixed Conditionals).
+* **Điều hướng thông minh:** Breadcrumb theo dõi hành trình lựa chọn, nút Back (lùi 1 bước), Reset (quay về câu hỏi đầu).
+* **Cẩm nang đảo ngữ:** Tích hợp trực tiếp công thức đảo ngữ câu điều kiện (`Should + S + V`, `Were + S`, `Had + S + V3`).
+
+#### 3. Sơ đồ biến đổi câu bị động (TransformationDiagram.jsx)
+* **Quy trình 5 bước sư phạm:**
+  1. Xác định thành phần S - V - O.
+  2. Dịch chuyển Tân ngữ (O) lên đầu làm Chủ ngữ mới.
+  3. Xác định dạng thích hợp của động từ TO BE theo thì và ngôi của Chủ ngữ mới.
+  4. Đưa động từ chính về Quá khứ phân từ (V3/V-ed).
+  5. Đặt tác nhân thực hiện sau `by + O` (hoặc áp dụng quy tắc lược bỏ).
+* **Mã màu phân tích câu:** Chủ ngữ (Xanh dương), Động từ (Vàng hổ phách), Tân ngữ (Xanh lá), TO BE (Cam), V3 (Lam).
+* **Tab thì ngữ pháp:** Chuyển đổi nhanh giữa các thì thường gặp và Modals.
+* **Cẩm nang lược bỏ "By + Agent":** Bảng quy tắc khi nào bắt buộc bỏ (*by people, by someone, by them...*) và khi nào bắt buộc giữ (*tên riêng, đại từ xác định*).
+
+#### 4. Luồng chuyển đổi câu gián tiếp (ConversionFlowVisualization.jsx)
+* **7 Giai đoạn liên hoàn:** Nhận diện động từ tường thuật ➔ Xác định câu ➔ Lùi thì ➔ Đổi đại từ ➔ Đổi trạng từ thời gian/nơi chốn ➔ Xử lý modals ➔ Bỏ dấu ngoặc kép.
+* **Ma trận lùi thì (Backshift Matrix):** Bảng đối chiếu song song từ câu trực tiếp sang gián tiếp cho tất cả các thì.
+* **Bảng trạng từ:** Tra cứu nhanh *today ➔ that day*, *now ➔ then*, *here ➔ there*, *ago ➔ before*, v.v.
+* **Ngoại lệ không lùi thì:** Cảnh báo rõ ràng các trường hợp chân lý hiển nhiên, động từ tường thuật ở hiện tại (*says, tells*), và câu điều kiện loại 2, 3.
+
+### 7.4. Kiến trúc Centralized Audio Service & Pronunciation Pipeline
+
+* **Tập trung hóa (`lib/audio/speech.service.js`):** Singleton Service quản lý toàn bộ âm thanh nền tảng, chống hiện tượng gọi Web Speech API đồng thời gây phát âm méo tiếng hoặc nói đè (`speechSynthesis.cancel()`).
+* **Lọc văn bản trước TTS (`lib/audio/speech.utils.js`):**
+  * Hàm `sanitizeSpeechText(text)` tự động loại bỏ các thẻ định dạng Markdown (`**`, `*`, `~~`), ký hiệu phiên âm IPA `/.../`, và phần dịch nghĩa tiếng Việt trong ngoặc `(...)` để TTS chỉ đọc tiếng Anh tự nhiên.
+  * Hàm `matchBestVoice(lang)` ưu tiên nạp các giọng đọc chất lượng cao tự nhiên của hệ thống (Google US English, Samantha, Microsoft Zira/David, Daniel).
+* **Đa dạng tùy chọn học viên:**
+  * Giọng đọc bản ngữ: Anh - Mỹ (US, `en-US`) và Anh - Anh (UK, `en-GB`).
+  * Tốc độ phát âm: `0.75x` (Luyện nghe chậm, rõ từng âm tiết), `1.0x` (Tốc độ tự nhiên chuẩn), `1.25x` (Tăng cường phản xạ nghe nhanh).
+  * Bộ nhớ đệm tùy chọn: Tự động lưu lựa chọn giọng và tốc độ vào `localStorage` (`grammar_audio_voice`, `grammar_audio_rate`).
+* **Reusable UI Component (`components/audio/AudioPlayer.jsx`):**
+  * Chế độ **Compact Inline:** Nút loa nhỏ tích hợp trong bảng ví dụ, các câu mẫu trong sơ đồ.
+  * Chế độ **Full Card:** Giao diện thẻ đầy đủ kèm waveform visualizer, nút chuyển đổi giọng US/UK, và 3 nút chuyển tốc độ nhanh chóng.
+
+### 7.5. Tiêu chuẩn Tiếp cận & Tương thích Giao diện Sáng/Tối (WCAG AA)
+
+* **Chuẩn hóa Design Tokens:** Toàn bộ thành phần âm thanh và trực quan hóa sử dụng biến màu tập trung từ `lib/tokens/design-tokens.js`.
+* **Độ tương phản cao trên White Mode:** Đảm bảo toàn bộ chữ tiêu đề, phụ đề, nhãn công thức và văn bản giải thích đạt độ tương phản tối thiểu từ 4.5:1 đến 15.5:1 trên nền trắng (`#ffffff` / `#f8fafc`).
+* **Hoàn toàn Responsive:** Tự động co giãn mượt mà trên mọi kích thước màn hình từ Desktop (1440px), Laptop (1024px) đến Tablet và Mobile.
 
 ---
 
@@ -575,9 +657,33 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
 - [x] Bổ sung Skeleton Loading và các trạng thái Empty / Error đồng bộ.
 
 ### 🔹 Milestone 2.7: Xây dựng Grammar Visualization Engine & Audio Service (P1)
-- [x] Thiết kế sơ đồ trực quan hóa đặc thù cho từng nhóm ngữ pháp: Timeline (13 thì), Decision Tree (Câu điều kiện), Transformation Diagram (Câu bị động), Conversion Flow (Câu gián tiếp).
-- [x] Cho phép học viên tương tác click chọn từng thành phần trên sơ đồ trực quan, so sánh đối chiếu đa chiều.
-- [x] Chuẩn hóa `lib/audio/speech.service.js` với tùy chọn giọng đọc UK/US và thanh chỉnh tốc độ đọc (`0.75x`, `1.0x`, `1.25x`), lưu trữ tùy chọn localStorage và chống phát âm chồng lấn.
+- [x] **2.7.1 Centralized Audio Service & Pronunciation Engine:**
+  * Xây dựng singleton `lib/audio/speech.service.js` bao bọc Web Speech API chuẩn W3C, cơ chế chống phát âm chồng lấn (overlap cancellation) và lắng nghe sự kiện `voiceschanged`.
+  * Hỗ trợ chuyển đổi linh hoạt giọng đọc bản ngữ Anh - Mỹ (US, `en-US`) và Anh - Anh (UK, `en-GB`).
+  * Tùy chỉnh tốc độ đọc 3 cấp độ (`0.75x`, `1.0x`, `1.25x`) và tự động ghi nhớ tùy chọn học viên vào `localStorage`.
+  * Xây dựng bộ lọc làm sạch văn bản `lib/audio/speech.utils.js` (`sanitizeSpeechText`) tự động bóc tách Markdown, phiên âm quốc tế IPA `/.../` và giải nghĩa tiếng Việt trong ngoặc đơn `(...)` để TTS phát âm tự nhiên.
+  * Thiết kế UI component tái sử dụng `components/audio/AudioPlayer.jsx` với 2 chế độ: Compact Inline (nút phát âm nhỏ gọn cho câu ví dụ) và Full Card (bộ điều khiển đầy đủ kèm chuyển giọng, tốc độ đọc và thanh trạng thái).
+- [x] **2.7.2 Structured Pedagogical Visualization Data Layer:**
+  * Tách biệt 100% dữ liệu sư phạm khỏi logic render vào thư mục chuẩn `data/grammar-visualizations/`.
+  * `tenses.data.js`: Cấu trúc hóa 13 thì tiếng Anh với tọa độ trục thời gian (Past, Present, Future), 4 thể ngữ pháp (Simple, Continuous, Perfect, Perfect Continuous), công thức 3 thể (+/-/?) kèm giải thích chi tiết, từ nhận biết vàng, lỗi sai thường gặp và các cặp so sánh hay nhầm lẫn.
+  * `conditionals.data.js`: Cấu trúc hóa cây quyết định câu điều kiện (Zero, Loại 1, Loại 2, Loại 3, Loại Hỗn hợp), cấu trúc đảo ngữ nâng cao (`Had I known...`, `Should you need...`, `Were it not for...`) và giải thích sư phạm *"Vì sao chọn kết quả này?"*.
+  * `passive-voice.data.js`: Cấu trúc hóa quy trình chuyển đổi 5 bước chủ động sang bị động, ma trận chia động từ TO BE theo từng thì, và bảng quy tắc chuẩn lược bỏ tác nhân *By + Agent* trong đề thi.
+  * `reported-speech.data.js`: Cấu trúc hóa quy trình 7 giai đoạn chuyển đổi câu gián tiếp, ma trận lùi thì (Backshift Matrix), bảng biến đổi trạng từ chỉ thời gian & nơi chốn, biến đổi đại từ, và các trường hợp ngoại lệ không lùi thì (sự thật hiển nhiên, động từ tường thuật ở hiện tại).
+- [x] **2.7.3 Registry-Driven Visualization Engine:**
+  * Xây dựng `lib/visualization/visualization.registry.js` tự động phân giải bài học và chuyên đề sang mô hình trực quan hóa tương ứng (Tenses ➔ Timeline; Conditionals ➔ Decision Tree; Passive Voice ➔ Transformation; Reported Speech ➔ Conversion Flow).
+  * Bộ tiện ích `lib/visualization/visualization.utils.js` chuẩn hóa mã màu thể thì và tính toán tọa độ vector SVG/Flexbox.
+  * Thành phần điều phối `components/grammar-visualization/VisualizationRenderer.jsx` kết nối linh hoạt giữa Registry và các View trực quan.
+  * Bảng chú giải ký hiệu trực quan `components/grammar-visualization/VisualizationLegend.jsx` giải thích ý nghĩa các khối màu, thể thì và loại nút.
+  * Bộ điều khiển trực quan `components/grammar-visualization/VisualizationControls.jsx` (Thu nhỏ/Phóng to giao diện, Đặt lại trạng thái ban đầu).
+- [x] **2.7.4 Bốn Mô Hình Trực Quan Hóa Chuyên Sâu Tích Hợp Study Mode:**
+  * `TimelineVisualization.jsx`: Trục thời gian 13 thì tương tác, bộ lọc thể thì, chế độ đối chiếu 2 thì song song (Side-by-side Compare Mode) kèm phát âm chuẩn bản ngữ.
+  * `DecisionTreeVisualization.jsx`: Cây quyết định câu điều kiện từng bước, lưu vết lịch sử lựa chọn (Breadcrumbs), nút lùi bước (Back), nút làm lại (Reset) và phát âm câu ví dụ.
+  * `TransformationDiagram.jsx`: Sơ đồ chuyển đổi S-V-O sang câu bị động với mã màu trực quan (Chủ ngữ: Xanh dương, Động từ: Vàng hổ phách, Tân ngữ: Xanh lá), mũi tên dịch chuyển vị trí, bộ chuyển đổi thì và bảng quy tắc lược bỏ tác nhân.
+  * `ConversionFlowVisualization.jsx`: Luồng 7 giai đoạn câu gián tiếp, tab tra cứu ma trận lùi thì, tab tra cứu trạng từ thời gian/nơi chốn, tab cảnh báo trường hợp ngoại lệ và nghe phát âm câu trực tiếp/gián tiếp.
+  * Tích hợp thành phần tổng thể `GrammarVisualization.jsx` vào giao diện học lý thuyết (`pages/index.js`) với hiệu ứng accordion đóng/mở mượt mà.
+- [x] **2.7.5 Tối Ưu Tương Phản White (Light) Mode & WCAG AA:**
+  * Rà soát và loại bỏ toàn bộ mã màu xám mờ (`#a1a1aa`, `#71717a`) trên nền sáng.
+  * Áp dụng hệ thống Design Tokens (`T.text`, `T.textSecondary`, `T.textMuted`), bảo đảm tỷ lệ tương phản đạt chuẩn WCAG AA (≥ 4.5:1 đến 15.5:1) trên toàn bộ Dashboard, Bản đồ tiến độ, Breadcrumbs, Quiz Engine và Sổ tay câu sai.
 
 ### 🔹 Milestone 2.8: AI-Powered Grammar Diagnostic & Personalized Learning Roadmap (P1 - Central Module)
 - [ ] **2.8.1 Diagnostic Assessment Engine:**
