@@ -2532,20 +2532,21 @@ export default function Home() {
                 width: "28px",
                 height: "28px",
                 borderRadius: "6px",
-                backgroundColor: "#27272a",
-                border: "1px solid #3f3f46",
+                backgroundColor: isLight ? "#2563eb" : "#27272a",
+                border: `1px solid ${isLight ? "#1d4ed8" : "#3f3f46"}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#fafafa",
+                color: "#ffffff",
                 fontSize: "0.85rem",
                 fontWeight: "700",
+                boxShadow: isLight ? "0 2px 6px rgba(37,99,235,0.25)" : "none",
               }}
             >
               G
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-              <span style={{ fontSize: "0.95rem", fontWeight: "600", letterSpacing: "-0.015em", color: "#fafafa" }}>
+              <span style={{ fontSize: "0.95rem", fontWeight: "700", letterSpacing: "-0.015em", color: T.text }}>
                 Grammar Engine
               </span>
               <span
@@ -2554,9 +2555,10 @@ export default function Home() {
                   fontFamily: "Geist Mono",
                   padding: "0.1rem 0.4rem",
                   borderRadius: "4px",
-                  backgroundColor: "#18181b",
-                  border: "1px solid #27272a",
-                  color: "#a1a1aa",
+                  backgroundColor: T.bgElevated,
+                  border: `1px solid ${T.border}`,
+                  color: T.textMuted,
+                  fontWeight: "600",
                 }}
               >
                 v1.4 PRO
@@ -2568,10 +2570,10 @@ export default function Home() {
           <nav
             style={{
               display: "flex",
-              backgroundColor: "#18181b",
+              backgroundColor: T.bgElevated,
               padding: "3px",
               borderRadius: "8px",
-              border: "1px solid #27272a",
+              border: `1px solid ${T.border}`,
               gap: "2px",
             }}
           >
@@ -2585,9 +2587,10 @@ export default function Home() {
                 padding: "0.4rem 0.85rem",
                 borderRadius: "6px",
                 fontSize: "0.825rem",
-                fontWeight: currentView === "dashboard" ? "600" : "500",
-                color: currentView === "dashboard" ? "#fafafa" : "#a1a1aa",
-                backgroundColor: currentView === "dashboard" ? "#27272a" : "transparent",
+                fontWeight: currentView === "dashboard" ? "700" : "500",
+                color: currentView === "dashboard" ? T.text : T.textMuted,
+                backgroundColor: currentView === "dashboard" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "dashboard" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -2605,9 +2608,10 @@ export default function Home() {
                 padding: "0.4rem 0.85rem",
                 borderRadius: "6px",
                 fontSize: "0.825rem",
-                fontWeight: currentView === "study" ? "600" : "500",
-                color: currentView === "study" ? "#fafafa" : "#a1a1aa",
-                backgroundColor: currentView === "study" ? "#27272a" : "transparent",
+                fontWeight: currentView === "study" ? "700" : "500",
+                color: currentView === "study" ? T.text : T.textMuted,
+                backgroundColor: currentView === "study" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "study" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -2628,9 +2632,10 @@ export default function Home() {
                 padding: "0.4rem 0.85rem",
                 borderRadius: "6px",
                 fontSize: "0.825rem",
-                fontWeight: currentView === "quiz" ? "600" : "500",
-                color: currentView === "quiz" ? "#fafafa" : "#a1a1aa",
-                backgroundColor: currentView === "quiz" ? "#27272a" : "transparent",
+                fontWeight: currentView === "quiz" ? "700" : "500",
+                color: currentView === "quiz" ? T.text : T.textMuted,
+                backgroundColor: currentView === "quiz" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "quiz" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -2648,9 +2653,10 @@ export default function Home() {
                 padding: "0.4rem 0.85rem",
                 borderRadius: "6px",
                 fontSize: "0.825rem",
-                fontWeight: currentView === "mistakes" ? "600" : "500",
-                color: currentView === "mistakes" ? "#fafafa" : "#a1a1aa",
-                backgroundColor: currentView === "mistakes" ? "#27272a" : "transparent",
+                fontWeight: currentView === "mistakes" ? "700" : "500",
+                color: currentView === "mistakes" ? T.text : T.textMuted,
+                backgroundColor: currentView === "mistakes" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "mistakes" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -3328,14 +3334,14 @@ export default function Home() {
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
         {/* ============================================================== */}
         {currentView === "dashboard" && (
-          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
               {/* Hero Banner: Streak & Rank */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "12px",
                   padding: "1.75rem 2rem",
                   marginBottom: "1.75rem",
@@ -3344,13 +3350,14 @@ export default function Home() {
                   alignItems: "center",
                   flexWrap: "wrap",
                   gap: "1.5rem",
-                  background: "linear-gradient(135deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.95) 100%)",
+                  background: isLight ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)" : "linear-gradient(135deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.95) 100%)",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
                     <span style={{ fontSize: "1.6rem" }}>🔥</span>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#fafafa", margin: 0 }}>
+                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: T.text, margin: 0 }}>
                       Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
                     </h1>
                   </div>
@@ -3361,9 +3368,9 @@ export default function Home() {
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
                     <span
                       style={{
-                        backgroundColor: "#18181b",
-                        border: "1px solid #27272a",
-                        color: "#fafafa",
+                        backgroundColor: T.bgElevated,
+                        border: `1px solid ${T.border}`,
+                        color: T.text,
                         fontSize: "0.78rem",
                         padding: "0.25rem 0.65rem",
                         borderRadius: "6px",
@@ -3400,13 +3407,14 @@ export default function Home() {
                 {/* 7-Day Mini Calendar */}
                 <div
                   style={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: isLight ? "#ffffff" : "#18181b",
+                    border: `1px solid ${T.border}`,
                     padding: "1rem 1.25rem",
                     borderRadius: "10px",
+                    boxShadow: isLight ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
                   }}
                 >
-                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
+                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
                     LỊCH HOẠT ĐỘNG 7 NGÀY
                   </div>
                   <div style={{ display: "flex", gap: "0.6rem" }}>
@@ -3431,8 +3439,8 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            backgroundColor: d.isActive ? "#f59e0b" : "#27272a",
-                            color: d.isActive ? "#09090b" : "#71717a",
+                            backgroundColor: d.isActive ? "#f59e0b" : (isLight ? "#f1f5f9" : "#27272a"),
+                            color: d.isActive ? "#09090b" : (isLight ? "#475569" : "#71717a"),
                             fontSize: "0.85rem",
                             fontWeight: "700",
                             border: d.isToday ? "2px solid #38bdf8" : "none",
@@ -3449,13 +3457,14 @@ export default function Home() {
               {/* SMART DAILY RECOMMENDATION CARD */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #3b82f6",
+                  backgroundColor: T.card,
+                  border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f6"}`,
                   borderRadius: "12px",
                   padding: "1.5rem 1.75rem",
                   marginBottom: "1.75rem",
                   position: "relative",
                   overflow: "hidden",
+                  boxShadow: isLight ? "0 4px 15px rgba(37, 99, 235, 0.08)" : T.shadow,
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
@@ -3478,7 +3487,7 @@ export default function Home() {
                       <span style={{ fontSize: "0.8rem", color: "#71717a" }}>Đề xuất học hôm nay</span>
                     </div>
 
-                    <h2 style={{ fontSize: "1.35rem", fontWeight: "700", color: "#fafafa", margin: "0.35rem 0" }}>
+                    <h2 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, margin: "0.35rem 0" }}>
                       Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
                     </h2>
 
@@ -3515,7 +3524,7 @@ export default function Home() {
                       {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
                     </span>
                   </div>
-                  <div style={{ width: "100%", height: "6px", backgroundColor: "#27272a", borderRadius: "999px", overflow: "hidden" }}>
+                  <div style={{ width: "100%", height: "6px", backgroundColor: isLight ? "#e2e8f0" : "#27272a", borderRadius: "999px", overflow: "hidden" }}>
                     <div
                       style={{
                         width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
@@ -3531,11 +3540,11 @@ export default function Home() {
 
               {/* 4 Analytics Metrics Grid */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
                   <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
                     Bài học đã hoàn thành
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
                     {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalLessonsCount}</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#34d399" }}>
@@ -3543,11 +3552,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
                   <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
                     Câu hỏi đã giải đúng
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
                     {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>/ {totalQuestionsCount}</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#60a5fa" }}>
@@ -3555,11 +3564,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
                   <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
                     Tổng điểm kinh nghiệm
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#fafafa", margin: "0.4rem 0" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
                     {userTracker.xp} <span style={{ fontSize: "0.95rem", color: "#71717a" }}>XP</span>
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#f59e0b" }}>
@@ -3567,7 +3576,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div style={{ backgroundColor: "#121215", border: "1px solid #27272a", borderRadius: "8px", padding: "1.25rem" }}>
+                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
                   <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
                     Sổ tay câu sai cần ôn
                   </div>
@@ -3587,7 +3596,7 @@ export default function Home() {
               <div style={{ marginBottom: "2rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem" }}>
                   <div>
-                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
                       Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
                     </h3>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", margin: "0.2rem 0 0 0" }}>
@@ -3609,12 +3618,13 @@ export default function Home() {
                           setCurrentView("study");
                         }}
                         style={{
-                          backgroundColor: "#121215",
-                          border: "1px solid #27272a",
+                          backgroundColor: T.card,
+                          border: `1px solid ${T.border}`,
                           borderRadius: "8px",
                           padding: "1.1rem 1.25rem",
                           cursor: "pointer",
                           transition: "border-color 0.15s ease",
+                          boxShadow: T.shadow,
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
@@ -4773,7 +4783,7 @@ export default function Home() {
         {/* VIEW 2: QUIZ ENGINE (50 RANDOM QUESTIONS BY TOPIC)             */}
         {/* ============================================================== */}
         {currentView === "quiz" && (
-          <div id="quiz-area" data-dict-area="true" style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div id="quiz-area" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Daily Quiz Limit Notice for Free User */}
@@ -4815,11 +4825,12 @@ export default function Home() {
               {/* Quiz Control Card */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "8px",
                   padding: "1.5rem",
                   marginBottom: "1.75rem",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
@@ -5195,17 +5206,18 @@ export default function Home() {
         {/* VIEW 3: MISTAKES NOTEBOOK (SỔ TAY CÂU SAI ĐỂ ÔN LẠI)            */}
         {/* ============================================================== */}
         {currentView === "mistakes" && (
-          <div id="mistakes-area" data-dict-area="true" style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+          <div id="mistakes-area" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Notebook Header Card */}
               <div
                 style={{
-                  backgroundColor: "#121215",
-                  border: "1px solid #27272a",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "8px",
                   padding: "1.5rem",
                   marginBottom: "1.75rem",
+                  boxShadow: T.shadow,
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
