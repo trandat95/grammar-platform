@@ -15,9 +15,9 @@
          ✅ HOÀN THÀNH                                ✅ CORE LIVE TRÊN PROD                         🚀 SẴN SÀNG TRIỂN KHAI TỪNG MILESTONE
 ```
 
-* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3, 2.4, 2.5, 2.6 & 2.8 (ENHANCED SPECS) — TIẾP TỤC TRIỂN KHAI PHASE 3 (2.9–2.12)**.
+* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3, 2.4, 2.5, 2.6, 2.8 & 2.9 (ADAPTIVE MASTERY & UNIFIED EVENT BUS) — TIẾP TỤC TRIỂN KHAI PHASE 3 (2.10–2.12)**.
 * **Hiện trạng Thực tế trên Production (`https://grammar-platform.vercel.app`):**
-  1. **Database PostgreSQL 17 Live (29 Bảng & 100% RLS):** Đã vận hành 10 bảng Core/Auth/Audit + 8 bảng Diagnostic/Roadmap/AI Coach + 9 bảng Pedagogical Intelligence/Knowledge Graph + 2 bảng Enterprise Sync/Policy Versioning trên Supabase (`wtvlbbcyvtqqygtojxay`).
+  1. **Database PostgreSQL 17 Live (30 Bảng & 100% RLS):** Đã vận hành 10 bảng Core/Auth/Audit + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence, Knowledge Graph & Event Bus (`learning_event_logs`) + 2 bảng Enterprise Sync/Policy Versioning trên Supabase (`wtvlbbcyvtqqygtojxay`).
   2. **Layered Architecture Bảo mật:** Tách biệt hoàn toàn Browser Client (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) và Server Admin Client (`SUPABASE_SERVICE_ROLE_KEY`), Repositories (`7 files`), Services (`7 files`), Server Guard (`admin-guard.js`).
   3. **Các Phân hệ Enhanced Đã Hoàn Thành 100% Live:**
      - **Milestone 2.3 Enhanced:** Multi-Store IndexedDB v2, SyncEvent v1.0 + `idempotency_key`, Multi-Tab Web Locks/BroadcastChannel, Full Jitter Backoff, `/api/health`, `/api/sync/batch|pull|status`, `SyncStatusIndicator.jsx`, PWA Service Worker `sw.js`.
@@ -26,7 +26,8 @@
      - **Milestone 2.6 Enhanced:** 3-Layer Design Token Architecture (`design-tokens.js`, `typography.tokens.js`, `spacing.tokens.js`), Shared Component Library (`components/design-system/`), WCAG 2.2 AA (`design-system.css`, Focus Not Obscured `2.4.11`, Target Size `2.5.8`, `prefers-reduced-motion`, OS `prefers-color-scheme`), Automated Validator (`validate-design-tokens.py/.mjs` — `28/28` contrast pairs `>= 4.62:1`, `0` HEX violations).
      - **Milestone 2.7:** Đầy đủ 8 sơ đồ trực quan tương tác + Audio Service US/UK (0.75x/1.0x/1.25x).
      - **Milestone 2.8 Enhanced:** Root Cause DAG Analysis (`lib/diagnostic/knowledge.graph.js`), Adaptive Dynamic Adjustment & Versioning (`adaptive.learning.engine.js`, `/api/diagnostic/adaptive/adjust`, `roadmap_versions`), Multi-Attempt Growth Analytics (`/api/diagnostic/analytics`, `retention.tracker.js`), Conversational AI Study Coach (`AiAdvisorDrawer.jsx`, `/api/ai-advisor/ask`, `ai_advisor_logs`) với Anti-Hallucination Guardrails.
-  4. **Các Phân hệ Kế Tiếp Sẵn sàng Triển khai:** Adaptive Learning (`2.9`), Gamification (`2.10`), Pre-Prod Verification (`2.11`), Monetization (`2.12`).
+     - **Milestone 2.9 & Section 8D.1 (Live):** 5-State Memory Machine (`New/Learning/Review/Relearning/Mastered`) + Response-Time SM-2/FSRS (`spaced-repetition.js`), Forgetting Curve 1-3-7-14-30d, 6-Factor Anti-Gaming 12-Topic Mastery (`mastery-tracker.js`), Dynamic 50/30/20 Adaptive Mix + Anti-Consecutive Interleaving (`/api/learning/adaptive-mix`, `adaptive-question-engine.js`), Unified Idempotent Event Bus (`POST /api/learning/events`, `learning_event_logs`), SVG 12-Topic Radar + Heatmap (`MasteryIntelligenceDashboard.jsx`) & 8-Scenario Validation Suite (`tests/mastery-engine.test.mjs`, `scripts/validate-mastery-engine.py`).
+  4. **Các Phân hệ Kế Tiếp Sẵn sàng Triển khai:** Gamification (`2.10`), Pre-Prod Verification (`2.11`), Monetization (`2.12`).
 * **Thông tin Môi trường kết nối:**
   - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
   - 🐙 **GitHub Repository:** [doanphuongtanthoihiep-crypto/grammar-platform](https://github.com/doanphuongtanthoihiep-crypto/grammar-platform)
@@ -54,7 +55,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Design** | **2.6** | **Enterprise-Grade Design System & WCAG 2.2 AA** | **P2 (Medium)**| ✅ Hoàn thành (100% — Enhanced Spec Live) |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine (8 Models)** | **P1 (High)** | ✅ Hoàn thành (100%) |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành (100% — Enhanced Spec Live) |
-| **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ⏳ Kế tiếp (Adaptive Spec Active) |
+| **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ⏳ Kế tiếp (Gamification Spec Active) |
 | **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ⏳ Kế tiếp (Monetization Spec Active) |
@@ -106,6 +107,7 @@ grammar-platform/
 │   │   ├── ModalMatrixVisualization.jsx     # Thang đo xác suất Modal Verbs (0-100%)
 │   │   └── WordFamilyTreeVisualization.jsx  # Cây họ từ 4 hướng (N-V-Adj-Adv) & hậu tố vàng
 │   ├── learning/
+│   │   ├── MasteryIntelligenceDashboard.jsx # M2.9 12-Topic Radar, Forgetting Curve & 14d Heatmap (Live)
 │   │   ├── RemedialRecommendationCard.jsx   # Thẻ khuyến nghị bài học bù đắp 1-click (Live)
 │   │   └── SpacedRepetitionPanel.jsx        # Thẻ ôn tập SM-2 (1->3->7->14->30d), Knowledge Decay & DAG (Live)
 │   └── sync/
@@ -130,8 +132,9 @@ grammar-platform/
 │   │   └── spaced-repetition.js             # Thuật toán SM-2 Variant (1 -> 3 -> 7 -> 14 -> 30 ngày)
 │   ├── knowledge/                           # Milestone 2.5 Acyclic Knowledge Graph DAG (Live)
 │   │   └── knowledge-graph.js               # 53 Concept Nodes, 94 Prerequisite Edges (< 5ms lookup)
-│   ├── learning/                            # Milestone 2.5 Mastery & Knowledge Decay (Live)
-│   │   └── mastery-tracker.js               # Tính điểm thành thạo [0-100] & suy hao -5%/tuần sau 14 ngày
+│   ├── learning/                            # Milestone 2.5 & 2.9 Adaptive Mastery Engine (Live)
+│   │   ├── adaptive-question-engine.js      # Phân phối Đề 50/30/20, Anti-Consecutive & Coach Recs (Live)
+│   │   └── mastery-tracker.js               # 6-Factor Anti-Gaming Mastery (6 Tiers) & 5%/wk Decay (Live)
 │   ├── diagnostic/                          # Milestone 2.8 Core & Adaptive Modules (Live)
 │   │   ├── diagnostic.blueprint.js          # Ma trận 30 câu chuẩn hóa & 10 nhóm kiến thức
 │   │   ├── diagnostic.scoring.js            # Deterministic Assessment Scoring & Weakness Detection
@@ -189,8 +192,10 @@ grammar-platform/
 │   │   ├── ai-advisor/
 │   │   │   └── ask.js                       # Cố vấn AI Study Coach với Deterministic Guardrails (Live)
 │   │   ├── learning/
+│   │   │   ├── adaptive-mix.js              # API trộn đề thích ứng 50/30/20 & Manual Topic Review (Live)
+│   │   │   ├── events.js                    # Section 8D.1 Unified Idempotent Learning Event Bus (Live)
 │   │   │   ├── knowledge-graph.js           # API truy vấn DAG 53 bài học & tiên quyết < 5ms (Live)
-│   │   │   ├── mastery.js                   # API điểm thành thạo, Knowledge Decay & SM-2 Queue (Live)
+│   │   │   ├── mastery.js                   # API điểm thành thạo 12 chuyên đề, Forgetting Curve & SM-2 (Live)
 │   │   │   └── remedial-recommendations.js  # API tạo & quản lý khuyến nghị học bù đắp (Live)
 │   │   ├── questions/
 │   │   │   └── [questionId]/explanation.js  # API trả về lời giải JSON 5 trường theo trình độ (Live)
@@ -211,15 +216,18 @@ grammar-platform/
 │   ├── batch-migrate-explanations.mjs       # CLI đồng bộ 2,939 lời giải qua Supabase Service Role
 │   ├── benchmark-adaptation.mjs             # Kiểm thử hiệu năng adaptExplanationForLevel (< 1ms/câu)
 │   ├── validate-design-tokens.py            # Kiểm định tương phản WCAG 2.2 AA & rà soát HEX (Live)
-│   └── validate-design-tokens.mjs           # Node validator tương phản Light/Dark Mode
+│   ├── validate-design-tokens.mjs           # Node validator tương phản Light/Dark Mode
+│   └── validate-mastery-engine.py           # Bộ kiểm thử M2.9 (8 kịch bản + dữ liệu 2,939 câu, Live)
 ├── styles/
 │   └── design-system.css                    # Focus Ring WCAG 2.2 (2.4.11/2.5.8), Skeleton & Reduced Motion
 ├── tests/
+│   ├── mastery-engine.test.mjs              # Suite 8 kịch bản M2.9 Node/CI Validation (Live)
 │   └── visual-regression.spec.mjs           # Playwright Snapshot Matrix (Mobile/Tablet/Desktop × Light/Dark)
 ├── docs/design-system/README.md             # Tài liệu Governance Design System v2.6
 ├── database/migrations/
 │   ├── 002_milestones_23_24_25_enhanced.sql # Migration 6 bảng M2.3-2.5, Immutable Trigger & Composite Indexes
-│   └── 003_milestone_28_adaptive_roadmap.sql # Migration 2 bảng M2.8: roadmap_versions & ai_advisor_logs
+│   ├── 003_milestone_28_adaptive_roadmap.sql # Migration 2 bảng M2.8: roadmap_versions & ai_advisor_logs
+│   └── 004_milestone_29_adaptive_mastery.sql # Migration M2.9: learning_event_logs + SR/Mastery extensions
 ├── data/
 │   ├── grammar-visualizations/              # 8 Bộ dữ liệu Sư phạm Chuẩn hóa (Live)
 │   │   ├── tenses.data.js, conditionals.data.js, passive-voice.data.js, reported-speech.data.js
@@ -237,9 +245,9 @@ grammar-platform/
 
 ---
 
-## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (29 LIVE TABLES & RLS ARCHITECTURE)
+## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (30 LIVE TABLES & RLS ARCHITECTURE)
 
-### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (29 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
+### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (30 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
 
 ```mermaid
 erDiagram
@@ -433,10 +441,10 @@ erDiagram
     }
 ```
 
-> **Danh sách Đầy đủ 29 Bảng Live trên Supabase (`public` schema — 29/29 RLS enabled):**  
+> **Danh sách Đầy đủ 30 Bảng Live trên Supabase (`public` schema — 30/30 RLS enabled):**  
 > • **Core / Auth / Audit (12):** `profiles`, `user_learning_trackers`, `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements`, `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
 > • **Diagnostic, Adaptive Roadmap & AI Coach (8):** `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps` (+`current_version`, `last_adjusted_at`), `roadmap_items`, `roadmap_versions`, `ai_advisor_logs`.  
-> • **Pedagogical Intelligence & Knowledge Graph (9):** `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress` (+`mastery_score`, `last_reviewed_at`, `next_review_at`), `concepts`, `concept_dependencies`, `spaced_repetition_queue`, `error_taxonomy_registry`.
+> • **Learning Events, Pedagogical Intelligence & Knowledge Graph (10):** `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress` (+`mastery_score`, `mastery_tier`, `consistency_score`, `retention_score`, `difficulty_weight`, `recency_score`, `topic_coverage_score`, `unique_questions_seen`, `last_reviewed_at`, `next_review_at`), `concepts`, `concept_dependencies`, `spaced_repetition_queue` (+`memory_state`, `response_time_ms`, `correct_history`, `difficulty_rating`, `stability_score`, `retrievability_score`), `error_taxonomy_registry`, `learning_event_logs` (`UNIQUE(user_id, idempotency_key)` — Section `8D.1`).
 
 ### 4.2. RLS Security Model (Chống Đệ quy & Phân quyền Độc lập)
 
@@ -1340,7 +1348,7 @@ components/
 
 ## 🧠 8A. MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & INTELLIGENT MASTERY TRACKING (P2)
 
-> **Sứ mệnh cốt lõi:** Xây dựng hệ thống theo dõi năng lực học tập liên tục, đo lường khả năng ghi nhớ kiến thức dài hạn và tự động điều phối nội dung luyện tập dựa trên hiệu suất thực tế của từng học viên. Hệ thống không chỉ đếm số câu đúng mà phải trả lời được: *Học viên thực sự hiểu bản chất hay chỉ nhớ vẹt đáp án? Kiến thức nào đã thành thạo và kiến thức nào đang rơi rụng theo thời gian?* *(Trạng thái: `Planned Spec` — kế thừa và mở rộng trên bảng Live `public.user_concept_progress`)*.
+> **Sứ mệnh cốt lõi:** Xây dựng hệ thống theo dõi năng lực học tập liên tục, đo lường khả năng ghi nhớ kiến thức dài hạn và tự động điều phối nội dung luyện tập dựa trên hiệu suất thực tế của từng học viên. Hệ thống không chỉ đếm số câu đúng mà phải trả lời được: *Học viên thực sự hiểu bản chất hay chỉ nhớ vẹt đáp án? Kiến thức nào đã thành thạo và kiến thức nào đang rơi rụng theo thời gian?* *(Trạng thái: `Live on Production` — vận hành trên `public.spaced_repetition_queue`, `public.user_concept_progress` & `public.learning_event_logs`)*.
 
 ### 8A.1. Động cơ Ôn tập Lặp lại Ngắt quãng Thông minh (`Intelligent Spaced Repetition Engine - P0`)
 - **Máy trạng thái Ghi nhớ (Memory State Machine):** Phân loại từng câu hỏi theo 5 trạng thái:
@@ -1956,37 +1964,37 @@ Liên kết trực tiếp với hệ thống `auth.users`, `profiles` & `system_
 
 > **Mục tiêu:** Xây dựng hệ thống theo dõi năng lực học tập liên tục, đánh giá mức độ ghi nhớ kiến thức dài hạn và tự động điều chỉnh nội dung luyện tập dựa trên hiệu suất thực tế của từng người dùng; phân biệt rõ người dùng thực sự hiểu bản chất hay chỉ nhớ vẹt đáp án.
 
-- [ ] **2.9.1 Intelligent Spaced Repetition Engine (P0):**
+- [x] **2.9.1 Intelligent Spaced Repetition Engine (P0):**
   * Triển khai thuật toán Spaced Repetition (SM-2 / FSRS) tự động lên lịch thời điểm ôn tập tối ưu.
   * Máy trạng thái 5 mức ghi nhớ câu hỏi: `New`, `Learning`, `Review`, `Relearning`, `Mastered`.
   * Tự động điều chỉnh khoảng cách ngày ôn tập (`review_interval`) dựa trên tốc độ phản hồi (`response_time_ms`) và độ chính xác; thu hẹp về 1 ngày khi có dấu hiệu rơi rụng kiến thức.
   * Hỗ trợ chế độ ôn tập chủ động (Manual Topic Review).
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.1):** Lịch ôn tập được tạo và cập nhật tự động sau mỗi phiên làm bài; câu hỏi làm sai được đưa ngay vào danh sách ưu tiên ôn tập kế tiếp.
-- [ ] **2.9.2 Knowledge Retention & Forgetting Curve Analysis (P1):**
+- [x] **2.9.2 Knowledge Retention & Forgetting Curve Analysis (P1):**
   * Theo dõi độ bền vững kiến thức tại 5 mốc thời gian: 1 ngày, 3 ngày, 7 ngày, 14 ngày và 30 ngày.
   * Phân tách 3 chỉ số sư phạm độc lập: *Short-term Learning* (ngay sau khi học), *Long-term Retention* (sau $\ge 14$ ngày), và *Consistency* (độ ổn định qua các lần kiểm tra).
   * Phát hiện kịp thời các chuyên đề có nguy cơ quên kiến thức (Topics at Risk).
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.2):** Biểu đồ đường cong quên lãng phản ánh chính xác tỷ lệ lưu giữ kiến thức thực tế của học viên trên Dashboard.
-- [ ] **2.9.3 Adaptive Difficulty & Dynamic Question Recommendation (P0):**
+- [x] **2.9.3 Adaptive Difficulty & Dynamic Question Recommendation (P0):**
   * Tự động điều chỉnh độ khó và lựa chọn câu hỏi tiếp theo dựa trên phân tích kết quả làm bài gần nhất.
   * Áp dụng tỷ lệ phân phối câu hỏi thích ứng: **50% Weak Topics** (chuyên đề yếu) + **30% Knowledge Retention Review** (ôn tập câu hỏi cũ) + **20% New Knowledge & Challenge** (kiến thức mới mở rộng).
   * Cơ chế chống học vẹt: trộn biến thể câu hỏi và ngăn chặn xuất hiện liên tiếp 2 câu cùng cấu trúc cú pháp.
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.3):** Học viên có trình độ cao tự động nhận câu hỏi khó hơn; học viên đang yếu được tập trung củng cố kiến thức nền tảng mà không bị quá tải.
-- [ ] **2.9.4 12-Topic Mastery Tracking System (P0):**
+- [x] **2.9.4 12-Topic Mastery Tracking System (P0):**
   * Theo dõi điểm thành thạo `mastery_score` (0 - 100%) thời gian thực cho toàn bộ 12 chuyên đề ngữ pháp Mai Lan Hương (mở rộng trực tiếp bảng Live `user_concept_progress` hiện mới có `attempts`, `correct_attempts`, `mastery_status`).
   * Phân loại 6 cấp bậc chuẩn: *Beginner (0-19%)*, *Basic (20-39%)*, *Intermediate (40-59%)*, *Advanced (60-74%)*, *Proficient (75-89%)*, *Master (90-100%)*.
   * Thuật toán đa nhân tố: kết hợp *Accuracy*, *Consistency*, *Retention*, *Difficulty*, *Recency*, và *Topic Coverage*. Chống gian lận: không thể cày điểm bằng cách lặp lại câu hỏi dễ.
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.4):** Điểm Mastery phản ánh trung thực năng lực vận dụng ngữ pháp, lưu trữ an toàn trong `user_concept_progress` và cập nhật tức thì sau mỗi lượt submit.
-- [ ] **2.9.5 Learning Analytics & Progress Intelligence (P1):**
+- [x] **2.9.5 Learning Analytics & Progress Intelligence (P1):**
   * Tổng hợp thống kê Daily / Weekly / Monthly: tổng câu hỏi, thời gian học, xu hướng chính xác, tốc độ học tập (Learning Velocity) và tỷ lệ tiến bộ so với giai đoạn trước.
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.5):** Báo cáo phân tích hiển thị đầy đủ các chiều thông tin so sánh năng lực học tập qua từng tuần.
-- [ ] **2.9.6 Personalized Review & Learning Recommendations (P1):**
+- [x] **2.9.6 Personalized Review & Learning Recommendations (P1):**
   * Recommendation Engine phân tích dữ liệu thực tế để đưa ra lời khuyên hành động tức thời (*"Bạn đang yếu ở Conditional Sentences"*, *"Passive Voice có nguy cơ bị quên — Hãy ôn tập 15 câu hôm nay"*).
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.6):** Khuyến nghị được cá nhân hóa 100% theo dữ liệu của từng user, có nút 1-click dẫn thẳng vào bài luyện tập tương ứng.
-- [ ] **2.9.7 Mastery Dashboard & Visualizations (P1):**
+- [x] **2.9.7 Mastery Dashboard & Visualizations (P1):**
   * Xây dựng cụm thành phần giao diện trực quan: Biểu đồ Radar 12 chuyên đề, Biểu đồ đường cong ghi nhớ, Heatmap hoạt động hàng ngày, Thẻ chuyên đề mạnh nhất/yếu nhất, Lịch ôn tập sắp tới.
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.7):** Giao diện responsive trên Mobile/Desktop, hỗ trợ hoàn hảo cả Light Mode và Dark Mode đạt chuẩn WCAG AA.
-- [ ] **2.9.8 Mastery Engine Validation, Anti-Duplicate & Multi-Device Testing (P0):**
+- [x] **2.9.8 Mastery Engine Validation, Anti-Duplicate & Multi-Device Testing (P0):**
   * Bộ kiểm thử tự động 8 kịch bản: trả lời đúng liên tục, sai liên tục, nghỉ học nhiều ngày, ôn tập câu đã thành thạo, submit trùng lặp (duplicate submissions), học đồng thời trên nhiều thiết bị.
   * **Tiêu chuẩn Nghiệm thu (AC-2.9.8):** 100% test cases vượt qua; không phát sinh race condition hay sai lệch điểm số khi đổi thiết bị.
 
