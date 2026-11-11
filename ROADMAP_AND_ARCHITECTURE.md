@@ -42,9 +42,9 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | :--- | :--- | :--- | :---: | :---: |
 | **Infrastructure** | **2.1** | **Database Provisioning, Security Hardening & RLS** | **P0 (Critical)** | ✅ Hoàn thành |
 | **Infrastructure** | **2.2** | **Supabase SDK Layering (Client / Server / Services)** | **P0 (Critical)** | ✅ Hoàn thành |
-| **Infrastructure** | **2.3** | **Auth & Offline Sync Engine (Conflict Resolution)** | **P0 (Critical)** | ✅ Hoàn thành |
-| **Management** | **2.4** | **Enterprise Admin Dashboard & Server Audit Logs** | **P1 (High)** | ✅ Hoàn thành |
-| **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | ✅ Hoàn thành |
+| **Infrastructure** | **2.3** | **Resilient Offline-First Architecture & Multi-Device Sync** | **P0 (Critical)** | ✅ Core Live / Resilient Sync Spec Active |
+| **Management** | **2.4** | **Enterprise Admin Dashboard, RBAC & Immutable Audit Logs** | **P1 (High)** | ✅ Core Live / Enterprise Governance Spec Active |
+| **Content** | **2.5** | **Structured Pedagogical Intelligence & Remedial Engine** | **P1 (High)** | ✅ Core Live / Knowledge Graph Spec Active |
 | **Design** | **2.6** | **Enterprise-Grade Design System & WCAG 2.2 AA** | **P2 (Medium)**| ✅ Core Live / Design System Spec Active |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành |
@@ -341,77 +341,452 @@ erDiagram
 
 ---
 
-## 🔄 5. KIẾN TRÚC OFFLINE SYNC ENGINE & CHIẾN LƯỢC XUNG ĐỘT (HYBRID SYNC)
+## 🔄 5. OFFLINE-FIRST ARCHITECTURE, RESILIENT SYNC ENGINE & MULTI-DEVICE SYNCHRONIZATION (MILESTONE 2.3)
 
-### 5.1. Mô hình Đồng bộ Dữ liệu
+> **Sứ mệnh cốt lõi:** Xây dựng hệ thống Offline-First cấp công nghiệp (Industrial-grade Offline-First Engine) cho phép học viên tiếp tục toàn bộ hoạt động học tập (học bài, làm quiz, đánh dấu câu sai, lưu từ vựng) trong điều kiện mất Internet hoặc kết nối chập chờn. Toàn bộ tiến trình được bảo toàn 100% trong lưu trữ cục bộ có tính giao dịch, tự động phục hồi và hội tụ nhất quán (Eventually Consistent) ngay khi thiết bị kết nối lại, đảm bảo triệt tiêu rủi ro mất điểm XP, mất chuỗi streak hoặc trùng lặp dữ liệu trên đa thiết bị.
+
+### 5.1. Triết lý & Nguyên tắc Thiết kế Cốt lõi
+Hệ thống tuân thủ 4 nguyên tắc kỹ thuật bất biến:
+1. **Offline-First Resilience:** Mọi thao tác học tập đều được ghi nhận tức thì vào lưu trữ cục bộ (Local-First Commit) trước khi phát sinh yêu cầu mạng; giao diện phản hồi 0ms không phụ thuộc độ trễ máy chủ.
+2. **Event-Driven Synchronization:** Mọi biến động dữ liệu được đóng gói thành các sự kiện đồng bộ tuần tự bất biến (`SyncEvent`), lưu trữ trong hàng đợi có chỉ mục (Transactional IndexedDB Queue).
+3. **Eventually Consistent Convergence:** Áp dụng mô hình đồng bộ trạng thái hội tụ giữa các thiết bị thông qua dấu thời gian logical (Vector Clock / Server Sync Cursors) và bộ giải quyết xung đột nghiệp vụ chuyên sâu.
+4. **Strict Idempotency:** Mỗi sự kiện đồng bộ mang một mã định danh ngẫu nhiên bất biến (`idempotency_key` UUIDv4). Máy chủ từ chối xử lý lặp lại ngay cả khi client gửi lại nhiều lần do ngắt kết nối giữa chừng.
+
+### 5.2. Sơ đồ Kiến trúc Đồng bộ Hai chiều Đa Thiết bị (End-to-End Architectural Flow)
 
 ```text
-[ Browser Event: Complete Question / Learn Lesson ]
-                       │
-                       ▼
-       [ Local Storage / IndexedDB Storage ]
-                       │
-                       ▼
-            [ Offline Write Queue ]
-                       │
-           ┌───────────┴───────────┐
-      (Online)                  (Offline)
-           │                         │
-           ▼                         ▼
-   [ Sync Manager ]           [ Pending Changes State (🟠) ]
-           │                         │
-    (Conflict Rules)                 ▼
-           │                  [ Auto-retry when online ]
-           ▼
-[ Supabase PostgreSQL 17 via API ]
-           │
-           ▼
-[ Synced State (🟢) with Last Sync Timestamp ]
+  [ Học viên thao tác: Làm bài / Luyện Quiz / Lưu câu sai / Bookmark từ vựng ]
+                                      │
+                                      ▼
+                      ┌──────────────────────────────┐
+                      │    Optimistic UI Updates     │ ──► Giao diện phản hồi 0ms
+                      └──────────────┬───────────────┘
+                                      │
+                                      ▼
+                    ┌──────────────────────────────────┐
+                    │  IndexedDB Transactional Store   │
+                    │      (Offline Event Queue)       │
+                    └─────────────────┬────────────────┘
+                                      │
+                         ┌────────────┴────────────┐
+                         ▼                         ▼
+              [ Tab 1 (Leader Lock) ]    [ Tab 2 (Follower Tab) ]
+                         │                         │
+                         │    BroadcastChannel     │
+                         ├─────────────────────────┤ (Đồng bộ trạng thái giữa các Tab)
+                         │                         │
+                         ▼                         ▼
+              ┌────────────────────────────────────────┐
+              │    Resilient Sync Manager (Worker)     │
+              │  - Network State & Heartbeat Ping      │
+              │  - Batching (Max 50 events / flush)    │
+              │  - Exponential Backoff with Jitter     │
+              └───────────────────┬────────────────────┘
+                                  │
+                                  │ (HTTPS POST /api/sync/batch)
+                                  ▼
+              ┌────────────────────────────────────────┐
+              │       Supabase Serverless Edge         │
+              │  - Idempotency Deduplication Cache     │
+              │  - RBAC & Token Signature Guard        │
+              │  - Atomic Multi-Entity DB Transaction  │
+              └───────────────────┬────────────────────┘
+                                  │
+                                  ▼
+              ┌────────────────────────────────────────┐
+              │       Conflict Resolution Matrix       │
+              │  - XP: Transactional Delta Increment   │
+              │  - Streak: Server UTC Date Audit       │
+              │  - Quiz: Immutable Snapshot Insertion  │
+              │  - Mistakes: Last-Write / Delete Flag  │
+              │  - Progress: Mathematical Set Union    │
+              └───────────────────┬────────────────────┘
+                                  │
+                                  ▼
+              ┌────────────────────────────────────────┐
+              │  Supabase PostgreSQL 17 (Cloud State)  │
+              └───────────────────┬────────────────────┘
+                                  │
+                                  │ (Sync Ack & Server Change Delta)
+                                  ▼
+              ┌────────────────────────────────────────┐
+              │  Local Cache Invalidation & Synced (🟢)│
+              └────────────────────────────────────────┘
 ```
 
-### 5.2. Ma trận Chiến lược Giải quyết Xung đột (Conflict Resolution Matrix)
+### 5.3. Cấu trúc Lưu trữ Ngoại tuyến & Schema Sự kiện Đồng bộ (`lib/sync/sync-queue.js`)
 
-| Loại dữ liệu | Chiến lược xử lý | Cơ chế thực thi |
+Để đảm bảo hiệu năng và dung lượng lưu trữ lớn (hàng ngàn câu hỏi và phiên làm bài), hệ thống sử dụng **IndexedDB** làm lưu trữ chính (Primary Store) với fallback an toàn sang **LocalStorage** trong môi trường bị hạn chế sandbox:
+
+```typescript
+// Schema Sự kiện Đồng bộ Bất biến (Sync Event Schema v1.0)
+interface SyncEvent {
+  idempotency_key: string;       // UUIDv4 bất biến sinh tại client
+  user_id: string;              // UUID học viên (hoặc 'guest_session')
+  device_id: string;            // UUID duy nhất cho từng trình duyệt/thiết bị
+  event_type:                   // Phân loại biến động dữ liệu
+    | 'XP_EARNED' 
+    | 'LESSON_COMPLETED' 
+    | 'MISTAKE_RECORDED' 
+    | 'MISTAKE_RESOLVED' 
+    | 'QUIZ_SUBMITTED' 
+    | 'VOCABULARY_SAVED' 
+    | 'VOCABULARY_DELETED'
+    | 'DIAGNOSTIC_COMPLETED';
+  payload: Record<string, any>; // Dữ liệu ngữ cảnh chi tiết
+  client_timestamp: number;     // Unix timestamp miligiây tại client
+  retry_count: number;          // Số lần thử gửi thất bại
+  last_error?: string;          // Nguyên nhân thất bại gần nhất
+  status: 'PENDING' | 'SYNCING' | 'FAILED' | 'RESOLVED';
+}
+```
+
+### 5.4. Phối hợp Đa Tab & Chống Trùng lặp Giao dịch (`lib/sync/sync-coordinator.js`)
+Khi học viên mở nhiều tab cùng lúc trên một trình duyệt, nguy cơ race condition và spam yêu cầu mạng đồng thời lên máy chủ rất cao. Hệ thống triển khai bộ điều phối:
+- **Web Locks API (`navigator.locks.request`):** Bầu chọn Tab Trưởng (Leader Tab) độc quyền sở hữu quyền kích hoạt đồng bộ mạng. Các tab còn lại đóng vai trò Follower.
+- **BroadcastChannel (`'grammar_sync_channel'`):** Tab Trưởng truyền thông tin trạng thái hàng đợi và kết quả đồng bộ thành công sang các tab khác trong 2ms mà không cần truy vấn lại đĩa cứng.
+- Fallback sử dụng `storage` event của `window.localStorage` cho các trình duyệt chưa hỗ trợ Web Locks.
+
+### 5.5. Động cơ Đồng bộ Tự phục hồi & Giao thức Batch Flush (`lib/sync/sync-manager.js`)
+- **Exponential Backoff with Full Jitter:** Khi gặp sự cố mạng (HTTP 502/503/504 hoặc Network Timeout), thời gian chờ tái thử nghiệm tuân theo công thức:
+  $$T_{backoff} = \min\left(T_{max}, T_{base} \times 2^{retry}\right) \times \text{random}(0.5, 1.5)$$
+  *(Với $T_{base} = 1000\text{ms}$, $T_{max} = 30000\text{ms}$)*.
+- **Micro-Batching:** Gom tối đa 50 sự kiện đang chờ (`status: 'PENDING'`) vào một mẻ (payload chunk) duy nhất gửi qua API, giảm 98% chi phí kết nối HTTP handshake.
+- **Network Liveness Detection:** Kết hợp `window.addEventListener('online')`, `navigator.onLine` và cơ chế Heartbeat Ping định kỳ 60s tới endpoint siêu nhẹ `/api/health` để xác thực đường truyền internet thực tế (tránh captive portal hoặc mạng wifi ảo).
+
+### 5.6. Ma trận Chiến lược Giải quyết Xung đột Dữ liệu (Conflict Resolution Matrix)
+
+| Thực thể dữ liệu | Chiến lược xử lý | Quy tắc giải quyết xung đột (Conflict Resolution Protocol) |
 | :--- | :--- | :--- |
-| **Điểm kinh nghiệm (XP)** | Transactional Increment | Tính toán phần gia tăng (delta) ở client; server thực hiện phép toán cộng dồn nguyên tử `xp = xp + delta` thay vì ghi đè giá trị tuyệt đối. |
-| **Chuỗi ngày học (Streak)**| Server-side Calculation | Server đối chiếu `last_active_date` với `CURRENT_DATE`: nếu là ngày kế tiếp thì tăng 1; nếu trùng thì giữ nguyên; nếu đứt quãng thì reset về 1. |
-| **Bài làm Chẩn đoán & Quiz**| Immutable Records | Mỗi bài kiểm tra là một bản ghi bất biến với UUID riêng; lưu snapshot câu hỏi tại thời điểm làm bài để bảo toàn lịch sử khi ngân hàng câu hỏi thay đổi. |
-| **Sổ tay câu sai (Mistakes)** | Upsert theo Unique Key | Cặp `(user_id, question_id)` làm khóa duy nhất: nếu làm sai lại thì cập nhật `failed_at` và `review_count += 1`; nếu làm đúng trong chế độ ôn thì set `is_mastered = true`. |
-| **Lộ trình học tập (Roadmap)**| Active State Locking | Không tự ý ghi đè lộ trình đang thực hiện khi chưa có quyết định rõ ràng từ người dùng hoặc qua quy trình Reassessment chính thức. |
+| **Điểm kinh nghiệm (XP)** | **Transactional Delta Accumulation** | Client chỉ gửi độ tăng $\Delta_{xp}$. Server thực hiện phép toán nguyên tử: `UPDATE profiles SET xp = xp + $delta, level = calculate_level(xp + $delta)`. Không bao giờ ghi đè con số tổng tuyệt đối. |
+| **Chuỗi học tập (Streak)** | **Server-side Temporal Audit** | Server thẩm định đối chiếu `last_activity_date` máy chủ với UTC ngày hiện tại. Nếu khoảng cách là 1 ngày: `streak += 1`. Nếu trùng ngày: giữ nguyên. Nếu gián đoạn > 48h: reset về 1. |
+| **Phiên thi & Quiz** | **Immutable Snapshot Append** | Mỗi bài thi mang UUID riêng và là thực thể bất biến. Server chỉ thực hiện `INSERT`, không bao giờ `UPDATE` phiên thi cũ. Lưu snapshot danh sách câu hỏi tại thời điểm làm bài. |
+| **Sổ tay câu sai (Mistakes)** | **Composite Key Upsert & Soft-Delete** | Khóa duy nhất `(user_id, question_id)`. Nếu làm sai lại khi offline: `review_count += 1`, `last_failed_at = MAX(server, client)`. Nếu ôn đúng: `is_mastered = true`. Trạng thái sửa/xóa có độ ưu tiên thời gian (`updated_at`). |
+| **Tiến trình bài học** | **Mathematical Set Union ($S_{srv} \cup S_{cli}$)** | Hợp tập hợp tất cả bài học đã hoàn thành giữa local và cloud. Học viên không bao giờ bị mất bài học đã hoàn thành dù học xen kẽ trên điện thoại và laptop. |
+| **Từ vựng đã lưu (Bookmarks)** | **Tombstone Precedence** | Áp dụng cờ xóa ảo (`deleted_at`). Bản ghi có `deleted_at > updated_at` luôn được xem là đã xóa, triệt tiêu hiện tượng từ vựng bị "hồi sinh" sau khi đồng bộ. |
+
+### 5.7. Giao thức API Serverless Phục vụ Đồng bộ (`pages/api/sync/*`)
+1. `POST /api/sync/batch`: Nhận danh sách mẻ sự kiện, xác thực token phiên, thực thi transaction PostgreSQL trên Supabase, trả về danh sách các sự kiện được chấp nhận và danh sách ID bị từ chối/xung đột.
+2. `GET /api/sync/pull`: Tiếp nhận con trỏ thời gian `since_timestamp` của thiết bị, trả về toàn bộ thay đổi dữ liệu phát sinh từ các thiết bị khác sau mốc đó.
+3. `GET /api/sync/status`: Cung cấp đồng hồ chuẩn máy chủ (Server Clock UTC) để client tính toán độ lệch đồng hồ (Clock Skew Offset).
+
+### 5.8. Giao diện Chỉ báo Trạng thái Đồng bộ UI (`components/sync/SyncStatusIndicator.jsx`)
+Được nhúng trực tiếp trên Navbar và chân trang, phản hồi 5 trạng thái trực quan:
+- 🟢 **Cloud Synced:** Thiết bị khớp hoàn toàn với máy chủ. Tooltip: *"Dữ liệu học tập đã được sao lưu an toàn trên Cloud."*
+- 🟡 **Syncing...:** Hiển thị icon xoay mượt mà khi đang truyền dữ liệu mẻ.
+- 🟠 **Pending Changes ($N$ items):** Hiển thị số lượng sự kiện đang xếp hàng chờ đồng bộ.
+- 🔴 **Sync Error:** Cảnh báo khi thử lại quá số lần quy định; cung cấp nút bấm *"Thử lại ngay"* thủ công.
+- ⚪ **Offline Mode:** Huy hiệu biểu tượng đám mây gạch chéo thông báo ứng dụng đang vận hành hoàn toàn độc lập ngoại tuyến.
+
+### 5.9. Chiến lược Service Worker & Caching Ngoại tuyến
+- Cấu hình Workbox precaching toàn bộ tài sản tĩnh (HTML shell, CSS, Fonts, Icons).
+- Cache-First cho toàn bộ dữ liệu 12 chuyên đề ngữ pháp, 53 bài học lý thuyết (`/data/grammar-lessons/*`).
+- Network-First với Fallback sang Cache cho ngân hàng 2,939 câu hỏi luyện tập.
+
+### 5.10. Giám sát, Đo lường & Telemetry
+- Client ghi nhận các chỉ số hiệu năng vào bảng cục bộ: Tỷ lệ đồng bộ thành công (% success), Thời gian hoàn tất mẻ đồng bộ P95 (< 600ms), Tỷ lệ giải quyết xung đột dữ liệu.
 
 ---
 
-## 📐 6. STRUCTURED PEDAGOGICAL EXPLANATION ENGINE (JSON SCHEMA)
+## 🛡️ 5.5. ENTERPRISE ADMIN DASHBOARD, RBAC GOVERNANCE & IMMUTABLE AUDIT TRAIL (MILESTONE 2.4)
 
-Toàn bộ giải thích câu hỏi bài tập và đề thi được chuẩn hóa thành cấu trúc dữ liệu JSON sư phạm thay vì các chuỗi văn bản tự do:
+> **Sứ mệnh cốt lõi:** Thiết lập hệ thống Quản trị & Giám sát Tập trung (Centralized Administrative & Governance System) đáp ứng tiêu chuẩn Enterprise dành cho Giảng viên, Chuyên gia Sư phạm và Quản trị viên Nền tảng. Hệ thống cung cấp khả năng kiểm soát vai trò chặt chẽ (RBAC), điều phối chính sách hạn mức hệ thống động (Dynamic Quota Policies), bảo vệ dữ liệu học viên và lưu vết toàn bộ thay đổi thông qua Nhật ký Kiểm toán Bất biến (Immutable Append-Only Audit Trail) chống giả mạo.
+
+### 5.5.1. Sứ mệnh Quản trị & Kiến trúc Kiểm soát Tập trung
+Bảng điều khiển quản trị viên được phân ly kiến trúc hoàn toàn với giao diện học viên:
+- **Zero-Trust Access:** Mọi thao tác truy vấn và biến đổi dữ liệu trên giao diện Admin đều phải đi qua Server-side Authorization Middleware (`lib/admin/admin-guard.js`), kiểm tra chữ ký JWT phiên làm việc và đối chiếu quyền trong bảng `public.profiles`.
+- **Defense in Depth:** Kết hợp bảo vệ 3 lớp: UI Route Guards -> Next.js API Middleware -> Supabase Row-Level Security (RLS) Policies.
+
+### 5.5.2. Bảng Điều khiển Vận hành Hệ thống (`components/admin/AdminOverview.jsx`)
+Cung cấp góc nhìn thời gian thực về sức khỏe và chỉ số vận hành nền tảng:
+- **Chỉ số Người dùng:** Tổng số tài khoản, Học viên tích cực hôm nay (DAU), Học viên tích cực tuần này (WAU), Tỷ lệ chuyển đổi VIP ⭐.
+- **Chỉ số Học tập:** Số bài học lý thuyết đã hoàn thành trong 24h, Số lượt thi Quiz 50 câu, Tỷ lệ trả lời chính xác trung bình toàn hệ thống.
+- **Chỉ số Đồng bộ & Kỹ thuật:** Số lượng sự kiện đồng bộ ngoại tuyến được xử lý/phút, Tỷ lệ lỗi API (4xx/5xx), Độ trễ phản hồi trung bình (P95 Response Time).
+- **Trạng thái Dịch vụ:** Supabase Database Connection Pool, Audio CDN Health, Vercel Edge Cache Hit Ratio.
+
+### 5.5.3. Ma trận Phân quyền RBAC & Quản trị Học viên (`components/admin/UserManagementTable.jsx`)
+
+#### A. Ma trận Quyền hạn Chi tiết (RBAC Permissions Matrix)
+
+| Danh mục Quyền | FREE (Học viên Miễn phí) | VIP (Học viên Cao cấp) | ADMIN (Quản trị viên) |
+| :--- | :---: | :---: | :---: |
+| Học lý thuyết 12 Chuyên đề & 53 Bài học | ✅ Đầy đủ | ✅ Đầy đủ | ✅ Đầy đủ |
+| Luyện tập bài tập trắc nghiệm | ⚠️ 10 câu đầu/chương | ✅ Toàn bộ 2,939 câu | ✅ Toàn bộ 2,939 câu |
+| Thi thử Quiz 50 câu chuẩn THPT | ⚠️ Tối đa 2 đề/ngày | ✅ Không giới hạn | ✅ Không giới hạn |
+| Lời giải Sư phạm Chuẩn hóa (JSON Schema) | ⚠️ Bản cơ bản (Beginner) | ✅ Đầy đủ 4 Cấp độ | ✅ Đầy đủ 4 Cấp độ |
+| Phát âm Audio Engine bản xứ (US/UK) | ❌ Không hỗ trợ | ✅ Không giới hạn | ✅ Không giới hạn |
+| Chẩn đoán Năng lực & Lộ trình Cá nhân hóa | ⚠️ 1 lần/tháng | ✅ Định kỳ linh hoạt | ✅ Không giới hạn |
+| Đồng bộ Đa thiết bị (Offline Sync Engine) | ✅ Tiêu chuẩn | ✅ Ưu tiên cao | ✅ Không giới hạn |
+| Quản lý Người dùng & Đổi vai trò | ❌ Bị chặn | ❌ Bị chặn | ✅ Quyền tối cao |
+| Cấu hình Chính sách Hạn mức Hệ thống | ❌ Bị chặn | ❌ Bị chặn | ✅ Toàn quyền |
+| Truy cập Nhật ký Kiểm toán (Audit Logs) | ❌ Bị chặn | ❌ Bị chặn | ✅ Read-only Toàn quyền |
+
+#### B. Thao tác Quản trị Học viên Tập trung
+- **Nâng cấp / Hạ cấp Vai trò 1-Chạm:** Chuyển đổi trạng thái `FREE` $\leftrightarrow$ `VIP` $\leftrightarrow$ `ADMIN` với xác thực phân quyền máy chủ.
+- **Quản lý Trạng thái Tài khoản:** Khóa tài khoản vi phạm quy định (`BANNED`) hoặc kích hoạt lại (`ACTIVE`). Khi bị khóa, toàn bộ API của học viên lập tức bị chặn qua middleware.
+- **Bộ lọc & Tìm kiếm Tức thì:** Tìm kiếm theo Email, Họ tên, UUID; lọc theo Vai trò, Trạng thái hoạt động, Mốc ngày tạo và Chuỗi Streak.
+- **Xuất Dữ liệu (Bulk Export):** Trích xuất danh sách học viên định dạng CSV/JSON phục vụ báo cáo sư phạm.
+
+### 5.5.4. Quản lý Hạn mức Động & Chính sách Hệ thống (`components/admin/PolicyManagementModal.jsx`)
+Thay vì hardcode hạn mức trong mã nguồn, hệ thống cho phép Admin cấu hình động các thông số trong bảng `public.system_policies`:
+- `free_questions_per_chapter`: Số câu bài tập tối đa người dùng Free được làm mỗi chương (Mặc định: 10).
+- `free_daily_quiz_limit`: Số lượt làm Quiz 50 câu mỗi ngày cho người dùng Free (Mặc định: 2).
+- `diagnostic_cooldown_days`: Khoảng thời gian giãn cách giữa 2 lần làm bài chẩn đoán năng lực (Mặc định: 7 ngày).
+- `offline_sync_max_batch`: Kích thước mẻ đồng bộ tối đa (Mặc định: 50 sự kiện/mẻ).
+- Cơ chế Semantic Versioning: Mọi thay đổi chính sách được lưu phiên bản mới kèm ghi chú lý do và người phê duyệt; client nhận tín hiệu invalidate cache sau 60 giây.
+
+### 5.5.5. Nhật ký Kiểm toán Bất biến (Immutable Audit Trail - `public.audit_logs`)
+Mọi hành vi có tính biến đổi cấu hình, can thiệp tài khoản hoặc thay đổi vai trò đều bắt buộc ghi vào bảng `public.audit_logs`:
+- **Cấu trúc Bản ghi Kiểm toán:**
+  - `id`: UUID khóa chính.
+  - `actor_id`: UUID của Quản trị viên thực hiện hành động.
+  - `actor_email`: Email định danh người thao tác.
+  - `action_type`: `ROLE_CHANGE` | `USER_BAN` | `USER_UNBAN` | `POLICY_UPDATE` | `CONTENT_APPROVAL` | `EXPLANATION_EDIT`.
+  - `target_resource`: Bảng hoặc thực thể bị tác động (`profiles`, `system_policies`, `explanations`).
+  - `target_id`: Định danh bản ghi đích.
+  - `old_value`: JSON snapshot trạng thái trước khi thay đổi.
+  - `new_value`: JSON snapshot trạng thái sau khi thay đổi.
+  - `ip_address`: Địa chỉ IP của client thực hiện.
+  - `user_agent`: Thông tin trình duyệt/thiết bị thao tác.
+  - `created_at`: Dấu thời gian chuẩn UTC.
+- **Bảo vệ Bất biến Cấp Cơ sở Dữ liệu:** Thiết lập PostgreSQL Trigger chặn hoàn toàn lệnh `UPDATE` hoặc `DELETE` trên bảng `public.audit_logs`. Ngay cả tài khoản Quản trị viên cao cấp nhất cũng không thể sửa đổi hoặc xóa dấu vết nhật ký.
+
+### 5.5.6. Bảo vệ Thao tác Nhạy cảm, Rate Limiting & Xác thực Hai bước
+- **Step-up Confirmation Dialog:** Đối với các thao tác rủi ro cao (Khóa vĩnh viễn tài khoản, Chỉ định quyền ADMIN mới, Điều chỉnh hạn mức cốt lõi), hệ thống yêu cầu Quản trị viên nhập chuỗi xác nhận cụ thể (ví dụ: gõ chữ `"CONFIRM_ACTION"`) trước khi kích hoạt.
+- **Rate Limiting nghiêm ngặt:** Áp dụng giới hạn tối đa 30 yêu cầu thao tác nhạy cảm/phút/IP để ngăn chặn tấn công vét cạn hoặc tự động hóa trái phép.
+
+### 5.5.7. Bộ API Quản trị Serverless (`pages/api/admin/*`)
+1. `GET /api/admin/overview`: Trả về dữ liệu KPI tổng quan hệ thống, trạng thái dịch vụ và cảnh báo bất thường.
+2. `GET /api/admin/users`: Truy vấn danh sách học viên có phân trang, tìm kiếm và lọc đa tiêu chí.
+3. `PATCH /api/admin/users/[userId]`: Cập nhật vai trò (`role`) hoặc trạng thái (`status`), tự động ghi nhận bản ghi audit log trong cùng một transaction.
+4. `GET & PUT /api/admin/policy`: Truy xuất cấu hình hạn mức hiện hành và cập nhật chính sách mới.
+5. `GET /api/admin/audit-logs`: Truy vấn danh mục nhật ký kiểm toán có phân trang, lọc theo người thực hiện và loại hành động.
+
+### 5.5.8. Tối ưu Hiệu năng Truy vấn & Chỉ mục Quản trị
+- Tạo Composite Indexes trên `profiles(role, created_at DESC)` và `audit_logs(created_at DESC, action_type)`.
+- Áp dụng Server-side Caching (S-MaxAge: 30s, Stale-While-Revalidate: 60s) cho endpoint thống kê `/api/admin/overview`.
+
+---
+
+## 🧠 6. STRUCTURED PEDAGOGICAL INTELLIGENCE, KNOWLEDGE GRAPH & PERSONALIZED REMEDIAL LEARNING (MILESTONE 2.5)
+
+> **Sứ mệnh cốt lõi:** Chuyển hóa toàn bộ hệ thống giải thích ngữ pháp từ dạng văn bản tự do (unstructured text) sang **Động cơ Trí tuệ Sư phạm Cấu trúc (Structured Pedagogical Intelligence Engine)** chuẩn hóa JSON. Hệ thống tích hợp Đồ thị Tri thức Ngữ pháp (Grammar Knowledge Graph), Phân cấp độ sâu sư phạm thích ứng 4 cấp độ học lực, Hệ thống phản hồi đánh giá chất lượng từ học viên, Phân loại 11 nhóm lỗi sai chuẩn xác và Động cơ Đề xuất Bài học Bù đắp Tự động (Deterministic Remedial Recommendation Engine) kết hợp Lặp lại Ngắt quãng (Spaced Repetition).
+
+### 6.1. Sứ mệnh Sư phạm & Kiến trúc Trí tuệ Giáo dục
+Trong học tập ngôn ngữ, lời giải không chỉ để thông báo đáp án đúng/sai, mà là công cụ giảng dạy trực tiếp tại khoảnh khắc học viên vấp ngã (teachable moment). Hệ thống giải thích cấu trúc giải quyết 3 bài toán:
+1. Chuẩn hóa tính chính xác và nhất quán sư phạm cho toàn bộ 2,939 câu hỏi dựa trên nguyên tác *Ngữ pháp tiếng Anh - Mai Lan Hương & Hà Thanh Uyên*.
+2. Cá nhân hóa chiều sâu lý giải phù hợp với trình độ người học (từ mới bắt đầu đến nâng cao).
+3. Tự động chẩn đoán lỗ hổng kiến thức căn nguyên và dẫn hướng học viên bù đắp kiến thức ngay lập tức.
+
+### 6.2. Chuẩn Hóa Schema Lời Giải Sư Phạm 5 Trường (JSON Schema v1.0)
+Mọi câu hỏi trong nền tảng đều được chuẩn hóa thành cấu trúc JSON nghiêm ngặt gồm 5 trường sư phạm cốt lõi:
 
 ```json
 {
+  "$schema": "https://grammar-platform.com/schemas/explanation.v1.json",
+  "version": "1.0",
+  "question_id": "ch1_ex1_q05",
+  "topic": "TENSES",
   "signal": {
     "title": "Dấu hiệu nhận biết",
-    "content": "Xuất hiện trạng từ chỉ thời gian 'for 5 years' kết hợp ngữ cảnh hành động bắt đầu từ quá khứ và vẫn tiếp diễn ở hiện tại.",
-    "keywords": ["for 5 years", "since", "so far"]
+    "keywords": ["for 5 years", "since 2018", "so far"],
+    "grammar_clues": [
+      "Xuất hiện cụm giới từ chỉ khoảng thời gian 'for + khoảng thời gian'.",
+      "Ngữ cảnh hành động bắt đầu trong quá khứ và vẫn tiếp diễn ở hiện tại."
+    ],
+    "identified_pattern": "S + [verb] + for + duration"
   },
   "rule": {
     "title": "Quy tắc ngữ pháp",
+    "topic_name": "Thì Hiện tại hoàn thành (Present Perfect Tense)",
     "formula": "S + have/has + V3/V-ed",
-    "explanation": "Thì Hiện tại hoàn thành (Present Perfect Tense) diễn tả hành động xảy ra trong quá khứ và kéo dài đến hiện tại."
+    "explanation": "Diễn tả hành động xảy ra trong quá khứ và vẫn đang kéo dài đến hiện tại hoặc để lại kết quả ở hiện tại.",
+    "conditions": ["Chủ ngữ số nhiều / I / You / We / They đi với 'have'", "Chủ ngữ số ít đi với 'has'"],
+    "exceptions": ["Không dùng thì tiếp diễn với các Stative Verbs như know, believe, like..."]
   },
   "translation": {
-    "vi": "Họ đã sống ở thành phố này được 5 năm.",
-    "en": "They have lived in this city for 5 years."
+    "title": "Dịch nghĩa sư phạm",
+    "vietnamese": "Họ đã sống ở thành phố này được 5 năm.",
+    "english": "They have lived in this city for 5 years.",
+    "highlight_segment": "đã sống... được 5 năm",
+    "literal_meaning": "Hành động sinh sống bắt đầu từ 5 năm trước và hiện vẫn đang sống ở đây."
   },
   "common_mistakes": [
-    "Dùng nhầm thì Quá khứ đơn (lived) vì thấy hành động đã bắt đầu từ trước.",
-    "Quên chia 'has' với ngôi thứ ba số ít."
+    {
+      "trap_option": "lived",
+      "error_type": "TENSE_CONFUSION",
+      "why_incorrect": "Dùng thì Quá khứ đơn (Past Simple) là sai vì hành động chưa chấm dứt hoàn toàn trong quá khứ mà vẫn tiếp diễn ở hiện tại.",
+      "confusion_point": "Nhầm lẫn giữa hành động trong quá khứ có mốc thời gian chấm dứt và hành động kéo dài đến hiện tại."
+    },
+    {
+      "trap_option": "are living",
+      "error_type": "TENSE_CONFUSION",
+      "why_incorrect": "Thì Hiện tại tiếp diễn chỉ hành động đang diễn ra ngay lúc nói, không dùng kèm 'for + khoảng thời gian' để chỉ độ dài tích lũy.",
+      "confusion_point": "Thấy hành động đang diễn ra nên vội vàng chọn Hiện tại tiếp diễn."
+    }
   ],
   "exam_tips": [
-    "Phân biệt 'since' (mốc thời gian cụ thể: since 2018) và 'for' (khoảng thời gian: for 5 years)."
+    {
+      "type": "QUICK_RULE",
+      "tip": "Gặp 'since + mốc thời gian' hoặc 'for + khoảng thời gian' -> 90% ưu tiên chọn thì Hiện tại hoàn thành (have/has + V3/ed)."
+    },
+    {
+      "type": "ELIMINATION_STRATEGY",
+      "tip": "Loại ngay các phương án chia thì Quá khứ đơn (V2/ed) nếu trong câu không có mốc thời gian chấm dứt như 'yesterday', 'ago', 'in 2010'."
+    }
   ],
-  "difficulty": "Intermediate",
-  "category": "TENSES"
+  "metadata": {
+    "difficulty_tier": "INTERMEDIATE",
+    "prerequisite_concepts": ["concept_present_simple", "concept_past_simple"],
+    "target_chapter": 1,
+    "target_lesson": 3
+  }
 }
 ```
+
+### 6.3. Động cơ Phân cấp 4 Cấp độ Học lực Thích ứng (Level-Aware Adaptation Engine)
+Hàm thích ứng sư phạm phi hủy diệt (`lib/explanation/adaptive-explanation.js`) tự động điều chỉnh độ sâu phân tích theo trình độ học viên:
+- **Cấp độ 1 - BEGINNER (Mới bắt đầu):**
+  - Tối giản thuật ngữ ngôn ngữ học.
+  - Nêu bật ngay từ khóa nhận diện (`keywords`) và công thức cứu cánh ngắn gọn.
+  - Cung cấp dịch nghĩa thô từng từ để người học không bị rào cản từ vựng cản trở việc hiểu ngữ pháp.
+- **Cấp độ 2 - ELEMENTARY (Sơ cấp):**
+  - Trình bày công thức hoàn chỉnh kèm các bước áp dụng từng bước ($Step-by-Step$).
+  - Phân tích bẫy thường gặp nhất trong danh mục `common_mistakes`.
+- **Cấp độ 3 - INTERMEDIATE (Trung cấp):**
+  - Phân tích toàn diện cấu trúc câu, chỉ báo ngữ cảnh thì và lý giải cặn kẽ tại sao tất cả các phương án gây nhiễu đều sai.
+  - Bổ sung mẹo thi THPT Quốc gia / TOEIC từ `exam_tips`.
+- **Cấp độ 4 - ADVANCED (Nâng cao):**
+  - Mở rộng các trường hợp ngoại lệ (Edge Cases), sắc thái văn phong (Formal vs Informal), cấu trúc đảo ngữ hoặc biến thể văn chương tương đương.
+  - Chiến lược loại trừ thần tốc giúp tiết kiệm thời gian tối đa trong phòng thi.
+
+### 6.4. Vòng lặp Phản hồi Chất lượng Sư phạm & Báo cáo Lỗi 6 Danh mục
+Tích hợp trực tiếp dưới chân mỗi thẻ giải thích (`StructuredExplanation.jsx`):
+- **Đánh giá Hữu ích (Helpful Rating):** Nút "👍 Lời giải dễ hiểu" cho phép học viên bình chọn; cập nhật realtime tỷ lệ hài lòng của bài tập.
+- **Modal Báo cáo Lỗi Chuẩn hóa (Pedagogical Error Reporting):** Cung cấp 6 danh mục phản ánh chuyên sâu:
+  1. `incorrect_grammar_rule`: Sai quy tắc hoặc công thức ngữ pháp.
+  2. `incorrect_translation`: Bản dịch tiếng Việt chưa chuẩn hoặc thiếu tự nhiên.
+  3. `confusing_explanation`: Lời giải tối nghĩa, khó hiểu đối với học viên.
+  4. `missing_information`: Thiếu giải thích nguyên nhân các phương án khác bị sai.
+  5. `incorrect_exam_tip`: Mẹo làm bài chưa chính xác hoặc không áp dụng được.
+  6. `other`: Góp ý nội dung khác kèm khung nhập văn bản chi tiết.
+- **Bảo vệ Chống Spam:** Ràng buộc dữ liệu duy nhất `UNIQUE(user_id, question_id, explanation_version)` ngăn chặn gửi lặp lại nhiều lần.
+
+### 6.5. Phân loại Lỗi Ngữ pháp Chuẩn hóa 11 Nhóm & Tính Điểm Tin cậy
+Mô-đun `lib/explanation/error-taxonomy.js` phân loại chính xác bản chất sai sót của học viên vào 11 danh mục chuẩn quốc tế:
+
+```typescript
+export const GRAMMAR_ERROR_TAXONOMY = {
+  TENSE_CONFUSION: 'Nhầm lẫn giữa các thì trong tiếng Anh',
+  SUBJECT_VERB_AGREEMENT: 'Không hòa hợp giữa Chủ ngữ và Động từ',
+  WORD_FORM: 'Nhầm lẫn dạng từ (Danh từ, Động từ, Tính từ, Trạng từ)',
+  PREPOSITION_ERROR: 'Dùng sai giới từ chỉ thời gian, nơi chốn hoặc đi kèm',
+  ARTICLE_ERROR: 'Sử dụng sai mạo từ (a, an, the hoặc không dùng mạo từ)',
+  CONDITIONAL_ERROR: 'Sai cấu trúc câu điều kiện hoặc mệnh đề ước muốn',
+  PASSIVE_VOICE_ERROR: 'Sai dạng bị động của động từ hoặc tân ngữ',
+  REPORTED_SPEECH_ERROR: 'Sai quy tắc lùi thì, đổi đại từ hoặc trạng từ khi tường thuật',
+  VOCABULARY_ERROR: 'Chọn sai từ vựng hoặc cặp từ dễ gây nhầm lẫn',
+  CONTEXT_MISUNDERSTANDING: 'Hiểu sai ngữ cảnh hoặc đại từ quan hệ',
+  UNKNOWN_ERROR: 'Sai sót chưa phân loại'
+} as const;
+```
+
+Bộ phân loại kết hợp Heuristic đối chiếu phương án học viên chọn với bảng phân tích bẫy `trap_options`, tính toán **Độ tin cậy Chẩn đoán (Confidence Score)** từ `0.85` đến `0.99`.
+
+### 6.6. Bản đồ Đồ thị Tri thức Ngữ pháp (Grammar Knowledge Graph & Prerequisite DAG)
+Xây dựng đồ thị có hướng không chu trình (Directed Acyclic Graph - DAG) kết nối toàn bộ hệ thống tri thức sách Mai Lan Hương:
+- **Cấu trúc Nút (Nodes):** 12 Chuyên đề $\rightarrow$ 53 Bài học $\rightarrow$ 376 Mục sư phạm $\rightarrow$ 215 Quy tắc $\rightarrow$ 82 Công thức $\rightarrow$ 2,939 Câu hỏi.
+- **Cạnh Phụ thuộc (Prerequisite Edges):**
+  - Ví dụ: `Thì Hiện tại hoàn thành (Ch1_L3)` có quan hệ phụ thuộc tiên quyết vào `Thì Hiện tại đơn (Ch1_L1)` và `Thì Quá khứ đơn (Ch1_L2)`.
+  - `Câu Bị động (Ch8)` có phụ thuộc tiên quyết vào toàn bộ `12 Thì tiếng Anh (Ch1)`.
+  - `Câu Tường thuật (Ch9)` phụ thuộc vào `Quy tắc Lùi thì (Ch1)` và `Đại từ nhân xưng (Ch4)`.
+
+### 6.7. Động cơ Đề xuất Bài học Bù đắp Tự động (Deterministic Remedial Recommendation Engine)
+Khi học viên trả lời sai một câu hỏi trong bài luyện tập hoặc đề thi Quiz 50 câu:
+1. Động cơ phân tích câu sai, xác định mã lỗi và khái niệm bị khuyết (`knowledge_gap`).
+2. Tra cứu Đồ thị Tri thức để tìm bài học gốc có độ ưu tiên cao nhất cần bồi dưỡng trong 53 bài học.
+3. Xuất thẻ kiến nghị sư phạm trực quan (`components/explanation/RemedialRecommendationCard.jsx`):
+   - Nêu rõ nguyên nhân chọn sai và phân tích cặn kẽ lỗ hổng kiến thức.
+   - Hiển thị nút hành động 1-chạm: `"📖 Bổ sung kiến thức: [Tên Bài Học]"`, nhấp vào sẽ điều hướng thẳng tới đúng vị trí bài học lý thuyết tương ứng.
+
+### 6.8. Theo dõi Mức độ Thành thạo & Thuật toán Lặp lại Ngắt quãng (Spaced Repetition)
+- **Công thức Đo lường Mức độ Thành thạo (Mastery Score Formula):**
+  $$\text{Mastery}(C) = \min\left(100, \max\left(0, (\text{Correct} \times 10) - (\text{Wrong} \times 15) + \text{StreakBonus}\right)\right)$$
+- **Lịch Ôn tập Ngắt quãng (Spaced Repetition Schedule):** Áp dụng thuật toán Leitner biến thể kết hợp đường cong quên lãng Ebbinghaus:
+  - Lần 1: Ôn sau **1 ngày** kể từ khi làm sai.
+  - Lần 2: Ôn sau **3 ngày** nếu làm đúng lần 1.
+  - Lần 3: Ôn sau **7 ngày**.
+  - Lần 4: Ôn sau **14 ngày**.
+  - Lần 5: Ôn sau **30 ngày** (Đạt trạng thái *Làm chủ Hoàn toàn - Fully Mastered*).
+- **Suy hao Tri thức (Knowledge Decay):** Nếu quá hạn ôn tập 14 ngày mà học viên không thực hiện bài ôn tập, điểm thành thạo của khái niệm tự động giảm 5%/tuần.
+
+### 6.9. Thiết kế Cơ sở Dữ liệu Supabase PostgreSQL 17 (9 Bảng Chuyên dụng)
+1. `public.explanations`: Lưu trữ nội dung JSON 5 trường, phiên bản hóa và trạng thái phê duyệt.
+2. `public.explanation_feedback`: Lưu trữ đánh giá hữu ích và báo cáo sai sót từ người dùng.
+3. `public.concepts`: Bảng danh mục các khái niệm ngữ pháp nguyên tử trong 12 chuyên đề.
+4. `public.concept_dependencies`: Lưu trữ các cạnh phụ thuộc tiên quyết trong Knowledge Graph (DAG).
+5. `public.question_concepts`: Bản đồ liên kết từng câu hỏi với các khái niệm liên quan và trọng số.
+6. `public.user_concept_progress`: Theo dõi điểm thành thạo (`mastery_score`), số lần đúng/sai theo từng học viên.
+7. `public.remedial_recommendations`: Nhật ký các khuyến nghị học tập bù đắp được tạo tự động.
+8. `public.spaced_repetition_queue`: Hàng đợi các câu hỏi cần ôn tập ngắt quãng theo từng ngày.
+9. `public.error_taxonomy_registry`: Bảng tra cứu danh mục phân loại lỗi ngữ pháp chuẩn hóa.
+
+### 6.10. Bộ API Phục vụ Học tập & Sư phạm (`/api/questions/*`, `/api/learning/*`)
+1. `GET /api/questions/[questionId]/explanation?level=...`: Trả về lời giải cấu trúc 5 trường thích ứng theo trình độ học viên (`BEGINNER` $\rightarrow$ `ADVANCED`).
+2. `POST /api/explanation-feedback`: Tiếp nhận phản hồi đánh giá và báo cáo sai sót từ học viên.
+3. `POST & GET /api/learning/remedial-recommendations`: Tạo mới và truy vấn danh sách bài học cần bồi dưỡng.
+4. `GET /api/learning/mastery`: Truy xuất bản đồ năng lực thành thạo các chuyên đề của học viên.
+5. `GET /api/admin/explanations/feedback-summary`: Endpoint tổng hợp báo cáo phản ánh chất lượng sư phạm cho Giảng viên/Quản trị viên.
+
+---
+
+## 🔗 6.2. CROSS-MILESTONE INTEGRATION, ARCHITECTURAL FLOW & SHARED INFRASTRUCTURE (MILESTONES 2.3 - 2.5)
+
+> **Mô tả tích hợp:** Ba cột mốc 2.3, 2.4 và 2.5 không vận hành độc lập mà tạo thành một tam giác kiến trúc khép kín: **Hạ tầng Ngoại tuyến (2.3) $\rightarrow$ Động cơ Sư phạm Thông minh (2.5) $\rightarrow$ Quản trị & Kiểm soát Tập trung (2.4)**.
+
+### 1. Luồng Dữ liệu Xuyên suốt Toàn diện (Unified Cross-Milestone Data Flow)
+
+```text
+[ Học viên làm bài khi Offline ]
+               │
+               ▼
+  [ 2.3 IndexedDB Event Queue ] 
+               │
+               ▼ (Thiết bị có kết nối lại)
+  [ 2.3 Resilient Sync Manager ] ──(HTTPS Batch Sync)──► [ Supabase Serverless Engine ]
+                                                                     │
+                                    ┌────────────────────────────────┴────────────────────────────────┐
+                                    ▼                                                                 ▼
+               [ 2.5 Pedagogical Intelligence Engine ]                                  [ 2.4 Admin Audit Logging ]
+                                    │                                                                 │
+                 - Tính toán phân loại lỗi 11 nhóm                                       - Ghi nhận biến động mẻ đồng bộ
+                 - Cập nhật Điểm Thành thạo (Mastery)                                    - Cảnh báo bất thường nếu có
+                 - Kích hoạt Đề xuất Học bù đắp (Remedial)                               - Lưu vết trạng thái tài khoản
+                                    │                                                                 │
+                                    ▼                                                                 ▼
+                     [ 2.5 Remedial & Spaced Repetition ]                             [ 2.4 Admin Overview Monitoring ]
+```
+
+### 2. Cấu trúc Thư viện Dùng chung (Shared Library Modules)
+- `lib/sync/`: Bộ điều phối ngoại tuyến (`sync-queue.js`, `sync-manager.js`, `sync-coordinator.js`).
+- `lib/explanation/`: Chuẩn hóa sư phạm (`explanation.schema.js`, `adaptive-explanation.js`, `error-taxonomy.js`, `remedial-engine.js`).
+- `lib/knowledge/`: Bản đồ tri thức ngữ pháp (`knowledge-graph.js`, `spaced-repetition.js`).
+- `lib/admin/`: Tiện ích quản trị và kiểm soát bảo mật (`admin-guard.js`, `audit-logger.js`, `policy-service.js`).
+
+### 3. Yêu cầu Phi Chức năng (Non-Functional Requirements & Performance SLAs)
+- **Độ trễ API (Latency):** Thời gian phản hồi P95 < 500ms cho toàn bộ các endpoint đồng bộ, quản trị và sư phạm dưới tải 500 người dùng đồng thời.
+- **Bảo toàn Dữ liệu (Data Integrity):** Tỷ lệ mất mát dữ liệu do ngắt kết nối đột ngột hoặc xung đột đa thiết bị bằng 0.00%.
+- **Khả năng Tiếp cận (Accessibility):** 100% các thành phần UI mới (Chỉ báo đồng bộ, Thẻ khuyến nghị học bù đắp, Bảng điều khiển quản trị) tuân thủ tiêu chuẩn WCAG 2.2 AA.
+- **Bảo vệ Bảo mật (Security):** 100% các bảng Supabase mới đều được áp dụng Row-Level Security (RLS) nghiêm ngặt; mọi endpoint nhạy cảm đều có middleware xác thực chữ ký phiên.
+
+### 4. Trình tự Triển khai 5 Giai đoạn & Tiêu chuẩn Nghiệm thu Toàn diện (Phased Quality Gates)
+1. **Giai đoạn 1 (Database & Schemas):** Triển khai schema 9 bảng PostgreSQL 17 trên Supabase, thiết lập RLS và triggers bảo vệ.
+2. **Giai đoạn 2 (Core Engines & Resolvers):** Hoàn thiện Sync Queue, Conflict Resolvers, Error Taxonomy Classifier và Knowledge Graph DAG.
+3. **Giai đoạn 3 (Serverless API Suite):** Xây dựng các route `/api/sync/*`, `/api/admin/*` và `/api/learning/*` kèm middleware kiểm soát.
+4. **Giai đoạn 4 (UI Integration & Interactive Components):** Tích hợp `SyncStatusIndicator`, `RemedialRecommendationCard` và `AdminOverview` vào layout ứng dụng.
+5. **Giai đoạn 5 (End-to-End Verification & Verification Gate):** Kiểm thử mô phỏng mất mạng, kiểm thử xung đột đa tab, rà soát hiệu năng và đẩy code lên production Vercel.
+
+---
 
 ---
 
@@ -987,48 +1362,101 @@ components/
   * `/api/admin/audit-logs`: API truy xuất nhật ký thao tác kiểm toán của quản trị viên.
   * Middleware xác thực thẩm quyền Admin nghiêm ngặt phía server thông qua token phiên đăng nhập.
 
-### 🔹 Milestone 2.3: Offline Sync Engine & Hybrid Synchronization (P0)
-- [x] **2.3.1 Local Storage & Offline Write Queue:**
-  * Xây dựng `lib/sync/sync-queue.js` quản lý hàng đợi ghi chép cục bộ sử dụng LocalStorage / IndexedDB, lưu trữ các thao tác (lưu XP, hoàn thành bài, thêm/xóa câu sai, thêm/xóa từ vựng) khi mạng ngắt kết nối.
-  * Định danh duy nhất cho từng hành động với UUID tạm thời và cờ trạng thái `is_pending: true`.
-- [x] **2.3.2 Bộ Điều Phối Đồng Bộ Đa Luồng (Sync Manager):**
-  * Xây dựng `lib/sync/sync-manager.js` tự động lắng nghe sự kiện mạng `window.addEventListener('online')` và `window.addEventListener('offline')`.
-  * Cơ chế tự động giải phóng hàng đợi theo mẻ (batch flush) khi thiết bị phục hồi kết nối Internet.
-  * Cơ chế Exponential Backoff tự động thử lại khi gặp sự cố mạng hoặc máy chủ phản hồi chậm.
-- [x] **2.3.3 Quy Tắc Xử Lý Xung Đột Dữ Liệu Toàn Diện (Conflict Resolution Strategy):**
-  * **XP & Điểm số:** Cộng dồn lũy tiến giao dịch (Transactional increment `server_xp + local_pending_xp`), triệt tiêu rủi ro ghi đè làm mất điểm kinh nghiệm của học viên.
-  * **Chuỗi học tập (Streak):** Máy chủ thẩm định dựa trên mốc ngày UTC (`activity_date`), duy trì chuỗi học liên tục nếu có hoạt động trong vòng 24-48 giờ.
-  * **Quiz & Lịch sử làm bài:** Bản ghi bất biến (Immutable records), các lượt làm bài khi offline được gắn timestamp máy client và nạp bổ sung vào lịch sử mà không ghi đè lượt cũ.
-  * **Sổ tay câu sai & Từ vựng:** Cơ chế Last-Write-Wins có kiểm tra trạng thái xóa (Delete flag precedence).
-  * **Tiến độ học tập:** Hợp tập hợp (Set Union `server_completed_lessons ∪ local_completed_lessons`), bảo toàn 100% tiến độ bài học.
-- [x] **2.3.4 Huy Hiệu Trạng Thái Đồng Bộ Trực Quan Trên UI (Sync Status Pill):**
-  * Hiển thị trạng thái đồng bộ thời gian thực trên Navbar:
-    * 🟢 **Đã đồng bộ (Cloud Synced)**: Dữ liệu đám mây khớp hoàn toàn với thiết bị.
-    * 🟡 **Đang đồng bộ (Syncing...)**: Đang gửi dữ liệu mẻ lên máy chủ.
-    * 🟠 **Chờ gửi (Pending Changes - X items)**: Đang lưu tạm khi mất kết nối.
-    * 🔴 **Lỗi đồng bộ (Sync Failed)**: Cảnh báo kèm nút thử lại thủ công.
-    * ⚪ **Chế độ ngoại tuyến (Offline Mode)**: Tiếp tục học tập bình thường không bị gián đoạn.
+### 🔹 Milestone 2.3: Resilient Offline-First Architecture & Multi-Device Sync (P0)
 
-### 🔹 Milestone 2.4: Nâng cấp Admin Dashboard Chuyên sâu & Audit Logs (P1)
+> **Mục tiêu:** Xây dựng hệ thống Offline-First cấp công nghiệp, bảo toàn 100% dữ liệu học tập khi mất mạng, tự động phục hồi và hội tụ nhất quán trên đa thiết bị với cơ chế chống trùng lặp giao dịch và giải quyết xung đột nghiệp vụ chuyên sâu.
+
+#### 1. Các thành phần Cốt lõi Đã Triển khai & Hoạt động trên Production:
+- [x] **2.3.1 Local Storage & Offline Write Queue Cơ Bản (`lib/sync/sync-queue.js`):**
+  * Hàng đợi lưu trữ sự kiện ngoại tuyến sử dụng LocalStorage với fallback an toàn.
+  * Định danh duy nhất cho từng hành động với UUID tạm thời và cờ trạng thái `is_pending: true`.
+- [x] **2.3.2 Bộ Điều Phối Lắng Nghe Mạng (`lib/sync/sync-manager.js`):**
+  * Lắng nghe sự kiện `window.addEventListener('online')` và `window.addEventListener('offline')`.
+  * Cơ chế tự động giải phóng hàng đợi theo mẻ (batch flush) khi thiết bị phục hồi kết nối.
+  * Exponential Backoff tự động thử lại khi gặp sự cố mạng hoặc máy chủ phản hồi chậm.
+- [x] **2.3.3 Quy Tắc Xử Lý Xung Đột Dữ Liệu Ban Đầu:**
+  * XP & Điểm số: Tính toán độ tăng `delta` để cộng dồn nguyên tử phía server.
+  * Chuỗi học tập: Máy chủ thẩm định dựa trên mốc ngày UTC.
+  * Sổ tay câu sai & Từ vựng: Cơ chế Last-Write-Wins.
+  * Tiến độ bài học: Phép hợp tập hợp (Set Union).
+- [x] **2.3.4 Huy Hiệu Trạng Thái Đồng Bộ Trực Quan Trên Navbar (`SyncStatusIndicator.jsx`):**
+  * 🟢 Cloud Synced (Đã đồng bộ) | 🟡 Syncing (Đang đồng bộ) | 🟠 Pending (Chờ gửi $N$ items) | 🔴 Sync Failed (Lỗi kèm nút thử lại) | ⚪ Offline Mode (Ngoại tuyến).
+
+#### 2. Kế hoạch Mở rộng Nâng cao (Resilient Offline-First & Multi-Device Sync Spec):
+- [ ] **2.3.5 Nâng cấp Lưu trữ Giao dịch Cấp Đĩa Cứng (IndexedDB Transactional Store):**
+  * **Mô tả:** Thay thế hoàn toàn giới hạn 5MB của LocalStorage bằng IndexedDB thông qua thư viện IDB/Dexie wrapper nhẹ (< 4KB). Cho phép lưu trữ không giới hạn hàng chục ngàn câu hỏi, lịch sử làm bài và âm thanh đệm.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.1):** Hàng đợi `pending_sync_queue` có transactional write, tự động rollback nếu xảy ra lỗi ghi đĩa, hỗ trợ lưu trữ blob/jsonb lên tới 100MB.
+- [ ] **2.3.6 Schema Sự kiện Đồng bộ Bất biến v1.0 & Khóa Idempotency:**
+  * **Mô tả:** Chuẩn hóa payload sự kiện đồng bộ `SyncEvent` gồm 8 loại (`XP_EARNED`, `LESSON_COMPLETED`, `MISTAKE_RECORDED`, `MISTAKE_RESOLVED`, `QUIZ_SUBMITTED`, `VOCABULARY_SAVED`, `VOCABULARY_DELETED`, `DIAGNOSTIC_COMPLETED`).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.2):** Mọi sự kiện đều mang `idempotency_key` (UUIDv4) và `device_id`. Server từ chối xử lý lặp lại với mã HTTP 200 (Deduped), triệt tiêu rủi ro duplicate XP khi mạng rớt giữa chừng.
+- [ ] **2.3.7 Phối hợp Đa Tab Trình duyệt (Multi-Tab Coordination via Web Locks & BroadcastChannel):**
+  * **Mô tả:** Triển khai `lib/sync/sync-coordinator.js` bầu chọn 1 Tab Trưởng (Leader Tab) bằng Web Locks API (`navigator.locks.request`). Tab Trưởng chịu trách nhiệm giao tiếp mạng với server; các tab còn lại nhận tín hiệu cập nhật qua `BroadcastChannel('grammar_sync_channel')`.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.3):** Mở 5 tab đồng thời và hoàn thành bài tập chỉ phát sinh 1 HTTP request duy nhất; trạng thái pill trên 5 tab đồng loạt chuyển sang 🟢 Synced cùng lúc trong vòng 10ms.
+- [ ] **2.3.8 Động cơ Tự Phục hồi & Exponential Backoff with Full Jitter:**
+  * **Mô tả:** Áp dụng công thức jitter ngẫu nhiên $T_{backoff} = \min(30000, 1000 \times 2^{retry}) \times \text{random}(0.5, 1.5)$ để ngăn chặn hiện tượng thundering herd khi hàng ngàn thiết bị cùng online trở lại.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.4):** Mô phỏng máy chủ 503 tạm thời, client thử lại với thời gian giãn cách ngẫu nhiên và tự động phục hồi thành công khi máy chủ 200 trở lại mà không gây nghẽn mạng.
+- [ ] **2.3.9 Bộ API Serverless Đồng bộ Hai Chiều (`/api/sync/batch`, `/api/sync/pull`, `/api/sync/status`):**
+  * **Mô tả:** Xây dựng endpoint tiếp nhận mẻ (micro-batching tối đa 50 sự kiện/lần) trong một transaction duy nhất trên PostgreSQL 17; endpoint pull theo dõi con trỏ thời gian `since_timestamp` để đồng bộ thay đổi giữa các thiết bị khác nhau của cùng 1 học viên.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.5):** Một học viên làm bài trên điện thoại (Device A), sau đó mở laptop (Device B), dữ liệu trên Device B được tự động cập nhật đầy đủ chỉ trong vòng 1 lần kéo (pull delta).
+- [ ] **2.3.10 Service Worker Caching & Offline Grammar PWA Assets:**
+  * **Mô tả:** Đăng ký Service Worker precache toàn bộ 12 chuyên đề lý thuyết, 53 bài học ngữ pháp và shell giao diện. Áp dụng chiến lược Stale-While-Revalidate cho dữ liệu câu hỏi.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.6):** Ngắt kết nối mạng hoàn toàn (DevTools Offline), học viên vẫn có thể mở ứng dụng, đọc toàn bộ lý thuyết 12 chương và làm bài tập trắc nghiệm mà không gặp màn hình trắng hay lỗi mạng.
+- [ ] **2.3.11 Giám sát Hiệu năng Đồng bộ & Telemetry Client:**
+  * **Mô tả:** Thu thập chỉ số P95 sync latency, queue backlog depth, tỷ lệ giải quyết xung đột để phục vụ giám sát và cảnh báo.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.3.7):** Thời gian hoàn thành mẻ đồng bộ 50 sự kiện P95 < 600ms, tỷ lệ lỗi đồng bộ < 0.01%.
+
+---
+
+### 🔹 Milestone 2.4: Enterprise Admin Dashboard, RBAC Governance & Immutable Audit Trail (P1)
+
+> **Mục tiêu:** Thiết lập hệ thống Quản trị & Giám sát Tập trung (Enterprise Admin & Governance System) với cơ chế bảo vệ Zero-Trust, phân quyền RBAC đa cấp (FREE/VIP/ADMIN), điều phối chính sách hạn mức động và lưu vết toàn bộ biến động hệ thống qua Nhật ký Kiểm toán Bất biến (Immutable Append-Only Audit Trail).
+
+#### 1. Các thành phần Cốt lõi Đã Triển khai & Hoạt động trên Production:
 - [x] **2.4.1 Bảng Điều Khiển Quản Trị Viên Tập Trung (Admin Panel View):**
   * Tích hợp trực tiếp vào thanh điều hướng khi đăng nhập bằng tài khoản có quyền `role === 'ADMIN'`.
   * Hiển thị thẻ thông tin hệ thống trực tiếp từ Supabase PostgreSQL 17.
-- [x] **2.4.2 Quản Lý Học Viên & Phân Quyền Nâng Cao:**
+- [x] **2.4.2 Quản Lý Học Viên & Phân Quyền Cơ Bản:**
   * Bảng danh sách học viên trực quan: Họ tên, Email, Vai trò (`ADMIN`, `VIP`, `FREE`), Tiến độ học tập (Streak, XP, số bài học), Trạng thái (`ACTIVE`, `BANNED`) và Ngày tạo.
   * Thao tác nhanh 1 chạm: Nâng cấp VIP ⭐, Hạ xuống FREE, Khóa tài khoản (Khóa/Mở khóa học viên).
   * Modal thêm người dùng mới với form xác thực chuẩn.
   * Thanh tìm kiếm người dùng theo Họ tên, Email và bộ lọc vai trò tức thì.
-- [x] **2.4.3 Cấu Hình Hạn Mức Hệ Thống (System Quota Policy Management):**
-  * Biểu mẫu cấu hình hạn mức cho học viên mặc định (FREE):
-    * Số câu bài tập tối đa mỗi chương (Mặc định: 10 câu; câu thứ 11 trở đi khóa VIP).
-    * Số đề thi Quiz tối đa mỗi ngày (Mặc định: 2 đề 50 câu/ngày).
-  * Lưu trữ cấu hình trực tiếp vào bảng `system_policies` trên Supabase PostgreSQL 17 và đồng bộ ngay cho người dùng.
-- [x] **2.4.4 Hệ Thống Ghi Nhận Lịch Sử Quản Trị (Enterprise Audit Logs):**
+- [x] **2.4.3 Cấu Hình Hạn Mức Hệ Thống Ban Đầu (`system_policies`):**
+  * Cấu hình hạn mức số câu bài tập tối đa mỗi chương (10 câu) và số đề thi Quiz mỗi ngày (2 đề 50 câu).
+  * Lưu trữ cấu hình trực tiếp vào bảng `system_policies` trên Supabase PostgreSQL 17.
+- [x] **2.4.4 Hệ Thống Ghi Nhận Lịch Sử Quản Trị Cơ Bản (`audit_logs`):**
   * Tự động ghi nhận mọi hành động quản trị vào bảng `audit_logs`: Thay đổi quyền tài khoản, Khóa/Mở khóa học viên, Cập nhật hạn mức hệ thống.
   * Lưu trữ metadata chi tiết: `admin_id`, `admin_email`, `action_type`, `target_user_id`, `old_value`, `new_value`, `ip_address`, `created_at`.
-  * Cơ chế Append-Only bảo vệ tính toàn vẹn dữ liệu, không thể can thiệp xóa dấu vết.
 
-### 🔹 Milestone 2.5: Structured Pedagogical Explanation Engine (JSON) & Remedial Engine (P1)
+#### 2. Kế hoạch Mở rộng Nâng cao (Enterprise Governance & Immutable Audit Spec):
+- [ ] **2.4.5 Bảng Điều Khiển Vận Hành Thời Gian Thực (Operational Health Dashboard):**
+  * **Mô tả:** Tích hợp các biểu đồ trực quan hóa số lượng active users (DAU/WAU), tỷ lệ chuyển đổi VIP, số phiên thi Quiz hoàn thành trong ngày, tỷ lệ lỗi API và backlog hàng đợi đồng bộ ngoại tuyến.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.1):** Dashboard tải hoàn tất dưới 500ms, tự động làm mới số liệu mỗi 60 giây qua cached serverless endpoint `/api/admin/overview`.
+- [ ] **2.4.6 Ma Trận Phân Quyền RBAC Phía Server & Middleware Bảo Vệ (`admin-guard.js`):**
+  * **Mô tả:** Xác thực phân quyền 3 tầng nghiêm ngặt (UI Guard -> API Middleware -> Database RLS). Ngăn chặn hoàn toàn việc can thiệp bằng cách giả mạo JWT hoặc sửa đổi localStorage.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.2):** Mọi request tới `/api/admin/*` thiếu chữ ký admin hợp lệ lập tức nhận HTTP 403 Forbidden kèm ghi nhận cảnh báo an ninh.
+- [ ] **2.4.7 Quản Lý Chính Sách Hạn Mức Động Với Quản Lý Phiên Bản (Policy Versioning):**
+  * **Mô tả:** Cho phép Quản trị viên cập nhật động các tham số hạn mức: số câu miễn phí mỗi chương, số lượt làm quiz, thời gian cooldown bài thi chẩn đoán, kích thước mẻ sync. Mỗi lần thay đổi được gán mã phiên bản `policy_version` và tự động kích hoạt client invalidation.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.3):** Khi Admin thay đổi hạn mức từ 10 lên 15 câu, học viên Free lập tức nhận hạn mức mới mà không cần restart máy chủ hoặc build lại code.
+- [ ] **2.4.8 Khóa Bất Biến Cấp Cơ Sở Dữ Liệu Cho Nhật Ký Kiểm Toán (`public.audit_logs`):**
+  * **Mô tả:** Cài đặt PostgreSQL Trigger chặn hoàn toàn lệnh `UPDATE` hoặc `DELETE` trên bảng `public.audit_logs`. Đảm bảo tính pháp lý và toàn vẹn dữ liệu tuyệt đối (Zero Erasure).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.4):** Chạy lệnh SQL `DELETE FROM audit_logs` nhận thông báo lỗi từ chối `EXCEPTION: Audit logs are immutable and cannot be deleted or modified`.
+- [ ] **2.4.9 Hộp Thoại Xác Nhận Thao Tác Nguy Hiểm & Rate Limiting Admin:**
+  * **Mô tả:** Thao tác khóa tài khoản hàng loạt hoặc chỉ định quyền ADMIN mới yêu cầu Quản trị viên nhập chuỗi văn bản xác nhận bảo mật (`CONFIRM_SECURITY_ACTION`). Giới hạn tối đa 30 thao tác nhạy cảm/phút/IP.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.5):** Không thể kích hoạt hành động nếu nhập sai chuỗi xác nhận; vượt quá 30 req/phút nhận mã lỗi HTTP 429 Too Many Requests.
+- [ ] **2.4.10 Bộ Lọc Nâng Cao & Xuất Báo Cáo Sư Phạm (Bulk User Operations & CSV Export):**
+  * **Mô tả:** Tìm kiếm đa tiêu chí kết hợp (vai trò + chuỗi streak > 7 ngày + trạng thái), hỗ trợ xuất báo cáo tiến độ học tập toàn hệ thống dưới dạng file CSV/Excel UTF-8 có dấu.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.6):** Xuất thành công danh sách 10,000 học viên dưới 2 giây với đầy đủ dữ liệu tiếng Việt chuẩn Unicode.
+- [ ] **2.4.11 Tối Ưu Hóa Truy Vấn & Composite Indexing Cho Quản Trị:**
+  * **Mô tả:** Đánh chỉ mục tổng hợp trên các cột tìm kiếm và sắp xếp của `profiles` và `audit_logs`.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.4.7):** Thời gian truy vấn danh sách người dùng phân trang 50 mục < 50ms trên tập dữ liệu 50,000 người dùng.
+
+---
+
+### 🔹 Milestone 2.5: Structured Pedagogical Intelligence, Knowledge Graph & Personalized Remedial Learning (P1)
+
+> **Mục tiêu:** Chuyển đổi toàn bộ giải thích ngữ pháp sang Động cơ Trí tuệ Sư phạm Cấu trúc (JSON Schema v1.0), tích hợp Đồ thị Tri thức Ngữ pháp (Grammar Knowledge Graph), Phân cấp 4 cấp độ học lực thích ứng, Hệ thống phản hồi chất lượng từ học viên, Phân loại 11 nhóm lỗi sai chuẩn xác và Động cơ Đề xuất Bài học Bù đắp Tự động kết hợp Lặp lại Ngắt quãng (Spaced Repetition).
+
+#### 1. Các thành phần Cốt lõi Đã Triển khai & Hoạt động trên Production:
 - [x] **2.5.1 Chuẩn Hóa Schema Lời Giải Sư Phạm 5 Trường (`lib/explanation/explanation.schema.js`):**
   * Định dạng JSON v1.0 chuẩn hóa bắt buộc gồm đúng 5 thành phần sư phạm:
     1. `signal`: Dấu hiệu ngữ pháp, từ khóa nhận diện, bối cảnh câu (`keywords`, `grammar_clues`, `identified_pattern`).
@@ -1039,16 +1467,11 @@ components/
   * Runtime schema validator `validateExplanation()` đảm bảo mọi câu hỏi đều thỏa mãn 100% định dạng, có fallback an toàn.
 - [x] **2.5.2 Phân Cấp 4 Cấp Độ Học Lực Thích Ứng (Level-Aware Difficulty Adaptation):**
   * Phân loại chuẩn 4 cấp độ: `BEGINNER` (Score 1, 30s), `ELEMENTARY` (Score 2, 45s), `INTERMEDIATE` (Score 3, 60s), `ADVANCED` (Score 4, 90s).
-  * Hàm `adaptExplanationForLevel(explanation, targetLevel)` tự động điều chỉnh độ sâu phân tích:
-    * *Beginner*: Tối giản, tập trung vào từ khóa nhận diện, công thức ngắn gọn, tránh thuật ngữ phức tạp.
-    * *Elementary*: Bổ sung bước áp dụng chi tiết và phân tích bẫy thường gặp.
-    * *Intermediate*: Phân tích đầy đủ cấu trúc câu, ngữ cảnh thì và các phương án gây nhiễu.
-    * *Advanced*: Mở rộng ngoại lệ ngữ pháp, sắc thái nâng cao và mẹo tăng tốc tối đa khi làm bài thi.
-  * Bộ chuyển đổi thích ứng phi hủy diệt (`non-destructive adaptation`): không bao giờ thay đổi bản chất câu hỏi hay đáp án chính xác.
+  * Hàm `adaptExplanationForLevel(explanation, targetLevel)` tự động điều chỉnh độ sâu phân tích không làm thay đổi bản chất câu hỏi hay đáp án chính xác.
 - [x] **2.5.3 Hệ Thống Thu Thập Phản Hồi Học Viên (Explanation Quality Feedback System):**
   * Component `StructuredExplanation.jsx` tích hợp thanh phản hồi trực quan:
     * Nút "👍 Hữu ích": Ghi nhận đánh giá tích cực của học viên, tính toán tỷ lệ hữu ích theo thời gian thực.
-    * Nút "⚠️ Báo lỗi": Mở modal phản hồi chi tiết với 6 danh mục lỗi chuẩn hóa: `incorrect_grammar_rule`, `incorrect_translation`, `confusing_explanation`, `missing_information`, `incorrect_exam_tip`, `other` kèm ô góp ý bổ sung.
+    * Nút "⚠️ Báo lỗi": Mở modal phản hồi chi tiết với 6 danh mục lỗi chuẩn hóa kèm ô góp ý bổ sung.
   * Bảng Supabase `public.explanation_feedback` có ràng buộc duy nhất `UNIQUE(user_id, question_id, explanation_version)` chống spam lặp lại.
   * API bảo mật `pages/api/explanation-feedback.js` và API tổng hợp quản trị `pages/api/admin/explanations/feedback-summary.js`.
 - [x] **2.5.4 Chuẩn Hóa Phân Loại Lỗi & Phát Hiện Lỗ Hổng Kiến Thức (Error Classification Taxonomy):**
@@ -1057,22 +1480,36 @@ components/
   * Bộ phân loại thông minh `classifyError(question, userAnswer, correctAnswer)` kết hợp phân tích từ khóa, cấu trúc thì và từ vựng đối chiếu.
 - [x] **2.5.5 Động Cơ Đề Xuất Bài Học Bù Đắp Tự Động (Deterministic Remedial Recommendation Engine):**
   * Module `lib/explanation/remedial-engine.js` phân tích câu sai của học viên, tính điểm tin cậy (Confidence Score 0.88 - 0.98), tra cứu danh mục 12 chương & 53 bài học chuẩn sách Mai Lan Hương.
-  * Component `RemedialRecommendationCard.jsx` hiển thị cảnh báo sư phạm ngay khi học viên trả lời sai (ở chế độ kiểm tra từng câu hoặc xem lại toàn bộ đề thi Quiz 50 câu):
-    * Hiển thị chính xác lỗ hổng kiến thức phát hiện (`knowledge_gap`).
-    * Giải thích nguyên nhân vì sao phương án chọn bị sai và chỉ ra quy tắc đúng.
-    * Cung cấp nút hành động 1-click "📖 Học ngay bài bù đắp" điều hướng thẳng đến đúng bài học cần củng cố trong 12 Chuyên đề.
+  * Component `RemedialRecommendationCard.jsx` hiển thị cảnh báo sư phạm ngay khi học viên trả lời sai kèm nút hành động 1-click "📖 Học ngay bài bù đắp" điều hướng thẳng đến đúng bài học cần củng cố trong 12 Chuyên đề.
 - [x] **2.5.6 Lưu Trữ Supabase PostgreSQL 17 & Serverless API Routes:**
-  * 5 bảng cơ sở dữ liệu chuyên dụng với RLS và chỉ mục tổng hợp:
-    * `public.explanations`: Lưu trữ định dạng JSON 5 trường, quản lý phiên bản `version` và trạng thái phê duyệt.
-    * `public.explanation_feedback`: Lưu trữ đánh giá của học viên.
-    * `public.question_concepts`: Bản đồ liên kết câu hỏi với khái niệm kiến thức và độ khó.
-    * `public.remedial_recommendations`: Nhật ký các khuyến nghị học tập bù đắp cá nhân hóa.
-    * `public.user_concept_progress`: Theo dõi mức độ thành thạo (`mastery_score`) từng khái niệm theo người dùng.
-  * Serverless API Routes bảo vệ:
-    * `GET /api/questions/[questionId]/explanation`: Trả về lời giải 5 trường thích ứng theo trình độ học viên.
-    * `POST /api/explanation-feedback`: Gửi phản hồi đánh giá và báo cáo sai sót.
-    * `POST & GET & PATCH /api/learning/remedial-recommendations`: Tạo và quản lý trạng thái khuyến nghị học bù đắp.
-    * `GET /api/admin/explanations/feedback-summary`: Tổng hợp báo cáo chất lượng sư phạm cho Quản trị viên.
+  * 5 bảng cơ sở dữ liệu chuyên dụng với RLS và chỉ mục tổng hợp: `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress`.
+  * Serverless API Routes bảo vệ: `/api/questions/[questionId]/explanation`, `/api/explanation-feedback`, `/api/learning/remedial-recommendations`, `/api/admin/explanations/feedback-summary`.
+
+#### 2. Kế hoạch Mở rộng Nâng cao (Pedagogical Intelligence & Knowledge Graph Spec):
+- [ ] **2.5.7 Bản Đồ Đồ Thị Tri Thức Ngữ Pháp Hoàn Chỉnh (Grammar Knowledge Graph DAG):**
+  * **Mô tả:** Xây dựng mô-đun `lib/knowledge/knowledge-graph.js` mô hình hóa toàn bộ 12 Chuyên đề, 53 Bài học, 376 Mục sư phạm thành đồ thị có hướng không chu trình (DAG). Lưu trữ mối quan hệ phụ thuộc tiên quyết (prerequisite edges) giữa các khái niệm ngữ pháp.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.1):** Kiểm tra đồ thị không có chu trình (Acyclic Validation = pass); thuật toán tìm đường đi tiên quyết (`findPrerequisites(conceptId)`) trả về danh sách bài học gốc cần học trước trong thời gian < 5ms.
+- [ ] **2.5.8 Tự Động Hóa Chuyển Đổi Dữ Liệu Lời Giải Sư Phạm Cho Toàn Bộ 2,939 Câu Hỏi:**
+  * **Mô tả:** Triển khai kịch bản xử lý hàng loạt (Batch Pedagogical Ingestion Script) chuyển đổi 100% lời giải hiện có trong cơ sở dữ liệu và mã nguồn thành định dạng JSON 5 trường đạt chuẩn schema v1.0.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.2):** 100% trong số 2,939 câu hỏi vượt qua hàm kiểm định `validateExplanation() === true`; không có câu hỏi nào bị lỗi format hay thiếu các trường bắt buộc `signal`, `rule`, `translation`.
+- [ ] **2.5.9 Theo Dõi Mức Độ Thành Thạo Khái Niệm Thời Gian Thực (Concept Mastery Tracker):**
+  * **Mô tả:** Triển khai mô-đun `lib/learning/mastery-tracker.js` tính toán điểm thành thạo $\text{Mastery}(C) \in [0, 100]$ cho từng khái niệm theo thời gian thực dựa trên tỷ lệ trả lời đúng, số lần sai lặp lại và chuỗi ngày ôn tập.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.3):** Điểm thành thạo được cập nhật tức thì sau mỗi bài làm và hiển thị thanh tiến độ phần trăm rõ ràng trong thẻ bài học và trang cá nhân.
+- [ ] **2.5.10 Hệ Thống Ôn Tập Lặp Lại Ngắt Quãng (Spaced Repetition Engine - SM-2 Variant):**
+  * **Mô tả:** Xây dựng lịch trình ôn tập tự động theo các mốc giãn cách thời gian: 1 ngày -> 3 ngày -> 7 ngày -> 14 ngày -> 30 ngày. Thiết lập bảng `public.spaced_repetition_queue` tự động gợi ý danh sách câu hỏi cần ôn tập mỗi ngày.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.4):** Học viên đăng nhập mỗi ngày nhận được thông báo: *"Bạn có $N$ câu hỏi cần ôn tập hôm nay để duy trì trí nhớ dài hạn"*; làm đúng liên tục 5 mốc sẽ được đánh dấu *Làm chủ Hoàn toàn (Fully Mastered)*.
+- [ ] **2.5.11 Cơ Chế Suy Hao Tri Thức Tự Động (Knowledge Decay Algorithm):**
+  * **Mô tả:** Thiết lập quy tắc suy hao tri thức: nếu học viên không thực hiện ôn tập một khái niệm sau 14 ngày kể từ ngày đáo hạn, điểm thành thạo của khái niệm đó tự động giảm 5%/tuần cho tới ngưỡng sàn 50%.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.5):** Mô phỏng thời gian học tập 30 ngày không ôn tập, điểm thành thạo tự động phản ánh sự suy giảm hợp lý theo đường cong quên lãng Ebbinghaus.
+- [ ] **2.5.12 Bảng Điều Khiển Chất Lượng Sư Phạm Dành Cho Giảng Viên (Pedagogical Quality Dashboard):**
+  * **Mô tả:** Xây dựng giao diện quản trị sư phạm tổng hợp các câu hỏi có tỷ lệ phản ánh lỗi cao (`report_count > 3`), tỷ lệ bình chọn không hữu ích cao để đội ngũ biên soạn sư phạm xem xét, chỉnh sửa trực tiếp nội dung JSON và phê duyệt phiên bản mới.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.6):** Quản trị viên sư phạm có thể lọc các câu hỏi có vấn đề, chỉnh sửa trực tiếp các trường `signal`, `rule`, `translation` trên giao diện web và xuất bản phiên bản mới ngay lập tức.
+- [ ] **2.5.13 Kiểm Thử Hiệu Năng & Độ Sâu Thích Ứng (Pedagogical Adaptation Performance Test):**
+  * **Mô tả:** Kiểm thử tự động khả năng thích ứng của hàm `adaptExplanationForLevel` với 1,000 câu hỏi mẫu ở cả 4 cấp độ.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.7):** Thời gian chuyển đổi cấp độ sư phạm trung bình < 1ms/câu; không phát sinh bất kỳ lỗi runtime nào.
+- [ ] **2.5.14 Hoàn Thiện Bộ Schema 9 Bảng Supabase PostgreSQL 17 Cho Phân Hệ Sư Phạm:**
+  * **Mô tả:** Bổ sung đầy đủ 4 bảng còn lại trong kiến trúc 9 bảng: `concepts`, `concept_dependencies`, `spaced_repetition_queue`, `error_taxonomy_registry` với RLS và indexes đầy đủ.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.5.8):** 9 bảng được kết nối toàn vẹn qua Foreign Keys, có RLS pass-through an toàn và chỉ mục tối ưu hóa tốc độ truy vấn.
 
 ### 🔹 Milestone 2.6: Enterprise-Grade Design System, Semantic Design Tokens & WCAG 2.2 AA Compliance (P2)
 
