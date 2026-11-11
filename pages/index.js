@@ -3256,246 +3256,355 @@ export default function Home() {
                       </div>
 
                       {/* Sections List */}
-                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                        {selectedLesson.sections?.map((sec, secIdx) => (
-                          <section
-                            key={secIdx}
-                            id={`sec-${secIdx}`}
-                            style={{
-                              backgroundColor: "#121215",
-                              border: "1px solid #27272a",
-                              borderRadius: "8px",
-                              padding: "1.5rem",
-                            }}
-                          >
-                            {/* Section Header */}
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                              <span
-                                style={{
-                                  fontSize: "0.68rem",
-                                  fontFamily: "Geist Mono",
-                                  backgroundColor: "#18181b",
-                                  border: "1px solid #27272a",
-                                  color: "#a1a1aa",
-                                  padding: "0.1rem 0.4rem",
-                                  borderRadius: "4px",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                {String(secIdx + 1).padStart(2, "0")}
-                              </span>
-                              <h2 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
-                                {sec.title}
-                              </h2>
-                            </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+                        {selectedLesson.sections?.map((sec, secIdx) => {
+                          const badgeColor = 
+                            sec.badge?.includes("CÔNG THỨC") ? { bg: "#064e3b30", border: "#05966970", text: "#34d399" } :
+                            sec.badge?.includes("LƯU Ý") ? { bg: "#451a0330", border: "#d9770670", text: "#fbbf24" } :
+                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "#3b076430", border: "#9333ea70", text: "#c084fc" } :
+                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "#0c4a6e30", border: "#0284c770", text: "#38bdf8" } :
+                            { bg: "#1e1b4b30", border: "#6366f170", text: "#a5b4fc" };
 
-                            {/* Formulas Box */}
-                            {sec.formulas && sec.formulas.length > 0 && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.25rem" }}>
-                                {sec.formulas.map((f, fIdx) => (
-                                  <div
-                                    key={fIdx}
+                          return (
+                            <section
+                              key={secIdx}
+                              id={`sec-${secIdx}`}
+                              style={{
+                                backgroundColor: "#111115",
+                                border: "1px solid #23232a",
+                                borderRadius: "12px",
+                                padding: "1.5rem 1.75rem",
+                                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                              }}
+                            >
+                              {/* Section Header with Number Badge & Category Pill */}
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1.25rem", paddingBottom: "0.75rem", borderBottom: "1px solid #1f1f26" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                                  <span
                                     style={{
-                                      backgroundColor: "#09090b",
-                                      border: "1px solid #27272a",
-                                      borderLeft: f.type?.includes("(+)")
-                                        ? "3px solid #10b981"
-                                        : f.type?.includes("(-)")
-                                        ? "3px solid #f43f5e"
-                                        : "3px solid #38bdf8",
+                                      fontSize: "0.78rem",
+                                      fontFamily: "Geist Mono",
+                                      backgroundColor: "#18181f",
+                                      border: "1px solid #3f3f4e",
+                                      color: "#818cf8",
+                                      padding: "0.2rem 0.55rem",
                                       borderRadius: "6px",
-                                      padding: "0.7rem 1rem",
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                      flexWrap: "wrap",
-                                      gap: "0.5rem",
+                                      fontWeight: "800",
+                                      letterSpacing: "0.05em",
                                     }}
                                   >
-                                    <div style={{ fontFamily: "Geist Mono", fontSize: "0.9rem", color: "#34d399", fontWeight: "600" }}>
-                                      {f.text}
-                                    </div>
-                                    <span
-                                      style={{
-                                        fontSize: "0.7rem",
-                                        fontFamily: "Geist Mono",
-                                        backgroundColor: "#18181b",
-                                        color: "#a1a1aa",
-                                        padding: "0.15rem 0.45rem",
-                                        borderRadius: "4px",
-                                        border: "1px solid #27272a",
-                                      }}
-                                    >
-                                      {f.type}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Paragraphs */}
-                            {sec.paragraphs && sec.paragraphs.length > 0 && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", marginBottom: "1rem" }}>
-                                {sec.paragraphs.map((p, pIdx) => (
-                                  <p key={pIdx} style={{ fontSize: "0.9rem", color: "#d4d4d8", lineHeight: "1.7", margin: 0 }}>
-                                    {p}
-                                  </p>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Tables */}
-                            {sec.tables && sec.tables.length > 0 && (
-                              <div style={{ overflowX: "auto", margin: "1rem 0" }}>
-                                {sec.tables.map((tbl, tIdx) => (
-                                  <table key={tIdx}>
-                                    {tbl.headers && tbl.headers.some((h) => h) && (
-                                      <thead>
-                                        <tr>
-                                          {tbl.headers.map((h, hIdx) => (
-                                            <th key={hIdx}>{h}</th>
-                                          ))}
-                                        </tr>
-                                      </thead>
-                                    )}
-                                    <tbody>
-                                      {tbl.rows?.map((row, rIdx) => (
-                                        <tr key={rIdx}>
-                                          {row.map((cell, cIdx) => (
-                                            <td key={cIdx}>{cell}</td>
-                                          ))}
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Bullets List */}
-                            {sec.bullets && sec.bullets.length > 0 && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", margin: "0.85rem 0" }}>
-                                {sec.bullets.map((b, bIdx) => (
-                                  <div
-                                    key={bIdx}
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "flex-start",
-                                      gap: "0.6rem",
-                                      backgroundColor: "#18181b",
-                                      padding: "0.65rem 0.85rem",
-                                      borderRadius: "6px",
-                                      border: "1px solid #27272a",
-                                    }}
-                                  >
-                                    <span style={{ color: "#38bdf8", fontSize: "0.9rem", lineHeight: "1.4" }}>•</span>
-                                    <div style={{ fontSize: "0.875rem", color: "#e4e4e7", lineHeight: "1.6" }}>
-                                      {b}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Notes Alert Box */}
-                            {sec.notes && sec.notes.length > 0 && (
-                              <div style={{ margin: "1rem 0", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                                {sec.notes.map((n, nIdx) => (
-                                  <div
-                                    key={nIdx}
-                                    style={{
-                                      backgroundColor: "rgba(245, 158, 11, 0.08)",
-                                      borderLeft: "3px solid #f59e0b",
-                                      borderRadius: "4px",
-                                      padding: "0.75rem 1rem",
-                                      fontSize: "0.85rem",
-                                      color: "#fcd34d",
-                                      lineHeight: "1.6",
-                                    }}
-                                  >
-                                    <strong style={{ color: "#fbbf24", marginRight: "0.4rem" }}>⚠️ Lưu ý:</strong>
-                                    {n}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-
-                            {/* Section Examples */}
-                            {sec.examples && sec.examples.length > 0 && (
-                              <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: "1px dashed #27272a" }}>
-                                <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-                                  Ví dụ minh họa:
+                                    {String(secIdx + 1).padStart(2, "0")}
+                                  </span>
+                                  <h2 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#f8fafc", margin: 0, letterSpacing: "-0.01em" }}>
+                                    {sec.title}
+                                  </h2>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
-                                  {sec.examples.map((ex, exIdx) => (
+
+                                {sec.badge && (
+                                  <span
+                                    style={{
+                                      fontSize: "0.68rem",
+                                      fontFamily: "Geist Mono",
+                                      backgroundColor: badgeColor.bg,
+                                      border: `1px solid ${badgeColor.border}`,
+                                      color: badgeColor.text,
+                                      padding: "0.2rem 0.6rem",
+                                      borderRadius: "999px",
+                                      fontWeight: "700",
+                                      letterSpacing: "0.05em",
+                                      textTransform: "uppercase",
+                                    }}
+                                  >
+                                    {sec.badge}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* 1. Formulas Box (Syntax-colored & Prominent) */}
+                              {sec.formulas && sec.formulas.length > 0 && (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginBottom: "1.35rem" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#60a5fa", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                    ⚡ CÔNG THỨC CHUẨN XÁC:
+                                  </div>
+                                  {sec.formulas.map((f, fIdx) => (
                                     <div
-                                      key={exIdx}
+                                      key={fIdx}
                                       style={{
-                                        backgroundColor: "#09090b",
-                                        padding: "0.5rem 0.75rem",
-                                        borderRadius: "4px",
-                                        border: "1px solid #27272a",
-                                        fontSize: "0.85rem",
+                                        backgroundColor: "#09090d",
+                                        border: "1px solid #272732",
+                                        borderLeft: f.type?.includes("(+)")
+                                          ? "4px solid #10b981"
+                                          : f.type?.includes("(-)")
+                                          ? "4px solid #f43f5e"
+                                          : "4px solid #38bdf8",
+                                        borderRadius: "8px",
+                                        padding: "0.85rem 1.15rem",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        flexWrap: "wrap",
+                                        gap: "0.75rem",
                                       }}
                                     >
-                                      <span style={{ color: "#34d399", fontWeight: "600", marginRight: "0.5rem" }}>Ex:</span>
-                                      <span style={{ color: "#fafafa" }}>{ex.en}</span>
-                                      {ex.vi && <div style={{ color: "#a1a1aa", fontSize: "0.8rem", marginTop: "0.2rem" }}>→ {ex.vi}</div>}
+                                      <div style={{ fontFamily: "Geist Mono", fontSize: "0.95rem", color: "#34d399", fontWeight: "700", letterSpacing: "0.02em" }}>
+                                        {f.text}
+                                      </div>
+                                      <span
+                                        style={{
+                                          fontSize: "0.7rem",
+                                          fontFamily: "Geist Mono",
+                                          backgroundColor: "#18181f",
+                                          color: f.type?.includes("(+)") ? "#34d399" : f.type?.includes("(-)") ? "#fb7185" : "#38bdf8",
+                                          padding: "0.2rem 0.55rem",
+                                          borderRadius: "6px",
+                                          border: "1px solid #333342",
+                                          fontWeight: "700",
+                                        }}
+                                      >
+                                        {f.type}
+                                      </span>
                                     </div>
                                   ))}
                                 </div>
-                              </div>
-                            )}
-                          </section>
-                        ))}
-                      </div>
+                              )}
 
-                      {/* Full Lesson Examples Library */}
-                      {selectedLesson.examples && selectedLesson.examples.length > 0 && (
-                        <div
-                          style={{
-                            backgroundColor: "#121215",
-                            border: "1px solid #27272a",
-                            borderRadius: "8px",
-                            padding: "1.5rem",
-                            marginTop: "2rem",
-                          }}
-                        >
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                            <div>
-                              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase" }}>
-                                TỔNG HỢP VÍ DỤ SONG NGỮ
-                              </div>
-                              <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: "0.2rem 0 0 0" }}>
-                                Kho câu ví dụ minh họa ({selectedLesson.examples.length} câu)
-                              </h3>
-                            </div>
-                          </div>
-
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                            {selectedLesson.examples.map((ex, exIdx) => (
-                              <div
-                                key={exIdx}
-                                style={{
-                                  backgroundColor: "#18181b",
-                                  padding: "0.75rem 1rem",
-                                  borderRadius: "6px",
-                                  border: "1px solid #27272a",
-                                }}
-                              >
-                                <div style={{ fontSize: "0.9rem", color: "#fafafa", fontWeight: "500" }}>
-                                  • {ex.en}
-                                </div>
-                                {ex.vi && (
-                                  <div style={{ fontSize: "0.825rem", color: "#a1a1aa", marginTop: "0.25rem", paddingLeft: "0.85rem" }}>
-                                    → {ex.vi}
+                              {/* 2. Numbered Rules (Đánh số thứ tự 1, 2, 3... rõ ràng, có tiêu đề & ví dụ) */}
+                              {sec.rules && sec.rules.length > 0 && (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "1.15rem 0" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#818cf8", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                    📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG:
                                   </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                                  {sec.rules.map((rule, rIdx) => (
+                                    <div
+                                      key={rIdx}
+                                      style={{
+                                        backgroundColor: "#15151b",
+                                        border: "1px solid #282834",
+                                        borderRadius: "10px",
+                                        padding: "1rem 1.25rem",
+                                      }}
+                                    >
+                                      {/* Rule Header */}
+                                      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.65rem" }}>
+                                        <span
+                                          style={{
+                                            width: "26px",
+                                            height: "26px",
+                                            borderRadius: "6px",
+                                            backgroundColor: "#1e1b4b",
+                                            border: "1px solid #4f46e5",
+                                            color: "#a5b4fc",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontSize: "0.82rem",
+                                            fontWeight: "800",
+                                            flexShrink: 0,
+                                          }}
+                                        >
+                                          {rule.num || String(rIdx + 1)}
+                                        </span>
+                                        <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                                          {rule.title}
+                                        </h3>
+                                      </div>
+
+                                      {/* Rule Content */}
+                                      {rule.content && (
+                                        <p style={{ fontSize: "0.92rem", color: "#cbd5e1", lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
+                                          {rule.content}
+                                        </p>
+                                      )}
+
+                                      {/* Rule Examples */}
+                                      {rule.examples && rule.examples.length > 0 && (
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem", paddingLeft: "0.75rem", borderLeft: "2px solid #3b82f650" }}>
+                                          {rule.examples.map((ex, exIdx) => (
+                                            <div
+                                              key={exIdx}
+                                              style={{
+                                                backgroundColor: "#0d0d12",
+                                                border: "1px solid #1f1f28",
+                                                borderRadius: "6px",
+                                                padding: "0.55rem 0.85rem",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                gap: "0.75rem",
+                                              }}
+                                            >
+                                              <div>
+                                                <div style={{ fontSize: "0.92rem", fontWeight: "600", color: "#f1f5f9" }}>
+                                                  {ex.en}
+                                                </div>
+                                                {ex.vi && (
+                                                  <div style={{ fontSize: "0.82rem", color: "#34d399", marginTop: "0.15rem" }}>
+                                                    🇻🇳 {ex.vi}
+                                                  </div>
+                                                )}
+                                              </div>
+                                              <button
+                                                onClick={() => playWordAudio(ex.en, null)}
+                                                title="Nghe phát âm chuẩn câu này"
+                                                style={{
+                                                  backgroundColor: "#181824",
+                                                  border: "1px solid #313146",
+                                                  color: "#38bdf8",
+                                                  borderRadius: "6px",
+                                                  padding: "0.25rem 0.55rem",
+                                                  fontSize: "0.75rem",
+                                                  fontWeight: "600",
+                                                  cursor: "pointer",
+                                                  flexShrink: 0,
+                                                }}
+                                              >
+                                                🔊 Đọc
+                                              </button>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* 3. General Paragraphs */}
+                              {sec.paragraphs && sec.paragraphs.length > 0 && (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1rem" }}>
+                                  {sec.paragraphs.map((p, pIdx) => (
+                                    <p key={pIdx} style={{ fontSize: "0.92rem", color: "#d4d4d8", lineHeight: "1.75", margin: 0 }}>
+                                      {p}
+                                    </p>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* 4. Structured Tables */}
+                              {sec.tables && sec.tables.length > 0 && (
+                                <div style={{ overflowX: "auto", margin: "1.25rem 0" }}>
+                                  {sec.tables.map((tbl, tIdx) => (
+                                    <table
+                                      key={tIdx}
+                                      style={{
+                                        width: "100%",
+                                        borderCollapse: "separate",
+                                        borderSpacing: 0,
+                                        backgroundColor: "#0d0d12",
+                                        border: "1px solid #272733",
+                                        borderRadius: "8px",
+                                        overflow: "hidden",
+                                        fontSize: "0.86rem",
+                                      }}
+                                    >
+                                      {tbl.headers && tbl.headers.some((h) => h) && (
+                                        <thead>
+                                          <tr style={{ backgroundColor: "#181822" }}>
+                                            {tbl.headers.map((h, hIdx) => (
+                                              <th
+                                                key={hIdx}
+                                                style={{
+                                                  padding: "0.7rem 0.9rem",
+                                                  borderBottom: "1px solid #272733",
+                                                  color: "#60a5fa",
+                                                  fontWeight: "700",
+                                                  textAlign: "left",
+                                                  fontFamily: "Geist Mono",
+                                                  fontSize: "0.82rem",
+                                                  letterSpacing: "0.03em",
+                                                }}
+                                              >
+                                                {h}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+                                      )}
+                                      <tbody>
+                                        {tbl.rows?.map((row, rIdx) => (
+                                          <tr
+                                            key={rIdx}
+                                            style={{
+                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : "#14141d",
+                                            }}
+                                          >
+                                            {row.map((cell, cIdx) => (
+                                              <td
+                                                key={cIdx}
+                                                style={{
+                                                  padding: "0.65rem 0.9rem",
+                                                  borderBottom: "1px solid #1e1e28",
+                                                  color: "#e2e8f0",
+                                                  lineHeight: "1.55",
+                                                }}
+                                              >
+                                                {cell}
+                                              </td>
+                                            ))}
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* 5. Bullet Points (Đánh dấu phân mục với icon rõ ràng) */}
+                              {sec.bullets && sec.bullets.length > 0 && (
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", margin: "1rem 0" }}>
+                                  {sec.bullets.map((b, bIdx) => (
+                                    <div
+                                      key={bIdx}
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "flex-start",
+                                        gap: "0.7rem",
+                                        backgroundColor: "#14141a",
+                                        padding: "0.7rem 0.95rem",
+                                        borderRadius: "8px",
+                                        border: "1px solid #23232c",
+                                      }}
+                                    >
+                                      <span style={{ color: "#38bdf8", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
+                                      <div style={{ fontSize: "0.9rem", color: "#e2e8f0", lineHeight: "1.65" }}>
+                                        {b}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* 6. Notes & Exam Pitfalls (Lưu ý & Bẫy ngữ pháp nổi bật) */}
+                              {sec.notes && sec.notes.length > 0 && (
+                                <div style={{ margin: "1.15rem 0", display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                                  {sec.notes.map((n, nIdx) => (
+                                    <div
+                                      key={nIdx}
+                                      style={{
+                                        backgroundColor: "rgba(245, 158, 11, 0.08)",
+                                        border: "1px solid rgba(245, 158, 11, 0.4)",
+                                        borderLeft: "4px solid #f59e0b",
+                                        borderRadius: "8px",
+                                        padding: "0.85rem 1.15rem",
+                                      }}
+                                    >
+                                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
+                                        <span style={{ fontSize: "1.05rem" }}>⚠️</span>
+                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                          LƯU Ý QUAN TRỌNG & BẪY THI CỬ:
+                                        </span>
+                                      </div>
+                                      <div style={{ fontSize: "0.9rem", color: "#fef3c7", lineHeight: "1.65" }}>
+                                        {n}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </section>
+                          );
+                        })}
+                      </div>
 
                       {/* Bottom Completion & Practice Bar */}
                       <div
