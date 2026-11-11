@@ -6,6 +6,10 @@ import { SyncManager } from "../lib/sync/sync-manager";
 import { getThemeTokens } from "../lib/tokens/design-tokens";
 import GrammarVisualization from "../components/grammar-visualization/GrammarVisualization";
 import { speechService } from "../lib/audio/speech.service";
+import StructuredExplanation from "../components/explanation/StructuredExplanation";
+import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
+import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
+import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import {
   supabase,
   getProfile,
@@ -1196,6 +1200,20 @@ export default function Home() {
     });
   };
 
+  const handleAcceptRemedial = (rec) => {
+    if (!rec) return;
+    const targetCh = previewData.chapters.find((c) => c.number === rec.chapter_number) || previewData.chapters[0];
+    if (targetCh) {
+      handleSelectChapter(targetCh);
+      const targetL = targetCh.lessons.find((l) => l.id === rec.lesson_id || l.code === rec.lesson_code);
+      if (targetL) {
+        setSelectedLessonId(targetL.id);
+      }
+      setActiveTab("theory");
+      setCurrentView("study");
+    }
+  };
+
   const handleSelectChapter = (ch) => {
     setSelectedChapterId(ch.id);
     setSelectedLessonId(ch.lessons[0]?.id || "");
@@ -1355,110 +1373,26 @@ export default function Home() {
     return parts;
   };
 
-  const renderPedagogicalExplanation = (explanation, pedagogy) => {
-    if (!explanation && !pedagogy) return null;
+  const renderPedagogicalExplanation = (explanation, pedagogy, question = null) => {
+    if (!explanation && !pedagogy && !question) return null;
 
-    let signal = pedagogy?.signal || "";
-    let rule = pedagogy?.rule || "";
-    let translation = pedagogy?.translation || "";
-
-    if ((!signal || !rule) && explanation) {
-      const sigMatch = explanation.match(/【Dấu hiệu & Ngữ cảnh】\s*([^\n【]+)/);
-      const ruleMatch = explanation.match(/【Quy tắc & Công thức】\s*([^\n【]+)/);
-      const transMatch = explanation.match(/【Dịch nghĩa câu】\s*([^\n【]+)/);
-      if (sigMatch) signal = sigMatch[1].trim();
-      if (ruleMatch) rule = ruleMatch[1].trim();
-      if (transMatch) translation = transMatch[1].trim();
-    }
-
-    if (!signal && !rule && !translation) {
-      return (
-        <div style={{ marginTop: "0.5rem", fontSize: "0.825rem", color: "#cbd5e1", lineHeight: "1.5" }}>
-          💡 <strong>Giải thích:</strong> {explanation}
-        </div>
-      );
-    }
+    const structured = question
+      ? migrateQuestionExplanation(question)
+      : migrateQuestionExplanation({
+          id: "q_temp",
+          stem: "",
+          explanation: explanation || "",
+          pedagogy: pedagogy || {},
+          topic_name: selectedChapter?.title_vi || "Ngữ pháp",
+        });
 
     return (
-      <div
-        style={{
-          marginTop: "0.75rem",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.55rem",
-          backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-          border: `1px solid ${isLight ? "#e2e8f0" : "#1e293b"}`,
-          borderRadius: "8px",
-          padding: "0.85rem 1rem",
-        }}
-      >
-        {signal && (
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
-            <span
-              style={{
-                fontSize: "0.68rem",
-                fontFamily: "Geist Mono",
-                backgroundColor: isLight ? "#fffbeb" : "#f59e0b20",
-                color: isLight ? "#b45309" : "#fbbf24",
-                border: `1px solid ${isLight ? "#fde68a" : "#f59e0b50"}`,
-                padding: "0.15rem 0.45rem",
-                borderRadius: "4px",
-                fontWeight: "700",
-                flexShrink: 0,
-                textTransform: "uppercase",
-                letterSpacing: "0.03em",
-              }}
-            >
-              🔍 Dấu hiệu & Ngữ cảnh
-            </span>
-            <span style={{ fontSize: "0.835rem", color: isLight ? "#92400e" : "#fef3c7", lineHeight: "1.5" }}>{signal}</span>
-          </div>
-        )}
-        {rule && (
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
-            <span
-              style={{
-                fontSize: "0.68rem",
-                fontFamily: "Geist Mono",
-                backgroundColor: isLight ? "#eff6ff" : "#3b82f620",
-                color: isLight ? "#1d4ed8" : "#60a5fa",
-                border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f650"}`,
-                padding: "0.15rem 0.45rem",
-                borderRadius: "4px",
-                fontWeight: "700",
-                flexShrink: 0,
-                textTransform: "uppercase",
-                letterSpacing: "0.03em",
-              }}
-            >
-              📐 Quy tắc áp dụng
-            </span>
-            <span style={{ fontSize: "0.835rem", color: isLight ? "#1e40af" : "#dbeafe", lineHeight: "1.5" }}>{rule}</span>
-          </div>
-        )}
-        {translation && (
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
-            <span
-              style={{
-                fontSize: "0.68rem",
-                fontFamily: "Geist Mono",
-                backgroundColor: isLight ? "#f0fdf4" : "#10b98120",
-                color: isLight ? "#059669" : "#34d399",
-                border: `1px solid ${isLight ? "#bbf7d0" : "#10b98150"}`,
-                padding: "0.15rem 0.45rem",
-                borderRadius: "4px",
-                fontWeight: "700",
-                flexShrink: 0,
-                textTransform: "uppercase",
-                letterSpacing: "0.03em",
-              }}
-            >
-              🇻🇳 Dịch câu hoàn chỉnh
-            </span>
-            <span style={{ fontSize: "0.835rem", color: isLight ? "#065f46" : "#d1fae5", fontStyle: "italic", lineHeight: "1.5" }}>"{translation}"</span>
-          </div>
-        )}
-      </div>
+      <StructuredExplanation
+        explanation={structured}
+        questionId={question?.id || structured?.question_id}
+        userId={currentUser?.id}
+        isLight={isLight}
+      />
     );
   };
 
@@ -2275,13 +2209,13 @@ export default function Home() {
             left: `${dictPopup.x}px`,
             top: `${dictPopup.y}px`,
             width: "330px",
-            backgroundColor: "#0f172a",
-            border: "1px solid #38bdf860",
-            boxShadow: "0 20px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2)",
+            backgroundColor: isLight ? "#ffffff" : "#0f172a",
+            border: isLight ? "1px solid #bae6fd" : "1px solid #38bdf860",
+            boxShadow: isLight ? "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(56, 189, 248, 0.15)" : "0 20px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2)",
             borderRadius: "14px",
             zIndex: 9999,
             padding: "1rem 1.15rem",
-            color: "#f8fafc",
+            color: isLight ? "#0f172a" : "#f8fafc",
             backdropFilter: "blur(12px)",
           }}
         >
@@ -2296,9 +2230,9 @@ export default function Home() {
                   style={{
                     fontSize: "0.68rem",
                     fontFamily: "Geist Mono",
-                    backgroundColor: "#1e293b",
-                    color: "#93c5fd",
-                    border: "1px solid #334155",
+                    backgroundColor: isLight ? "#eff6ff" : "#1e293b",
+                    color: isLight ? "#1d4ed8" : "#93c5fd",
+                    border: isLight ? "1px solid #bfdbfe" : "1px solid #334155",
                     padding: "0.1rem 0.45rem",
                     borderRadius: "4px",
                     fontWeight: "700",
@@ -2339,8 +2273,8 @@ export default function Home() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  backgroundColor: "#020617",
-                  border: "1px solid #1e293b",
+                  backgroundColor: isLight ? "#f8fafc" : "#020617",
+                  border: isLight ? "1px solid #e2e8f0" : "1px solid #1e293b",
                   borderRadius: "8px",
                   padding: "0.45rem 0.75rem",
                   marginBottom: "0.75rem",
@@ -2379,21 +2313,21 @@ export default function Home() {
               {/* Vietnamese Meaning Box */}
               <div
                 style={{
-                  backgroundColor: "#064e3b25",
-                  border: "1px solid #05966950",
+                  backgroundColor: isLight ? "#f0fdf4" : "#064e3b25",
+                  border: isLight ? "1px solid #bbf7d0" : "1px solid #05966950",
                   borderRadius: "8px",
                   padding: "0.65rem 0.75rem",
                   marginBottom: "0.75rem",
                 }}
               >
-                <div style={{ fontSize: "0.7rem", color: "#34d399", fontWeight: "700", marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <div style={{ fontSize: "0.7rem", color: isLight ? "#15803d" : "#34d399", fontWeight: "700", marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   🇻🇳 Nghĩa tiếng Việt
                 </div>
-                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: "#ecfdf5", lineHeight: 1.35 }}>
+                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: isLight ? "#14532d" : "#ecfdf5", lineHeight: 1.35 }}>
                   {dictPopup.vietnamese}
                 </div>
                 {dictPopup.detailedMeanings.length > 0 && dictPopup.detailedMeanings[0].meanings.length > 1 && (
-                  <div style={{ marginTop: "0.35rem", fontSize: "0.75rem", color: "#a7f3d0" }}>
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.75rem", color: isLight ? "#166534" : "#a7f3d0" }}>
                     Từ đồng nghĩa: {dictPopup.detailedMeanings[0].meanings.slice(1, 4).join(", ")}
                   </div>
                 )}
@@ -2417,9 +2351,9 @@ export default function Home() {
                         display: "flex",
                         alignItems: "center",
                         gap: "0.35rem",
-                        backgroundColor: isSaved ? "#f59e0b25" : "#1e293b",
-                        border: isSaved ? "1px solid #f59e0b70" : "1px solid #334155",
-                        color: isSaved ? "#fbbf24" : "#cbd5e1",
+                        backgroundColor: isSaved ? (isLight ? "#fef3c7" : "#f59e0b25") : (isLight ? "#f1f5f9" : "#1e293b"),
+                        border: isSaved ? (isLight ? "1px solid #fcd34d" : "1px solid #f59e0b70") : (isLight ? "1px solid #cbd5e1" : "1px solid #334155"),
+                        color: isSaved ? (isLight ? "#b45309" : "#fbbf24") : (isLight ? "#334155" : "#cbd5e1"),
                         borderRadius: "6px",
                         padding: "0.3rem 0.6rem",
                         fontSize: "0.75rem",
@@ -2479,15 +2413,15 @@ export default function Home() {
         >
           <div
             style={{
-              backgroundColor: "#111827",
-              border: "1px solid #374151",
+              backgroundColor: isLight ? "#ffffff" : "#111827",
+              border: isLight ? "1px solid #e2e8f0" : "1px solid #374151",
               borderRadius: "14px",
               width: "100%",
               maxWidth: "680px",
               maxHeight: "85vh",
               display: "flex",
               flexDirection: "column",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8)",
+              boxShadow: isLight ? "0 20px 40px -10px rgba(0, 0, 0, 0.15)" : "0 25px 50px -12px rgba(0, 0, 0, 0.8)",
               overflow: "hidden",
             }}
           >
@@ -2495,20 +2429,20 @@ export default function Home() {
             <div
               style={{
                 padding: "1.25rem 1.5rem",
-                borderBottom: "1px solid #1f2937",
+                borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#1f2937"}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                backgroundColor: "#0f172a",
+                backgroundColor: isLight ? "#f8fafc" : "#0f172a",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                 <span style={{ fontSize: "1.3rem" }}>📚</span>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700", color: "#f9fafb" }}>
+                  <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700", color: isLight ? "#0f172a" : "#f9fafb" }}>
                     Sổ tay từ vựng của {currentUser.name}
                   </h3>
-                  <p style={{ margin: 0, fontSize: "0.78rem", color: "#9ca3af" }}>
+                  <p style={{ margin: 0, fontSize: "0.78rem", color: isLight ? "#64748b" : "#9ca3af" }}>
                     Lưu trữ các từ đã tra cứu, phiên âm IPA và audio phát âm
                   </p>
                 </div>
@@ -2870,8 +2804,8 @@ export default function Home() {
                   borderRadius: "6px",
                   fontSize: "0.825rem",
                   fontWeight: currentView === "admin" ? "600" : "500",
-                  color: currentView === "admin" ? "#f87171" : "#ef4444",
-                  backgroundColor: currentView === "admin" ? "#27272a" : "transparent",
+                  color: currentView === "admin" ? (isLight ? "#dc2626" : "#f87171") : (isLight ? "#b91c1c" : "#ef4444"),
+                  backgroundColor: currentView === "admin" ? (isLight ? "#fee2e2" : "#27272a") : "transparent",
                   border: "none",
                   cursor: "pointer",
                 }}
@@ -5453,8 +5387,9 @@ export default function Home() {
                                       fontFamily: "Geist Mono",
                                       padding: "0.15rem 0.45rem",
                                       borderRadius: "4px",
-                                      backgroundColor: "#27272a",
-                                      color: "#fafafa",
+                                      backgroundColor: isLight ? "#e0f2fe" : "#27272a",
+                                      color: isLight ? "#0369a1" : "#fafafa",
+                                      border: isLight ? "1px solid #bae6fd" : "none",
                                       fontWeight: "700",
                                     }}
                                   >
@@ -5480,9 +5415,9 @@ export default function Home() {
                                   style={{
                                     padding: "0.4rem 0.75rem",
                                     borderRadius: "4px",
-                                    backgroundColor: "#27272a",
-                                    border: "1px solid #3f3f46",
-                                    color: "#fafafa",
+                                    backgroundColor: isLight ? "#2563eb" : "#27272a",
+                                      border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
+                                      color: "#ffffff",
                                     fontSize: "0.75rem",
                                     fontWeight: "600",
                                     cursor: "pointer",
@@ -5496,8 +5431,8 @@ export default function Home() {
                                     padding: "0.4rem 0.65rem",
                                     borderRadius: "4px",
                                     backgroundColor: "transparent",
-                                    border: "1px solid #27272a",
-                                    color: "#a1a1aa",
+                                    border: isLight ? "1px solid #cbd5e1" : "1px solid #27272a",
+                                      color: isLight ? "#64748b" : "#a1a1aa",
                                     fontSize: "0.75rem",
                                     cursor: "pointer",
                                   }}
@@ -5725,7 +5660,7 @@ export default function Home() {
                                         <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                                           {q.answers.map((a) => a.correct).join("  /  ")}
                                         </div>
-                                        {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
+                                        {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
                                       </div>
                                     )}
                                   </div>
@@ -6274,10 +6209,10 @@ export default function Home() {
                     }}
                     style={{
                       padding: "0.55rem 1.25rem",
-                      backgroundColor: "#27272a",
-                      border: "1px solid #3f3f46",
+                      backgroundColor: isLight ? "#2563eb" : "#27272a",
+                      border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
                       borderRadius: "6px",
-                      color: "#fafafa",
+                      color: "#ffffff",
                       fontSize: "0.825rem",
                       fontWeight: "600",
                       cursor: "pointer",
@@ -6456,7 +6391,7 @@ export default function Home() {
                             <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                               {item.answers.join("  /  ")}
                             </div>
-                            {renderPedagogicalExplanation(item.explanation, item.pedagogy)}
+                            {renderPedagogicalExplanation(item.explanation, item.pedagogy, item)}
                           </div>
                         )}
                       </div>

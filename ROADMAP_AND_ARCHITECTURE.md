@@ -44,7 +44,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Infrastructure** | **2.2** | **Supabase SDK Layering (Client / Server / Services)** | **P0 (Critical)** | ✅ Hoàn thành |
 | **Infrastructure** | **2.3** | **Auth & Offline Sync Engine (Conflict Resolution)** | **P0 (Critical)** | ✅ Hoàn thành |
 | **Management** | **2.4** | **Enterprise Admin Dashboard & Server Audit Logs** | **P1 (High)** | ✅ Hoàn thành |
-| **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | 🔄 Nâng cấp |
+| **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | ✅ Hoàn thành |
 | **Design** | **2.6** | **Design Token System & White/Dark Mode WCAG AA** | **P2 (Medium)**| ✅ Hoàn thành |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ⏳ Kế tiếp |
@@ -692,11 +692,51 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
   * Lưu trữ metadata chi tiết: `admin_id`, `admin_email`, `action_type`, `target_user_id`, `old_value`, `new_value`, `ip_address`, `created_at`.
   * Cơ chế Append-Only bảo vệ tính toàn vẹn dữ liệu, không thể can thiệp xóa dấu vết.
 
-### 🔹 Milestone 2.5: Chuẩn hóa Structured Pedagogical Explanation Engine (JSON) (P1)
-- [ ] Chuyển đổi định dạng giải thích sang chuẩn JSON sư phạm gồm 5 trường: `signal`, `rule`, `translation`, `common_mistakes`, `exam_tips`.
-- [ ] Bổ sung nhãn phân cấp độ khó: Beginner, Elementary, Intermediate, Advanced.
-- [ ] Bổ sung tính năng học viên gửi phản hồi chất lượng lời giải (Hữu ích / Báo lỗi).
-- [ ] Tự động đề xuất bài học bù đắp khi học viên làm sai câu hỏi.
+### 🔹 Milestone 2.5: Structured Pedagogical Explanation Engine (JSON) & Remedial Engine (P1)
+- [x] **2.5.1 Chuẩn Hóa Schema Lời Giải Sư Phạm 5 Trường (`lib/explanation/explanation.schema.js`):**
+  * Định dạng JSON v1.0 chuẩn hóa bắt buộc gồm đúng 5 thành phần sư phạm:
+    1. `signal`: Dấu hiệu ngữ pháp, từ khóa nhận diện, bối cảnh câu (`keywords`, `grammar_clues`, `identified_pattern`).
+    2. `rule`: Quy tắc áp dụng, công thức cú pháp, điều kiện ứng dụng và ngoại lệ (`topic`, `formula`, `explanation`, `conditions`, `exceptions`).
+    3. `translation`: Dịch câu hoàn chỉnh sang tiếng Việt, làm nổi bật ngữ nghĩa thành phần ngữ pháp trọng tâm (`vietnamese`, `highlight_segment`, `literal_meaning`).
+    4. `common_mistakes`: Sai lầm phổ biến, phân tích bẫy đề thi và lý do học viên hay chọn nhầm (`trap_distractors`, `why_incorrect`, `confusion_point`).
+    5. `exam_tips`: Mẹo nhận diện thần tốc cho kỳ thi THPT/IELTS/TOEIC, quy tắc loại trừ nhanh (`quick_rule`, `time_saver`, `elimination_strategy`).
+  * Runtime schema validator `validateExplanation()` đảm bảo mọi câu hỏi đều thỏa mãn 100% định dạng, có fallback an toàn.
+- [x] **2.5.2 Phân Cấp 4 Cấp Độ Học Lực Thích Ứng (Level-Aware Difficulty Adaptation):**
+  * Phân loại chuẩn 4 cấp độ: `BEGINNER` (Score 1, 30s), `ELEMENTARY` (Score 2, 45s), `INTERMEDIATE` (Score 3, 60s), `ADVANCED` (Score 4, 90s).
+  * Hàm `adaptExplanationForLevel(explanation, targetLevel)` tự động điều chỉnh độ sâu phân tích:
+    * *Beginner*: Tối giản, tập trung vào từ khóa nhận diện, công thức ngắn gọn, tránh thuật ngữ phức tạp.
+    * *Elementary*: Bổ sung bước áp dụng chi tiết và phân tích bẫy thường gặp.
+    * *Intermediate*: Phân tích đầy đủ cấu trúc câu, ngữ cảnh thì và các phương án gây nhiễu.
+    * *Advanced*: Mở rộng ngoại lệ ngữ pháp, sắc thái nâng cao và mẹo tăng tốc tối đa khi làm bài thi.
+  * Bộ chuyển đổi thích ứng phi hủy diệt (`non-destructive adaptation`): không bao giờ thay đổi bản chất câu hỏi hay đáp án chính xác.
+- [x] **2.5.3 Hệ Thống Thu Thập Phản Hồi Học Viên (Explanation Quality Feedback System):**
+  * Component `StructuredExplanation.jsx` tích hợp thanh phản hồi trực quan:
+    * Nút "👍 Hữu ích": Ghi nhận đánh giá tích cực của học viên, tính toán tỷ lệ hữu ích theo thời gian thực.
+    * Nút "⚠️ Báo lỗi": Mở modal phản hồi chi tiết với 6 danh mục lỗi chuẩn hóa: `incorrect_grammar_rule`, `incorrect_translation`, `confusing_explanation`, `missing_information`, `incorrect_exam_tip`, `other` kèm ô góp ý bổ sung.
+  * Bảng Supabase `public.explanation_feedback` có ràng buộc duy nhất `UNIQUE(user_id, question_id, explanation_version)` chống spam lặp lại.
+  * API bảo mật `pages/api/explanation-feedback.js` và API tổng hợp quản trị `pages/api/admin/explanations/feedback-summary.js`.
+- [x] **2.5.4 Chuẩn Hóa Phân Loại Lỗi & Phát Hiện Lỗ Hổng Kiến Thức (Error Classification Taxonomy):**
+  * Danh mục 11 nhóm lỗi ngữ pháp chuẩn hóa trong `lib/explanation/error-taxonomy.js`:
+    * `TENSE_CONFUSION`, `SUBJECT_VERB_AGREEMENT`, `WORD_FORM`, `PREPOSITION_ERROR`, `ARTICLE_ERROR`, `CONDITIONAL_ERROR`, `PASSIVE_VOICE_ERROR`, `REPORTED_SPEECH_ERROR`, `VOCABULARY_ERROR`, `CONTEXT_MISUNDERSTANDING`, `UNKNOWN_ERROR`.
+  * Bộ phân loại thông minh `classifyError(question, userAnswer, correctAnswer)` kết hợp phân tích từ khóa, cấu trúc thì và từ vựng đối chiếu.
+- [x] **2.5.5 Động Cơ Đề Xuất Bài Học Bù Đắp Tự Động (Deterministic Remedial Recommendation Engine):**
+  * Module `lib/explanation/remedial-engine.js` phân tích câu sai của học viên, tính điểm tin cậy (Confidence Score 0.88 - 0.98), tra cứu danh mục 12 chương & 53 bài học chuẩn sách Mai Lan Hương.
+  * Component `RemedialRecommendationCard.jsx` hiển thị cảnh báo sư phạm ngay khi học viên trả lời sai (ở chế độ kiểm tra từng câu hoặc xem lại toàn bộ đề thi Quiz 50 câu):
+    * Hiển thị chính xác lỗ hổng kiến thức phát hiện (`knowledge_gap`).
+    * Giải thích nguyên nhân vì sao phương án chọn bị sai và chỉ ra quy tắc đúng.
+    * Cung cấp nút hành động 1-click "📖 Học ngay bài bù đắp" điều hướng thẳng đến đúng bài học cần củng cố trong 12 Chuyên đề.
+- [x] **2.5.6 Lưu Trữ Supabase PostgreSQL 17 & Serverless API Routes:**
+  * 5 bảng cơ sở dữ liệu chuyên dụng với RLS và chỉ mục tổng hợp:
+    * `public.explanations`: Lưu trữ định dạng JSON 5 trường, quản lý phiên bản `version` và trạng thái phê duyệt.
+    * `public.explanation_feedback`: Lưu trữ đánh giá của học viên.
+    * `public.question_concepts`: Bản đồ liên kết câu hỏi với khái niệm kiến thức và độ khó.
+    * `public.remedial_recommendations`: Nhật ký các khuyến nghị học tập bù đắp cá nhân hóa.
+    * `public.user_concept_progress`: Theo dõi mức độ thành thạo (`mastery_score`) từng khái niệm theo người dùng.
+  * Serverless API Routes bảo vệ:
+    * `GET /api/questions/[questionId]/explanation`: Trả về lời giải 5 trường thích ứng theo trình độ học viên.
+    * `POST /api/explanation-feedback`: Gửi phản hồi đánh giá và báo cáo sai sót.
+    * `POST & GET & PATCH /api/learning/remedial-recommendations`: Tạo và quản lý trạng thái khuyến nghị học bù đắp.
+    * `GET /api/admin/explanations/feedback-summary`: Tổng hợp báo cáo chất lượng sư phạm cho Quản trị viên.
 
 ### 🔹 Milestone 2.6: Chuẩn hóa Design Token System & WCAG AA (P2)
 - [x] **2.6.1 Hệ Thống Design Tokens Tập Trung (`lib/tokens/design-tokens.js`):**
