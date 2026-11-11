@@ -1,8 +1,8 @@
-import { supabaseServer } from "../../../lib/supabase/server";
-import { supabase } from "../../../lib/supabase/client";
-import { migrateQuestionExplanation } from "../../../lib/explanation/explanation.migrator";
-import { adaptExplanationForLevel, DIFFICULTY_LEVELS } from "../../../lib/explanation/explanation.schema";
-import quizData from "../../../data/ui/quiz_bank.json";
+import { supabaseServer } from "../../../../lib/supabase/server";
+import { supabase } from "../../../../lib/supabase/client";
+import { migrateQuestionExplanation } from "../../../../lib/explanation/explanation.migrator";
+import { adaptExplanationForLevel, DIFFICULTY_LEVELS } from "../../../../lib/explanation/explanation.schema";
+import quizData from "../../../../data/ui/quiz_bank.json";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
