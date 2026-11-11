@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState, useEffect, useMemo } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
+import { SyncManager } from "../lib/sync/sync-manager";
 import {
   supabase,
   getProfile,
@@ -253,6 +254,7 @@ export default function Home() {
   const [mistakeFilterTopic, setMistakeFilterTopic] = useState("ALL");
 
   const [xpToast, setXpToast] = useState(null);
+  const [syncState, setSyncState] = useState({ status: "SYNCED", lastSyncTime: null });
 
   // Helper date strings
   const getTodayDateStr = () => {
@@ -366,6 +368,15 @@ export default function Home() {
     })();
   }, []);
 
+  // Offline Sync Engine Initialization
+  useEffect(() => {
+    if (currentUser?.id && currentUser.id !== "guest" && !currentUser.isGuest) {
+      SyncManager.init(currentUser.id, (state) => {
+        setSyncState(state);
+      });
+    }
+  }, [currentUser?.id]);
+
   // 2. Load Per-User Tracker & Mistakes whenever currentUser changes
   useEffect(() => {
     if (!currentUser?.id) return;
@@ -455,10 +466,12 @@ export default function Home() {
       } catch (e) {
         console.error("Failed to save tracker locally", e);
       }
-      // Asynchronous background sync to Supabase PostgreSQL 17
-      upsertTracker(currentUser.id, next).catch((err) => {
-        console.warn("Supabase tracker sync skipped:", err?.message || err);
-      });
+      // Offline Sync Engine: Queue mutation and sync to Supabase Cloud
+      if (!currentUser.isGuest && currentUser.id !== "guest") {
+        SyncManager.recordAction("SYNC_TRACKER", { tracker: next }).catch(() => {
+          upsertTracker(currentUser.id, next).catch(() => {});
+        });
+      }
       return next;
     });
   };
@@ -2810,24 +2823,85 @@ export default function Home() {
 
           {/* Quick Dictionary & Vocab Tools */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {/* Live Supabase Cloud Sync Badge */}
+            {/* Live Offline Sync Engine Status Pill */}
             <div
-              title="Cơ sở dữ liệu Supabase PostgreSQL 17 (Project: wtvlbbcyvtqqygtojxay)"
+              onClick={() => SyncManager.triggerSync()}
+              title={
+                syncState.status === "SYNCED"
+                  ? `Đã đồng bộ an toàn với Supabase Cloud lúc ${syncState.lastSyncTime || "vừa xong"}. Bấm để đồng bộ lại.`
+                  : syncState.status === "SYNCING"
+                  ? "Đang gửi dữ liệu mẻ lên Supabase Postgres 17..."
+                  : syncState.status === "PENDING"
+                  ? "Có thay đổi mới đang chờ gửi lên Cloud. Bấm để đồng bộ ngay."
+                  : syncState.status === "OFFLINE"
+                  ? "Đang ở chế độ ngoại tuyến (Offline). Dữ liệu được lưu trong LocalStorage/IndexedDB và sẽ tự động đồng bộ khi có mạng."
+                  : "Đồng bộ thất bại. Bấm để thử lại."
+              }
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "0.35rem",
-                backgroundColor: "#064e3b30",
-                border: "1px solid #05966980",
+                backgroundColor:
+                  syncState.status === "SYNCED"
+                    ? (isLight ? "#ecfdf5" : "#064e3b30")
+                    : syncState.status === "SYNCING"
+                    ? (isLight ? "#eff6ff" : "#1e3a8a30")
+                    : syncState.status === "PENDING"
+                    ? (isLight ? "#fffbeb" : "#78350f30")
+                    : syncState.status === "OFFLINE"
+                    ? (isLight ? "#f1f5f9" : "#27272a")
+                    : (isLight ? "#fef2f2" : "#450a0a30"),
+                border: `1px solid ${
+                  syncState.status === "SYNCED"
+                    ? (isLight ? "#a7f3d0" : "#05966980")
+                    : syncState.status === "SYNCING"
+                    ? (isLight ? "#bfdbfe" : "#3b82f680")
+                    : syncState.status === "PENDING"
+                    ? (isLight ? "#fde68a" : "#f59e0b80")
+                    : syncState.status === "OFFLINE"
+                    ? T.border
+                    : (isLight ? "#fecaca" : "#ef444480")
+                }`,
                 borderRadius: "999px",
                 padding: "0.22rem 0.65rem",
                 fontSize: "0.72rem",
                 fontWeight: "700",
-                color: "#34d399",
+                color:
+                  syncState.status === "SYNCED"
+                    ? (isLight ? "#047857" : "#34d399")
+                    : syncState.status === "SYNCING"
+                    ? (isLight ? "#1d4ed8" : "#60a5fa")
+                    : syncState.status === "PENDING"
+                    ? (isLight ? "#b45309" : "#fbbf24")
+                    : syncState.status === "OFFLINE"
+                    ? T.textMuted
+                    : (isLight ? "#dc2626" : "#f87171"),
+                cursor: "pointer",
+                transition: "all 0.15s ease",
               }}
             >
-              <span style={{ fontSize: "0.75rem" }}>⚡</span>
-              <span>Supabase Cloud</span>
+              <span style={{ fontSize: "0.65rem" }}>
+                {syncState.status === "SYNCED"
+                  ? "🟢"
+                  : syncState.status === "SYNCING"
+                  ? "🟡"
+                  : syncState.status === "PENDING"
+                  ? "🟠"
+                  : syncState.status === "OFFLINE"
+                  ? "⚪"
+                  : "🔴"}
+              </span>
+              <span>
+                {syncState.status === "SYNCED"
+                  ? "Đã đồng bộ"
+                  : syncState.status === "SYNCING"
+                  ? "Đang đồng bộ..."
+                  : syncState.status === "PENDING"
+                  ? "Chờ đồng bộ"
+                  : syncState.status === "OFFLINE"
+                  ? "Offline"
+                  : "Thử lại"}
+              </span>
             </div>
 
             {/* Quick Word Search Box */}
