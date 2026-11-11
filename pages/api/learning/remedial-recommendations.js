@@ -4,6 +4,10 @@ import { generateRemedialRecommendation } from "../../../lib/explanation/remedia
 import quizData from "../../../data/ui/quiz_bank.json";
 import previewData from "../../../data/ui/preview_data.json";
 
+const isValidUUID = (id) =>
+  typeof id === "string" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
 export default async function handler(req, res) {
   const dbClient = supabaseServer || supabase;
 
@@ -41,8 +45,8 @@ export default async function handler(req, res) {
         {}
       );
 
-      // If user_id is provided, persist into remedial_recommendations table
-      if (user_id) {
+      // If user_id is provided and is a valid UUID, persist into remedial_recommendations table
+      if (isValidUUID(user_id)) {
         await dbClient.from("remedial_recommendations").insert([
           {
             user_id,

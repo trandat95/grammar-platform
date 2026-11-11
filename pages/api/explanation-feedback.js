@@ -2,6 +2,10 @@ import { supabaseServer } from "../../lib/supabase/server";
 import { supabase } from "../../lib/supabase/client";
 import { FEEDBACK_ERROR_CATEGORIES } from "../../lib/explanation/explanation.schema";
 
+const isValidUUID = (id) =>
+  typeof id === "string" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
 export default async function handler(req, res) {
   const dbClient = supabaseServer || supabase;
 
@@ -32,12 +36,14 @@ export default async function handler(req, res) {
         }
       }
 
-      // Check for duplicate feedback if user_id is provided
-      if (user_id) {
+      const safeUserId = isValidUUID(user_id) ? user_id : null;
+
+      // Check for duplicate feedback if valid user_id is provided
+      if (safeUserId) {
         const { data: existing } = await dbClient
           .from("explanation_feedback")
           .select("id")
-          .eq("user_id", user_id)
+          .eq("user_id", safeUserId)
           .eq("question_id", question_id)
           .eq("explanation_version", explanation_version)
           .eq("feedback_type", feedback_type)
@@ -51,12 +57,12 @@ export default async function handler(req, res) {
         }
       }
 
-      // Insert feedback
-      const { data, error } = await dbClient
+      // Insert feedback (without .select() to prevent triggering restrictive SELECT RLS for guests)
+      const { error } = await dbClient
         .from("explanation_feedback")
         .insert([
           {
-            user_id: user_id || null,
+            user_id: safeUserId,
             question_id,
             explanation_id: explanation_id || null,
             explanation_version,
@@ -64,9 +70,7 @@ export default async function handler(req, res) {
             error_category: error_category || null,
             comment: comment || null,
           },
-        ])
-        .select()
-        .single();
+        ]);
 
       if (error) {
         console.error("[Feedback Insert Error]:", error);
@@ -76,7 +80,6 @@ export default async function handler(req, res) {
       return res.status(200).json({
         success: true,
         message: feedback_type === "helpful" ? "Cảm ơn bạn đã đánh giá lời giải hữu ích!" : "Đã tiếp nhận báo lỗi lời giải. Ban biên tập sẽ rà soát ngay!",
-        feedback: data,
       });
     } catch (err) {
       console.error("[API Feedback Error]:", err);
