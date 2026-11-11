@@ -298,14 +298,6 @@ export default function Home() {
       return next;
     });
   };
-      try {
-        localStorage.setItem(trackerKey, JSON.stringify(next));
-      } catch (e) {
-        console.error("Failed to save tracker", e);
-      }
-      return next;
-    });
-  };
 
   // Persist current user's mistakes
   const persistMistakes = (newMistakes) => {
