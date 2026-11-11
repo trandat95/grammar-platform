@@ -1089,6 +1089,114 @@ export default function Home() {
     }
   };
 
+  // --- Pedagogical 3-Tier Explanation Renderer ---
+  const renderPedagogicalExplanation = (explanation, pedagogy) => {
+    if (!explanation && !pedagogy) return null;
+
+    let signal = pedagogy?.signal || "";
+    let rule = pedagogy?.rule || "";
+    let translation = pedagogy?.translation || "";
+
+    if ((!signal || !rule) && explanation) {
+      const sigMatch = explanation.match(/【Dấu hiệu & Ngữ cảnh】\s*([^\n【]+)/);
+      const ruleMatch = explanation.match(/【Quy tắc & Công thức】\s*([^\n【]+)/);
+      const transMatch = explanation.match(/【Dịch nghĩa câu】\s*([^\n【]+)/);
+      if (sigMatch) signal = sigMatch[1].trim();
+      if (ruleMatch) rule = ruleMatch[1].trim();
+      if (transMatch) translation = transMatch[1].trim();
+    }
+
+    if (!signal && !rule && !translation) {
+      return (
+        <div style={{ marginTop: "0.5rem", fontSize: "0.825rem", color: "#cbd5e1", lineHeight: "1.5" }}>
+          💡 <strong>Giải thích:</strong> {explanation}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        style={{
+          marginTop: "0.75rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.55rem",
+          backgroundColor: "#0d1117",
+          border: "1px solid #1e293b",
+          borderRadius: "8px",
+          padding: "0.85rem 1rem",
+        }}
+      >
+        {signal && (
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontFamily: "Geist Mono",
+                backgroundColor: "#f59e0b20",
+                color: "#fbbf24",
+                border: "1px solid #f59e0b50",
+                padding: "0.15rem 0.45rem",
+                borderRadius: "4px",
+                fontWeight: "700",
+                flexShrink: 0,
+                textTransform: "uppercase",
+                letterSpacing: "0.03em",
+              }}
+            >
+              🔍 Dấu hiệu & Ngữ cảnh
+            </span>
+            <span style={{ fontSize: "0.835rem", color: "#fef3c7", lineHeight: "1.5" }}>{signal}</span>
+          </div>
+        )}
+        {rule && (
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontFamily: "Geist Mono",
+                backgroundColor: "#3b82f620",
+                color: "#60a5fa",
+                border: "1px solid #3b82f650",
+                padding: "0.15rem 0.45rem",
+                borderRadius: "4px",
+                fontWeight: "700",
+                flexShrink: 0,
+                textTransform: "uppercase",
+                letterSpacing: "0.03em",
+              }}
+            >
+              📐 Quy tắc áp dụng
+            </span>
+            <span style={{ fontSize: "0.835rem", color: "#dbeafe", lineHeight: "1.5" }}>{rule}</span>
+          </div>
+        )}
+        {translation && (
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontFamily: "Geist Mono",
+                backgroundColor: "#10b98120",
+                color: "#34d399",
+                border: "1px solid #10b98150",
+                padding: "0.15rem 0.45rem",
+                borderRadius: "4px",
+                fontWeight: "700",
+                flexShrink: 0,
+                textTransform: "uppercase",
+                letterSpacing: "0.03em",
+              }}
+            >
+              🇻🇳 Dịch câu hoàn chỉnh
+            </span>
+            <span style={{ fontSize: "0.835rem", color: "#d1fae5", fontStyle: "italic", lineHeight: "1.5" }}>"{translation}"</span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // --- Study Exercise Handlers with Permission Check ---
   const handleInputChange = (questionId, value) => {
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
@@ -1135,6 +1243,7 @@ export default function Home() {
         instruction: q.instruction || exerciseType || "",
         answers: answersList,
         explanation: q.explanation,
+        pedagogy: q.pedagogy,
         topic_name: selectedChapter.title_vi,
       });
     }
@@ -1240,6 +1349,7 @@ export default function Home() {
         instruction: q.instruction,
         answers: q.answers,
         explanation: q.explanation,
+        pedagogy: q.pedagogy,
         topic_name: q.topic_name,
       });
     }
@@ -4512,23 +4622,19 @@ export default function Home() {
                                       <div
                                         style={{
                                           marginTop: "0.75rem",
-                                          padding: "0.65rem 0.85rem",
+                                          padding: "0.75rem 0.95rem",
                                           backgroundColor: "#09090b",
                                           border: "1px solid #27272a",
-                                          borderRadius: "5px",
+                                          borderRadius: "6px",
                                         }}
                                       >
                                         <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
                                           Đáp án chính xác:
                                         </div>
-                                        <div style={{ fontSize: "0.9rem", color: "#60a5fa", fontWeight: "600", marginTop: "0.2rem" }}>
+                                        <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                                           {q.answers.map((a) => a.correct).join("  /  ")}
                                         </div>
-                                        {q.explanation && (
-                                          <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginTop: "0.35rem" }}>
-                                            {q.explanation}
-                                          </div>
-                                        )}
+                                        {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
                                       </div>
                                     )}
                                   </div>
@@ -4906,18 +5012,19 @@ export default function Home() {
                         <div
                           style={{
                             marginTop: "0.75rem",
-                            padding: "0.7rem 0.85rem",
+                            padding: "0.75rem 0.95rem",
                             backgroundColor: "#09090b",
                             border: "1px solid #27272a",
-                            borderRadius: "5px",
+                            borderRadius: "6px",
                           }}
                         >
                           <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
                             Đáp án chính xác:
                           </div>
-                          <div style={{ fontSize: "0.9rem", color: "#60a5fa", fontWeight: "600", marginTop: "0.2rem" }}>
+                          <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                             {q.answers.join("  /  ")}
                           </div>
+                          {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
                         </div>
                       )}
 
@@ -4928,7 +5035,7 @@ export default function Home() {
                             marginTop: "0.85rem",
                             padding: "0.75rem 0.95rem",
                             backgroundColor: detail.isCorrect ? "rgba(16, 185, 129, 0.05)" : "rgba(244, 63, 94, 0.05)",
-                            borderRadius: "5px",
+                            borderRadius: "6px",
                             border: `1px solid ${detail.isCorrect ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`,
                           }}
                         >
@@ -4938,6 +5045,7 @@ export default function Home() {
                           <div style={{ fontSize: "0.825rem", color: "#d4d4d8", marginTop: "0.25rem" }}>
                             Đáp án chuẩn: <strong style={{ color: "#fafafa" }}>{q.answers.join(" / ")}</strong>
                           </div>
+                          {renderPedagogicalExplanation(q.explanation, q.pedagogy)}
                         </div>
                       )}
                     </div>
@@ -5233,18 +5341,19 @@ export default function Home() {
                           <div
                             style={{
                               marginTop: "0.75rem",
-                              padding: "0.65rem 0.85rem",
+                              padding: "0.75rem 0.95rem",
                               backgroundColor: "#09090b",
                               border: "1px solid #27272a",
-                              borderRadius: "5px",
+                              borderRadius: "6px",
                             }}
                           >
                             <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
                               Đáp án chuẩn:
                             </div>
-                            <div style={{ fontSize: "0.875rem", color: "#60a5fa", fontWeight: "600", marginTop: "0.2rem" }}>
+                            <div style={{ fontSize: "0.95rem", color: "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
                               {item.answers.join("  /  ")}
                             </div>
+                            {renderPedagogicalExplanation(item.explanation, item.pedagogy)}
                           </div>
                         )}
                       </div>

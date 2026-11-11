@@ -192,7 +192,16 @@ erDiagram
 - [x] Cho phép Admin đổi quyền (FREE <-> VIP), khóa tài khoản, cập nhật giới hạn câu hỏi realtime và đồng bộ trực tiếp lên Cloud.
 - [x] Bổ sung nút "Làm mới từ Cloud" và badge trạng thái `Supabase Postgres 17 Live` trong bảng điều khiển Admin.
 
-#### 🔹 Milestone 2.5: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
+#### 🔹 Milestone 2.5: Chuẩn hóa & Nâng cấp Sư phạm Toàn diện Học liệu Lý thuyết & Bài tập (Deep Pedagogical Overhaul)
+- [x] Sửa chữa toàn diện 376 mục lý thuyết thuộc 53 bài học: Nối liền toàn bộ các câu bị ngắt quãng giữa dòng (cut-offs, dangling lines), phục hồi ngữ cảnh trọn vẹn từ sách gốc Mai Lan Hương & Hà Thanh Uyên.
+- [x] Bổ sung bản dịch tiếng Việt chuẩn xác cho 100% (268/269) ví dụ minh họa ngữ pháp, gắn nút phát âm chuẩn bản xứ `🔊 Đọc`.
+- [x] Nâng cấp toàn bộ 51 bài tập thực hành (507 câu hỏi) và ngân hàng Quiz (2.939 câu) từ đáp án thô sang **Bộ giải thích chuyên sâu 3 tầng Sư phạm**:
+  - 🔍 **Dấu hiệu & Ngữ cảnh:** Phân tích từ khóa nhận biết (signal words), mệnh đề điều kiện, liên từ, bối cảnh thời gian.
+  - 📐 **Quy tắc & Công thức:** Trích dẫn chính xác công thức ngữ pháp, cấu trúc cú pháp và cách biến đổi tương đương.
+  - 🇻🇳 **Dịch nghĩa câu hoàn chỉnh:** Dịch trọn vẹn ngữ nghĩa câu bài tập sang tiếng Việt để người học thấu hiểu bản chất.
+- [x] Tích hợp `renderPedagogicalExplanation` vào giao diện Study View (Tab Bài tập thực hành), Quiz View (Xem đáp án & Chấm điểm nộp bài) và Mistakes View (Sổ tay câu sai).
+
+#### 🔹 Milestone 2.6: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
 - [ ] Tải dữ liệu từ `data/normalized/full_import_data.json` lên các bảng `lessons`, `grammar_rules`, `questions`, `question_answers` trên Supabase để hỗ trợ Full-Text Search PostgreSQL (`tsvector`).
 
 ---
