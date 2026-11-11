@@ -178,18 +178,19 @@ erDiagram
 - [x] Tích hợp cơ chế Hybrid Sync (Local-First Resilience) vào `pages/index.js` tự động đồng bộ tiến độ học tập (Streak/XP) lên Supabase Postgres 17.
 
 #### 🔹 Milestone 2.3: Đồng bộ Xác thực & Chuyển giao Dữ liệu (Auth & Migration Engine)
-- [ ] Tích hợp Supabase Auth (Email/Password & Social OAuth nếu cần).
-- [ ] Xây dựng cơ chế **Hybrid Sync (Local-First Resilience)**:
-  - Khi có mạng: Dữ liệu được ghi trực tiếp lên Supabase Cloud Database.
-  - Khi offline hoặc tải chậm: Vẫn đọc/ghi tạm từ LocalStorage và đồng bộ lên Cloud khi online.
-- [ ] Seed sẵn 3 tài khoản mẫu chuẩn trên Supabase Auth:
-  - `admin@grammarpro.com` -> Gán role `ADMIN`
-  - `vip@grammarpro.com` -> Gán role `VIP`
-  - `nam@grammarpro.com` -> Gán role `FREE`
+- [x] Tích hợp Supabase Auth (Email/Password với GoTrue API).
+- [x] Xây dựng cơ chế **Hybrid Sync (Local-First Resilience)**:
+  - Khi có mạng: Xác thực trực tiếp qua Supabase Auth, nạp Profiles/Trackers từ PostgreSQL 17.
+  - Khi offline hoặc tải chậm: Tự động fallback đọc/ghi LocalStorage an toàn không gây gián đoạn học tập.
+- [x] Seed sẵn 3 tài khoản chuẩn trên Supabase Auth & PostgreSQL 17:
+  - 🛡️ `admin@grammarpro.com` / `admin` -> Gán role `ADMIN`
+  - ⭐ `vip@grammarpro.com` / `vip` -> Gán role `VIP`
+  - 👤 `nam@grammarpro.com` / `free` -> Gán role `FREE`
 
 #### 🔹 Milestone 2.4: Nâng cấp Admin Panel kết nối Live Supabase
-- [ ] Chuyển đổi toàn bộ thao tác trong trang Quản trị Admin sang truy vấn trực tiếp bảng `profiles` và `system_policies` qua Supabase.
-- [ ] Cho phép Admin đổi quyền (FREE <-> VIP), khóa tài khoản, cập nhật giới hạn câu hỏi realtime.
+- [x] Chuyển đổi toàn bộ thao tác trong trang Quản trị Admin sang truy vấn trực tiếp bảng `profiles` và `system_policies` qua Supabase.
+- [x] Cho phép Admin đổi quyền (FREE <-> VIP), khóa tài khoản, cập nhật giới hạn câu hỏi realtime và đồng bộ trực tiếp lên Cloud.
+- [x] Bổ sung nút "Làm mới từ Cloud" và badge trạng thái `Supabase Postgres 17 Live` trong bảng điều khiển Admin.
 
 #### 🔹 Milestone 2.5: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
 - [ ] Tải dữ liệu từ `data/normalized/full_import_data.json` lên các bảng `lessons`, `grammar_rules`, `questions`, `question_answers` trên Supabase để hỗ trợ Full-Text Search PostgreSQL (`tsvector`).
