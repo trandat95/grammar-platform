@@ -1567,63 +1567,6 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Quick 1-Click Role Switch Demo Pills */}
-            <div style={{ marginBottom: "1.25rem", padding: "0.75rem", backgroundColor: "#18181b", borderRadius: "8px", border: "1px solid #27272a" }}>
-              <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-                TÀI KHOẢN MẪU TEST NHANH:
-              </div>
-              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                <button
-                  type="button"
-                  onClick={() => quickSwitchUser(usersList[0])}
-                  style={{
-                    fontSize: "0.75rem",
-                    padding: "0.3rem 0.6rem",
-                    borderRadius: "4px",
-                    backgroundColor: "#ef444420",
-                    border: "1px solid #ef444450",
-                    color: "#f87171",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                  }}
-                >
-                  🛡️ Admin Demo
-                </button>
-                <button
-                  type="button"
-                  onClick={() => quickSwitchUser(usersList[1])}
-                  style={{
-                    fontSize: "0.75rem",
-                    padding: "0.3rem 0.6rem",
-                    borderRadius: "4px",
-                    backgroundColor: "#f59e0b20",
-                    border: "1px solid #f59e0b50",
-                    color: "#fbbf24",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                  }}
-                >
-                  ⭐ VIP Demo
-                </button>
-                <button
-                  type="button"
-                  onClick={() => quickSwitchUser(usersList[2])}
-                  style={{
-                    fontSize: "0.75rem",
-                    padding: "0.3rem 0.6rem",
-                    borderRadius: "4px",
-                    backgroundColor: "#3b82f620",
-                    border: "1px solid #3b82f650",
-                    color: "#60a5fa",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                  }}
-                >
-                  👤 Free Demo
-                </button>
-              </div>
-            </div>
-
             {/* Error Message */}
             {authError && (
               <div style={{ padding: "0.6rem 0.85rem", backgroundColor: "rgba(239, 68, 68, 0.15)", border: "1px solid #ef4444", borderRadius: "6px", color: "#f87171", fontSize: "0.85rem", marginBottom: "1rem" }}>
