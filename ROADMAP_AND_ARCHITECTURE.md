@@ -47,7 +47,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | ✅ Hoàn thành |
 | **Design** | **2.6** | **Design Token System & White/Dark Mode WCAG AA** | **P2 (Medium)**| ✅ Hoàn thành |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
-| **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ⏳ Kế tiếp |
+| **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning, Mastery Tracking & Reassessment**| **P2 (High)** | ⏳ Kế tiếp |
 | **Gamification** | **2.10**| **Achievement, Level & Gamification System** | **P2 (Medium)**| ⏳ Kế tiếp |
 | **Quality** | **2.11**| **Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp |
@@ -839,35 +839,38 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
   * Tích hợp thanh chuyển đổi 8 mô hình trực quan trực tiếp trên đầu `GrammarVisualization.jsx`, cho phép học viên khám phá linh hoạt bất kỳ mô hình nào tại bất kỳ bài học nào.
 
 ### 🔹 Milestone 2.8: AI-Powered Grammar Diagnostic & Personalized Learning Roadmap (P1 - Central Module)
-- [ ] **2.8.1 Diagnostic Assessment Engine:**
-  * Xây dựng bài kiểm tra đầu vào 30 câu trắc nghiệm (A/B/C/D), thời gian 15-20 phút.
-  * Phân bổ cân đối theo ma trận blueprint 12 chuyên đề (10 Dễ - 12 Trung bình - 8 Khó).
-  * Tái sử dụng ngân hàng 2.939 câu hỏi thông qua hệ thống metadata và mapping bài học (`lesson_id`, `topic_id`, `difficulty`).
-  * Cơ chế làm bài 1 câu/màn hình, Progress bar, Timer, Đánh dấu xem lại (Flag Question), Auto-save tiến độ.
-  * Chống gian lận: Không hiển thị đáp án trong lúc làm bài; chỉ submit 1 lần duy nhất mỗi lượt attempt.
-- [ ] **2.8.2 Assessment Scoring & Weakness Detection Engine:**
-  * Thuật toán chấm điểm server-side an toàn, xác định Accuracy và Confidence level.
-  * Phân loại trình độ theo từng kỹ năng: Mastered / Good / Developing / Needs Improvement / Critical Weakness.
-  * Ước tính trình độ ngữ pháp tổng thể (A1 / A2 / B1 / B2 / C1 Estimated Level).
-  * Lưu trữ snapshot câu hỏi và kết quả phân tích vào PostgreSQL 17.
-- [ ] **2.8.3 Personalized Learning Roadmap Engine:**
-  * Tự động sinh lộ trình học tập cá nhân hóa dựa trên kết quả chẩn đoán.
-  * Ưu tiên khắc phục các chuyên đề có mức độ Critical Weakness và Needs Improvement.
-  * Liên kết trực tiếp 100% với 53 bài học và 51 bài tập thực hành hiện có.
-  * Tích hợp AI Recommendation Layer giải thích nguyên nhân và đưa ra lời khuyên cá nhân hóa.
-- [ ] **2.8.4 Learning Analytics, Progress Comparison & Reassessment:**
-  * Theo dõi tiến độ hoàn thành từng nhiệm vụ trên Roadmap.
-  * Hỗ trợ Retake Test sau quá trình học tập để đo lường mức độ cải thiện (+% Improvement).
-  * Tự động tái tạo Roadmap khi học viên đã làm chủ các chủ điểm ngữ pháp cũ.
-- [ ] **2.8.5 UI/UX & Responsive Experience:**
-  * Thiết kế Landing Page giới thiệu bài kiểm tra chẩn đoán.
-  * Giao diện làm bài hiện đại, tập trung cao độ, hỗ trợ cả White Mode & Dark Mode.
-  * Dashboard hiển thị kết quả chẩn đoán trực quan (Biểu đồ Radar / Bar Chart kỹ năng).
-  * Giao diện Lộ trình học tập cá nhân hóa dạng Timeline các chặng tuần học.
-- [ ] **2.8.6 Security, Anti-Tampering & Quality Assurance:**
-  * RLS bảo vệ toàn bộ bảng `diagnostic_*` và `user_learning_roadmaps`.
-  * Server-side Answer Validation ngăn chặn can thiệp kết quả từ client.
-  * Bộ kiểm thử tự động toàn diện từ khâu làm bài, chấm điểm, sinh lộ trình đến thi lại.
+- [x] **2.8.1 Diagnostic Assessment Engine:**
+  * Xây dựng bài kiểm tra đầu vào 30 câu trắc nghiệm (A/B/C/D), thời gian 15-20 phút (`lib/diagnostic/diagnostic.blueprint.js`).
+  * Phân bổ cân đối theo ma trận blueprint 10 nhóm kiến thức chuẩn hóa (10 Dễ - 12 Trung bình - 8 Khó) khớp 100% tài liệu Mai Lan Hương & Hà Thanh Uyên.
+  * Tái sử dụng ngân hàng câu hỏi thông qua hệ thống metadata và mapping bài học (`lesson_id`, `lesson_code`, `chapter_number`, `competency_id`).
+  * Cơ chế làm bài 1 câu/màn hình (`DiagnosticTestSession.jsx`), Progress bar, Countdown Timer (20:00), Đánh dấu xem lại (Flag Question), phím tắt nhanh (A/B/C/D), Question drawer nhảy nhanh 30 câu.
+  * Chống gian lận: Che giấu đáp án đúng và giải thích ở client API (`/api/diagnostic/test`); chỉ submit 1 lần duy nhất mỗi lượt attempt với hộp thoại xác nhận.
+- [x] **2.8.2 Assessment Scoring & Weakness Detection Engine:**
+  * Thuật toán chấm điểm server-side toán học thuần túy (Zero Hallucination) tại `lib/diagnostic/diagnostic.scoring.js`.
+  * Xác định Accuracy % và gán nhãn Confidence level (`high` >5 câu, `medium` 3-5 câu, `low` <3 câu) tránh kết luận vội vã.
+  * Phân loại 5 cấp độ thành thạo: Mastered (90-100%) / Good (75-89%) / Developing (60-74%) / Needs Improvement (40-59%) / Critical Weakness (0-39% 🔴).
+  * Ước tính trình độ ngữ pháp nội bộ chuẩn xác (A1 / A2 / B1 / B2 / C1 Estimated Level).
+  * Lưu trữ snapshot câu hỏi, đáp án học viên và kết quả kỹ năng vào PostgreSQL 17 (`diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`).
+- [x] **2.8.3 Personalized Learning Roadmap Engine:**
+  * Bộ máy sinh lộ trình học tập cá nhân hóa 4 tuần tại `lib/diagnostic/roadmap.generator.js` dựa trên kết quả chẩn đoán.
+  * Ưu tiên tuần 1 khắc phục điểm yếu chí mạng (🔴 Critical Weakness) và tuần 2 nâng cấp dạng câu biến đổi.
+  * Liên kết trực tiếp 100% với 53 bài học và 51 bài tập trong hệ thống với nút bấm 1-click "Vào học ngay ➔".
+  * Tích hợp AI Recommendation Layer (AI Advisor) tổng hợp điểm mạnh, lỗ hổng cần ưu tiên và lời khuyên học tập truyền cảm hứng.
+  * Lưu trữ lộ trình và các đầu việc học tập vào Supabase PostgreSQL 17 (`user_learning_roadmaps`, `roadmap_items`).
+- [x] **2.8.4 Learning Analytics, Progress Comparison & Reassessment:**
+  * Theo dõi tiến độ hoàn thành từng nhiệm vụ trên Roadmap qua checkbox tương tác và thanh tiến độ thời gian thực.
+  * Hỗ trợ Retake Placement Test sau quá trình học tập để đo lường mức độ cải thiện (+% Improvement).
+  * Tích hợp công cụ xem lại chi tiết 30 câu hỏi kèm giải thích sư phạm chuẩn 5 trường (Signal, Rule, Translation, Common Mistakes, Exam Tips) từ Milestone 2.5 (`DiagnosticQuestionReview.jsx`).
+- [x] **2.8.5 UI/UX & Responsive Experience:**
+  * Landing Page giới thiệu bài kiểm tra chẩn đoán trực quan (`DiagnosticOnboarding.jsx`) với bảng ma trận 10 chuyên đề.
+  * Giao diện làm bài hiện đại, tập trung cao độ, hỗ trợ đầy đủ phím tắt và cảnh báo thời gian.
+  * Dashboard hiển thị kết quả chẩn đoán trực quan (`DiagnosticAnalysisDashboard.jsx`) với thẻ trình độ nổi bật và ma trận 10 kỹ năng.
+  * Giao diện Lộ trình học tập cá nhân hóa dạng Timeline tuần học (`PersonalizedRoadmapView.jsx`) với bộ lọc chặng tuần.
+  * Tuân thủ chuẩn thiết kế Design Token System WCAG AA trên cả White Mode và Dark Mode.
+- [x] **2.8.6 Security, Anti-Tampering & Quality Assurance:**
+  * Server-side Answer Validation ngăn chặn can thiệp kết quả từ client qua `/api/diagnostic/submit`.
+  * Cơ chế Fallback linh hoạt: hoạt động mượt mà cả khi offline hoặc ở chế độ Khách (Guest User) với LocalStorage.
+  * RLS bảo vệ bảng `diagnostic_*` và `user_learning_roadmaps`, chống đệ quy và phân quyền chặt chẽ.
 
 ### 🔹 Milestone 2.9: Continuous Adaptive Learning & Mastery Tracking (P2)
 - [ ] Theo dõi độ bền vững của kiến thức (Spaced Repetition Review) cho các câu hỏi hay làm sai.

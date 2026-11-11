@@ -8,6 +8,7 @@ import GrammarVisualization from "../components/grammar-visualization/GrammarVis
 import { speechService } from "../lib/audio/speech.service";
 import StructuredExplanation from "../components/explanation/StructuredExplanation";
 import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
+import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import {
@@ -1206,6 +1207,19 @@ export default function Home() {
     if (targetCh) {
       handleSelectChapter(targetCh);
       const targetL = targetCh.lessons.find((l) => l.id === rec.lesson_id || l.code === rec.lesson_code);
+      if (targetL) {
+        setSelectedLessonId(targetL.id);
+      }
+      setActiveTab("theory");
+      setCurrentView("study");
+    }
+  };
+
+  const handleNavigateToDiagnosticLesson = (chapterNumber, lessonId) => {
+    const targetCh = previewData.chapters.find((c) => c.number === chapterNumber) || previewData.chapters[0];
+    if (targetCh) {
+      handleSelectChapter(targetCh);
+      const targetL = targetCh.lessons.find((l) => l.id === lessonId);
       if (targetL) {
         setSelectedLessonId(targetL.id);
       }
@@ -2721,6 +2735,27 @@ export default function Home() {
               <span>Lộ trình & Streak</span>
             </button>
 
+            {/* Tab: Diagnostic & Personalized Roadmap (Milestone 2.8) */}
+            <button
+              onClick={() => setCurrentView("diagnostic")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.45rem",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "6px",
+                fontSize: "0.825rem",
+                fontWeight: currentView === "diagnostic" ? "700" : "500",
+                color: currentView === "diagnostic" ? (isLight ? "#1d4ed8" : "#93c5fd") : T.textMuted,
+                backgroundColor: currentView === "diagnostic" ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
+                boxShadow: currentView === "diagnostic" && isLight ? "0 1px 3px rgba(37,99,235,0.15)" : "none",
+                border: currentView === "diagnostic" ? `1px solid ${isLight ? "#bfdbfe" : "#3730a3"}` : "none",
+                cursor: "pointer",
+              }}
+            >
+              <span>🎯 Đánh Giá &amp; Lộ Trình</span>
+            </button>
+
             {/* Tab 1: 12 Chapters Study */}
             <button
               onClick={() => setCurrentView("study")}
@@ -3968,7 +4003,22 @@ export default function Home() {
 
             </div>
           </div>
-        )}{/* ============================================================== */}
+        )}
+
+        {/* ============================================================== */}
+        {/* VIEW 5: DIAGNOSTIC & PERSONALIZED LEARNING ROADMAP (MILESTONE 2.8) */}
+        {/* ============================================================== */}
+        {currentView === "diagnostic" && (
+          <GrammarDiagnosticEngine
+            currentUser={currentUser}
+            userTracker={userTracker}
+            onNavigateToLesson={handleNavigateToDiagnosticLesson}
+            T={T}
+            isLight={isLight}
+          />
+        )}
+
+        {/* ============================================================== */}
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
         {/* ============================================================== */}
         {currentView === "dashboard" && (
@@ -4090,6 +4140,74 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* MILESTONE 2.8: DIAGNOSTIC PLACEMENT ASSESSMENT HERO CALLOUT */}
+              <div
+                style={{
+                  background: isLight
+                    ? "linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%)"
+                    : "linear-gradient(135deg, #1e1b4b 0%, #064e3b 100%)",
+                  border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f6"}`,
+                  borderRadius: "12px",
+                  padding: "1.5rem 1.75rem",
+                  marginBottom: "1.75rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1.25rem",
+                  boxShadow: isLight ? "0 4px 15px rgba(37, 99, 235, 0.08)" : T.shadow,
+                }}
+              >
+                <div style={{ flex: "1 1 500px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem" }}>
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        padding: "0.2rem 0.6rem",
+                        borderRadius: "9999px",
+                        backgroundColor: isLight ? "#dbeafe" : "#312e81",
+                        color: isLight ? "#1d4ed8" : "#93c5fd",
+                      }}
+                    >
+                      🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
+                    </span>
+                    <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
+                      30 câu trắc nghiệm • 15-20 phút
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: T.text, margin: "0 0 0.35rem 0" }}>
+                    Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: T.textSecondary, margin: 0, lineHeight: 1.45 }}>
+                    Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setCurrentView("diagnostic")}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "0.6rem",
+                    backgroundColor: T.accent,
+                    color: "#ffffff",
+                    fontSize: "0.9rem",
+                    fontWeight: 700,
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span>Khám phá trình độ ngay</span>
+                  <span>➔</span>
+                </button>
               </div>
 
               {/* SMART DAILY RECOMMENDATION CARD */}
