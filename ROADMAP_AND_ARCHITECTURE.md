@@ -45,7 +45,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Infrastructure** | **2.3** | **Auth & Offline Sync Engine (Conflict Resolution)** | **P0 (Critical)** | ✅ Hoàn thành |
 | **Management** | **2.4** | **Enterprise Admin Dashboard & Server Audit Logs** | **P1 (High)** | ✅ Hoàn thành |
 | **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | ✅ Hoàn thành |
-| **Design** | **2.6** | **Design Token System & White/Dark Mode WCAG AA** | **P2 (Medium)**| ✅ Hoàn thành |
+| **Design** | **2.6** | **Enterprise-Grade Design System & WCAG 2.2 AA** | **P2 (Medium)**| ✅ Core Live / Design System Spec Active |
 | **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | ✅ Hoàn thành |
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning, Mastery Tracking & Reassessment**| **P2 (High)** | ⏳ Kế tiếp |
@@ -412,6 +412,127 @@ Toàn bộ giải thích câu hỏi bài tập và đề thi được chuẩn h�
   "category": "TENSES"
 }
 ```
+
+---
+
+## 🎨 6.5. ENTERPRISE-GRADE DESIGN SYSTEM, SEMANTIC DESIGN TOKENS & WCAG 2.2 AA COMPLIANCE (MILESTONE 2.6)
+
+> **Sứ mệnh cốt lõi:** Xây dựng một Design System tập trung, nhất quán và có khả năng mở rộng cho toàn bộ Grammar Learning Platform. Mục tiêu không chỉ là đồng bộ màu sắc giữa Light Mode và Dark Mode mà còn chuẩn hóa Typography, Spacing, Layout, Component States, Interactions, Animations và Accessibility (WCAG 2.2 Level AA). Toàn bộ giao diện phải sử dụng chung một hệ thống Design Tokens, đảm bảo không xảy ra tình trạng mỗi trang tự định nghĩa màu sắc, font chữ, khoảng cách hoặc trạng thái giao diện riêng.
+
+### 6.5.1. Sơ đồ Cấu trúc Tổng thể Hệ thống Design System
+
+```text
+                                DESIGN SYSTEM HOÀN CHỈNH
+                                           │
+                     ┌─────────────────────┴─────────────────────┐
+                     │                                           │
+               DESIGN TOKENS                               ACCESSIBILITY
+                     │                                     (WCAG 2.2 AA)
+          ┌──────────┴──────────┐                                │
+          │                     │                                │
+    LIGHT MODE              DARK MODE                   Contrast ≥ 4.5:1
+  (High Contrast)       (Soft Neutral Eye-Care)         Target Size ≥ 24px
+          │                     │                       No Keyboard Trap
+          └──────────┬──────────┘                       Focus Not Obscured
+                     │
+              TYPOGRAPHY SCALE (Inter & JetBrains Mono)
+                     │
+              SPACING & LAYOUT (4px Grid & Radius Tokens)
+                     │
+              SHARED COMPONENT LIBRARY (Buttons, Cards, Inputs, Modals)
+                     │
+              INTERACTION & MOTION (Reduced Motion & Transitions)
+                     │
+              RESPONSIVE LAYOUT (Mobile-First Breakpoints)
+                     │
+              VISUAL REGRESSION TESTING (Playwright & Token Audit)
+                     │
+              ENTIRE GRAMMAR PLATFORM (Dashboard, Study, Quiz, Roadmap)
+```
+
+### 6.5.2. Kiến trúc Design Tokens 3 Tầng Tập Trung (`lib/tokens/design-tokens.js`)
+
+Hệ thống token phân tách rõ ràng thành 3 tầng phân cấp:
+
+1. **Layer 1 – Primitive Tokens (Giá trị Nguyên bản):**
+   - Bảng mã màu cơ bản (Slate, Blue, Emerald, Amber, Rose, Zinc) được định nghĩa thô từ thang 50 đến 950.
+2. **Layer 2 – Semantic Tokens (Màu theo Ý nghĩa & Ngữ cảnh):**
+   - **Background:** `bg`, `bgSub`, `bgElevated`, `bgActive`.
+   - **Surface & Cards:** `card`, `cardSubtle`, `cardHover`, `cardBorder`.
+   - **Borders:** `border`, `borderSubtle`, `borderStrong`.
+   - **Typography phân cấp:** `text` (Slate-900 trên sáng / Slate-50 trên tối), `textSecondary`, `textMuted`, `textHeading`.
+   - **Semantic Accents:** `accent` (Blue), `success` (Emerald), `warning` (Amber), `danger` (Red), `info` (Sky) kèm `*Bg` và `*Border`.
+   - **Focus & Overlays:** `focusRing`, `focusOutline`, `overlay`, `backdrop`.
+3. **Layer 3 – Component Tokens (Đặc thù từng Component):**
+   - Ví dụ cho Button (`primaryBg: accent`, `radius: radiusMd`, `padding: space2 space4`), Card, Input, Modal, Tooltip.
+
+> [!IMPORTANT]
+> **Quy tắc Bất biến:** Tuyệt đối không hardcode mã màu HEX trực tiếp trong các component giao diện. Component chỉ được tiêu thụ Semantic Tokens (`T.accent`, `T.text`, `T.bg`) hoặc Component Tokens.
+
+### 6.5.3. Bảng Chuẩn hóa Màu sắc Light Mode & Dark Mode
+
+| Nhóm Token | Light Mode (Clean & High Readability) | Dark Mode (Deep Neutral & Eye-Care) | Tỷ lệ Tương phản WCAG |
+| :--- | :---: | :---: | :---: |
+| **Nền chính (`bg`)** | `#ffffff` / `#f8fafc` | `#09090b` / `#0b1120` | Đạt chuẩn nền sâu |
+| **Bề mặt thẻ (`card`)** | `#ffffff` (viền `#e2e8f0`) | `#121215` / `#1e293b` (viền `#27272a`) | Độ nổi khối tinh tế |
+| **Chữ chính (`text`)** | `#0f172a` (Slate-900) | `#f8fafc` (Slate-50) | **15.5:1** (Rất cao) |
+| **Chữ phụ (`textSecondary`)**| `#334155` (Slate-700) | `#cbd5e1` (Slate-300) | **9.6:1** (Vượt chuẩn AA) |
+| **Chữ mờ (`textMuted`)** | `#475569` (Slate-600) | `#94a3b8` (Slate-400) | **6.1:1** (Vượt chuẩn 4.5:1) |
+| **Thương hiệu (`accent`)** | `#2563eb` (Blue-600) | `#60a5fa` (Blue-400) | **5.2:1** |
+| **Thành công (`success`)** | `#15803d` (Green-700) | `#4ade80` (Green-400) | **5.1:1** |
+| **Cảnh báo (`warning`)** | `#b45309` (Amber-700) | `#fbbf24` (Amber-400) | **5.3:1** |
+| **Nguy hiểm (`danger`)** | `#dc2626` (Red-600) | `#f87171` (Red-400) | **4.8:1** |
+
+### 6.5.4. Hệ thống Typography Chuẩn hóa (`lib/tokens/typography.tokens.js`)
+
+- **Font Family:** Primary: `Inter`, system-ui, sans-serif; Monospace: `JetBrains Mono`, Geist Mono.
+- **Thang đo Typography Phân cấp:**
+  * `display` (40px / 800) • `h1` (32px / 800) • `h2` (24px / 700) • `h3` (20px / 700) • `h4` (18px / 600)
+  * `bodyLg` (16px / 500) • `body` (14px / 500) • `bodySm` (13px / 500) • `caption` (12px / 500) • `overline` (11px / 700 uppercase).
+- **Line Height:** 1.4 – 1.7 cho nội dung đọc sư phạm; 1.2 – 1.35 cho tiêu đề.
+- **Responsive Typography:** Sử dụng `clamp()` tự động co giãn phông chữ theo độ rộng viewport, chống tràn chữ trên thiết bị di động.
+
+### 6.5.5. Hệ thống Khoảng cách Spacing & Bố cục Layout (`lib/tokens/spacing.tokens.js`)
+
+- **Thang đo Spacing 4px Grid:** `space1` (4px) ➔ `space2` (8px) ➔ `space3` (12px) ➔ `space4` (16px) ➔ `space6` (24px) ➔ `space8` (32px) ➔ `space12` (48px) ➔ `space16` (64px).
+- **Hệ thống Bo góc (Border Radius):** `radiusSm` (4px), `radiusMd` (8px), `radiusLg` (12px), `radiusXl` (16px), `radiusFull` (9999px).
+- **Đổ bóng (Elevation Shadows):** `shadowXs`, `shadowSm`, `shadowMd`, `shadowLg`, `shadowElevated`.
+- **Layout Grid & Breakpoints:** Mobile Small (<375px), Mobile (375-767px), Tablet (768-1023px), Desktop (1024-1439px), Large Desktop (≥1440px). Max container width 1120px / 960px.
+
+### 6.5.6. Bộ Component UI Dùng Chung Chuẩn Hóa (`components/design-system/`)
+
+1. **Buttons & Actions:** `Button` (Primary, Secondary, Ghost, Danger), `IconButton`, `ButtonGroup`.
+2. **Form Controls:** `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`, `Switch` tích hợp focus ring và error state.
+3. **Feedback & Status:** `Badge`, `Alert`, `Toast`, `Progress`, `Tooltip`.
+4. **Layout & Containers:** `Card`, `Container`, `Grid`, `Divider`.
+5. **Overlays:** `Modal`, `Drawer`, `Dropdown`, `Popover` có bẫy focus (focus trap) và phục hồi focus sau khi đóng.
+6. **Loading & States:** `Skeleton` đồng bộ kích thước ngăn ngừa Layout Shift (CLS), `EmptyState` có hình minh họa và CTA rõ ràng.
+
+### 6.5.7. Tuân Thủ Toàn Diện Chuẩn Tiếp Cận WCAG 2.2 Level AA
+
+- **Tương phản Màu sắc (Color Contrast):** Văn bản thông thường ≥ 4.5:1; Văn bản lớn / Icon ý nghĩa ≥ 3.0:1. Không dùng màu sắc làm phương tiện duy nhất để truyền tải thông tin (luôn kèm icon và văn bản bổ trợ).
+- **Khả năng Tiếp cận qua Bàn phím (Keyboard Accessibility):** Điều hướng 100% bằng Tab, Shift+Tab, Enter, Space, Escape, Mũi tên; hiển thị rõ ràng Visible Focus Ring (`2px solid T.accent`).
+- **Tiêu chuẩn WCAG 2.2 Bổ sung:**
+  * **2.4.11 Focus Not Obscured:** Không để thanh Header dính (sticky) hoặc Modal che khuất phần tử đang focus.
+  * **2.5.8 Target Size (Minimum):** Vùng tương tác cảm ứng tối thiểu 24 × 24 CSS pixels; ưu tiên 44 × 44 pixels trên Mobile.
+  * **Hỗ trợ Zoom:** Cho phép phóng to văn bản lên 200% – 400% mà không bị vỡ bố cục hoặc mất thông tin.
+
+### 6.5.8. Cơ chế Chống Nhấp Nháy Theme (Anti-Flicker & Theme Initialization)
+
+Script khởi tạo inline chặn ngay trong `<Head>` của `pages/_document.js` hoặc `pages/_app.js`:
+- Đọc `localStorage.getItem('grammar_theme')`.
+- Nếu chưa có, tự động bắt sự kiện `window.matchMedia('(prefers-color-scheme: dark)')`.
+- Gán thuộc tính `data-theme` trước khi DOM được paint, triệt tiêu 100% hiện tượng chớp sáng / nhấp nháy FOUC (Flash of Unstyled Content).
+
+### 6.5.9. Tương tác Chuyển động & Reduced Motion (Motion Guidelines)
+
+- **Thời lượng Animation Chuẩn:** `durationFast` (120ms), `durationNormal` (200ms), `durationSlow` (300ms).
+- **Hỗ trợ Bắt buộc `@media (prefers-reduced-motion: reduce)`:** Tự động vô hiệu hóa transition và animation cho học viên có cơ địa nhạy cảm chuyển động hoặc rối loạn tiền đình.
+
+### 6.5.10. Kiểm Thử Tự Động Token & Visual Regression Testing
+
+- **Tự động Kiểm tra Mã Màu:** Script `scripts/validate-design-tokens.js` rà quét toàn bộ JSX để phát hiện mã HEX bị hardcode hoặc vi phạm tương phản.
+- **Visual Regression Testing:** Tích hợp Playwright chụp snapshot giao diện (Dashboard, Study, Quiz, Mistakes, Roadmap) trên 3 thiết bị (Mobile, Tablet, Desktop) ở cả 2 chế độ Light/Dark để phát hiện lệch giao diện ngoài ý muốn.
 
 ---
 
@@ -953,7 +1074,11 @@ components/
     * `POST & GET & PATCH /api/learning/remedial-recommendations`: Tạo và quản lý trạng thái khuyến nghị học bù đắp.
     * `GET /api/admin/explanations/feedback-summary`: Tổng hợp báo cáo chất lượng sư phạm cho Quản trị viên.
 
-### 🔹 Milestone 2.6: Chuẩn hóa Design Token System & WCAG AA (P2)
+### 🔹 Milestone 2.6: Enterprise-Grade Design System, Semantic Design Tokens & WCAG 2.2 AA Compliance (P2)
+
+> **Mục tiêu:** Xây dựng một Design System tập trung, nhất quán và có khả năng mở rộng cho toàn bộ Grammar Learning Platform. Chuẩn hóa 3 tầng Design Tokens, Typography Scale, Spacing & Layout, Component Library dùng chung, Interaction & Motion System và nâng cấp khả năng tiếp cận lên chuẩn quốc tế WCAG 2.2 Level AA.
+
+#### 1. Các thành phần Cốt lõi Đã Triển khai & Hoạt động trên Production:
 - [x] **2.6.1 Hệ Thống Design Tokens Tập Trung (`lib/tokens/design-tokens.js`):**
   * Chuẩn hóa bảng mã màu độc lập cho cả Light Mode (Sáng) và Dark Mode (Tối):
     * Nền & Bề mặt: `bg`, `bgSub`, `bgElevated`, `bgActive`.
@@ -961,16 +1086,49 @@ components/
     * Đường viền: `border`, `borderSubtle`, `borderStrong`.
     * Typography phân cấp: `text` (`#0f172a`), `textSecondary` (`#334155`), `textMuted` (`#475569`), `textHeading` (`#0f172a`).
     * Accent Tokens: `accent`, `success`, `warning`, `danger` kèm màu nền nhẹ và đường viền tương ứng.
-- [x] **2.6.2 Đảm Bảo Tuyệt Đối Chuẩn Tiếp Cận WCAG AA:**
+- [x] **2.6.2 Đảm Bảo Tuyệt Đối Chuẩn Tiếp Cận WCAG AA & Tương Phản Màu:**
   * Mọi thành phần chữ trên nền sáng đều đạt tỷ lệ tương phản tối thiểu ≥ 4.5:1 (Normal Text) và ≥ 3.0:1 (Large Text / Icons).
   * Tiêu đề chính đạt tỷ lệ tương phản 15.5:1 trên nền trắng (`#0f172a` trên `#ffffff`).
   * Loại bỏ hoàn toàn các mã màu xám mờ (`#a1a1aa`, `#71717a`) trên nền sáng ở Dashboard, Bản đồ tiến độ 12 chương, Breadcrumbs, Quiz Engine và Sổ tay câu sai.
 - [x] **2.6.3 Chống Nhấp Nháy Giao Diện (Anti-Flicker Script):**
   * Script Inline chặn ngay trong `<Head>` của `pages/_app.js` đọc `localStorage.getItem('grammar_theme')` trước khi DOM render để loại bỏ triệt để hiện tượng Flash of Unstyled Content (FOUC).
-- [x] **2.6.4 Chuẩn Hóa Các Trạng Thái Giao Diện:**
+- [x] **2.6.4 Chuẩn Hóa Các Trạng Thái Giao Diện Cơ bản:**
   * Empty States (Trạng thái rỗng cho Sổ tay câu sai, Bộ đề Quiz, Danh sách từ vựng).
   * Skeleton Loading đồng bộ cho thẻ học viên và bài học.
   * Form Controls (Input, Select, Textarea) tự động thích ứng viền và nền theo theme đang chọn.
+
+#### 2. Kế hoạch Mở rộng 8 Hướng Nâng cấp Enterprise Design System (Spec 2.6 Enhanced):
+- [ ] **2.6.5 Semantic & Component Design Tokens (3-Layer Architecture):**
+  * Tách biệt 3 tầng: Primitive Tokens ➔ Semantic Tokens ➔ Component Tokens.
+  * Cấm tuyệt đối hardcode mã HEX trong components; mọi thành phần chỉ tiêu thụ Semantic/Component Tokens.
+- [ ] **2.6.6 Typography System & Responsive Fluid Fonts (`lib/tokens/typography.tokens.js`):**
+  * Chuẩn hóa font gia đình Inter & JetBrains Mono; phân cấp 10 bậc từ `display` (40px) đến `overline` (11px).
+  * Ứng dụng hàm `clamp()` co giãn phông chữ mượt mà theo viewport, chống tràn chữ trên màn hình nhỏ.
+- [ ] **2.6.7 Spacing 4px Grid, Border Radius & Elevation Shadow (`lib/tokens/spacing.tokens.js`):**
+  * Thống nhất thang khoảng cách 4px Grid (`space1` 4px đến `space16` 64px) và hệ thống bo góc (`radiusSm` đến `radiusFull`).
+  * Chuẩn hóa chiều rộng container (max 1120px / 960px) trên toàn bộ Dashboard, Quiz, Study Mode và Roadmap.
+- [ ] **2.6.8 Shared Component Design System Library (`components/design-system/`):**
+  * Xây dựng thư viện component nguyên khối dùng chung: `buttons/` (Button, IconButton, ButtonGroup), `forms/` (Input, Select, Checkbox, Radio, Switch), `feedback/` (Badge, Alert, Toast, Progress, Tooltip), `layout/` (Card, Container, Grid, Divider), `overlays/` (Modal, Drawer, Dropdown, Popover).
+  * Mỗi component hỗ trợ đầy đủ 8 trạng thái: Default, Hover, Focus, Active, Disabled, Loading, Error, Success.
+- [ ] **2.6.9 WCAG 2.2 Level AA Compliance Nâng cao:**
+  * **2.4.11 Focus Not Obscured:** Không để thanh header dính hoặc modal che khuất focus indicator.
+  * **2.5.8 Target Size:** Vùng tương tác cảm ứng tối thiểu 24 × 24 CSS pixels (ưu tiên 44 × 44 pixels trên Mobile).
+  * **Keyboard Accessibility:** Điều hướng 100% bằng phím (Tab, Enter, Space, Escape, Arrow), hiển thị rõ ràng Focus Ring (`2px solid T.accent`).
+  * Hỗ trợ zoom phóng to 200% - 400% không vỡ giao diện.
+- [ ] **2.6.10 Interaction & Motion Design System:**
+  * Chuẩn hóa thời lượng transition (120ms, 200ms, 300ms) và easing curves.
+  * Hỗ trợ bắt buộc `@media (prefers-reduced-motion: reduce)` vô hiệu hóa animation cho người dùng nhạy cảm.
+- [ ] **2.6.11 Automated Token Validation & Visual Regression Testing:**
+  * Script `scripts/validate-design-tokens.js` tự động quét phát hiện mã HEX bị hardcode hoặc vi phạm tương phản.
+  * Bộ kiểm thử Playwright Visual Regression chụp so sánh screenshot giao diện trên Mobile, Tablet, Desktop ở cả Light/Dark Mode.
+- [ ] **2.6.12 Design System Documentation & Governance (`docs/design-system/`):**
+  * Bộ tài liệu hướng dẫn sử dụng Design System, Token guidelines, quy tắc đóng góp và cơ chế phát hiện vi phạm.
+- [ ] **2.6.13 Bộ Tiêu chuẩn Nghiệm thu 20 Tiêu chí (AC-01 -> AC-20):**
+  * `AC-01 -> AC-06`: Primitive/Semantic tokens, Light/Dark sync, System Theme OS detection, Anti-Flicker no FOUC.
+  * `AC-07 -> AC-09`: Typography scale, Spacing scale 4px grid, Shared Component Library đầy đủ.
+  * `AC-10 -> AC-13`: WCAG contrast ≥4.5:1, Keyboard navigation, Focus management, Motion System có Reduced Motion.
+  * `AC-14 -> AC-16`: Empty states có illustration, Skeleton loading không CLS layout shift, Mobile-first responsive.
+  * `AC-17 -> AC-20`: Visual regression testing, Accessibility audit report, Token validation script, Tài liệu Design System.
 
 ### 🔹 Milestone 2.7: Xây dựng Grammar Visualization Engine & Audio Service (P1)
 - [x] **2.7.1 Centralized Audio Service & Pronunciation Engine:**
