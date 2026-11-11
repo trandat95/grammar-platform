@@ -14,6 +14,8 @@ import RemedialRecommendationCard from "../components/learning/RemedialRecommend
 import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
 import MasteryIntelligenceDashboard from "../components/learning/MasteryIntelligenceDashboard";
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
+import GamificationHub from "../components/gamification/GamificationHub";
+import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
 import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
@@ -262,6 +264,11 @@ export default function Home() {
   const [mistakeFilterTopic, setMistakeFilterTopic] = useState("ALL");
 
   const [xpToast, setXpToast] = useState(null);
+  const [gamificationCelebration, setGamificationCelebration] = useState(null);
+  const [gamificationPreferences, setGamificationPreferences] = useState({
+    leaderboard_visibility: "public",
+    reduced_motion: false,
+  });
   const [syncState, setSyncState] = useState({ status: "SYNCED", lastSyncTime: null });
 
   // Helper date strings
@@ -1417,6 +1424,24 @@ export default function Home() {
     }
   };
 
+  const handleServerGamificationOutcome = (gam) => {
+    if (!gam) return;
+    if (gam.levelState?.totalXp !== undefined) {
+      setUserTracker((prev) => ({
+        ...prev,
+        xp: Number(gam.levelState.totalXp),
+        streak: Number(gam.streakState?.current_streak ?? prev.streak),
+      }));
+    }
+    if (
+      gam.leveledUp ||
+      gam.streakState?.milestone_reached ||
+      (gam.newlyUnlockedAchievements && gam.newlyUnlockedAchievements.length > 0)
+    ) {
+      setGamificationCelebration(gam);
+    }
+  };
+
   const syncQuestionMastery = (question, isCorrect, errorCategory = null) => {
     if (!question?.id || !currentUser?.id || currentUser.isGuest) return;
     const startedAt = questionFocusTimestampsRef.current?.[question.id];
@@ -1439,7 +1464,10 @@ export default function Home() {
         response_time_ms: responseTimeMs,
         idempotency_key: StorageAdapter.generateUUIDv4(),
       }),
-    }).catch(() => {});
+    })
+      .then((res) => res.json())
+      .then((json) => handleServerGamificationOutcome(json?.gamification))
+      .catch(() => {});
   };
 
   const computeAndAttachRemedial = (question, userInput, correctAns, chapterTitleFallback = "Ngữ pháp") => {
@@ -1981,7 +2009,10 @@ export default function Home() {
             },
           ],
         }),
-      }).catch(() => {});
+      })
+        .then((res) => res.json())
+        .then((json) => handleServerGamificationOutcome(json?.gamification))
+        .catch(() => {});
       SyncManager.recordAction(SYNC_EVENT_TYPES.QUIZ_SUBMITTED, {
         quiz: {
           topic: selectedQuizTopic,
@@ -3218,6 +3249,27 @@ export default function Home() {
               )}
             </button>
 
+            {/* Tab 3.5: Thành tích & Xếp hạng (Milestone 2.10) */}
+            <button
+              onClick={() => setCurrentView("gamification")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "6px",
+                fontSize: "0.825rem",
+                fontWeight: currentView === "gamification" ? "700" : "500",
+                color: currentView === "gamification" ? T.text : T.textMuted,
+                backgroundColor: currentView === "gamification" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                boxShadow: currentView === "gamification" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span>🏆 Thành tích</span>
+            </button>
+
             {/* Tab 4: Admin Panel (Only for authenticated ADMIN users) */}
             {!currentUser.isGuest && currentUser.role === "ADMIN" && (
               <button
@@ -4443,6 +4495,30 @@ export default function Home() {
           }}
           isLight={isLight}
         />
+
+        <GamificationCelebrationModal
+          celebration={gamificationCelebration}
+          onClose={() => setGamificationCelebration(null)}
+          isLight={isLight}
+          reducedMotion={gamificationPreferences.reduced_motion}
+        />
+
+        {/* ============================================================== */}
+        {/* VIEW 6: INTELLIGENT GAMIFICATION & LEADERBOARD (MILESTONE 2.10)*/}
+        {/* ============================================================== */}
+        {currentView === "gamification" && (
+          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+            <div style={{ maxWidth: "1020px", margin: "0 auto" }}>
+              <GamificationHub
+                userId={!currentUser?.isGuest ? currentUser?.id : null}
+                authToken={activeAuthToken}
+                isLight={isLight}
+                onPreferencesChange={setGamificationPreferences}
+                onStartAdaptivePractice={startAdaptivePractice}
+              />
+            </div>
+          </div>
+        )}
 
         {/* ============================================================== */}
         {/* VIEW 5: DIAGNOSTIC & PERSONALIZED LEARNING ROADMAP (MILESTONE 2.8) */}

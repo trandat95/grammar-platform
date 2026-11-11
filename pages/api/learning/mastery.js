@@ -12,6 +12,7 @@ import {
   calculateForgettingCurve,
 } from "../../../lib/explanation/spaced-repetition";
 import { generatePersonalRecommendations } from "../../../lib/learning/adaptive-question-engine";
+import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
 import quizData from "../../../data/ui/quiz_bank.json";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -390,6 +391,35 @@ export default async function handler(req, res) {
 
       if (progSaveErr) throw progSaveErr;
 
+      // 3. Section 8D.1 Shared Pipeline: Trigger M2.10 XP, Streak, Challenges & Achievements
+      const { data: allProgRows } = await serverClient
+        .from("user_concept_progress")
+        .select("*")
+        .eq("user_id", resolvedUserId);
+
+      const progLookup = new Map((allProgRows || []).map((r) => [r.concept_id, r]));
+      const snapshotNodes = KNOWLEDGE_GRAPH.nodeList.map((n) => {
+        const pr = progLookup.get(n.id);
+        return pr ? { ...n, ...pr } : { ...n, attempts: 0, mastery_score: 0 };
+      });
+      const twelveTopicSnapshot = aggregateTwelveTopicMastery(snapshotNodes);
+
+      const gamification = await processLearningGamificationEvent({
+        serverClient,
+        userId: resolvedUserId,
+        eventType: "QUESTION_ANSWERED",
+        idempotencyKey: idempotency_key || `${resolvedUserId}_${question_id}_${Date.now()}`,
+        questionId: question_id,
+        isCorrect: Boolean(is_correct),
+        responseTimeMs: Number(response_time_ms || 0),
+        existingSrCard: existingSr,
+        nextSrCard: savedSr,
+        masteryBeforeScore: Number(existingProg?.mastery_score || 0),
+        masteryAfter: mastery,
+        twelveTopicMastery: twelveTopicSnapshot,
+        now,
+      });
+
       return res.status(200).json({
         success: true,
         deduped: false,
@@ -399,6 +429,7 @@ export default async function handler(req, res) {
         mastery: savedProg,
         masteryFactors: mastery.factors,
         spacedRepetition: savedSr,
+        gamification,
       });
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });

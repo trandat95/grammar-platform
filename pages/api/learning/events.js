@@ -1,5 +1,8 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
+import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
+import { aggregateTwelveTopicMastery } from "../../../lib/learning/mastery-tracker";
+import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -39,6 +42,7 @@ export default async function handler(req, res) {
   try {
     let processed = 0;
     let deduped = 0;
+    let latestGamification = null;
 
     for (const ev of eventList.slice(0, 50)) {
       if (!ev?.idempotency_key || !ev?.event_type) continue;
@@ -57,10 +61,28 @@ export default async function handler(req, res) {
         deduped += 1;
       } else if (!error) {
         processed += 1;
+        if (ev.event_type === "QUIZ_COMPLETED") {
+          const { data: progRows } = await serverClient
+            .from("user_concept_progress")
+            .select("*")
+            .eq("user_id", resolvedUserId);
+          const progMap = new Map((progRows || []).map((r) => [r.concept_id, r]));
+          const twelveTopicSnapshot = aggregateTwelveTopicMastery(
+            KNOWLEDGE_GRAPH.nodeList.map((n) => (progMap.get(n.id) ? { ...n, ...progMap.get(n.id) } : { ...n, attempts: 0, mastery_score: 0 }))
+          );
+          latestGamification = await processLearningGamificationEvent({
+            serverClient,
+            userId: resolvedUserId,
+            eventType: "QUIZ_COMPLETED",
+            idempotencyKey: String(ev.idempotency_key),
+            twelveTopicMastery: twelveTopicSnapshot,
+            quizPayload: ev.payload || {},
+          });
+        }
       }
     }
 
-    return res.status(200).json({ success: true, processed, deduped });
+    return res.status(200).json({ success: true, processed, deduped, gamification: latestGamification });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
