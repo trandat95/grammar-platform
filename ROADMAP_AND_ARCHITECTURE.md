@@ -211,9 +211,12 @@ erDiagram
 - [x] Bổ sung nút chuyển đổi 1-click `☀️ Sáng / 🌙 Tối` trên Header Navbar, chuyển đổi mượt mà không cần reload trang.
 - [x] Đồng bộ White Mode trên toàn bộ các phân hệ: Header, Sidebar 12 Chuyên đề, Study View (Lý thuyết & Bài tập), Quiz Engine, Sổ tay câu sai, Sổ từ vựng, Popup Tra từ điển nhanh và Admin Dashboard.
 
-#### 🔹 Milestone 2.7: Mở rộng & Hoàn thiện Học liệu Sư phạm 12 Chuyên đề (Deep-dive Content Expansion)
-- [ ] Tiếp tục đối soát và làm giàu nội dung chi tiết cho các chuyên đề nâng cao: Câu điều kiện hỗn hợp, Đảo ngữ với phó từ phủ định, Giới từ chỉ nơi chốn/thời gian phức hợp, Danh động từ & Động từ nguyên mẫu.
-- [ ] Bổ sung sơ đồ tóm tắt ngữ pháp trực quan (Cheat-sheet syntax summary) ở đầu mỗi bài học.
+#### 🔹 Milestone 2.7: Mở rộng & Hoàn thiện Học liệu Sư phạm 12 Chuyên đề (Deep-dive Pedagogical Content & Presentation)
+- [x] **Chuẩn hóa cấu trúc sư phạm 12 Chuyên đề & 53 bài học:** Khắc phục triệt để các tiêu đề phân mục bị vỡ (OCR artifacts từ bản gốc), chuẩn hóa ma trận công thức 3 thể (Khẳng định `(+)`, Phủ định `(-)`, Nghi vấn `(?)`) chuẩn xác cho 13 thì và các cấu trúc ngữ pháp trọng điểm.
+- [x] **Bổ sung Sơ đồ Tóm tắt Cú pháp Trực quan (Visual Cheat-Sheet Cấp tốc):** Xuất hiện ngay đầu mỗi bài học với dòng thời gian trực quan (Timeline), bản chất cốt lõi (Concept), ma trận thẻ công thức 3 thể kèm ví dụ mẫu, đám mây từ nhận biết vàng (Signal Words Chips), và mẹo thi cử tránh bẫy ngữ pháp.
+- [x] **Nâng cấp Bộ phân tích Cú pháp Sư phạm Nội dòng (`renderFormattedText`):** Xử lý định dạng tự động cho từ in nghiêng, in đậm, gạch ngang từ sai (`~~wrong~~`), thẻ cảnh báo bẫy ngữ pháp (`[NOT...]`), tự động biến đổi các dòng ví dụ thành thẻ ví dụ chuyên biệt có nút nghe phát âm bản ngữ.
+- [x] **Ra mắt Thư viện Ví dụ Mẫu Song ngữ (Bilingual Example Library):** Bổ sung 100% bản dịch tiếng Việt chuẩn mực cho 639 câu ví dụ mẫu trong các bài học, tích hợp nút phát âm bản ngữ từng câu.
+- [x] **Tích hợp Phát âm Bản ngữ cho Bài tập Thực hành:** Bổ sung nút nghe phát âm trực tiếp trên từng câu bài tập trong tab "Bài tập thực hành", giúp học viên kết hợp luyện ngữ pháp và luyện nghe.
 - [ ] Mở rộng tính năng xuất bản bài học ra PDF/In ấn định dạng chuẩn giáo án cho giáo viên và học sinh.
 
 #### 🔹 Milestone 2.8: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)

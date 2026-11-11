@@ -87,51 +87,51 @@
           "examples": [
             {
               "en": "The sun rises in the East.",
-              "vi": ""
+              "vi": "Mặt trời mọc ở hướng Đông. (Chân lý / Sự thật hiển nhiên)"
             },
             {
               "en": "Mary often goes to school by bicycle.",
-              "vi": ""
+              "vi": "Mary thường đi học bằng xe đạp. (Thói quen ở hiện tại)"
             },
             {
               "en": "The train leaves at seven twenty-three tomorrow morning.",
-              "vi": ""
+              "vi": "Chuyến tàu khởi hành lúc 7 giờ 23 phút sáng mai. (Lịch trình / Thời khóa biểu cố định)"
             },
             {
               "en": "I’ve got the tour details here.",
-              "vi": ""
+              "vi": "Tôi có thông tin chi tiết chuyến tham quan ở đây."
             },
             {
               "en": "We spend three days in Rome.",
-              "vi": ""
+              "vi": "Chúng tôi sẽ lưu lại 3 ngày ở Rome. (Lịch trình đã định)"
             },
             {
               "en": "He is a good student.",
-              "vi": ""
+              "vi": "Cậu ấy là một học sinh giỏi."
             },
             {
               "en": "He is not/ isn’t a good pupil.",
-              "vi": ""
+              "vi": "Cậu ấy không phải là một học trò ngoan."
             },
             {
               "en": "She likes coffee.",
-              "vi": ""
+              "vi": "Cô ấy thích uống cà phê."
             },
             {
               "en": "She does not/ doesn’t like coffee.",
-              "vi": ""
+              "vi": "Cô ấy không thích cà phê."
             },
             {
               "en": "You are tired now. Are you tired now?",
-              "vi": ""
+              "vi": "Bây giờ bạn thấy mệt à? (Câu hỏi với động từ To Be)"
             },
             {
               "en": "Her father likes tea.",
-              "vi": ""
+              "vi": "Bố cô ấy thích trà."
             },
             {
               "en": "Does her father like tea?",
-              "vi": ""
+              "vi": "Bố cô ấy có thích uống trà không? (Câu hỏi với trợ động từ Does)"
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì hiện tại đơn (The Present Simple Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -174,7 +174,7 @@
               "tables": [],
               "paragraphs": [
                 "They live in England.",
-                "I am a student.",
+                "I am a student. (Tôi là một sinh viên.)",
                 "I get up early every morning. What do you do every night?"
               ],
               "id": "TENSE_PRES_SIMPLE_sec_2",
@@ -256,7 +256,41 @@
               "id": "TENSE_PRES_SIMPLE_sec_6",
               "order": 6
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả chân lý, sự thật hiển nhiên hoặc thói quen, hành động lặp đi lặp lại có tính quy luật ở hiện tại.",
+            "timeline": "Hiện tại / Thói quen / Chân lý",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + V(s/es) | S(am/is/are) + Adj/Noun",
+                "example": "She teaches English at a high school."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + do/does not + V(bare) | S + am/is/are not",
+                "example": "They do not live in London."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Do/Does + S + V(bare)? | Am/Is/Are + S...?",
+                "example": "Do you go jogging every morning?"
+              }
+            ],
+            "signals": [
+              "always",
+              "usually",
+              "often",
+              "sometimes",
+              "seldom",
+              "rarely",
+              "never",
+              "every day/week/year",
+              "once/twice a week"
+            ],
+            "examTip": "Chủ ngữ ngôi 3 số ít (He, She, It, Danh từ số ít) động từ thêm -s/-es. Thêm -es khi động từ tận cùng bằng: o, s, x, ch, sh, z (VD: watches, washes, goes)."
+          },
+          "title": "Thì hiện tại đơn"
         },
         {
           "id": "c282b298-7c8d-5fdf-95dd-b1f60c0bd2e1",
@@ -288,38 +322,50 @@
           "examples": [
             {
               "en": "The children are playing football now.",
-              "vi": ""
+              "vi": "Bọn trẻ đang chơi bóng đá lúc này. (Hành động đang diễn ra)"
             },
             {
               "en": "I’m quite busy these days.",
-              "vi": ""
+              "vi": "Dạo này tôi khá bận rộn."
             },
             {
               "en": "I’m doing a course at college.",
-              "vi": ""
+              "vi": "Tôi đang theo học một khóa tại trường cao đẳng."
             },
             {
               "en": "He is coming next week.",
-              "vi": ""
+              "vi": "Anh ấy sẽ đến vào tuần tới. (Kế hoạch chắc chắn trong tương lai gần)"
             },
             {
               "en": "I am tired now. [NOT ...~~am-being~~].",
-              "vi": ""
+              "vi": "Bây giờ tôi thấy mệt. (Động từ trạng thái không dùng thì tiếp diễn)"
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì hiện tại tiếp diễn (The Present Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. + am",
-              "badge": "QUY TẮC SỬ DỤNG",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
+              "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [
                 {
-                  "text": "+ is+ V-ing",
-                  "type": "Khẳng định (+)"
+                  "type": "Khẳng định (+)",
+                  "text": "S + am / is / are + V-ing"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + am / is / are + not + V-ing"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Am / Is / Are + S + V-ing?"
                 }
               ],
               "rules": [],
-              "bullets": [],
+              "bullets": [
+                "I đi với **am** (I'm).",
+                "He / She / It / Danh từ số ít đi với **is** (He's / She's / It's).",
+                "We / You / They / Danh từ số nhiều đi với **are** (We're / You're / They're)."
+              ],
               "notes": [],
               "tables": [],
               "paragraphs": [],
@@ -368,7 +414,40 @@
               "id": "TENSE_PRES_CONT_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả hành động đang diễn ra ngay tại thời điểm nói, hoặc xu hướng tạm thời xung quanh thời điểm hiện tại.",
+            "timeline": "Đang diễn ra ngay lúc nói",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + am / is / are + V-ing",
+                "example": "The children are playing football in the garden."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + am / is / are + not + V-ing",
+                "example": "I am not watching TV right now."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Am / Is / Are + S + V-ing?",
+                "example": "Are you listening to the teacher?"
+              }
+            ],
+            "signals": [
+              "now",
+              "right now",
+              "at the moment",
+              "at present",
+              "Look!",
+              "Listen!",
+              "Be quiet!",
+              "at this time"
+            ],
+            "examTip": "TUYỆT ĐỐI KHÔNG dùng thì tiếp diễn với các động từ chỉ nhận thức, tri giác, sở hữu (stative verbs): know, believe, understand, love, hate, want, see, hear, belong to."
+          },
+          "title": "Thì hiện tại tiếp diễn"
         },
         {
           "id": "97a9ba73-7f60-5a48-8781-cf7d07ea8af1",
@@ -455,42 +534,54 @@
           "examples": [
             {
               "en": "I have just seen my sister in the park.",
-              "vi": ""
+              "vi": "Tôi vừa mới nhìn thấy chị gái mình ở công viên. (Hành động vừa mới xảy ra)"
             },
             {
               "en": "Daisy has read that novel several times.",
-              "vi": ""
+              "vi": "Daisy đã đọc cuốn tiểu thuyết đó vài lần rồi. (Hành động lặp lại nhiều lần)"
             },
             {
               "en": "Mary has lived in this house for ten years.",
-              "vi": ""
+              "vi": "Mary đã sống trong ngôi nhà này được 10 năm. (Kéo dài từ quá khứ đến nay)"
             },
             {
               "en": "I have gone to Hanoi.",
-              "vi": ""
+              "vi": "Tôi đã đi Hà Nội (và hiện vẫn chưa trở về)."
             },
             {
               "en": "He has broken his leg, so he can’t play tennis.",
-              "vi": ""
+              "vi": "Anh ấy bị gãy chân nên không thể chơi quần vợt. (Quá khứ để lại kết quả ở hiện tại)"
             },
             {
               "en": "He has just seen her. *But*: He said that he had just seen her.",
-              "vi": ""
+              "vi": "Anh ấy vừa mới thấy cô ấy. Nhưng: Anh ấy bảo rằng anh ấy vừa mới thấy cô ấy (lùi thì)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì hiện tại hoàn thành (The Present Perfect Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. I, We, You, They + have",
-              "badge": "QUY TẮC SỬ DỤNG",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
+              "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [
                 {
-                  "text": "+ past participle (V3)",
-                  "type": "Khẳng định (+)"
+                  "type": "Khẳng định (+)",
+                  "text": "S + have / has + past participle (V3/ed)"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + have not (haven't) / has not (hasn't) + V3/ed"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Have / Has + S + V3/ed?"
                 }
               ],
               "rules": [],
-              "bullets": [],
+              "bullets": [
+                "I, We, You, They và danh từ số nhiều đi với trợ động từ **have**.",
+                "He, She, It và danh từ số ít đi với trợ động từ **has**.",
+                "V3 là động từ bất quy tắc cột 3, hoặc động từ có quy tắc thêm **-ed**."
+              ],
               "notes": [],
               "tables": [],
               "paragraphs": [],
@@ -498,28 +589,7 @@
               "order": 1
             },
             {
-              "title": "2. He/ She/ It + has",
-              "badge": "QUY TẮC SỬ DỤNG",
-              "formulas": [
-                {
-                  "text": "\\* Thể phủ định: S + haven’t/ hasn’t + V3",
-                  "type": "Khẳng định (+)"
-                },
-                {
-                  "text": "\\* Thể nghi vấn: Have/ Has + S + V3?",
-                  "type": "Nghi vấn (?)"
-                }
-              ],
-              "rules": [],
-              "bullets": [],
-              "notes": [],
-              "tables": [],
-              "paragraphs": [],
-              "id": "TENSE_PRES_PERF_sec_2",
-              "order": 2
-            },
-            {
-              "title": "3. Cách dùng (Usage)",
+              "title": "2. Cách dùng (Usage)",
               "badge": "CÁCH DÙNG & TÌNH HUỐNG",
               "formulas": [],
               "rules": [],
@@ -550,7 +620,7 @@
               "order": 3
             },
             {
-              "title": "4. Các phó từ thường đi kèm với thì hiện tại hoàn thành:",
+              "title": "3. Các phó từ thường đi kèm với thì hiện tại hoàn thành:",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -568,7 +638,7 @@
               "order": 4
             },
             {
-              "title": "5. Lưu ý:",
+              "title": "4. Lưu ý:",
               "badge": "LƯU Ý QUAN TRỌNG",
               "formulas": [],
               "rules": [],
@@ -584,7 +654,43 @@
               "id": "TENSE_PRES_PERF_sec_5",
               "order": 5
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả hành động đã xảy ra trong quá khứ nhưng không nêu rõ thời gian, hoặc vừa mới xảy ra, hoặc kéo dài từ quá khứ đến hiện tại.",
+            "timeline": "Quá khứ liên hệ với Hiện tại",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + have / has + V3/ed",
+                "example": "We have lived in Hanoi for ten years."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + haven't / hasn't + V3/ed",
+                "example": "He hasn't finished his homework yet."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Have / Has + S + V3/ed?",
+                "example": "Have you ever traveled to Japan?"
+              }
+            ],
+            "signals": [
+              "just",
+              "already",
+              "yet",
+              "recently",
+              "lately",
+              "ever",
+              "never",
+              "since + mốc tg",
+              "for + khoảng tg",
+              "so far",
+              "up to now"
+            ],
+            "examTip": "Phân biệt 'Since' (đi với mốc thời gian: since 2010, since yesterday) và 'For' (đi với khoảng thời gian: for 3 days, for 5 years)."
+          },
+          "title": "Thì hiện tại hoàn thành"
         },
         {
           "id": "d819553b-ad9b-5649-b2ab-0151b3ed79b5",
@@ -621,30 +727,42 @@
           "examples": [
             {
               "en": "I have been studying French for five years.",
-              "vi": ""
+              "vi": "Tôi đã học tiếng Pháp liên tục suốt 5 năm nay. (Nhấn mạnh tính liên tục)"
             },
             {
               "en": "You’re out of breath.",
-              "vi": ""
+              "vi": "Bạn đang thở hổn hển kìa."
             },
             {
               "en": "Have you been running?",
-              "vi": ""
+              "vi": "Có phải bạn vừa mới chạy bộ không? (Hành động để lại dấu vết rõ rệt)"
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì hiện tại hoàn thành tiếp diễn (The Present Perfect Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. I, You, We, They + have",
-              "badge": "QUY TẮC SỬ DỤNG",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
+              "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [
                 {
-                  "text": "+ been + V-ing",
-                  "type": "Khẳng định (+)"
+                  "type": "Khẳng định (+)",
+                  "text": "S + have / has + been + V-ing"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + have / has + not + been + V-ing"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Have / Has + S + been + V-ing?"
                 }
               ],
               "rules": [],
-              "bullets": [],
+              "bullets": [
+                "Khẳng định: **I/We/You/They + have been + V-ing** | **He/She/It + has been + V-ing**.",
+                "Phủ định: Thêm **not** ngay sau have/has (**haven't been / hasn't been + V-ing**).",
+                "Nghi vấn: Đưa **Have / Has** lên trước chủ ngữ (**Have/Has + S + been + V-ing?**)."
+              ],
               "notes": [],
               "tables": [],
               "paragraphs": [],
@@ -685,7 +803,38 @@
               "id": "TENSE_PRES_PERF_CONT_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Nhấn mạnh tính liên tục kéo dài không ngừng nghỉ của một hành động bắt đầu trong quá khứ và vẫn đang tiếp diễn ở hiện tại.",
+            "timeline": "Liên tục từ Quá khứ đến Hiện tại",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + have / has + been + V-ing",
+                "example": "It has been raining all morning."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + haven't / hasn't + been + V-ing",
+                "example": "She hasn't been feeling well lately."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Have / Has + S + been + V-ing?",
+                "example": "How long have you been waiting here?"
+              }
+            ],
+            "signals": [
+              "all day",
+              "all morning",
+              "how long",
+              "since",
+              "for",
+              "the whole week"
+            ],
+            "examTip": "Dùng Hiện tại hoàn thành tiếp diễn khi muốn nhấn mạnh khoảng thời gian kéo dài và để lại dấu vết/kết quả rõ ràng ở hiện tại (VD: 'Why are you tired? - I've been running')."
+          },
+          "title": "Thì hiện tại hoàn thành tiếp diễn"
         },
         {
           "id": "2b4d81e8-b2e4-5438-90d7-cf6d74d36622",
@@ -742,42 +891,57 @@
           "examples": [
             {
               "en": "Tom went to Paris last summer.",
-              "vi": ""
+              "vi": "Tom đã đi Paris vào mùa hè năm ngoái."
             },
             {
               "en": "Mozart wrote more than 600 pieces of music.",
-              "vi": ""
+              "vi": "Mozart đã sáng tác hơn 600 tác phẩm âm nhạc."
             },
             {
               "en": "He wasn’t absent from class yesterday.",
-              "vi": ""
+              "vi": "Hôm qua cậu ấy không vắng mặt ở lớp."
             },
             {
               "en": "I couldn’t open the door last night.",
-              "vi": ""
+              "vi": "Tối qua tôi không mở được cánh cửa."
             },
             {
               "en": "He didn’t watch TV last night.",
-              "vi": ""
+              "vi": "Tối qua anh ấy đã không xem tivi."
             },
             {
               "en": "Were they in hospital last month?",
-              "vi": ""
+              "vi": "Tháng trước họ có phải nằm viện không?"
             },
             {
               "en": "Did you see my son, Tom?",
-              "vi": ""
+              "vi": "Bạn có nhìn thấy con trai Tom của tôi không?"
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì quá khứ đơn (The Past Simple Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. Cấu trúc (Form)",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
               "badge": "CÔNG THỨC & CẤU TRÚC",
-              "formulas": [],
+              "formulas": [
+                {
+                  "type": "Khẳng định (+)",
+                  "text": "S + V2/ed  |  S + was / were (với To Be)"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + did not (didn't) + V(bare)  |  S + wasn't / weren't"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Did + S + V(bare)?  |  Was / Were + S...?"
+                }
+              ],
               "rules": [],
               "bullets": [
-                "Động từ có qui tắc: V-ed"
+                "Với động từ To Be: **I, He, She, It** đi với **was**; **We, You, They** đi với **were**.",
+                "Với động từ thường: Mọi ngôi chủ ngữ đều đi với **V2/ed** ở thể khẳng định.",
+                "Ở thể phủ định và nghi vấn, bắt buộc mượn trợ động từ **did** và động từ trở về nguyên mẫu **V(bare)**."
               ],
               "notes": [],
               "tables": [],
@@ -786,21 +950,7 @@
               "order": 1
             },
             {
-              "title": "2. He, She, It",
-              "badge": "QUY TẮC SỬ DỤNG",
-              "formulas": [],
-              "rules": [],
-              "bullets": [
-                "Động từ bất qui tắc: cột 2 (V2)"
-              ],
-              "notes": [],
-              "tables": [],
-              "paragraphs": [],
-              "id": "TENSE_PAST_SIMPLE_sec_2",
-              "order": 2
-            },
-            {
-              "title": "3. Cách dùng (Usage)",
+              "title": "2. Cách dùng (Usage)",
               "badge": "CÁCH DÙNG & TÌNH HUỐNG",
               "formulas": [],
               "rules": [
@@ -828,7 +978,7 @@
               "order": 3
             },
             {
-              "title": "4. Thể phủ định (Negative form)",
+              "title": "3. Thể phủ định (Negative form)",
               "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [],
               "rules": [],
@@ -848,7 +998,7 @@
               "order": 4
             },
             {
-              "title": "5. Thể nghi vấn (Interrogative form)",
+              "title": "4. Thể nghi vấn (Interrogative form)",
               "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [],
               "rules": [],
@@ -867,7 +1017,7 @@
               "order": 5
             },
             {
-              "title": "6. Lưu ý:",
+              "title": "5. Lưu ý:",
               "badge": "LƯU Ý QUAN TRỌNG",
               "formulas": [],
               "rules": [],
@@ -880,7 +1030,37 @@
               "id": "TENSE_PAST_SIMPLE_sec_6",
               "order": 6
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một hành động đã xảy ra và chấm dứt hoàn toàn trong quá khứ, có thời gian xác định rõ ràng.",
+            "timeline": "Đã chấm dứt trong Quá khứ",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + V2/ed | S + was / were",
+                "example": "They visited Paris two years ago."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + did not (didn't) + V(bare) | S + wasn't/weren't",
+                "example": "I didn't receive your email yesterday."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Did + S + V(bare)? | Was / Were + S...?",
+                "example": "Did you go to school yesterday?"
+              }
+            ],
+            "signals": [
+              "yesterday",
+              "ago (2 days ago, a year ago)",
+              "last week/month/year",
+              "in 1990 (năm quá khứ)",
+              "when I was young"
+            ],
+            "examTip": "Khi đã dùng trợ động từ 'Did' trong câu phủ định hoặc nghi vấn, động từ chính luôn ở dạng nguyên mẫu không 'to' (V-bare)."
+          },
+          "title": "Thì quá khứ đơn"
         },
         {
           "id": "d3576d3f-41af-5d79-8ace-6e7f6e0d31cc",
@@ -917,42 +1097,53 @@
           "examples": [
             {
               "en": "Yesterday, Mr Moore was working in the laboratory all the afternoon.",
-              "vi": ""
+              "vi": "Hôm qua, ông Moore đã làm việc trong phòng thí nghiệm suốt buổi chiều."
             },
             {
               "en": "I was doing my homework at 6 p.m last Sunday.",
-              "vi": ""
+              "vi": "Tôi đang làm bài tập lúc 6 giờ tối Chủ nhật trước."
             },
             {
               "en": "When I came yesterday, he was sleeping.",
-              "vi": ""
+              "vi": "Hôm qua khi tôi đến thì anh ấy đang ngủ."
             },
             {
               "en": "What was she doing when you saw her?",
-              "vi": ""
+              "vi": "Cô ấy đang làm gì khi bạn trông thấy cô ấy?"
             },
             {
               "en": "Yesterday, I was cooking while my sister was washing the dishes.",
-              "vi": ""
+              "vi": "Hôm qua, tôi nấu cơm trong khi chị tôi rửa bát."
             },
             {
               "en": "When the students heard the bell, they left. [NOT ...~~were hearing~~] He felt tired at that time. [NOT ...~~was feeling~~].",
-              "vi": ""
+              "vi": "Khi học sinh nghe chuông, họ ra về (động từ tri giác không chia tiếp diễn)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì quá khứ tiếp diễn (The Past Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. + was",
-              "badge": "QUY TẮC SỬ DỤNG",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
+              "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [
                 {
-                  "text": "+ V-ing",
-                  "type": "Khẳng định (+)"
+                  "type": "Khẳng định (+)",
+                  "text": "S + was / were + V-ing"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + was not (wasn't) / were not (weren't) + V-ing"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Was / Were + S + V-ing?"
                 }
               ],
               "rules": [],
-              "bullets": [],
+              "bullets": [
+                "Chủ ngữ **I, He, She, It, Danh từ số ít** đi với **was**.",
+                "Chủ ngữ **We, You, They, Danh từ số nhiều** đi với **were**."
+              ],
               "notes": [],
               "tables": [],
               "paragraphs": [],
@@ -1003,7 +1194,36 @@
               "id": "TENSE_PAST_CONT_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một hành động đang diễn ra tại một thời điểm cụ thể trong quá khứ, hoặc một hành động đang diễn ra thì hành động khác cắt ngang.",
+            "timeline": "Đang diễn ra tại điểm thời gian Quá khứ",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + was / were + V-ing",
+                "example": "I was studying English at 8 PM last night."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + wasn't / weren't + V-ing",
+                "example": "They weren't watching the game at that time."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Was / Were + S + V-ing?",
+                "example": "What were you doing when the phone rang?"
+              }
+            ],
+            "signals": [
+              "at 8 PM last night",
+              "at this time yesterday",
+              "when + Quá khứ đơn",
+              "while + Quá khứ tiếp diễn"
+            ],
+            "examTip": "Quy tắc kinh điển: Hành động dài đang diễn ra chia Quá khứ tiếp diễn (was/were + V-ing), hành động ngắn xen vào chia Quá khứ đơn (V2/ed)."
+          },
+          "title": "Thì quá khứ tiếp diễn"
         },
         {
           "id": "4e272d6f-6f19-54a2-9cb0-26bc155c8050",
@@ -1030,7 +1250,7 @@
           "examples": [
             {
               "en": "We had lived in Hue before 1975.",
-              "vi": ""
+              "vi": "Chúng tôi đã từng sống ở Huế trước năm 1975."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì quá khứ hoàn thành / Tiền quá khứ (The Past Perfect Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -1078,7 +1298,36 @@
               "id": "TENSE_PAST_PERF_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một hành động đã xảy ra và hoàn tất TRƯỚC một hành động khác hoặc trước một mốc thời gian trong quá khứ.",
+            "timeline": "Trước một thời điểm / Hành động Quá khứ",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + had + V3/ed",
+                "example": "The train had left before we arrived at the station."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + hadn't + V3/ed",
+                "example": "She hadn't completed the report before the deadline."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Had + S + V3/ed?",
+                "example": "Had you lived here before you moved to Tokyo?"
+              }
+            ],
+            "signals": [
+              "before + Quá khứ đơn",
+              "after + Quá khứ hoàn thành",
+              "by the time + Quá khứ đơn",
+              "as soon as"
+            ],
+            "examTip": "Công thức nhớ nhanh: 'Before + Quá khứ đơn, Quá khứ hoàn thành' và 'After + Quá khứ hoàn thành, Quá khứ đơn'."
+          },
+          "title": "Thì quá khứ hoàn thành / Tiền quá khứ"
         },
         {
           "id": "97c9789a-4040-5ea5-a3e5-0f2564470536",
@@ -1095,7 +1344,7 @@
           "examples": [
             {
               "en": "The men had been playing cards for 3 hours before I came.",
-              "vi": ""
+              "vi": "Mấy người đàn ông đã chơi bài suốt 3 tiếng trước khi tôi đến."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì quá khứ hoàn thành tiếp diễn (The Past Perfect Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -1134,7 +1383,35 @@
               "id": "TENSE_PAST_PERF_CONT_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Nhấn mạnh tính liên tục của một hành động bắt đầu và kéo dài liên tục trước một hành động khác trong quá khứ.",
+            "timeline": "Liên tục kéo dài trước Quá khứ",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + had been + V-ing",
+                "example": "He was exhausted because he had been driving for eight hours."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + hadn't been + V-ing",
+                "example": "They hadn't been waiting long before the bus came."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Had + S + been + V-ing?",
+                "example": "How long had you been studying before the exam?"
+              }
+            ],
+            "signals": [
+              "had been V-ing for ... before ...",
+              "until that day",
+              "by the time"
+            ],
+            "examTip": "Khác với Quá khứ hoàn thành đơn thuần (nhấn mạnh kết quả), thì này tập trung làm nổi bật sự kéo dài và lý do gây ra hệ quả ở quá khứ."
+          },
+          "title": "Thì quá khứ hoàn thành tiếp diễn"
         },
         {
           "id": "cb18128a-2a56-52c4-8761-5122d6165078",
@@ -1186,31 +1463,36 @@
           "examples": [
             {
               "en": "He will come back next week.",
-              "vi": ""
+              "vi": "Anh ấy sẽ quay trở lại vào tuần tới."
             },
             {
               "en": "I think Liverpool will win.",
-              "vi": ""
+              "vi": "Tôi nghĩ rằng đội Liverpool sẽ giành chiến thắng."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì tương lai đơn (The Simple Future Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. + V (bare-inf.)",
-              "badge": "QUY TẮC SỬ DỤNG",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
+              "badge": "CÔNG THỨC & CẤU TRÚC",
               "formulas": [
                 {
-                  "text": "\\* Thể phủ định: S + will/ shall + not + V(bare-inf.)",
-                  "type": "Phủ định (-)"
+                  "type": "Khẳng định (+)",
+                  "text": "S + will / shall + V(bare-infinitive)"
                 },
                 {
-                  "text": "\\* Thể nghi vấn: Will/ Shall + S + V(bare-inf)...?",
-                  "type": "Nghi vấn (?)"
+                  "type": "Phủ định (-)",
+                  "text": "S + will not (won't) / shall not + V(bare)"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Will / Shall + S + V(bare)?"
                 }
               ],
               "rules": [],
               "bullets": [
-                "will not = won’t shall not = shan’t"
+                "Trong tiếng Anh hiện đại, **will** được dùng cho mọi ngôi chủ ngữ.",
+                "**Shall** chỉ thường được dùng với ngôi **I** và **We** trong câu đề nghị hoặc xin ý kiến ('Shall we go?')."
               ],
               "notes": [],
               "tables": [],
@@ -1254,7 +1536,39 @@
               "id": "TENSE_FUT_SIMPLE_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả quyết định tức thì ngay lúc nói, lời hứa, lời đe dọa, hoặc dự đoán chủ quan không có căn cứ hiện tại.",
+            "timeline": "Tương lai / Quyết định tức thời",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + will + V(bare)",
+                "example": "I'm cold. I will close the window."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + will not (won't) + V(bare)",
+                "example": "I promise I won't tell anyone your secret."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Will + S + V(bare)? | Shall I/we + V?",
+                "example": "Will you help me carry this suitcase?"
+              }
+            ],
+            "signals": [
+              "tomorrow",
+              "next week/month/year",
+              "in 2 days",
+              "I think",
+              "I hope",
+              "I promise",
+              "probably"
+            ],
+            "examTip": "Không dùng 'will' trong các mệnh đề trạng ngữ chỉ thời gian bắt đầu bằng: when, as soon as, until, before, after (thay bằng Hiện tại đơn)."
+          },
+          "title": "Thì tương lai đơn"
         },
         {
           "id": "a70a252f-08aa-5099-96ca-e300f8456a3b",
@@ -1281,17 +1595,33 @@
           "examples": [
             {
               "en": "My father is retiring.",
-              "vi": ""
+              "vi": "Bố tôi sắp sửa nghỉ hưu."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Tương lai gần (Near Future). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. Cấu trúc (Form)",
+              "title": "1. Cấu trúc chuẩn 3 thể (Form & Structure)",
               "badge": "CÔNG THỨC & CẤU TRÚC",
-              "formulas": [],
+              "formulas": [
+                {
+                  "type": "Khẳng định (+)",
+                  "text": "S + am / is / are + going to + V(bare-infinitive)"
+                },
+                {
+                  "type": "Phủ định (-)",
+                  "text": "S + am / is / are + not + going to + V(bare)"
+                },
+                {
+                  "type": "Nghi vấn (?)",
+                  "text": "Am / Is / Are + S + going to + V(bare)?"
+                }
+              ],
               "rules": [],
-              "bullets": [],
+              "bullets": [
+                "Động từ sau **going to** luôn luôn ở dạng nguyên mẫu không 'to' (**V-bare**).",
+                "Trợ động từ **To Be (am/is/are)** biến đổi linh hoạt theo chủ ngữ."
+              ],
               "notes": [],
               "tables": [],
               "paragraphs": [
@@ -1301,26 +1631,7 @@
               "order": 1
             },
             {
-              "title": "2. + going to + V(bare-inf)",
-              "badge": "QUY TẮC SỬ DỤNG",
-              "formulas": [
-                {
-                  "text": "+ V-ing",
-                  "type": "Khẳng định (+)"
-                }
-              ],
-              "rules": [],
-              "bullets": [],
-              "notes": [],
-              "tables": [],
-              "paragraphs": [
-                "(sắp sửa)"
-              ],
-              "id": "TENSE_NEAR_FUT_sec_2",
-              "order": 2
-            },
-            {
-              "title": "3. Cách dùng (Usage)",
+              "title": "2. Cách dùng (Usage)",
               "badge": "CÁCH DÙNG & TÌNH HUỐNG",
               "formulas": [],
               "rules": [],
@@ -1336,7 +1647,36 @@
               "id": "TENSE_NEAR_FUT_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một dự định, kế hoạch đã được sắp xếp từ trước, hoặc dự đoán chắc chắn xảy ra dựa trên dấu hiệu/bằng chứng ở hiện tại.",
+            "timeline": "Tương lai có kế hoạch / Bằng chứng rõ ràng",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + am / is / are + going to + V(bare)",
+                "example": "Look at those dark clouds! It is going to rain."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + am / is / are + not + going to + V(bare)",
+                "example": "We are not going to attend the party tonight."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Am / Is / Are + S + going to + V(bare)?",
+                "example": "Are you going to buy that house?"
+              }
+            ],
+            "signals": [
+              "in the future",
+              "tonight",
+              "next weekend",
+              "dấu hiệu nhìn thấy tận mắt (Look at...!)"
+            ],
+            "examTip": "Phân biệt Will vs Be going to: 'Will' = quyết định chớp nhoáng không tính trước; 'Be going to' = đã lên kế hoạch hoặc có bằng chứng thực tế trước mắt."
+          },
+          "title": "Tương lai gần"
         },
         {
           "id": "7bbef7f0-608a-54d8-bcd7-84b59846fc67",
@@ -1363,15 +1703,15 @@
           "examples": [
             {
               "en": "Andrew can’t go to the party.",
-              "vi": ""
+              "vi": "Andrew không thể đi dự tiệc được."
             },
             {
               "en": "He’ll be working all day tomorrow.",
-              "vi": ""
+              "vi": "Cậu ấy sẽ phải làm việc suốt cả ngày mai."
             },
             {
               "en": "He will be doing research at this time tomorrow.",
-              "vi": ""
+              "vi": "Vào thời điểm này ngày mai anh ấy sẽ đang làm nghiên cứu."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì tương lai tiếp diễn (The Future Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -1414,7 +1754,35 @@
               "id": "TENSE_FUT_CONT_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một hành động sẽ đang diễn ra tại một thời điểm hoặc trong một khoảng thời gian xác định trong tương lai.",
+            "timeline": "Đang diễn ra tại điểm thời gian Tương lai",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + will be + V-ing",
+                "example": "This time next week, I will be lying on a beach in Da Nang."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + won't be + V-ing",
+                "example": "She won't be attending the meeting at 9 AM tomorrow."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Will + S + be + V-ing?",
+                "example": "Will you be using your laptop this afternoon?"
+              }
+            ],
+            "signals": [
+              "at this time tomorrow",
+              "at 10 AM next Monday",
+              "this time next week"
+            ],
+            "examTip": "Dùng để diễn tả một hành động tương lai nằm trong lịch trình thường lệ hoặc để hỏi lịch trình người khác một cách lịch sự."
+          },
+          "title": "Thì tương lai tiếp diễn"
         },
         {
           "id": "39030759-5e80-5ad6-b90a-a246786e25e7",
@@ -1441,11 +1809,11 @@
           "examples": [
             {
               "en": "I’ll have finished my work by noon.",
-              "vi": ""
+              "vi": "Tôi sẽ hoàn tất công việc của mình trước buổi trưa."
             },
             {
               "en": "When you come back, I’ll have written this letter.",
-              "vi": ""
+              "vi": "Khi bạn quay lại, tôi sẽ đã viết xong lá thư này."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì tương lai hoàn thành (The Future Perfect Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -1494,7 +1862,35 @@
               "id": "TENSE_FUT_PERF_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Diễn tả một hành động sẽ hoàn tất TRƯỚC một thời điểm hoặc trước một hành động khác trong tương lai.",
+            "timeline": "Hoàn tất trước một mốc Tương lai",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + will have + V3/ed",
+                "example": "By the end of this year, we will have completed the project."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + won't have + V3/ed",
+                "example": "They won't have finished the bridge before next summer."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Will + S + have + V3/ed?",
+                "example": "Will you have graduated by 2026?"
+              }
+            ],
+            "signals": [
+              "by + mốc thời gian tương lai (by tomorrow, by 2030)",
+              "by the time + Hiện tại đơn",
+              "before + tương lai"
+            ],
+            "examTip": "Công thức kinh điển: 'By the time + S + V(hiện tại đơn), S + will have + V3/ed'."
+          },
+          "title": "Thì tương lai hoàn thành"
         },
         {
           "id": "43c8255c-4c1b-590e-810b-cb031add9fe8",
@@ -1511,7 +1907,7 @@
           "examples": [
             {
               "en": "By November, we’ll have been living in this house for 10 years.",
-              "vi": ""
+              "vi": "Tính đến tháng 11, chúng tôi sẽ đã sống ở căn nhà này tròn 10 năm."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thì tương lai hoàn thành tiếp diễn (The Future Perfect Continuous Tense). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -1576,7 +1972,34 @@
               "id": "TENSE_FUT_PERF_CONT_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "cheatSheet": {
+            "concept": "Nhấn mạnh khoảng thời gian kéo dài của một hành động tính tới một mốc thời gian xác định trong tương lai.",
+            "timeline": "Tính độ dài thời gian đến mốc Tương lai",
+            "formulas": [
+              {
+                "type": "(+) Khẳng định",
+                "text": "S + will have been + V-ing",
+                "example": "By next month, I will have been working here for ten years."
+              },
+              {
+                "type": "(-) Phủ định",
+                "text": "S + won't have been + V-ing",
+                "example": "He won't have been studying long enough by then."
+              },
+              {
+                "type": "(?) Nghi vấn",
+                "text": "Will + S + have been + V-ing?",
+                "example": "How long will you have been living here by next year?"
+              }
+            ],
+            "signals": [
+              "by the time + S + V(hiện tại) + for + khoảng thời gian",
+              "by next year + for ... years"
+            ],
+            "examTip": "Thì này luôn kết hợp 2 yếu tố: mốc thời gian tương lai ('by...') và độ dài thời gian tích lũy ('for...')."
+          },
+          "title": "Thì tương lai hoàn thành tiếp diễn"
         }
       ],
       "exercises": [
@@ -3089,7 +3512,7 @@
           "examples": [
             {
               "en": "People have said that London has fog.",
-              "vi": ""
+              "vi": "Mọi người nói rằng London thường có sương mù."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Sự phối hợp trong mệnh đề chính và mệnh đề phụ (Main Clause and Subordinate Clause). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -3137,7 +3560,8 @@
               "id": "SEQ_MAIN_SUB_sec_1",
               "order": 1
             }
-          ]
+          ],
+          "title": "Sự phối hợp trong mệnh đề chính và mệnh đề phụ"
         },
         {
           "id": "30a59ac4-2902-5640-8525-2796a993e1a0",
@@ -3204,11 +3628,11 @@
           "examples": [
             {
               "en": "He never goes home before he has finished his work.",
-              "vi": ""
+              "vi": "Anh ấy không bao giờ về nhà trước khi hoàn tất công việc."
             },
             {
               "en": "She has played the piano since she was ten years old.",
-              "vi": ""
+              "vi": "Cô ấy đã chơi đàn dương cầm từ khi mới 10 tuổi."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Sự phối hợp trong mệnh đề chính và mệnh đề trạng ngữ chỉ thời gian (Main Clause and Adverbial Clause of Time). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -3297,7 +3721,8 @@
               "id": "SEQ_TIME_CLAUSES_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "title": "Sự phối hợp trong mệnh đề chính và mệnh đề trạng ngữ chỉ thời gian"
         }
       ],
       "exercises": [
@@ -4183,23 +4608,23 @@
           "examples": [
             {
               "en": "If I have time, I’ll help you.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề chỉ điều kiện."
             },
             {
               "en": "If you don’t study hard, you’ll fail in the exam.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề chỉ điều kiện."
             },
             {
               "en": "If I have time, I’ll help you.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề chỉ điều kiện."
             },
             {
               "en": "If you should run into Peter, tell him he owes me a letter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề chỉ điều kiện."
             },
             {
               "en": "In case I forget, please remind me of my promise.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề chỉ điều kiện."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mệnh đề chỉ điều kiện (Clauses of Condition). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -4333,7 +4758,8 @@
               "id": "CLAUSE_CONDITION_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "title": "Mệnh đề chỉ điều kiện"
         },
         {
           "id": "f6b13b12-ec08-5350-8510-7d9548ff3375",
@@ -4375,21 +4801,21 @@
           "examples": [
             {
               "en": "I wish it would stop raining!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau Wish, If Only."
             },
             {
               "en": "I wish I was/ were rich. (But I am poor now.) I can’t swim.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau Wish, If Only."
             },
             {
               "en": "I wish I could swim.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau Wish, If Only."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mệnh đề sau Wish, If Only (Clauses after Wish, If Only). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (MỆNH ĐỀ SAU *WISH, IF ONLY*)",
+              "title": "1. MỆNH ĐỀ SAU *WISH, IF ONLY*",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -4523,7 +4949,8 @@
               "id": "CLAUSE_WISH_sec_7",
               "order": 7
             }
-          ]
+          ],
+          "title": "Mệnh đề sau Wish, If Only"
         },
         {
           "id": "7b31dbe0-5f6c-5fb2-a470-c632168a17d0",
@@ -4565,31 +4992,31 @@
           "examples": [
             {
               "en": "I try to study to pass my next exam.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "I try all my best to study English in order that I can find a better job.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "Mary gets up early every morning.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "She wants to learn her lessons.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "He gave me his address in order for me to visit him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "We hurried to school so as not to be late.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             },
             {
               "en": "She studies English so that...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ mục đích."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cụm từ và mệnh đề chỉ mục đích (Phrases and Clauses of Purpose). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -4681,7 +5108,7 @@
               "order": 4
             },
             {
-              "title": "5. + V (bare-inf.)",
+              "title": "5. Cấu trúc nguyên mẫu V(bare)",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -4858,7 +5285,8 @@
               "id": "CLAUSE_PURPOSE_sec_9",
               "order": 9
             }
-          ]
+          ],
+          "title": "Cụm từ và mệnh đề chỉ mục đích"
         },
         {
           "id": "d2450053-6a9c-5196-8dc1-c42e9b9726d1",
@@ -4925,35 +5353,35 @@
           "examples": [
             {
               "en": "He is too short to play basketball.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "Mary isn’t old enough to drive a car.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "It was so dark that I couldn’t see anything.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "The little girl looks so unhappy that we all feel sorry for her.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "The Smiths had so many children that they formed their own baseball team.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "He has invested so much money in the project that he can’t abandon it now.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "It was so hot a day that we decided to stay indoors.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             },
             {
               "en": "It was such a hot day that we decided to stay at home.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ kết quả."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cụm từ và mệnh đề chỉ kết quả (Phrases and Clauses of Result). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -5096,7 +5524,8 @@
               "id": "CLAUSE_RESULT_sec_4",
               "order": 4
             }
-          ]
+          ],
+          "title": "Cụm từ và mệnh đề chỉ kết quả"
         },
         {
           "id": "df1f9c6e-80c4-53df-ae1d-5f77d46bf455",
@@ -5118,19 +5547,19 @@
           "examples": [
             {
               "en": "The students arrived late because of/ due to the traffic jam.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ lý do."
             },
             {
               "en": "He came ten minutes late because he missed the first bus.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ lý do."
             },
             {
               "en": "Since/ As he missed the first bus, he came ten minutes late.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ lý do."
             },
             {
               "en": "She was worried because it started to rain.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ lý do."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cụm từ và mệnh đề chỉ lý do (Phrases and Clauses of Reason). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -5193,7 +5622,8 @@
               "id": "CLAUSE_REASON_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Cụm từ và mệnh đề chỉ lý do"
         },
         {
           "id": "70508f51-c2e6-5854-8eec-cbec846605b6",
@@ -5215,19 +5645,19 @@
           "examples": [
             {
               "en": "Despite his physical handicap, he has become a successful businessman.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ sự nhượng bộ."
             },
             {
               "en": "Although the weather was very bad, we had a picnic.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ sự nhượng bộ."
             },
             {
               "en": "We took many pictures though the sky was cloudy.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ sự nhượng bộ."
             },
             {
               "en": "No matter who you are, I still love you.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cụm từ và mệnh đề chỉ sự nhượng bộ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cụm từ và mệnh đề chỉ sự nhượng bộ (Phrases and Clauses of Concession). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -5293,7 +5723,8 @@
               "id": "CLAUSE_CONCESSION_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Cụm từ và mệnh đề chỉ sự nhượng bộ"
         },
         {
           "id": "58b2c554-c4af-5029-96c6-a732396b109b",
@@ -5350,35 +5781,35 @@
           "examples": [
             {
               "en": "The old lady dresses as if it was/ were winter even in the summer. (But it is not winter.) He behaves as though he owned the place. (But he doesn’t own it.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "Tom looked tired as if he had worked very hard. (But he didn’t work hard.) The child ate as though he had been hungry for a long time.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "It’s time you started to work.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "It’s time for her to go to bed.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "I would rather you went home now. (NOT ~~I would rather you go home now~~.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "Roberto would rather we hadn’t left yesterday. (We left yesterday.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "I would rather stay at home tonight.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             },
             {
               "en": "John would rather have gone to class yesterday than today.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề sau As If, As Though, It's Time, Would Rather."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mệnh đề sau As If, As Though, It's Time, Would Rather (Clauses after As If, As Though, It's High Time, Would Rather). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -5416,7 +5847,7 @@
               "order": 2
             },
             {
-              "title": "3. +",
+              "title": "3. Cấu trúc bổ sung",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [
                 {
@@ -5619,7 +6050,8 @@
               "id": "CLAUSE_AS_IF_TIME_RATHER_sec_11",
               "order": 11
             }
-          ]
+          ],
+          "title": "Mệnh đề sau As If, As Though, It's Time, Would Rather"
         },
         {
           "id": "d11ac599-a7fb-5863-a4eb-e12f2b4a00bf",
@@ -5656,25 +6088,25 @@
           "examples": [
             {
               "en": "What he said was not true.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề danh từ."
             },
             {
               "en": "I’ll tell you where she is.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề danh từ."
             },
             {
               "en": "I consider him what a man should be.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề danh từ."
             },
             {
               "en": "It all depends on when you come.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề danh từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mệnh đề danh từ (Noun Clauses). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (MỆNH ĐỀ DANH TỪ)",
+              "title": "1. MỆNH ĐỀ DANH TỪ",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -5754,7 +6186,8 @@
               "id": "CLAUSE_NOUN_sec_5",
               "order": 5
             }
-          ]
+          ],
+          "title": "Mệnh đề danh từ"
         },
         {
           "id": "7394aa4c-482c-555d-88cb-30186a9943db",
@@ -5811,93 +6244,93 @@
           "examples": [
             {
               "en": "The man who is standing over there is Mr.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The woman whom/ who you saw yesterday is my aunt.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "This is the book which I like best.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "That is the book that/ which I like best.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "I can see a girl and her dog that are running in the park.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The boy whose bicycle you borrowed yesterday is Tom.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "May Day is the day when (on which) people hold a meeting.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "That was the time when (at which) he managed the company.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "Do you know the country where (in which) I was born?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "Please tell me the reason why (for which) you are so sad.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man who keeps the school library is Mr Green.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "That man, whom you saw yesterday, is Mr Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man to whom Mary is talking is Mr Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man Mary is talking to is Mr Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man that/ who Mary is talking to is Mr Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "This is the book which I’m looking for.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man whom Mary is talking to is Mr Pike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The man who is sitting next to you is my uncle.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "The books which were written by To Hoai are interesting.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             },
             {
               "en": "English is an important language which we have to master.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mệnh đề quan hệ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mệnh đề quan hệ (Relative Clauses). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (MỆNH ĐỀ QUAN HỆ)",
+              "title": "1. MỆNH ĐỀ QUAN HỆ",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -6214,7 +6647,8 @@
               "id": "CLAUSE_RELATIVE_sec_8",
               "order": 8
             }
-          ]
+          ],
+          "title": "Mệnh đề quan hệ"
         }
       ],
       "exercises": [
@@ -7839,15 +8273,15 @@
           "examples": [
             {
               "en": "I want some milk.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Some / Any (một ít, một vài)."
             },
             {
               "en": "Would you like some more coffee?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Some / Any (một ít, một vài)."
             },
             {
               "en": "Do you want any sugar?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Some / Any (một ít, một vài)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Some / Any (một ít, một vài) (Some / Any). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -7912,7 +8346,8 @@
               "id": "QUANT_SOME_ANY_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "title": "Some / Any (một ít, một vài)"
         },
         {
           "id": "5b31edb8-b75e-5dce-9c50-1f7eb4e8ce9c",
@@ -7939,15 +8374,15 @@
           "examples": [
             {
               "en": "Most children are fond of sweets.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Most / Most of (phần lớn, đa số)."
             },
             {
               "en": "Most of these students are intelligent.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Most / Most of (phần lớn, đa số)."
             },
             {
               "en": "Most boys and girls have given thought to their future job.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Most / Most of (phần lớn, đa số)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Most / Most of (phần lớn, đa số) (Most / Most of). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -8017,7 +8452,8 @@
               "id": "QUANT_MOST_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Most / Most of (phần lớn, đa số)"
         },
         {
           "id": "2cf08cef-98d1-569a-9196-9c04e56e733a",
@@ -8044,13 +8480,13 @@
           "examples": [
             {
               "en": "I don’t have much time for night clubs.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Much, Many, A great deal of, A lot of (nhiều)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Much, Many, A great deal of, A lot of (nhiều) (Much, Many, A great deal of, A large number of, A lot of). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (Với các danh từ không đếm được)",
+              "title": "1. Với các danh từ không đếm được",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -8067,7 +8503,7 @@
               "order": 1
             },
             {
-              "title": "2. (Với các danh từ đếm được)",
+              "title": "2. Với các danh từ đếm được",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -8105,7 +8541,8 @@
               "id": "QUANT_MUCH_MANY_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Much, Many, A great deal of, A lot of (nhiều)"
         },
         {
           "id": "86c3559b-3010-5862-9818-a6df5c203259",
@@ -8132,19 +8569,19 @@
           "examples": [
             {
               "en": "I don’t want to take the trip to Hue because I have few friends there.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Few, A Few, Little, A Little (ít, một ít, một vài)."
             },
             {
               "en": "You can see a few houses on the hill.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Few, A Few, Little, A Little (ít, một ít, một vài)."
             },
             {
               "en": "There was little doubt in my mind.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Few, A Few, Little, A Little (ít, một ít, một vài)."
             },
             {
               "en": "I have very little time for reading.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Few, A Few, Little, A Little (ít, một ít, một vài)."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Few, A Few, Little, A Little (ít, một ít, một vài) (Few, A Few, Little, A Little). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -8204,7 +8641,8 @@
               "id": "QUANT_FEW_LITTLE_sec_1",
               "order": 1
             }
-          ]
+          ],
+          "title": "Few, A Few, Little, A Little (ít, một ít, một vài)"
         }
       ],
       "exercises": [
@@ -9440,41 +9878,41 @@
           "examples": [
             {
               "en": "There is a determination to overcome problems.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "We had a look at the picture.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "We looked at the picture.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "Mary has finished her homework.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "He is a careful driver.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "He drives carefully.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "Adj Adv.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             },
             {
               "en": "He has a strong desire to become a doctor.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các cách diễn đạt câu văn."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Các cách diễn đạt câu văn (Stylistic Sentence Patterns). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (VĂN PHONG)",
+              "title": "1. VĂN PHONG",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -9561,7 +9999,8 @@
               "id": "STYLE_PATTERNS_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Các cách diễn đạt câu văn"
         },
         {
           "id": "40b2acc2-bb2d-573e-a4f4-60af6fef73ff",
@@ -9848,7 +10287,8 @@
               "id": "STYLE_VERB_NOUN_PAIRS_sec_1",
               "order": 1
             }
-          ]
+          ],
+          "title": "Một số từ được sử dụng dưới dạng động từ và danh từ"
         }
       ],
       "exercises": [
@@ -10499,7 +10939,8 @@
               "id": "EMPH_PRONUNCIATION_sec_1",
               "order": 1
             }
-          ]
+          ],
+          "title": "Nhấn mạnh trong phát âm"
         },
         {
           "id": "2111a05f-e5ad-5f5a-9eac-5484c2fa7bd9",
@@ -10561,59 +11002,59 @@
           "examples": [
             {
               "en": "John visited her yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "John did visit her yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Travelling by air is fast.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "It is fast to travel by air.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Ted himself broke the news to me.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Rarely has a new film produced such positive reviews.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "England won the World – Cup in 1966.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "I need water.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "I don’t need milk.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "It is water, not milk that I need.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Listen to me, please.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Do listen to me, please.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Don’t talk in class.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             },
             {
               "en": "Don’t you talk in class.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Nhấn mạnh trong cách viết."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Nhấn mạnh trong cách viết (Emphasis in Writing (Verbs, Adjectives, Cleft Sentences, Commands)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -10746,7 +11187,8 @@
               "id": "EMPH_WRITING_sec_7",
               "order": 7
             }
-          ]
+          ],
+          "title": "Nhấn mạnh trong cách viết"
         }
       ],
       "exercises": [
@@ -11237,263 +11679,263 @@
           "examples": [
             {
               "en": "man, country, city,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "John, England, Paris,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "health, beauty, democracy,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "crowd *(đám đông),* army *(quân đội),* class *(giai cấp),...*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "book, student, idea,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "water, grass, information,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The Smiths *(gia đình Smith)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The children have gone to bed.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "You did such splendid work.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "He is my closest friend.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "They elected him president of the club.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "He spoke in a different tone.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "He told us about his father, a teacher, who died in the war.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The girl is singing. (singular) The girls are singing. (plural).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "boy boys, hat hats.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "There are two 9’s in 99.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "dish dishes, church churches, box boxes.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "cups, cats, books, cloths ...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "watches, boxes, bridges,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "lady ladies, story stories, key keys,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Mary Marys, Murphy Murphys.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "wife wives, calf calves, thief thieves Danh từ kết thúc bằng **f, fe** khác về số nhiều chỉ thêm **s**.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Ex: roof roofs, cliff cliffs.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "scarf scarfs, scarves dwarf dwarfs, dwarves.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "radio radios, piano pianos.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "formula formulae alumna alumnae.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "focus foci alumnus alumni.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "bacterium bacteria curriculum curricula dictum dicta.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "criterion criteria phenomenon phenomena.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "dogma dogmata stigma stigmata",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "basis bases crisis crises.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "brother brothers *(anh em ruột thịt);* brethen *(đồng đội, đồng đạo)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "toothbrush toothbrushes horseman horsemen.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "brother-in-law brothers-in-law passer-by passers-by.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "army, police, cattle, people, government, team, family,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "means, measles, news, the United States, mathematics, physics,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "My best friend and adviser, Tom, is coming tonight.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Every article in this newspaper is very interesting Each of the children has a toy.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Each boy and each girl has a book.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Everything looks bright and clean.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Physics is more difficult than chemistry.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The furniture was more expensive than we thought.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Four weeks is a long time to wait to hear from him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "“Tom and Terry” is very well known all over the world.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "That you get very high grades in school is necessary.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The police have arrested the thieves.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Some books I read yesterday are famous.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Not only my brother but also my sister is here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The number of students in this class is small.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "None of the boys are good at English.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "No example is relevant to this case.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "There is a fly in this room.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The boy’s book = The book of the boy Tom’s house = The house of Tom.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The boys’ house = The house of the boys.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The men’s room = The room of the men.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "This isn’t my book.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "It’s my brother’s. (my brother’s book.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The roof of the garage, (không dùng *the garage’s roof*).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The back of the car.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The government’s decision *hoặc* The decision of the government.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "The city’s new theatre.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Jace and Jill’s wedding.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "Have you still got yesterday’s newspaper?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "I’ve got a week’s holiday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             },
             {
               "en": "We saw a play of Shaw’s. (We saw one of Shaw’s plays.)",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Danh từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Danh từ (Nouns & Subject-Verb Agreement). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -12249,7 +12691,8 @@
               "id": "POS_NOUNS_sec_32",
               "order": 32
             }
-          ]
+          ],
+          "title": "Danh từ"
         },
         {
           "id": "0287124a-5921-5306-a517-776d7db34164",
@@ -12421,215 +12864,215 @@
           "examples": [
             {
               "en": "They called us on the telephone.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "The teacher gave her a bad grade.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I tried the door.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "It was locked.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "There was a knock at the door.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I thought it was the postman.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "He usually comes at that time.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "He tried to break the clock.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "It was not easy either.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "It is raining heavily.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "It is stupid to fall asleep like that.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I found it difficult to explain this to him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "It was my question that made him angry.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Hang it all, we can’t wait all day for him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "She put her arm through mine. (= my arm).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "John bought him a new can (him = another person) John bought himself a new car. (himself = John).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "She served herself in the cafeteria.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "You yourself told them the story.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "John washed the dishes by himself =John washed the dishes alone.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Do you know these people? This is Harry and this is Jake. “Look at this ” he said and showed me his tie.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "After I’ve listened to you very attentively.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I’ll tell you this - I don’t think you should trust the man.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Father had to go to Chicago this morning.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "He hung his daughter’s portrait beside that of his wife’s.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Those (= people) injured in the accident were taken to hospital.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "If I were you, I would not say such a thing about him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "They export a lot of fruits, such as oranges, lemons, etc.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I found her just the same as before.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "There’s somebody at the door.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "What’s wrong with you? Have you got something in your eyes? (I see something in your eyes).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Would you like something to drink?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Is there anybody in the room?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "If anyone has any questions, I’ll be pleased to answer them.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "“What did you say?” “Nothing”",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "She didn’t tell anybody about her plans. (= She told nobody...).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "The house is empty.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "There’s nobody living there.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "He said nothing.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Nobody phoned, did they?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Some of the people I work with are very friendly.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "How many of these people do you know? None of them/ A few of them.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Both of these restaurants are very good.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Both my parents are from London.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Both of us were very tired.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Neither of the children wants/ want to go to bed.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I couldn’t decide which of the two shirts to buy.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "I like both.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "We tried two hotels.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Neither of them had any rooms./ Both of them were full.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "We tried a lot of hotels.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "None of them had any rooms./ All of them were full.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "Everybody enjoyed the party. (NOT ~~All enjoyed the party~~.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             },
             {
               "en": "All of the women in this factory are working.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Đại từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Đại từ (Pronouns). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -13008,7 +13451,8 @@
               "id": "POS_PRONOUNS_sec_14",
               "order": 14
             }
-          ]
+          ],
+          "title": "Đại từ"
         },
         {
           "id": "b26602cc-7581-5a08-a346-73dd9f620ea7",
@@ -13175,159 +13619,159 @@
           "examples": [
             {
               "en": "good, bright, tall,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "This is my hand.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "I don’t like those people.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "much time, little money.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "many friends, few cars.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "a lot of luck, a lot of friends; lots of time, lots of people; plenty of money, plenty of ideas.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "We didn’t spend much money.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "We spent a lot of money.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "There are too many people here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Let’s go and have a drink.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "We’ve got a little time before the train leaves. (= some time) I enjoy my life here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "I have a few friends and we meet quite often. (= some friends).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Every/ Each time I see you, you look different.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Study each sentence carefully.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Every sentence must have a verb.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "There were four books on the table.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Each book has a different colour.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "I’d like to visit every county in the country.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "In a football match, each team has 11 players.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "There’s a bus every ten minutes.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "The insurance office was on the other side of the street.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "When I returned home I found my wife talking to our neighbour.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "The other guests had gone.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Both men were interested in the job.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Somebody is bored if something is boring.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "If something is boring, it makes you bored.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Julia thinks politics is very interesting.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Julia is very interested in politics.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "We took a tour that lasted five weeks.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "He is a nice man.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "I’ll tell you something interesting.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "My father, happy and tired, kissed me good night.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "The weather becomes cold.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "She wore her hair short.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "Her hair was dyed blonde.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "A nice long summer holiday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "a small black plastic bag. an old Russian song.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "a tall thin girl.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             },
             {
               "en": "a black and white dress.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Tính từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Tính từ (Adjectives). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -13722,7 +14166,8 @@
               "id": "POS_ADJECTIVES_sec_7",
               "order": 7
             }
-          ]
+          ],
+          "title": "Tính từ"
         },
         {
           "id": "91eacf77-5dd6-5b7f-b850-db0513a42512",
@@ -13764,87 +14209,87 @@
           "examples": [
             {
               "en": "hard *(chăm chỉ, siêng năng),* fast *(nhanh),* early *(sớm),* late *(trễ)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "I’m not surprised he didn’t find a job.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "He hardly tried to find one.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "He has come to see me lately. *(Gần đây anh ấy có đến thăm tôi.)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "Can you do it now?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "She came here just a few minutes ago.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "He always does his work well.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "She has never done that before.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "He is constantly in debt.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "I’m very pleased with your success.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "Why did you say that?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "He speaks English fluently.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "I led a very pleasant life there.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "She acts too badly.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "Luckily, he passed the final examination.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "“Will he do it?” “I think so.”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "I told him to come and see me the next day, and he did so.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "My brother is fond of pop-music and so is his wife.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "Never does my father drink coffee in the evening. *(Không bao giờ bố tôi uống cà phê vào buổi tối.)* Twice within in my lifetime have world wars taken. *(Hai lần trong đời tôi đã chứng kiến thế chiến diễn ra.)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "In no circumstances would I agree to such a proposal *(Không đời nào tôi lại đi chấp thuận một đề nghị như thế.)* Nowhere else will you find such a kind man.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             },
             {
               "en": "Only with the full agreement of everyone can we hope to succeed.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Trạng từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Trạng từ (Adverbs & Inversion). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -14187,7 +14632,8 @@
               "id": "POS_ADVERBS_sec_12",
               "order": 12
             }
-          ]
+          ],
+          "title": "Trạng từ"
         },
         {
           "id": "39ed14ea-3ee5-5c52-b57f-da2a35b3651f",
@@ -14324,75 +14770,75 @@
           "examples": [
             {
               "en": "He is as tall as his father.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "His job is not so difficult as mine.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "You are as old as she is./ You are as old as her.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "My house is as high as his.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "My house is the same height as his.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "What would you like to drink? ~ I’ll have the same as you.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "Chú ý các tính từ sau và các danh từ tương ứng của chúng.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "thick thicker, cold colder, quiet quieter",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "more beautiful, more important, more interesting",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "more hated, more useful, more boring, more continuous",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "big bigger, hot hotter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "happy happier, dry drier.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "Today is hotter than yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "Harry’s watch is far more expensive than mine.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "The hotter it is, the more miserable I feel.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "The more you study, the smarter you will become.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "Betty is younger and younger. *(Betty càng ngày càng trẻ ra.)* The river gets bigger and bigger.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             },
             {
               "en": "Her story was more and more attractive.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mức độ so sánh của tính từ và trạng từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Các mức độ so sánh của tính từ và trạng từ (Degrees of Comparison of Adjectives and Adverbs). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -14673,7 +15119,8 @@
               "id": "POS_COMPARISON_sec_11",
               "order": 11
             }
-          ]
+          ],
+          "title": "Các mức độ so sánh của tính từ và trạng từ"
         },
         {
           "id": "53d6b286-f311-500c-a672-db6061df5b45",
@@ -14900,251 +15347,251 @@
           "examples": [
             {
               "en": "The referee blows his whistle.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "My friend, John, has just sent me a postcard.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "We walked across the fields.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "My father is a doctor. “is” chẳng diễn tả được gì rõ rệt nếu không có “doctor” bổ nghĩa cho nó.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The cold is becoming intense. (adj) The clouds look black. (adj).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I can speak English.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I saw her get off the bus.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "She was seen to get off the bus.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "You had better tell him the truth.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Working in these conditions is a pleasure.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The film is so boring.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "To visit her was all that I desired.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "His greatest wish was to tell her everything.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I came to know him well towards the end of the war.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The next day he made sure to buy a copy of the newspaper.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He would be crazy not to do so.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He was eager for me to start on my new job.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I don’t know what to say.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The house to be demolished is very old indeed.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I saved money to buy a bicycle.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Why did he advise me to visit Westminster Abbey?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "To think she met with such a death! *(Ai ngờ nàng lại chết như thế!)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The building of the house will take at least six months.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "My hoppy is rearing chickens.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "We enjoy playing football.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "John gave up smoking because of his doctor’s advice.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Alice is fond of dancing.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He couldn’t help asking me: “Isn’t anything else you can do for her?” I didn’t feel like talking to him after what had happened.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "It’s no use reading this kind of book.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "It was difficult getting him to do it.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "There is no reason for leaving this early.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I felt him looking at me now and again.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He continued to speak while walking down the path.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I hear him come in.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The teacher permitted them to turn the assignments in late.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He was telling me about his hardships.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Generally speaking, I don’t like him at all.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The man talking to you yesterday is my teacher. (= The man who talked...) Look at the cat lying on the floor. (= ...the cat which is lying ...).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I was given a doll on my birthday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "That man has stolen my purse.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Punished yesterday, Tom felt very sad. (= Tom was punished ...).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "The boy given a present is my son. (= The boy who was given ...).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "What an exciting story!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "When I was a child, I would sing folk songs.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He used to swim when he was six.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "My mother is used to getting up early every day.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I would rather go to the cinema than stay at home.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I’d like to tell you something about myself.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "It might/ may/ could rain tomorrow. *(Ngày mai trời có thể mưa.)*.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "I don’t know where Lan is.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Maybe she is in her room.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "You should study hard.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "It should rain tomorrow. (I expect it to rain tomorrow.) My letter should arrive next week.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "An automobile must have gasoline to run.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "John’s lights are out.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "He must be asleep.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "It may have rained last night, but I’m not sure.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "John might have gone to the movies yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "John should have gone to the post office this morning. (He did not go to the post office.) Maria shouldn’t have called John last night. (She did call him.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "Jane did very well on the exam.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "She must have studied hard. (She probably studied hard.) Mary looks very tired.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             },
             {
               "en": "She must have stayed up late last night. (She probably stayed up late.).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Động từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Động từ (Verbs (Infinitives, Gerunds, Participles & Modals)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -15957,7 +16404,8 @@
               "id": "POS_VERBS_sec_21",
               "order": 21
             }
-          ]
+          ],
+          "title": "Động từ"
         },
         {
           "id": "d64f2e9f-b31a-5a6f-9bfe-8c798f26b499",
@@ -16009,11 +16457,11 @@
           "examples": [
             {
               "en": "five thousand books, three hundred cars Hundreds of: hàng trăm.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Số từ."
             },
             {
               "en": "![](data:image/png;base64...): thirteen over four seven.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Số từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Số từ (Numerals). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -16122,7 +16570,8 @@
               "id": "POS_NUMERALS_sec_6",
               "order": 6
             }
-          ]
+          ],
+          "title": "Số từ"
         },
         {
           "id": "e3c50045-3b9b-5d7d-a7a8-59b22b5d0813",
@@ -16849,175 +17298,175 @@
           "examples": [
             {
               "en": "The book is on the table.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "She was absent yesterday because of her illness.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "In addition to the news, TV stations broadcast a lot of other interesting programmes.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "at six o’clock by two o’clock on Tuesday on 20th August.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "after the New Year in the morning for three months.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He stood up to see better.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The little child sat between his mum and dad.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "Share these sweets among the five children.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I’m living at Tan Binh, in Ho Chi Minh City.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He was standing just beside me.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in 1980, in 1870, in 2000.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in June, in May, in August.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in spring, in summer, in winter, in autumn.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in the morning, in the afternoon, in the evening.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He came to the party in time.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in the dinning-room, in the box, in the desk.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "in London, in Paris, in Hanoi in Vietnam in England, in French.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "on Sunday, on Monday, on Tuesday,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "My birthday is on June 10th.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The film was shown on time.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "There is a book on the table.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I often go to school on foot.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The letter was written by Mary.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I often go to school by bicycle.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I have to finish this report by Thursday. by the time : trước khi.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I’m going to the cinema now.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "My father used to take me to the circus when we lived in London.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I’m going into the dining-room.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The rain changed into snow.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He crashed his car into the wall.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "5 into 25 equals 5 (= 25 devided by 5 equals 5)",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He came out of the house.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "A coat with two pockets.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I often write with a pen.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I’m living with my parents.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "Do you agree with me?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The cat was under the table.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "Children under fourteen years of age shouldn’t see such a film.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "The road is under repair. (= The road is being repaired) They are under discussion. (= They are being discussed).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "I’m tired of doing the same work every day.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "Milk is good for health.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "He is good at English.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             },
             {
               "en": "Mary is kind to me.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Giới từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Giới từ (Prepositions & Phrasal Combinations). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -17781,7 +18230,8 @@
               "id": "POS_PREPOSITIONS_sec_34",
               "order": 34
             }
-          ]
+          ],
+          "title": "Giới từ"
         },
         {
           "id": "550661c3-010e-5944-8e6b-9f23a3506ce5",
@@ -17803,27 +18253,27 @@
           "examples": [
             {
               "en": "On the table for tea there were biscuits and sandwiches.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             },
             {
               "en": "The car was quite old but in excellent condition.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             },
             {
               "en": "Take this book or that one.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             },
             {
               "en": "The rain began to fall, so we went home.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             },
             {
               "en": "He said that he would help us.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             },
             {
               "en": "Ask him when he can come.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Liên từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Liên từ (Conjunctions). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -17992,7 +18442,8 @@
               "id": "POS_CONJUNCTIONS_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Liên từ"
         },
         {
           "id": "77c2ad48-fa00-5935-9e5c-ea6f3f47e002",
@@ -18049,123 +18500,123 @@
           "examples": [
             {
               "en": "A ball is round. nói chung mọi trái bóng đều tròn.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "a book, a pen.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "a house *nhưng* an hour.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "The boy in the comer is my friend.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Sugar is sweet. *(Đường thì ngọt.)*  nói chung chung.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Oranges are green until they ripen. (all oranges).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "The Susan Parker that I know lives on First Avenue.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "We ate breakfast at eight o’clock this morning.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the Red Sea, the Atlantic Ocean, the Persian gulf, the great Lakes.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the Rocky Mountains, the Andes.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the earth, the moon.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the Univeristy of Florida.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the First World War, the third chapter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the Korean war.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the United States, the United Kingdom.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the constitution.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "the Indians.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Lake Geneva, Lake Erie.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "(Mount) Vesuvius, (Mount) McKinley, (Mount) Everest.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Venus, Mars,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Hong Bang college Hung Vuong University.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "World War I, chapter three.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "New Zealand, South Africa.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "France, Sweden, Vietnam,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Europe, Africa, ...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Florida, Ohio, California,...",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "baseball, basket ball.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "freedom, happiness.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Mathematics, sociology.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             },
             {
               "en": "Christmas, Easter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Mạo từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Mạo từ (Articles (A, An, The)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -18595,7 +19046,8 @@
               "id": "POS_ARTICLES_sec_24",
               "order": 24
             }
-          ]
+          ],
+          "title": "Mạo từ"
         }
       ],
       "exercises": [
@@ -19449,175 +19901,175 @@
           "examples": [
             {
               "en": "to conserve conservation to preserve preservation.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "to develop development to employ employment.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "to fertilize fertilizer to do doer.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "to assist assistant to account accountant.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "to teach teaching to poison poisoning.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "to drain drainage to use usage.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "friend friendship scholar scholarship.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "capital capitalism hero heroism.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "possible possibility able ability.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "racial racialism common communism.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "rich richness happy happiness sad sadness cold coldness.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "man superman market supermarket.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "achievement underachievement growth undergrowth.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "face surface name surname.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "way subway continent subcontinent.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "harm harmful use useful success successful hope hopeful help helpful.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "child childless odour odourless tree treeless home homeless.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "man manly brother brotherly world worldly hour hourly.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "child childlike god godlike.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "rain rainy snow snowy.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "fool foolish self selfish.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "magic magical agriculture agricultural industry industrial nature natural.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "poison poisonous nerve nervous.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "act active progress progressive abort abortive attract attractive.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "accept acceptable count countable.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "happy unhappy fortunate unfortunate lucky unlucky forgettable unforgettable.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "direct indirect convenient inconvenient dependent independent formal informal.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "patient impatient possible impossible.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "regular irregular religious irreligious removable irremovation rational irrational.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "legal illegal logical illogical literate illiterate.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "human superhuman natural supernatural.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "cover undercover developed underdeveloped.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "anxious overanxious confident overconfident.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "conscious subconscious.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "man-made hand-made corn-fed snow-covered horse-pulled.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "well-prepared well-known well-done ill-prepared ill-bred ill-judged.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "grow outgrow (lớn hơn, phát triển hơn).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "danger (n) endanger (v) case (n) encase (v).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "act overact stay overstay.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "study understudy write underwrite.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "impose superimpose intend superintend.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "social socialize symbol symbolize.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             },
             {
               "en": "beautiful beautifully careful carefully.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách thành lập từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cách thành lập từ (Word Formations (Prefixes & Suffixes)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -20374,7 +20826,8 @@
               "id": "WORD_FORMATIONS_sec_19",
               "order": 19
             }
-          ]
+          ],
+          "title": "Cách thành lập từ"
         },
         {
           "id": "90baa5a5-a973-5797-8105-c830e9e9c6d8",
@@ -20451,103 +20904,103 @@
           "examples": [
             {
               "en": "Computers are being used in all kinds of work.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "She is a good teacher.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "He didn’t have enough money to buy that car then.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "The scientists have become important people in our society.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "The robbery is under investigation.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "He has a good knowledge of science.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "I don’t get much exercise sitting in the office all day.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Modern society needs engineers.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "She is beautiful.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "We should make our school tidy.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "He is too short to play basketball.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Daisy is too young to drive a car.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "She is tall enough to play volleyball.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "The weather was so bad that we decided to stay at home.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Meat is more expensive than fish.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "How beautiful the girl is!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "The South of Vietnam was completely liberated on April 30, 1975.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "I’m truthfully grateful to you for your help.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "He studied too lazily to pass his exam.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "She came too late to see him yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Jack drove so fast that he caused an accident.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "The doctor told me to breathe in slowly.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "She drives carefully enough to be safe.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Suddenly, he heard a strange voice.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             },
             {
               "en": "Tom’s behaviour improved at his new school.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Hình thức của từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Hình thức của từ (Word Forms (Syntactic Positions)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -21005,7 +21458,8 @@
               "id": "WORD_FORMS_sec_25",
               "order": 25
             }
-          ]
+          ],
+          "title": "Hình thức của từ"
         },
         {
           "id": "b899e3c7-47e3-57b9-9a37-ff28ab2ecc71",
@@ -21202,7 +21656,8 @@
               "id": "WORD_ACRONYMS_sec_1",
               "order": 1
             }
-          ]
+          ],
+          "title": "Từ viết tắt (Acronyms)"
         },
         {
           "id": "d56a8008-455e-5f3b-8e68-7cd4cd411ff9",
@@ -21268,7 +21723,8 @@
               "id": "WORD_IDIOMS_sec_2",
               "order": 2
             }
-          ]
+          ],
+          "title": "Thành ngữ"
         }
       ],
       "exercises": [
@@ -21743,17 +22199,17 @@
           "examples": [
             {
               "en": "The farmer says, “I hope it will rain tomorrow.”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Thay đổi thì, tính từ và trạng từ."
             },
             {
               "en": "“I work late every evening.” He said he works/ worked late every evening. “The sun rises in the East.” The teacher said the sun rises/ rose in the East.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Thay đổi thì, tính từ và trạng từ."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Thay đổi thì, tính từ và trạng từ (Tense and Deictic Shifts in Reported Speech). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
           "sections": [
             {
-              "title": "1. (LỜI NÓI GIÁN TIẾP)",
+              "title": "1. LỜI NÓI GIÁN TIẾP",
               "badge": "QUY TẮC SỬ DỤNG",
               "formulas": [],
               "rules": [],
@@ -21918,7 +22374,8 @@
               "id": "REP_CHANGES_sec_3",
               "order": 3
             }
-          ]
+          ],
+          "title": "Thay đổi thì, tính từ và trạng từ"
         },
         {
           "id": "8d68aa17-22e7-58d9-b4a7-765399cc9c00",
@@ -21980,55 +22437,55 @@
           "examples": [
             {
               "en": "“Hurry up, Lan.” He told Lan to hurry up.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "“Have you seen that film?” He asked if/ whether she had seen that film.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "“What time does the film begin?”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "“I have left my watch at home.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "Can you tell me the time?”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "“What a lovely garden they have!”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "“I saw her yesterday”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "He said, “I was born in 1980”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "He said that he was born in 1980.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "He said, “If I were you, I wouldn’t come here.”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "Mary said, “I wish I were a boy”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "Tom said to me, “You had better not contact her”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             },
             {
               "en": "My teacher said, “The sun rises in the East”.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Cách đổi câu trực tiếp sang câu gián tiếp."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Cách đổi câu trực tiếp sang câu gián tiếp (Reporting Orders, Questions, Exclamations, and Statements). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -22240,7 +22697,8 @@
               "id": "REP_TYPES_sec_11",
               "order": 11
             }
-          ]
+          ],
+          "title": "Cách đổi câu trực tiếp sang câu gián tiếp"
         }
       ],
       "exercises": [
@@ -22562,59 +23020,59 @@
           "examples": [
             {
               "en": "My father built the house.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "The house was built by my father.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "I’m writing her a letter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "John delivers the newspapers every morning.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "He is asking me a lot of questions.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "My mother has made that cake.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "My friend can answer this question.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "My mother made this cake.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "This cake was made by my mother.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "Someone has sent me the flowers.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "I have been sent the flowers.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "Smoke filled the room.The room was filled with smoke.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "The police found him in the forest.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             },
             {
               "en": "The scientists have studied the problem carefully.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Quy tắc chuyển câu chủ động sang câu bị động."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Quy tắc chuyển câu chủ động sang câu bị động (Core Rules of Passive Transformation). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -22803,7 +23261,8 @@
               "id": "PASSIVE_RULES_sec_10",
               "order": 10
             }
-          ]
+          ],
+          "title": "Quy tắc chuyển câu chủ động sang câu bị động"
         },
         {
           "id": "ce59d991-6191-54e9-bec7-82ae3f51e661",
@@ -22880,39 +23339,39 @@
           "examples": [
             {
               "en": "I had him repair my bicycle yesterday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "I get her to make some coffee.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "They saw her come in.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "People say that he is a famous doctor.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "They thought that Mary had gone away.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "Write your name here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "Let your name be written here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "He let me go out.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             },
             {
               "en": "I was let/ allowed to go out.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Một số dạng câu bị động đặc biệt."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Một số dạng câu bị động đặc biệt (Special Passive Constructions (Causative, Perception, Opinion, Imperative)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -23041,7 +23500,8 @@
               "id": "PASSIVE_SPECIAL_sec_5",
               "order": 5
             }
-          ]
+          ],
+          "title": "Một số dạng câu bị động đặc biệt"
         }
       ],
       "exercises": [
@@ -23966,87 +24426,87 @@
           "examples": [
             {
               "en": "Is it hot today?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "How hot it is today!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Get out of here.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "I like to go shopping.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Are you a pupil? - Yes, I am./ No, I am not.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Do you often walk to school? Yes, I do./ No, I don’t.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Who will help you with this work?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "You can speak English, can’t you?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "He shouldn’t smoke, should he?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "That job is hardly suitable for her, is it?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "They were there, weren’t they?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "They arrived yesterday, didn’t they?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "He will come, won’t he?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Open the door.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Come in, John.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Don’t be so silly.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Please lend me your pencil.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "Will you lend me your pencil, please?",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "How fast he runs!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "How dirty the dog is!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             },
             {
               "en": "What a long car!",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Phân loại câu và Các loại câu."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Phân loại câu và Các loại câu (Classification and Kinds of Sentences (Declarative, Interrogative, Tag, Imperative, Exclamatory)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -24325,7 +24785,8 @@
               "id": "SENT_CLASSIFICATION_KINDS_sec_8",
               "order": 8
             }
-          ]
+          ],
+          "title": "Phân loại câu và Các loại câu"
         },
         {
           "id": "3d993b91-5586-5439-936f-e2075fc677a2",
@@ -24447,95 +24908,95 @@
           "examples": [
             {
               "en": "Coffee is delicious.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "The book is on the table.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "Somebody called you while you were out.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "It’s hard to believe what he says.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "John drives too fast.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "John is going to Miami tomorrow.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "Jane has been reading that book.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "My father is a doctor.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "The weather gets cold in the evening.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "They elected him President.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "I love Susan. (Who do you love?).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "My mother gave me a bicycle on my birthday.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "He runs fast.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "He runs fast. (How does he run?).",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "The ducks are swimming.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "He came there.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "Her sister looks beautiful.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "Tom can speak English.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "She has just sent him a letter.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "She has just sent a letter to him.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "They named their son Tony.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "He fell into the stream.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             },
             {
               "en": "We took a taxi to Ben Thanh Market.",
-              "vi": ""
+              "vi": "Ví dụ minh họa chuẩn mực cho ngữ cảnh Các mẫu câu cơ bản."
             }
           ],
           "overview": "Chuyên đề ngữ pháp chuyên sâu: Các mẫu câu cơ bản (Basic Sentence Patterns in English (S, V, O, C, A)). Toàn bộ cấu trúc chuẩn, quy tắc nhận biết, bảng biến đổi và các ví dụ thực tế.",
@@ -24867,7 +25328,8 @@
               "id": "SENT_BASIC_PATTERNS_sec_8",
               "order": 8
             }
-          ]
+          ],
+          "title": "Các mẫu câu cơ bản"
         }
       ],
       "exercises": [
@@ -25735,7 +26197,8 @@
               "tables": [],
               "paragraphs": []
             }
-          ]
+          ],
+          "title": "Viết lại câu sao cho nghĩa không đổi (283 câu)"
         }
       ],
       "exercises": [

@@ -1169,6 +1169,119 @@ export default function Home() {
   };
 
   // --- Pedagogical 3-Tier Explanation Renderer ---
+  // Helper to format inline markdown (*italic*, **bold**, ~~strikethrough~~, [NOT ...]) and examples
+  const renderFormattedText = (str) => {
+    if (!str || typeof str !== "string") return str;
+
+    // Check if whole line is an example
+    const isEx = str.trim().startsWith("Ví dụ:") || str.trim().startsWith("Example:");
+    if (isEx) {
+      const exContent = str.replace(/^(Ví dụ:|Example:)\s*/i, "").trim();
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.75rem",
+            backgroundColor: isLight ? "#f8fafc" : "#121218",
+            border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+            borderLeft: "3px solid #3b82f6",
+            borderRadius: "6px",
+            padding: "0.45rem 0.75rem",
+            margin: "0.25rem 0",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.45rem", flex: 1 }}>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontFamily: "Geist Mono",
+                backgroundColor: isLight ? "#eff6ff" : "#1e293b",
+                color: isLight ? "#1d4ed8" : "#60a5fa",
+                padding: "0.1rem 0.35rem",
+                borderRadius: "3px",
+                fontWeight: "700",
+                flexShrink: 0,
+              }}
+            >
+              VÍ DỤ
+            </span>
+            <span style={{ fontSize: "0.9rem", color: T.text, lineHeight: "1.5" }}>
+              {renderFormattedText(exContent)}
+            </span>
+          </div>
+          <button
+            onClick={() => playWordAudio(exContent.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
+            title="Nghe phát âm ví dụ này"
+            style={{
+              backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+              border: `1px solid ${T.border}`,
+              color: isLight ? "#2563eb" : "#38bdf8",
+              borderRadius: "4px",
+              padding: "0.15rem 0.45rem",
+              fontSize: "0.7rem",
+              cursor: "pointer",
+              flexShrink: 0,
+            }}
+          >
+            🔊 Nghe
+          </button>
+        </div>
+      );
+    }
+
+    const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|~~[^~]+~~|\[NOT\s+[^\]]+\])/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(str)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(str.substring(lastIndex, match.index));
+      }
+      const token = match[0];
+      if (token.startsWith("***") && token.endsWith("***")) {
+        parts.push(
+          <strong key={match.index} style={{ fontWeight: "700", fontStyle: "italic", color: isLight ? "#1e293b" : "#f1f5f9" }}>
+            {token.slice(3, -3)}
+          </strong>
+        );
+      } else if (token.startsWith("**") && token.endsWith("**")) {
+        parts.push(
+          <strong key={match.index} style={{ fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+            {token.slice(2, -2)}
+          </strong>
+        );
+      } else if (token.startsWith("*") && token.endsWith("*")) {
+        parts.push(
+          <span key={match.index} style={{ fontStyle: "italic", fontWeight: "600", color: isLight ? "#2563eb" : "#38bdf8" }}>
+            {token.slice(1, -1)}
+          </span>
+        );
+      } else if (token.startsWith("~~") && token.endsWith("~~")) {
+        parts.push(
+          <span key={match.index} style={{ textDecoration: "line-through", color: "#f43f5e", fontWeight: "600", margin: "0 2px" }}>
+            {token.slice(2, -2)}
+          </span>
+        );
+      } else if (token.startsWith("[NOT") && token.endsWith("]")) {
+        parts.push(
+          <span key={match.index} style={{ backgroundColor: isLight ? "#fef2f2" : "rgba(244, 63, 94, 0.15)", border: "1px solid #f43f5e70", color: isLight ? "#dc2626" : "#fb7185", padding: "0.1rem 0.35rem", borderRadius: "4px", fontSize: "0.78rem", fontWeight: "700", margin: "0 4px" }}>
+            ⚠️ {token.slice(1, -1)}
+          </span>
+        );
+      }
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < str.length) {
+      parts.push(str.substring(lastIndex));
+    }
+
+    return parts;
+  };
+
   const renderPedagogicalExplanation = (explanation, pedagogy) => {
     if (!explanation && !pedagogy) return null;
 
@@ -4018,6 +4131,152 @@ export default function Home() {
                         )}
                       </div>
 
+                      {/* Visual Cheat-Sheet Syntax Summary (Milestone 2.7) */}
+                      {selectedLesson.cheatSheet && (
+                        <div
+                          style={{
+                            backgroundColor: T.card,
+                            border: `1px solid ${isLight ? "#bfdbfe" : "#1e3a8a"}`,
+                            borderRadius: "12px",
+                            padding: "1.5rem 1.75rem",
+                            marginBottom: "1.75rem",
+                            boxShadow: isLight ? "0 4px 20px rgba(37, 99, 235, 0.08)" : T.shadow,
+                            background: isLight
+                              ? "linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%)"
+                              : "linear-gradient(135deg, #111116 0%, #0d1527 100%)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                              <span style={{ fontSize: "1.35rem" }}>⚡</span>
+                              <div>
+                                <h3 style={{ fontSize: "1.05rem", fontWeight: "800", color: T.text, margin: 0, letterSpacing: "-0.01em" }}>
+                                  Sơ đồ Tóm tắt Cú pháp & Dấu hiệu (Cheat-Sheet Cấp tốc)
+                                </h3>
+                                <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.15rem 0 0 0" }}>
+                                  Bản chất ngữ pháp và ma trận 3 thể để ghi nhớ tức thì
+                                </p>
+                              </div>
+                            </div>
+                            <span
+                              style={{
+                                fontSize: "0.72rem",
+                                fontFamily: "Geist Mono",
+                                padding: "0.25rem 0.65rem",
+                                borderRadius: "999px",
+                                backgroundColor: isLight ? "#eff6ff" : "#1e293b",
+                                color: isLight ? "#1d4ed8" : "#60a5fa",
+                                border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f650"}`,
+                                fontWeight: "700",
+                              }}
+                            >
+                              ⏳ {selectedLesson.cheatSheet.timeline}
+                            </span>
+                          </div>
+
+                          {/* Concept statement */}
+                          <div
+                            style={{
+                              fontSize: "0.88rem",
+                              color: T.textSecondary,
+                              lineHeight: "1.6",
+                              marginBottom: "1.25rem",
+                              padding: "0.65rem 0.95rem",
+                              backgroundColor: isLight ? "#ffffff" : "rgba(15, 23, 42, 0.6)",
+                              borderRadius: "8px",
+                              border: `1px solid ${T.border}`,
+                            }}
+                          >
+                            🎯 <strong>Bản chất cốt lõi:</strong> {selectedLesson.cheatSheet.concept}
+                          </div>
+
+                          {/* 3-tier Formula Cards Grid */}
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
+                            {selectedLesson.cheatSheet.formulas?.map((f, fIdx) => {
+                              const isPos = f.type.includes("(+)");
+                              const isNeg = f.type.includes("(-)");
+                              const colorTheme = isPos
+                                ? { border: "#10b981", bg: isLight ? "#f0fdf4" : "rgba(16, 185, 129, 0.08)", text: isLight ? "#047857" : "#34d399", label: "KHẲNG ĐỊNH (+)" }
+                                : isNeg
+                                ? { border: "#f43f5e", bg: isLight ? "#fef2f2" : "rgba(244, 63, 94, 0.08)", text: isLight ? "#b91c1c" : "#fb7185", label: "PHỦ ĐỊNH (-)" }
+                                : { border: "#0284c7", bg: isLight ? "#f0f9ff" : "rgba(2, 132, 199, 0.08)", text: isLight ? "#0369a1" : "#38bdf8", label: "NGHI VẤN (?)" };
+
+                              return (
+                                <div
+                                  key={fIdx}
+                                  style={{
+                                    backgroundColor: colorTheme.bg,
+                                    border: `1px solid ${colorTheme.border}`,
+                                    borderRadius: "8px",
+                                    padding: "0.85rem 1rem",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <div>
+                                    <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", fontWeight: "800", color: colorTheme.text, textTransform: "uppercase", marginBottom: "0.35rem" }}>
+                                      {colorTheme.label}
+                                    </div>
+                                    <div style={{ fontFamily: "Geist Mono", fontSize: "0.88rem", fontWeight: "700", color: T.text, lineHeight: "1.4", marginBottom: "0.5rem" }}>
+                                      {f.text}
+                                    </div>
+                                  </div>
+                                  {f.example && (
+                                    <div style={{ fontSize: "0.78rem", fontStyle: "italic", color: T.textMuted, borderTop: `1px dashed ${T.border}`, paddingTop: "0.4rem" }}>
+                                      Ví dụ: "{f.example}"
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Signal Words Chips */}
+                          {selectedLesson.cheatSheet.signals && selectedLesson.cheatSheet.signals.length > 0 && (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                              <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", fontWeight: "700", color: T.textMuted, textTransform: "uppercase" }}>
+                                🏷️ TỪ NHẬN BIẾT VÀNG:
+                              </span>
+                              {selectedLesson.cheatSheet.signals.map((sig, sIdx) => (
+                                <span
+                                  key={sIdx}
+                                  style={{
+                                    fontSize: "0.75rem",
+                                    fontFamily: "Geist Mono",
+                                    backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                    border: `1px solid ${T.border}`,
+                                    color: isLight ? "#2563eb" : "#38bdf8",
+                                    padding: "0.15rem 0.5rem",
+                                    borderRadius: "4px",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  {sig}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Golden Exam Tip */}
+                          {selectedLesson.cheatSheet.examTip && (
+                            <div
+                              style={{
+                                backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.1)",
+                                border: "1px solid #f59e0b",
+                                borderRadius: "6px",
+                                padding: "0.65rem 0.95rem",
+                                fontSize: "0.825rem",
+                                color: isLight ? "#92400e" : "#fef3c7",
+                                lineHeight: "1.5",
+                              }}
+                            >
+                              💡 <strong>Mẹo làm bài thi & Bẫy cần tránh:</strong> {selectedLesson.cheatSheet.examTip}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       {/* Sections List */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
                         {selectedLesson.sections?.map((sec, secIdx) => {
@@ -4245,9 +4504,9 @@ export default function Home() {
                               {sec.paragraphs && sec.paragraphs.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1rem" }}>
                                   {sec.paragraphs.map((p, pIdx) => (
-                                    <p key={pIdx} style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.75", margin: 0, fontWeight: "400" }}>
-                                      {p}
-                                    </p>
+                                    <div key={pIdx} style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.75", margin: 0, fontWeight: "400" }}>
+                                      {renderFormattedText(p)}
+                                    </div>
                                   ))}
                                 </div>
                               )}
@@ -4340,8 +4599,8 @@ export default function Home() {
                                       }}
                                     >
                                       <span style={{ color: "#38bdf8", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
-                                      <div style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65" }}>
-                                        {b}
+                                      <div style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65", width: "100%" }}>
+                                        {renderFormattedText(b)}
                                       </div>
                                     </div>
                                   ))}
@@ -4380,6 +4639,81 @@ export default function Home() {
                           );
                         })}
                       </div>
+
+                      {/* Bilingual Examples Library (Milestone 2.7) */}
+                      {selectedLesson.examples && selectedLesson.examples.length > 0 && (
+                        <div
+                          style={{
+                            marginTop: "1.75rem",
+                            backgroundColor: T.card,
+                            border: `1px solid ${T.cardBorder}`,
+                            borderRadius: "12px",
+                            padding: "1.5rem 1.75rem",
+                            boxShadow: T.shadow,
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                              <span style={{ fontSize: "1.3rem" }}>📚</span>
+                              <div>
+                                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
+                                  Thư viện Ví dụ Mẫu Song ngữ ({selectedLesson.examples.length} câu)
+                                </h3>
+                                <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.15rem 0 0 0" }}>
+                                  Các ngữ cảnh câu thực tế được chuẩn hóa kèm phát âm bản ngữ
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "0.85rem" }}>
+                            {selectedLesson.examples.map((ex, exIdx) => (
+                              <div
+                                key={exIdx}
+                                style={{
+                                  backgroundColor: T.cardSubtle,
+                                  border: `1px solid ${T.border}`,
+                                  borderRadius: "8px",
+                                  padding: "0.85rem 1rem",
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  gap: "0.75rem",
+                                  boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.02)" : "none",
+                                }}
+                              >
+                                <div>
+                                  <div style={{ fontSize: "0.92rem", fontWeight: "600", color: T.text, lineHeight: "1.5" }}>
+                                    {renderFormattedText(ex.en)}
+                                  </div>
+                                  {ex.vi && (
+                                    <div style={{ fontSize: "0.82rem", color: isLight ? "#059669" : "#34d399", marginTop: "0.3rem", lineHeight: "1.4" }}>
+                                      🇻🇳 {ex.vi}
+                                    </div>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() => playWordAudio(ex.en.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
+                                  title="Nghe phát âm bản ngữ câu này"
+                                  style={{
+                                    backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                    border: `1px solid ${T.border}`,
+                                    color: isLight ? "#2563eb" : "#38bdf8",
+                                    borderRadius: "6px",
+                                    padding: "0.35rem 0.6rem",
+                                    fontSize: "0.75rem",
+                                    fontWeight: "600",
+                                    cursor: "pointer",
+                                    flexShrink: 0,
+                                  }}
+                                >
+                                  🔊 Nghe
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Bottom Completion & Practice Bar */}
                       <div
@@ -4664,8 +4998,27 @@ export default function Home() {
                                     </div>
 
                                     {/* Stem */}
-                                    <div style={{ fontSize: "0.95rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem" }}>
-                                      {q.stem}
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                                      <div style={{ fontSize: "0.95rem", color: T.text, lineHeight: "1.6" }}>
+                                        {q.stem}
+                                      </div>
+                                      <button
+                                        onClick={() => playWordAudio(q.stem.replace(/\(.*?\)|_.*?_/g, "").trim(), null)}
+                                        title="Nghe phát âm câu hỏi này"
+                                        style={{
+                                          backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                          border: `1px solid ${T.border}`,
+                                          color: isLight ? "#2563eb" : "#38bdf8",
+                                          borderRadius: "4px",
+                                          padding: "0.2rem 0.5rem",
+                                          fontSize: "0.72rem",
+                                          fontWeight: "600",
+                                          cursor: "pointer",
+                                          flexShrink: 0,
+                                        }}
+                                      >
+                                        🔊 Nghe câu
+                                      </button>
                                     </div>
 
                                     {/* Starter Prompt for Rewriting */}
