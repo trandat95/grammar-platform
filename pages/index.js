@@ -3,9 +3,64 @@ import { useState, useEffect, useMemo } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 
+// Default Pre-seeded User Database
+const DEFAULT_USERS = [
+  {
+    id: "usr_admin",
+    name: "Quản trị viên Hệ thống",
+    email: "admin@grammarpro.com",
+    password: "admin",
+    role: "ADMIN",
+    status: "ACTIVE",
+    createdAt: "2026-11-01",
+  },
+  {
+    id: "usr_vip",
+    name: "Trần Minh Hoàng (Học viên VIP)",
+    email: "vip@grammarpro.com",
+    password: "vip",
+    role: "VIP",
+    status: "ACTIVE",
+    createdAt: "2026-11-05",
+  },
+  {
+    id: "usr_free",
+    name: "Nguyễn Văn Nam (Học viên Miễn phí)",
+    email: "nam@grammarpro.com",
+    password: "user",
+    role: "FREE",
+    status: "ACTIVE",
+    createdAt: "2026-11-10",
+  },
+];
+
+const DEFAULT_ACCESS_POLICY = {
+  freeExerciseLimit: 10, // Max 10 questions per chapter for free users
+  freeDailyQuizLimit: 2, // Max 2 quizzes per day for free users
+};
+
 export default function Home() {
-  // Navigation mode: 'study' | 'quiz' | 'mistakes' | 'dashboard'
+  // Navigation mode: 'dashboard' | 'study' | 'quiz' | 'mistakes' | 'admin'
   const [currentView, setCurrentView] = useState("dashboard");
+
+  // --- Auth & User State ---
+  const [usersList, setUsersList] = useState(DEFAULT_USERS);
+  const [currentUser, setCurrentUser] = useState(DEFAULT_USERS[2]); // Default as Free student
+  const [accessPolicy, setAccessPolicy] = useState(DEFAULT_ACCESS_POLICY);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authTab, setAuthTab] = useState("login"); // 'login' | 'register'
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authName, setAuthName] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  // Admin Panel states
+  const [adminPolicyForm, setAdminPolicyForm] = useState(DEFAULT_ACCESS_POLICY);
+  const [newUserModalOpen, setNewUserModalOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newUserPassword, setNewUserPassword] = useState("");
+  const [newUserRole, setNewUserRole] = useState("FREE");
 
   // Study View State
   const [selectedChapterId, setSelectedChapterId] = useState(previewData.chapters[0]?.id || "");
@@ -39,14 +94,7 @@ export default function Home() {
   const [quizSingleChecks, setQuizSingleChecks] = useState({});
   const [quizShowAnswers, setQuizShowAnswers] = useState({});
 
-  // Mistakes Storage State (saved in localStorage)
-  const [savedMistakes, setSavedMistakes] = useState([]);
-  const [mistakeInputs, setMistakeInputs] = useState({});
-  const [mistakeResults, setMistakeResults] = useState({});
-  const [showMistakeAnswers, setShowMistakeAnswers] = useState({});
-  const [mistakeFilterTopic, setMistakeFilterTopic] = useState("ALL");
-
-  // Duolingo-style Learning Tracker State
+  // Per-User Duolingo-style Learning Tracker State
   const [userTracker, setUserTracker] = useState({
     streak: 1,
     lastActiveDate: "",
@@ -54,8 +102,17 @@ export default function Home() {
     xp: 50,
     completedLessons: [],
     completedQuestions: [],
-    dailyGoal: { targetQuestions: 10, solvedToday: 0, date: "" }
+    quizzesCompletedToday: 0,
+    dailyGoal: { targetQuestions: 10, solvedToday: 0, date: "" },
   });
+
+  // Per-User Mistakes Storage State
+  const [savedMistakes, setSavedMistakes] = useState([]);
+  const [mistakeInputs, setMistakeInputs] = useState({});
+  const [mistakeResults, setMistakeResults] = useState({});
+  const [showMistakeAnswers, setShowMistakeAnswers] = useState({});
+  const [mistakeFilterTopic, setMistakeFilterTopic] = useState("ALL");
+
   const [xpToast, setXpToast] = useState(null);
 
   // Helper date strings
@@ -76,19 +133,52 @@ export default function Home() {
     setTimeout(() => setXpToast(null), 2800);
   };
 
-  // Load Tracker and Mistakes from localStorage on client mount
+  // 1. Initial Load of Users DB & Access Policy
   useEffect(() => {
     try {
-      // 1. Load mistakes
-      const storedMistakes = localStorage.getItem("grammar_platform_mistakes");
-      if (storedMistakes) {
-        setSavedMistakes(JSON.parse(storedMistakes));
+      const storedUsers = localStorage.getItem("grammar_users_db");
+      if (storedUsers) {
+        setUsersList(JSON.parse(storedUsers));
+      } else {
+        localStorage.setItem("grammar_users_db", JSON.stringify(DEFAULT_USERS));
       }
 
-      // 2. Load and verify Duolingo tracker
+      const storedPolicy = localStorage.getItem("grammar_access_policy");
+      if (storedPolicy) {
+        const parsed = JSON.parse(storedPolicy);
+        setAccessPolicy(parsed);
+        setAdminPolicyForm(parsed);
+      } else {
+        localStorage.setItem("grammar_access_policy", JSON.stringify(DEFAULT_ACCESS_POLICY));
+      }
+
+      const storedActiveUserId = localStorage.getItem("grammar_active_user_id");
+      if (storedActiveUserId) {
+        const uList = storedUsers ? JSON.parse(storedUsers) : DEFAULT_USERS;
+        const found = uList.find((u) => u.id === storedActiveUserId);
+        if (found) setCurrentUser(found);
+      }
+    } catch (e) {
+      console.error("Failed to load initial user DB", e);
+    }
+  }, []);
+
+  // 2. Load Per-User Tracker & Mistakes whenever currentUser changes
+  useEffect(() => {
+    if (!currentUser?.id) return;
+
+    try {
       const today = getTodayDateStr();
       const yesterday = getYesterdayDateStr();
-      const storedTracker = localStorage.getItem("grammar_platform_tracker");
+
+      // Load User Mistakes
+      const mistakeKey = `grammar_mistakes_${currentUser.id}`;
+      const storedMistakes = localStorage.getItem(mistakeKey);
+      setSavedMistakes(storedMistakes ? JSON.parse(storedMistakes) : []);
+
+      // Load User Tracker
+      const trackerKey = `grammar_tracker_${currentUser.id}`;
+      const storedTracker = localStorage.getItem(trackerKey);
 
       if (storedTracker) {
         const parsed = JSON.parse(storedTracker);
@@ -98,9 +188,9 @@ export default function Home() {
         if (!parsed.lastActiveDate) {
           newStreak = 1;
         } else if (parsed.lastActiveDate === today) {
-          // already active today
+          // already logged today
         } else if (parsed.lastActiveDate === yesterday) {
-          // consecutive active day!
+          // streak continues!
           newStreak = (parsed.streak || 0) + 1;
         } else {
           // streak broken
@@ -112,8 +202,10 @@ export default function Home() {
         }
 
         let dailyGoal = parsed.dailyGoal || { targetQuestions: 10, solvedToday: 0, date: today };
+        let quizzesToday = parsed.quizzesCompletedToday || 0;
         if (dailyGoal.date !== today) {
           dailyGoal = { targetQuestions: 10, solvedToday: 0, date: today };
+          quizzesToday = 0;
         }
 
         const updated = {
@@ -121,35 +213,42 @@ export default function Home() {
           streak: newStreak,
           lastActiveDate: today,
           activeDays: newActiveDays,
-          dailyGoal: dailyGoal
+          dailyGoal: dailyGoal,
+          quizzesCompletedToday: quizzesToday,
         };
         setUserTracker(updated);
-        localStorage.setItem("grammar_platform_tracker", JSON.stringify(updated));
+        localStorage.setItem(trackerKey, JSON.stringify(updated));
       } else {
-        // Initial setup for new learner
+        // Initial setup for this specific user
         const initial = {
           streak: 1,
           lastActiveDate: today,
           activeDays: [today],
-          xp: 50, // Welcome gift
+          xp: currentUser.role === "VIP" ? 250 : 50,
           completedLessons: [],
           completedQuestions: [],
-          dailyGoal: { targetQuestions: 10, solvedToday: 0, date: today }
+          quizzesCompletedToday: 0,
+          dailyGoal: { targetQuestions: 10, solvedToday: 0, date: today },
         };
         setUserTracker(initial);
-        localStorage.setItem("grammar_platform_tracker", JSON.stringify(initial));
+        localStorage.setItem(trackerKey, JSON.stringify(initial));
       }
-    } catch (e) {
-      console.error("Failed to initialize user tracker", e);
-    }
-  }, []);
 
-  // Persist tracker updates helper
+      // Record active user id
+      localStorage.setItem("grammar_active_user_id", currentUser.id);
+    } catch (e) {
+      console.error("Failed to load user-specific progress", e);
+    }
+  }, [currentUser]);
+
+  // Persist current user's tracker
   const persistTracker = (updater) => {
+    if (!currentUser?.id) return;
+    const trackerKey = `grammar_tracker_${currentUser.id}`;
     setUserTracker((prev) => {
       const next = typeof updater === "function" ? updater(prev) : { ...prev, ...updater };
       try {
-        localStorage.setItem("grammar_platform_tracker", JSON.stringify(next));
+        localStorage.setItem(trackerKey, JSON.stringify(next));
       } catch (e) {
         console.error("Failed to save tracker", e);
       }
@@ -157,16 +256,154 @@ export default function Home() {
     });
   };
 
+  // Persist current user's mistakes
   const persistMistakes = (newMistakes) => {
+    if (!currentUser?.id) return;
+    const mistakeKey = `grammar_mistakes_${currentUser.id}`;
     setSavedMistakes(newMistakes);
     try {
-      localStorage.setItem("grammar_platform_mistakes", JSON.stringify(newMistakes));
+      localStorage.setItem(mistakeKey, JSON.stringify(newMistakes));
     } catch (e) {
       console.error("Failed to save mistakes", e);
     }
   };
 
-  // Toggle mark lesson as completed
+  // Persist entire users list to DB
+  const persistUsersList = (newList) => {
+    setUsersList(newList);
+    try {
+      localStorage.setItem("grammar_users_db", JSON.stringify(newList));
+    } catch (e) {
+      console.error("Failed to save users DB", e);
+    }
+  };
+
+  // --- Auth Handlers ---
+  const handleLogin = (e) => {
+    if (e) e.preventDefault();
+    setAuthError("");
+    const user = usersList.find(
+      (u) => u.email.toLowerCase() === authEmail.trim().toLowerCase() && u.password === authPassword
+    );
+
+    if (!user) {
+      setAuthError("Email hoặc mật khẩu không chính xác!");
+      return;
+    }
+    if (user.status === "LOCKED") {
+      setAuthError("Tài khoản này đã bị khóa bởi Quản trị viên!");
+      return;
+    }
+
+    setCurrentUser(user);
+    setAuthModalOpen(false);
+    setAuthEmail("");
+    setAuthPassword("");
+    triggerXpGain(10, `Chào mừng ${user.name}!`);
+  };
+
+  const handleRegister = (e) => {
+    if (e) e.preventDefault();
+    setAuthError("");
+    if (!authName.trim() || !authEmail.trim() || !authPassword.trim()) {
+      setAuthError("Vui lòng điền đầy đủ họ tên, email và mật khẩu!");
+      return;
+    }
+    if (usersList.some((u) => u.email.toLowerCase() === authEmail.trim().toLowerCase())) {
+      setAuthError("Email này đã được đăng ký trên hệ thống!");
+      return;
+    }
+
+    const newUser = {
+      id: `usr_${Date.now()}`,
+      name: authName.trim(),
+      email: authEmail.trim(),
+      password: authPassword,
+      role: "FREE",
+      status: "ACTIVE",
+      createdAt: getTodayDateStr(),
+    };
+
+    const updatedUsers = [...usersList, newUser];
+    persistUsersList(updatedUsers);
+    setCurrentUser(newUser);
+    setAuthModalOpen(false);
+    setAuthName("");
+    setAuthEmail("");
+    setAuthPassword("");
+    triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
+  };
+
+  const quickSwitchUser = (targetUser) => {
+    if (targetUser.status === "LOCKED") {
+      alert("Tài khoản này đã bị khóa!");
+      return;
+    }
+    setCurrentUser(targetUser);
+    setAuthModalOpen(false);
+    triggerXpGain(10, `Đã chuyển sang ${targetUser.name}`);
+  };
+
+  // --- Admin Management Handlers ---
+  const handleUpdateUserRole = (userId, newRole) => {
+    const updated = usersList.map((u) => (u.id === userId ? { ...u, role: newRole } : u));
+    persistUsersList(updated);
+    if (currentUser.id === userId) {
+      setCurrentUser((prev) => ({ ...prev, role: newRole }));
+    }
+  };
+
+  const handleToggleUserStatus = (userId) => {
+    const target = usersList.find((u) => u.id === userId);
+    if (!target) return;
+    if (target.role === "ADMIN") {
+      alert("Không thể khóa tài khoản Quản trị viên cấp cao!");
+      return;
+    }
+    const newStatus = target.status === "ACTIVE" ? "LOCKED" : "ACTIVE";
+    const updated = usersList.map((u) => (u.id === userId ? { ...u, status: newStatus } : u));
+    persistUsersList(updated);
+    if (currentUser.id === userId && newStatus === "LOCKED") {
+      alert("Tài khoản hiện tại của bạn đã bị khóa.");
+      setCurrentUser(DEFAULT_USERS[2]);
+    }
+  };
+
+  const handleSavePolicy = (e) => {
+    e.preventDefault();
+    setAccessPolicy(adminPolicyForm);
+    localStorage.setItem("grammar_access_policy", JSON.stringify(adminPolicyForm));
+    alert("Đã cập nhật chính sách phân quyền hệ thống thành công!");
+  };
+
+  const handleCreateNewUserByAdmin = (e) => {
+    e.preventDefault();
+    if (!newUserName.trim() || !newUserEmail.trim() || !newUserPassword.trim()) {
+      alert("Vui lòng điền đủ thông tin!");
+      return;
+    }
+    if (usersList.some((u) => u.email.toLowerCase() === newUserEmail.trim().toLowerCase())) {
+      alert("Email đã tồn tại!");
+      return;
+    }
+    const created = {
+      id: `usr_${Date.now()}`,
+      name: newUserName.trim(),
+      email: newUserEmail.trim(),
+      password: newUserPassword,
+      role: newUserRole,
+      status: "ACTIVE",
+      createdAt: getTodayDateStr(),
+    };
+    persistUsersList([...usersList, created]);
+    setNewUserModalOpen(false);
+    setNewUserName("");
+    setNewUserEmail("");
+    setNewUserPassword("");
+    alert(`Đã tạo thành công tài khoản ${created.name} (${created.role})!`);
+  };
+
+  // --- Learning Gamification Handlers ---
   const toggleLessonCompletion = (lessonId) => {
     const isDone = userTracker.completedLessons.includes(lessonId);
     persistTracker((prev) => {
@@ -187,15 +424,14 @@ export default function Home() {
     });
   };
 
-  // Record correct question answered
   const recordCorrectQuestion = (questionId, isQuiz = false) => {
     const xpReward = isQuiz ? 15 : 10;
     persistTracker((prev) => {
       const today = getTodayDateStr();
       const alreadyDone = prev.completedQuestions.includes(questionId);
       const nextQuestions = alreadyDone ? prev.completedQuestions : [...prev.completedQuestions, questionId];
-      const todaySolved = (prev.dailyGoal?.date === today ? (prev.dailyGoal?.solvedToday || 0) : 0) + 1;
-      
+      const todaySolved = (prev.dailyGoal?.date === today ? prev.dailyGoal?.solvedToday || 0 : 0) + 1;
+
       if (!alreadyDone) {
         triggerXpGain(xpReward, isQuiz ? "Chính xác câu Quiz: +15 XP!" : "Đúng bài tập: +10 XP!");
       }
@@ -207,8 +443,8 @@ export default function Home() {
         dailyGoal: {
           targetQuestions: prev.dailyGoal?.targetQuestions || 10,
           solvedToday: todaySolved,
-          date: today
-        }
+          date: today,
+        },
       };
     });
   };
@@ -258,12 +494,21 @@ export default function Home() {
     }
   };
 
-  // --- Study Exercise Handlers ---
+  // --- Study Exercise Handlers with Permission Check ---
   const handleInputChange = (questionId, value) => {
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const checkSingleQuestion = (q, exerciseType = "") => {
+  const checkSingleQuestion = (q, exerciseType = "", globalIdx = 0) => {
+    // Permission Limit Check for Free User
+    const isFreeUser = currentUser.role === "FREE";
+    if (isFreeUser && globalIdx >= accessPolicy.freeExerciseLimit) {
+      alert(
+        `Tài khoản Miễn phí giới hạn ${accessPolicy.freeExerciseLimit} câu bài tập/chương. Hãy nâng cấp VIP để làm không giới hạn!`
+      );
+      return;
+    }
+
     const userInput = userInputs[q.id] || "";
     if (!userInput.trim()) {
       setResults((prev) => ({
@@ -300,8 +545,10 @@ export default function Home() {
     }
   };
 
-  const checkAllQuestions = (exercise) => {
-    exercise.questions.forEach((q) => checkSingleQuestion(q, exercise.instruction_vi || exercise.title));
+  const checkAllQuestions = (exercise, startIdx = 0) => {
+    exercise.questions.forEach((q, idx) => {
+      checkSingleQuestion(q, exercise.instruction_vi || exercise.title, startIdx + idx);
+    });
   };
 
   const toggleShowAnswer = (qId) => {
@@ -326,8 +573,20 @@ export default function Home() {
     });
   };
 
-  // --- Quiz Handlers ---
+  // --- Quiz Handlers with Daily Free Limit Check ---
+  const isQuizLimitReached = useMemo(() => {
+    if (currentUser.role === "VIP" || currentUser.role === "ADMIN") return false;
+    return (userTracker.quizzesCompletedToday || 0) >= accessPolicy.freeDailyQuizLimit;
+  }, [currentUser.role, userTracker.quizzesCompletedToday, accessPolicy.freeDailyQuizLimit]);
+
   const startNewQuiz = (topicId = selectedQuizTopic) => {
+    if (isQuizLimitReached) {
+      alert(
+        `Bạn đã hoàn thành giới hạn ${accessPolicy.freeDailyQuizLimit} lượt Quiz hôm nay của gói Miễn phí. Hãy nâng cấp lên VIP để làm bài không giới hạn!`
+      );
+      return;
+    }
+
     let pool = [];
     if (topicId === "ALL") {
       pool = quizData.topics.flatMap((t) => t.questions);
@@ -435,6 +694,12 @@ export default function Home() {
     });
     setQuizSubmitted(true);
 
+    // Increment quizzes completed today for free limit tracker
+    persistTracker((prev) => ({
+      ...prev,
+      quizzesCompletedToday: (prev.quizzesCompletedToday || 0) + 1,
+    }));
+
     if (newMistakesToAdd.length > 0) {
       const existingIds = new Set(savedMistakes.map((m) => m.id));
       const filtered = newMistakesToAdd.filter((m) => !existingIds.has(m.id));
@@ -457,7 +722,7 @@ export default function Home() {
   };
 
   const clearAllMistakes = () => {
-    if (confirm("Xác nhận xóa toàn bộ danh sách câu hỏi trong sổ tay câu sai?")) {
+    if (confirm("Xác nhận xóa toàn bộ danh sách câu hỏi trong sổ tay câu sai của bạn?")) {
       persistMistakes([]);
     }
   };
@@ -525,7 +790,6 @@ export default function Home() {
 
   // Smart Daily Recommendation Algorithm
   const dailyRecommendation = useMemo(() => {
-    // 1. If there are saved mistakes, recommend reviewing that chapter first
     if (savedMistakes.length > 0) {
       const topMistake = savedMistakes[0];
       const targetCh = previewData.chapters.find((c) => c.title_vi === topMistake.topic_name) || previewData.chapters[0];
@@ -535,11 +799,10 @@ export default function Home() {
         lesson: targetLs,
         reason: `Cần phục thù: Bạn đang có ${savedMistakes.length} câu làm sai cần củng cố ở chuyên đề này.`,
         tag: "ÔN TẬP CỦNG CỐ",
-        tagColor: "#f59e0b"
+        tagColor: "#f59e0b",
       };
     }
 
-    // 2. Next uncompleted lesson in sequential order
     for (const ch of previewData.chapters) {
       for (const ls of ch.lessons) {
         if (!userTracker.completedLessons.includes(ls.id)) {
@@ -548,19 +811,18 @@ export default function Home() {
             lesson: ls,
             reason: `Tiếp nối lộ trình học tập: Chuyên đề ${ch.number} - ${ch.title_vi}.`,
             tag: "BÀI HỌC TIẾP THEO",
-            tagColor: "#38bdf8"
+            tagColor: "#38bdf8",
           };
         }
       }
     }
 
-    // 3. All completed fallback
     return {
       chapter: previewData.chapters[0],
       lesson: previewData.chapters[0].lessons[0],
       reason: "Xuất sắc! Bạn đã hoàn thành toàn bộ 53 bài học. Hãy làm đề Quiz 50 câu để duy trì phong độ!",
       tag: "LUYỆN TẬP NÂNG CAO",
-      tagColor: "#10b981"
+      tagColor: "#10b981",
     };
   }, [savedMistakes, userTracker.completedLessons]);
 
@@ -593,19 +855,16 @@ export default function Home() {
     return days;
   }, [userTracker.activeDays]);
 
-  // Total exercise questions in current chapter
   const totalChapterExerciseQuestions = useMemo(() => {
     if (!selectedChapter?.exercises) return 0;
     return selectedChapter.exercises.reduce((acc, ex) => acc + (ex.questions?.length || 0), 0);
   }, [selectedChapter]);
 
-  // Total formulas in selected lesson
   const totalLessonFormulas = useMemo(() => {
     if (!selectedLesson?.sections) return 0;
     return selectedLesson.sections.reduce((acc, s) => acc + (s.formulas?.length || 0), 0);
   }, [selectedLesson]);
 
-  // Quiz answered stats
   const answeredCount = useMemo(() => {
     return Object.keys(quizAnswers).filter((k) => quizAnswers[k]?.trim()).length;
   }, [quizAnswers]);
@@ -699,7 +958,6 @@ export default function Home() {
             display: "flex",
             alignItems: "center",
             gap: "0.6rem",
-            animation: "slideIn 0.3s ease",
           }}
         >
           <span style={{ fontSize: "1.2rem" }}>⚡</span>
@@ -712,9 +970,339 @@ export default function Home() {
         </div>
       )}
 
+      {/* Auth Modal (Login / Register / Quick Switch) */}
+      {authModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#121215",
+              border: "1px solid #27272a",
+              borderRadius: "12px",
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "460px",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            {/* Modal Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
+              <div style={{ fontSize: "1.2rem", fontWeight: "700", color: "#fafafa" }}>
+                {authTab === "login" ? "Đăng nhập tài khoản" : "Đăng ký thành viên"}
+              </div>
+              <button
+                onClick={() => setAuthModalOpen(false)}
+                style={{ background: "none", border: "none", color: "#71717a", fontSize: "1.2rem", cursor: "pointer" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Quick 1-Click Role Switch Demo Pills */}
+            <div style={{ marginBottom: "1.25rem", padding: "0.75rem", backgroundColor: "#18181b", borderRadius: "8px", border: "1px solid #27272a" }}>
+              <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", marginBottom: "0.5rem" }}>
+                TÀI KHOẢN MẪU TEST NHANH:
+              </div>
+              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={() => quickSwitchUser(usersList[0])}
+                  style={{
+                    fontSize: "0.75rem",
+                    padding: "0.3rem 0.6rem",
+                    borderRadius: "4px",
+                    backgroundColor: "#ef444420",
+                    border: "1px solid #ef444450",
+                    color: "#f87171",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  🛡️ Admin Demo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => quickSwitchUser(usersList[1])}
+                  style={{
+                    fontSize: "0.75rem",
+                    padding: "0.3rem 0.6rem",
+                    borderRadius: "4px",
+                    backgroundColor: "#f59e0b20",
+                    border: "1px solid #f59e0b50",
+                    color: "#fbbf24",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  ⭐ VIP Demo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => quickSwitchUser(usersList[2])}
+                  style={{
+                    fontSize: "0.75rem",
+                    padding: "0.3rem 0.6rem",
+                    borderRadius: "4px",
+                    backgroundColor: "#3b82f620",
+                    border: "1px solid #3b82f650",
+                    color: "#60a5fa",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  👤 Free Demo
+                </button>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {authError && (
+              <div style={{ padding: "0.6rem 0.85rem", backgroundColor: "rgba(239, 68, 68, 0.15)", border: "1px solid #ef4444", borderRadius: "6px", color: "#f87171", fontSize: "0.85rem", marginBottom: "1rem" }}>
+                {authError}
+              </div>
+            )}
+
+            {/* Form Tabs */}
+            <div style={{ display: "flex", backgroundColor: "#18181b", padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
+              <button
+                type="button"
+                onClick={() => { setAuthTab("login"); setAuthError(""); }}
+                style={{
+                  flex: 1,
+                  padding: "0.4rem",
+                  borderRadius: "4px",
+                  border: "none",
+                  fontSize: "0.825rem",
+                  fontWeight: authTab === "login" ? "600" : "400",
+                  backgroundColor: authTab === "login" ? "#27272a" : "transparent",
+                  color: authTab === "login" ? "#fafafa" : "#71717a",
+                  cursor: "pointer",
+                }}
+              >
+                Đăng nhập
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthTab("register"); setAuthError(""); }}
+                style={{
+                  flex: 1,
+                  padding: "0.4rem",
+                  borderRadius: "4px",
+                  border: "none",
+                  fontSize: "0.825rem",
+                  fontWeight: authTab === "register" ? "600" : "400",
+                  backgroundColor: authTab === "register" ? "#27272a" : "transparent",
+                  color: authTab === "register" ? "#fafafa" : "#71717a",
+                  cursor: "pointer",
+                }}
+              >
+                Đăng ký mới
+              </button>
+            </div>
+
+            {/* Auth Form */}
+            <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
+              {authTab === "register" && (
+                <div style={{ marginBottom: "1rem" }}>
+                  <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                    Họ và tên:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={authName}
+                    placeholder="Nguyễn Văn A"
+                    onChange={(e) => setAuthName(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "0.55rem 0.75rem",
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "6px",
+                      color: "#fafafa",
+                      fontSize: "0.875rem",
+                      outline: "none",
+                    }}
+                  />
+                </div>
+              )}
+
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={authEmail}
+                  placeholder="name@example.com"
+                  onChange={(e) => setAuthEmail(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    borderRadius: "6px",
+                    color: "#fafafa",
+                    fontSize: "0.875rem",
+                    outline: "none",
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                  Mật khẩu:
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={authPassword}
+                  placeholder="••••••••"
+                  onChange={(e) => setAuthPassword(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    backgroundColor: "#18181b",
+                    border: "1px solid #27272a",
+                    borderRadius: "6px",
+                    color: "#fafafa",
+                    fontSize: "0.875rem",
+                    outline: "none",
+                  }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                style={{
+                  width: "100%",
+                  padding: "0.65rem",
+                  backgroundColor: "#2563eb",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontWeight: "600",
+                  fontSize: "0.9rem",
+                  cursor: "pointer",
+                }}
+              >
+                {authTab === "login" ? "Đăng nhập ngay" : "Tạo tài khoản học tập"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Admin: Modal Add New User */}
+      {newUserModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#121215",
+              border: "1px solid #27272a",
+              borderRadius: "12px",
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "460px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
+              <div style={{ fontSize: "1.15rem", fontWeight: "700", color: "#fafafa" }}>
+                Thêm người dùng mới vào hệ thống
+              </div>
+              <button
+                onClick={() => setNewUserModalOpen(false)}
+                style={{ background: "none", border: "none", color: "#71717a", fontSize: "1.2rem", cursor: "pointer" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateNewUserByAdmin}>
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Họ tên:</label>
+                <input
+                  type="text"
+                  required
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Email:</label>
+                <input
+                  type="email"
+                  required
+                  value={newUserEmail}
+                  onChange={(e) => setNewUserEmail(e.target.value)}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Mật khẩu:</label>
+                <input
+                  type="password"
+                  required
+                  value={newUserPassword}
+                  onChange={(e) => setNewUserPassword(e.target.value)}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Quyền tài khoản:</label>
+                <select
+                  value={newUserRole}
+                  onChange={(e) => setNewUserRole(e.target.value)}
+                  style={{ width: "100%", padding: "0.5rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa" }}
+                >
+                  <option value="FREE">FREE (Miễn phí - Giới hạn 10 câu/chương & 2 quiz)</option>
+                  <option value="VIP">VIP (Toàn quyền 2,900+ câu & không giới hạn)</option>
+                  <option value="ADMIN">ADMIN (Quản trị viên hệ thống)</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                style={{ width: "100%", padding: "0.65rem", backgroundColor: "#10b981", color: "#042f1a", border: "none", borderRadius: "6px", fontWeight: "700", cursor: "pointer" }}
+              >
+                Tạo tài khoản ngay
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content Layout */}
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#09090b" }}>
         
-        {/* Top Navbar — Duolingo-style Streak & XP Bar */}
+        {/* Top Navbar */}
         <header
           style={{
             height: "56px",
@@ -763,12 +1351,12 @@ export default function Home() {
                   color: "#a1a1aa",
                 }}
               >
-                v1.3 PRO
+                v1.4 PRO
               </span>
             </div>
           </div>
 
-          {/* Segmented Mode Control (Tabs) */}
+          {/* Segmented Mode Navigation (Tabs) */}
           <nav
             style={{
               display: "flex",
@@ -794,14 +1382,8 @@ export default function Home() {
                 backgroundColor: currentView === "dashboard" ? "#27272a" : "transparent",
                 border: "none",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="18" height="18" x="3" y="3" rx="2"/>
-                <path d="M3 9h18"/>
-                <path d="M9 21V9"/>
-              </svg>
               <span>Lộ trình & Streak</span>
             </button>
 
@@ -820,14 +1402,8 @@ export default function Home() {
                 backgroundColor: currentView === "study" ? "#27272a" : "transparent",
                 border: "none",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
-                <path d="M6 6h10"/>
-                <path d="M6 10h10"/>
-              </svg>
               <span>12 Chuyên đề</span>
             </button>
 
@@ -849,13 +1425,8 @@ export default function Home() {
                 backgroundColor: currentView === "quiz" ? "#27272a" : "transparent",
                 border: "none",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polygon points="10 8 16 12 10 16 10 8"/>
-              </svg>
               <span>Quiz Engine (50 câu)</span>
             </button>
 
@@ -874,90 +1445,363 @@ export default function Home() {
                 backgroundColor: currentView === "mistakes" ? "#27272a" : "transparent",
                 border: "none",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
-              </svg>
               <span>Sổ tay câu sai</span>
               {savedMistakes.length > 0 && (
-                <span
-                  style={{
-                    backgroundColor: "#f43f5e",
-                    color: "#ffffff",
-                    fontSize: "0.68rem",
-                    fontWeight: "600",
-                    padding: "0.1rem 0.4rem",
-                    borderRadius: "999px",
-                  }}
-                >
+                <span style={{ backgroundColor: "#f43f5e", color: "#fff", fontSize: "0.68rem", fontWeight: "600", padding: "0.1rem 0.4rem", borderRadius: "999px" }}>
                   {savedMistakes.length}
                 </span>
               )}
             </button>
+
+            {/* Tab 4: Admin Panel (Only for ADMIN users) */}
+            {currentUser.role === "ADMIN" && (
+              <button
+                onClick={() => setCurrentView("admin")}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.45rem",
+                  padding: "0.4rem 0.85rem",
+                  borderRadius: "6px",
+                  fontSize: "0.825rem",
+                  fontWeight: currentView === "admin" ? "600" : "500",
+                  color: currentView === "admin" ? "#f87171" : "#ef4444",
+                  backgroundColor: currentView === "admin" ? "#27272a" : "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                <span>🛡️ Quản trị Admin</span>
+              </button>
+            )}
           </nav>
 
-          {/* Duolingo Gamification Stats Pill Bar */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            {/* Streak Pill */}
+          {/* User Profile & Role Badge & Quick Switch */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+            {/* Streak & XP Pills */}
             <div
               onClick={() => setCurrentView("dashboard")}
               title="Chuỗi ngày học liên tiếp"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                backgroundColor: "#1c1917",
-                border: "1px solid #78350f",
-                padding: "0.25rem 0.65rem",
-                borderRadius: "999px",
-                cursor: "pointer",
-              }}
+              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: "#1c1917", border: "1px solid #78350f", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
             >
-              <span style={{ fontSize: "0.9rem" }}>🔥</span>
-              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#f59e0b" }}>
-                {userTracker.streak} ngày
-              </span>
+              <span>🔥</span>
+              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#f59e0b" }}>{userTracker.streak} ngày</span>
             </div>
 
-            {/* XP Pill */}
             <div
               onClick={() => setCurrentView("dashboard")}
-              title="Tổng điểm kinh nghiệm tích lũy"
+              title="Tổng điểm XP"
+              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: "#141c2b", border: "1px solid #1e3a8a", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
+            >
+              <span>⚡</span>
+              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#60a5fa" }}>{userTracker.xp} XP</span>
+            </div>
+
+            {/* User Account Dropdown / Trigger */}
+            <div
+              onClick={() => setAuthModalOpen(true)}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.35rem",
-                backgroundColor: "#141c2b",
-                border: "1px solid #1e3a8a",
-                padding: "0.25rem 0.65rem",
-                borderRadius: "999px",
+                gap: "0.5rem",
+                backgroundColor: "#18181b",
+                border: "1px solid #27272a",
+                padding: "0.3rem 0.65rem",
+                borderRadius: "8px",
                 cursor: "pointer",
               }}
             >
-              <span style={{ fontSize: "0.9rem" }}>⚡</span>
-              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#60a5fa" }}>
-                {userTracker.xp} XP
-              </span>
-            </div>
-
-            {/* Overall Progress Pill */}
-            <div
-              style={{
-                fontSize: "0.75rem",
-                color: "#71717a",
-                fontFamily: "Geist Mono",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-              }}
-            >
-              <span>Tiến độ:</span>
-              <strong style={{ color: "#34d399" }}>{overallLessonsProgress}%</strong>
+              <div
+                style={{
+                  width: "22px",
+                  height: "22px",
+                  borderRadius: "50%",
+                  backgroundColor: currentUser.role === "ADMIN" ? "#ef4444" : currentUser.role === "VIP" ? "#f59e0b" : "#3b82f6",
+                  color: "#09090b",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: "800",
+                }}
+              >
+                {currentUser.name.charAt(0)}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "#fafafa", maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {currentUser.name}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.65rem",
+                    fontFamily: "Geist Mono",
+                    color: currentUser.role === "ADMIN" ? "#f87171" : currentUser.role === "VIP" ? "#fbbf24" : "#94a3b8",
+                    fontWeight: "700",
+                  }}
+                >
+                  {currentUser.role === "ADMIN" ? "🛡️ ADMIN" : currentUser.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
+                </span>
+              </div>
             </div>
           </div>
         </header>
+
+        {/* ============================================================== */}
+        {/* VIEW 4: ADMIN MANAGEMENT PANEL (QUẢN TRỊ VIÊN HỆ THỐNG)        */}
+        {/* ============================================================== */}
+        {currentView === "admin" && currentUser.role === "ADMIN" && (
+          <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
+            <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
+              
+              {/* Admin Header */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #ef444450",
+                  borderRadius: "12px",
+                  padding: "1.75rem 2rem",
+                  marginBottom: "2rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1rem",
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                    <span style={{ fontSize: "1.5rem" }}>🛡️</span>
+                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#fafafa", margin: 0 }}>
+                      Bảng điều khiển Quản trị viên (Admin Panel)
+                    </h1>
+                  </div>
+                  <p style={{ fontSize: "0.875rem", color: "#a1a1aa", marginTop: "0.35rem" }}>
+                    Quản lý danh sách người dùng, phân quyền truy cập (FREE / VIP), và điều chỉnh hạn mức làm bài tập, bài quiz.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setNewUserModalOpen(true)}
+                  style={{
+                    padding: "0.6rem 1.25rem",
+                    backgroundColor: "#10b981",
+                    color: "#042f1a",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontWeight: "700",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  + Thêm người dùng mới
+                </button>
+              </div>
+
+              {/* Access Policy Configuration Card */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #27272a",
+                  borderRadius: "10px",
+                  padding: "1.5rem",
+                  marginBottom: "2rem",
+                }}
+              >
+                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: "0 0 1rem 0" }}>
+                  ⚙️ Cấu hình Quyền & Hạn mức truy cập cho User Default (FREE)
+                </h3>
+                
+                <form onSubmit={handleSavePolicy} style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "flex-end" }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                      Số câu bài tập tối đa mỗi chương (Free User):
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={adminPolicyForm.freeExerciseLimit}
+                      onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeExerciseLimit: parseInt(e.target.value) || 10 })}
+                      style={{ padding: "0.5rem 0.75rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa", width: "160px" }}
+                    />
+                    <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 10 câu (Câu thứ 11 sẽ bị khóa VIP)</div>
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.35rem" }}>
+                      Số đề thi Quiz tối đa mỗi ngày (Free User):
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={adminPolicyForm.freeDailyQuizLimit}
+                      onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeDailyQuizLimit: parseInt(e.target.value) || 2 })}
+                      style={{ padding: "0.5rem 0.75rem", backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "6px", color: "#fafafa", width: "160px" }}
+                    />
+                    <div style={{ fontSize: "0.72rem", color: "#71717a", marginTop: "0.2rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    style={{
+                      padding: "0.55rem 1.4rem",
+                      backgroundColor: "#2563eb",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontWeight: "600",
+                      fontSize: "0.85rem",
+                      cursor: "pointer",
+                      height: "38px",
+                    }}
+                  >
+                    Lưu cấu hình hạn mức
+                  </button>
+                </form>
+              </div>
+
+              {/* Users Table Card */}
+              <div
+                style={{
+                  backgroundColor: "#121215",
+                  border: "1px solid #27272a",
+                  borderRadius: "10px",
+                  padding: "1.5rem",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                  <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fafafa", margin: 0 }}>
+                    👥 Danh sách Người dùng ({usersList.length})
+                  </h3>
+                  <div style={{ fontSize: "0.8rem", color: "#71717a" }}>
+                    Tự động đồng bộ tiến độ & phân quyền theo từng User ID
+                  </div>
+                </div>
+
+                <div style={{ overflowX: "auto" }}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Họ tên & Email</th>
+                        <th>Vai trò (Role)</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động thay đổi quyền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {usersList.map((u) => {
+                        const isCurrent = u.id === currentUser.id;
+                        return (
+                          <tr key={u.id}>
+                            <td>
+                              <div style={{ fontWeight: "600", color: "#fafafa", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                {u.name}
+                                {isCurrent && (
+                                  <span style={{ fontSize: "0.68rem", backgroundColor: "#27272a", padding: "0.1rem 0.35rem", borderRadius: "3px", color: "#60a5fa" }}>
+                                    (Bạn)
+                                  </span>
+                                )}
+                              </div>
+                              <div style={{ fontSize: "0.75rem", color: "#71717a" }}>{u.email}</div>
+                            </td>
+
+                            <td>
+                              <span
+                                style={{
+                                  fontSize: "0.72rem",
+                                  fontFamily: "Geist Mono",
+                                  fontWeight: "700",
+                                  padding: "0.2rem 0.5rem",
+                                  borderRadius: "4px",
+                                  backgroundColor: u.role === "ADMIN" ? "#ef444420" : u.role === "VIP" ? "#f59e0b20" : "#3b82f620",
+                                  color: u.role === "ADMIN" ? "#f87171" : u.role === "VIP" ? "#fbbf24" : "#60a5fa",
+                                  border: `1px solid ${u.role === "ADMIN" ? "#ef444450" : u.role === "VIP" ? "#f59e0b50" : "#3b82f650"}`,
+                                }}
+                              >
+                                {u.role === "ADMIN" ? "🛡️ ADMIN" : u.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
+                              </span>
+                            </td>
+
+                            <td>
+                              <span style={{ fontSize: "0.75rem", color: u.status === "ACTIVE" ? "#34d399" : "#fb7185", fontWeight: "600" }}>
+                                {u.status === "ACTIVE" ? "✓ Hoạt động" : "✕ Đã khóa"}
+                              </span>
+                            </td>
+
+                            <td style={{ fontSize: "0.75rem", color: "#71717a", fontFamily: "Geist Mono" }}>
+                              {u.createdAt}
+                            </td>
+
+                            <td>
+                              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                                {u.role !== "VIP" && u.role !== "ADMIN" && (
+                                  <button
+                                    onClick={() => handleUpdateUserRole(u.id, "VIP")}
+                                    style={{
+                                      padding: "0.25rem 0.6rem",
+                                      backgroundColor: "#f59e0b20",
+                                      border: "1px solid #f59e0b",
+                                      color: "#fbbf24",
+                                      borderRadius: "4px",
+                                      fontSize: "0.75rem",
+                                      fontWeight: "600",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    Nâng VIP ⭐
+                                  </button>
+                                )}
+
+                                {u.role === "VIP" && (
+                                  <button
+                                    onClick={() => handleUpdateUserRole(u.id, "FREE")}
+                                    style={{
+                                      padding: "0.25rem 0.6rem",
+                                      backgroundColor: "#27272a",
+                                      border: "1px solid #3f3f46",
+                                      color: "#a1a1aa",
+                                      borderRadius: "4px",
+                                      fontSize: "0.75rem",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    Hạ FREE
+                                  </button>
+                                )}
+
+                                {u.role !== "ADMIN" && (
+                                  <button
+                                    onClick={() => handleToggleUserStatus(u.id)}
+                                    style={{
+                                      padding: "0.25rem 0.6rem",
+                                      backgroundColor: u.status === "ACTIVE" ? "#ef444415" : "#10b98115",
+                                      border: `1px solid ${u.status === "ACTIVE" ? "#ef4444" : "#10b981"}`,
+                                      color: u.status === "ACTIVE" ? "#f87171" : "#34d399",
+                                      borderRadius: "4px",
+                                      fontSize: "0.75rem",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {u.status === "ACTIVE" ? "Khóa" : "Mở khóa"}
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* ============================================================== */}
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
@@ -986,7 +1830,7 @@ export default function Home() {
                   <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
                     <span style={{ fontSize: "1.6rem" }}>🔥</span>
                     <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#fafafa", margin: 0 }}>
-                      Chuỗi học tập {userTracker.streak} ngày liên tiếp!
+                      Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
                     </h1>
                   </div>
                   <p style={{ fontSize: "0.9rem", color: "#a1a1aa", margin: "0 0 1rem 0" }}>
@@ -1011,6 +1855,24 @@ export default function Home() {
                     <span style={{ fontSize: "0.78rem", color: "#71717a" }}>
                       Mục tiêu cấp tiếp theo: <strong style={{ color: "#60a5fa" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
                     </span>
+
+                    {currentUser.role === "FREE" && (
+                      <span
+                        onClick={() => setAuthModalOpen(true)}
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "#fbbf24",
+                          backgroundColor: "#f59e0b15",
+                          border: "1px solid #f59e0b40",
+                          padding: "0.2rem 0.5rem",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontWeight: "600",
+                        }}
+                      >
+                        ⚡ Nâng cấp VIP để mở khóa không giới hạn
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -1208,7 +2070,7 @@ export default function Home() {
                       Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
                     </h3>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", margin: "0.2rem 0 0 0" }}>
-                      Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương theo chuẩn sách Mai Lan Hương.
+                      Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương của tài khoản {currentUser.name}.
                     </p>
                   </div>
                 </div>
@@ -1410,7 +2272,7 @@ export default function Home() {
                       {/* Expanded Sub-lessons if chapter is selected */}
                       {isSelected && ch.lessons && ch.lessons.length > 0 && (
                         <div style={{ marginLeft: "1.75rem", paddingLeft: "0.6rem", borderLeft: "1px solid #27272a", marginTop: "0.2rem", marginBottom: "0.4rem" }}>
-                          {ch.lessons.map((ls, idx) => {
+                          {ch.lessons.map((ls) => {
                             const isLessonActive = selectedLesson?.id === ls.id;
                             const isLessonCompleted = userTracker.completedLessons?.includes(ls.id);
 
@@ -1925,255 +2787,347 @@ export default function Home() {
                 </div>
               )}
 
-              {/* TAB 2: EXERCISES PRACTICE */}
+              {/* TAB 2: EXERCISES PRACTICE (WITH VIP/FREE PERMISSION LOCKING) */}
               {activeTab === "exercises" && (
                 <div>
-                  {selectedChapter?.exercises && selectedChapter.exercises.length > 0 ? (
-                    selectedChapter.exercises.map((ex, eIdx) => (
-                      <div
-                        key={ex.id || eIdx}
+                  {/* VIP / Free Status Notice Banner */}
+                  <div
+                    style={{
+                      backgroundColor: currentUser.role === "VIP" ? "rgba(245, 158, 11, 0.08)" : "rgba(59, 130, 246, 0.08)",
+                      border: `1px solid ${currentUser.role === "VIP" ? "#f59e0b50" : "#3b82f650"}`,
+                      borderRadius: "8px",
+                      padding: "0.85rem 1.25rem",
+                      marginBottom: "1.5rem",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "0.75rem",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span>{currentUser.role === "VIP" ? "⭐" : "ℹ️"}</span>
+                      <span style={{ fontSize: "0.85rem", color: "#e4e4e7" }}>
+                        {currentUser.role === "VIP"
+                          ? "Tài khoản VIP: Bạn có toàn quyền truy cập 100% tất cả 2,939 câu bài tập và lời giải chi tiết."
+                          : `Tài khoản Miễn phí: Được phép làm tối đa ${accessPolicy.freeExerciseLimit} câu bài tập đầu tiên mỗi chuyên đề.`}
+                      </span>
+                    </div>
+
+                    {currentUser.role === "FREE" && (
+                      <button
+                        onClick={() => setAuthModalOpen(true)}
                         style={{
-                          backgroundColor: "#121215",
-                          border: "1px solid #27272a",
-                          borderRadius: "8px",
-                          padding: "1.5rem",
-                          marginBottom: "2rem",
+                          backgroundColor: "#f59e0b",
+                          color: "#09090b",
+                          border: "none",
+                          padding: "0.35rem 0.85rem",
+                          borderRadius: "4px",
+                          fontSize: "0.78rem",
+                          fontWeight: "700",
+                          cursor: "pointer",
                         }}
                       >
-                        {/* Exercise Header */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
-                          <div>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.35rem" }}>
-                              <span
-                                style={{
-                                  fontSize: "0.72rem",
-                                  fontFamily: "Geist Mono",
-                                  padding: "0.15rem 0.45rem",
-                                  borderRadius: "4px",
-                                  backgroundColor: "#27272a",
-                                  color: "#fafafa",
-                                  fontWeight: "700",
-                                }}
-                              >
-                                EXERCISE {ex.roman || (eIdx + 1)}
-                              </span>
-                              <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
-                                {ex.questions?.length || 0} câu hỏi
-                              </span>
-                            </div>
-                            <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa" }}>
-                              {ex.instruction_vi || ex.title}
-                            </div>
-                            {ex.instruction_vi && ex.title && (
-                              <div style={{ fontSize: "0.825rem", color: "#71717a", marginTop: "0.2rem" }}>
-                                {ex.title}
-                              </div>
-                            )}
-                          </div>
+                        Nâng cấp VIP ngay ⭐
+                      </button>
+                    )}
+                  </div>
 
-                          <div style={{ display: "flex", gap: "0.5rem" }}>
-                            <button
-                              onClick={() => checkAllQuestions(ex)}
-                              style={{
-                                padding: "0.4rem 0.75rem",
-                                borderRadius: "4px",
-                                backgroundColor: "#27272a",
-                                border: "1px solid #3f3f46",
-                                color: "#fafafa",
-                                fontSize: "0.75rem",
-                                fontWeight: "600",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Chấm điểm tất cả
-                            </button>
-                            <button
-                              onClick={() => resetExercise(ex)}
-                              style={{
-                                padding: "0.4rem 0.65rem",
-                                borderRadius: "4px",
-                                backgroundColor: "transparent",
-                                border: "1px solid #27272a",
-                                color: "#a1a1aa",
-                                fontSize: "0.75rem",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Làm lại
-                            </button>
-                          </div>
-                        </div>
+                  {selectedChapter?.exercises && selectedChapter.exercises.length > 0 ? (
+                    (() => {
+                      let globalChapterQuestionCounter = 0;
 
-                        {/* Questions List */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: "1.25rem" }}>
-                          {ex.questions?.map((q, qIdx) => {
-                            const res = results[q.id];
-                            const isAnswerOpen = showAnswers[q.id];
-                            const inputVal = userInputs[q.id] || "";
-                            const typeInfo = getQuestionTypeInfo(ex.type);
+                      return selectedChapter.exercises.map((ex, eIdx) => {
+                        const exerciseStartIdx = globalChapterQuestionCounter;
+                        globalChapterQuestionCounter += ex.questions?.length || 0;
 
-                            return (
-                              <div
-                                key={q.id || qIdx}
-                                style={{
-                                  backgroundColor: "#18181b",
-                                  border: res?.checked
-                                    ? res.isCorrect
-                                      ? "1px solid #10b981"
-                                      : "1px solid #f43f5e"
-                                    : "1px solid #27272a",
-                                  borderRadius: "6px",
-                                  padding: "1.1rem",
-                                }}
-                              >
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", fontWeight: "600" }}>
-                                    CÂU {q.num || (qIdx + 1)}
-                                  </span>
+                        return (
+                          <div
+                            key={ex.id || eIdx}
+                            style={{
+                              backgroundColor: "#121215",
+                              border: "1px solid #27272a",
+                              borderRadius: "8px",
+                              padding: "1.5rem",
+                              marginBottom: "2rem",
+                            }}
+                          >
+                            {/* Exercise Header */}
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
+                              <div>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.35rem" }}>
                                   <span
                                     style={{
-                                      fontSize: "0.68rem",
+                                      fontSize: "0.72rem",
                                       fontFamily: "Geist Mono",
-                                      padding: "0.1rem 0.4rem",
-                                      borderRadius: "3px",
-                                      backgroundColor: "#09090b",
-                                      color: "#a1a1aa",
-                                      border: "1px solid #27272a",
+                                      padding: "0.15rem 0.45rem",
+                                      borderRadius: "4px",
+                                      backgroundColor: "#27272a",
+                                      color: "#fafafa",
+                                      fontWeight: "700",
                                     }}
                                   >
-                                    {typeInfo.tag}
+                                    EXERCISE {ex.roman || eIdx + 1}
+                                  </span>
+                                  <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
+                                    {ex.questions?.length || 0} câu hỏi
                                   </span>
                                 </div>
-
-                                {/* Stem */}
-                                <div style={{ fontSize: "0.95rem", color: "#fafafa", lineHeight: "1.6", marginBottom: "0.75rem" }}>
-                                  {q.stem}
+                                <div style={{ fontSize: "1rem", fontWeight: "600", color: "#fafafa" }}>
+                                  {ex.instruction_vi || ex.title}
                                 </div>
-
-                                {/* Starter Prompt for Rewriting */}
-                                {q.starter_prompt && (
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.5rem",
-                                      backgroundColor: "#1c1917",
-                                      border: "1px solid #44403c",
-                                      padding: "0.45rem 0.75rem",
-                                      borderRadius: "4px",
-                                      fontSize: "0.825rem",
-                                      color: "#f59e0b",
-                                      marginBottom: "0.75rem",
-                                    }}
-                                  >
-                                    <span style={{ color: "#a8a29e", fontSize: "0.75rem", fontWeight: "600" }}>GỢI Ý MỞ ĐẦU:</span>
-                                    <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
+                                {ex.instruction_vi && ex.title && (
+                                  <div style={{ fontSize: "0.825rem", color: "#71717a", marginTop: "0.2rem" }}>
+                                    {ex.title}
                                   </div>
                                 )}
+                              </div>
 
-                                {/* Input Row */}
-                                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-                                  <input
-                                    type="text"
-                                    value={inputVal}
-                                    placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
-                                    onChange={(e) => handleInputChange(q.id, e.target.value)}
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title);
-                                    }}
+                              <div style={{ display: "flex", gap: "0.5rem" }}>
+                                <button
+                                  onClick={() => checkAllQuestions(ex, exerciseStartIdx)}
+                                  style={{
+                                    padding: "0.4rem 0.75rem",
+                                    borderRadius: "4px",
+                                    backgroundColor: "#27272a",
+                                    border: "1px solid #3f3f46",
+                                    color: "#fafafa",
+                                    fontSize: "0.75rem",
+                                    fontWeight: "600",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Chấm điểm bài này
+                                </button>
+                                <button
+                                  onClick={() => resetExercise(ex)}
+                                  style={{
+                                    padding: "0.4rem 0.65rem",
+                                    borderRadius: "4px",
+                                    backgroundColor: "transparent",
+                                    border: "1px solid #27272a",
+                                    color: "#a1a1aa",
+                                    fontSize: "0.75rem",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Làm lại
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Questions List */}
+                            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: "1.25rem" }}>
+                              {ex.questions?.map((q, qIdx) => {
+                                const questionGlobalIdx = exerciseStartIdx + qIdx;
+                                const isLockedForFree = currentUser.role === "FREE" && questionGlobalIdx >= accessPolicy.freeExerciseLimit;
+
+                                const res = results[q.id];
+                                const isAnswerOpen = showAnswers[q.id];
+                                const inputVal = userInputs[q.id] || "";
+                                const typeInfo = getQuestionTypeInfo(ex.type);
+
+                                if (isLockedForFree) {
+                                  return (
+                                    <div
+                                      key={q.id || qIdx}
+                                      style={{
+                                        backgroundColor: "#141417",
+                                        border: "1px dashed #f59e0b50",
+                                        borderRadius: "6px",
+                                        padding: "1.25rem",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#fbbf24", marginBottom: "0.3rem" }}>
+                                        🔒 Câu {questionGlobalIdx + 1}: Nội dung khóa dành riêng cho Thành viên VIP
+                                      </div>
+                                      <p style={{ fontSize: "0.8rem", color: "#a1a1aa", maxWidth: "520px", margin: "0 auto 0.75rem auto" }}>
+                                        Tài khoản Miễn phí được trải nghiệm tối đa {accessPolicy.freeExerciseLimit} câu đầu tiên. Hãy nâng cấp lên VIP để mở khóa toàn bộ câu hỏi và đáp án giải thích chi tiết!
+                                      </p>
+                                      <button
+                                        onClick={() => setAuthModalOpen(true)}
+                                        style={{
+                                          padding: "0.35rem 0.85rem",
+                                          backgroundColor: "#f59e0b",
+                                          color: "#09090b",
+                                          border: "none",
+                                          borderRadius: "4px",
+                                          fontSize: "0.78rem",
+                                          fontWeight: "700",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        Nâng cấp VIP ngay (Hoặc chuyển tài khoản)
+                                      </button>
+                                    </div>
+                                  );
+                                }
+
+                                return (
+                                  <div
+                                    key={q.id || qIdx}
                                     style={{
-                                      flex: 1,
-                                      minWidth: "220px",
-                                      padding: "0.5rem 0.75rem",
-                                      backgroundColor: "#09090b",
+                                      backgroundColor: "#18181b",
                                       border: res?.checked
                                         ? res.isCorrect
                                           ? "1px solid #10b981"
                                           : "1px solid #f43f5e"
                                         : "1px solid #27272a",
-                                      borderRadius: "5px",
-                                      color: "#fafafa",
-                                      fontSize: "0.875rem",
-                                      outline: "none",
-                                    }}
-                                  />
-
-                                  <button
-                                    onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title)}
-                                    style={{
-                                      padding: "0.5rem 0.9rem",
-                                      backgroundColor: "#27272a",
-                                      border: "1px solid #3f3f46",
-                                      borderRadius: "5px",
-                                      color: "#fafafa",
-                                      fontSize: "0.8rem",
-                                      fontWeight: "600",
-                                      cursor: "pointer",
+                                      borderRadius: "6px",
+                                      padding: "1.1rem",
                                     }}
                                   >
-                                    Kiểm tra
-                                  </button>
-
-                                  <button
-                                    onClick={() => toggleShowAnswer(q.id)}
-                                    style={{
-                                      padding: "0.5rem 0.75rem",
-                                      backgroundColor: "transparent",
-                                      border: "1px solid #27272a",
-                                      borderRadius: "5px",
-                                      color: "#71717a",
-                                      fontSize: "0.8rem",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    {isAnswerOpen ? "Ẩn đáp án" : "Đáp án"}
-                                  </button>
-                                </div>
-
-                                {/* Instant Result Message */}
-                                {res?.checked && (
-                                  <div
-                                    style={{
-                                      marginTop: "0.6rem",
-                                      fontSize: "0.825rem",
-                                      fontWeight: "500",
-                                      color: res.isCorrect ? "#34d399" : "#fb7185",
-                                    }}
-                                  >
-                                    {res.feedback}
-                                  </div>
-                                )}
-
-                                {/* Correct Answer Box */}
-                                {isAnswerOpen && (
-                                  <div
-                                    style={{
-                                      marginTop: "0.75rem",
-                                      padding: "0.65rem 0.85rem",
-                                      backgroundColor: "#09090b",
-                                      border: "1px solid #27272a",
-                                      borderRadius: "5px",
-                                    }}
-                                  >
-                                    <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
-                                      Đáp án chính xác:
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+                                      <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", fontWeight: "600" }}>
+                                        CÂU {q.num || qIdx + 1}
+                                      </span>
+                                      <span
+                                        style={{
+                                          fontSize: "0.68rem",
+                                          fontFamily: "Geist Mono",
+                                          padding: "0.1rem 0.4rem",
+                                          borderRadius: "3px",
+                                          backgroundColor: "#09090b",
+                                          color: "#a1a1aa",
+                                          border: "1px solid #27272a",
+                                        }}
+                                      >
+                                        {typeInfo.tag}
+                                      </span>
                                     </div>
-                                    <div style={{ fontSize: "0.9rem", color: "#60a5fa", fontWeight: "600", marginTop: "0.2rem" }}>
-                                      {q.answers.map((a) => a.correct).join("  /  ")}
+
+                                    {/* Stem */}
+                                    <div style={{ fontSize: "0.95rem", color: "#fafafa", lineHeight: "1.6", marginBottom: "0.75rem" }}>
+                                      {q.stem}
                                     </div>
-                                    {q.explanation && (
-                                      <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginTop: "0.35rem" }}>
-                                        {q.explanation}
+
+                                    {/* Starter Prompt for Rewriting */}
+                                    {q.starter_prompt && (
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "0.5rem",
+                                          backgroundColor: "#1c1917",
+                                          border: "1px solid #44403c",
+                                          padding: "0.45rem 0.75rem",
+                                          borderRadius: "4px",
+                                          fontSize: "0.825rem",
+                                          color: "#f59e0b",
+                                          marginBottom: "0.75rem",
+                                        }}
+                                      >
+                                        <span style={{ color: "#a8a29e", fontSize: "0.75rem", fontWeight: "600" }}>GỢI Ý MỞ ĐẦU:</span>
+                                        <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
+                                      </div>
+                                    )}
+
+                                    {/* Input Row */}
+                                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                                      <input
+                                        type="text"
+                                        value={inputVal}
+                                        placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
+                                        onChange={(e) => handleInputChange(q.id, e.target.value)}
+                                        onKeyDown={(e) => {
+                                          if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx);
+                                        }}
+                                        style={{
+                                          flex: 1,
+                                          minWidth: "220px",
+                                          padding: "0.5rem 0.75rem",
+                                          backgroundColor: "#09090b",
+                                          border: res?.checked
+                                            ? res.isCorrect
+                                              ? "1px solid #10b981"
+                                              : "1px solid #f43f5e"
+                                            : "1px solid #27272a",
+                                          borderRadius: "5px",
+                                          color: "#fafafa",
+                                          fontSize: "0.875rem",
+                                          outline: "none",
+                                        }}
+                                      />
+
+                                      <button
+                                        onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx)}
+                                        style={{
+                                          padding: "0.5rem 0.9rem",
+                                          backgroundColor: "#27272a",
+                                          border: "1px solid #3f3f46",
+                                          borderRadius: "5px",
+                                          color: "#fafafa",
+                                          fontSize: "0.8rem",
+                                          fontWeight: "600",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        Kiểm tra
+                                      </button>
+
+                                      <button
+                                        onClick={() => toggleShowAnswer(q.id)}
+                                        style={{
+                                          padding: "0.5rem 0.75rem",
+                                          backgroundColor: "transparent",
+                                          border: "1px solid #27272a",
+                                          borderRadius: "5px",
+                                          color: "#71717a",
+                                          fontSize: "0.8rem",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        {isAnswerOpen ? "Ẩn đáp án" : "Đáp án"}
+                                      </button>
+                                    </div>
+
+                                    {/* Instant Result Message */}
+                                    {res?.checked && (
+                                      <div
+                                        style={{
+                                          marginTop: "0.6rem",
+                                          fontSize: "0.825rem",
+                                          fontWeight: "500",
+                                          color: res.isCorrect ? "#34d399" : "#fb7185",
+                                        }}
+                                      >
+                                        {res.feedback}
+                                      </div>
+                                    )}
+
+                                    {/* Correct Answer Box */}
+                                    {isAnswerOpen && (
+                                      <div
+                                        style={{
+                                          marginTop: "0.75rem",
+                                          padding: "0.65rem 0.85rem",
+                                          backgroundColor: "#09090b",
+                                          border: "1px solid #27272a",
+                                          borderRadius: "5px",
+                                        }}
+                                      >
+                                        <div style={{ fontSize: "0.72rem", color: "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
+                                          Đáp án chính xác:
+                                        </div>
+                                        <div style={{ fontSize: "0.9rem", color: "#60a5fa", fontWeight: "600", marginTop: "0.2rem" }}>
+                                          {q.answers.map((a) => a.correct).join("  /  ")}
+                                        </div>
+                                        {q.explanation && (
+                                          <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginTop: "0.35rem" }}>
+                                            {q.explanation}
+                                          </div>
+                                        )}
                                       </div>
                                     )}
                                   </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()
                   ) : (
                     <div style={{ padding: "3rem", textAlign: "center", backgroundColor: "#121215", border: "1px dashed #27272a", borderRadius: "8px", color: "#71717a" }}>
                       Chuyên đề này chưa có bài tập thực hành.
@@ -2192,6 +3146,42 @@ export default function Home() {
           <div style={{ flex: 1, backgroundColor: "#09090b", padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
+              {/* Daily Quiz Limit Notice for Free User */}
+              {isQuizLimitReached && (
+                <div
+                  style={{
+                    backgroundColor: "rgba(239, 68, 68, 0.12)",
+                    border: "1px solid #ef4444",
+                    borderRadius: "8px",
+                    padding: "1.25rem",
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
+                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f87171", marginBottom: "0.35rem" }}>
+                    🔒 Giới hạn lượt thi Quiz hôm nay
+                  </div>
+                  <p style={{ fontSize: "0.875rem", color: "#d4d4d8", margin: "0 0 1rem 0" }}>
+                    Tài khoản Miễn phí được làm tối đa {accessPolicy.freeDailyQuizLimit} đề Quiz mỗi ngày (Bạn đã làm {userTracker.quizzesCompletedToday || 0}/{accessPolicy.freeDailyQuizLimit} đề). Nâng cấp lên VIP để làm bài thi không giới hạn!
+                  </p>
+                  <button
+                    onClick={() => setAuthModalOpen(true)}
+                    style={{
+                      padding: "0.55rem 1.25rem",
+                      backgroundColor: "#f59e0b",
+                      color: "#09090b",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "0.85rem",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Nâng cấp VIP ngay ⭐
+                  </button>
+                </div>
+              )}
+
               {/* Quiz Control Card */}
               <div
                 style={{
@@ -2208,22 +3198,23 @@ export default function Home() {
                       Bộ đề Quiz 50 câu ngẫu nhiên
                     </h1>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem", lineHeight: "1.5" }}>
-                      Hệ thống tự động rút trích 50 câu hỏi từ ngân hàng 2,900+ bài tập. Các câu trả lời sai sẽ được ghi nhận vào Sổ tay để ôn luyện.
+                      Hệ thống tự động rút trích 50 câu hỏi từ ngân hàng 2,900+ bài tập. Các câu trả lời sai sẽ được ghi nhận vào Sổ tay của {currentUser.name}.
                     </p>
                   </div>
 
                   <div style={{ display: "flex", gap: "0.5rem" }}>
                     <button
+                      disabled={isQuizLimitReached}
                       onClick={() => startNewQuiz(selectedQuizTopic)}
                       style={{
                         padding: "0.5rem 1rem",
-                        backgroundColor: "#27272a",
+                        backgroundColor: isQuizLimitReached ? "#27272a" : "#2563eb",
                         border: "1px solid #3f3f46",
                         borderRadius: "6px",
-                        color: "#fafafa",
+                        color: isQuizLimitReached ? "#71717a" : "#ffffff",
                         fontSize: "0.825rem",
                         fontWeight: "600",
-                        cursor: "pointer",
+                        cursor: isQuizLimitReached ? "not-allowed" : "pointer",
                       }}
                     >
                       Trộn đề mới (50 câu)
@@ -2254,6 +3245,7 @@ export default function Home() {
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <label style={{ fontSize: "0.8rem", color: "#71717a", fontWeight: "500" }}>Chủ đề kiểm tra:</label>
                     <select
+                      disabled={isQuizLimitReached}
                       value={selectedQuizTopic}
                       onChange={(e) => {
                         setSelectedQuizTopic(e.target.value);
@@ -2267,7 +3259,7 @@ export default function Home() {
                         color: "#fafafa",
                         fontSize: "0.825rem",
                         outline: "none",
-                        cursor: "pointer",
+                        cursor: isQuizLimitReached ? "not-allowed" : "pointer",
                       }}
                     >
                       <option value="ALL">Toàn bộ 12 Chương (Tổng hợp)</option>
@@ -2499,7 +3491,7 @@ export default function Home() {
                       )}
 
                       {/* Answer Reveal Box */}
-                      {(!quizSubmitted && isAnswerShown) && (
+                      {!quizSubmitted && isAnswerShown && (
                         <div
                           style={{
                             marginTop: "0.75rem",
@@ -2586,10 +3578,10 @@ export default function Home() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
                     <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: "#fafafa", letterSpacing: "-0.015em" }}>
-                      Sổ tay câu hỏi cần ôn lại
+                      Sổ tay câu hỏi cần ôn lại của {currentUser.name}
                     </h1>
                     <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem" }}>
-                      Lưu trữ tự động các câu bạn đã làm chưa đúng trong phần bài tập và bài thi Quiz. Bạn có thể làm lại tại đây cho đến khi thành thạo.
+                      Lưu trữ tự động các câu bạn đã làm chưa đúng trong phần bài tập và bài thi Quiz. Dữ liệu được lưu riêng cho tài khoản của bạn.
                     </p>
                   </div>
 
@@ -2651,7 +3643,7 @@ export default function Home() {
                   }}
                 >
                   <div style={{ fontSize: "1.1rem", fontWeight: "600", color: "#fafafa", marginBottom: "0.5rem" }}>
-                    Chưa có câu sai nào được lưu
+                    Chưa có câu sai nào trong sổ tay của bạn
                   </div>
                   <p style={{ fontSize: "0.85rem", color: "#71717a", maxWidth: "420px", margin: "0 auto 1.25rem auto" }}>
                     Khi bạn làm bài tập ở mục "12 Chuyên đề" hoặc làm bài kiểm tra ở "Quiz Engine", những câu chưa đúng sẽ tự động xuất hiện tại đây để bạn ôn luyện lại.
