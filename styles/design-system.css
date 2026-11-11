@@ -1,0 +1,83 @@
+/**
+ * Milestone 2.6.9 & 2.6.10: Enterprise Accessibility (WCAG 2.2 AA) & Reduced Motion Stylesheet
+ * Imported globally in pages/_app.js
+ */
+
+:root {
+  --ds-focus-ring: #2563eb;
+  --ds-focus-shadow: 0 0 0 3px #bfdbfe;
+  --ds-shimmer-base: #e2e8f0;
+  --ds-shimmer-highlight: #f8fafc;
+}
+
+[data-theme="dark"] {
+  --ds-focus-ring: #38bdf8;
+  --ds-focus-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
+  --ds-shimmer-base: #1f1f26;
+  --ds-shimmer-highlight: #272733;
+}
+
+/* WCAG 2.2 2.4.11 Focus Not Obscured: Reserve sticky header scroll padding */
+html {
+  scroll-padding-top: 76px;
+}
+
+/* Visible High-Contrast Keyboard Focus Ring */
+.ds-focusable:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ds-focus-ring) !important;
+  outline-offset: 2px !important;
+  box-shadow: var(--ds-focus-shadow);
+}
+
+/* WCAG 2.2 2.5.8 Target Size Minimum >= 24px desktop, 44px touch devices */
+.ds-target-min {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+@media (pointer: coarse) {
+  .ds-touch-target,
+  .ds-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Zero-CLS Skeleton Shimmer */
+@keyframes ds-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.ds-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--ds-shimmer-base) 25%,
+    var(--ds-shimmer-highlight) 50%,
+    var(--ds-shimmer-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: ds-shimmer 1.4s ease infinite;
+}
+
+/* Milestone 2.6.10: Mandatory Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

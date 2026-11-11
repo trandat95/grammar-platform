@@ -1,7 +1,15 @@
 import React, { useState } from "react";
+import AiAdvisorDrawer from "./AiAdvisorDrawer";
+import { Button, Badge, Alert } from "../design-system";
 
 export default function PersonalizedRoadmapView({
   roadmap,
+  scoreResult = null,
+  currentUser = null,
+  authToken = null,
+  isAdjusting = false,
+  lastAdjustSummary = "",
+  onAdaptiveAdjust,
   onToggleTask,
   onNavigateToLesson,
   onRetakeTest,
@@ -9,6 +17,7 @@ export default function PersonalizedRoadmapView({
   isLight,
 }) {
   const [activeWeekTab, setActiveWeekTab] = useState("all"); // 'all' | 1 | 2 | 3 | 4
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
 
   if (!roadmap) {
     return (
@@ -87,10 +96,67 @@ export default function PersonalizedRoadmapView({
           {title}
         </h1>
 
-        <p style={{ fontSize: "0.95rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1.5rem" }}>
+        <p style={{ fontSize: "0.95rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1rem" }}>
           Lộ trình được thiết kế tối ưu hóa trong 4 tuần để đưa trình độ ngữ pháp của bạn từ{" "}
           <strong>{estimated_level}</strong> lên mục tiêu <strong>{target_level}</strong>, ưu tiên tập trung lấp đầy các lỗ hổng kiến thức trước.
         </p>
+
+        {/* Adaptive Recalibration Bar (Milestone 2.8.8) */}
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.65rem", marginBottom: "1.25rem" }}>
+          <Badge tone="success" isLight={isLight}>
+            Roadmap Version v{roadmap.current_version || 1}
+          </Badge>
+          {onAdaptiveAdjust && (
+            <Button
+              variant="primary"
+              size="sm"
+              isLight={isLight}
+              isLoading={isAdjusting}
+              onClick={onAdaptiveAdjust}
+            >
+              ⚡ Tự động Điều chỉnh Thích ứng (Adaptive Engine)
+            </Button>
+          )}
+          {Array.isArray(roadmap.version_history) && roadmap.version_history.length > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              isLight={isLight}
+              onClick={() => setShowVersionHistory((p) => !p)}
+            >
+              {showVersionHistory ? "Ẩn Lịch sử Phiên bản" : `🕒 Lịch sử Phiên bản (${roadmap.version_history.length})`}
+            </Button>
+          )}
+        </div>
+
+        {lastAdjustSummary && (
+          <div style={{ marginBottom: "1rem" }}>
+            <Alert tone="info" title="Kết quả Điều chỉnh Lộ trình Thích ứng" isLight={isLight}>
+              {lastAdjustSummary}
+            </Alert>
+          </div>
+        )}
+
+        {showVersionHistory && Array.isArray(roadmap.version_history) && (
+          <div
+            style={{
+              backgroundColor: T.card,
+              border: `1px solid ${T.borderSubtle}`,
+              borderRadius: "0.75rem",
+              padding: "0.85rem 1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ fontSize: "0.78rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.45rem" }}>
+              Lịch sử Điều chỉnh Lộ trình (Roadmap Versions):
+            </div>
+            {[...roadmap.version_history].reverse().map((vh, idx) => (
+              <div key={idx} style={{ fontSize: "0.76rem", color: T.textSecondary, padding: "0.25rem 0", borderTop: idx > 0 ? `1px dashed ${T.borderSubtle}` : "none" }}>
+                <strong>v{vh.version_number}</strong> • {vh.trigger_reason} — {vh.summary}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Progress Bar & Stats */}
         <div
@@ -341,6 +407,12 @@ export default function PersonalizedRoadmapView({
                           {task.priority === "HIGH" ? "Ưu tiên cao" : "Tiêu chuẩn"}
                         </span>
 
+                        {task.adaptive_badge && (
+                          <Badge tone="accent" isLight={isLight}>
+                            {task.adaptive_badge}
+                          </Badge>
+                        )}
+
                         {task.duration_est && (
                           <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
                             ⏱️ {task.duration_est}
@@ -475,6 +547,17 @@ export default function PersonalizedRoadmapView({
         >
           Làm bài Retake Assessment 🔄
         </button>
+      </div>
+
+      {/* Conversational AI Advisor inside Roadmap */}
+      <div style={{ marginTop: "2rem" }}>
+        <AiAdvisorDrawer
+          currentUser={currentUser}
+          authToken={authToken}
+          scoreResult={scoreResult}
+          onNavigateToLesson={onNavigateToLesson}
+          isLight={isLight}
+        />
       </div>
     </div>
   );

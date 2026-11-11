@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import DiagnosticQuestionReview from "./DiagnosticQuestionReview";
+import AiAdvisorDrawer from "./AiAdvisorDrawer";
+import { analyzeDiagnosticRootCauses } from "../../lib/diagnostic/knowledge.graph";
+import { Button, Badge } from "../design-system";
 
 export default function DiagnosticAnalysisDashboard({
   scoreResult,
   roadmap,
+  analytics = null,
+  currentUser = null,
+  authToken = null,
   onViewRoadmap,
   onRetakeTest,
   onNavigateToLesson,
@@ -11,6 +17,12 @@ export default function DiagnosticAnalysisDashboard({
   isLight,
 }) {
   const [showReviewModal, setShowReviewModal] = useState(false);
+
+  const rootCauseAnalysis = useMemo(() => {
+    if (!scoreResult) return null;
+    if (scoreResult.root_cause_analysis) return scoreResult.root_cause_analysis;
+    return analyzeDiagnosticRootCauses(scoreResult.detailed_answers || [], scoreResult.skill_results || []);
+  }, [scoreResult]);
 
   if (!scoreResult) {
     return (
@@ -308,6 +320,142 @@ export default function DiagnosticAnalysisDashboard({
           <span>Làm lại bài kiểm tra</span>
           <span>🔄</span>
         </button>
+      </div>
+
+      {/* Milestone 2.8.4 & 2.8.9: Progress Comparison & Retention Score */}
+      {analytics?.retentionMetrics?.growthSummary && (
+        <div
+          style={{
+            backgroundColor: T.card,
+            borderRadius: "1rem",
+            padding: "1.35rem 1.5rem",
+            border: `1px solid ${T.accentBorder}`,
+            marginBottom: "2rem",
+            boxShadow: T.shadow,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.85rem" }}>
+            <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
+              📈 Đối soát Tăng trưởng &amp; Độ bền Kiến thức (Analytics 2.8)
+            </h2>
+            <Badge tone={analytics.retentionMetrics.growthSummary.growthDelta >= 0 ? "success" : "warning"} isLight={isLight}>
+              {analytics.retentionMetrics.growthSummary.attemptCount} lần kiểm tra •{" "}
+              {analytics.retentionMetrics.growthSummary.growthDelta >= 0
+                ? `+${analytics.retentionMetrics.growthSummary.growthDelta}% Growth`
+                : `${analytics.retentionMetrics.growthSummary.growthDelta}%`}
+            </Badge>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "0.75rem" }}>
+            <div style={{ backgroundColor: T.bgElevated, borderRadius: "0.7rem", padding: "0.75rem" }}>
+              <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: 600 }}>Điểm đầu vào (Lần 1)</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: T.textHeading }}>
+                {analytics.retentionMetrics.growthSummary.initialScore}/100 ({analytics.retentionMetrics.growthSummary.initialLevel})
+              </div>
+            </div>
+            <div style={{ backgroundColor: T.bgElevated, borderRadius: "0.7rem", padding: "0.75rem" }}>
+              <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: 600 }}>Kết quả gần nhất</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: T.accent }}>
+                {analytics.retentionMetrics.growthSummary.latestScore}/100 ({analytics.retentionMetrics.growthSummary.latestLevel})
+              </div>
+            </div>
+            <div style={{ backgroundColor: T.bgElevated, borderRadius: "0.7rem", padding: "0.75rem" }}>
+              <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: 600 }}>Knowledge Retention Score</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: T.success }}>
+                {analytics.retentionMetrics.overallRetentionScore}%
+              </div>
+            </div>
+            <div style={{ backgroundColor: T.bgElevated, borderRadius: "0.7rem", padding: "0.75rem" }}>
+              <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: 600 }}>Thẻ SM-2 Đã Làm Chủ</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: T.warning }}>
+                {analytics.retentionMetrics.masteredCardsCount} thẻ
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Milestone 2.8.7: Knowledge Graph Prerequisites & Root Cause Analysis */}
+      {rootCauseAnalysis && rootCauseAnalysis.totalIncorrectAnalyzed > 0 && (
+        <div
+          style={{
+            backgroundColor: T.card,
+            borderRadius: "1rem",
+            padding: "1.5rem",
+            border: `1px solid ${T.cardBorder}`,
+            boxShadow: T.shadow,
+            marginBottom: "2rem",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.9rem" }}>
+            <div>
+              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: T.textHeading }}>
+                🕸️ Phân tích Nguyên nhân Gốc rễ &amp; Tiên quyết (Knowledge Graph DAG)
+              </h2>
+              <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.8rem", color: T.textMuted }}>
+                Phân tích {rootCauseAnalysis.totalIncorrectAnalyzed} câu chưa đúng để truy vết lỗ hổng nền tảng cần vá trước.
+              </p>
+            </div>
+            {rootCauseAnalysis.primaryRootCause && (
+              <Badge tone="danger" isLight={isLight}>
+                Chính: {rootCauseAnalysis.primaryRootCause.label_vi}
+              </Badge>
+            )}
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.7rem", marginBottom: "1rem" }}>
+            {rootCauseAnalysis.rootCauses.map((rc) => (
+              <div
+                key={rc.code}
+                style={{
+                  backgroundColor: T.bgElevated,
+                  border: `1px solid ${T.borderSubtle}`,
+                  borderRadius: "0.75rem",
+                  padding: "0.85rem",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.3rem" }}>
+                  <strong style={{ fontSize: "0.8rem", color: T.textHeading }}>{rc.label_vi}</strong>
+                  <Badge tone="warning" isLight={isLight}>{rc.count} câu</Badge>
+                </div>
+                <p style={{ margin: 0, fontSize: "0.76rem", color: T.textSecondary, lineHeight: 1.45 }}>
+                  {rc.advice}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {rootCauseAnalysis.prerequisiteGaps.length > 0 && (
+            <div style={{ borderTop: `1px dashed ${T.borderSubtle}`, paddingTop: "0.85rem" }}>
+              <div style={{ fontSize: "0.78rem", fontWeight: 700, color: T.textSecondary, marginBottom: "0.5rem" }}>
+                Bài học Tiên quyết cần nắm vững trước (1-Click từ Knowledge Graph):
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                {rootCauseAnalysis.prerequisiteGaps.map((pg) => (
+                  <Button
+                    key={pg.lesson_code}
+                    variant="secondary"
+                    size="sm"
+                    isLight={isLight}
+                    onClick={() => onNavigateToLesson && onNavigateToLesson(pg.chapter_number, pg.lesson_id)}
+                  >
+                    📖 Tiên quyết Ch.{pg.chapter_number}: {pg.lesson_title} (cho {pg.for_topic}) ➔
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Milestone 2.8.10: AI Learning Advisor */}
+      <div style={{ marginBottom: "2rem" }}>
+        <AiAdvisorDrawer
+          currentUser={currentUser}
+          authToken={authToken}
+          scoreResult={scoreResult}
+          onNavigateToLesson={onNavigateToLesson}
+          isLight={isLight}
+        />
       </div>
 
       {/* 10 Topic Skills Breakdown Matrix */}

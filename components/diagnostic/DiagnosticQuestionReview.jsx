@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StructuredExplanation from "../explanation/StructuredExplanation";
+import { migrateQuestionExplanation } from "../../lib/explanation/explanation.migrator";
 
 export default function DiagnosticQuestionReview({
   detailedAnswers = [],
@@ -8,6 +9,14 @@ export default function DiagnosticQuestionReview({
   isLight,
 }) {
   const [filterMode, setFilterMode] = useState("ALL"); // 'ALL' | 'INCORRECT' | 'CORRECT'
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape" && onClose) onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   const filteredQuestions = detailedAnswers.filter((q) => {
     if (filterMode === "INCORRECT") return !q.is_correct;
@@ -20,6 +29,9 @@ export default function DiagnosticQuestionReview({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Chi tiết bài làm và giải thích sư phạm"
       style={{
         position: "fixed",
         inset: 0,
@@ -275,10 +287,40 @@ export default function DiagnosticQuestionReview({
               {q.pedagogy && (
                 <div style={{ marginTop: "1rem" }}>
                   <StructuredExplanation
-                    explanation={q.pedagogy}
+                    explanation={migrateQuestionExplanation({
+                      id: q.question_id,
+                      topic_name: q.topic_vi || "Ngữ pháp",
+                      stem: q.stem,
+                      answer: (q.options || []).find((o) => o.key === q.correct_answer)?.text || q.correct_answer,
+                      pedagogy: {
+                        translation: q.pedagogy.translation || "",
+                        common_mistakes: Array.isArray(q.pedagogy.common_mistakes)
+                          ? q.pedagogy.common_mistakes.map((m) =>
+                              typeof m === "string"
+                                ? {
+                                    mistake: m,
+                                    reason: q.pedagogy.rule?.explanation || "Nhầm dấu hiệu hoặc cấu trúc.",
+                                    correction: (q.options || []).find((o) => o.key === q.correct_answer)?.text || q.correct_answer,
+                                    prevention_tip: q.pedagogy.signal?.grammar_clues?.[0] || "Kiểm tra lại từ khóa nhận biết.",
+                                  }
+                                : m
+                            )
+                          : [],
+                        exam_tips: Array.isArray(q.pedagogy.exam_tips)
+                          ? q.pedagogy.exam_tips.map((tip) =>
+                              typeof tip === "string"
+                                ? {
+                                    strategy: tip,
+                                    example: q.stem,
+                                    warning: q.pedagogy.rule?.formula || "Đối chiếu chủ ngữ và mốc thời gian.",
+                                  }
+                                : tip
+                            )
+                          : [],
+                      },
+                      explanation: q.pedagogy.rule?.explanation || "",
+                    })}
                     questionId={q.question_id}
-                    difficulty="Intermediate"
-                    T={T}
                     isLight={isLight}
                   />
                 </div>

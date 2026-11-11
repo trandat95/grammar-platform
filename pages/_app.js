@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useEffect } from "react";
+import "../styles/design-system.css";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -26,7 +27,8 @@ export default function MyApp({ Component, pageProps }) {
               (function() {
                 try {
                   var saved = localStorage.getItem('grammar_theme');
-                  var isLight = saved === 'light';
+                  var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                  var isLight = saved ? saved === 'light' : prefersLight;
                   document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
                   document.documentElement.style.backgroundColor = isLight ? '#f8fafc' : '#09090b';
                 } catch (e) {}

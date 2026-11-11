@@ -173,7 +173,7 @@ export default function SyncStatusIndicator({
                 fontSize: "0.74rem",
                 fontWeight: "700",
                 backgroundColor: T.accent,
-                color: isLight ? "#ffffff" : "#09090b",
+                color: isLight ? "#ffffff" : T.bg,
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",

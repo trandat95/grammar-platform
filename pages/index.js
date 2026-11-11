@@ -139,7 +139,7 @@ export default function Home() {
   const [stepUpError, setStepUpError] = useState("");
   const [activeRemedialMap, setActiveRemedialMap] = useState({});
 
-    // --- Theme State (Dark vs Light / White Mode) ---
+  // --- Theme State (Dark vs Light / White Mode + OS MatchMedia Fallback) ---
   const [themeMode, setThemeMode] = useState("dark");
 
   useEffect(() => {
@@ -147,6 +147,11 @@ export default function Home() {
       const saved = localStorage.getItem("grammar_theme");
       if (saved === "light" || saved === "dark") {
         setThemeMode(saved);
+        document.documentElement.setAttribute("data-theme", saved);
+      } else if (typeof window !== "undefined" && window.matchMedia) {
+        const osTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        setThemeMode(osTheme);
+        document.documentElement.setAttribute("data-theme", osTheme);
       }
     } catch (e) {}
   }, []);
@@ -156,6 +161,7 @@ export default function Home() {
       const next = prev === "dark" ? "light" : "dark";
       try {
         localStorage.setItem("grammar_theme", next);
+        document.documentElement.setAttribute("data-theme", next);
       } catch (e) {}
       return next;
     });
@@ -4321,6 +4327,7 @@ export default function Home() {
         {currentView === "diagnostic" && (
           <GrammarDiagnosticEngine
             currentUser={currentUser}
+            authToken={activeAuthToken}
             userTracker={userTracker}
             onNavigateToLesson={handleNavigateToDiagnosticLesson}
             T={T}

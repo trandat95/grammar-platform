@@ -6,6 +6,7 @@
 
 import { scoreDiagnosticAttempt } from "../../../lib/diagnostic/diagnostic.scoring";
 import { generatePersonalizedRoadmap } from "../../../lib/diagnostic/roadmap.generator";
+import { analyzeDiagnosticRootCauses } from "../../../lib/diagnostic/knowledge.graph";
 import { supabaseServer } from "../../../lib/supabase/server";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -31,9 +32,25 @@ export default async function handler(req, res) {
 
     // 1. Layer 1: Deterministic Scorer (Zero Hallucination)
     const scoreResult = scoreDiagnosticAttempt(answers, duration_seconds);
+    scoreResult.root_cause_analysis = analyzeDiagnosticRootCauses(
+      scoreResult.detailed_answers,
+      scoreResult.skill_results
+    );
 
     // 2. Layer 2: Actionable Personalized Roadmap Generator
     const roadmap = generatePersonalizedRoadmap(scoreResult, user_tracker);
+    if (roadmap) {
+      roadmap.current_version = 1;
+      roadmap.version_history = [
+        {
+          version_number: 1,
+          trigger_reason: "initial_diagnostic",
+          adjustments_count: 0,
+          summary: "Khởi tạo lộ trình 4 tuần từ bài kiểm tra chẩn đoán 30 câu.",
+          created_at: new Date().toISOString(),
+        },
+      ];
+    }
 
     let savedToCloud = false;
     let attemptId = null;
@@ -137,6 +154,21 @@ export default async function handler(req, res) {
             if (taskInserts.length > 0) {
               await supabaseServer.from("roadmap_items").insert(taskInserts);
             }
+
+            // Record initial version v1 snapshot in roadmap_versions
+            await supabaseServer.from("roadmap_versions").insert({
+              roadmap_id: roadmapData.id,
+              user_id: user_id,
+              version_number: 1,
+              trigger_reason: "initial_diagnostic",
+              adjustment_summary: [
+                {
+                  rule: "INITIAL_GENERATION",
+                  detail: `Khởi tạo lộ trình từ kết quả ${scoreResult.percentage}/100 (${scoreResult.estimated_level.code}).`,
+                },
+              ],
+              weeks_snapshot: roadmap.weeks,
+            });
           }
         }
       } catch (dbErr) {
