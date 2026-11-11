@@ -1,7 +1,8 @@
-# 🗺️ BẢN ĐỒ PHÁT TRIỂN & KIẾN TRÚC HỆ THỐNG (LIVING ROADMAP & ARCHITECTURE GUIDE)
-> **Dự án:** Grammar Engine - Nền tảng Tự học & Luyện thi Ngữ pháp Tiếng Anh Toàn diện  
+# 🗺️ BẢN ĐỒ PHÁT TRIỂN & KIẾN TRÚC HỆ THỐNG (LIVING ROADMAP & ENTERPRISE ARCHITECTURE GUIDE)
+> **Dự án:** Grammar Engine - Nền tảng Tự học & Luyện thi Ngữ pháp Tiếng Anh Toàn diện (Personalized English Grammar Learning Platform)  
 > **Nguồn học liệu:** Giáo trình *Ngữ pháp tiếng Anh* - Mai Lan Hương & Hà Thanh Uyên  
-> **Phiên bản hiện tại:** `v1.5-phase2-prep`  
+> **Kiến trúc:** Enterprise EdTech (Next.js + Supabase PostgreSQL 17 + Offline Sync Engine)  
+> **Phiên bản hiện tại:** `v2.0-architect-enhanced`  
 > **Cập nhật gần nhất:** 11/11/2026  
 > **Tài liệu điều hướng tối cao:** Mọi phiên làm việc / Prompt tiếp theo **BẮT BUỘC ĐỌC FILE NÀY ĐẦU TIÊN** để nắm bắt chính xác tiến độ, kiến trúc và bước đi tiếp theo.
 
@@ -10,12 +11,16 @@
 ## 📌 1. ĐỊNH VỊ GIAI ĐOẠN HIỆN TẠI (CURRENT PHASE STATUS)
 
 ```
-[ Phase 1: Frontend MVP & Gamified Core ] ---> [ Phase 2: Cloud Database & Auth (HIỆN TẠI) ] ---> [ Phase 3: AI Tutor & Monetization ]
-                  ✅ HOÀN THÀNH                                 🚀 ĐANG TRIỂN KHAI                                  ⏳ KẾ TIẾP
+[ Phase 1: Frontend MVP & Gamified Core ] ---> [ Phase 2: Enterprise Cloud & Learning Platform (HIỆN TẠI) ] ---> [ Phase 3: AI Tutor & Monetization ]
+                  ✅ HOÀN THÀNH                                        🚀 ĐANG TÁI CẤU TRÚC & TRIỂN KHAI                                  ⏳ KẾ TIẾP
 ```
 
-* **Trạng thái hiện tại:** **BẮT ĐẦU GIAI ĐOẠN 2.1 (PHASE 2 - CLOUD DATABASE ENHANCEMENT)**.
-* **Mục tiêu cấp thiết nhất:** Nâng cấp tầng dữ liệu từ `LocalStorage` (Client-side) lên **Supabase Cloud Database (PostgreSQL 17)**, đồng bộ tài khoản, tiến độ học tập (Streak/XP), sổ tay câu sai và sổ từ vựng lên đám mây.
+* **Trọng tâm hiện tại:** **GIAI ĐOẠN 2 - NÂNG CẤP LÊN PERSONALIZED GRAMMAR LEARNING PLATFORM CHUYÊN SÂU**.
+* **Mục tiêu cấp thiết nhất:** 
+  1. Tách lớp kiến trúc Client/Server/Services/Repositories bảo mật tuyệt đối `SERVICE_ROLE_KEY`.
+  2. Nâng cấp schema Supabase PostgreSQL 17 (9 bảng), thiết lập RLS đa tầng chống đệ quy (No Infinite Recursion), triggers idempotent với `search_path = public`, composite indexes.
+  3. Xây dựng **Offline Sync Engine** đa tầng giải quyết triệt để xung đột LocalStorage / IndexedDB <-> Cloud.
+  4. Chuẩn hóa **Structured Pedagogical Explanation Engine** (JSON schema 5 thành phần), **Grammar Visualization Engine** (sơ đồ riêng cho từng chuyên đề), và hệ thống **Learning Analytics & Smart Recommendation**.
 * **Thông tin Môi trường kết nối:**
   - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
   - 🐙 **GitHub Repository:** [doanphuongtanthoihiep-crypto/grammar-platform](https://github.com/doanphuongtanthoihiep-crypto/grammar-platform)
@@ -29,72 +34,88 @@
 
 ---
 
-## 🏛️ 2. KIẾN TRÚC DỰ ÁN & CẤU TRÚC THƯ MỤC HIỆN TẠI
+## 🏛️ 2. MA TRẬN PHÂN CHIA MILESTONE & THỨ TỰ ƯU TIÊN (PRIORITY MATRIX)
+
+Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm bảo tính liên tục của nền tảng học tập, lộ trình Phase 2 được tổ chức theo thứ tự ưu tiên kiến trúc nghiêm ngặt:
+
+| Nhóm chức năng | Milestone | Tên Milestone | Mức độ ưu tiên | Trạng thái |
+| :--- | :--- | :--- | :---: | :---: |
+| **Infrastructure** | **2.1** | **Database Provisioning, Security Hardening & RLS** | **P0 (Critical)** | 🚀 Tái cấu trúc |
+| **Infrastructure** | **2.2** | **Supabase SDK Layering (Client / Server / Services)** | **P0 (Critical)** | 🚀 Tái cấu trúc |
+| **Infrastructure** | **2.3** | **Auth & Offline Sync Engine (Conflict Resolution)** | **P0 (Critical)** | 🚀 Tái cấu trúc |
+| **Management** | **2.4** | **Enterprise Admin Dashboard & Server Audit Logs** | **P1 (High)** | 🔄 Nâng cấp |
+| **Content** | **2.5** | **Structured Pedagogical Explanation Engine (JSON Schema)**| **P1 (High)** | 🔄 Nâng cấp |
+| **Design** | **2.6** | **Design Token System & White/Dark Mode WCAG AA** | **P2 (Medium)**| ✅ Core Ready |
+| **Content** | **2.7** | **Grammar Visualization Engine & Audio Engine** | **P1 (High)** | 🔄 Nâng cấp |
+| **Intelligence** | **2.8** | **Learning Analytics Engine (Topic & Pattern Tracking)**| **P2 (High)** | ⏳ Kế tiếp |
+| **Intelligence** | **2.9** | **Smart Diagnostic & Recommendation Engine** | **P2 (High)** | ⏳ Kế tiếp |
+| **Gamification** | **2.10**| **Achievement, Level & Gamification System** | **P2 (Medium)**| ⏳ Kế tiếp |
+| **Quality** | **2.11**| **Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp |
+
+---
+
+## 🏛️ 3. KIẾN TRÚC DỰ ÁN & PHÂN TÁCH LỚP (LAYERED ARCHITECTURE)
+
+Hệ thống Next.js Pages Router được phân tầng rõ rệt nhằm triệt tiêu hoàn toàn rủi ro lộ khóa bảo mật và đảm bảo code clean, dễ kiểm thử tự động:
 
 ```
 grammar-platform/
+├── lib/
+│   ├── supabase/
+│   │   ├── client.js            # Browser Supabase Client (Chỉ dùng NEXT_PUBLIC_SUPABASE_ANON_KEY)
+│   │   ├── server.js            # Server-side Client (Sử dụng SUPABASE_SERVICE_ROLE_KEY, chỉ chạy trên Node.js/API)
+│   │   └── middleware.js        # Session check & token refresh helper
+│   ├── sync/
+│   │   ├── indexed-db.js        # Local Database adapter cho lưu trữ lớn
+│   │   ├── sync-queue.js        # Hàng đợi Offline Write Queue
+│   │   └── sync-manager.js      # Bộ điều phối đồng bộ & giải quyết xung đột (Conflict Resolution)
+│   ├── audio/
+│   │   ├── audio.service.js     # Trình phát âm thanh & Cache
+│   │   └── speech.service.js    # Web Speech API & TTS Fallback (US / UK accents, Playback speed)
+│   └── tokens/
+│       └── design-tokens.js     # Bảng mã màu, khoảng cách, typography tập trung
+├── services/
+│   ├── auth.service.js          # Nghiệp vụ đăng ký, đăng nhập, phân quyền
+│   ├── profile.service.js       # Nghiệp vụ thông tin tài khoản & vai trò
+│   ├── tracker.service.js       # Nghiệp vụ XP, Streak, Bài học hoàn thành
+│   ├── mistakes.service.js      # Nghiệp vụ Sổ tay câu sai & thuật toán ôn tập
+│   ├── vocabulary.service.js    # Nghiệp vụ Sổ tay từ vựng
+│   ├── quiz.service.js          # Nghiệp vụ bộ đề trắc nghiệm & lưu kết quả
+│   ├── policy.service.js        # Nghiệp vụ cấu hình hạn mức người dùng
+│   ├── analytics.service.js     # Phân tích độ chính xác, tỷ lệ sai theo chuyên đề
+│   └── recommendation.service.js# Chẩn đoán điểm yếu & gợi ý bài học cá nhân hóa
+├── repositories/
+│   ├── user.repository.js       # Truy cập DB bảng profiles, user_learning_trackers
+│   ├── quiz.repository.js       # Truy cập DB bảng quiz_attempts
+│   ├── mistakes.repository.js   # Truy cập DB bảng user_mistakes
+│   ├── vocabulary.repository.js # Truy cập DB bảng user_vocabularies
+│   ├── activity.repository.js   # Truy cập DB bảng user_daily_activities
+│   └── audit.repository.js      # Truy cập DB bảng audit_logs (Server-side Only)
 ├── pages/
 │   ├── api/
-│   │   └── dictionary.js        # Serverless API: Hợp nhất Free Dictionary API + Google GTX Translation
-│   ├── _app.js                  # Next.js Application Wrapper & Global Font Styles
-│   └── index.js                 # Single-Page App chính: Navigation, Study, Quiz, Mistakes, Admin, Dictionary
+│   │   ├── admin/
+│   │   │   ├── users.js         # API quản trị tài khoản có xác thực Admin Server-side
+│   │   │   ├── policy.js        # API cập nhật hạn mức hệ thống
+│   │   │   └── audit-logs.js    # API lấy lịch sử hoạt động Admin
+│   │   ├── sync/
+│   │   │   └── batch.js         # Endpoint nhận đồng bộ mẻ từ Sync Queue
+│   │   └── dictionary.js        # Serverless API tra từ điển
+│   ├── _app.js                  # Global wrappers, Theme Provider & Offline Sync Provider
+│   └── index.js                 # Single-Page Application (Navigation, Dashboard, Study, Quiz, Mistakes, Admin)
 ├── data/
 │   ├── normalized/
-│   │   ├── full_import_data.json # 7.2MB: Toàn bộ dữ liệu gốc quan hệ (53 lessons, 982 rules, 1026 examples)
-│   │   └── sample_import_data.json
+│   │   └── full_import_data.json # 7.2MB quan hệ gốc 53 lessons, 982 rules
 │   └── ui/
-│       ├── preview_data.json    # 931KB: 12 chương, 53 bài, 376 phân mục, 215 quy tắc, 82 công thức, 507 câu
-│       └── quiz_bank.json       # 1.2MB: Ngân hàng trắc nghiệm 2.939 câu hỏi phân theo chủ đề
-├── docs/
-│   ├── DATABASE_DESIGN.md       # Thiết kế schema chuẩn PostgreSQL 21 bảng
-│   ├── CONTENT_AUDIT.md         # Kiểm toán đối soát học liệu sách gốc
-│   └── ERD.md                   # Sơ đồ thực thể quan hệ Entity Relationship Diagram
-├── GEMINI.md                    # Quy tắc chỉ dẫn agent đọc tài liệu này mỗi lượt
-├── PROJECT_STATUS_OVERVIEW.md   # Báo cáo tổng kết dành cho đối tác / bên ngoài
-└── ROADMAP_AND_ARCHITECTURE.md  # FILE NÀY: Kim chỉ nam điều hướng và giám sát phát triển
+│       ├── preview_data.json    # 12 chương, 53 bài, cheat-sheets, song ngữ
+│       └── quiz_bank.json       # 2.939 câu trắc nghiệm đã làm sạch
+└── ROADMAP_AND_ARCHITECTURE.md  # SINGLE SOURCE OF TRUTH
 ```
 
 ---
 
-## ✅ 3. NHẬT KÝ ĐÃ HOÀN THÀNH (PHASE 1 ACHIEVEMENTS)
+## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (9 TABLES & RLS ARCHITECTURE)
 
-1. **Học liệu Lý thuyết Chuẩn hóa Sư phạm (Deep-dive Pedagogy):**
-   - Rà soát toàn bộ 12 chuyên đề & 53 bài học chuẩn sách *Mai Lan Hương & Hà Thanh Uyên*.
-   - Khắc phục lỗi ngắt dòng cứng (`unwrap lines`), giúp câu văn liền mạch, mạch lạc.
-   - Xây dựng **376 phân mục có số thứ tự** (`01`, `02`...) kèm nhãn ngữ nghĩa (`CÔNG THỨC`, `QUY TẮC`, `CÁCH DÙNG`, `LƯU Ý`).
-   - Xây dựng **215 thẻ quy tắc đánh số** (`1.`, `2.`, `3.` / `A.`, `B.`) có ví dụ song ngữ Anh - Việt và nút nghe phát âm câu `🔊 Đọc`.
-   - Chuẩn hóa **82 khung công thức cú pháp** phân loại Khẳng định (+), Phủ định (-), Nghi vấn (?).
-   - Thiết lập **Hộp cảnh báo bẫy thi cử** màu hổ phách `⚠️ LƯU Ý QUAN TRỌNG & BẪY THI CỬ` và **7 bảng so sánh ngữ pháp**.
-2. **Kho Bài tập Thực hành Đa định dạng (Practice Engine):**
-   - Trắc nghiệm 4 lựa chọn (Choice), Điền từ vào chỗ trống (Fill-in-the-blanks tự sinh ô input), Viết lại câu (Sentence Transformation / Rewrite).
-   - Kiểm tra đáp án tức thì cho từng câu kèm giải thích chi tiết.
-   - Tự động ghi nhận câu làm sai vào Sổ tay câu sai.
-3. **Bộ đề Thi trắc nghiệm Quiz 50 câu (Quiz Engine):**
-   - Thuật toán trộn ngẫu nhiên câu hỏi theo chủ đề chuyên biệt hoặc trên toàn bộ 12 chương.
-   - Chấm điểm, tính phần trăm, đánh giá năng lực và phân tích lỗi sai.
-4. **Hệ thống Gamification theo dõi Lộ trình kiểu Duolingo:**
-   - Ngọn lửa chuỗi ngày học liên tục (🔥 Streak).
-   - Điểm kinh nghiệm tích lũy (⚡ XP: +10 XP/câu đúng, +25 XP/học xong bài lý thuyết).
-   - Lịch mini 7 ngày và thuật toán thông minh đề xuất bài học cần học hôm nay.
-5. **Hệ thống Phân quyền VIP / FREE (Role-Based Access Control):**
-   - Tài khoản FREE: Giới hạn 10 câu đầu tiên mỗi chương, tối đa 2 lượt quiz/ngày.
-   - Tài khoản VIP: Mở khóa toàn diện 2.939 câu hỏi và không giới hạn làm bài.
-   - Tài khoản mẫu 1-click test: Admin (`admin@grammarpro.com`), VIP (`vip@grammarpro.com`), Free (`nam@grammarpro.com`).
-6. **Trang Quản trị Hệ thống (Admin Control Panel):**
-   - Thống kê toàn hệ thống, cấu hình chính sách làm bài trực tiếp trên UI, nâng/hạ quyền người dùng, khóa/xóa tài khoản.
-7. **Bộ Từ điển Tra từ Nhanh (Smart Click-to-Lookup Dictionary):**
-   - Cơ chế bôi đen hoặc nhấp đúp (Double-Click) có chủ đích trong vùng bài học.
-   - Cách ly hoàn toàn nút bấm, sidebar và menu; tự động bỏ qua từ tiếng Việt.
-   - Phiên âm quốc tế IPA chuẩn, API Audio phát âm giọng bản ngữ (Dictionary API + Web Speech API fallback).
-   - Sổ tay từ vựng cá nhân (`⭐ Sổ từ`) lưu trữ và ôn tập từ vựng yêu thích.
-
----
-
-## 🎯 4. KẾ HOẠCH HÀNH ĐỘNG CHI TIẾT (PHASE 2 ROADMAP - SUPABASE ENHANCEMENT)
-
-> **Mục tiêu cốt lõi:** Thay thế việc lưu trữ phân tán ở LocalStorage bằng một kiến trúc Backend Cloud tập trung trên Supabase Postgres, hỗ trợ xác thực người dùng an toàn (Supabase Auth), lưu trữ dữ liệu vĩnh viễn trên đám mây, đồng bộ đa thiết bị và chuẩn bị nền tảng thanh toán tự động.
-
-### 4.1. Sơ đồ Thực thể Dữ liệu Supabase (Core Schema DDL)
+### 4.1. Sơ đồ Thực thể Dữ liệu Mở rộng (Extended ERD)
 
 ```mermaid
 erDiagram
@@ -102,6 +123,10 @@ erDiagram
     PROFILES ||--o{ USER_MISTAKES : tracks
     PROFILES ||--o{ USER_VOCAB : saves
     PROFILES ||--o{ QUIZ_ATTEMPTS : records
+    PROFILES ||--o{ USER_ACHIEVEMENTS : earns
+    PROFILES ||--o{ USER_DAILY_ACTIVITIES : logs
+    PROFILES ||--o{ AUDIT_LOGS : triggers
+
     PROFILES {
         uuid id PK "references auth.users(id)"
         text email UK
@@ -122,6 +147,8 @@ erDiagram
         jsonb completed_lessons
         int quizzes_today
         date quiz_date
+        int version "for optimistic concurrency"
+        timestamptz updated_at
     }
     USER_MISTAKES {
         uuid id PK
@@ -131,7 +158,9 @@ erDiagram
         text question_prompt
         text user_wrong_answer
         text correct_answer
-        text explanation
+        jsonb explanation_structured
+        int review_count
+        boolean is_mastered
         timestamptz failed_at
     }
     USER_VOCAB {
@@ -148,7 +177,9 @@ erDiagram
         text key PK
         int free_exercise_limit
         int free_daily_quiz_limit
+        jsonb feature_flags
         timestamptz updated_at
+        uuid updated_by FK
     }
     QUIZ_ATTEMPTS {
         uuid id PK
@@ -157,89 +188,309 @@ erDiagram
         int score
         int total_questions
         int time_spent_seconds
+        jsonb incorrect_question_ids
+        timestamptz created_at
+    }
+    USER_ACHIEVEMENTS {
+        uuid id PK
+        uuid user_id FK
+        text achievement_code
+        text title
+        text description
+        text icon
+        timestamptz unlocked_at
+    }
+    USER_DAILY_ACTIVITIES {
+        uuid id PK
+        uuid user_id FK
+        date activity_date
+        int xp_earned
+        int lessons_studied
+        int questions_answered
+        int time_spent_minutes
+        timestamptz updated_at
+    }
+    AUDIT_LOGS {
+        uuid id PK
+        uuid admin_id FK
+        text action_type
+        text target_type
+        text target_id
+        jsonb before_state
+        jsonb after_state
+        text ip_address
         timestamptz created_at
     }
 ```
 
-### 4.2. Các Milestone Triển khai Cụ thể:
+### 4.2. RLS Security Model (Chống Đệ quy & Phân quyền Độc lập)
 
-#### 🔹 Milestone 2.1: Khởi tạo Cấu trúc Bảng trên Supabase Postgres (Database Provisioning)
-- [x] Chạy migration script SQL trên Supabase project `wtvlbbcyvtqqygtojxay` qua MCP tool `execute_sql`.
-- [x] Thiết lập bảng `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`.
-- [x] Thiết lập RLS (Row Level Security) trên toàn bộ 6 bảng: Người dùng chỉ đọc/ghi dữ liệu của chính mình (`auth.uid() = user_id`), Admin có quyền đọc/ghi toàn bộ.
-- [x] Tạo trigger `on_auth_user_created` tự động tạo `profiles` và `user_learning_trackers` khi có người dùng đăng ký mới.
+1. **Hàm bảo mật xác thực Admin (Security Definer Helper Function):**
+   Tránh lỗi `infinite recursion` khi RLS policy trên `profiles` truy vấn ngược chính bảng `profiles`:
+   ```sql
+   CREATE OR REPLACE FUNCTION public.is_admin()
+   RETURNS boolean AS $$
+   BEGIN
+     RETURN EXISTS (
+       SELECT 1 FROM public.profiles
+       WHERE id = auth.uid() AND role = 'ADMIN' AND status = 'ACTIVE'
+     );
+   END;
+   $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+   ```
 
-#### 🔹 Milestone 2.2: Tích hợp Supabase Client & SDK vào Next.js
-- [x] Cài đặt `@supabase/supabase-js` trong `package.json`.
-- [x] Tạo `lib/supabase/client.js`: Khởi tạo Supabase client dùng cho React component và toàn bộ các helper CRUD dữ liệu (`getProfile`, `upsertTracker`, `getMistakes`, `getVocabularies`, `updateSystemPolicy`...).
-- [x] Thiết lập biến môi trường trên Vercel và file `.env.local`:
-  - `NEXT_PUBLIC_SUPABASE_URL=https://wtvlbbcyvtqqygtojxay.supabase.co`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOi...`
-- [x] Tích hợp cơ chế Hybrid Sync (Local-First Resilience) vào `pages/index.js` tự động đồng bộ tiến độ học tập (Streak/XP) lên Supabase Postgres 17.
+2. **Chính sách phân quyền 2 tầng rõ rệt:**
+   - **Bảng người dùng (`profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `quiz_attempts`, `user_achievements`, `user_daily_activities`):**
+     * `SELECT`: `auth.uid() = user_id` HOẶC `is_admin() = true`.
+     * `INSERT`: `auth.uid() = user_id` (Không cho phép user tự chỉ định `user_id` khác).
+     * `UPDATE`: `auth.uid() = user_id` (Cấm user cập nhật cột `role` trong bảng `profiles` thông qua trigger / column privilege).
+     * `DELETE`: `auth.uid() = user_id` HOẶC `is_admin() = true`.
+   - **Bảng hệ thống (`system_policies`):**
+     * `SELECT`: Mọi người dùng đã đăng nhập (`auth.role() = 'authenticated'`) hoặc công khai.
+     * `INSERT / UPDATE / DELETE`: Chỉ dành riêng cho Admin (`is_admin() = true`).
+   - **Bảng ghi log (`audit_logs`):**
+     * `SELECT`: Chỉ dành riêng cho Admin (`is_admin() = true`).
+     * `INSERT`: Chỉ cho phép thực hiện từ Server-Side qua `SERVICE_ROLE_KEY` hoặc `is_admin() = true`. Không cho phép chỉnh sửa hoặc xóa log (Append-only).
 
-#### 🔹 Milestone 2.3: Đồng bộ Xác thực & Chuyển giao Dữ liệu (Auth & Migration Engine)
-- [x] Tích hợp Supabase Auth (Email/Password với GoTrue API).
-- [x] Xây dựng cơ chế **Hybrid Sync (Local-First Resilience)**:
-  - Khi có mạng: Xác thực trực tiếp qua Supabase Auth, nạp Profiles/Trackers từ PostgreSQL 17.
-  - Khi offline hoặc tải chậm: Tự động fallback đọc/ghi LocalStorage an toàn không gây gián đoạn học tập.
-- [x] Seed sẵn 3 tài khoản chuẩn trên Supabase Auth & PostgreSQL 17:
-  - 🛡️ `admin@grammarpro.com` / `admin` -> Gán role `ADMIN`
-  - ⭐ `vip@grammarpro.com` / `vip` -> Gán role `VIP`
-  - 👤 `nam@grammarpro.com` / `free` -> Gán role `FREE`
+3. **Cơ chế Trigger Khởi tạo An toàn & Idempotent:**
+   ```sql
+   CREATE OR REPLACE FUNCTION public.handle_new_user()
+   RETURNS trigger AS $$
+   BEGIN
+     -- Insert profile
+     INSERT INTO public.profiles (id, email, full_name, role, status)
+     VALUES (
+       new.id,
+       new.email,
+       COALESCE(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+       'FREE',
+       'ACTIVE'
+     )
+     ON CONFLICT (id) DO UPDATE
+     SET email = EXCLUDED.email,
+         full_name = EXCLUDED.full_name;
 
-#### 🔹 Milestone 2.4: Nâng cấp Admin Panel kết nối Live Supabase
-- [x] Chuyển đổi toàn bộ thao tác trong trang Quản trị Admin sang truy vấn trực tiếp bảng `profiles` và `system_policies` qua Supabase.
-- [x] Cho phép Admin đổi quyền (FREE <-> VIP), khóa tài khoản, cập nhật giới hạn câu hỏi realtime và đồng bộ trực tiếp lên Cloud.
-- [x] Bổ sung nút "Làm mới từ Cloud" và badge trạng thái `Supabase Postgres 17 Live` trong bảng điều khiển Admin.
+     -- Insert learning tracker
+     INSERT INTO public.user_learning_trackers (user_id, streak, xp, last_active_date)
+     VALUES (new.id, 1, 50, CURRENT_DATE)
+     ON CONFLICT (user_id) DO NOTHING;
 
-#### 🔹 Milestone 2.5: Chuẩn hóa & Nâng cấp Sư phạm Toàn diện Học liệu Lý thuyết & Bài tập (Deep Pedagogical Overhaul)
-- [x] Sửa chữa toàn diện 376 mục lý thuyết thuộc 53 bài học: Nối liền toàn bộ các câu bị ngắt quãng giữa dòng (cut-offs, dangling lines), phục hồi ngữ cảnh trọn vẹn từ sách gốc Mai Lan Hương & Hà Thanh Uyên.
-- [x] Bổ sung bản dịch tiếng Việt chuẩn xác cho 100% (268/269) ví dụ minh họa ngữ pháp, gắn nút phát âm chuẩn bản xứ `🔊 Đọc`.
-- [x] Nâng cấp toàn bộ 51 bài tập thực hành (507 câu hỏi) và ngân hàng Quiz (2.939 câu) từ đáp án thô sang **Bộ giải thích chuyên sâu 3 tầng Sư phạm**:
-  - 🔍 **Dấu hiệu & Ngữ cảnh:** Phân tích từ khóa nhận biết (signal words), mệnh đề điều kiện, liên từ, bối cảnh thời gian.
-  - 📐 **Quy tắc & Công thức:** Trích dẫn chính xác công thức ngữ pháp, cấu trúc cú pháp và cách biến đổi tương đương.
-  - 🇻🇳 **Dịch nghĩa câu hoàn chỉnh:** Dịch trọn vẹn ngữ nghĩa câu bài tập sang tiếng Việt để người học thấu hiểu bản chất.
-- [x] Tích hợp `renderPedagogicalExplanation` vào giao diện Study View (Tab Bài tập thực hành), Quiz View (Xem đáp án & Chấm điểm nộp bài) và Mistakes View (Sổ tay câu sai).
+     RETURN new;
+   EXCEPTION WHEN OTHERS THEN
+     RAISE WARNING 'handle_new_user error: %', SQLERRM;
+     RETURN new;
+   END;
+   $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+   ```
 
-#### 🔹 Milestone 2.6: Hệ thống Giao diện White Mode / Light Theme & Tối ưu Trải nghiệm Đọc (White Mode Enhancement)
-- [x] Thiết lập kiến trúc Theme Palette linh hoạt (`themeMode: "dark" | "light"`), tự động ghi nhớ trạng thái người dùng trong `localStorage.getItem("grammar_theme")`.
-- [x] Thiết kế giao diện White Mode (Light Theme) hiện đại, độ tương phản cao, bảo vệ mắt khi học ban ngày:
-  - Nền trang sáng chuẩn Apple/Stripe (`#f8fafc`), bề mặt thẻ Card trắng tinh khôi (`#ffffff`), viền tinh tế (`#e2e8f0`).
-  - Phối màu chữ phân cấp rõ ràng: Tiêu đề & nội dung chính `#0f172a`, mô tả phụ `#475569`, ghi chú `#64748b`.
-  - Khung công thức cú pháp, bảng quy tắc ngữ pháp và ví dụ song ngữ hiển thị sắc nét trên nền sáng.
-  - Thẻ giải thích 3 tầng (Dấu hiệu, Quy tắc, Dịch nghĩa) được tối ưu màu sắc tương phản cao cho cả hai chế độ Sáng / Tối.
-- [x] Bổ sung nút chuyển đổi 1-click `☀️ Sáng / 🌙 Tối` trên Header Navbar, chuyển đổi mượt mà không cần reload trang.
-- [x] Đồng bộ White Mode trên toàn bộ các phân hệ: Header, Sidebar 12 Chuyên đề, Study View (Lý thuyết & Bài tập), Quiz Engine, Sổ tay câu sai, Sổ từ vựng, Popup Tra từ điển nhanh và Admin Dashboard.
-- [x] **Tối ưu hóa triệt để White Mode cho Quiz Engine & Bài tập:** Loại bỏ hoàn toàn các thanh đen/khối màu tối (Instruction box `q.instruction`, Question Type badges, Starter prompt, Answer reveal box, Exercise inputs & buttons), làm sạch triệt để lỗi ký tự markdown gạch dưới bị escape (`\_\_\_\_` -> `____`) trong 2.939 câu hỏi, và đồng bộ giao diện Sáng cho Bảng điều khiển Quản trị viên (Admin Panel) và Header user pills.
-
-#### 🔹 Milestone 2.7: Mở rộng & Hoàn thiện Học liệu Sư phạm 12 Chuyên đề (Deep-dive Pedagogical Content & Presentation)
-- [x] **Chuẩn hóa cấu trúc sư phạm 12 Chuyên đề & 53 bài học:** Khắc phục triệt để các tiêu đề phân mục bị vỡ (OCR artifacts từ bản gốc), chuẩn hóa ma trận công thức 3 thể (Khẳng định `(+)`, Phủ định `(-)`, Nghi vấn `(?)`) chuẩn xác cho 13 thì và các cấu trúc ngữ pháp trọng điểm.
-- [x] **Bổ sung Sơ đồ Tóm tắt Cú pháp Trực quan (Visual Cheat-Sheet Cấp tốc):** Xuất hiện ngay đầu mỗi bài học với dòng thời gian trực quan (Timeline), bản chất cốt lõi (Concept), ma trận thẻ công thức 3 thể kèm ví dụ mẫu, đám mây từ nhận biết vàng (Signal Words Chips), và mẹo thi cử tránh bẫy ngữ pháp.
-- [x] **Nâng cấp Bộ phân tích Cú pháp Sư phạm Nội dòng (`renderFormattedText`):** Xử lý định dạng tự động cho từ in nghiêng, in đậm, gạch ngang từ sai (`~~wrong~~`), thẻ cảnh báo bẫy ngữ pháp (`[NOT...]`), tự động biến đổi các dòng ví dụ thành thẻ ví dụ chuyên biệt có nút nghe phát âm bản ngữ.
-- [x] **Ra mắt Thư viện Ví dụ Mẫu Song ngữ (Bilingual Example Library):** Bổ sung 100% bản dịch tiếng Việt chuẩn mực cho 639 câu ví dụ mẫu trong các bài học, tích hợp nút phát âm bản ngữ từng câu.
-- [x] **Tích hợp Phát âm Bản ngữ cho Bài tập Thực hành:** Bổ sung nút nghe phát âm trực tiếp trên từng câu bài tập trong tab "Bài tập thực hành", giúp học viên kết hợp luyện ngữ pháp và luyện nghe.
-- [ ] Mở rộng tính năng xuất bản bài học ra PDF/In ấn định dạng chuẩn giáo án cho giáo viên và học sinh.
-
-#### 🔹 Milestone 2.8: Đưa toàn bộ 2.939 câu hỏi & 53 bài học lên PostgreSQL (Optional Enhancement)
-- [ ] Tải dữ liệu từ `data/normalized/full_import_data.json` lên các bảng `lessons`, `grammar_rules`, `questions`, `question_answers` trên Supabase để hỗ trợ Full-Text Search PostgreSQL (`tsvector`).
-
----
-
-## 🚀 5. GIAI ĐOẠN 3: TƯƠNG LAI & MỞ RỘNG (FUTURE HORIZONS)
-
-* **Phase 3.1: AI Grammar Tutor (Gemini Integration):**
-  - Trợ lý AI phân tích ngữ pháp trực tiếp trong bài làm, giải thích vì sao chọn đáp án A thay vì B theo ngữ cảnh cụ thể của người học.
-* **Phase 3.2: Cổng thanh toán Tự động Nâng cấp VIP (Monetization):**
-  - Tích hợp VietQR / MoMo / SePay: Học viên quét mã QR thanh toán -> Webhook tự động kích hoạt vai trò `VIP` trong Supabase chỉ sau 3 giây.
-* **Phase 3.3: Mobile App & AI Voice Pronunciation:**
-  - Build ứng dụng mobile hoặc PWA cài đặt trực tiếp lên màn hình điện thoại.
-  - Chấm điểm phát âm từ vựng bằng microphone.
+4. **Composite Performance Indexes:**
+   ```sql
+   CREATE INDEX IF NOT EXISTS idx_mistakes_user_ch ON public.user_mistakes(user_id, chapter_title);
+   CREATE INDEX IF NOT EXISTS idx_vocab_user_date ON public.user_vocabularies(user_id, added_at DESC);
+   CREATE INDEX IF NOT EXISTS idx_quiz_user_date ON public.quiz_attempts(user_id, created_at DESC);
+   CREATE INDEX IF NOT EXISTS idx_daily_user_date ON public.user_daily_activities(user_id, activity_date DESC);
+   CREATE INDEX IF NOT EXISTS idx_audit_admin_date ON public.audit_logs(admin_id, created_at DESC);
+   ```
 
 ---
 
-## 📋 6. NGUYÊN TẮC VẬN HÀNH DÀNH CHO AGENT / DEVELOPER (OPERATIONAL PROTOCOL)
+## 🔄 5. KIẾN TRÚC OFFLINE SYNC ENGINE & CHIẾN LƯỢC XUNG ĐỘT (HYBRID SYNC)
 
-1. **Đọc tài liệu này đầu tiên:** Trong mọi lượt tương tác (turn) phát triển mới, agent phải đọc `ROADMAP_AND_ARCHITECTURE.md` để nắm đúng bối cảnh và mục tiêu kế tiếp.
-2. **Bảo tồn tính toàn vẹn của học liệu:** Không làm mất mát hoặc xáo trộn 12 chuyên đề, 53 bài học lý thuyết và 2.939 câu hỏi thực hành đã được số hóa.
-3. **Cập nhật trạng thái liên tục:** Sau khi hoàn thành bất kỳ mục nào trong Milestone 2.x, agent phải đánh dấu `[x]` vào checklist của tài liệu này và commit lên git.
-4. **Kiểm thử trên Production:** Mọi code mới sau khi commit phải được push lên GitHub và xác nhận Vercel Deployment đạt trạng thái `READY` trước khi bàn giao cho người dùng.
+### 5.1. Mô hình Đồng bộ Dữ liệu
+
+```text
+[ Browser Event: Complete Question / Learn Lesson ]
+                       │
+                       ▼
+       [ Local Storage / IndexedDB Storage ]
+                       │
+                       ▼
+            [ Offline Write Queue ]
+                       │
+           ┌───────────┴───────────┐
+      (Online)                  (Offline)
+           │                         │
+           ▼                         ▼
+   [ Sync Manager ]           [ Pending Changes State (🟠) ]
+           │                         │
+    (Conflict Rules)                 ▼
+           │                  [ Auto-retry when online ]
+           ▼
+[ Supabase PostgreSQL 17 via API ]
+           │
+           ▼
+[ Synced State (🟢) with Last Sync Timestamp ]
+```
+
+### 5.2. Ma trận Chiến lược Giải quyết Xung đột (Conflict Resolution Matrix)
+
+| Loại dữ liệu | Chiến lược xử lý | Cơ chế thực thi |
+| :--- | :--- | :--- |
+| **Điểm kinh nghiệm (XP)** | Transactional Increment | Tính toán phần gia tăng (delta) ở client; server thực hiện phép toán cộng dồn nguyên tử `xp = xp + delta` thay vì ghi đè giá trị tuyệt đối. |
+| **Chuỗi ngày học (Streak)**| Server-side Calculation | Server đối chiếu `last_active_date` với `CURRENT_DATE`: nếu là ngày kế tiếp thì tăng 1; nếu trùng thì giữ nguyên; nếu đứt quãng thì reset về 1. |
+| **Lượt thi Quiz (Quiz Attempts)**| Immutable Records | Mỗi lần thi xong là một bản ghi bất biến với UUID riêng; không cập nhật bản ghi cũ, chỉ append bản ghi mới. |
+| **Sổ tay câu sai (Mistakes)** | Upsert theo Unique Key | Cặp `(user_id, question_id)` làm khóa duy nhất: nếu làm sai lại thì cập nhật `failed_at` và `review_count += 1`; nếu làm đúng trong chế độ ôn thì set `is_mastered = true`. |
+| **Sổ từ vựng (Vocabulary)** | Merge theo Word ID | Hợp nhất danh sách từ vựng cục bộ và cloud theo khóa từ (`word`). |
+| **Tiến độ học tập (Progress)** | Version-based Merge | Sử dụng trường `version` trong `user_learning_trackers`: hợp nhất tập hợp mảng `completed_lessons` (Union Set) để không bao giờ làm mất bài học đã hoàn thành. |
+
+---
+
+## 📐 6. STRUCTURED PEDAGOGICAL EXPLANATION ENGINE (JSON SCHEMA)
+
+Toàn bộ giải thích câu hỏi bài tập và đề thi được chuẩn hóa thành cấu trúc dữ liệu JSON sư phạm thay vì các chuỗi văn bản tự do:
+
+```json
+{
+  "signal": {
+    "title": "Dấu hiệu nhận biết",
+    "content": "Xuất hiện trạng từ chỉ thời gian 'for 5 years' kết hợp ngữ cảnh hành động bắt đầu từ quá khứ và vẫn tiếp diễn ở hiện tại.",
+    "keywords": ["for 5 years", "since", "so far"]
+  },
+  "rule": {
+    "title": "Quy tắc ngữ pháp",
+    "formula": "S + have/has + V3/V-ed",
+    "explanation": "Thì Hiện tại hoàn thành (Present Perfect Tense) diễn tả hành động xảy ra trong quá khứ và kéo dài đến hiện tại."
+  },
+  "translation": {
+    "vi": "Họ đã sống ở thành phố này được 5 năm.",
+    "en": "They have lived in this city for 5 years."
+  },
+  "common_mistakes": [
+    "Dùng nhầm thì Quá khứ đơn (lived) vì thấy hành động đã bắt đầu từ trước.",
+    "Quên chia 'has' với ngôi thứ ba số ít."
+  ],
+  "exam_tips": [
+    "Phân biệt 'since' (mốc thời gian cụ thể: since 2018) và 'for' (khoảng thời gian: for 5 years)."
+  ],
+  "difficulty": "Intermediate",
+  "category": "TENSES"
+}
+```
+
+### 4 Tính năng Sư phạm Mở rộng:
+1. **Phân cấp độ khó (Difficulty Levels):** `Beginner`, `Elementary`, `Intermediate`, `Advanced`.
+2. **Kiểm toán chất lượng giải thích (Explanation Quality Validation):** Tuyệt đối không thay đổi đáp án đúng để ép theo lời giải. Kiểm tra tính nhất quán giữa công thức, từ khóa và bản dịch.
+3. **Gợi ý học tập bù đắp (Learning Recommendation):** Tự động phát hiện lỗi sai liên quan đến chuyên đề và dẫn đường cho học viên ôn lại phần lý thuyết tương ứng kèm 5 câu bài tập tương tự.
+4. **Phản hồi học liệu (Student Feedback):** Nút đánh giá trực tiếp trên từng lời giải: `👍 Hữu ích`, `👎 Chưa rõ ràng`, `🚩 Báo lỗi đáp án`.
+
+---
+
+## 🎨 7. GRAMMAR VISUALIZATION ENGINE (SƠ ĐỒ TRỰC QUAN TƯƠNG TÁC THEO CHUYÊN ĐỀ)
+
+Không áp dụng một mẫu Cheat-sheet đơn điệu cho mọi bài học. Mỗi chủ điểm ngữ pháp được thiết kế một hình thức trực quan chuyên biệt:
+
+| Chủ điểm Ngữ pháp | Hình thức Trực quan Hóa | Trải nghiệm Tương tác |
+| :--- | :--- | :--- |
+| **13 Thì tiếng Anh (Tenses)** | **Dòng thời gian (Timeline Axis)** | Trục thời gian Quá khứ - Hiện tại - Tương lai kèm điểm mốc và khoảng hành động. |
+| **Câu điều kiện (Conditionals)** | **Cây quyết định (Decision Tree)** | Phân nhánh theo tính khả thi: Có thật ở hiện tại -> Loại 1; Giả định hiện tại -> Loại 2; Giả định quá khứ -> Loại 3. |
+| **Câu bị động (Passive Voice)** | **Sơ đồ Biến đổi (Transformation Diagram)** | Mũi tên chuyển vị trí S -> By O, O -> S, và động từ V -> Be + V3 sinh động. |
+| **Câu gián tiếp (Reported Speech)** | **Bảng Lùi thì & Chuyển đổi (Conversion Flow)** | Luồng lùi thì mũi tên (Present -> Past -> Past Perfect) và quy tắc đổi đại từ/thời gian. |
+| **Mệnh đề quan hệ (Relative Clauses)** | **Sơ đồ Cấu trúc Câu (Sentence Tree)** | Highlight danh từ đi trước và liên kết với đại từ quan hệ (Who, Whom, Which, Whose, That). |
+| **So sánh (Comparisons)** | **Thẻ So sánh Đa cấp (Comparison Scale)** | Biểu diễn trực quan tỷ lệ Bằng nhau (=), Hơn (>), Nhất (MAX). |
+| **Động từ khuyết thiếu (Modal Verbs)**| **Ma trận Cấp độ Nghĩa (Meaning Matrix)** | Thang đo độ chắc chắn từ 0% đến 100% (Might -> May -> Could -> Should -> Must). |
+| **Từ loại & Cấu tạo từ (Word Forms)** | **Cây Họ từ (Word Family Tree)** | Cây phân nhánh Gốc từ -> Danh từ -> Động từ -> Tính từ -> Trạng từ kèm hậu tố. |
+
+---
+
+## 🔊 8. CHUẨN HÓA KIẾN TRÚC AUDIO ENGINE
+
+Thay thế các lời gọi `playWordAudio` rải rác bằng một hệ thống **Audio Service** tập trung:
+- **Tập trung hóa:** `lib/audio/speech.service.js` và `lib/audio/pronunciation.service.js`.
+- **Đa dạng ngữ điệu:** Hỗ trợ tùy chọn giọng đọc Anh - Anh (UK - British English) và Anh - Mỹ (US - American English).
+- **Điều chỉnh tốc độ:** `0.75x` (chậm cho người mới bắt đầu), `1.0x` (chuẩn), `1.25x` (luyện nghe nhanh).
+- **Bộ nhớ đệm âm thanh (Audio Caching):** Lưu cache audio URL từ từ điển, tránh gọi trùng lặp mạng.
+
+---
+
+## 🛡️ 9. ENGINEERING QUALITY GATES (TIÊU CHUẨN NGHIỆM THU BẮT BUỘC)
+
+Trước khi đánh dấu hoàn thành `[x]` cho bất kỳ milestone nào, agent và lập trình viên bắt buộc phải vượt qua bảng tiêu chí kiểm soát chất lượng kỹ thuật sau:
+
+| Quality Gate | Tiêu chuẩn Đánh giá | Bằng chứng Bắt buộc (Verification Evidence) |
+| :--- | :--- | :--- |
+| **1. Architecture Compliance** | Tuân thủ tuyệt đối cấu trúc Client / Server / Services / Repositories. | Không import server code vào browser, không dùng `SERVICE_ROLE_KEY` ở client. |
+| **2. Security & RLS** | RLS không đệ quy, không bypass authorization, người dùng không thể tự phong quyền Admin. | Script chạy test RLS đóng vai trò Anonymous, Free User, VIP User và Admin. |
+| **3. Database Migration** | Migration chạy thành công, hỗ trợ rollback, idempotent. | Log kết quả chạy SQL từ Supabase MCP tool `execute_sql`. |
+| **4. Zero Compilation Error** | Bản build Next.js thành công 100%, không lỗi cú pháp hoặc JSON escape. | Vercel Deployment đạt trạng thái `READY` trên production. |
+| **5. Functional Integrity** | Tính năng hoạt động chuẩn xác theo nghiệp vụ mô tả. | Test luồng end-to-end từ UI -> API -> Supabase DB. |
+| **6. Regression Proof** | Không làm hỏng hoặc mất mát 12 chuyên đề, 53 bài học và 2.939 câu hỏi hiện có. | Kiểm tra đối soát số lượng record dữ liệu sau khi cập nhật. |
+| **7. Design & Responsive** | Hiển thị hoàn hảo trên cả White Mode và Dark Mode, đáp ứng tốt Mobile / Tablet / Desktop. | Đảm bảo tương phản WCAG AA, không bị thanh đen, nút chìm hay text tàng hình. |
+| **8. Living Roadmap Sync** | File `ROADMAP_AND_ARCHITECTURE.md` được cập nhật đồng bộ ngay sau mỗi bước. | Commit Git có diff thể hiện việc cập nhật checklist tương ứng. |
+
+---
+
+## 📋 10. CHI TIẾT CÁC MILESTONE TIẾP THEO
+
+### 🔹 Milestone 2.1: Database Provisioning, Security Hardening & RLS (P0)
+- [ ] Chạy migration mở rộng 9 bảng trên Supabase Postgres: `profiles`, `user_learning_trackers`, `user_mistakes`, `user_vocabularies`, `system_policies`, `quiz_attempts`, `user_achievements`, `user_daily_activities`, `audit_logs`.
+- [ ] Thiết lập hàm bảo mật `is_admin()` (Security Definer) ngăn ngừa triệt để lỗi Infinite Recursion trong RLS.
+- [ ] Thiết lập RLS policies độc lập: User tables (Owner read/write), System tables (Authenticated read, Admin write), Audit logs (Append-only).
+- [ ] Tạo trigger `on_auth_user_created` idempotent với `SET search_path = public` và bảo vệ lỗi ngoại lệ.
+- [ ] Tạo composite indexes cho các câu truy vấn thực tế (`user_id`, `chapter_title`, `created_at DESC`).
+- [ ] Chạy bộ kiểm thử tự động RLS Security Validation.
+
+### 🔹 Milestone 2.2: Phân tách Kiến trúc Supabase SDK (Client / Server / Services / Repositories) (P0)
+- [ ] Tách `lib/supabase/client.js` chỉ chứa browser client sử dụng `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- [ ] Tạo `lib/supabase/server.js` chỉ chạy phía server sử dụng `SUPABASE_SERVICE_ROLE_KEY`.
+- [ ] Xây dựng thư mục `repositories/` chuyên trách các thao tác database.
+- [ ] Xây dựng thư mục `services/` chuyên trách các quy tắc nghiệp vụ.
+- [ ] Tạo các Next.js API Routes được bảo vệ quyền Admin phía server (`/api/admin/users`, `/api/admin/policy`, `/api/admin/audit-logs`).
+
+### 🔹 Milestone 2.3: Offline Sync Engine & Hybrid Synchronization (P0)
+- [ ] Xây dựng `lib/sync/sync-queue.js` quản lý hàng đợi ghi chép cục bộ khi mất mạng.
+- [ ] Xây dựng `lib/sync/sync-manager.js` điều phối gửi mẻ dữ liệu đồng bộ khi có kết nối trở lại.
+- [ ] Triển khai các quy tắc giải quyết xung đột (Conflict Resolution Rules): Transactional increment cho XP, Server calculation cho Streak, Immutable records cho Quiz, Upsert cho Mistakes, Set Union cho Progress.
+- [ ] Thiết kế huy hiệu trạng thái đồng bộ trên UI: 🟢 Synced, 🟡 Syncing, 🟠 Pending Changes, 🔴 Sync Failed, ⚪ Offline Mode kèm thời gian đồng bộ thành công gần nhất.
+
+### 🔹 Milestone 2.4: Nâng cấp Admin Dashboard Chuyên sâu & Audit Logs (P1)
+- [ ] Bổ sung thanh tìm kiếm người dùng theo email và bộ lọc trạng thái (FREE / VIP / ADMIN).
+- [ ] Hiển thị thống kê tổng thể: Tổng người dùng, Người dùng tích cực hàng ngày, Tỷ lệ trả lời chính xác trung bình, Top bài học khó nhất, Top câu hỏi sai nhiều nhất.
+- [ ] Ghi nhận toàn bộ thao tác thay đổi quyền và cập nhật cấu hình vào bảng `audit_logs`.
+- [ ] Xử lý khóa tài khoản (Ban/Unban) thực thi ở server-side API.
+
+### 🔹 Milestone 2.5: Chuẩn hóa Structured Pedagogical Explanation Engine (JSON) (P1)
+- [ ] Chuyển đổi định dạng giải thích sang chuẩn JSON sư phạm gồm 5 trường: `signal`, `rule`, `translation`, `common_mistakes`, `exam_tips`.
+- [ ] Bổ sung nhãn phân cấp độ khó: Beginner, Elementary, Intermediate, Advanced.
+- [ ] Bổ sung tính năng học viên gửi phản hồi chất lượng lời giải (Hữu ích / Báo lỗi).
+- [ ] Tự động đề xuất bài học bù đắp khi học viên làm sai câu hỏi.
+
+### 🔹 Milestone 2.6: Chuẩn hóa Design Token System & WCAG AA (P2)
+- [ ] Định nghĩa Design Tokens tập trung trong `lib/tokens/design-tokens.js` và CSS Variables.
+- [ ] Đảm bảo 100% tỷ lệ tương phản đạt chuẩn WCAG AA cho cả Light Theme và Dark Theme.
+- [ ] Ngăn ngừa hiện tượng nhấp nháy giao diện khi tải trang (FOIT / FOUT).
+- [ ] Bổ sung Skeleton Loading và các trạng thái Empty / Error đồng bộ.
+
+### 🔹 Milestone 2.7: Xây dựng Grammar Visualization Engine & Audio Service (P1)
+- [ ] Thiết kế sơ đồ trực quan hóa đặc thù cho từng nhóm ngữ pháp: Timeline (13 thì), Decision Tree (Câu điều kiện), Transformation Diagram (Câu bị động), Conversion Flow (Câu gián tiếp).
+- [ ] Cho phép học viên tương tác click chọn từng thành phần trên sơ đồ trực quan.
+- [ ] Chuẩn hóa `lib/audio/speech.service.js` với tùy chọn giọng đọc UK/US và thanh chỉnh tốc độ đọc (`0.75x`, `1.0x`, `1.25x`).
+
+### 🔹 Milestone 2.8: Learning Analytics Engine (P2)
+- [ ] Bảng điều khiển phân tích chi tiết: Tỷ lệ làm đúng theo từng chuyên đề ngữ pháp.
+- [ ] Biểu đồ theo dõi sự tiến bộ theo thời gian và thời lượng học tập mỗi ngày.
+- [ ] Thống kê các mẫu lỗi ngữ pháp tái diễn nhiều nhất của học viên.
+
+### 🔹 Milestone 2.9: Smart Diagnostic & Recommendation Engine (P2)
+- [ ] Thuật toán chẩn đoán điểm yếu (Weak Area Detection) dựa trên lịch sử làm bài.
+- [ ] Lập lộ trình học bù đắp tự động: Ôn lý thuyết chuyên đề yếu -> Làm 10 câu luyện tập đích danh -> Làm mini-quiz đánh giá lại.
+
+### 🔹 Milestone 2.10: Achievement & Gamification System (P2)
+- [ ] Hệ thống huy hiệu thành tích mở khóa tự động (Ví dụ: "Bậc thầy 13 Thì", "Chuỗi lửa 7 ngày", "Thợ săn điểm 10").
+- [ ] Bảng xếp hạng học tập (Leaderboard) tuần và tháng tạo động lực thi đua.
+- [ ] Thử thách hàng ngày (Daily Challenges) nhận thêm điểm kinh nghiệm XP.
+
+### 🔹 Milestone 2.11: Performance, Security Hardening & Pre-Production Verification (P0)
+- [ ] Kiểm thử bảo mật RLS và API Authorization (Penetration testing mô phỏng tấn công chiếm quyền).
+- [ ] Tối ưu hóa truy vấn cơ sở dữ liệu, kiểm tra EXPLAIN ANALYZE các query phức tạp.
+- [ ] Đạt điểm số Google Lighthouse tối thiểu 90+ trên cả Mobile và Desktop.
+- [ ] Thiết lập quy trình sao lưu định kỳ (Automated Backup) và kịch bản Rollback khi có sự cố.
+
+---
+
+## 📋 11. NGUYÊN TẮC VẬN HÀNH DÀNH CHO AGENT / DEVELOPER (OPERATIONAL PROTOCOL)
+
+1. **Đọc tài liệu này đầu tiên:** Trong mọi lượt tương tác phát triển mới, agent phải đọc `ROADMAP_AND_ARCHITECTURE.md` để nắm đúng bối cảnh, kiến trúc và mục tiêu kế tiếp.
+2. **Tuân thủ Quality Gates:** Tuyệt đối không tự ý báo cáo hoàn thành một milestone nếu chưa cung cấp đầy đủ bằng chứng thực thi theo bảng Tiêu chuẩn Nghiệm thu tại Mục 9.
+3. **Bảo tồn tính toàn vẹn của học liệu:** Không làm mất mát hoặc xáo trộn 12 chuyên đề, 53 bài học lý thuyết và 2.939 câu hỏi thực hành đã được số hóa.
+4. **Cập nhật trạng thái liên tục:** Sau khi hoàn thành bất kỳ mục nào trong Milestone 2.x, agent phải đánh dấu `[x]` vào checklist của tài liệu này và commit lên git.
+5. **Kiểm thử trên Production:** Mọi code mới sau khi commit phải được push lên GitHub và xác nhận Vercel Deployment đạt trạng thái `READY` trước khi bàn giao cho người dùng.
