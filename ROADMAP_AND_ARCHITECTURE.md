@@ -542,103 +542,275 @@ Nhằm tránh hiện tượng "hardcoded diagrams" trong từng trang bài học
 
 ---
 
-## 🎯 8. MILESTONE 2.8: AI-POWERED GRAMMAR DIAGNOSTIC & PERSONALIZED LEARNING ROADMAP (MODULE TRUNG TÂM)
+## 🎯 8. MILESTONE 2.8: AI-POWERED GRAMMAR DIAGNOSTIC & PERSONALIZED ADAPTIVE LEARNING ROADMAP (P1 – MODULE TRUNG TÂM)
 
-> **Sứ mệnh cốt lõi:** Thay vì để học viên tự chọn mò mẫm trong 53 bài học mà không biết xuất phát điểm của mình ở đâu, hệ thống chủ động đánh giá chính xác năng lực, chẩn đoán vùng kiến thức yếu và kiến tạo lộ trình học tập đo ni đóng giày cho riêng từng người.
+> **Sứ mệnh cốt lõi:** Xây dựng một hệ thống Grammar Diagnostic & Personalized Learning có khả năng đánh giá trình độ ngữ pháp đầu vào, phát hiện chính xác lỗ hổng kiến thức, phân tích năng lực theo từng chuyên đề và tự động xây dựng lộ trình học tập cá nhân hóa. Hệ thống không chỉ dừng lại ở việc đưa ra điểm số sau bài kiểm tra mà phải liên tục theo dõi, đánh giá và điều chỉnh phương pháp học dựa trên hành vi, kết quả và mức độ tiến bộ thực tế của từng người dùng.
 
-### 8.1. Quy trình Trải nghiệm Học viên (4-Step UX Flow)
+### 8.1. Sơ đồ Vòng lặp Học tập Thích ứng Khép kín (Closed-Loop Adaptive Learning Cycle)
 
+```text
+            HỌC VIÊN (USER)
+                  │
+                  ▼
+      Diagnostic Assessment (30 câu)
+                  │
+                  ▼
+       Scoring Engine (Deterministic)
+                  │
+                  ▼
+     Weakness Detection (5 Mastery Tiers)
+                  │
+                  ▼
+     Knowledge Gap & Root Cause Analysis
+                  │
+                  ▼
+    Personalized Roadmap (4 Tuần Hành Động)
+                  │
+                  ▼
+       Learning Activities (53 Bài học)
+                  │
+                  ▼
+      Exercise Performance (51 Bài tập)
+                  │
+                  ▼
+     Adaptive Learning Engine (Điều chỉnh Động)
+                  │
+        ┌─────────┴─────────┐
+        ▼                   ▼
+   Mastery Tracking    Spaced Repetition
+  (Độ thành thạo)     (Lịch ôn 1-3-7-14-30d)
+        │                   │
+        └─────────┬─────────┘
+                  │
+                  ▼
+       Reassessment (Retake Test)
+                  │
+                  ▼
+      Progress Comparison (+% Growth)
+                  │
+                  ▼
+       Updated Dynamic Roadmap
+                  │
+                  └──────────► Continuous Adaptive Learning
 ```
-[ Step 1: Initial Assessment Onboarding ]
-  "Discover Your Grammar Level" -> 30 câu hỏi / 15-20 phút / Không áp lực trừ điểm
-                       │
-                       ▼
-[ Step 2: Adaptive Placement Test Session ]
-  Giao diện 1 câu/màn hình -> Timer -> Progress Bar -> Flag Review -> Submit
-                       │
-                       ▼
-[ Step 3: Deterministic Diagnostic Analysis ]
-  Bóc tách ma trận 12 chuyên đề -> Tính Accuracy & Confidence Level -> Phân loại điểm mạnh/yếu
-                       │
-                       ▼
-[ Step 4: Dynamic Personalized Learning Roadmap ]
-  Lộ trình hành động tuần tự: Ôn lý thuyết -> Luyện tập bài tập thực tế -> Mini-quiz -> Reassessment
-```
 
-### 8.2. Ma trận Blueprint 30 Câu hỏi & Phân loại Độ khó
+### 8.2. Ma trận Blueprint 30 Câu hỏi & Tích hợp Ngân hàng Câu hỏi
 
-Tái sử dụng ngân hàng 2.939 câu hỏi hiện có thông qua thuật toán trích xuất có đối trọng:
+**A. Diagnostic Test Blueprint**
+- Định nghĩa tập trung tại `lib/diagnostic/diagnostic.blueprint.js`.
+- Bài kiểm tra đầu vào chuẩn hóa gồm 30 câu trắc nghiệm A/B/C/D, thời gian 15–20 phút.
+- Phân bổ độ khó: 10 câu Easy (33%), 12 câu Medium (40%), 8 câu Hard (27%).
+- Phân bổ câu hỏi theo ma trận 10 nhóm kiến thức chuẩn hóa khớp giáo trình Mai Lan Hương & Hà Thanh Uyên:
+  1. **Các Thì trong tiếng Anh (Tenses)** - 6 câu (20%) - 2 Dễ, 3 TB, 1 Khó.
+  2. **Câu bị động (Passive Voice)** - 3 câu (10%) - 1 Dễ, 1 TB, 1 Khó.
+  3. **Câu điều kiện (Conditionals)** - 3 câu (10%) - 1 Dễ, 1 TB, 1 Khó.
+  4. **Động từ khuyết thiếu (Modal Verbs)** - 3 câu (10%) - 1 Dễ, 1 TB, 1 Khó.
+  5. **Mệnh đề quan hệ (Relative Clauses)** - 3 câu (10%) - 1 Dễ, 1 TB, 1 Khó.
+  6. **Lượng từ & Mạo từ (Determiners)** - 3 câu (10%) - 1 Dễ, 1 TB, 1 Khó.
+  7. **Giới từ & Cụm từ (Prepositions)** - 3 câu (10%) - 1 Dễ, 2 TB, 0 Khó.
+  8. **Các dạng So sánh (Comparisons)** - 2 câu (7%) - 1 Dễ, 1 TB, 0 Khó.
+  9. **Lời nói gián tiếp (Reported Speech)** - 2 câu (7%) - 0 Dễ, 1 TB, 1 Khó.
+  10. **Từ loại & Cấu tạo từ (Word Forms)** - 2 câu (6%) - 1 Dễ, 0 TB, 1 Khó.
 
-| Nhóm Kiến thức Ngữ pháp | Số lượng Câu | Tỷ lệ Blueprint | Phân bổ Độ khó |
-| :--- | :---: | :---: | :---: |
-| **Các Thì trong tiếng Anh (Tenses)** | 6 câu | 20% | 2 Dễ - 3 Trung bình - 1 Khó |
-| **Câu bị động (Passive Voice)** | 3 câu | 10% | 1 Dễ - 1 Trung bình - 1 Khó |
-| **Câu điều kiện (Conditionals)** | 3 câu | 10% | 1 Dễ - 1 Trung bình - 1 Khó |
-| **Động từ khuyết thiếu (Modal Verbs)** | 3 câu | 10% | 1 Dễ - 1 Trung bình - 1 Khó |
-| **Mệnh đề quan hệ (Relative Clauses)** | 3 câu | 10% | 1 Dễ - 1 Trung bình - 1 Khó |
-| **Mạo từ & Từ chỉ số lượng (Determiners)**| 3 câu | 10% | 1 Dễ - 1 Trung bình - 1 Khó |
-| **Giới từ & Cụm từ (Prepositions)** | 3 câu | 10% | 1 Dễ - 2 Trung bình - 0 Khó |
-| **Các dạng So sánh (Comparisons)** | 2 câu | 7% | 1 Dễ - 1 Trung bình - 0 Khó |
-| **Lời nói gián tiếp (Reported Speech)** | 2 câu | 7% | 0 Dễ - 1 Trung bình - 1 Khó |
-| **Từ loại & Cấu trúc câu (Word Forms)** | 2 câu | 6% | 1 Dễ - 0 Trung bình - 1 Khó |
-| **TỔNG CỘNG** | **30 câu** | **100%** | **10 Dễ (33%) - 12 TB (40%) - 8 Khó (27%)** |
-
-**Schema Metadata gắn kèm mỗi câu hỏi:**
+**B. Question Bank Schema & Metadata Integration**
+Mỗi câu hỏi quản lý đầy đủ metadata chuẩn hóa:
 ```json
 {
-  "question_id": "Q_TENSE_042",
-  "topic": "Tenses",
-  "sub_topic": "Present Perfect vs Past Simple",
-  "lesson_id": "lesson_03",
-  "difficulty": "medium",
-  "skill": "grammar_application",
-  "correct_answer": "C",
-  "competency_id": "COMP_TENSE_PERFECT"
+  "question_id": "DIAG_TENSE_03",
+  "lesson_id": "97a9ba73-7f60-5a48-8781-cf7d07ea8af1",
+  "lesson_code": "TENSE_PRES_PERF",
+  "chapter_number": 1,
+  "competency_id": "COMP_PRES_PERF_SINCE",
+  "difficulty_level": "medium",
+  "grammar_topic": "tenses",
+  "learning_objective": "Phân biệt Thì Hiện tại hoàn thành với Quá khứ đơn qua giới từ since/for",
+  "question_type": "MULTIPLE_CHOICE",
+  "estimated_time": 45,
+  "prerequisite_competencies": ["COMP_PAST_SIMPLE", "COMP_PAST_PARTICIPLE_V3"]
 }
 ```
 
-### 8.3. Kiến trúc Đánh giá 2 Tầng (Two-Tier Diagnostic Engine)
+**C. Trải nghiệm Làm bài Thi Chẩn đoán (`DiagnosticTestSession.jsx`)**
+- One Question Per Screen, Focus Mode.
+- Progress Bar (`Câu X / 30`) kèm thanh % hoàn thành động.
+- Countdown Timer (20:00), cảnh báo trực quan khi còn 5 phút và 1 phút.
+- Flag Question (`🚩 Đánh dấu xem lại`).
+- Điều hướng Previous / Next, hỗ trợ Keyboard Shortcuts (A, B, C, D; Mũi tên trái/phải).
+- Question Drawer Palette chuyển nhanh giữa 30 câu (Màu xanh: đã trả lời, Vàng: đã đánh dấu, Trắng: chưa trả lời).
+- Tự động lưu tiến độ vào state / LocalStorage, xử lý an toàn khi reload trang.
 
-1. **Layer 1 – Deterministic Assessment Engine (Toán học Thuần túy - Zero Hallucination):**
-   - Chấm điểm tuyệt đối phía server (Server-side Verification).
-   - Công thức: `Accuracy = (Correct Answers / Total Questions) * 100`.
-   - Phân loại 5 cấp độ chuẩn xác:
-     * `90% – 100%`: **Mastered** (Đã làm chủ kiến thức)
-     * `75% – 89%`: **Good** (Nắm vững tốt)
-     * `60% – 74%`: **Developing** (Đang phát triển, cần củng cố)
-     * `40% – 59%`: **Needs Improvement** (Hổng kiến thức nền)
-     * `0% – 39%`: **Critical Weakness** (Điểm yếu chí mạng - Ưu tiên hàng đầu 🔴)
-   - **Độ tin cậy (Confidence Level):** Gắn nhãn `low` (1-2 câu), `medium` (3-5 câu), `high` (> 5 câu) để không kết luận vội vã về năng lực của học viên khi mẫu dữ liệu còn nhỏ.
-   - **Xếp hạng trình độ tổng thể (Estimated Grammar Level):** Ước tính nội bộ mức A1, A2, B1, B2 (rõ ràng minh bạch: đây là thang đo ngữ pháp nội bộ, không thay thế chứng chỉ 4 kỹ năng quốc tế).
+**D. Cơ chế Chống Gian lận (Anti-Cheating & Data Protection)**
+- Endpoint `/api/diagnostic/test` tuyệt đối không trả về `correct_answer`, `explanation` hay scoring metadata về browser.
+- Server-side generation UUID cho mỗi attempt, kiểm soát thời gian bắt đầu và kết thúc.
+- Xác nhận Confirmation Dialog trước khi nộp; ngăn chặn replay request và duplicate submission qua idempotency.
+- Không tin tưởng bất kỳ kết quả hay competency mapping nào do client tự tính toán gửi lên.
 
-2. **Layer 2 – AI Learning Recommendation Engine (Cá nhân hóa Lời khuyên):**
-   - Tiếp nhận kết quả đã được xác minh từ Layer 1 (không để AI tự chấm điểm).
-   - Diễn giải dễ hiểu điểm mạnh, điểm yếu.
-   - Sắp xếp thứ tự ưu tiên học tập: 🔴 High Priority -> 🟡 Medium Priority -> 🟢 Maintain.
-   - Tạo lời khuyên truyền cảm hứng và giải thích lý do vì sao cần học bài học đó.
+---
 
-### 8.4. Lộ trình Học tập Cá nhân hóa Hành động (Actionable Learning Roadmap)
+### 8.3. Bộ máy Chấm điểm Xác định & Nhận diện Lỗ hổng Kiến thức (`lib/diagnostic/diagnostic.scoring.js`)
 
-Roadmap liên kết chặt chẽ 100% với **53 bài học lý thuyết** và **51 bộ bài tập thực hành** có thật trong hệ thống:
+**A. Thuật toán Chấm điểm Cốt lõi (Deterministic Scoring - Zero Hallucination)**
+- Không phụ thuộc vào AI để tính điểm; toàn bộ công thức là toán học xác định tuyệt đối:
+  $$\text{Accuracy} = \left(\frac{\text{Correct Answers}}{\text{Total Valid Questions}}\right) \times 100$$
+- Đánh giá phân tách theo từng competency, từng mức độ khó và từng khoảng thời gian làm bài.
 
+**B. Thang Đo Độ Tin Cậy (Competency Confidence Level)**
+
+| Số câu đánh giá trong bài | Confidence Level | Hành vi Ứng xử Hệ thống |
+| :---: | :---: | :--- |
+| **> 5 câu** | **High** | Đủ dữ liệu thống kê để kết luận độ thuần thục của chuyên đề |
+| **3 – 5 câu** | **Medium** | Đủ dữ liệu đưa ra khuyến nghị ban đầu, cần kiểm chứng thêm |
+| **< 3 câu** | **Low** | Gắn nhãn *Insufficient Evidence*, không vội vàng kết luận mất gốc, ưu tiên thu thập qua quá trình học |
+
+**C. Phân loại 5 Cấp độ Thành thạo (Grammar Mastery Classification)**
+
+| Mastery Level | Accuracy Range | Diễn giải Sư phạm | Màu sắc & Ưu tiên |
+| :--- | :---: | :--- | :---: |
+| **Mastered** | **90% – 100%** | Đã làm chủ hoàn toàn kiến thức chuyên đề | 🌟 Xanh lục • Low |
+| **Good** | **75% – 89%** | Nắm vững tốt các quy tắc cốt lõi | ✅ Xanh dương • Low |
+| **Developing** | **60% – 74%** | Đang phát triển, còn lúng túng ở câu phức | ⚠️ Hổ phách • Medium |
+| **Needs Improvement**| **40% – 59%** | Hổng kiến thức nền tảng, nhầm lẫn công thức | 🟡 Cam • High |
+| **Critical Weakness** | **0% – 39%** | Lỗ hổng nghiêm trọng - Ưu tiên hàng đầu | 🔴 Đỏ • Critical Priority |
+
+**D. Ước tính Trình độ Ngữ pháp Nội bộ (Estimated Grammar Proficiency Level)**
+Ước tính trình độ theo thang CEFR nội bộ: **A1 (Beginner), A2 (Elementary), B1 (Intermediate), B2 (Upper Intermediate), C1 (Advanced)**.
+Công bố rõ ràng: Đây là thang đo ước tính năng lực ngữ pháp nội bộ cho chương trình số hóa, không thay thế chứng chỉ 4 kỹ năng quốc tế.
+
+---
+
+### 8.4. Grammar Knowledge Graph & Competency Mapping Engine (P1 - Kiến trúc Nâng cấp)
+
+Thay vì xem 10 chuyên đề là các ốc đảo độc lập, hệ thống xây dựng **Bản đồ Tri thức Ngữ pháp (Knowledge Graph)** phản ánh quan hệ tiền đề (Prerequisites) và mối phụ thuộc sâu xa giữa các khái niệm:
+
+```text
+Basic Grammar (Ngữ pháp Nền tảng)
+    │
+    ├── Parts of Speech (Từ loại)
+    │      ├── Nouns (Danh từ) ──► Determiners & Quantifiers (Lượng từ)
+    │      ├── Verbs (Động từ) ──► Regular & Irregular V2/V3 (Bảng V3)
+    │      └── Adjectives & Adverbs (Tính từ / Trạng từ) ──► Comparisons (So sánh)
+    │
+    ├── Tenses (Hệ thống Thì)
+    │      ├── Present Simple ──► Past Simple ──► Present Perfect (Hiện tại hoàn thành)
+    │      └── Auxiliary Verbs (To Be, Have, Do) ──► Passive Voice (Câu bị động)
+    │
+    ├── Sentence Structure (Cấu trúc Câu)
+    │      ├── Subject & Verb Agreement (Sự hòa hợp Chủ ngữ - Vị ngữ)
+    │      └── Sentence Transformation (Biến đổi câu)
+    │
+    └── Advanced Syntactic Structures (Ngữ pháp Nâng cao)
+           ├── Conditional Sentences Type 1, 2, 3 (Câu điều kiện)
+           ├── Relative Clauses: Defining & Non-defining (Mệnh đề quan hệ)
+           ├── Reported Speech: Tense Backshift (Lời nói gián tiếp)
+           └── Impersonal & Modal Passive (Bị động đặc biệt & khuyết thiếu)
 ```
-[ LỘ TRÌNH MẪU ĐƯỢC TẠO SAU CHẨN ĐOÁN ]
-Ước tính trình độ: B1 Grammar (Estimated) - Điểm tổng thể: 72/100
 
-Tuần 1: Khắc phục Điểm Yếu Chí Mạng (🔴 Critical Weakness)
-  Step 1: Ôn lý thuyết Thì Hiện tại hoàn thành (Bài học số 3 - Chuyên đề 1)
-  Step 2: Học bảng công thức 3 thể & Dấu hiệu nhận biết Since/For
-  Step 3: Làm 20 câu bài tập phân biệt Present Perfect vs Past Simple
-  Step 4: Hoàn thành Mini-Quiz kiểm tra lại chuyên đề (Target: >= 80%)
+**Root Cause Analysis (Phân tích Nguyên nhân Gốc rễ):**
+- **Conceptual Error:** Không hiểu bản chất thời điểm / đối tượng tác động.
+- **Rule Confusion:** Nhầm lẫn giữa quá khứ đơn và hiện tại hoàn thành.
+- **Structural Error:** Sai trật tự từ hoặc thiếu trợ động từ trong câu hỏi gián tiếp.
+- **Application Error:** Biết công thức nhưng không nhận diện được signal context.
 
-Tuần 2: Nâng cấp Dạng câu Biến đổi (🔴 High Priority)
-  Step 1: Ôn lý thuyết Câu bị động đặc biệt (Bài học số 42 - Chuyên đề 10)
-  Step 2: Thực hành 20 câu Sentence Transformation Chủ động -> Bị động
-  Step 3: Rà soát các câu làm sai trong Sổ tay câu sai
+---
 
-Tuần 3: Đánh giá lại Tiến độ (Reassessment)
-  Step 1: Thực hiện bài Retake Test 30 câu
-  Step 2: Xem biểu đồ đối soát tăng trưởng: Present Perfect (Trước: 20% -> Hiện tại: 85% [+65%])
+### 8.5. Bộ máy Tạo Lộ trình Học Cá nhân hóa 4 Tuần (`lib/diagnostic/roadmap.generator.js`)
+
+**Chiến lược Học tập 4 Tuần Hành động:**
+
+| Tuần Học | Tên Giai đoạn Chiến lược | Mục tiêu Trọng tâm Hành động |
+| :---: | :--- | :--- |
+| **Tuần 1** | **Foundation Recovery**<br>(🔴 Critical Priority) | Khắc phục triệt để lỗ hổng kiến thức nghiêm trọng nhất (<40%), xây lại kiến thức nền |
+| **Tuần 2** | **Core Grammar Development**<br>(🟡 High Priority) | Củng cố và nâng cấp các chuyên đề trọng tâm thứ hai, dạng câu bị động & chuyển đổi |
+| **Tuần 3** | **Application & Transformation**<br>(🟢 Medium Priority) | Luyện tập vận dụng mệnh đề quan hệ, so sánh kép và các bài tập tổng hợp 12 chuyên đề |
+| **Tuần 4** | **Advanced Practice & Assessment**<br>(🎯 Growth Milestone) | Làm bài Retake Placement Test (30 câu) đối soát mức độ tăng trưởng điểm số (+% Growth) |
+
+**Liên kết Trực tiếp Học liệu:**
+Mỗi nhiệm vụ trong lộ trình ánh xạ trực tiếp 100% vào **53 bài học** và **51 bài tập** với nút bấm 1-click **`Vào học ngay ➔`**, tự động chuyển ngữ cảnh học viên tới chính xác bài học và chương tương ứng.
+
+---
+
+### 8.6. Adaptive Learning Engine & Dynamic Roadmap Adjustment (Học tập Thích ứng Động)
+
+Hệ thống không giữ nguyên một lộ trình cố định mà tự động thích ứng dựa trên kết quả thực tế qua bộ quy tắc `lib/diagnostic/adaptive.learning.engine.js`:
+- **Trường hợp 1 (Vượt tiến độ - Accuracy > 90%):** Giảm tải bài tập cơ bản, mở khóa ngay các bài tập nâng cao hoặc chặng tiếp theo.
+- **Trường hợp 2 (Tiếp tục mắc lỗi - Accuracy < 60%):** Giữ chuyên đề trong Priority Queue, tự động chèn thêm bước ôn lý thuyết nền tảng từ Knowledge Graph.
+- **Trường hợp 3 (Lệch pha Lý thuyết - Bài tập - Application Gap):** Đọc lý thuyết 100% nhưng làm bài đạt < 50%, hệ thống chuyển sang bài tập có hướng dẫn (Scaffolded Practice) và trực quan hóa thay vì bắt đọc lại văn bản.
+- **Roadmap Versioning:** Lưu trữ lịch sử các phiên bản lộ trình (`roadmap_versions`) để học viên xem lại hành trình tiến bộ.
+
+---
+
+### 8.7. Spaced Repetition Review & Knowledge Retention Tracking (Độ Bền vững Kiến thức)
+
+Không kết luận học viên đã làm chủ vĩnh viễn một quy tắc chỉ qua 1 lần làm đúng. Hệ thống áp dụng chu kỳ lặp lại ngắt quãng:
+
+$$\text{Review Interval} \in \{1\text{ ngày}, 3\text{ ngày}, 7\text{ ngày}, 14\text{ ngày}, 30\text{ ngày}\}$$
+
+- Tự động quét và đẩy các câu hỏi hay làm sai từ Sổ tay câu sai (`user_mistakes`) vào lịch ôn tập ngắt quãng.
+- Tính toán chỉ số **Knowledge Retention Score** phản ánh độ bền ghi nhớ trước và sau khi ôn tập.
+
+---
+
+### 8.8. AI Learning Advisor & Intelligent Study Coach (AI Cố vấn Học tập)
+
+- **AI Guardrails Tuyệt đối:** AI không được tự ý tính điểm hay phát minh ra lesson ID giả mạo. Toàn bộ thông số đầu vào được trích xuất từ Scorer toán học và cơ sở dữ liệu có thật.
+- **Vai trò của AI Advisor:**
+  - Diễn giải dễ hiểu điểm mạnh, điểm yếu theo ngôn ngữ truyền cảm hứng.
+  - Phân tích nguyên nhân sâu xa vì sao học viên gặp khó khăn ở từng dạng bài.
+  - Tư vấn chiến lược học tập hàng ngày: *"Hôm nay nên dành 20 phút học bài nào, làm bài tập nào và vì sao?"*.
+  - Sẵn sàng giải đáp các câu hỏi học tập có ngữ cảnh: *"Tại sao tôi hay nhầm thì hoàn thành?", "Khi nào tôi sẵn sàng cho trình độ B2?"*.
+
+---
+
+### 8.9. Kiến trúc Cơ sở Dữ liệu PostgreSQL 17 & API Design
+
+**A. Các bảng Cơ sở Dữ liệu Quản lý trên Supabase:**
+1. `diagnostic_tests`: Danh mục bài thi chẩn đoán (blueprint, thời gian, câu hỏi).
+2. `diagnostic_attempts`: Lịch sử các lần làm bài (user, điểm, level, thời gian, trạng thái).
+3. `diagnostic_answers`: Snapshot từng câu trả lời, thời gian làm và tính đúng/sai.
+4. `diagnostic_skill_results`: Kết quả phân tích chi tiết từng chuyên đề (accuracy, confidence, classification).
+5. `grammar_competencies` & `competency_dependencies`: Bản đồ năng lực và quan hệ tiên quyết của Knowledge Graph.
+6. `user_learning_roadmaps`: Lộ trình học cá nhân hóa đang hoạt động.
+7. `roadmap_items`: Danh sách các đầu việc học tập chi tiết của từng tuần.
+8. `roadmap_versions`: Lịch sử các lần tự động điều chỉnh lộ trình thích ứng.
+9. `user_competency_mastery`: Bảng theo dõi độ thành thạo tích lũy theo thời gian.
+10. `spaced_repetition_reviews`: Lịch trình ôn tập ngắt quãng cá nhân.
+
+**B. Kiến trúc API Endpoints:**
+```text
+/api/diagnostic
+    GET  /test          -> Lấy bài thi chẩn đoán (đã ẩn đáp án)
+    POST /submit        -> Chấm điểm server-side & khởi tạo lộ trình
+    GET  /roadmap       -> Lấy lộ trình cá nhân hóa hiện tại
+    PATCH /roadmap/item -> Cập nhật trạng thái nhiệm vụ (completed/pending)
+    POST /adaptive/adjust -> Tự động điều chỉnh lộ trình theo kết quả mới
+    GET  /analytics     -> Thống kê đối soát năng lực trước/sau
+```
+
+---
+
+### 8.10. Kiến trúc Thư mục Module Mở rộng
+
+```text
+lib/
+├── diagnostic/
+│   ├── diagnostic.blueprint.js     # Ma trận 30 câu hỏi chuẩn hóa
+│   ├── diagnostic.scoring.js       # Scorer xác định Layer 1 (Zero Hallucination)
+│   ├── roadmap.generator.js        # Generator lộ trình học tập 4 tuần
+│   ├── knowledge.graph.js          # Bản đồ quan hệ tiên quyết & Root Cause
+│   └── adaptive.learning.engine.js # Engine điều chỉnh lộ trình thích ứng động
+│
+├── spaced-repetition/
+│   ├── repetition.scheduler.js     # Thuật toán lập lịch 1-3-7-14-30 ngày
+│   └── retention.tracker.js        # Đo lường độ bền kiến thức
+│
+components/
+└── diagnostic/
+    ├── DiagnosticOnboarding.jsx         # Landing page giới thiệu bài kiểm tra
+    ├── DiagnosticTestSession.jsx        # Giao diện làm bài 1 câu/màn hình, timer, shortcuts
+    ├── DiagnosticAnalysisDashboard.jsx  # Báo cáo kết quả & ma trận 10 kỹ năng
+    ├── PersonalizedRoadmapView.jsx      # Lộ trình học 4 tuần với nút 1-click vào bài
+    ├── DiagnosticQuestionReview.jsx     # Xem lại 30 câu với giải thích 5 trường
+    └── GrammarDiagnosticEngine.jsx      # Trình điều phối trung tâm
 ```
 
 ---
@@ -838,13 +1010,17 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
 - [x] **2.7.6 Visualizer Catalog Switcher Toàn Diện:**
   * Tích hợp thanh chuyển đổi 8 mô hình trực quan trực tiếp trên đầu `GrammarVisualization.jsx`, cho phép học viên khám phá linh hoạt bất kỳ mô hình nào tại bất kỳ bài học nào.
 
-### 🔹 Milestone 2.8: AI-Powered Grammar Diagnostic & Personalized Learning Roadmap (P1 - Central Module)
-- [x] **2.8.1 Diagnostic Assessment Engine:**
-  * Xây dựng bài kiểm tra đầu vào 30 câu trắc nghiệm (A/B/C/D), thời gian 15-20 phút (`lib/diagnostic/diagnostic.blueprint.js`).
+### 🔹 Milestone 2.8: AI-Powered Grammar Diagnostic & Personalized Adaptive Learning Roadmap (P1 - Central Module)
+
+> **Mục tiêu:** Xây dựng hệ thống Grammar Diagnostic & Personalized Learning có khả năng đánh giá trình độ ngữ pháp đầu vào, phát hiện chính xác lỗ hổng kiến thức, phân tích năng lực theo từng chuyên đề và tự động xây dựng lộ trình học tập cá nhân hóa 4 tuần liên kết 100% với 53 bài học và 51 bài tập.
+
+#### 1. Các thành phần Cốt lõi Đã Triển khai & Hoạt động trên Production:
+- [x] **2.8.1 Diagnostic Assessment Engine (Placement Test Blueprint):**
+  * Xây dựng bài kiểm tra đầu vào chuẩn hóa 30 câu trắc nghiệm (A/B/C/D), thời gian 15-20 phút tại `lib/diagnostic/diagnostic.blueprint.js`.
   * Phân bổ cân đối theo ma trận blueprint 10 nhóm kiến thức chuẩn hóa (10 Dễ - 12 Trung bình - 8 Khó) khớp 100% tài liệu Mai Lan Hương & Hà Thanh Uyên.
   * Tái sử dụng ngân hàng câu hỏi thông qua hệ thống metadata và mapping bài học (`lesson_id`, `lesson_code`, `chapter_number`, `competency_id`).
-  * Cơ chế làm bài 1 câu/màn hình (`DiagnosticTestSession.jsx`), Progress bar, Countdown Timer (20:00), Đánh dấu xem lại (Flag Question), phím tắt nhanh (A/B/C/D), Question drawer nhảy nhanh 30 câu.
-  * Chống gian lận: Che giấu đáp án đúng và giải thích ở client API (`/api/diagnostic/test`); chỉ submit 1 lần duy nhất mỗi lượt attempt với hộp thoại xác nhận.
+  * Trải nghiệm làm bài 1 câu/màn hình (`DiagnosticTestSession.jsx`), Progress bar, Countdown Timer (20:00), Đánh dấu xem lại (Flag Question), phím tắt nhanh (A/B/C/D), Question drawer chuyển nhanh 30 câu.
+  * Cơ chế chống gian lận: Che giấu đáp án đúng và giải thích ở client API (`/api/diagnostic/test`); chỉ submit 1 lần duy nhất mỗi lượt attempt với hộp thoại xác nhận.
 - [x] **2.8.2 Assessment Scoring & Weakness Detection Engine:**
   * Thuật toán chấm điểm server-side toán học thuần túy (Zero Hallucination) tại `lib/diagnostic/diagnostic.scoring.js`.
   * Xác định Accuracy % và gán nhãn Confidence level (`high` >5 câu, `medium` 3-5 câu, `low` <3 câu) tránh kết luận vội vã.
@@ -853,8 +1029,8 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
   * Lưu trữ snapshot câu hỏi, đáp án học viên và kết quả kỹ năng vào PostgreSQL 17 (`diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`).
 - [x] **2.8.3 Personalized Learning Roadmap Engine:**
   * Bộ máy sinh lộ trình học tập cá nhân hóa 4 tuần tại `lib/diagnostic/roadmap.generator.js` dựa trên kết quả chẩn đoán.
-  * Ưu tiên tuần 1 khắc phục điểm yếu chí mạng (🔴 Critical Weakness) và tuần 2 nâng cấp dạng câu biến đổi.
-  * Liên kết trực tiếp 100% với 53 bài học và 51 bài tập trong hệ thống với nút bấm 1-click "Vào học ngay ➔".
+  * Ưu tiên tuần 1 khắc phục điểm yếu chí mạng (🔴 Critical Priority) và tuần 2 nâng cấp dạng câu biến đổi.
+  * Liên kết trực tiếp 100% với 53 bài học và 51 bài tập trong hệ thống với nút bấm 1-click **"Vào học ngay ➔"**.
   * Tích hợp AI Recommendation Layer (AI Advisor) tổng hợp điểm mạnh, lỗ hổng cần ưu tiên và lời khuyên học tập truyền cảm hứng.
   * Lưu trữ lộ trình và các đầu việc học tập vào Supabase PostgreSQL 17 (`user_learning_roadmaps`, `roadmap_items`).
 - [x] **2.8.4 Learning Analytics, Progress Comparison & Reassessment:**
@@ -871,6 +1047,18 @@ Tuần 3: Đánh giá lại Tiến độ (Reassessment)
   * Server-side Answer Validation ngăn chặn can thiệp kết quả từ client qua `/api/diagnostic/submit`.
   * Cơ chế Fallback linh hoạt: hoạt động mượt mà cả khi offline hoặc ở chế độ Khách (Guest User) với LocalStorage.
   * RLS bảo vệ bảng `diagnostic_*` và `user_learning_roadmaps`, chống đệ quy và phân quyền chặt chẽ.
+
+#### 2. Kế hoạch Mở rộng 6 Hướng Nâng cấp Adaptive EdTech (Phases 4 - 10 / Spec 2.8 Enhanced):
+- [ ] **2.8.7 Grammar Knowledge Graph & Competency Mapping:** Xây dựng bản đồ quan hệ tri thức giữa 53 bài học, xác định các khái niệm tiền đề (Prerequisites) và cơ chế Root Cause Analysis cho các lỗi sai lặp lại.
+- [ ] **2.8.8 Adaptive Learning & Dynamic Roadmap Adjustment Engine:** Bộ quy tắc `adaptive.learning.engine.js` tự động điều chỉnh lộ trình dựa trên kết quả làm bài tập thực tế (Accuracy >90% tăng tốc; Accuracy <60% bổ sung bài tập củng cố; Application Gap tự động bù đắp bài tập có giàn giáo).
+- [ ] **2.8.9 Learning Mastery, Spaced Repetition & Retention Tracking:** Tự động lên lịch ôn tập ngắt quãng 1-3-7-14-30 ngày cho các câu hỏi hay làm sai trong Sổ tay câu sai và đo lường chỉ số Knowledge Retention Score.
+- [ ] **2.8.10 Conversational AI Learning Advisor:** Phát triển endpoint `/api/ai-advisor/ask` giải đáp ngữ cảnh người học (*"Tại sao tôi yếu chuyên đề Thì?", "Tôi đã sẵn sàng lên B2 chưa?"*) với hệ thống AI Guardrails chặt chẽ.
+- [ ] **2.8.11 Bộ Tiêu chuẩn Nghiệm thu Toàn diện (20 Acceptance Criteria AC-01 -> AC-20):**
+  * `AC-01 -> AC-05`: Đạt chuẩn Blueprint 30 câu, 10 nhóm kiến thức, 15-20 phút, Anti-Cheating server-side.
+  * `AC-06 -> AC-09`: Thuật toán chấm điểm xác định, nhận diện điểm yếu, phân loại Confidence, Knowledge Graph mapping.
+  * `AC-10 -> AC-13`: Roadmap 4 tuần, liên kết 53 Lessons, 51 Exercises, AI Recommendation theo schema cố định.
+  * `AC-14 -> AC-17`: Tự động điều chỉnh thích ứng, theo dõi 10 competency mastery, lịch ôn tập ngắt quãng, so sánh tăng trưởng trước/sau.
+  * `AC-18 -> AC-20`: Lưu trữ toàn vẹn trên Supabase PostgreSQL 17, bảo mật RLS, UI/UX chuẩn WCAG 2.2 AA.
 
 ### 🔹 Milestone 2.9: Continuous Adaptive Learning & Mastery Tracking (P2)
 - [ ] Theo dõi độ bền vững của kiến thức (Spaced Repetition Review) cho các câu hỏi hay làm sai.
