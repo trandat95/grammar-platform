@@ -1,12 +1,11 @@
 /**
- * Milestone 2.3.10: Offline-First PWA Service Worker
- * - Pre-caches application shell on install
- * - Stale-While-Revalidate / Cache-First for Next static assets
- * - Network-First with graceful Cache Fallback for curriculum & explanations APIs
+ * Milestone 2.3.10 & 2.12 Hotfix: Offline-First PWA Service Worker
+ * - Bumps cache version to wipe pre-2.12 stale shells
+ * - Never traps HTML navigation behind stale HTTP cache (cache: "no-store" Network-First)
  */
 
-const CACHE_VERSION = "grammar-engine-v2.5";
-const STATIC_SHELL = ["/", "/manifest.json"];
+const CACHE_VERSION = "grammar-engine-v2.12-sw2";
+const STATIC_SHELL = ["/manifest.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -35,12 +34,34 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Never cache mutable sync or admin APIs
-  if (url.pathname.startsWith("/api/sync/") || url.pathname.startsWith("/api/admin/") || url.pathname === "/api/health") {
+  // Never cache mutable sync, monetization, gamification, or admin APIs
+  if (
+    url.pathname.startsWith("/api/sync/") ||
+    url.pathname.startsWith("/api/admin/") ||
+    url.pathname.startsWith("/api/monetization/") ||
+    url.pathname.startsWith("/api/gamification/") ||
+    url.pathname === "/api/health"
+  ) {
     return;
   }
 
-  // Static Next.js build assets: Cache-First
+  // HTML page navigations: Always fetch fresh from Vercel Network-First (avoid stale UI handlers)
+  if (request.mode === "navigate" || url.pathname === "/") {
+    event.respondWith(
+      fetch(new Request(request, { cache: "no-store" }))
+        .then((res) => {
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE_VERSION).then((c) => c.put(request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
+    );
+    return;
+  }
+
+  // Static Next.js hashed build assets: Cache-First
   if (url.pathname.startsWith("/_next/static/")) {
     event.respondWith(
       caches.match(request).then((cached) => {
@@ -57,7 +78,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Pages & read-only pedagogy APIs: Network-First with Cache Fallback
+  // Other read-only pedagogy GET endpoints: Network-First with Cache Fallback
   event.respondWith(
     fetch(request)
       .then((res) => {
@@ -67,6 +88,6 @@ self.addEventListener("fetch", (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
+      .catch(() => caches.match(request))
   );
 });

@@ -5,7 +5,12 @@ import "../styles/design-system.css";
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((reg) => {
+          if (reg && typeof reg.update === "function") reg.update().catch(() => {});
+        })
+        .catch(() => {});
     }
   }, []);
 

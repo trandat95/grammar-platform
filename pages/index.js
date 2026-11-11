@@ -958,6 +958,7 @@ export default function Home() {
         setCurrentUser(newUser);
         localStorage.setItem("grammar_active_user_id", newUser.id);
         setAuthModalOpen(false);
+        setAuthTab("login");
         setAuthName("");
         setAuthEmail("");
         setAuthPassword("");
@@ -984,6 +985,7 @@ export default function Home() {
       persistUsersList([...usersList, localNewUser]);
       setCurrentUser(localNewUser);
       setAuthModalOpen(false);
+      setAuthTab("login");
       setAuthName("");
       setAuthEmail("");
       setAuthPassword("");
@@ -2445,30 +2447,53 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Currently Logged In Box with Logout Action */}
+            {/* Currently Logged In Box with VIP Upgrade & Logout Actions */}
             {!currentUser.isGuest && (
-              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: isLight ? "#f8fafc" : "#18181b", borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: T.bgElevated, borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ fontSize: "0.72rem", color: T.textMuted, textTransform: "uppercase" }}>Đang đăng nhập:</div>
                   <div style={{ fontSize: "0.85rem", fontWeight: "700", color: T.text }}>{currentUser.name} ({currentUser.role})</div>
                   <div style={{ fontSize: "0.75rem", color: T.textSecondary }}>{currentUser.email}</div>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  style={{
-                    padding: "0.4rem 0.8rem",
-                    backgroundColor: "#ef444420",
-                    border: "1px solid #ef444450",
-                    color: "#f87171",
-                    borderRadius: "6px",
-                    fontSize: "0.75rem",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                  }}
-                >
-                  🚪 Đăng xuất
-                </button>
+                <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+                  {currentUser.role === "FREE" && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthModalOpen(false);
+                        setCurrentView("vip");
+                      }}
+                      style={{
+                        padding: "0.4rem 0.75rem",
+                        backgroundColor: T.accent,
+                        border: "none",
+                        color: "#ffffff",
+                        borderRadius: "6px",
+                        fontSize: "0.75rem",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                      }}
+                    >
+                      💎 Nâng cấp VIP
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    style={{
+                      padding: "0.4rem 0.8rem",
+                      backgroundColor: T.dangerBg,
+                      border: `1px solid ${T.dangerBorder}`,
+                      color: T.danger,
+                      borderRadius: "6px",
+                      fontSize: "0.75rem",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🚪 Đăng xuất
+                  </button>
+                </div>
               </div>
             )}
 
@@ -6135,7 +6160,7 @@ export default function Home() {
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       <span>{currentUser.role === "VIP" ? "⭐" : "ℹ️"}</span>
-                      <span style={{ fontSize: "0.85rem", color: "#e4e4e7" }}>
+                      <span style={{ fontSize: "0.85rem", color: T.text, fontWeight: 500 }}>
                         {currentUser.role === "VIP"
                           ? "Tài khoản VIP: Bạn có toàn quyền truy cập 100% tất cả 2,939 câu bài tập và lời giải chi tiết."
                           : `Tài khoản Miễn phí: Được phép làm tối đa ${accessPolicy.freeExerciseLimit} câu bài tập đầu tiên mỗi chuyên đề.`}
@@ -6262,33 +6287,33 @@ export default function Home() {
                                     <div
                                       key={q.id || qIdx}
                                       style={{
-                                        backgroundColor: "#141417",
-                                        border: "1px dashed #f59e0b50",
-                                        borderRadius: "6px",
+                                        backgroundColor: T.bgElevated,
+                                        border: `1px dashed ${T.warningBorder}`,
+                                        borderRadius: "8px",
                                         padding: "1.25rem",
                                         textAlign: "center",
                                       }}
                                     >
-                                      <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#fbbf24", marginBottom: "0.3rem" }}>
+                                      <div style={{ fontSize: "0.9rem", fontWeight: "700", color: T.warning, marginBottom: "0.3rem" }}>
                                         🔒 Câu {questionGlobalIdx + 1}: Nội dung khóa dành riêng cho Thành viên VIP
                                       </div>
-                                      <p style={{ fontSize: "0.8rem", color: "#a1a1aa", maxWidth: "520px", margin: "0 auto 0.75rem auto" }}>
+                                      <p style={{ fontSize: "0.8rem", color: T.textSecondary, maxWidth: "520px", margin: "0 auto 0.75rem auto", lineHeight: 1.5 }}>
                                         Tài khoản Miễn phí được trải nghiệm tối đa {accessPolicy.freeExerciseLimit} câu đầu tiên. Hãy nâng cấp lên VIP để mở khóa toàn bộ câu hỏi và đáp án giải thích chi tiết!
                                       </p>
                                       <button
                                         onClick={() => openContextualSmartPaywall("vip_feature_click", { title: `Mở khóa Câu ${questionGlobalIdx + 1} & Toàn bộ Chuyên đề`, description: "Truy cập không giới hạn kho 2,939 câu kèm lời giải sư phạm 5 trường." })}
                                         style={{
-                                          padding: "0.35rem 0.85rem",
-                                          backgroundColor: "#f59e0b",
-                                          color: "#09090b",
+                                          padding: "0.45rem 1rem",
+                                          backgroundColor: T.accent,
+                                          color: "#ffffff",
                                           border: "none",
-                                          borderRadius: "4px",
-                                          fontSize: "0.78rem",
+                                          borderRadius: "6px",
+                                          fontSize: "0.8rem",
                                           fontWeight: "700",
                                           cursor: "pointer",
                                         }}
                                       >
-                                        Nâng cấp VIP ngay (Hoặc xem gói ưu đãi)
+                                        Nâng cấp VIP ngay ➔
                                       </button>
                                     </div>
                                   );
