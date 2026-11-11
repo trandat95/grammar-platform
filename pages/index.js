@@ -4387,18 +4387,16 @@ export default function Home() {
                           marginTop: "2rem",
                           padding: "1.75rem",
                           backgroundColor: T.card,
-                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px dashed ${isLight ? "#3b82f6" : "#3b82f6"}`, borderRadius: "10px", textAlign: "center", boxShadow: T.shadow }} > <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.4rem" }}>,
-                          borderRadius: "8px",
+                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px dashed ${isLight ? "#3b82f6" : "#3b82f6"}`,
+                          borderRadius: "10px",
                           textAlign: "center",
+                          boxShadow: T.shadow,
                         }}
                       >
-                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: <p style={{ fontSize: "0.85rem", color: T.textMuted,, marginBottom: "0.4rem" }}>
+                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.4rem" }}>
                           {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
                         </div>
-                        <p style={{ fontSize: "0.85rem", color: (isLight ? "#10b981" : "#10b981") : (isLight ? "#f1f5f9" : "#18181b")
-                          {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
-                        </div>
-                        `1px solid ${T.border}`, marginBottom: "1.25rem" }}>
+                        <p style={{ fontSize: "0.85rem", color: T.textMuted, marginBottom: "1.25rem" }}>
                           Chuyên đề "{selectedChapter?.title_vi}" có {selectedChapter?.exercises?.length || 0} bài tập thực hành ({totalChapterExerciseQuestions} câu hỏi) để bạn củng cố kiến thức.
                         </p>
 
@@ -4407,13 +4405,16 @@ export default function Home() {
                             onClick={() => toggleLessonCompletion(selectedLesson.id)}
                             style={{
                               padding: "0.6rem 1.25rem",
-                              backgroundColor: isCurrentLessonDone ? (isLight ? "#ffffff" : "#042f1a") : T.text,
+                              backgroundColor: isCurrentLessonDone ? "#10b981" : (isLight ? "#f1f5f9" : "#18181b"),
+                              border: isCurrentLessonDone ? "none" : `1px solid ${T.border}`,
+                              borderRadius: "6px",
+                              color: isCurrentLessonDone ? "#ffffff" : T.text,
                               fontSize: "0.85rem",
                               fontWeight: "700",
                               cursor: "pointer",
                             }}
                           >
-                            {isCurrentLessonDone ? "✓ Đã đánh dấu hoàn thành" : "✓ Đánh dấu đã học xong (+25 XP)"}
+                            {isCurrentLessonDone ? "✓ Hoàn thành (Bấm để hủy)" : "✓ Đánh dấu đã học xong (+25 XP)"}
                           </button>
 
                           <button
