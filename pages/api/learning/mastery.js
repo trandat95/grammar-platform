@@ -1,8 +1,17 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH, findPrerequisites, resolveConceptForQuestion } from "../../../lib/knowledge/knowledge-graph";
-import { applyKnowledgeDecay, calculateConceptMasteryScore } from "../../../lib/learning/mastery-tracker";
-import { calculateNextReview, getDailyDueSummary } from "../../../lib/explanation/spaced-repetition";
+import {
+  applyKnowledgeDecay,
+  calculateMultiFactorMastery,
+  aggregateTwelveTopicMastery,
+} from "../../../lib/learning/mastery-tracker";
+import {
+  calculateNextReview,
+  getDailyDueSummary,
+  calculateForgettingCurve,
+} from "../../../lib/explanation/spaced-repetition";
+import { generatePersonalRecommendations } from "../../../lib/learning/adaptive-question-engine";
 import quizData from "../../../data/ui/quiz_bank.json";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -21,8 +30,10 @@ const QUESTION_MAP = (() => {
   return map;
 })();
 
+const DIFF_TO_SCORE = { Beginner: 1, Elementary: 2, Intermediate: 3, Advanced: 4, easy: 1, medium: 3, hard: 4 };
+
 /**
- * Milestone 2.5.9, 2.5.10 & 2.5.11: Adaptive Concept Mastery, Knowledge Decay & SM-2 Spaced Repetition API
+ * Milestone 2.5 & 2.9: Adaptive 12-Topic Concept Mastery, 5-State SM-2 & Forgetting Curve API
  */
 export default async function handler(req, res) {
   const serverClient = getAdminClient();
@@ -36,22 +47,42 @@ export default async function handler(req, res) {
     const requestedUserId = authUser?.id || req.query?.user_id;
 
     if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
+      const guestConcepts = KNOWLEDGE_GRAPH.nodeList.map((n) => ({
+        ...n,
+        attempts: 0,
+        correct_attempts: 0,
+        mastery_score: 0,
+        decayed_score: 0,
+        decay_penalty: 0,
+        days_overdue: 0,
+        mastery_status: "unstarted",
+        mastery_tier: "Beginner",
+        prerequisites: findPrerequisites(n.id, { includeIndirect: false }),
+      }));
+      const twelveTopicMastery = aggregateTwelveTopicMastery(guestConcepts);
+      const dailyReview = getDailyDueSummary([]);
+      const forgettingCurve = calculateForgettingCurve([]);
+      const personalRecommendations = generatePersonalRecommendations({
+        twelveTopicMastery,
+        dailyReview,
+        retentionMetrics: { overallRetentionScore: 0 },
+      });
+
       return res.status(200).json({
         success: true,
         guestMode: true,
-        dailyReview: getDailyDueSummary([]),
-        concepts: KNOWLEDGE_GRAPH.nodeList.map((n) => ({
-          ...n,
-          attempts: 0,
-          correct_attempts: 0,
-          mastery_score: 0,
-          decayed_score: 0,
-          decay_penalty: 0,
-          days_overdue: 0,
-          mastery_status: "unstarted",
-          prerequisites: findPrerequisites(n.id, { includeIndirect: false }),
-        })),
+        dailyReview,
+        concepts: guestConcepts,
         weakConcepts: [],
+        twelveTopicMastery,
+        forgettingCurve,
+        personalRecommendations,
+        analyticsIntelligence: {
+          overallMastery: 0,
+          learningVelocity7d: 0,
+          strongestTopic: null,
+          weakestTopic: null,
+        },
       });
     }
 
@@ -60,14 +91,24 @@ export default async function handler(req, res) {
     }
 
     try {
-      const [{ data: progressRows, error: progErr }, { data: srRows, error: srErr }] = await Promise.all([
+      const weekAgoIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const [
+        { data: progressRows, error: progErr },
+        { data: srRows, error: srErr },
+        { data: recentEvents },
+      ] = await Promise.all([
         serverClient.from("user_concept_progress").select("*").eq("user_id", requestedUserId),
         serverClient
           .from("spaced_repetition_queue")
           .select("*")
           .eq("user_id", requestedUserId)
           .order("next_review_at", { ascending: true })
-          .limit(250),
+          .limit(300),
+        serverClient
+          .from("learning_event_logs")
+          .select("id, created_at, is_correct")
+          .eq("user_id", requestedUserId)
+          .gte("created_at", weekAgoIso),
       ]);
 
       if (progErr) throw progErr;
@@ -90,6 +131,7 @@ export default async function handler(req, res) {
             decay_penalty: 0,
             days_overdue: 0,
             mastery_status: "unstarted",
+            mastery_tier: "Beginner",
             prerequisites: findPrerequisites(node.id, { includeIndirect: false }),
           };
         }
@@ -106,6 +148,11 @@ export default async function handler(req, res) {
           decay_penalty: decay.decayPenalty,
           days_overdue: decay.daysOverdue,
           mastery_status: prog.mastery_status || "learning",
+          mastery_tier: prog.mastery_tier || "Beginner",
+          consistency_score: Number(prog.consistency_score || 0),
+          retention_score: Number(prog.retention_score || 0),
+          topic_coverage_score: Number(prog.topic_coverage_score || 0),
+          unique_questions_seen: prog.unique_questions_seen || 0,
           last_reviewed_at: prog.last_reviewed_at,
           next_review_at: prog.next_review_at,
           prerequisites: findPrerequisites(node.id, { includeIndirect: false }),
@@ -138,6 +185,24 @@ export default async function handler(req, res) {
       });
 
       const dailyReview = getDailyDueSummary(enrichedSrCards, now);
+      const twelveTopicMastery = aggregateTwelveTopicMastery(concepts);
+      const forgettingCurve = calculateForgettingCurve(srRows || [], now);
+
+      const trackedChapters = twelveTopicMastery.filter((t) => t.attempts > 0);
+      const overallMastery =
+        trackedChapters.length > 0
+          ? Math.round(trackedChapters.reduce((s, t) => s + t.mastery_score, 0) / trackedChapters.length)
+          : 0;
+      const strongestTopic =
+        trackedChapters.length > 0 ? [...trackedChapters].sort((a, b) => b.mastery_score - a.mastery_score)[0] : null;
+      const weakestTopic =
+        trackedChapters.length > 0 ? [...trackedChapters].sort((a, b) => a.mastery_score - b.mastery_score)[0] : null;
+
+      const personalRecommendations = generatePersonalRecommendations({
+        twelveTopicMastery,
+        dailyReview,
+        retentionMetrics: { overallRetentionScore: forgettingCurve.longTermRetention || overallMastery },
+      });
 
       return res.status(200).json({
         success: true,
@@ -145,6 +210,15 @@ export default async function handler(req, res) {
         dailyReview,
         concepts,
         weakConcepts,
+        twelveTopicMastery,
+        forgettingCurve,
+        personalRecommendations,
+        analyticsIntelligence: {
+          overallMastery,
+          learningVelocity7d: (recentEvents || []).length,
+          strongestTopic,
+          weakestTopic,
+        },
         summaryStats: {
           trackedConcepts: (progressRows || []).length,
           masteredConcepts: concepts.filter((c) => c.mastery_status === "mastered").length,
@@ -158,7 +232,18 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     try {
-      const { user_id, question_id, is_correct, quality_rating = null, error_category = null } = req.body || {};
+      const {
+        user_id,
+        question_id,
+        is_correct,
+        quality_rating = null,
+        error_category = null,
+        response_time_ms = 0,
+        difficulty_rating = null,
+        idempotency_key = null,
+        device_id = null,
+      } = req.body || {};
+
       const resolvedUserId = authUser?.id || user_id;
 
       if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId)) {
@@ -173,10 +258,34 @@ export default async function handler(req, res) {
 
       const question = QUESTION_MAP.get(question_id);
       const conceptId = resolveConceptForQuestion(question || { id: question_id }, error_category);
+      const diffScore = difficulty_rating || DIFF_TO_SCORE[question?.level] || 3;
       const now = new Date();
       const nowIso = now.toISOString();
 
-      // 1. Update Spaced Repetition Queue (SM-2: 1 -> 3 -> 7 -> 14 -> 30d)
+      // Anti-Duplicate Idempotency Check via Unified Learning Event Log (8D.1 & 2.9.8)
+      if (idempotency_key && typeof idempotency_key === "string") {
+        const { error: evErr } = await serverClient.from("learning_event_logs").insert({
+          user_id: resolvedUserId,
+          idempotency_key,
+          event_type: "QUESTION_ANSWERED",
+          question_id,
+          concept_id: conceptId,
+          is_correct: Boolean(is_correct),
+          response_time_ms: Math.max(0, Math.round(Number(response_time_ms || 0))),
+          device_id,
+          payload: { error_category, difficulty_score: diffScore },
+        });
+        if (evErr && (evErr.code === "23505" || evErr.message?.toLowerCase().includes("duplicate"))) {
+          return res.status(200).json({
+            success: true,
+            deduped: true,
+            conceptId,
+            message: "Idempotent learning event already processed.",
+          });
+        }
+      }
+
+      // 1. Update Spaced Repetition Queue (5-State Machine & Stability/Retrievability)
       const { data: existingSr } = await serverClient
         .from("spaced_repetition_queue")
         .select("*")
@@ -184,7 +293,11 @@ export default async function handler(req, res) {
         .eq("question_id", question_id)
         .maybeSingle();
 
-      const nextSr = calculateNextReview(existingSr, Boolean(is_correct), quality_rating, now);
+      const nextSr = calculateNextReview(existingSr, Boolean(is_correct), quality_rating, now, {
+        responseTimeMs: response_time_ms,
+        difficultyWeight: diffScore,
+      });
+
       const srPayload = {
         user_id: resolvedUserId,
         question_id,
@@ -197,6 +310,12 @@ export default async function handler(req, res) {
         last_reviewed_at: nextSr.last_reviewed_at,
         next_review_at: nextSr.next_review_at,
         status: nextSr.status,
+        memory_state: nextSr.memory_state,
+        response_time_ms: nextSr.response_time_ms,
+        correct_history: nextSr.correct_history,
+        difficulty_rating: nextSr.difficulty_rating,
+        stability_score: nextSr.stability_score,
+        retrievability_score: nextSr.retrievability_score,
         updated_at: nowIso,
       };
 
@@ -208,7 +327,14 @@ export default async function handler(req, res) {
 
       if (srSaveErr) throw srSaveErr;
 
-      // 2. Update Real-Time Concept Mastery (user_concept_progress)
+      // Count unique questions seen for this concept to enforce Anti-Gaming Topic Coverage
+      const { count: uniqueCount } = await serverClient
+        .from("spaced_repetition_queue")
+        .select("question_id", { count: "exact", head: true })
+        .eq("user_id", resolvedUserId)
+        .eq("concept_id", conceptId);
+
+      // 2. Update 6-Factor Anti-Gaming Concept Mastery (user_concept_progress)
       const { data: existingProg } = await serverClient
         .from("user_concept_progress")
         .select("*")
@@ -220,13 +346,17 @@ export default async function handler(req, res) {
       const nextCorrect = Number(existingProg?.correct_attempts || 0) + (is_correct ? 1 : 0);
       const nextIncorrect = Number(existingProg?.incorrect_attempts || 0) + (is_correct ? 0 : 1);
       const nextConsecutive = is_correct ? Number(existingProg?.consecutive_correct || 0) + 1 : 0;
+      const seenCount = Math.max(1, uniqueCount || 1);
 
-      const mastery = calculateConceptMasteryScore({
+      const mastery = calculateMultiFactorMastery({
         attempts: nextAttempts,
         correct_attempts: nextCorrect,
         consecutive_correct: nextConsecutive,
         interval_days: nextSr.interval_days,
         next_review_at: nextSr.next_review_at,
+        last_attempt_at: nowIso,
+        avg_difficulty_score: diffScore,
+        unique_questions_seen: seenCount,
         now,
       });
 
@@ -239,6 +369,13 @@ export default async function handler(req, res) {
         consecutive_correct: nextConsecutive,
         mastery_score: mastery.masteryScore,
         mastery_status: mastery.masteryStatus,
+        mastery_tier: mastery.masteryTier,
+        consistency_score: mastery.factors.consistency,
+        retention_score: mastery.factors.retention,
+        difficulty_weight: mastery.factors.difficultyWeight,
+        recency_score: mastery.factors.recency,
+        topic_coverage_score: mastery.factors.topicCoverage,
+        unique_questions_seen: seenCount,
         last_attempt_at: nowIso,
         last_reviewed_at: nowIso,
         next_review_at: nextSr.next_review_at,
@@ -255,10 +392,12 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
+        deduped: false,
         conceptId,
         conceptNode: KNOWLEDGE_GRAPH.nodes[conceptId] || null,
         prerequisites: findPrerequisites(conceptId, { includeIndirect: false }),
         mastery: savedProg,
+        masteryFactors: mastery.factors,
         spacedRepetition: savedSr,
       });
     } catch (err) {

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
 import { SyncManager } from "../lib/sync/sync-manager";
@@ -12,6 +12,8 @@ import { speechService } from "../lib/audio/speech.service";
 import StructuredExplanation from "../components/explanation/StructuredExplanation";
 import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
 import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
+import MasteryIntelligenceDashboard from "../components/learning/MasteryIntelligenceDashboard";
+import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
 import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
@@ -236,6 +238,9 @@ export default function Home() {
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizSingleChecks, setQuizSingleChecks] = useState({});
   const [quizShowAnswers, setQuizShowAnswers] = useState({});
+  const [adaptiveQuizMeta, setAdaptiveQuizMeta] = useState(null);
+  const [adaptiveLoading, setAdaptiveLoading] = useState(false);
+  const questionFocusTimestampsRef = useRef({});
 
   // Per-User Duolingo-style Learning Tracker State
   const [userTracker, setUserTracker] = useState({
@@ -1414,6 +1419,11 @@ export default function Home() {
 
   const syncQuestionMastery = (question, isCorrect, errorCategory = null) => {
     if (!question?.id || !currentUser?.id || currentUser.isGuest) return;
+    const startedAt = questionFocusTimestampsRef.current?.[question.id];
+    const responseTimeMs = startedAt ? Math.max(500, Math.min(180000, Date.now() - startedAt)) : 3500;
+    if (startedAt) {
+      delete questionFocusTimestampsRef.current[question.id];
+    }
     const headers = {
       "Content-Type": "application/json",
       ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
@@ -1426,6 +1436,8 @@ export default function Home() {
         question_id: question.id,
         is_correct: Boolean(isCorrect),
         error_category: errorCategory,
+        response_time_ms: responseTimeMs,
+        idempotency_key: StorageAdapter.generateUUIDv4(),
       }),
     }).catch(() => {});
   };
@@ -1643,7 +1655,14 @@ export default function Home() {
   };
 
   // --- Study Exercise Handlers with Permission Check ---
+  const markQuestionInteractionStart = (questionId) => {
+    if (questionId && !questionFocusTimestampsRef.current[questionId]) {
+      questionFocusTimestampsRef.current[questionId] = Date.now();
+    }
+  };
+
   const handleInputChange = (questionId, value) => {
+    markQuestionInteractionStart(questionId);
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
   };
 
@@ -1755,6 +1774,7 @@ export default function Home() {
     const shuffled = [...pool].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, 50);
 
+    setAdaptiveQuizMeta(null);
     setActiveQuizQuestions(selected);
     setQuizAnswers({});
     setQuizResults(null);
@@ -1763,7 +1783,87 @@ export default function Home() {
     setQuizShowAnswers({});
   };
 
+  const startAdaptivePractice = async ({ mode = "adaptive", topicId = null, count = 20 } = {}) => {
+    if (isQuizLimitReached) {
+      alert(
+        `Bạn đã hoàn thành giới hạn ${accessPolicy.freeDailyQuizLimit} lượt Quiz hôm nay của gói Miễn phí. Hãy nâng cấp lên VIP để làm bài không giới hạn!`
+      );
+      return;
+    }
+
+    setAdaptiveLoading(true);
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
+      };
+      const res = await fetch("/api/learning/adaptive-mix", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          user_id: !currentUser?.isGuest ? currentUser?.id : null,
+          mode,
+          topicId,
+          count,
+          completedQuestionIds: userTracker?.completedQuestions || [],
+        }),
+      });
+      const json = await res.json();
+      let resultQuestions = json?.questions;
+      let meta = json;
+      if (!res.ok || !Array.isArray(resultQuestions) || resultQuestions.length === 0) {
+        meta = buildAdaptiveQuestionSet({
+          count,
+          targetTopicId: topicId,
+          mode,
+          completedQuestionIds: userTracker?.completedQuestions || [],
+        });
+        resultQuestions = meta.questions;
+      }
+
+      setActiveQuizQuestions(resultQuestions || []);
+      setAdaptiveQuizMeta({
+        mode: meta.mode || mode,
+        topicId,
+        preferredDifficulty: meta.preferredDifficulty || "Adaptive",
+        breakdown: meta.breakdown || {},
+      });
+      setQuizAnswers({});
+      setQuizResults(null);
+      setQuizSubmitted(false);
+      setQuizSingleChecks({});
+      setQuizShowAnswers({});
+      setCurrentView("quiz");
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch {
+      const fallback = buildAdaptiveQuestionSet({
+        count,
+        targetTopicId: topicId,
+        mode,
+        completedQuestionIds: userTracker?.completedQuestions || [],
+      });
+      setActiveQuizQuestions(fallback.questions || []);
+      setAdaptiveQuizMeta({
+        mode: fallback.mode || mode,
+        topicId,
+        preferredDifficulty: fallback.preferredDifficulty || "Adaptive",
+        breakdown: fallback.breakdown || {},
+      });
+      setQuizAnswers({});
+      setQuizResults(null);
+      setQuizSubmitted(false);
+      setQuizSingleChecks({});
+      setQuizShowAnswers({});
+      setCurrentView("quiz");
+    } finally {
+      setAdaptiveLoading(false);
+    }
+  };
+
   const handleQuizAnswerChange = (qId, val) => {
+    markQuestionInteractionStart(qId);
     setQuizAnswers((prev) => ({ ...prev, [qId]: val }));
   };
 
@@ -1859,6 +1959,29 @@ export default function Home() {
         total: activeQuizQuestions.length,
         percentage: Math.round((correctCount / activeQuizQuestions.length) * 100),
       });
+      fetch("/api/learning/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(activeAuthToken ? { Authorization: `Bearer ${activeAuthToken}` } : {}),
+        },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          events: [
+            {
+              event_type: "QUIZ_COMPLETED",
+              idempotency_key: StorageAdapter.generateUUIDv4(),
+              payload: {
+                mode: adaptiveQuizMeta?.mode || "standard",
+                topic: selectedQuizTopic,
+                score: correctCount,
+                total: activeQuizQuestions.length,
+                percentage: Math.round((correctCount / activeQuizQuestions.length) * 100),
+              },
+            },
+          ],
+        }),
+      }).catch(() => {});
       SyncManager.recordAction(SYNC_EVENT_TYPES.QUIZ_SUBMITTED, {
         quiz: {
           topic: selectedQuizTopic,
@@ -4537,6 +4660,17 @@ export default function Home() {
                 />
               </div>
 
+              {/* MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & 12-TOPIC MASTERY INTELLIGENCE */}
+              <div style={{ marginBottom: "1.75rem" }}>
+                <MasteryIntelligenceDashboard
+                  userId={!currentUser?.isGuest ? currentUser?.id : null}
+                  authToken={activeAuthToken}
+                  userTracker={userTracker}
+                  isLight={isLight}
+                  onStartAdaptivePractice={startAdaptivePractice}
+                />
+              </div>
+
               {/* SMART DAILY RECOMMENDATION CARD */}
               <div
                 style={{
@@ -6200,7 +6334,24 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <button
+                      disabled={isQuizLimitReached || adaptiveLoading}
+                      onClick={() => startAdaptivePractice({ mode: "adaptive", count: 20 })}
+                      style={{
+                        padding: "0.5rem 1rem",
+                        backgroundColor: isQuizLimitReached ? T.border : T.accent,
+                        border: `1px solid ${T.accent}`,
+                        borderRadius: "6px",
+                        color: isQuizLimitReached ? T.textMuted : "#ffffff",
+                        fontSize: "0.825rem",
+                        fontWeight: "700",
+                        cursor: isQuizLimitReached || adaptiveLoading ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {adaptiveLoading ? "Đang trộn đề..." : "🎯 Đề Thích Ứng (50/30/20)"}
+                    </button>
+
                     <button
                       disabled={isQuizLimitReached}
                       onClick={() => startNewQuiz(selectedQuizTopic)}
@@ -6237,6 +6388,35 @@ export default function Home() {
                     )}
                   </div>
                 </div>
+
+                {adaptiveQuizMeta && (
+                  <div
+                    style={{
+                      marginTop: "1rem",
+                      padding: "0.75rem 1rem",
+                      borderRadius: "8px",
+                      backgroundColor: T.bgElevated,
+                      border: `1px solid ${T.borderSubtle}`,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "0.6rem",
+                      fontSize: "0.8rem",
+                    }}
+                  >
+                    <span style={{ color: T.textHeading, fontWeight: "700" }}>
+                      {adaptiveQuizMeta.mode === "manual_review"
+                        ? `🎯 Chế độ Ôn tập Chuyên đề #${adaptiveQuizMeta.topicId}`
+                        : `🧠 Đề Thích Ứng 50/30/20 (${adaptiveQuizMeta.preferredDifficulty || "Adaptive"})`}
+                    </span>
+                    <span style={{ color: T.textMuted }}>
+                      Weak: <strong style={{ color: T.warning }}>{adaptiveQuizMeta.breakdown?.weakCount ?? 0}</strong> • SR Review:{" "}
+                      <strong style={{ color: T.accent }}>{adaptiveQuizMeta.breakdown?.reviewCount ?? 0}</strong> • Challenge:{" "}
+                      <strong style={{ color: T.success }}>{adaptiveQuizMeta.breakdown?.challengeCount ?? 0}</strong>
+                    </span>
+                  </div>
+                )}
 
                 {/* Topic Selector & Progress Bar */}
                 <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid #1f1f23", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
@@ -6354,20 +6534,37 @@ export default function Home() {
                           <span style={{ fontSize: "0.75rem", color: T.textMuted }}>{q.topic_name}</span>
                         </div>
 
-                        <span
-                          style={{
-                            fontSize: "0.68rem",
-                            fontFamily: "Geist Mono",
-                            padding: "0.15rem 0.45rem",
-                            borderRadius: "4px",
-                            backgroundColor: isLight ? "#f1f5f9" : "#18181b",
-                            color: isLight ? "#334155" : "#a1a1aa",
-                            border: `1px solid ${T.border}`,
-                            fontWeight: "700",
-                          }}
-                        >
-                          {typeInfo.tag}
-                        </span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+                          {q.adaptive_bucket && (
+                            <span
+                              style={{
+                                fontSize: "0.66rem",
+                                fontWeight: "700",
+                                padding: "0.15rem 0.45rem",
+                                borderRadius: "9999px",
+                                backgroundColor: T.bgElevated,
+                                color: T.accent,
+                                border: `1px solid ${T.borderSubtle}`,
+                              }}
+                            >
+                              {q.adaptive_bucket}
+                            </span>
+                          )}
+                          <span
+                            style={{
+                              fontSize: "0.68rem",
+                              fontFamily: "Geist Mono",
+                              padding: "0.15rem 0.45rem",
+                              borderRadius: "4px",
+                              backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                              color: isLight ? "#334155" : "#a1a1aa",
+                              border: `1px solid ${T.border}`,
+                              fontWeight: "700",
+                            }}
+                          >
+                            {typeInfo.tag}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Explicit Instruction Box */}

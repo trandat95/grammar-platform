@@ -73,6 +73,7 @@ STRICT_TOKEN_DIRS = [
     "components/sync",
     "components/learning/SpacedRepetitionPanel.jsx",
     "components/learning/RemedialRecommendationCard.jsx",
+    "components/learning/MasteryIntelligenceDashboard.jsx",
 ]
 HEX_PATTERN = re.compile(r"#[0-9a-fA-F]{6}\b")
 ALLOWLIST = {"#ffffff"}
