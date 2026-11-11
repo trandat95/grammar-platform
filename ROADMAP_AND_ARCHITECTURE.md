@@ -51,6 +51,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ⏳ Kế tiếp (Adaptive Spec Active) |
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ⏳ Kế tiếp (Gamification Spec Active) |
 | **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
+| **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ⏳ Kế tiếp (Monetization Spec Active) |
 
 ---
 
@@ -1488,6 +1489,113 @@ Hỗ trợ 4 hạng huy hiệu (**Bronze / Silver / Gold / Diamond**), **Hidden 
 
 ---
 
+## 💎 8.9. MILESTONE 2.12: INTELLIGENT MONETIZATION, BEHAVIORAL PSYCHOLOGY & PREMIUM CONVERSION ENGINE (P0)
+
+> **Tuyên ngôn Giá trị Cốt lõi (Core Value Proposition):** *"Đừng bán cho học viên một tài khoản VIP; hãy bán cho họ một **Hệ thống Cải thiện Ngữ pháp Tiếng Anh Cá nhân hóa (Personalized English Grammar Improvement System)**. Gói **FREE** tạo ra giá trị thực tế giúp người dùng học được tiếng Anh; gói **VIP** nhân rộng giá trị (học thông minh hơn, cá nhân hóa sâu hơn, tiết kiệm thời gian tối đa); còn **Dữ liệu Học tập Thực tế** chứng minh giá trị đó."*
+
+> **Cam kết Đạo đức & Tuân thủ Pháp lý (Anti-Dark-Patterns Policy):** Toàn bộ cơ chế FOMO, khan hiếm (Scarcity) và khuyến mãi phải dựa trên lợi ích, ưu đãi và sự kiện **có thật**. Tuyệt đối **CẤM** dùng đồng hồ đếm ngược giả tự động reset (fake countdown), đánh giá/số lượng mua giả, tạo thông báo đe dọa mất streak/tiến độ nếu không mua VIP, hoặc cố tình gây khó khăn khi hủy đăng ký (Tuân thủ báo cáo [FTC Dark Patterns](https://www.ftc.gov/news-events/news/press-releases/2022/09/ftc-report-shows-rise-sophisticated-dark-patterns-designed-trick-trap-consumers)).
+
+### 8.9.1. Kiến trúc Hệ thống Monetization Độc lập & Tích hợp Sâu (`Monetization Engine Architecture`)
+Tích hợp chặt chẽ trên nền tảng sự kiện của **Milestone 2.5** (Pedagogical Intelligence), **2.6** (Design System), **2.7** (Reusable Engines), **2.9** (Mastery & Spaced Repetition), **2.10** (Gamification) và **2.11** (Security & RLS):
+
+```text
+                       [ USER INTERACTION ]
+                                │
+                                ▼
+                       [ LEARNING ENGINE ]
+                                │
+                                ▼
+                      [ LEARNING EVENTS BUS ]
+              ┌─────────────────┼─────────────────┐
+              ▼                 ▼                 ▼
+     [ 2.9 Mastery ]   [ 2.10 Gamification ]  [ Analytics ]
+              │                 │                 │
+              └─────────────────┼─────────────────┘
+                                ▼
+                      [ BEHAVIORAL ENGINE ]
+              ┌─────────────────┴─────────────────┐
+              ▼                                   ▼
+   [ User Segmentation (9 nhóm) ]      [ Purchase Intent Scoring (0-100) ]
+              └─────────────────┬─────────────────┘
+                                ▼
+                     [ MONETIZATION ENGINE ]
+          ┌─────────────────────┼─────────────────────┐
+          ▼                     ▼                     ▼
+[ Smart Paywall ]    [ Pricing & Campaigns ]   [ Lifecycle Marketing ]
+          └─────────────────────┼─────────────────────┘
+                                ▼
+                         [ CHECKOUT API ]
+                                │
+                                ▼
+         [ PAYMENT PROVIDER ADAPTER (VNPay / MoMo / Stripe) ]
+                                │
+                                ▼
+                [ WEBHOOK VALIDATION (HMAC & Idempotent) ]
+                                │
+                                ▼
+                    [ SUBSCRIPTION & ENTITLEMENT ENGINE ]
+                                │
+                                ▼
+              [ SERVER-SIDE VIP ACCESS VERIFICATION ]
+```
+
+### 8.9.2. Mô hình Kinh doanh Freemium & Quyền lợi FREE vs VIP (`2.12.1`)
+
+| Tính năng Nền tảng (Feature) | Gói FREE (Acquisition & Habit) | Gói VIP (Conversion & Value Multiplier) |
+| :--- | :---: | :---: |
+| **12 Chuyên đề & 53 Bài học Lý thuyết** | ✅ Truy cập đầy đủ | ✅ Truy cập đầy đủ |
+| **Bài tập Thực hành & Luyện tập ngày** | ⚠️ Giới hạn hạn mức (Dynamic Policy) | ✅ Không giới hạn (Toàn bộ 2,939 câu) |
+| **Random Quiz & Thi thử Mock Tests** | ⚠️ Giới hạn lượt thi | ✅ Đầy đủ Mock Tests chuẩn THPT/IELTS |
+| **Tiến độ Học tập & Mastery Dashboard**| ⚠️ Cơ bản | ✅ Nâng cao & Toàn diện (Radar/Retention) |
+| **Sổ tay Câu sai & Spaced Repetition** | ⚠️ Cơ bản | ✅ Không giới hạn + Thuật toán FSRS Nâng cao |
+| **Lộ trình Cá nhân hóa & AI Tutor** | ⚠️ Xem trước / Cơ bản | ✅ Toàn quyền & Phản hồi chuyên sâu |
+| **Phân tích Chẩn đoán & Phát hiện Điểm yếu**| 🔒 Khóa (Xem Preview) | ✅ Đầy đủ Phân tích Nguyên nhân Gốc |
+| **Độ khó Thích ứng & Thử thách ngày** | ⚠️ Giới hạn | ✅ Đầy đủ Adaptive Engine |
+| **Ôn thi Nâng cao, Xuất PDF & Báo cáo** | 🔒 Khóa | ✅ Đầy đủ Xuất Báo cáo & Đề PDF |
+
+- **Gói Đăng ký (Subscription Plans):** Hỗ trợ linh hoạt `VIP Monthly`, `VIP Quarterly`, `VIP Yearly` và `VIP Lifetime`; hỗ trợ chu kỳ thanh toán tháng/năm, *Free Trial (3/7 ngày)*, gia hạn, hủy tự động minh bạch, nâng/hạ cấp (Upgrade/Downgrade), thời gian ân hạn khi lỗi thẻ (*Grace Period*) và lịch sử giao dịch. Toàn bộ giá bán và hạn mức được quản lý từ **Admin Configuration / Backend** (không hardcode Frontend).
+
+### 8.9.3. Ứng dụng Tâm lý học Hành vi & Tự chủ (`Behavioral Psychology - 2.12.2`)
+1. **Progress Principle:** Nhấn mạnh thành tựu thực tế (*"Bạn đã thành thạo 7/12 chuyên đề Grammar"*, *"Accuracy tăng +18% trong 30 ngày"*) trước khi giới thiệu VIP như đòn bẩy tiến xa hơn.
+2. **Goal Gradient Effect:** Hiển thị rõ khoảng cách chạm đích (*"Đạt 85% mục tiêu — Còn 2 chuyên đề để đạt danh hiệu Grammar Master"*).
+3. **Variable Rewards:** Phần thưởng biến thiên dựa trên hoạt động học tập hợp lệ (Random Achievement, Bonus XP, Surprise Learning Certificate), không tạo cơ chế nghiện ép buộc đăng nhập.
+4. **Self-Determination Theory:** Bảo đảm 3 trụ cột **Autonomy** (tự chọn mục tiêu, tốc độ, chuyên đề), **Competence** (feedback rõ ràng, bài tập vừa sức), **Relatedness** (Leaderboard, Weekly Challenges).
+5. **Endowed Progress Effect:** Sau khi làm bài Placement Test 30 câu, hệ thống ghi nhận ngay những nền tảng học viên đã có (*"Bạn đã nắm vững 4/12 chuyên đề"*) thay vì bắt đầu từ con số 0.
+
+### 8.9.4. Phân tích Hành vi, Phân nhóm & Dự đoán Ý định Mua hàng (`2.12.3`)
+- **Hệ thống Tracking 23 Sự kiện:** Phân tách rõ 3 nhóm: *Learning Events* (8), *Engagement Events* (6), và *Monetization Events* (9: `PAYWALL_VIEWED`, `VIP_FEATURE_CLICKED`, `CHECKOUT_STARTED`, `CHECKOUT_ABANDONED`, `TRIAL_STARTED`, `SUBSCRIPTION_PURCHASED`...) kèm `user_id`, `session_id`, `timestamp` và `metadata`.
+- **9 Phân khúc Người dùng Hành vi (Behavioral Segmentation):** *New Explorer*, *Active Learner*, *High Performer*, *Struggling Learner* (Gợi ý Personalized Roadmap), *Exam-Oriented* (Gợi ý Mock Tests), *Power User*, *Dormant User* (Re-engagement), *Purchase Intent* (Personalized Offer), *Churn Risk* (Retention Campaign).
+- **Purchase Intent Scoring (0 – 100):** Tính điểm từ các tín hiệu hành vi (Ví dụ trọng số thử nghiệm: Xem bảng giá nhiều lần +15, Click tính năng VIP +15, Hoàn thành Placement Test +10, Bắt đầu Checkout +25). Chia thành 5 mức: *Low (0-19)* $\rightarrow$ *Very High (80-100)*. **Cam kết bảo vệ người dùng:** Tuyệt đối không dùng Intent Score để phân biệt giá bán giữa các user.
+
+### 8.9.5. Smart Paywall, Pricing Psychology, Free Trial & A/B Testing (`2.12.4 – 2.12.10`)
+- **6 Điểm kích hoạt Smart Paywall theo Ngữ cảnh:** Sau Placement Test; Khi click vào tính năng VIP (hiển thị Feature Preview); Khi chạm Learning Milestone (100 câu); Khi đạt Mastery 90% (mở thử thách Expert); Khi cần ôn tập nhiều lỗi sai; Sau Daily Challenge.
+- **Luật Anti-Spam Paywall:** Giới hạn tần suất (*Frequency Capping* theo ngày), không hiện lại ngay sau khi user đóng paywall, không cắt ngang nội dung FREE đang học dở, cấu hình linh hoạt từ Admin.
+- **Pricing Psychology & Ethical FOMO:** Trình bày 3 gói (*Monthly 99k*, *Quarterly 249k*, *Yearly 699k — Best Value/Recommended* làm giá thử nghiệm UI); hiển thị rõ giá quy đổi mỗi tháng và số tiền tiết kiệm thực tế; cho phép tạo gói *Free Trial 3–7 ngày* kèm lộ trình onboarding Day 0 $\rightarrow$ Day 7 (công bố minh bạch giá và ngày gia hạn trước khi user xác nhận).
+- **14-Stage Conversion Funnel & Drop-off Analytics:** Theo dõi xuyên suốt `VISITOR` $\rightarrow$ `REGISTRATION` $\rightarrow$ `FIRST LEARNING` $\rightarrow$ `PLACEMENT TEST` $\rightarrow$ `VIP DISCOVERY` $\rightarrow$ `PAYWALL` $\rightarrow$ `CHECKOUT` $\rightarrow$ `PAYMENT` $\rightarrow$ `RETENTION`.
+- **A/B Testing Engine & Lifecycle Marketing Automation:** Phân nhóm ngẫu nhiên bền vững (Persistent Variant Assignment) để kiểm chứng thiết kế Paywall, thứ tự giá, CTA, thời điểm trigger với kiểm định ý nghĩa thống kê. Tự động gửi thông điệp đa kênh (In-App, Email, Push) có *Opt-out / Frequency Capping*.
+
+### 8.9.6. Kiến trúc Cơ sở Dữ liệu Monetization (18 Bảng PostgreSQL / Supabase - `2.12.13`)
+Liên kết trực tiếp với hệ thống `auth.users` & `profiles` hiện hữu, bảo vệ bởi RLS, Foreign Keys, Audit Logs và Idempotency:
+1. **Gói & Thanh toán (7 bảng):** `subscription_plans`, `user_subscriptions`, `subscription_events`, `feature_entitlements`, `plan_entitlements`, `payment_transactions`, `payment_webhook_events`.
+2. **Giá & Khuyến mãi (3 bảng):** `pricing_campaigns`, `discount_coupons`, `user_coupons`.
+3. **Hành vi, Phễu & Thử nghiệm (8 bảng):** `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
+
+### 8.9.7. Trình tự Triển khai 5 Pha (`2.12-A` $\rightarrow$ `2.12-E`) & KPI Thử nghiệm (`2.12.15`)
+
+| Pha (Phase) | Phạm vi Triển khai (Scope) | Độ ưu tiên |
+| :---: | :--- | :---: |
+| **2.12-A** | Mô hình Kinh doanh FREE/VIP + Database 18 Bảng + Entitlement Engine Server-side | **P0** |
+| **2.12-B** | Payment Provider Adapter (VNPay/MoMo/Stripe) + Subscription Lifecycle + Webhook Security | **P0** |
+| **2.12-C** | Behavioral Event Tracking + Segmentation (9 nhóm) + Intent Scoring + Smart Paywall | **P0** |
+| **2.12-D** | Pricing Psychology + Promotion Campaigns + Free Trial Engine + A/B Testing | **P1** |
+| **2.12-E** | Lifecycle Marketing Automation + Revenue Dashboard (MRR/ARR/LTV) + Funnel Optimization | **P1** |
+
+- **Chỉ số Kỳ vọng Thử nghiệm Ban đầu (Experimental Benchmarks):** *Registration $\rightarrow$ First Learning $\ge 60\%$* | *First Learning $\rightarrow$ Placement $\ge 50\%$* | *Paywall $\rightarrow$ Checkout $\ge 10\%$* | *Checkout $\rightarrow$ Payment $\ge 70\%$* | *FREE $\rightarrow$ VIP Conversion $\ge 3\%$* | *Webhook Reliability $\ge 99.9\%$* | *Unauthorized VIP Access = 0* | *Duplicate Payments = 0*. (Giám sát chặt chẽ *Day 1/7/30 Retention*, *Monthly Churn*, *Refund Rate* và *LTV* để đảm bảo doanh thu bền vững).
+
+> **Tài liệu Nghiên cứu Nền tảng:** [Pathways to Premium – JAMS 2026](https://link.springer.com/article/10.1007/s11747-026-01205-w), [RevenueCat Freemium Subscribers Guide](https://www-docs.revenuecat.com/blog/growth/how-to-turn-freemium-users-into-loyal-subscribers/), [RevenueCat State of Subscription Apps 2026](https://www.revenuecat.com/state-of-subscription-apps), [FTC Dark Patterns Report](https://www.ftc.gov/news-events/news/press-releases/2022/09/ftc-report-shows-rise-sophisticated-dark-patterns-designed-trick-trap-consumers).
+
+---
+
 ## 🛡️ 9. ENGINEERING QUALITY GATES (TIÊU CHUẨN NGHIỆM THU BẮT BUỘC)
 
 | Quality Gate | Tiêu chuẩn Đánh giá | Bằng chứng Bắt buộc (Verification Evidence) |
@@ -1978,6 +2086,81 @@ Hỗ trợ 4 hạng huy hiệu (**Bronze / Silver / Gold / Diamond**), **Hidden 
 - [ ] **2.11.14 Hoàn Thiện Bộ 12 Tài Liệu Vận Hành Production (P1):**
   * Xuất bản đầy đủ bộ tài liệu bàn giao: System Architecture, Database Schema Docs, API Documentation, Security Assessment Report, Performance Benchmark Report, Backup & Recovery Guide, Deployment Guide, Rollback Runbook, Incident Response Procedure, Production Configuration, Known Limitations.
   * **Tiêu chuẩn Nghiệm thu (AC-2.11.14):** Bộ tài liệu hoàn chỉnh sẵn sàng cho đội ngũ vận hành và bảo trì dài hạn.
+
+### 🔹 Milestone 2.12: Intelligent Monetization, Behavioral Psychology & Premium Conversion Engine (P0)
+
+> **Mục tiêu:** Xây dựng hệ thống Monetization thông minh dựa trên dữ liệu học tập thực tế (từ 2.5, 2.7, 2.9, 2.10), Tâm lý học hành vi (Progress Principle, Goal Gradient, Self-Determination, Endowed Progress), Smart Paywall theo ngữ cảnh và Hạ tầng Thanh toán/Phân quyền an toàn tuyệt đối (100% Backend-verified, tuân thủ nguyên tắc chống Dark Patterns).
+
+#### 📦 Phase 2.12-A: Business Model, Database 18 Tables & Server-side Entitlement (P0)
+- [ ] **2.12.1 Freemium & Premium Business Model Architecture (P0):**
+  * Xây dựng ma trận quyền lợi FREE (thu hút, tạo thói quen, chứng minh giá trị) vs VIP (nhân rộng giá trị, cá nhân hóa, tiết kiệm thời gian).
+  * Thiết lập các gói đăng ký: `VIP Monthly`, `VIP Quarterly`, `VIP Yearly`, `VIP Lifetime` với giá bán và hạn mức được cấu hình động từ Backend/Admin Panel (không hardcode Frontend).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.1):** Admin có thể thay đổi hạn mức gói FREE và giá gói VIP trực tiếp trên hệ thống mà không cần deploy lại code.
+- [ ] **2.12.2 Monetization Database Architecture (18 Tables - P0):**
+  * Triển khai và chuẩn hóa 18 bảng PostgreSQL/Supabase liên kết chặt chẽ với `auth.users`: `subscription_plans`, `user_subscriptions`, `subscription_events`, `feature_entitlements`, `plan_entitlements`, `payment_transactions`, `payment_webhook_events`, `pricing_campaigns`, `discount_coupons`, `user_coupons`, `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
+  * Bảo vệ toàn diện bằng Foreign Keys, Composite Indexes, RLS Policies, Audit Logs và Idempotency Key.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.2):** Không trùng lặp bảng User hiện hữu; 100% bảng mới bật RLS chặt chẽ.
+- [ ] **2.12.3 Server-side Entitlement Engine (`Entitlement Verification - P0`):**
+  * Xây dựng Middleware và Service xác thực quyền VIP hoàn toàn tại Backend trước khi trả về dữ liệu (AI Tutor, Advanced Analytics, Personalized Roadmap, Full Mock Tests, PDF Export).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.3):** 100% Protected APIs từ chối FREE user truy cập trái phép (HTTP 403) dù sửa LocalStorage hay JWT ở Frontend.
+
+#### 💳 Phase 2.12-B: Payment Integration, Subscription Lifecycle & Webhook Security (P0)
+- [ ] **2.12.4 Subscription Management & Payment Provider Adapter (P0):**
+  * Hỗ trợ đầy đủ vòng đời Subscription: Create, Activate, Renew, Cancel (dễ dàng, minh bạch), Expire, Upgrade/Downgrade, Grace Period, Payment History, Refund Handling.
+  * Thiết kế Payment Provider Adapter hỗ trợ tích hợp đa cổng thanh toán: **VNPay**, **MoMo**, **Stripe**.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.4):** Thanh toán thành công kích hoạt VIP ngay lập tức; hủy đăng ký minh bạch chỉ với 2 chạm và giữ nguyên toàn bộ lịch sử học tập.
+- [ ] **2.12.5 Webhook Security, Idempotency & Reconciliation (P0):**
+  * Triển khai xác thực chữ ký HMAC Webhook (`Verify Webhook Signature`), chống xử lý thanh toán lặp lại (`Idempotent Payment Processing`), ghi nhật ký sự kiện webhook và tự động đối soát trạng thái thất bại.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.5):** Độ tin cậy Webhook $\ge 99.9\%$; 0 giao dịch thanh toán bị xử lý trùng lặp (`Duplicate Payment Processing = 0`).
+
+#### 🧠 Phase 2.12-C: Behavioral Psychology, Analytics, Intent Scoring & Smart Paywall (P0)
+- [ ] **2.12.6 Behavioral Psychology & Dopamine Engagement Loops (P0):**
+  * Ứng dụng thực tế: *Progress Principle* (hiển thị tiến bộ Accuracy/Mastery), *Goal Gradient Effect* (cách mục tiêu $N$ chuyên đề), *Variable Rewards* (huy hiệu/XP dựa trên bài làm thực), *Self-Determination* (Autonomy/Competence/Relatedness), và *Endowed Progress* (roadmap sau Placement Test).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.6):** Không tạo tiến độ giả hoặc ép đăng nhập liên tục bằng hình phạt gây lo lắng.
+- [ ] **2.12.7 User Behavioral Tracking, 9 Segments & Intent Scoring (P0):**
+  * Tracking 23 sự kiện (8 Learning, 6 Engagement, 9 Monetization) kèm session/metadata.
+  * Tự động phân nhóm 9 phân khúc (*New Explorer*, *Active Learner*, *High Performer*, *Struggling Learner*, *Exam-Oriented*, *Power User*, *Dormant User*, *Purchase Intent*, *Churn Risk*).
+  * Tính Purchase Intent Score (0–100) hiệu chỉnh bằng dữ liệu chuyển đổi thực; cấm dùng điểm số để phân biệt giá bán.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.7):** Sự kiện được ghi nhận chính xác, cập nhật phân khúc người dùng và thông điệp gợi ý phù hợp theo ngữ cảnh.
+- [ ] **2.12.8 Contextual Smart Paywall Engine (`6 Triggers & Frequency Capping - P0`):**
+  * Xây dựng 6 ngữ cảnh kích hoạt Paywall: (1) Sau Placement Test 30 câu, (2) Click tính năng VIP (kèm Feature Preview), (3) Đạt Learning Milestone (100 câu), (4) Đạt Mastery 90%, (5) Cần ôn tập chuyên sâu nhiều lỗi sai, (6) Hoàn thành Daily Challenge.
+  * Áp dụng luật Anti-Spam: giới hạn tần suất (Frequency Capping), thời gian chờ sau khi đóng, không chặn nội dung FREE đang học dở, cá nhân hóa nội dung theo điểm yếu.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.8):** Paywall không hiện lặp lại gây phiền nhiễu; Admin tùy biến được trigger từ bảng điều khiển.
+
+#### 🧪 Phase 2.12-D: Ethical FOMO, Pricing Psychology, Free Trial & A/B Testing (P1)
+- [ ] **2.12.9 Ethical FOMO, Scarcity & Loss Aversion Engine (P1):**
+  * Áp dụng FOMO qua giá trị thực và *Feature Preview*, *Social Proof* có thể kiểm chứng (số lượt học, đánh giá VIP thật), và chiến dịch khan hiếm có thời hạn thật (không countdown giả tự reset).
+  * *Loss Aversion* tích cực dựa trên thời gian đã đầu tư; tuyệt đối không dọa mất dữ liệu hoặc mất streak nếu không mua VIP.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.9):** 100% chiến dịch tuân thủ chuẩn mực chống Dark Patterns của FTC.
+- [ ] **2.12.10 Pricing Psychology & Free Trial Onboarding Journey (P0/P1):**
+  * Thiết kế 3 gói hiển thị rõ *Price Anchoring* & *Annual Savings* (Monthly / Quarterly / Yearly Best Value) kèm ưu đãi linh hoạt (Welcome / Annual Upgrade / Win-back / Student).
+  * Hỗ trợ chiến dịch *Free Trial 3/7 ngày* theo hành trình Day 0 $\rightarrow$ Day 7 (công bố rõ giá, ngày trừ tiền và cách hủy trước khi user xác nhận).
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.10):** Điều khoản gia hạn và giá bán minh bạch 100% trước bước xác nhận thanh toán.
+- [ ] **2.12.11 A/B Testing & Conversion Optimization Engine (P0):**
+  * Hỗ trợ kiểm chứng A/B đồng thời cho Paywall Design, Pricing Order, CTA Wording, Paywall Timing và Offer Framing.
+  * Gán biến thể ngẫu nhiên bền vững (`ab_assignments`), theo dõi Conversion Rate, Retention, Refund Rate và đánh giá *Statistical Significance*.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.11):** Phân nhóm thử nghiệm nhất quán giữa các phiên; báo cáo có kiểm định ý nghĩa thống kê trước khi kết luận phiên bản thắng.
+
+#### 📈 Phase 2.12-E: Conversion Funnel, Lifecycle Marketing, Admin Revenue & Verification (P0/P1)
+- [ ] **2.12.12 14-Stage Conversion Funnel & Monetization UX/UI System (P0/P1):**
+  * Theo dõi phễu 14 bước (`VISITOR` $\rightarrow$ `SUBSCRIPTION RETENTION`) và phân tích điểm rơi (*Drop-off Analysis*).
+  * Xây dựng 11 màn hình chuẩn Design Tokens (Milestone 2.6): VIP Landing Page, Pricing Comparison, Feature Preview, Personalized Paywall, Checkout, Subscription Management, Payment History, VIP Dashboard, Upgrade Success, Trial Expiration, Cancellation Flow.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.12):** Giao diện Responsive, Accessibility WCAG 2.2 AA, rõ ràng value hierarchy (không dùng thiết kế lòe loẹt hay popup ép buộc).
+- [ ] **2.12.13 Personalized Lifecycle Marketing & Notification Automation (P1):**
+  * Tự động hóa 9 chiến dịch theo hành vi (Getting Started, Placement Follow-up, 7-Day Milestone, Abandoned Checkout, Trial Expiration, Re-engagement, Cancellation Feedback, Renewal Reminder) qua In-App / Email / Push.
+  * Hỗ trợ đầy đủ *Frequency Capping*, *User Consent* và *1-click Unsubscribe*.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.13):** Học viên toàn quyền bật/tắt thông báo marketing và không bị spam.
+- [ ] **2.12.14 Monetization Admin Revenue & Campaign Dashboard (P1):**
+  * Bảng điều khiển quản trị kinh doanh: Total Revenue, MRR, ARR, Active Subscribers, Conversion Rate, Trial Conversion, Churn Rate, Renewal Rate, ARPPU, LTV.
+  * Công cụ bật/tắt chiến dịch, quản lý coupon, cấu hình FREE/VIP Feature Matrix và kiểm tra lịch sử entitlement.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.14):** Số liệu doanh thu và phễu chuyển đổi đồng bộ chính xác với bảng giao dịch thực tế.
+- [ ] **2.12.15 Monetization Security, Consumer Protection & 15 E2E Verification Cases (`MON-001 -> MON-015` - P0):**
+  * Thực thi đầy đủ 15 kịch bản kiểm thử bắt buộc:
+    * `MON-001 -> MON-004`: Phân quyền FREE/VIP, Upgrade prompt, Thu hồi quyền khi hết hạn.
+    * `MON-005 -> MON-010`: Thanh toán thành công/thất bại, Duplicate webhook, Hủy subscription, Trial expires, Invalid coupon.
+    * `MON-011 -> MON-015`: Sửa LocalStorage không tăng quyền, Direct VIP API auth check, Abandoned checkout tracking, Duplicate callback, Gia hạn entitlement.
+  * Kiểm thử bảo vệ người dùng: công khai giá/điều khoản hủy/hoàn tiền và bảo toàn 100% dữ liệu học tập khi nâng cấp hoặc hủy VIP.
+  * **Tiêu chuẩn Nghiệm thu (AC-2.12.15):** Đạt 15/15 test cases E2E pass; 0 lỗ hổng vượt quyền VIP hoặc cộng trùng giao dịch.
 
 ---
 
