@@ -63,11 +63,11 @@ export default function PersonalizedRoadmapView({
       <div
         style={{
           background: isLight
-            ? "linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)"
-            : "linear-gradient(135deg, #18181b 0%, #064e3b 100%)",
+            ? "linear-gradient(135deg, #ffffff 0%, var(--ds-success-bg) 100%)"
+            : "linear-gradient(135deg, var(--ds-bg-elevated) 0%, var(--ds-success-bg) 100%)",
           borderRadius: "1.25rem",
           padding: "2.25rem",
-          border: `1px solid ${isLight ? "#a7f3d0" : "#065f46"}`,
+          border: `1px solid ${"var(--ds-success-border)"}`,
           boxShadow: T.shadowElevated,
           marginBottom: "2rem",
         }}
@@ -81,8 +81,8 @@ export default function PersonalizedRoadmapView({
               letterSpacing: "0.08em",
               padding: "0.25rem 0.75rem",
               borderRadius: "9999px",
-              backgroundColor: isLight ? "#dcfce7" : "#064e3b",
-              color: isLight ? "#15803d" : "#86efac",
+              backgroundColor: "var(--ds-success-bg)",
+              color: "var(--ds-success)",
             }}
           >
             🗺️ Actionable Learning Roadmap
@@ -161,7 +161,7 @@ export default function PersonalizedRoadmapView({
         {/* Progress Bar & Stats */}
         <div
           style={{
-            backgroundColor: isLight ? "#ffffff" : "#18181b",
+            backgroundColor: "var(--ds-card)",
             borderRadius: "0.75rem",
             padding: "1.25rem",
             border: `1px solid ${T.borderSubtle}`,
@@ -186,7 +186,7 @@ export default function PersonalizedRoadmapView({
             style={{
               width: "100%",
               height: "10px",
-              backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+              backgroundColor: "var(--ds-card-border)",
               borderRadius: "9999px",
               overflow: "hidden",
             }}
@@ -222,9 +222,9 @@ export default function PersonalizedRoadmapView({
             fontSize: "0.85rem",
             fontWeight: 700,
             cursor: "pointer",
-            backgroundColor: activeWeekTab === "all" ? T.accent : isLight ? "#ffffff" : "#27272a",
+            backgroundColor: activeWeekTab === "all" ? "var(--ds-btn-primary)" : "var(--ds-card)",
             color: activeWeekTab === "all" ? "#ffffff" : T.text,
-            border: `1px solid ${activeWeekTab === "all" ? T.accent : T.borderSubtle}`,
+            border: `1px solid ${activeWeekTab === "all" ? "var(--ds-btn-primary)" : T.borderSubtle}`,
             whiteSpace: "nowrap",
           }}
         >
@@ -241,9 +241,9 @@ export default function PersonalizedRoadmapView({
               fontSize: "0.85rem",
               fontWeight: 700,
               cursor: "pointer",
-              backgroundColor: activeWeekTab === w.week_number ? T.accent : isLight ? "#ffffff" : "#27272a",
+              backgroundColor: activeWeekTab === w.week_number ? "var(--ds-btn-primary)" : "var(--ds-card)",
               color: activeWeekTab === w.week_number ? "#ffffff" : T.text,
-              border: `1px solid ${activeWeekTab === w.week_number ? T.accent : T.borderSubtle}`,
+              border: `1px solid ${activeWeekTab === w.week_number ? "var(--ds-btn-primary)" : T.borderSubtle}`,
               whiteSpace: "nowrap",
             }}
           >
@@ -282,7 +282,7 @@ export default function PersonalizedRoadmapView({
                     width: "32px",
                     height: "32px",
                     borderRadius: "50%",
-                    backgroundColor: isLight ? "#eff6ff" : "#1e1b4b",
+                    backgroundColor: "var(--ds-accent-bg)",
                     color: T.accent,
                     display: "flex",
                     alignItems: "center",
@@ -306,16 +306,16 @@ export default function PersonalizedRoadmapView({
                   borderRadius: "9999px",
                   backgroundColor:
                     week.badge.includes("Critical")
-                      ? isLight ? "#fee2e2" : "#7f1d1d"
+                      ? "var(--ds-danger-bg)"
                       : week.badge.includes("High")
-                      ? isLight ? "#fffbeb" : "#78350f"
-                      : isLight ? "#dcfce7" : "#064e3b",
+                      ? "var(--ds-warning-bg)"
+                      : "var(--ds-success-bg)",
                   color:
                     week.badge.includes("Critical")
-                      ? isLight ? "#dc2626" : "#fca5a5"
+                      ? "var(--ds-danger)"
                       : week.badge.includes("High")
-                      ? isLight ? "#b45309" : "#fde68a"
-                      : isLight ? "#15803d" : "#86efac",
+                      ? "var(--ds-warning)"
+                      : "var(--ds-success)",
                 }}
               >
                 {week.badge}
@@ -341,11 +341,11 @@ export default function PersonalizedRoadmapView({
                       padding: "1.1rem 1.25rem",
                       borderRadius: "0.75rem",
                       backgroundColor: isCompleted
-                        ? isLight ? "#f0fdf4" : "#052e16"
-                        : isLight ? "#f8fafc" : "#18181b",
+                        ? "var(--ds-success-bg)"
+                        : "var(--ds-bg-elevated)",
                       border: `1px solid ${
                         isCompleted
-                          ? isLight ? "#86efac" : "#15803d"
+                          ? "var(--ds-success-border)"
                           : T.borderSubtle
                       }`,
                       transition: "all 0.2s ease",
@@ -396,11 +396,11 @@ export default function PersonalizedRoadmapView({
                             borderRadius: "0.25rem",
                             backgroundColor:
                               task.priority === "HIGH"
-                                ? isLight ? "#fee2e2" : "#7f1d1d"
-                                : isLight ? "#e2e8f0" : "#27272a",
+                                ? "var(--ds-danger-bg)"
+                                : "var(--ds-card-border)",
                             color:
                               task.priority === "HIGH"
-                                ? isLight ? "#dc2626" : "#fca5a5"
+                                ? "var(--ds-danger)"
                                 : T.textMuted,
                           }}
                         >
@@ -435,8 +435,8 @@ export default function PersonalizedRoadmapView({
                         <div
                           style={{
                             fontSize: "0.78rem",
-                            color: isLight ? "#1e40af" : "#93c5fd",
-                            backgroundColor: isLight ? "#eff6ff" : "#1e1b4b",
+                            color: "var(--ds-accent)",
+                            backgroundColor: "var(--ds-accent-bg)",
                             padding: "0.35rem 0.65rem",
                             borderRadius: "0.4rem",
                             marginBottom: "0.6rem",
@@ -484,7 +484,7 @@ export default function PersonalizedRoadmapView({
                             style={{
                               padding: "0.35rem 0.85rem",
                               borderRadius: "0.45rem",
-                              backgroundColor: T.accent,
+                              backgroundColor: "var(--ds-btn-primary)",
                               color: "#ffffff",
                               fontSize: "0.8rem",
                               fontWeight: 700,
@@ -512,7 +512,7 @@ export default function PersonalizedRoadmapView({
       <div
         style={{
           marginTop: "2.5rem",
-          backgroundColor: isLight ? "#f8fafc" : "#18181b",
+          backgroundColor: "var(--ds-bg-elevated)",
           borderRadius: "1rem",
           padding: "2rem",
           border: `1px dashed ${T.border}`,
@@ -537,7 +537,7 @@ export default function PersonalizedRoadmapView({
           style={{
             padding: "0.75rem 1.5rem",
             borderRadius: "0.6rem",
-            backgroundColor: isLight ? "#ffffff" : "#27272a",
+            backgroundColor: "var(--ds-card)",
             color: T.accent,
             border: `1px solid ${T.accent}`,
             fontSize: "0.9rem",

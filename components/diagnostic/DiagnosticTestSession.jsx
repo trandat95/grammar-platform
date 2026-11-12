@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import FocusTrapModal2026 from "../ui-2026/FocusTrapModal2026";
 
 export default function DiagnosticTestSession({
   test,
@@ -219,7 +220,7 @@ export default function DiagnosticTestSession({
             gap: "0.5rem",
             padding: "0.4rem 0.9rem",
             borderRadius: "9999px",
-            backgroundColor: secondsRemaining < 180 ? T.dangerBg : isLight ? "#f1f5f9" : "#27272a",
+            backgroundColor: secondsRemaining < 180 ? T.dangerBg : "var(--ds-bg-elevated)",
             border: `1px solid ${secondsRemaining < 180 ? T.dangerBorder : T.borderSubtle}`,
             color: secondsRemaining < 180 ? T.danger : T.text,
             fontWeight: 700,
@@ -237,7 +238,7 @@ export default function DiagnosticTestSession({
         style={{
           width: "100%",
           height: "6px",
-          backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+          backgroundColor: "var(--ds-card-border)",
           borderRadius: "9999px",
           overflow: "hidden",
           marginBottom: "1.5rem",
@@ -285,9 +286,9 @@ export default function DiagnosticTestSession({
                 fontWeight: 700,
                 padding: "0.25rem 0.75rem",
                 borderRadius: "9999px",
-                backgroundColor: isLight ? "#eff6ff" : "#1e1b4b",
-                color: isLight ? "#2563eb" : "#93c5fd",
-                border: `1px solid ${isLight ? "#bfdbfe" : "#3730a3"}`,
+                backgroundColor: "var(--ds-accent-bg)",
+                color: "var(--ds-accent)",
+                border: `1px solid ${"var(--ds-accent-border)"}`,
               }}
             >
               Chuyên đề: {currentQ.topic_vi || currentQ.topic}
@@ -301,16 +302,16 @@ export default function DiagnosticTestSession({
                 borderRadius: "9999px",
                 backgroundColor:
                   currentQ.difficulty === "easy"
-                    ? isLight ? "#ecfdf5" : "#064e3b"
+                    ? "var(--ds-success-bg)"
                     : currentQ.difficulty === "medium"
-                    ? isLight ? "#fffbeb" : "#78350f"
-                    : isLight ? "#fef2f2" : "#7f1d1d",
+                    ? "var(--ds-warning-bg)"
+                    : "var(--ds-danger-bg)",
                 color:
                   currentQ.difficulty === "easy"
-                    ? isLight ? "#059669" : "#6ee7b7"
+                    ? "var(--ds-success)"
                     : currentQ.difficulty === "medium"
-                    ? isLight ? "#b45309" : "#fcd34d"
-                    : isLight ? "#dc2626" : "#fca5a5",
+                    ? "var(--ds-warning)"
+                    : "var(--ds-danger)",
               }}
             >
               {currentQ.difficulty === "easy" ? "🟢 Dễ" : currentQ.difficulty === "medium" ? "🟡 Trung bình" : "🔴 Khó"}
@@ -329,12 +330,12 @@ export default function DiagnosticTestSession({
               padding: "0.3rem 0.75rem",
               borderRadius: "0.5rem",
               backgroundColor: isCurrentFlagged
-                ? isLight ? "#fef3c7" : "#78350f"
+                ? "var(--ds-warning-bg)"
                 : "transparent",
               color: isCurrentFlagged
-                ? isLight ? "#b45309" : "#fde68a"
+                ? "var(--ds-warning)"
                 : T.textMuted,
-              border: `1px solid ${isCurrentFlagged ? (isLight ? "#fcd34d" : "#b45309") : T.borderSubtle}`,
+              border: `1px solid ${isCurrentFlagged ? "var(--ds-warning-border)" : T.borderSubtle}`,
               cursor: "pointer",
             }}
           >
@@ -373,10 +374,10 @@ export default function DiagnosticTestSession({
                   padding: "1rem 1.25rem",
                   borderRadius: "0.75rem",
                   backgroundColor: isSelected
-                    ? isLight ? "#eff6ff" : "#1e293b"
-                    : isLight ? "#ffffff" : "#18181b",
+                    ? "var(--ds-accent-bg)"
+                    : "var(--ds-card)",
                   border: `2px solid ${
-                    isSelected ? T.accent : isLight ? "#e2e8f0" : "#27272a"
+                    isSelected ? T.accent : "var(--ds-card-border)"
                   }`,
                   cursor: "pointer",
                   transition: "all 0.15s ease",
@@ -394,7 +395,7 @@ export default function DiagnosticTestSession({
                     justifyContent: "center",
                     fontWeight: 700,
                     fontSize: "0.95rem",
-                    backgroundColor: isSelected ? T.accent : isLight ? "#f1f5f9" : "#27272a",
+                    backgroundColor: isSelected ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
                     color: isSelected ? "#ffffff" : T.text,
                     flexShrink: 0,
                     transition: "all 0.15s ease",
@@ -408,7 +409,7 @@ export default function DiagnosticTestSession({
                   style={{
                     fontSize: "1.05rem",
                     fontWeight: isSelected ? 700 : 500,
-                    color: isSelected ? (isLight ? "#1d4ed8" : "#93c5fd") : T.text,
+                    color: isSelected ? "var(--ds-accent)" : T.text,
                     lineHeight: 1.4,
                   }}
                 >
@@ -423,7 +424,7 @@ export default function DiagnosticTestSession({
         <div
           style={{
             padding: "1rem",
-            backgroundColor: isLight ? "#f8fafc" : "#121215",
+            backgroundColor: "var(--ds-bg-elevated)",
             borderRadius: "0.75rem",
             border: `1px solid ${T.borderSubtle}`,
             marginBottom: "1.5rem",
@@ -459,19 +460,19 @@ export default function DiagnosticTestSession({
               const isFlag = !!flagged[q.id];
               const isCurr = idx === currentIndex;
 
-              let bgColor = isLight ? "#ffffff" : "#18181b";
+              let bgColor = "var(--ds-card)";
               let textColor = T.textMuted;
               let borderColor = T.borderSubtle;
 
               if (isAns) {
-                bgColor = isLight ? "#dcfce7" : "#064e3b";
-                textColor = isLight ? "#15803d" : "#86efac";
-                borderColor = isLight ? "#86efac" : "#059669";
+                bgColor = "var(--ds-success-bg)";
+                textColor = "var(--ds-success)";
+                borderColor = "var(--ds-success-border)";
               }
               if (isFlag) {
-                bgColor = isLight ? "#fef3c7" : "#78350f";
-                textColor = isLight ? "#b45309" : "#fde68a";
-                borderColor = isLight ? "#fcd34d" : "#d97706";
+                bgColor = "var(--ds-warning-bg)";
+                textColor = "var(--ds-warning)";
+                borderColor = "var(--ds-warning-border)";
               }
               if (isCurr) {
                 borderColor = T.accent;
@@ -533,7 +534,7 @@ export default function DiagnosticTestSession({
             style={{
               padding: "0.75rem 1.25rem",
               borderRadius: "0.6rem",
-              backgroundColor: isLight ? "#ffffff" : "#27272a",
+              backgroundColor: "var(--ds-card)",
               color: T.text,
               border: `1px solid ${T.border}`,
               fontSize: "0.9rem",
@@ -552,7 +553,7 @@ export default function DiagnosticTestSession({
                 style={{
                   padding: "0.75rem 1.5rem",
                   borderRadius: "0.6rem",
-                  backgroundColor: T.accent,
+                  backgroundColor: "var(--ds-btn-primary)",
                   color: "#ffffff",
                   border: "none",
                   fontSize: "0.9rem",
@@ -570,7 +571,7 @@ export default function DiagnosticTestSession({
               style={{
                 padding: "0.75rem 1.75rem",
                 borderRadius: "0.6rem",
-                backgroundColor: T.success,
+                backgroundColor: "var(--ds-btn-success)",
                 color: "#ffffff",
                 border: "none",
                 fontSize: "0.95rem",
@@ -585,105 +586,84 @@ export default function DiagnosticTestSession({
         </div>
       </div>
 
-      {/* Confirmation Modal */}
-      {showSubmitModal && (
+      {/* Confirmation Modal (WCAG FocusTrap) */}
+      <FocusTrapModal2026
+        isOpen={showSubmitModal}
+        onClose={() => setShowSubmitModal(false)}
+        title="Xác Nhận Nộp Bài Kiểm Tra?"
+        maxWidth="460px"
+      >
+        <p style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1.25rem" }}>
+          Hệ thống sẽ tiến hành chấm điểm tuyệt đối (Zero Hallucination), phân tích 10 nhóm kỹ năng và thiết lập lộ trình học riêng cho bạn.
+        </p>
+
         <div
           style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.65)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
+            backgroundColor: "var(--ds-bg-elevated)",
+            borderRadius: "0.5rem",
             padding: "1rem",
+            border: `1px solid ${T.borderSubtle}`,
+            marginBottom: "1.5rem",
+            fontSize: "0.85rem",
           }}
         >
-          <div
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
+            <span style={{ color: T.textMuted }}>Đã hoàn thành:</span>
+            <span style={{ fontWeight: 700, color: T.success }}>{answeredCount} / {totalQuestions} câu</span>
+          </div>
+          {unansweredCount > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
+              <span style={{ color: T.danger }}>Chưa chọn đáp án:</span>
+              <span style={{ fontWeight: 700, color: T.danger }}>{unansweredCount} câu</span>
+            </div>
+          )}
+          {flaggedCount > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ color: T.warning }}>Đánh dấu xem lại:</span>
+              <span style={{ fontWeight: 700, color: T.warning }}>{flaggedCount} câu</span>
+            </div>
+          )}
+        </div>
+
+        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+          <button
+            type="button"
+            onClick={() => setShowSubmitModal(false)}
+            className="ds-btn ds-focusable"
             style={{
-              maxWidth: "460px",
-              width: "100%",
-              backgroundColor: T.card,
-              borderRadius: "1rem",
-              padding: "2rem",
-              border: `1px solid ${T.cardBorder}`,
-              boxShadow: T.shadowElevated,
+              padding: "0.6rem 1.25rem",
+              borderRadius: "0.5rem",
+              backgroundColor: "transparent",
+              color: T.textSecondary,
+              border: `1px solid ${T.border}`,
+              fontWeight: 600,
+              fontSize: "0.85rem",
+              cursor: "pointer",
             }}
           >
-            <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
-              Xác Nhận Nộp Bài Kiểm Tra?
-            </h3>
+            Tiếp tục làm bài
+          </button>
 
-            <p style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1.25rem" }}>
-              Hệ thống sẽ tiến hành chấm điểm tuyệt đối (Zero Hallucination), phân tích 10 nhóm kỹ năng và thiết lập lộ trình học riêng cho bạn.
-            </p>
-
-            <div
-              style={{
-                backgroundColor: isLight ? "#f8fafc" : "#18181b",
-                borderRadius: "0.5rem",
-                padding: "1rem",
-                border: `1px solid ${T.borderSubtle}`,
-                marginBottom: "1.5rem",
-                fontSize: "0.85rem",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
-                <span style={{ color: T.textMuted }}>Đã hoàn thành:</span>
-                <span style={{ fontWeight: 700, color: T.success }}>{answeredCount} / {totalQuestions} câu</span>
-              </div>
-              {unansweredCount > 0 && (
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
-                  <span style={{ color: T.danger }}>Chưa chọn đáp án:</span>
-                  <span style={{ fontWeight: 700, color: T.danger }}>{unansweredCount} câu</span>
-                </div>
-              )}
-              {flaggedCount > 0 && (
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ color: T.warning }}>Đánh dấu xem lại:</span>
-                  <span style={{ fontWeight: 700, color: T.warning }}>{flaggedCount} câu</span>
-                </div>
-              )}
-            </div>
-
-            <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
-              <button
-                onClick={() => setShowSubmitModal(false)}
-                style={{
-                  padding: "0.6rem 1.25rem",
-                  borderRadius: "0.5rem",
-                  backgroundColor: "transparent",
-                  color: T.textSecondary,
-                  border: `1px solid ${T.border}`,
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
-                }}
-              >
-                Tiếp tục làm bài
-              </button>
-
-              <button
-                onClick={handleConfirmSubmit}
-                disabled={isSubmitting}
-                style={{
-                  padding: "0.6rem 1.5rem",
-                  borderRadius: "0.5rem",
-                  backgroundColor: T.success,
-                  color: "#ffffff",
-                  border: "none",
-                  fontWeight: 700,
-                  fontSize: "0.85rem",
-                  cursor: isSubmitting ? "wait" : "pointer",
-                }}
-              >
-                {isSubmitting ? "Đang nộp..." : "Xác nhận nộp bài"}
-              </button>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={handleConfirmSubmit}
+            disabled={isSubmitting}
+            className="ds-btn ds-focusable"
+            style={{
+              padding: "0.6rem 1.5rem",
+              borderRadius: "0.5rem",
+              backgroundColor: "var(--ds-btn-success)",
+              color: "#ffffff",
+              border: "none",
+              fontWeight: 700,
+              fontSize: "0.85rem",
+              cursor: isSubmitting ? "wait" : "pointer",
+            }}
+          >
+            {isSubmitting ? "Đang nộp..." : "Xác nhận nộp bài"}
+          </button>
         </div>
-      )}
+      </FocusTrapModal2026>
     </div>
   );
 }

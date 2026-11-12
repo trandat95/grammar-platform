@@ -16,7 +16,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
         style={{
           display: "flex",
           gap: "0.5rem",
-          borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+          borderBottom: `1px solid ${"var(--ds-card-border)"}`,
           paddingBottom: "0.75rem",
           overflowX: "auto",
         }}
@@ -32,9 +32,9 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
             style={{
               padding: "0.55rem 0.95rem",
               borderRadius: "8px",
-              border: activeSubTab === tab.id ? (isLight ? "1px solid #3b82f6" : "1px solid #60a5fa") : "1px solid transparent",
-              backgroundColor: activeSubTab === tab.id ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
-              color: activeSubTab === tab.id ? (isLight ? "#1d4ed8" : "#93c5fd") : (isLight ? "#475569" : "#a1a1aa"),
+              border: activeSubTab === tab.id ? (isLight ? "1px solid var(--ds-accent)" : "1px solid var(--ds-accent)") : "1px solid transparent",
+              backgroundColor: activeSubTab === tab.id ? "var(--ds-accent-bg)" : "transparent",
+              color: activeSubTab === tab.id ? "var(--ds-accent)" : "var(--ds-text-muted)",
               fontSize: "0.825rem",
               fontWeight: activeSubTab === tab.id ? "700" : "500",
               cursor: "pointer",
@@ -63,8 +63,8 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 style={{
                   padding: "0.85rem",
                   borderRadius: "8px",
-                  border: `2px solid ${selectedTierId === tier.id ? tier.color : (isLight ? "#e2e8f0" : "#272733")}`,
-                  backgroundColor: selectedTierId === tier.id ? (isLight ? "#f8fafc" : "#181822") : (isLight ? "#ffffff" : "#121218"),
+                  border: `2px solid ${selectedTierId === tier.id ? tier.color : "var(--ds-card-border)"}`,
+                  backgroundColor: selectedTierId === tier.id ? "var(--ds-bg-elevated)" : "var(--ds-card)",
                   textAlign: "left",
                   cursor: "pointer",
                   display: "flex",
@@ -73,7 +73,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                     {tier.name}
                   </span>
                   <span
@@ -90,7 +90,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                     {tier.symbol}
                   </span>
                 </div>
-                <div style={{ fontSize: "0.72rem", color: isLight ? "#475569" : "#a1a1aa" }}>
+                <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)" }}>
                   {tier.percentage_relation}
                 </div>
               </button>
@@ -102,8 +102,8 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
             style={{
               padding: "1.25rem",
               borderRadius: "10px",
-              backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-              border: `1px solid ${isLight ? "#e2e8f0" : "#1e293b"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-card-border)"}`,
               display: "flex",
               flexDirection: "column",
               gap: "1.25rem",
@@ -116,21 +116,21 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 flexDirection: "column",
                 gap: "0.75rem",
                 padding: "1rem",
-                backgroundColor: isLight ? "#ffffff" : "#161b22",
+                backgroundColor: "var(--ds-card)",
                 borderRadius: "8px",
-                border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}`,
+                border: `1px solid ${"var(--ds-card-border)"}`,
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: "700", color: isLight ? "#334155" : "#cbd5e1" }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: "700", color: "var(--ds-text-secondary)" }}>
                 📊 Biểu Đồ Thước Đo Tỷ Lệ Thực Nghiệm:
               </div>
 
               {/* Bar A */}
               <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <span style={{ width: "80px", fontSize: "0.78rem", fontWeight: "700", color: isLight ? "#0f172a" : "#e2e8f0" }}>
+                <span style={{ width: "80px", fontSize: "0.78rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                   Đối tượng A:
                 </span>
-                <div style={{ flex: 1, backgroundColor: isLight ? "#e2e8f0" : "#21262d", borderRadius: "999px", height: "18px", overflow: "hidden" }}>
+                <div style={{ flex: 1, backgroundColor: "var(--ds-card-border)", borderRadius: "999px", height: "18px", overflow: "hidden" }}>
                   <div
                     style={{
                       width: selectedTierId === "equal" ? "65%" : selectedTierId === "comparative" ? "85%" : "100%",
@@ -149,20 +149,20 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
               {/* Bar B */}
               {selectedTierId !== "superlative" && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ width: "80px", fontSize: "0.78rem", fontWeight: "700", color: isLight ? "#0f172a" : "#e2e8f0" }}>
+                  <span style={{ width: "80px", fontSize: "0.78rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                     Đối tượng B:
                   </span>
-                  <div style={{ flex: 1, backgroundColor: isLight ? "#e2e8f0" : "#21262d", borderRadius: "999px", height: "18px", overflow: "hidden" }}>
+                  <div style={{ flex: 1, backgroundColor: "var(--ds-card-border)", borderRadius: "999px", height: "18px", overflow: "hidden" }}>
                     <div
                       style={{
                         width: "65%",
                         height: "100%",
-                        backgroundColor: isLight ? "#94a3b8" : "#484f58",
+                        backgroundColor: "var(--ds-border-strong)",
                         borderRadius: "999px",
                       }}
                     />
                   </div>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", fontWeight: "700", color: isLight ? "#64748b" : "#8b949e" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", fontWeight: "700", color: "var(--ds-text-muted)" }}>
                     100% (Chuẩn)
                   </span>
                 </div>
@@ -173,19 +173,19 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {curTier.id === "equal" && (
                 <>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#10b981", textTransform: "uppercase" }}>Khẳng định:</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.formula_affirmative}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-success)", textTransform: "uppercase" }}>Khẳng định:</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_affirmative}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.example_affirmative}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.example_affirmative}"</span>
                       <AudioPlayer text={curTier.example_affirmative_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#ef4444", textTransform: "uppercase" }}>Phủ định:</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.formula_negative}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-danger)", textTransform: "uppercase" }}>Phủ định:</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_negative}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.example_negative}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.example_negative}"</span>
                       <AudioPlayer text={curTier.example_negative_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
@@ -194,19 +194,19 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
 
               {curTier.id === "comparative" && (
                 <>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#3b82f6", textTransform: "uppercase" }}>Tính từ ngắn (-er than):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-accent)", textTransform: "uppercase" }}>Tính từ ngắn (-er than):</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.short_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.short_example}"</span>
                       <AudioPlayer text={curTier.short_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#8b5cf6", textTransform: "uppercase" }}>Tính từ dài (more ... than):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-purple)", textTransform: "uppercase" }}>Tính từ dài (more ... than):</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.long_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.long_example}"</span>
                       <AudioPlayer text={curTier.long_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
@@ -215,19 +215,19 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
 
               {curTier.id === "superlative" && (
                 <>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#8b5cf6", textTransform: "uppercase" }}>Tính từ ngắn (the -est):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-purple)", textTransform: "uppercase" }}>Tính từ ngắn (the -est):</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.short_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.short_example}"</span>
                       <AudioPlayer text={curTier.short_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#ec4899", textTransform: "uppercase" }}>Tính từ dài (the most):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-pink)", textTransform: "uppercase" }}>Tính từ dài (the most):</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.long_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.long_example}"</span>
                       <AudioPlayer text={curTier.long_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
@@ -236,26 +236,26 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
 
               {curTier.id === "double" && (
                 <>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#f59e0b", textTransform: "uppercase" }}>Dạng 1: Càng ngày càng...</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.type1_formula}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-warning)", textTransform: "uppercase" }}>Dạng 1: Càng ngày càng...</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type1_formula}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.type1_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.type1_example}"</span>
                       <AudioPlayer text={curTier.type1_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
-                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: isLight ? "#ffffff" : "#161b22", border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}` }}>
-                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#10b981", textTransform: "uppercase" }}>Dạng 2: Càng... thì càng...</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: isLight ? "#0f172a" : "#f0f6fc", marginTop: "0.15rem" }}>{curTier.type2_formula}</div>
+                  <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
+                    <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-success)", textTransform: "uppercase" }}>Dạng 2: Càng... thì càng...</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type2_formula}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
-                      <span style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>"{curTier.type2_example}"</span>
+                      <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.type2_example}"</span>
                       <AudioPlayer text={curTier.type2_example_audio} isLight={isLight} mode="compact" />
                     </div>
                   </div>
                 </>
               )}
 
-              <div style={{ fontSize: "0.78rem", backgroundColor: isLight ? "#eff6ff" : "#1e1b4b", padding: "0.6rem 0.85rem", borderRadius: "6px", color: isLight ? "#1e40af" : "#93c5fd", border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f640"}` }}>
+              <div style={{ fontSize: "0.78rem", backgroundColor: "var(--ds-accent-bg)", padding: "0.6rem 0.85rem", borderRadius: "6px", color: "var(--ds-accent)", border: `1px solid ${"var(--ds-accent-border)"}` }}>
                 💡 <strong>Mẹo thi cử:</strong> {curTier.emphasis_tip || curTier.rule_summary}
               </div>
             </div>
@@ -272,18 +272,18 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
               style={{
                 padding: "1rem",
                 borderRadius: "8px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.6rem",
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.95rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+                <span style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                   {rule.category}
                 </span>
-                <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#2563eb" : "#60a5fa", fontWeight: "700" }}>
+                <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700" }}>
                   {rule.rule}
                 </span>
               </div>
@@ -295,8 +295,8 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                     style={{
                       padding: "0.5rem 0.75rem",
                       borderRadius: "6px",
-                      backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-                      border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                      backgroundColor: "var(--ds-bg-elevated)",
+                      border: `1px solid ${"var(--ds-card-border)"}`,
                       fontSize: "0.8rem",
                       display: "flex",
                       flexDirection: "column",
@@ -304,8 +304,8 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                     }}
                   >
                     <div><strong>Gốc:</strong> {ex.base}</div>
-                    <div style={{ color: isLight ? "#1d4ed8" : "#60a5fa" }}>➔ So sánh hơn: {ex.comp}</div>
-                    <div style={{ color: isLight ? "#7e22ce" : "#c084fc" }}>➔ So sánh nhất: {ex.sup}</div>
+                    <div style={{ color: "var(--ds-accent)" }}>➔ So sánh hơn: {ex.comp}</div>
+                    <div style={{ color: "var(--ds-purple)" }}>➔ So sánh nhất: {ex.sup}</div>
                   </div>
                 ))}
               </div>
@@ -323,29 +323,29 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
               style={{
                 padding: "1rem",
                 borderRadius: "8px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.5rem",
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa", fontFamily: "Geist Mono" }}>
+                <span style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
                   {item.base}
                 </span>
-                <span style={{ fontSize: "0.72rem", color: isLight ? "#059669" : "#34d399", fontWeight: "600" }}>
+                <span style={{ fontSize: "0.72rem", color: "var(--ds-success)", fontWeight: "600" }}>
                   {item.meaning}
                 </span>
               </div>
 
               <div style={{ display: "flex", gap: "0.75rem", fontSize: "0.8rem" }}>
-                <div>Hơn: <strong style={{ color: isLight ? "#1d4ed8" : "#60a5fa" }}>{item.comparative}</strong></div>
-                <div>Nhất: <strong style={{ color: isLight ? "#7e22ce" : "#c084fc" }}>{item.superlative}</strong></div>
+                <div>Hơn: <strong style={{ color: "var(--ds-accent)" }}>{item.comparative}</strong></div>
+                <div>Nhất: <strong style={{ color: "var(--ds-purple)" }}>{item.superlative}</strong></div>
               </div>
 
-              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}` }}>
-                <div style={{ fontSize: "0.8rem", color: isLight ? "#334155" : "#cbd5e1" }}>
+              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
+                <div style={{ fontSize: "0.8rem", color: "var(--ds-text-secondary)" }}>
                   "{item.example}"
                 </div>
                 <div style={{ marginTop: "0.35rem" }}>

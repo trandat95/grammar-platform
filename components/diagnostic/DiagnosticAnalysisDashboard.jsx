@@ -61,11 +61,11 @@ export default function DiagnosticAnalysisDashboard({
       <div
         style={{
           background: isLight
-            ? "linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)"
-            : "linear-gradient(135deg, #18181b 0%, #1e1b4b 100%)",
+            ? "linear-gradient(135deg, #ffffff 0%, var(--ds-accent-bg) 100%)"
+            : "linear-gradient(135deg, var(--ds-bg-elevated) 0%, var(--ds-accent-bg) 100%)",
           borderRadius: "1.25rem",
           padding: "2.5rem",
-          border: `1px solid ${isLight ? "#bfdbfe" : "#3730a3"}`,
+          border: `1px solid ${"var(--ds-accent-border)"}`,
           boxShadow: T.shadowElevated,
           marginBottom: "2rem",
           display: "flex",
@@ -85,8 +85,8 @@ export default function DiagnosticAnalysisDashboard({
                 letterSpacing: "0.08em",
                 padding: "0.25rem 0.75rem",
                 borderRadius: "9999px",
-                backgroundColor: isLight ? "#dcfce7" : "#064e3b",
-                color: isLight ? "#15803d" : "#86efac",
+                backgroundColor: "var(--ds-success-bg)",
+                color: "var(--ds-success)",
               }}
             >
               Phân tích hoàn tất
@@ -109,7 +109,7 @@ export default function DiagnosticAnalysisDashboard({
               style={{
                 padding: "0.5rem 1rem",
                 borderRadius: "0.75rem",
-                backgroundColor: isLight ? "#ffffff" : "#27272a",
+                backgroundColor: "var(--ds-card)",
                 border: `1px solid ${T.borderSubtle}`,
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -123,7 +123,7 @@ export default function DiagnosticAnalysisDashboard({
               style={{
                 padding: "0.5rem 1rem",
                 borderRadius: "0.75rem",
-                backgroundColor: isLight ? "#ffffff" : "#27272a",
+                backgroundColor: "var(--ds-card)",
                 border: `1px solid ${T.borderSubtle}`,
                 fontSize: "0.85rem",
                 fontWeight: 600,
@@ -144,7 +144,7 @@ export default function DiagnosticAnalysisDashboard({
             justifyContent: "center",
             padding: "1.75rem 2.25rem",
             borderRadius: "1rem",
-            backgroundColor: isLight ? "#ffffff" : "#18181b",
+            backgroundColor: "var(--ds-card)",
             border: `2px solid ${T.accent}`,
             boxShadow: "0 8px 24px rgba(37, 99, 235, 0.15)",
             textAlign: "center",
@@ -184,21 +184,21 @@ export default function DiagnosticAnalysisDashboard({
       {roadmap?.ai_recommendation && (
         <div
           style={{
-            backgroundColor: isLight ? "#f0fdf4" : "#052e16",
+            backgroundColor: "var(--ds-success-bg)",
             borderRadius: "1rem",
             padding: "1.75rem",
-            border: `1px solid ${isLight ? "#bbf7d0" : "#14532d"}`,
+            border: `1px solid ${"var(--ds-success-border)"}`,
             marginBottom: "2rem",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
             <span style={{ fontSize: "1.3rem" }}>💡</span>
-            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: isLight ? "#166534" : "#86efac" }}>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--ds-success)" }}>
               Phân Tích Sư Phạm &amp; Khuyến Nghị Cá Nhân Hóa (AI Advisor)
             </h2>
           </div>
 
-          <p style={{ fontSize: "0.95rem", color: isLight ? "#15803d" : "#bbf7d0", lineHeight: 1.5, marginBottom: "0.75rem" }}>
+          <p style={{ fontSize: "0.95rem", color: "var(--ds-success)", lineHeight: 1.5, marginBottom: "0.75rem" }}>
             {roadmap.ai_recommendation.headline}
           </p>
 
@@ -210,7 +210,7 @@ export default function DiagnosticAnalysisDashboard({
                 borderRadius: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: isLight ? "#15803d" : "#86efac", marginBottom: "0.25rem" }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-success)", marginBottom: "0.25rem" }}>
                 🌟 Điểm mạnh của bạn:
               </div>
               <div style={{ fontSize: "0.85rem", color: T.textSecondary, lineHeight: 1.4 }}>
@@ -225,7 +225,7 @@ export default function DiagnosticAnalysisDashboard({
                 borderRadius: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: isLight ? "#b91c1c" : "#fca5a5", marginBottom: "0.25rem" }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-danger)", marginBottom: "0.25rem" }}>
                 🔴 Vùng kiến thức cần ưu tiên khắc phục:
               </div>
               <div style={{ fontSize: "0.85rem", color: T.textSecondary, lineHeight: 1.4 }}>
@@ -238,9 +238,9 @@ export default function DiagnosticAnalysisDashboard({
             style={{
               marginTop: "1rem",
               paddingTop: "0.75rem",
-              borderTop: `1px solid ${isLight ? "#bbf7d0" : "#14532d"}`,
+              borderTop: `1px solid ${"var(--ds-success-border)"}`,
               fontSize: "0.85rem",
-              color: isLight ? "#166534" : "#a7f3d0",
+              color: "var(--ds-success)",
               fontWeight: 500,
             }}
           >
@@ -267,7 +267,7 @@ export default function DiagnosticAnalysisDashboard({
             gap: "0.6rem",
             padding: "0.85rem 1.75rem",
             borderRadius: "0.75rem",
-            backgroundColor: T.accent,
+            backgroundColor: "var(--ds-btn-primary)",
             color: "#ffffff",
             fontSize: "0.95rem",
             fontWeight: 700,
@@ -288,7 +288,7 @@ export default function DiagnosticAnalysisDashboard({
             gap: "0.5rem",
             padding: "0.85rem 1.5rem",
             borderRadius: "0.75rem",
-            backgroundColor: isLight ? "#ffffff" : "#27272a",
+            backgroundColor: "var(--ds-card)",
             color: T.text,
             fontSize: "0.9rem",
             fontWeight: 600,
@@ -484,7 +484,7 @@ export default function DiagnosticAnalysisDashboard({
               style={{
                 padding: "1.2rem",
                 borderRadius: "0.75rem",
-                backgroundColor: isLight ? "#f8fafc" : "#18181b",
+                backgroundColor: "var(--ds-bg-elevated)",
                 border: `1px solid ${skill.border || T.borderSubtle}`,
                 display: "flex",
                 flexDirection: "column",
@@ -516,7 +516,7 @@ export default function DiagnosticAnalysisDashboard({
                       fontWeight: 600,
                       padding: "0.2rem 0.5rem",
                       borderRadius: "9999px",
-                      backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+                      backgroundColor: "var(--ds-card-border)",
                       color: T.textMuted,
                     }}
                   >
@@ -545,7 +545,7 @@ export default function DiagnosticAnalysisDashboard({
                   style={{
                     flex: 1,
                     height: "8px",
-                    backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+                    backgroundColor: "var(--ds-card-border)",
                     borderRadius: "9999px",
                     overflow: "hidden",
                   }}
@@ -591,7 +591,7 @@ export default function DiagnosticAnalysisDashboard({
                   style={{
                     padding: "0.3rem 0.75rem",
                     borderRadius: "0.4rem",
-                    backgroundColor: isLight ? "#ffffff" : "#27272a",
+                    backgroundColor: "var(--ds-card)",
                     color: T.accent,
                     border: `1px solid ${T.accentBorder || T.border}`,
                     fontSize: "0.78rem",

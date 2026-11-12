@@ -23,6 +23,10 @@ import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
 import AdminMonetizationPanel from "../components/admin/AdminMonetizationPanel";
 import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
 import StepUpConfirmModal from "../components/admin/StepUpConfirmModal";
+import AppShell2026 from "../components/ui-2026/AppShell2026";
+import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
+import KitIcon from "../components/ui-2026/KitIcon";
+import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import {
@@ -145,6 +149,9 @@ export default function Home() {
   const [stepUpSubmitting, setStepUpSubmitting] = useState(false);
   const [stepUpError, setStepUpError] = useState("");
   const [activeRemedialMap, setActiveRemedialMap] = useState({});
+  const [dashboardZone, setDashboardZone] = useState("today"); // 'today' | 'analytics' | 'all'
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [expandedRulesMap, setExpandedRulesMap] = useState({});
 
   // --- Theme State (Dark vs Light / White Mode + OS MatchMedia Fallback) ---
   const [themeMode, setThemeMode] = useState("dark");
@@ -175,6 +182,12 @@ export default function Home() {
   };
 
   const isLight = themeMode === "light";
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute("data-theme", isLight ? "light" : "dark");
+    } catch (e) {}
+  }, [isLight]);
 
   const T = useMemo(() => {
     return getThemeTokens(isLight);
@@ -1650,9 +1663,9 @@ export default function Home() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: "0.75rem",
-            backgroundColor: isLight ? "#f8fafc" : "#121218",
-            border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
-            borderLeft: "3px solid #3b82f6",
+            backgroundColor: "var(--ds-card-subtle)",
+            border: `1px solid ${"var(--ds-border)"}`,
+            borderLeft: "3px solid var(--ds-accent)",
             borderRadius: "6px",
             padding: "0.45rem 0.75rem",
             margin: "0.25rem 0",
@@ -1663,8 +1676,8 @@ export default function Home() {
               style={{
                 fontSize: "0.68rem",
                 fontFamily: "Geist Mono",
-                backgroundColor: isLight ? "#eff6ff" : "#1e293b",
-                color: isLight ? "#1d4ed8" : "#60a5fa",
+                backgroundColor: "var(--ds-accent-bg)",
+                color: "var(--ds-accent)",
                 padding: "0.1rem 0.35rem",
                 borderRadius: "3px",
                 fontWeight: "700",
@@ -1681,9 +1694,9 @@ export default function Home() {
             onClick={() => playWordAudio(exContent.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
             title="Nghe phát âm ví dụ này"
             style={{
-              backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+              backgroundColor: "var(--ds-card)",
               border: `1px solid ${T.border}`,
-              color: isLight ? "#2563eb" : "#38bdf8",
+              color: "var(--ds-accent)",
               borderRadius: "4px",
               padding: "0.15rem 0.45rem",
               fontSize: "0.7rem",
@@ -1709,31 +1722,31 @@ export default function Home() {
       const token = match[0];
       if (token.startsWith("***") && token.endsWith("***")) {
         parts.push(
-          <strong key={match.index} style={{ fontWeight: "700", fontStyle: "italic", color: isLight ? "#1e293b" : "#f1f5f9" }}>
+          <strong key={match.index} style={{ fontWeight: "700", fontStyle: "italic", color: "var(--ds-text-secondary)" }}>
             {token.slice(3, -3)}
           </strong>
         );
       } else if (token.startsWith("**") && token.endsWith("**")) {
         parts.push(
-          <strong key={match.index} style={{ fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+          <strong key={match.index} style={{ fontWeight: "700", color: "var(--ds-text-heading)" }}>
             {token.slice(2, -2)}
           </strong>
         );
       } else if (token.startsWith("*") && token.endsWith("*")) {
         parts.push(
-          <span key={match.index} style={{ fontStyle: "italic", fontWeight: "600", color: isLight ? "#2563eb" : "#38bdf8" }}>
+          <span key={match.index} style={{ fontStyle: "italic", fontWeight: "600", color: "var(--ds-accent)" }}>
             {token.slice(1, -1)}
           </span>
         );
       } else if (token.startsWith("~~") && token.endsWith("~~")) {
         parts.push(
-          <span key={match.index} style={{ textDecoration: "line-through", color: "#f43f5e", fontWeight: "600", margin: "0 2px" }}>
+          <span key={match.index} style={{ textDecoration: "line-through", color: "var(--ds-danger)", fontWeight: "600", margin: "0 2px" }}>
             {token.slice(2, -2)}
           </span>
         );
       } else if (token.startsWith("[NOT") && token.endsWith("]")) {
         parts.push(
-          <span key={match.index} style={{ backgroundColor: isLight ? "#fef2f2" : "rgba(244, 63, 94, 0.15)", border: "1px solid #f43f5e70", color: isLight ? "#dc2626" : "#fb7185", padding: "0.1rem 0.35rem", borderRadius: "4px", fontSize: "0.78rem", fontWeight: "700", margin: "0 4px" }}>
+          <span key={match.index} style={{ backgroundColor: "var(--ds-danger-bg)", border: "1px solid var(--ds-danger-border)", color: "var(--ds-danger)", padding: "0.1rem 0.35rem", borderRadius: "4px", fontSize: "0.78rem", fontWeight: "700", margin: "0 4px" }}>
             ⚠️ {token.slice(1, -1)}
           </span>
         );
@@ -2237,7 +2250,9 @@ export default function Home() {
         lesson: targetLs,
         reason: `Cần phục thù: Bạn đang có ${savedMistakes.length} câu làm sai cần củng cố ở chuyên đề này.`,
         tag: "ÔN TẬP CỦNG CỐ",
-        tagColor: "#f59e0b",
+        tagColor: "var(--ds-warning)",
+        tagBg: "var(--ds-warning-bg)",
+        tagBorder: "var(--ds-warning-border)",
       };
     }
 
@@ -2249,7 +2264,9 @@ export default function Home() {
             lesson: ls,
             reason: `Tiếp nối lộ trình học tập: Chuyên đề ${ch.number} - ${ch.title_vi}.`,
             tag: "BÀI HỌC TIẾP THEO",
-            tagColor: "#38bdf8",
+            tagColor: "var(--ds-accent)",
+            tagBg: "var(--ds-accent-bg)",
+            tagBorder: "var(--ds-accent-border)",
           };
         }
       }
@@ -2260,7 +2277,9 @@ export default function Home() {
       lesson: previewData.chapters[0].lessons[0],
       reason: "Xuất sắc! Bạn đã hoàn thành toàn bộ 53 bài học. Hãy làm đề Quiz 50 câu để duy trì phong độ!",
       tag: "LUYỆN TẬP NÂNG CAO",
-      tagColor: "#10b981",
+      tagColor: "var(--ds-success)",
+      tagBg: "var(--ds-success-bg)",
+      tagBorder: "var(--ds-success-border)",
     };
   }, [savedMistakes, userTracker.completedLessons]);
 
@@ -2309,8 +2328,186 @@ export default function Home() {
 
   const isCurrentLessonDone = userTracker.completedLessons.includes(selectedLesson?.id);
 
-  return (
+  const chapterSidebarContent = (
     <>
+      <div style={{ padding: "0.85rem 1rem", borderBottom: `1px solid ${T.border}` }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            backgroundColor: T.inputBg,
+            border: `1px solid ${T.border}`,
+            borderRadius: "8px",
+            padding: "0.4rem 0.65rem",
+          }}
+        >
+          <KitIcon name="tool-search" size={14} />
+          <input
+            type="text"
+            value={chapterSearch}
+            onChange={(e) => setChapterSearch(e.target.value)}
+            placeholder="Lọc 12 chuyên đề..."
+            aria-label="Lọc 12 chuyên đề"
+            className="ds-focusable"
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              outline: "none",
+              color: T.text,
+              fontSize: "0.8rem",
+              width: "100%",
+            }}
+          />
+          {chapterSearch && (
+            <button
+              type="button"
+              onClick={() => setChapterSearch("")}
+              aria-label="Xóa bộ lọc"
+              style={{ background: "none", border: "none", color: T.textMuted, cursor: "pointer", fontSize: "0.85rem" }}
+            >
+              ×
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "0.6rem 0.5rem" }}>
+        <div
+          style={{
+            fontSize: "0.68rem",
+            fontWeight: "700",
+            color: T.textMuted,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            padding: "0.4rem 0.65rem",
+            marginBottom: "0.25rem",
+          }}
+        >
+          DANH MỤC 12 CHUYÊN ĐỀ ({filteredChapters.length})
+        </div>
+
+        {filteredChapters.map((ch) => {
+          const isSelected = ch.id === selectedChapter?.id;
+          const chapterNum = Number(ch.number || 1);
+          const chIcon = CHAPTER_ICON_MAP[chapterNum] || CHAPTER_ICON_MAP[1];
+
+          return (
+            <div key={ch.id} style={{ marginBottom: "0.3rem" }}>
+              <button
+                type="button"
+                onClick={() => handleSelectChapter(ch)}
+                className="ds-focusable"
+                style={{
+                  width: "100%",
+                  textAlign: "left",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0.48rem 0.6rem",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  backgroundColor: isSelected ? T.accentBg : "transparent",
+                  border: isSelected ? `1px solid ${T.accentBorder}` : "1px solid transparent",
+                  transition: "all 0.12s ease",
+                  gap: "0.6rem",
+                }}
+              >
+                <img src={chIcon} alt="" width={24} height={24} aria-hidden="true" style={{ flexShrink: 0 }} />
+                <span
+                  style={{
+                    fontSize: "0.82rem",
+                    color: isSelected ? T.textHeading : T.textSecondary,
+                    fontWeight: isSelected ? "700" : "500",
+                    flex: 1,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {ch.title_vi}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.68rem",
+                    fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                    color: T.textMuted,
+                    flexShrink: 0,
+                  }}
+                >
+                  {ch.lessons?.length || 0}b
+                </span>
+              </button>
+
+              {isSelected && ch.lessons && ch.lessons.length > 0 && (
+                <div
+                  style={{
+                    marginLeft: "1.45rem",
+                    paddingLeft: "0.55rem",
+                    borderLeft: `1px solid ${T.borderSubtle}`,
+                    marginTop: "0.25rem",
+                    marginBottom: "0.45rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "2px",
+                  }}
+                >
+                  {ch.lessons.map((ls) => {
+                    const isLessonActive = selectedLesson?.id === ls.id;
+                    const isLessonCompleted = userTracker.completedLessons?.includes(ls.id);
+
+                    return (
+                      <button
+                        key={ls.id}
+                        type="button"
+                        data-lesson-item="true"
+                        onClick={() => {
+                          setSelectedLessonId(ls.id);
+                          setActiveTab("theory");
+                        }}
+                        className="ds-focusable"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "0.38rem 0.55rem",
+                          borderRadius: "6px",
+                          fontSize: "0.775rem",
+                          color: isLessonActive ? T.accent : isLessonCompleted ? T.success : T.textMuted,
+                          backgroundColor: isLessonActive ? T.accentBg : "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          fontWeight: isLessonActive ? "700" : "500",
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "space-between",
+                          gap: "0.45rem",
+                        }}
+                      >
+                        <span className="ge-lesson-title-clamp" style={{ flex: 1 }}>
+                          {isLessonCompleted ? "✓ " : ""}
+                          {ls.title_vi}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: "0.66rem",
+                            color: T.textMuted,
+                            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {ls.sections?.length || 0}m
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+
+  return (
+    <div data-theme={isLight ? "light" : "dark"} className={isLight ? "theme-light" : "theme-dark"}>
       <Head>
         <title>Grammar Engine — Nền tảng Ngữ pháp Tiếng Anh Toàn diện</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -2329,8 +2526,8 @@ export default function Home() {
           padding: 0;
         }
         html, body {
-          background-color: ${T.bg};
-          color: ${T.text};
+          background-color: var(--ds-bg);
+          color: var(--ds-text);
           font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
@@ -2338,31 +2535,31 @@ export default function Home() {
         }
         .theme-light input, .theme-light select, .theme-light textarea {
           background-color: #ffffff !important;
-          color: #0f172a !important;
-          border-color: #cbd5e1 !important;
+          color: var(--ds-text) !important;
+          border-color: var(--ds-border) !important;
         }
         .theme-light input::placeholder, .theme-light textarea::placeholder {
-          color: #94a3b8 !important;
+          color: var(--ds-text-muted) !important;
         }
         input, button, select, textarea {
           font-family: inherit;
         }
         ::placeholder {
-          color: #71717a;
+          color: var(--ds-text-muted);
         }
         ::-webkit-scrollbar {
           width: 6px;
           height: 6px;
         }
         ::-webkit-scrollbar-track {
-          background: ${isLight ? "#f1f5f9" : "#09090b"};
+          background: var(--ds-bg);
         }
         ::-webkit-scrollbar-thumb {
-          background: ${isLight ? "#cbd5e1" : "#27272a"};
+          background: var(--ds-border);
           border-radius: 999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: #3f3f46;
+          background: var(--ds-border-strong);
         }
         code, kbd, pre {
           font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -2379,7 +2576,7 @@ export default function Home() {
           text-align: left;
         }
         th {
-          background-color: ${isLight ? "#f8fafc" : "#18181b"};
+          background-color: var(--ds-card-subtle);
           color: ${T.textHeading};
           font-weight: 700;
         }
@@ -2393,358 +2590,298 @@ export default function Home() {
         <div
           style={{
             position: "fixed",
-            bottom: "2rem",
-            right: "2rem",
-            zIndex: 100,
-            backgroundColor: isLight ? "#ffffff" : "#18181b",
-            border: "1px solid #10b981",
-            boxShadow: isLight ? "0 10px 25px -5px rgba(16, 185, 129, 0.2)" : "0 10px 25px -5px rgba(16, 185, 129, 0.3)",
-            color: isLight ? "#0f172a" : "#fafafa",
+            bottom: "4.75rem",
+            right: "1.25rem",
+            zIndex: 1400,
+            backgroundColor: T.card,
+            border: `1px solid ${T.successBorder}`,
+            boxShadow: T.shadowElevated,
+            color: T.text,
             padding: "0.75rem 1.25rem",
-            borderRadius: "8px",
+            borderRadius: "10px",
             display: "flex",
             alignItems: "center",
             gap: "0.6rem",
           }}
         >
-          <span style={{ fontSize: "1.2rem" }}>⚡</span>
+          <span style={{ fontSize: "1.2rem" }} aria-hidden="true">⚡</span>
           <div>
-            <div style={{ fontWeight: "700", color: "#34d399", fontSize: "0.95rem" }}>
+            <div style={{ fontWeight: "700", color: T.success, fontSize: "0.95rem" }}>
               {xpToast.message}
             </div>
-            <div style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>Điểm kinh nghiệm đã cộng</div>
+            <div style={{ fontSize: "0.75rem", color: T.textMuted }}>Điểm kinh nghiệm đã cộng</div>
           </div>
         </div>
       )}
 
-      {/* Auth Modal (Login / Register / Quick Switch) */}
-      {authModalOpen && (
-        <div
-          id="auth-modal"
-          data-no-dict="true"
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-            backdropFilter: "blur(6px)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "1rem",
-          }}
-        >
-          <div
+      {/* Auth Modal (WCAG 2.2 AA FocusTrapModal2026) */}
+      <FocusTrapModal2026
+        id="auth-modal"
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        title={authTab === "login" ? "Đăng nhập tài khoản" : "Đăng ký thành viên"}
+        maxWidth="460px"
+        padding="24px"
+      >
+        {!currentUser.isGuest && (
+          <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: T.bgElevated, borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ fontSize: "0.72rem", color: T.textMuted, textTransform: "uppercase" }}>Đang đăng nhập:</div>
+              <div style={{ fontSize: "0.85rem", fontWeight: "700", color: T.text }}>{currentUser.name} ({currentUser.role})</div>
+              <div style={{ fontSize: "0.75rem", color: T.textSecondary }}>{currentUser.email}</div>
+            </div>
+            <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+              {currentUser.role === "FREE" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalOpen(false);
+                    setCurrentView("vip");
+                  }}
+                  className="ds-focusable"
+                  style={{
+                    padding: "0.4rem 0.75rem",
+                    backgroundColor: "var(--ds-btn-primary)",
+                    border: "none",
+                    color: "#ffffff",
+                    borderRadius: "6px",
+                    fontSize: "0.75rem",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                  }}
+                >
+                  💎 Nâng cấp VIP
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="ds-focusable"
+                style={{
+                  padding: "0.4rem 0.8rem",
+                  backgroundColor: T.dangerBg,
+                  border: `1px solid ${T.dangerBorder}`,
+                  color: T.danger,
+                  borderRadius: "6px",
+                  fontSize: "0.75rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                🚪 Đăng xuất
+              </button>
+            </div>
+          </div>
+        )}
+
+        {authError && (
+          <div style={{ padding: "0.6rem 0.85rem", backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "6px", color: T.danger, fontSize: "0.85rem", marginBottom: "1rem" }}>
+            {authError}
+          </div>
+        )}
+
+        <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
+          <button
+            type="button"
+            onClick={() => { setAuthTab("login"); setAuthError(""); }}
+            className="ds-focusable"
             style={{
-              backgroundColor: T.card,
-              border: `1px solid ${T.border}`,
-              borderRadius: "12px",
-              padding: "2rem",
-              width: "100%",
-              maxWidth: "460px",
-              boxShadow: T.shadowElevated,
+              flex: 1,
+              padding: "0.4rem",
+              borderRadius: "4px",
+              border: "none",
+              fontSize: "0.825rem",
+              fontWeight: authTab === "login" ? "700" : "500",
+              backgroundColor: authTab === "login" ? T.card : "transparent",
+              color: authTab === "login" ? T.text : T.textMuted,
+              boxShadow: authTab === "login" ? T.shadow : "none",
+              cursor: "pointer",
             }}
           >
-            {/* Modal Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-              <div style={{ fontSize: "1.2rem", fontWeight: "700", color: T.text }}>
-                {authTab === "login" ? "Đăng nhập tài khoản" : "Đăng ký thành viên"}
-              </div>
-              <button
-                onClick={() => setAuthModalOpen(false)}
-                style={{ background: "none", border: "none", color: "#71717a", fontSize: "1.2rem", cursor: "pointer" }}
-              >
-                ✕
-              </button>
-            </div>
+            Đăng nhập
+          </button>
+          <button
+            type="button"
+            onClick={() => { setAuthTab("register"); setAuthError(""); }}
+            className="ds-focusable"
+            style={{
+              flex: 1,
+              padding: "0.4rem",
+              borderRadius: "4px",
+              border: "none",
+              fontSize: "0.825rem",
+              fontWeight: authTab === "register" ? "700" : "500",
+              backgroundColor: authTab === "register" ? T.card : "transparent",
+              color: authTab === "register" ? T.text : T.textMuted,
+              boxShadow: authTab === "register" ? T.shadow : "none",
+              cursor: "pointer",
+            }}
+          >
+            Đăng ký mới
+          </button>
+        </div>
 
-            {/* Currently Logged In Box with VIP Upgrade & Logout Actions */}
-            {!currentUser.isGuest && (
-              <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: T.bgElevated, borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
-                <div>
-                  <div style={{ fontSize: "0.72rem", color: T.textMuted, textTransform: "uppercase" }}>Đang đăng nhập:</div>
-                  <div style={{ fontSize: "0.85rem", fontWeight: "700", color: T.text }}>{currentUser.name} ({currentUser.role})</div>
-                  <div style={{ fontSize: "0.75rem", color: T.textSecondary }}>{currentUser.email}</div>
-                </div>
-                <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
-                  {currentUser.role === "FREE" && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAuthModalOpen(false);
-                        setCurrentView("vip");
-                      }}
-                      style={{
-                        padding: "0.4rem 0.75rem",
-                        backgroundColor: T.accent,
-                        border: "none",
-                        color: "#ffffff",
-                        borderRadius: "6px",
-                        fontSize: "0.75rem",
-                        fontWeight: "700",
-                        cursor: "pointer",
-                      }}
-                    >
-                      💎 Nâng cấp VIP
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    style={{
-                      padding: "0.4rem 0.8rem",
-                      backgroundColor: T.dangerBg,
-                      border: `1px solid ${T.dangerBorder}`,
-                      color: T.danger,
-                      borderRadius: "6px",
-                      fontSize: "0.75rem",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                    }}
-                  >
-                    🚪 Đăng xuất
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {authError && (
-              <div style={{ padding: "0.6rem 0.85rem", backgroundColor: "rgba(239, 68, 68, 0.15)", border: "1px solid #ef4444", borderRadius: "6px", color: "#f87171", fontSize: "0.85rem", marginBottom: "1rem" }}>
-                {authError}
-              </div>
-            )}
-
-            {/* Form Tabs */}
-            <div style={{ display: "flex", backgroundColor: isLight ? "#f1f5f9" : "#18181b", padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
-              <button
-                type="button"
-                onClick={() => { setAuthTab("login"); setAuthError(""); }}
-                style={{
-                  flex: 1,
-                  padding: "0.4rem",
-                  borderRadius: "4px",
-                  border: "none",
-                  fontSize: "0.825rem",
-                  fontWeight: authTab === "login" ? "600" : "400",
-                  backgroundColor: authTab === "login" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                  color: authTab === "login" ? T.text : T.textMuted,
-                  boxShadow: authTab === "login" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                  cursor: "pointer",
-                }}
-              >
-                Đăng nhập
-              </button>
-              <button
-                type="button"
-                onClick={() => { setAuthTab("register"); setAuthError(""); }}
-                style={{
-                  flex: 1,
-                  padding: "0.4rem",
-                  borderRadius: "4px",
-                  border: "none",
-                  fontSize: "0.825rem",
-                  fontWeight: authTab === "register" ? "600" : "400",
-                  backgroundColor: authTab === "register" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                  color: authTab === "register" ? T.text : T.textMuted,
-                  boxShadow: authTab === "register" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                  cursor: "pointer",
-                }}
-              >
-                Đăng ký mới
-              </button>
-            </div>
-
-            {/* Auth Form */}
-            <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
-              {authTab === "register" && (
-                <div style={{ marginBottom: "1rem" }}>
-                  <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-                    Họ và tên:
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={authName}
-                    placeholder="Nguyễn Văn A"
-                    onChange={(e) => setAuthName(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "0.55rem 0.75rem",
-                      backgroundColor: isLight ? "#ffffff" : "#18181b",
-                      border: `1px solid ${T.border}`,
-                      borderRadius: "6px",
-                      color: T.text,
-                      fontSize: "0.875rem",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-              )}
-
-              <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-                  Email:
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={authEmail}
-                  placeholder="name@example.com"
-                  onChange={(e) => setAuthEmail(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "0.55rem 0.75rem",
-                    backgroundColor: isLight ? "#ffffff" : "#18181b",
-                    border: `1px solid ${T.border}`,
-                    borderRadius: "6px",
-                    color: T.text,
-                    fontSize: "0.875rem",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-                  Mật khẩu:
-                </label>
-                <input
-                  type="password"
-                  required
-                  value={authPassword}
-                  placeholder="••••••••"
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "0.55rem 0.75rem",
-                    backgroundColor: isLight ? "#ffffff" : "#18181b",
-                    border: `1px solid ${T.border}`,
-                    borderRadius: "6px",
-                    color: T.text,
-                    fontSize: "0.875rem",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <button
-                type="submit"
+        <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
+          {authTab === "register" && (
+            <div style={{ marginBottom: "1rem" }}>
+              <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                Họ và tên:
+              </label>
+              <input
+                type="text"
+                required
+                value={authName}
+                placeholder="Nguyễn Văn A"
+                onChange={(e) => setAuthName(e.target.value)}
+                className="ds-focusable"
                 style={{
                   width: "100%",
-                  padding: "0.65rem",
-                  backgroundColor: "#2563eb",
-                  color: "#ffffff",
-                  border: "none",
+                  padding: "0.55rem 0.75rem",
+                  backgroundColor: T.inputBg,
+                  border: `1px solid ${T.border}`,
                   borderRadius: "6px",
-                  fontWeight: "600",
-                  fontSize: "0.9rem",
-                  cursor: "pointer",
+                  color: T.text,
+                  fontSize: "0.875rem",
                 }}
-              >
-                {authTab === "login" ? "Đăng nhập ngay" : "Tạo tài khoản học tập"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+              />
+            </div>
+          )}
 
-      {/* Admin: Modal Add New User */}
-      {newUserModalOpen && (
-        <div
-          id="new-user-modal"
-          data-no-dict="true"
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "1rem",
-          }}
-        >
-          <div
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+              Email:
+            </label>
+            <input
+              type="email"
+              required
+              value={authEmail}
+              placeholder="name@example.com"
+              onChange={(e) => setAuthEmail(e.target.value)}
+              className="ds-focusable"
+              style={{
+                width: "100%",
+                padding: "0.55rem 0.75rem",
+                backgroundColor: T.inputBg,
+                border: `1px solid ${T.border}`,
+                borderRadius: "6px",
+                color: T.text,
+                fontSize: "0.875rem",
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+              Mật khẩu:
+            </label>
+            <input
+              type="password"
+              required
+              value={authPassword}
+              placeholder="••••••••"
+              onChange={(e) => setAuthPassword(e.target.value)}
+              className="ds-focusable"
+              style={{
+                width: "100%",
+                padding: "0.55rem 0.75rem",
+                backgroundColor: T.inputBg,
+                border: `1px solid ${T.border}`,
+                borderRadius: "6px",
+                color: T.text,
+                fontSize: "0.875rem",
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="ds-btn ds-focusable"
             style={{
-              backgroundColor: T.card,
-              border: `1px solid ${T.border}`,
-              borderRadius: "12px",
-              padding: "2rem",
               width: "100%",
-              maxWidth: "460px",
-              boxShadow: T.shadowElevated,
+              padding: "0.65rem",
+              backgroundColor: "var(--ds-btn-primary)",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "700",
+              fontSize: "0.9rem",
+              cursor: "pointer",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-              <div style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text }}>
-                Thêm người dùng mới vào hệ thống
-              </div>
-              <button
-                onClick={() => setNewUserModalOpen(false)}
-                style={{ background: "none", border: "none", color: "#71717a", fontSize: "1.2rem", cursor: "pointer" }}
-              >
-                ✕
-              </button>
-            </div>
+            {authTab === "login" ? "Đăng nhập ngay" : "Tạo tài khoản học tập"}
+          </button>
+        </form>
+      </FocusTrapModal2026>
 
-            <form onSubmit={handleCreateNewUserByAdmin}>
-              <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: "#a1a1aa", marginBottom: "0.3rem" }}>Họ tên:</label>
-                <input
-                  type="text"
-                  required
-                  value={newUserName}
-                  onChange={(e) => setNewUserName(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
-                />
-              </div>
-
-              <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Email:</label>
-                <input
-                  type="email"
-                  required
-                  value={newUserEmail}
-                  onChange={(e) => setNewUserEmail(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
-                />
-              </div>
-
-              <div style={{ marginBottom: "1rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Mật khẩu:</label>
-                <input
-                  type="password"
-                  required
-                  value={newUserPassword}
-                  onChange={(e) => setNewUserPassword(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
-                />
-              </div>
-
-              <div style={{ marginBottom: "1.5rem" }}>
-                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Quyền tài khoản:</label>
-                <select
-                  value={newUserRole}
-                  onChange={(e) => setNewUserRole(e.target.value)}
-                  style={{ width: "100%", padding: "0.5rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
-                >
-                  <option value="FREE">FREE (Miễn phí - Giới hạn 10 câu/chương & 2 quiz)</option>
-                  <option value="VIP">VIP (Toàn quyền 2,900+ câu & không giới hạn)</option>
-                  <option value="ADMIN">ADMIN (Quản trị viên hệ thống)</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                style={{ width: "100%", padding: "0.65rem", backgroundColor: "#10b981", color: "#042f1a", border: "none", borderRadius: "6px", fontWeight: "700", cursor: "pointer" }}
-              >
-                Tạo tài khoản ngay
-              </button>
-            </form>
+      {/* Admin: Modal Add New User (WCAG FocusTrapModal2026) */}
+      <FocusTrapModal2026
+        id="new-user-modal"
+        isOpen={newUserModalOpen}
+        onClose={() => setNewUserModalOpen(false)}
+        title="Thêm người dùng mới vào hệ thống"
+        maxWidth="460px"
+        padding="24px"
+      >
+        <form onSubmit={handleCreateNewUserByAdmin}>
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Họ tên:</label>
+            <input
+              type="text"
+              required
+              value={newUserName}
+              onChange={(e) => setNewUserName(e.target.value)}
+              className="ds-focusable"
+              style={{ width: "100%", padding: "0.5rem", backgroundColor: T.inputBg, border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
+            />
           </div>
-        </div>
-      )}
+
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Email:</label>
+            <input
+              type="email"
+              required
+              value={newUserEmail}
+              onChange={(e) => setNewUserEmail(e.target.value)}
+              className="ds-focusable"
+              style={{ width: "100%", padding: "0.5rem", backgroundColor: T.inputBg, border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Mật khẩu:</label>
+            <input
+              type="password"
+              required
+              value={newUserPassword}
+              onChange={(e) => setNewUserPassword(e.target.value)}
+              className="ds-focusable"
+              style={{ width: "100%", padding: "0.5rem", backgroundColor: T.inputBg, border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.3rem" }}>Quyền tài khoản:</label>
+            <select
+              value={newUserRole}
+              onChange={(e) => setNewUserRole(e.target.value)}
+              className="ds-focusable"
+              style={{ width: "100%", padding: "0.5rem", backgroundColor: T.inputBg, border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text }}
+            >
+              <option value="FREE">FREE (Miễn phí - Giới hạn 10 câu/chương &amp; 2 quiz)</option>
+              <option value="VIP">VIP (Toàn quyền 2,900+ câu &amp; không giới hạn)</option>
+              <option value="ADMIN">ADMIN (Quản trị viên hệ thống)</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="ds-btn ds-focusable"
+            style={{ width: "100%", padding: "0.65rem", backgroundColor: "var(--ds-btn-success)", color: "#ffffff", border: "none", borderRadius: "6px", fontWeight: "700", cursor: "pointer" }}
+          >
+            Tạo tài khoản ngay
+          </button>
+        </form>
+      </FocusTrapModal2026>
 
       {/* ============================================================== */}
       {/* DICTIONARY POPUP (CLICK TRA TỪ NHANH + PHIÊN ÂM IPA + AUDIO)  */}
@@ -2752,35 +2889,36 @@ export default function Home() {
       {dictPopup.open && (
         <div
           id="dict-popup"
+          data-no-dict="true"
           style={{
             position: "fixed",
             left: `${dictPopup.x}px`,
             top: `${dictPopup.y}px`,
             width: "330px",
-            backgroundColor: isLight ? "#ffffff" : "#0f172a",
-            border: isLight ? "1px solid #bae6fd" : "1px solid #38bdf860",
-            boxShadow: isLight ? "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(56, 189, 248, 0.15)" : "0 20px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2)",
+            backgroundColor: "var(--ds-card)",
+            border: "1px solid var(--ds-accent-border)",
+            boxShadow: "var(--ds-shadow-lg)",
             borderRadius: "14px",
-            zIndex: 9999,
+            zIndex: 1300,
             padding: "1rem 1.15rem",
-            color: isLight ? "#0f172a" : "#f8fafc",
+            color: "var(--ds-text)",
             backdropFilter: "blur(12px)",
           }}
         >
           {/* Header: Word + POS Badge + Close */}
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "0.5rem" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem", flexWrap: "wrap" }}>
-              <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "800", color: "#38bdf8", letterSpacing: "-0.01em" }}>
+              <h3 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "800", color: "var(--ds-accent)", letterSpacing: "-0.01em" }}>
                 {dictPopup.word}
               </h3>
               {dictPopup.partOfSpeech && (
                 <span
                   style={{
                     fontSize: "0.68rem",
-                    fontFamily: "Geist Mono",
-                    backgroundColor: isLight ? "#eff6ff" : "#1e293b",
-                    color: isLight ? "#1d4ed8" : "#93c5fd",
-                    border: isLight ? "1px solid #bfdbfe" : "1px solid #334155",
+                    fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                    backgroundColor: "var(--ds-accent-bg)",
+                    color: "var(--ds-accent)",
+                    border: "1px solid var(--ds-accent-border)",
                     padding: "0.1rem 0.45rem",
                     borderRadius: "4px",
                     fontWeight: "700",
@@ -2792,15 +2930,19 @@ export default function Home() {
               )}
             </div>
             <button
+              type="button"
+              aria-label="Đóng cửa sổ tra từ"
               onClick={() => setDictPopup((prev) => ({ ...prev, open: false }))}
+              className="ds-focusable"
               style={{
                 background: "none",
                 border: "none",
-                color: "#94a3b8",
+                color: "var(--ds-text-muted)",
                 fontSize: "1.1rem",
                 cursor: "pointer",
                 padding: "0.1rem 0.3rem",
                 lineHeight: 1,
+                borderRadius: "4px",
               }}
             >
               ✕
@@ -2809,7 +2951,7 @@ export default function Home() {
 
           {/* Content / Loading state */}
           {dictPopup.loading ? (
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "1.25rem 0", color: "#94a3b8", fontSize: "0.85rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "1.25rem 0", color: "var(--ds-text-muted)", fontSize: "0.85rem" }}>
               <span style={{ fontSize: "1.2rem" }}>⏳</span>
               <span>Đang tra cứu từ điển & phiên âm IPA...</span>
             </div>
@@ -2821,32 +2963,34 @@ export default function Home() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  backgroundColor: isLight ? "#f8fafc" : "#020617",
-                  border: isLight ? "1px solid #e2e8f0" : "1px solid #1e293b",
+                  backgroundColor: "var(--ds-card-subtle)",
+                  border: "1px solid var(--ds-border-subtle)",
                   borderRadius: "8px",
                   padding: "0.45rem 0.75rem",
                   marginBottom: "0.75rem",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <span style={{ fontSize: "0.72rem", color: "#64748b", fontWeight: "700" }}>IPA:</span>
-                  <span style={{ fontFamily: "Geist Mono", fontSize: "0.9rem", color: "#38bdf8", fontWeight: "700" }}>
+                  <span style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontWeight: "700" }}>IPA:</span>
+                  <span style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.9rem", color: "var(--ds-accent)", fontWeight: "700" }}>
                     {dictPopup.phonetic || `/${dictPopup.word}/`}
                   </span>
                 </div>
 
                 {/* Audio Speaker Button */}
                 <button
+                  type="button"
                   onClick={() => playWordAudio(dictPopup.word, dictPopup.audioUrl)}
                   disabled={dictPopup.isPlayingAudio}
                   title="Nghe phát âm chuẩn tiếng Anh (Audio API)"
+                  className="ds-focusable"
                   style={{
-                    display: "flex",
+                    display: "inline-flex",
                     alignItems: "center",
                     gap: "0.35rem",
-                    backgroundColor: dictPopup.isPlayingAudio ? "#0284c7" : "#0284c725",
-                    border: "1px solid #0284c770",
-                    color: "#38bdf8",
+                    backgroundColor: dictPopup.isPlayingAudio ? "var(--ds-btn-primary)" : "var(--ds-accent-bg)",
+                    border: "1px solid var(--ds-accent-border)",
+                    color: dictPopup.isPlayingAudio ? "#ffffff" : "var(--ds-accent)",
                     borderRadius: "6px",
                     padding: "0.25rem 0.55rem",
                     fontSize: "0.75rem",
@@ -2854,28 +2998,29 @@ export default function Home() {
                     cursor: "pointer",
                   }}
                 >
-                  <span>{dictPopup.isPlayingAudio ? "🔊 Đang đọc..." : "🔊 Nghe phát âm"}</span>
+                  <KitIcon name="tool-audio" size={14} />
+                  <span>{dictPopup.isPlayingAudio ? "Đang đọc..." : "Nghe phát âm"}</span>
                 </button>
               </div>
 
               {/* Vietnamese Meaning Box */}
               <div
                 style={{
-                  backgroundColor: isLight ? "#f0fdf4" : "#064e3b25",
-                  border: isLight ? "1px solid #bbf7d0" : "1px solid #05966950",
+                  backgroundColor: "var(--ds-success-bg)",
+                  border: "1px solid var(--ds-success-border)",
                   borderRadius: "8px",
                   padding: "0.65rem 0.75rem",
                   marginBottom: "0.75rem",
                 }}
               >
-                <div style={{ fontSize: "0.7rem", color: isLight ? "#15803d" : "#34d399", fontWeight: "700", marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  🇻🇳 Nghĩa tiếng Việt
+                <div style={{ fontSize: "0.7rem", color: "var(--ds-success)", fontWeight: "700", marginBottom: "0.2rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  Nghĩa tiếng Việt
                 </div>
-                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: isLight ? "#14532d" : "#ecfdf5", lineHeight: 1.35 }}>
+                <div style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
                   {dictPopup.vietnamese}
                 </div>
                 {dictPopup.detailedMeanings.length > 0 && dictPopup.detailedMeanings[0].meanings.length > 1 && (
-                  <div style={{ marginTop: "0.35rem", fontSize: "0.75rem", color: isLight ? "#166534" : "#a7f3d0" }}>
+                  <div style={{ marginTop: "0.35rem", fontSize: "0.75rem", color: "var(--ds-text-secondary)" }}>
                     Từ đồng nghĩa: {dictPopup.detailedMeanings[0].meanings.slice(1, 4).join(", ")}
                   </div>
                 )}
@@ -2883,25 +3028,27 @@ export default function Home() {
 
               {/* English Definition (if available) */}
               {dictPopup.englishDefinition && (
-                <div style={{ fontSize: "0.75rem", color: "#94a3b8", lineHeight: 1.4, marginBottom: "0.75rem", fontStyle: "italic", borderLeft: "2px solid #334155", paddingLeft: "0.5rem" }}>
-                  "{dictPopup.englishDefinition}"
+                <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", lineHeight: 1.4, marginBottom: "0.75rem", fontStyle: "italic", borderLeft: "2px solid var(--ds-border)", paddingLeft: "0.5rem" }}>
+                  &ldquo;{dictPopup.englishDefinition}&rdquo;
                 </div>
               )}
 
               {/* Footer Toolbar: Save Vocab + Cambridge Link */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid #1e293b", gap: "0.5rem" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px solid var(--ds-border-subtle)", gap: "0.5rem" }}>
                 {(() => {
                   const isSaved = savedVocab.some((v) => v.word.toLowerCase() === dictPopup.word.toLowerCase());
                   return (
                     <button
+                      type="button"
                       onClick={() => toggleSaveWord(dictPopup)}
+                      className="ds-focusable"
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "0.35rem",
-                        backgroundColor: isSaved ? (isLight ? "#fef3c7" : "#f59e0b25") : (isLight ? "#f1f5f9" : "#1e293b"),
-                        border: isSaved ? (isLight ? "1px solid #fcd34d" : "1px solid #f59e0b70") : (isLight ? "1px solid #cbd5e1" : "1px solid #334155"),
-                        color: isSaved ? (isLight ? "#b45309" : "#fbbf24") : (isLight ? "#334155" : "#cbd5e1"),
+                        backgroundColor: isSaved ? "var(--ds-warning-bg)" : "var(--ds-bg-elevated)",
+                        border: isSaved ? "1px solid var(--ds-warning-border)" : "1px solid var(--ds-border)",
+                        color: isSaved ? "var(--ds-warning)" : "var(--ds-text-secondary)",
                         borderRadius: "6px",
                         padding: "0.3rem 0.6rem",
                         fontSize: "0.75rem",
@@ -2925,12 +3072,12 @@ export default function Home() {
                     alignItems: "center",
                     gap: "0.25rem",
                     fontSize: "0.72rem",
-                    color: "#94a3b8",
+                    color: "var(--ds-text-muted)",
                     textDecoration: "none",
                     padding: "0.3rem 0.5rem",
                     borderRadius: "6px",
-                    backgroundColor: "#020617",
-                    border: "1px solid #1e293b",
+                    backgroundColor: "var(--ds-card-subtle)",
+                    border: "1px solid var(--ds-border-subtle)",
                   }}
                 >
                   <span>Cambridge ↗</span>
@@ -2944,744 +3091,254 @@ export default function Home() {
       {/* ============================================================== */}
       {/* VOCABULARY NOTEBOOK MODAL (SỔ TAY TỪ VỰNG CÁ NHÂN)             */}
       {/* ============================================================== */}
-      {vocabModalOpen && (
-        <div
-          id="vocab-modal"
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            backdropFilter: "blur(6px)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "1rem",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: isLight ? "#ffffff" : "#111827",
-              border: isLight ? "1px solid #e2e8f0" : "1px solid #374151",
-              borderRadius: "14px",
-              width: "100%",
-              maxWidth: "680px",
-              maxHeight: "85vh",
-              display: "flex",
-              flexDirection: "column",
-              boxShadow: isLight ? "0 20px 40px -10px rgba(0, 0, 0, 0.15)" : "0 25px 50px -12px rgba(0, 0, 0, 0.8)",
-              overflow: "hidden",
-            }}
-          >
-            {/* Modal Header */}
-            <div
+      <FocusTrapModal2026
+        id="vocab-modal"
+        isOpen={vocabModalOpen}
+        onClose={() => setVocabModalOpen(false)}
+        maxWidth="680px"
+        padding="20px"
+        headerLeft={
+          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+            <span
               style={{
-                padding: "1.25rem 1.5rem",
-                borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#1f2937"}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                backgroundColor: isLight ? "#f8fafc" : "#0f172a",
+                width: 34,
+                height: 34,
+                borderRadius: "9px",
+                backgroundColor: "var(--ds-accent-bg)",
+                border: "1px solid var(--ds-accent-border)",
+                color: "var(--ds-accent)",
+                display: "grid",
+                placeItems: "center",
+                flexShrink: 0,
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                <span style={{ fontSize: "1.3rem" }}>📚</span>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700", color: isLight ? "#0f172a" : "#f9fafb" }}>
-                    Sổ tay từ vựng của {currentUser.name}
-                  </h3>
-                  <p style={{ margin: 0, fontSize: "0.78rem", color: isLight ? "#64748b" : "#9ca3af" }}>
-                    Lưu trữ các từ đã tra cứu, phiên âm IPA và audio phát âm
+              <KitIcon name="tool-vocab" size={18} />
+            </span>
+            <div>
+              <h3 style={{ margin: 0, fontSize: "1.08rem", fontWeight: 700, color: "var(--ds-text-heading)" }}>
+                Sổ tay từ vựng của {currentUser.name}
+              </h3>
+              <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                Lưu trữ các từ đã tra cứu, phiên âm IPA và audio phát âm
+              </p>
+            </div>
+          </div>
+        }
+      >
+        {/* Filter Search Input */}
+        <div style={{ paddingBottom: "0.85rem", borderBottom: "1px solid var(--ds-border-subtle)", marginBottom: "0.85rem" }}>
+          <input
+            type="text"
+            value={vocabSearchFilter}
+            onChange={(e) => setVocabSearchFilter(e.target.value)}
+            placeholder="Tìm kiếm trong sổ từ vựng..."
+            aria-label="Tìm kiếm trong sổ từ vựng"
+            style={{
+              width: "100%",
+              height: "38px",
+              padding: "0 0.85rem",
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: "1px solid var(--ds-border)",
+              borderRadius: "8px",
+              fontSize: "0.85rem",
+              color: "var(--ds-text)",
+              outline: "none",
+            }}
+          />
+        </div>
+
+        {/* Words List */}
+        <div style={{ maxHeight: "52vh", overflowY: "auto", paddingRight: "0.25rem" }}>
+          {(() => {
+            const filtered = savedVocab.filter(
+              (v) =>
+                v.word.toLowerCase().includes(vocabSearchFilter.toLowerCase()) ||
+                (v.vietnamese && v.vietnamese.toLowerCase().includes(vocabSearchFilter.toLowerCase()))
+            );
+
+            if (filtered.length === 0) {
+              return (
+                <div style={{ textAlign: "center", padding: "2.5rem 1rem", color: "var(--ds-text-muted)" }}>
+                  <div style={{ display: "inline-flex", padding: "0.75rem", borderRadius: "12px", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", marginBottom: "0.75rem" }}>
+                    <KitIcon name="tool-vocab" size={28} />
+                  </div>
+                  <p style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--ds-text-heading)", marginBottom: "0.45rem" }}>
+                    Chưa có từ vựng nào trong sổ
+                  </p>
+                  <p style={{ fontSize: "0.8rem", color: "var(--ds-text-muted)", maxWidth: "380px", margin: "0 auto", lineHeight: 1.5 }}>
+                    Khi học lý thuyết hoặc giải bài tập, bạn chỉ cần click trực tiếp vào bất kỳ từ tiếng Anh nào để tra nghĩa, nghe phát âm và bấm &ldquo;Lưu vào Sổ từ&rdquo;.
                   </p>
                 </div>
-              </div>
-              <button
-                onClick={() => setVocabModalOpen(false)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#9ca3af",
-                  fontSize: "1.25rem",
-                  cursor: "pointer",
-                }}
-              >
-                ✕
-              </button>
-            </div>
+              );
+            }
 
-            {/* Filter Search Input */}
-            <div style={{ padding: "0.75rem 1.5rem", borderBottom: "1px solid #1f2937", backgroundColor: "#111827" }}>
-              <input
-                type="text"
-                value={vocabSearchFilter}
-                onChange={(e) => setVocabSearchFilter(e.target.value)}
-                placeholder="🔍 Tìm kiếm trong sổ từ vựng..."
-                style={{
-                  width: "100%",
-                  height: "36px",
-                  padding: "0 0.85rem",
-                  backgroundColor: "#1f2937",
-                  border: "1px solid #374151",
-                  borderRadius: "8px",
-                  fontSize: "0.85rem",
-                  color: "#f3f4f6",
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            {/* Words List */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "1.25rem 1.5rem" }}>
-              {(() => {
-                const filtered = savedVocab.filter(
-                  (v) =>
-                    v.word.toLowerCase().includes(vocabSearchFilter.toLowerCase()) ||
-                    (v.vietnamese && v.vietnamese.toLowerCase().includes(vocabSearchFilter.toLowerCase()))
-                );
-
-                if (filtered.length === 0) {
-                  return (
-                    <div style={{ textAlign: "center", padding: "3rem 1rem", color: "#6b7280" }}>
-                      <div style={{ fontSize: "2.5rem", marginBottom: "0.75rem" }}>📖</div>
-                      <p style={{ fontSize: "0.95rem", fontWeight: "600", color: "#9ca3af", marginBottom: "0.5rem" }}>
-                        Chưa có từ vựng nào trong sổ
-                      </p>
-                      <p style={{ fontSize: "0.8rem", color: "#6b7280", maxWidth: "380px", margin: "0 auto" }}>
-                        Khi học lý thuyết hoặc giải bài tập, bạn chỉ cần click trực tiếp vào bất kỳ từ tiếng Anh nào để tra nghĩa, nghe phát âm và bấm "Lưu vào Sổ từ".
-                      </p>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                    {filtered.map((item) => (
-                      <div
-                        key={item.id}
-                        style={{
-                          backgroundColor: "#1f2937",
-                          border: "1px solid #374151",
-                          borderRadius: "10px",
-                          padding: "0.85rem 1rem",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          gap: "1rem",
-                        }}
-                      >
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-                          <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-                            <span style={{ fontSize: "1.05rem", fontWeight: "700", color: "#60a5fa" }}>
-                              {item.word}
-                            </span>
-                            <span style={{ fontFamily: "Geist Mono", fontSize: "0.82rem", color: "#38bdf8" }}>
-                              {item.phonetic}
-                            </span>
-                            {item.partOfSpeech && (
-                              <span
-                                style={{
-                                  fontSize: "0.65rem",
-                                  backgroundColor: "#111827",
-                                  border: "1px solid #4b5563",
-                                  color: "#9ca3af",
-                                  padding: "0.05rem 0.35rem",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                {item.partOfSpeech}
-                              </span>
-                            )}
-                          </div>
-                          <div style={{ fontSize: "0.9rem", fontWeight: "600", color: "#34d399" }}>
-                            🇻🇳 {item.vietnamese}
-                          </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                          {/* Audio button */}
-                          <button
-                            onClick={() => playWordAudio(item.word, item.audioUrl)}
-                            title="Nghe phát âm"
-                            style={{
-                              backgroundColor: "#0284c725",
-                              border: "1px solid #0284c770",
-                              color: "#38bdf8",
-                              borderRadius: "6px",
-                              padding: "0.35rem 0.65rem",
-                              fontSize: "0.75rem",
-                              fontWeight: "600",
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "0.3rem",
-                            }}
-                          >
-                            <span>🔊 Nghe</span>
-                          </button>
-
-                          {/* Delete from vocab */}
-                          <button
-                            onClick={() => toggleSaveWord(item)}
-                            title="Xóa khỏi sổ từ vựng"
-                            style={{
-                              backgroundColor: "#374151",
-                              border: "none",
-                              color: "#ef4444",
-                              borderRadius: "6px",
-                              padding: "0.35rem 0.55rem",
-                              fontSize: "0.85rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
-            </div>
-
-            {/* Modal Footer */}
-            <div
-              style={{
-                padding: "0.85rem 1.5rem",
-                borderTop: "1px solid #1f2937",
-                backgroundColor: "#0f172a",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <span style={{ fontSize: "0.78rem", color: "#9ca3af" }}>
-                Tổng cộng: <strong style={{ color: "#f3f4f6" }}>{savedVocab.length}</strong> từ vựng
-              </span>
-              <button
-                onClick={() => setVocabModalOpen(false)}
-                style={{
-                  backgroundColor: "#2563eb",
-                  color: "#ffffff",
-                  border: "none",
-                  borderRadius: "6px",
-                  padding: "0.4rem 1rem",
-                  fontSize: "0.8rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content Layout */}
-      <div className={isLight ? "theme-light" : "theme-dark"} style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: T.bg, color: T.text, transition: "background-color 0.15s ease, color 0.15s ease" }}>
-        
-        {/* Top Navbar */}
-        <header
-          style={{
-            height: "56px",
-            borderBottom: `1px solid ${T.border}`,
-            backgroundColor: T.bg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 1.5rem",
-            position: "sticky",
-            top: 0,
-            zIndex: 40,
-          }}
-        >
-          {/* Logo & Product Name */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "6px",
-                backgroundColor: isLight ? "#2563eb" : "#27272a",
-                border: `1px solid ${isLight ? "#1d4ed8" : "#3f3f46"}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#ffffff",
-                fontSize: "0.85rem",
-                fontWeight: "700",
-                boxShadow: isLight ? "0 2px 6px rgba(37,99,235,0.25)" : "none",
-              }}
-            >
-              G
-            </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-              <span style={{ fontSize: "0.95rem", fontWeight: "700", letterSpacing: "-0.015em", color: T.text }}>
-                Grammar Engine
-              </span>
-              <span
-                style={{
-                  fontSize: "0.68rem",
-                  fontFamily: "Geist Mono",
-                  padding: "0.1rem 0.4rem",
-                  borderRadius: "4px",
-                  backgroundColor: T.bgElevated,
-                  border: `1px solid ${T.border}`,
-                  color: T.textMuted,
-                  fontWeight: "600",
-                }}
-              >
-                v1.4 PRO
-              </span>
-            </div>
-          </div>
-
-          {/* Segmented Mode Navigation (Tabs) */}
-          <nav
-            style={{
-              display: "flex",
-              backgroundColor: T.bgElevated,
-              padding: "3px",
-              borderRadius: "8px",
-              border: `1px solid ${T.border}`,
-              gap: "2px",
-            }}
-          >
-            {/* Tab 0: Duolingo Dashboard */}
-            <button
-              onClick={() => setCurrentView("dashboard")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "dashboard" ? "700" : "500",
-                color: currentView === "dashboard" ? T.text : T.textMuted,
-                backgroundColor: currentView === "dashboard" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "dashboard" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>Lộ trình & Streak</span>
-            </button>
-
-            {/* Tab: Diagnostic & Personalized Roadmap (Milestone 2.8) */}
-            <button
-              onClick={() => setCurrentView("diagnostic")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "diagnostic" ? "700" : "500",
-                color: currentView === "diagnostic" ? (isLight ? "#1d4ed8" : "#93c5fd") : T.textMuted,
-                backgroundColor: currentView === "diagnostic" ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
-                boxShadow: currentView === "diagnostic" && isLight ? "0 1px 3px rgba(37,99,235,0.15)" : "none",
-                border: currentView === "diagnostic" ? `1px solid ${isLight ? "#bfdbfe" : "#3730a3"}` : "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>🎯 Đánh Giá &amp; Lộ Trình</span>
-            </button>
-
-            {/* Tab 1: 12 Chapters Study */}
-            <button
-              onClick={() => setCurrentView("study")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "study" ? "700" : "500",
-                color: currentView === "study" ? T.text : T.textMuted,
-                backgroundColor: currentView === "study" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "study" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>12 Chuyên đề</span>
-            </button>
-
-            {/* Tab 2: Quiz Engine */}
-            <button
-              onClick={() => {
-                setCurrentView("quiz");
-                if (activeQuizQuestions.length === 0) startNewQuiz("ALL");
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "quiz" ? "700" : "500",
-                color: currentView === "quiz" ? T.text : T.textMuted,
-                backgroundColor: currentView === "quiz" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "quiz" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>Quiz Engine (50 câu)</span>
-            </button>
-
-            {/* Tab 3: Sổ tay câu sai */}
-            <button
-              onClick={() => setCurrentView("mistakes")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "mistakes" ? "700" : "500",
-                color: currentView === "mistakes" ? T.text : T.textMuted,
-                backgroundColor: currentView === "mistakes" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "mistakes" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>Sổ tay câu sai</span>
-              {savedMistakes.length > 0 && (
-                <span style={{ backgroundColor: "#f43f5e", color: "#fff", fontSize: "0.68rem", fontWeight: "600", padding: "0.1rem 0.4rem", borderRadius: "999px" }}>
-                  {savedMistakes.length}
-                </span>
-              )}
-            </button>
-
-            {/* Tab 3.5: Thành tích & Xếp hạng (Milestone 2.10) */}
-            <button
-              onClick={() => setCurrentView("gamification")}
-              onMouseEnter={() =>
-                prefetchGamificationData({
-                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
-                  authToken: activeAuthToken,
-                })
-              }
-              onFocus={() =>
-                prefetchGamificationData({
-                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
-                  authToken: activeAuthToken,
-                })
-              }
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.4rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "gamification" ? "700" : "500",
-                color: currentView === "gamification" ? T.text : T.textMuted,
-                backgroundColor: currentView === "gamification" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "gamification" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>🏆 Thành tích</span>
-            </button>
-
-            {/* Tab 3.6: Gói VIP & Lộ trình Chuyên sâu (Milestone 2.12) */}
-            <button
-              onClick={() => setCurrentView("vip")}
-              onMouseEnter={() =>
-                prefetchMonetizationData({
-                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
-                  authToken: activeAuthToken,
-                })
-              }
-              onFocus={() =>
-                prefetchMonetizationData({
-                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
-                  authToken: activeAuthToken,
-                })
-              }
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                padding: "0.4rem 0.85rem",
-                borderRadius: "6px",
-                fontSize: "0.825rem",
-                fontWeight: currentView === "vip" ? "700" : "600",
-                color: currentView === "vip" ? T.text : T.accent,
-                backgroundColor: currentView === "vip" ? (isLight ? "#ffffff" : "#27272a") : "transparent",
-                boxShadow: currentView === "vip" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span>{currentUser.role === "VIP" ? "⭐ VIP" : "💎 Nâng cấp VIP"}</span>
-            </button>
-
-            {/* Tab 4: Admin Panel (Only for authenticated ADMIN users) */}
-            {!currentUser.isGuest && currentUser.role === "ADMIN" && (
-              <button
-                onClick={() => setCurrentView("admin")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.45rem",
-                  padding: "0.4rem 0.85rem",
-                  borderRadius: "6px",
-                  fontSize: "0.825rem",
-                  fontWeight: currentView === "admin" ? "600" : "500",
-                  color: currentView === "admin" ? (isLight ? "#dc2626" : "#f87171") : (isLight ? "#b91c1c" : "#ef4444"),
-                  backgroundColor: currentView === "admin" ? (isLight ? "#fee2e2" : "#27272a") : "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <span>🛡️ Quản trị Admin</span>
-              </button>
-            )}
-          </nav>
-
-          {/* Quick Dictionary & Vocab Tools */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {/* Live Offline-First Multi-Device Sync Indicator (Milestone 2.3) */}
-            <SyncStatusIndicator
-              syncState={syncState}
-              isLight={isLight}
-              onTriggerSync={() => SyncManager.triggerSync()}
-              onPullRemote={() => SyncManager.pullRemoteChanges()}
-            />
-
-            {/* Quick Word Search Box */}
-            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-              <input
-                type="text"
-                value={dictSearchInput}
-                onChange={(e) => setDictSearchInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && dictSearchInput.trim()) {
-                    triggerLookup(dictSearchInput.trim(), null, null);
-                  }
-                }}
-                placeholder="🔍 Tra từ nhanh..."
-                style={{
-                  height: "30px",
-                  padding: "0 0.75rem 0 1.85rem",
-                  backgroundColor: isLight ? "#ffffff" : "#18181b",
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "20px",
-                  fontSize: "0.78rem",
-                  color: T.text,
-                  width: "135px",
-                  outline: "none",
-                  boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
-                }}
-              />
-              <span style={{ position: "absolute", left: "0.6rem", fontSize: "0.75rem", pointerEvents: "none", color: "#a1a1aa" }}>
-                📖
-              </span>
-            </div>
-
-            {/* Click-to-lookup Toggle Pill */}
-            <button
-              onClick={() => setDictEnabled(!dictEnabled)}
-              title={dictEnabled ? "Chế độ click tra từ nhanh đang BẬT. Click để tắt." : "Click để bật chế độ tra từ khi click vào chữ"}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.3rem",
-                backgroundColor: dictEnabled ? (isLight ? "#ecfdf5" : "#064e3b35") : (isLight ? "#ffffff" : "#18181b"),
-                border: dictEnabled ? `1px solid ${isLight ? "#a7f3d0" : "#05966990"}` : `1px solid ${T.border}`,
-                borderRadius: "999px",
-                padding: "0.25rem 0.65rem",
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                color: dictEnabled ? (isLight ? "#047857" : "#34d399") : T.textSecondary,
-                cursor: "pointer",
-              }}
-            >
-              <span>{dictEnabled ? "⚡ Tra từ: BẬT" : "💤 Tra từ: TẮT"}</span>
-            </button>
-
-            {/* White / Dark Mode Switcher */}
-            <button
-              onClick={toggleTheme}
-              title={isLight ? "Chuyển sang giao diện Tối (Dark Mode)" : "Chuyển sang giao diện Sáng (White Mode)"}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                backgroundColor: isLight ? "#ffffff" : "#18181b",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#27272a"}`,
-                boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
-                borderRadius: "999px",
-                padding: "0.25rem 0.75rem",
-                fontSize: "0.75rem",
-                fontWeight: "700",
-                color: isLight ? "#0f172a" : "#f8fafc",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <span>{isLight ? "☀️ Sáng" : "🌙 Tối"}</span>
-            </button>
-
-            {/* Saved Vocab Notebook Pill */}
-            <button
-              onClick={() => setVocabModalOpen(true)}
-              title="Mở Sổ tay từ vựng đã lưu"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.3rem",
-                backgroundColor: savedVocab.length > 0 ? (isLight ? "#fffbeb" : "#451a0335") : (isLight ? "#ffffff" : "#18181b"),
-                border: savedVocab.length > 0 ? `1px solid ${isLight ? "#fde68a" : "#d9770690"}` : `1px solid ${T.border}`,
-                borderRadius: "999px",
-                padding: "0.25rem 0.65rem",
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                color: savedVocab.length > 0 ? (isLight ? "#b45309" : "#fbbf24") : T.textSecondary,
-                cursor: "pointer",
-              }}
-            >
-              <span>⭐ Sổ từ ({savedVocab.length})</span>
-            </button>
-          </div>
-
-          {/* User Profile & Role Badge & Quick Switch */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
-            {/* Streak & XP Pills */}
-            <div
-              onClick={() => setCurrentView("dashboard")}
-              title="Chuỗi ngày học liên tiếp"
-              style={{ display: "flex", alignItems: "center", gap: "0.35rem", backgroundColor: isLight ? "#fffbeb" : "#1c1917", border: `1px solid ${isLight ? "#fde68a" : "#78350f"}`, color: isLight ? "#b45309" : "#f59e0b", padding: "0.25rem 0.65rem", borderRadius: "999px", cursor: "pointer" }}
-            >
-              <span>🔥</span>
-              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: "#f59e0b" }}>{userTracker.streak} ngày</span>
-            </div>
-
-            <div
-              onClick={() => setCurrentView("dashboard")}
-              title="Tổng điểm XP"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                backgroundColor: isLight ? "#eff6ff" : "#141c2b",
-                border: `1px solid ${isLight ? "#bfdbfe" : "#1e3a8a"}`,
-                padding: "0.25rem 0.65rem",
-                borderRadius: "999px",
-                cursor: "pointer",
-              }}
-            >
-              <span>⚡</span>
-              <span style={{ fontSize: "0.8rem", fontWeight: "700", color: isLight ? "#2563eb" : "#60a5fa" }}>{userTracker.xp} XP</span>
-            </div>
-
-            {/* User Account / Sign In / Sign Out Section */}
-            {currentUser.isGuest ? (
-              <button
-                onClick={() => { setAuthTab("login"); setAuthModalOpen(true); }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.45rem",
-                  backgroundColor: "#2563eb",
-                  color: "#ffffff",
-                  border: "none",
-                  padding: "0.4rem 0.95rem",
-                  borderRadius: "8px",
-                  fontSize: "0.825rem",
-                  fontWeight: "700",
-                  cursor: "pointer",
-                  boxShadow: "0 2px 8px rgba(37, 99, 235, 0.35)",
-                }}
-              >
-                <span>🔑</span>
-                <span>Đăng nhập</span>
-              </button>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <div
-                  onClick={() => setAuthModalOpen(true)}
-                  title="Thông tin tài khoản"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    backgroundColor: isLight ? "#ffffff" : "#18181b",
-                    border: `1px solid ${T.border}`,
-                    padding: "0.3rem 0.65rem",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
-                  }}
-                >
+            return (
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                {filtered.map((item) => (
                   <div
+                    key={item.id}
                     style={{
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "50%",
-                      backgroundColor: currentUser.role === "ADMIN" ? "#ef4444" : currentUser.role === "VIP" ? "#f59e0b" : "#3b82f6",
-                      color: "#ffffff",
+                      backgroundColor: "var(--ds-card-subtle)",
+                      border: "1px solid var(--ds-border)",
+                      borderRadius: "10px",
+                      padding: "0.85rem 1rem",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.75rem",
-                      fontWeight: "800",
+                      justifyContent: "space-between",
+                      gap: "1rem",
+                      flexWrap: "wrap",
                     }}
                   >
-                    {currentUser.name.charAt(0)}
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "0.78rem", fontWeight: "600", color: T.text, maxWidth: "110px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {currentUser.name}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "0.65rem",
-                        fontFamily: "Geist Mono",
-                        color: currentUser.role === "ADMIN" ? (isLight ? "#dc2626" : "#f87171") : currentUser.role === "VIP" ? (isLight ? "#d97706" : "#fbbf24") : (isLight ? "#475569" : "#94a3b8"),
-                        fontWeight: "700",
-                      }}
-                    >
-                      {currentUser.role === "ADMIN" ? "🛡️ ADMIN" : currentUser.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
-                    </span>
-                  </div>
-                </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem", flexWrap: "wrap" }}>
+                        <span style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--ds-accent)" }}>
+                          {item.word}
+                        </span>
+                        <span style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.82rem", color: "var(--ds-cyan)" }}>
+                          {item.phonetic}
+                        </span>
+                        {item.partOfSpeech && (
+                          <span
+                            style={{
+                              fontSize: "0.65rem",
+                              backgroundColor: "var(--ds-bg-elevated)",
+                              border: "1px solid var(--ds-border)",
+                              color: "var(--ds-text-muted)",
+                              padding: "0.05rem 0.35rem",
+                              borderRadius: "4px",
+                            }}
+                          >
+                            {item.partOfSpeech}
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--ds-success)" }}>
+                        {item.vietnamese}
+                      </div>
+                    </div>
 
-                <button
-                  onClick={handleLogout}
-                  title="Đăng xuất tài khoản"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
-                    backgroundColor: isLight ? "#fef2f2" : "#18181b",
-                    border: `1px solid ${isLight ? "#fecaca" : "#3f3f46"}`,
-                    color: isLight ? "#dc2626" : "#f87171",
-                    padding: "0.38rem 0.65rem",
-                    borderRadius: "8px",
-                    fontSize: "0.75rem",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span>🚪</span>
-                  <span>Đăng xuất</span>
-                </button>
+                    {/* Actions */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <button
+                        type="button"
+                        onClick={() => playWordAudio(item.word, item.audioUrl)}
+                        title="Nghe phát âm"
+                        className="ds-focusable"
+                        style={{
+                          backgroundColor: "var(--ds-accent-bg)",
+                          border: "1px solid var(--ds-accent-border)",
+                          color: "var(--ds-accent)",
+                          borderRadius: "6px",
+                          padding: "0.35rem 0.65rem",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
+                        }}
+                      >
+                        <KitIcon name="tool-audio" size={14} />
+                        <span>Nghe</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleSaveWord(item)}
+                        title="Xóa khỏi sổ từ vựng"
+                        aria-label={`Xóa từ ${item.word}`}
+                        className="ds-focusable"
+                        style={{
+                          backgroundColor: "var(--ds-danger-bg)",
+                          border: "1px solid var(--ds-danger-border)",
+                          color: "var(--ds-danger)",
+                          borderRadius: "6px",
+                          padding: "0.35rem 0.6rem",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                        }}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
-        </header>
+            );
+          })()}
+        </div>
+
+        {/* Modal Footer */}
+        <div
+          style={{
+            marginTop: "1rem",
+            paddingTop: "0.85rem",
+            borderTop: "1px solid var(--ds-border-subtle)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ fontSize: "0.8rem", color: "var(--ds-text-muted)" }}>
+            Tổng cộng: <strong style={{ color: "var(--ds-text-heading)" }}>{savedVocab.length}</strong> từ vựng
+          </span>
+          <button
+            type="button"
+            onClick={() => setVocabModalOpen(false)}
+            className="ds-focusable"
+            style={{
+              backgroundColor: "var(--ds-btn-primary)",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "8px",
+              padding: "0.45rem 1.1rem",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Đóng
+          </button>
+        </div>
+      </FocusTrapModal2026>
+
+      {/* Main Content Layout (2026 Responsive 5-Hub Shell) */}
+      <AppShell2026
+        activeView={currentView}
+        onSelectView={setCurrentView}
+        currentUser={currentUser}
+        userTracker={userTracker}
+        savedMistakesCount={savedMistakes.length}
+        savedVocabCount={savedVocab.length}
+        syncState={syncState}
+        onTriggerSync={() => SyncManager.triggerSync()}
+        onPullRemote={() => SyncManager.pullRemoteChanges()}
+        dictSearchInput={dictSearchInput}
+        onDictSearchChange={setDictSearchInput}
+        onDictSearchSubmit={(val) => triggerLookup(val, null, null)}
+        dictEnabled={dictEnabled}
+        onToggleDict={() => setDictEnabled(!dictEnabled)}
+        isLight={isLight}
+        onToggleTheme={toggleTheme}
+        onOpenVocabModal={() => setVocabModalOpen(true)}
+        onOpenAuthModal={() => {
+          setAuthTab("login");
+          setAuthModalOpen(true);
+        }}
+        onPrefetchView={(hubId) => {
+          const uid = !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null;
+          if (hubId === "gamification") prefetchGamificationData({ userId: uid, authToken: activeAuthToken });
+          if (hubId === "vip") prefetchMonetizationData({ userId: uid, authToken: activeAuthToken });
+        }}
+        onStartQuizIfEmpty={() => {
+          if (activeQuizQuestions.length === 0) startNewQuiz("ALL");
+        }}
+        currentChapterTitle={`Chương ${String(selectedChapter?.number || 1).padStart(2, "0")}: ${selectedChapter?.title_vi || ""}`}
+        sidebarCollapsed={sidebarCollapsed}
+        onToggleSidebarCollapse={() => setSidebarCollapsed((p) => !p)}
+        sidebarContent={currentView === "study" ? chapterSidebarContent : null}
+      >
 
         {/* ============================================================== */}
         {/* VIEW 4: ADMIN MANAGEMENT PANEL (QUẢN TRỊ VIÊN HỆ THỐNG)        */}
@@ -3694,7 +3351,7 @@ export default function Home() {
               <div
                 style={{
                   backgroundColor: T.card,
-                  border: `1px solid ${isLight ? "#fca5a5" : "#ef444450"}`,
+                  border: `1px solid ${"var(--ds-danger-border)"}`,
                   borderRadius: "12px",
                   padding: "1.5rem 1.75rem",
                   marginBottom: "1.5rem",
@@ -3716,9 +3373,9 @@ export default function Home() {
                       style={{
                         fontSize: "0.72rem",
                         fontFamily: "Geist Mono",
-                        backgroundColor: isLight ? "#ecfdf5" : "#064e3b40",
-                        color: isLight ? "#047857" : "#34d399",
-                        border: `1px solid ${isLight ? "#a7f3d0" : "#05966960"}`,
+                        backgroundColor: "var(--ds-success-bg)",
+                        color: "var(--ds-success)",
+                        border: `1px solid ${"var(--ds-success-border)"}`,
                         padding: "0.2rem 0.55rem",
                         borderRadius: "999px",
                         fontWeight: "700",
@@ -3727,7 +3384,7 @@ export default function Home() {
                         gap: "0.3rem",
                       }}
                     >
-                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#10b981" }} />
+                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--ds-success)" }} />
                       Supabase Postgres 17 Live
                     </span>
                   </div>
@@ -3742,7 +3399,7 @@ export default function Home() {
                     title="Làm mới dữ liệu từ Supabase Cloud"
                     style={{
                       padding: "0.55rem 0.95rem",
-                      backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                      backgroundColor: "var(--ds-bg-elevated)",
                       color: T.text,
                       border: `1px solid ${T.border}`,
                       borderRadius: "6px",
@@ -3761,8 +3418,8 @@ export default function Home() {
                     onClick={() => setNewUserModalOpen(true)}
                     style={{
                       padding: "0.55rem 1.15rem",
-                      backgroundColor: "#10b981",
-                      color: "#042f1a",
+                      backgroundColor: "var(--ds-btn-success)",
+                      color: "#ffffff",
                       border: "none",
                       borderRadius: "6px",
                       fontWeight: "700",
@@ -3805,11 +3462,11 @@ export default function Home() {
                     {adminStats.total}
                   </div>
                   <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem", display: "flex", gap: "0.4rem" }}>
-                    <span style={{ color: "#3b82f6", fontWeight: "700" }}>{adminStats.freeCount} Free</span>
+                    <span style={{ color: "var(--ds-accent)", fontWeight: "700" }}>{adminStats.freeCount} Free</span>
                     <span>•</span>
-                    <span style={{ color: "#f59e0b", fontWeight: "700" }}>{adminStats.vipCount} VIP</span>
+                    <span style={{ color: "var(--ds-warning)", fontWeight: "700" }}>{adminStats.vipCount} VIP</span>
                     <span>•</span>
-                    <span style={{ color: "#ef4444", fontWeight: "700" }}>{adminStats.adminCount} Admin</span>
+                    <span style={{ color: "var(--ds-danger)", fontWeight: "700" }}>{adminStats.adminCount} Admin</span>
                   </div>
                 </div>
 
@@ -3829,7 +3486,7 @@ export default function Home() {
                     </span>
                     <span style={{ fontSize: "1.2rem" }}>🔥</span>
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "#10b981" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "var(--ds-success)" }}>
                     {adminStats.activeCount}
                   </div>
                   <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
@@ -3853,7 +3510,7 @@ export default function Home() {
                     </span>
                     <span style={{ fontSize: "1.2rem" }}>⚡</span>
                   </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "#f59e0b" }}>
+                  <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "var(--ds-warning)" }}>
                     {adminStats.totalXp.toLocaleString()} XP
                   </div>
                   <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
@@ -3877,7 +3534,7 @@ export default function Home() {
                     </span>
                     <span style={{ fontSize: "1.2rem" }}>🔒</span>
                   </div>
-                  <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "#3b82f6", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                  <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--ds-accent)", display: "flex", alignItems: "center", gap: "0.3rem" }}>
                     RLS Active 100%
                   </div>
                   <div style={{ fontSize: "0.75rem", color: T.textSecondary, marginTop: "0.35rem" }}>
@@ -3915,10 +3572,10 @@ export default function Home() {
                       }}
                       style={{
                         padding: "0.6rem 1.1rem",
-                        backgroundColor: isActive ? (isLight ? "#ffffff" : "#27272a") : "transparent",
+                        backgroundColor: isActive ? ("var(--ds-card)") : "transparent",
                         border: isActive ? `1px solid ${T.border}` : "1px solid transparent",
                         borderRadius: "8px",
-                        color: isActive ? (isLight ? "#0f172a" : "#ffffff") : T.textMuted,
+                        color: isActive ? "var(--ds-text-heading)" : "var(--ds-text-muted)",
                         fontWeight: isActive ? "700" : "500",
                         fontSize: "0.85rem",
                         cursor: "pointer",
@@ -3983,7 +3640,7 @@ export default function Home() {
                         style={{
                           width: "100%",
                           padding: "0.55rem 0.75rem 0.55rem 2.2rem",
-                          backgroundColor: isLight ? "#ffffff" : "#18181b",
+                          backgroundColor: "var(--ds-card)",
                           border: `1px solid ${T.border}`,
                           borderRadius: "6px",
                           color: T.text,
@@ -4025,9 +3682,9 @@ export default function Home() {
                               fontSize: "0.72rem",
                               fontWeight: adminRoleFilter === r ? "700" : "500",
                               borderRadius: "4px",
-                              backgroundColor: adminRoleFilter === r ? (isLight ? "#eff6ff" : "#1e3a8a40") : (isLight ? "#f1f5f9" : "#18181b"),
-                              color: adminRoleFilter === r ? (isLight ? "#1d4ed8" : "#60a5fa") : T.textMuted,
-                              border: `1px solid ${adminRoleFilter === r ? (isLight ? "#bfdbfe" : "#3b82f680") : T.border}`,
+                              backgroundColor: adminRoleFilter === r ? ("var(--ds-accent-bg)") : ("var(--ds-bg-elevated)"),
+                              color: adminRoleFilter === r ? ("var(--ds-accent)") : T.textMuted,
+                              border: `1px solid ${adminRoleFilter === r ? ("var(--ds-accent-border)") : T.border}`,
                               cursor: "pointer",
                             }}
                           >
@@ -4048,9 +3705,9 @@ export default function Home() {
                               fontSize: "0.72rem",
                               fontWeight: adminStatusFilter === s ? "700" : "500",
                               borderRadius: "4px",
-                              backgroundColor: adminStatusFilter === s ? (isLight ? "#ecfdf5" : "#064e3b40") : (isLight ? "#f1f5f9" : "#18181b"),
-                              color: adminStatusFilter === s ? (isLight ? "#047857" : "#34d399") : T.textMuted,
-                              border: `1px solid ${adminStatusFilter === s ? (isLight ? "#a7f3d0" : "#05966980") : T.border}`,
+                              backgroundColor: adminStatusFilter === s ? ("var(--ds-success-bg)") : ("var(--ds-bg-elevated)"),
+                              color: adminStatusFilter === s ? ("var(--ds-success)") : T.textMuted,
+                              border: `1px solid ${adminStatusFilter === s ? ("var(--ds-success-border)") : T.border}`,
                               cursor: "pointer",
                             }}
                           >
@@ -4126,7 +3783,7 @@ export default function Home() {
                                   <div style={{ fontWeight: "700", color: T.text, display: "flex", alignItems: "center", gap: "0.4rem" }}>
                                     {u.name}
                                     {isCurrent && (
-                                      <span style={{ fontSize: "0.68rem", backgroundColor: isLight ? "#eff6ff" : "#1e293b", padding: "0.1rem 0.35rem", borderRadius: "3px", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
+                                      <span style={{ fontSize: "0.68rem", backgroundColor: "var(--ds-accent-bg)", padding: "0.1rem 0.35rem", borderRadius: "3px", color: "var(--ds-accent)", fontWeight: "700" }}>
                                         (Bạn)
                                       </span>
                                     )}
@@ -4143,17 +3800,17 @@ export default function Home() {
                                       padding: "0.2rem 0.55rem",
                                       borderRadius: "4px",
                                       backgroundColor:
-                                        u.role === "ADMIN" ? (isLight ? "#fef2f2" : "#ef444420")
-                                        : u.role === "VIP" ? (isLight ? "#fffbeb" : "#f59e0b20")
-                                        : (isLight ? "#eff6ff" : "#3b82f620"),
+                                        u.role === "ADMIN" ? ("var(--ds-danger-bg)")
+                                        : u.role === "VIP" ? ("var(--ds-warning-bg)")
+                                        : ("var(--ds-accent-bg)"),
                                       color:
-                                        u.role === "ADMIN" ? (isLight ? "#dc2626" : "#f87171")
-                                        : u.role === "VIP" ? (isLight ? "#b45309" : "#fbbf24")
-                                        : (isLight ? "#1d4ed8" : "#60a5fa"),
+                                        u.role === "ADMIN" ? ("var(--ds-danger)")
+                                        : u.role === "VIP" ? ("var(--ds-warning)")
+                                        : ("var(--ds-accent)"),
                                       border: `1px solid ${
-                                        u.role === "ADMIN" ? (isLight ? "#fecaca" : "#ef444450")
-                                        : u.role === "VIP" ? (isLight ? "#fde68a" : "#f59e0b50")
-                                        : (isLight ? "#bfdbfe" : "#3b82f650")
+                                        u.role === "ADMIN" ? ("var(--ds-danger-border)")
+                                        : u.role === "VIP" ? ("var(--ds-warning-border)")
+                                        : ("var(--ds-accent-border)")
                                       }`,
                                     }}
                                   >
@@ -4164,10 +3821,10 @@ export default function Home() {
                                 <td style={{ padding: "0.85rem 0.5rem" }}>
                                   <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
                                     <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                                      <span style={{ fontSize: "0.75rem", color: isLight ? "#b45309" : "#f59e0b", fontWeight: "700" }}>
+                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)", fontWeight: "700" }}>
                                         🔥 {u.tracker?.streak || 1} ngày
                                       </span>
-                                      <span style={{ fontSize: "0.75rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
+                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-accent)", fontWeight: "700" }}>
                                         ⚡ {u.tracker?.xp || 0} XP
                                       </span>
                                     </div>
@@ -4181,7 +3838,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.75rem",
-                                      color: u.status === "ACTIVE" ? (isLight ? "#047857" : "#34d399") : (isLight ? "#dc2626" : "#fb7185"),
+                                      color: u.status === "ACTIVE" ? ("var(--ds-success)") : ("var(--ds-danger)"),
                                       fontWeight: "700",
                                     }}
                                   >
@@ -4200,9 +3857,9 @@ export default function Home() {
                                         onClick={() => handleUpdateUserRole(u.id, "VIP")}
                                         style={{
                                           padding: "0.3rem 0.65rem",
-                                          backgroundColor: isLight ? "#fffbeb" : "#f59e0b20",
-                                          border: `1px solid ${isLight ? "#fde68a" : "#f59e0b"}`,
-                                          color: isLight ? "#b45309" : "#fbbf24",
+                                          backgroundColor: "var(--ds-warning-bg)",
+                                          border: `1px solid ${"var(--ds-warning-border)"}`,
+                                          color: "var(--ds-warning)",
                                           borderRadius: "4px",
                                           fontSize: "0.75rem",
                                           fontWeight: "700",
@@ -4218,7 +3875,7 @@ export default function Home() {
                                         onClick={() => handleUpdateUserRole(u.id, "FREE")}
                                         style={{
                                           padding: "0.3rem 0.65rem",
-                                          backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                                          backgroundColor: "var(--ds-bg-elevated)",
                                           border: `1px solid ${T.border}`,
                                           color: T.textSecondary,
                                           borderRadius: "4px",
@@ -4236,9 +3893,9 @@ export default function Home() {
                                         onClick={() => handleToggleUserStatus(u.id)}
                                         style={{
                                           padding: "0.3rem 0.65rem",
-                                          backgroundColor: u.status === "ACTIVE" ? (isLight ? "#fef2f2" : "#ef444415") : (isLight ? "#ecfdf5" : "#10b98115"),
-                                          border: `1px solid ${u.status === "ACTIVE" ? (isLight ? "#fecaca" : "#ef4444") : (isLight ? "#a7f3d0" : "#10b981")}`,
-                                          color: u.status === "ACTIVE" ? (isLight ? "#dc2626" : "#f87171") : (isLight ? "#047857" : "#34d399"),
+                                          backgroundColor: u.status === "ACTIVE" ? ("var(--ds-danger-bg)") : ("var(--ds-success-bg)"),
+                                          border: `1px solid ${u.status === "ACTIVE" ? ("var(--ds-danger-border)") : ("var(--ds-success-border)")}`,
+                                          color: u.status === "ACTIVE" ? ("var(--ds-danger)") : ("var(--ds-success)"),
                                           borderRadius: "4px",
                                           fontSize: "0.75rem",
                                           fontWeight: "700",
@@ -4291,7 +3948,7 @@ export default function Home() {
                         max="100"
                         value={adminPolicyForm.freeExerciseLimit}
                         onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeExerciseLimit: parseInt(e.target.value) || 10 })}
-                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: "var(--ds-card)", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
                       />
                       <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 10 câu (Câu thứ 11 sẽ bị khóa VIP)</div>
                     </div>
@@ -4306,7 +3963,7 @@ export default function Home() {
                         max="20"
                         value={adminPolicyForm.freeDailyQuizLimit}
                         onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, freeDailyQuizLimit: parseInt(e.target.value) || 2 })}
-                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: "var(--ds-card)", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "180px", fontSize: "0.9rem" }}
                       />
                       <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 2 đề Quiz 50 câu / ngày</div>
                     </div>
@@ -4321,7 +3978,7 @@ export default function Home() {
                         max="30"
                         value={adminPolicyForm.diagnosticCooldownDays ?? 7}
                         onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, diagnosticCooldownDays: parseInt(e.target.value) || 0 })}
-                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: "var(--ds-card)", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
                       />
                       <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 7 ngày / lần</div>
                     </div>
@@ -4336,7 +3993,7 @@ export default function Home() {
                         max="200"
                         value={adminPolicyForm.offlineSyncMaxBatch ?? 50}
                         onChange={(e) => setAdminPolicyForm({ ...adminPolicyForm, offlineSyncMaxBatch: parseInt(e.target.value) || 50 })}
-                        style={{ padding: "0.55rem 0.85rem", backgroundColor: isLight ? "#ffffff" : "#18181b", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
+                        style={{ padding: "0.55rem 0.85rem", backgroundColor: "var(--ds-card)", border: `1px solid ${T.border}`, borderRadius: "6px", color: T.text, width: "150px", fontSize: "0.9rem" }}
                       />
                       <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>Mặc định: 50 sự kiện/lần</div>
                     </div>
@@ -4345,8 +4002,8 @@ export default function Home() {
                       type="submit"
                       style={{
                         padding: "0.6rem 1.6rem",
-                        backgroundColor: "#2563eb",
-                        color: "#fff",
+                        backgroundColor: "var(--ds-btn-primary)",
+                        color: "#ffffff",
                         border: "none",
                         borderRadius: "6px",
                         fontWeight: "700",
@@ -4414,7 +4071,7 @@ export default function Home() {
                         onChange={(e) => setAuditActionFilter(e.target.value)}
                         style={{
                           padding: "0.35rem 0.65rem",
-                          backgroundColor: isLight ? "#ffffff" : "#18181b",
+                          backgroundColor: "var(--ds-card)",
                           border: `1px solid ${T.border}`,
                           color: T.text,
                           borderRadius: "6px",
@@ -4435,7 +4092,7 @@ export default function Home() {
                         disabled={isLoadingAudit}
                         style={{
                           padding: "0.35rem 0.75rem",
-                          backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                          backgroundColor: "var(--ds-bg-elevated)",
                           border: `1px solid ${T.border}`,
                           color: T.text,
                           borderRadius: "6px",
@@ -4486,20 +4143,20 @@ export default function Home() {
                                       padding: "0.15rem 0.5rem",
                                       borderRadius: "4px",
                                       backgroundColor:
-                                        log.action_type === "BAN_USER" ? (isLight ? "#fef2f2" : "#ef444420")
-                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#ecfdf5" : "#10b98120")
-                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#eff6ff" : "#3b82f620")
-                                        : (isLight ? "#fffbeb" : "#f59e0b20"),
+                                        log.action_type === "BAN_USER" ? ("var(--ds-danger-bg)")
+                                        : log.action_type === "UNBAN_USER" ? ("var(--ds-success-bg)")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? ("var(--ds-accent-bg)")
+                                        : ("var(--ds-warning-bg)"),
                                       color:
-                                        log.action_type === "BAN_USER" ? (isLight ? "#dc2626" : "#f87171")
-                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#047857" : "#34d399")
-                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#1d4ed8" : "#60a5fa")
-                                        : (isLight ? "#b45309" : "#fbbf24"),
+                                        log.action_type === "BAN_USER" ? ("var(--ds-danger)")
+                                        : log.action_type === "UNBAN_USER" ? ("var(--ds-success)")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? ("var(--ds-accent)")
+                                        : ("var(--ds-warning)"),
                                       border: `1px solid ${
-                                        log.action_type === "BAN_USER" ? (isLight ? "#fecaca" : "#ef444460")
-                                        : log.action_type === "UNBAN_USER" ? (isLight ? "#a7f3d0" : "#10b98160")
-                                        : log.action_type === "UPDATE_USER_ROLE" ? (isLight ? "#bfdbfe" : "#3b82f660")
-                                        : (isLight ? "#fde68a" : "#f59e0b60")
+                                        log.action_type === "BAN_USER" ? ("var(--ds-danger-border)")
+                                        : log.action_type === "UNBAN_USER" ? ("var(--ds-success-border)")
+                                        : log.action_type === "UPDATE_USER_ROLE" ? ("var(--ds-accent-border)")
+                                        : ("var(--ds-warning-border)")
                                       }`,
                                     }}
                                   >
@@ -4512,13 +4169,13 @@ export default function Home() {
                                 <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted }}>
                                   <div style={{ maxWidth: "340px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                     {log.before_state && (
-                                      <span style={{ textDecoration: "line-through", marginRight: "0.4rem", color: isLight ? "#dc2626" : "#f87171" }}>
+                                      <span style={{ textDecoration: "line-through", marginRight: "0.4rem", color: "var(--ds-danger)" }}>
                                         {JSON.stringify(log.before_state)}
                                       </span>
                                     )}
                                     <span>→</span>
                                     {log.after_state && (
-                                      <span style={{ marginLeft: "0.4rem", color: isLight ? "#047857" : "#34d399" }}>
+                                      <span style={{ marginLeft: "0.4rem", color: "var(--ds-success)" }}>
                                         {JSON.stringify(log.after_state)}
                                       </span>
                                     )}
@@ -4558,7 +4215,7 @@ export default function Home() {
                       onClick={refreshAdminFromSupabase}
                       style={{
                         padding: "0.3rem 0.65rem",
-                        backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                        backgroundColor: "var(--ds-bg-elevated)",
                         border: `1px solid ${T.border}`,
                         color: T.textSecondary,
                         borderRadius: "6px",
@@ -4605,17 +4262,17 @@ export default function Home() {
                                       padding: "0.15rem 0.5rem",
                                       borderRadius: "4px",
                                       backgroundColor:
-                                        log.action_type === "LOGIN" ? (isLight ? "#ecfdf5" : "#10b98120")
-                                        : log.action_type === "LOGOUT" ? (isLight ? "#fef2f2" : "#ef444420")
-                                        : log.action_type === "SUBMIT_QUIZ" ? (isLight ? "#fffbeb" : "#f59e0b20")
-                                        : log.action_type === "STUDY_LESSON" ? (isLight ? "#eff6ff" : "#3b82f620")
-                                        : (isLight ? "#faf5ff" : "#8b5cf620"),
+                                        log.action_type === "LOGIN" ? ("var(--ds-success-bg)")
+                                        : log.action_type === "LOGOUT" ? ("var(--ds-danger-bg)")
+                                        : log.action_type === "SUBMIT_QUIZ" ? ("var(--ds-warning-bg)")
+                                        : log.action_type === "STUDY_LESSON" ? ("var(--ds-accent-bg)")
+                                        : ("var(--ds-purple-bg)"),
                                       color:
-                                        log.action_type === "LOGIN" ? (isLight ? "#047857" : "#34d399")
-                                        : log.action_type === "LOGOUT" ? (isLight ? "#dc2626" : "#f87171")
-                                        : log.action_type === "SUBMIT_QUIZ" ? (isLight ? "#b45309" : "#fbbf24")
-                                        : log.action_type === "STUDY_LESSON" ? (isLight ? "#1d4ed8" : "#60a5fa")
-                                        : (isLight ? "#7e22ce" : "#a78bfa"),
+                                        log.action_type === "LOGIN" ? ("var(--ds-success)")
+                                        : log.action_type === "LOGOUT" ? ("var(--ds-danger)")
+                                        : log.action_type === "SUBMIT_QUIZ" ? ("var(--ds-warning)")
+                                        : log.action_type === "STUDY_LESSON" ? ("var(--ds-accent)")
+                                        : ("var(--ds-purple)"),
                                     }}
                                   >
                                     {log.action_type}
@@ -4752,417 +4409,484 @@ export default function Home() {
               
               {/* Hero Banner: Streak & Rank */}
               <div
+                className="ge-hero-banner-card"
                 style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "12px",
-                  padding: "1.75rem 2rem",
-                  marginBottom: "1.75rem",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "1.5rem",
-                  background: isLight ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)" : "linear-gradient(135deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.95) 100%)",
-                  boxShadow: T.shadow,
+                  padding: "1.65rem 1.85rem",
+                  marginBottom: "1.25rem",
                 }}
               >
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
-                    <span style={{ fontSize: "1.6rem" }}>🔥</span>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "800", color: T.text, margin: 0 }}>
-                      Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
-                    </h1>
-                  </div>
-                  <p style={{ fontSize: "0.9rem", color: T.textMuted, margin: "0 0 1rem 0" }}>
-                    Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
-                  </p>
+                <img
+                  src={BANNER_PATHS.dashboard}
+                  alt=""
+                  aria-hidden="true"
+                  className="ge-hero-banner-bg"
+                />
+                <div className="ge-hero-banner-scrim" />
+                <div
+                  className="ge-hero-banner-content"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "1.5rem",
+                  }}
+                >
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
+                      <span style={{ fontSize: "1.6rem" }} aria-hidden="true">🔥</span>
+                      <h1 style={{ fontSize: "1.45rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
+                        Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
+                      </h1>
+                    </div>
+                    <p style={{ fontSize: "0.9rem", color: "var(--ds-text-muted)", margin: "0 0 1rem 0", maxWidth: "560px" }}>
+                      Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
+                    </p>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-                    <span
-                      style={{
-                        backgroundColor: T.bgElevated,
-                        border: `1px solid ${T.border}`,
-                        color: T.text,
-                        fontSize: "0.78rem",
-                        padding: "0.25rem 0.65rem",
-                        borderRadius: "6px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {userRank.badge} • Cấp {userRank.level} ({userRank.title})
-                    </span>
-
-                    <span style={{ fontSize: "0.78rem", color: "#71717a" }}>
-                      Mục tiêu cấp tiếp theo: <strong style={{ color: "#60a5fa" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
-                    </span>
-
-                    {currentUser.role === "FREE" && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
                       <span
-                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
                         style={{
-                          fontSize: "0.75rem",
-                          color: "#fbbf24",
-                          backgroundColor: "#f59e0b15",
-                          border: "1px solid #f59e0b40",
-                          padding: "0.2rem 0.5rem",
-                          borderRadius: "4px",
-                          cursor: "pointer",
+                          backgroundColor: "var(--ds-bg-elevated)",
+                          border: "1px solid var(--ds-border)",
+                          color: "var(--ds-text)",
+                          fontSize: "0.78rem",
+                          padding: "0.25rem 0.65rem",
+                          borderRadius: "6px",
                           fontWeight: "600",
                         }}
                       >
-                        ⚡ Nâng cấp VIP để mở khóa không giới hạn
+                        {userRank.badge} • Cấp {userRank.level} ({userRank.title})
                       </span>
-                    )}
-                  </div>
-                </div>
 
-                {/* 7-Day Mini Calendar */}
-                <div
-                  style={{
-                    backgroundColor: isLight ? "#ffffff" : "#18181b",
-                    border: `1px solid ${T.border}`,
-                    padding: "1rem 1.25rem",
-                    borderRadius: "10px",
-                    boxShadow: isLight ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
-                  }}
-                >
-                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
-                    LỊCH HOẠT ĐỘNG 7 NGÀY
-                  </div>
-                  <div style={{ display: "flex", gap: "0.6rem" }}>
-                    {last7Days.map((d, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          gap: "0.35rem",
-                        }}
-                      >
-                        <span style={{ fontSize: "0.68rem", color: d.isToday ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#64748b" : "#71717a"), fontWeight: d.isToday ? "700" : "500" }}>
-                          {d.dayName}
-                        </span>
-                        <div
+                      <span style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                        Mục tiêu cấp tiếp theo: <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
+                      </span>
+
+                      {currentUser.role === "FREE" && (
+                        <button
+                          type="button"
+                          onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
+                          className="ds-focusable"
                           style={{
-                            width: "32px",
-                            height: "32px",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backgroundColor: d.isActive ? "#f59e0b" : (isLight ? "#f1f5f9" : "#27272a"),
-                            color: d.isActive ? "#09090b" : (isLight ? "#475569" : "#71717a"),
-                            fontSize: "0.85rem",
-                            fontWeight: "700",
-                            border: d.isToday ? "2px solid #38bdf8" : "none",
+                            fontSize: "0.75rem",
+                            color: "var(--ds-warning)",
+                            backgroundColor: "var(--ds-warning-bg)",
+                            border: "1px solid var(--ds-warning-border)",
+                            padding: "0.24rem 0.55rem",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontWeight: "600",
                           }}
                         >
-                          {d.isActive ? "🔥" : d.dayNum}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* MILESTONE 2.8: DIAGNOSTIC PLACEMENT ASSESSMENT HERO CALLOUT */}
-              <div
-                style={{
-                  background: isLight
-                    ? "linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%)"
-                    : "linear-gradient(135deg, #1e1b4b 0%, #064e3b 100%)",
-                  border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f6"}`,
-                  borderRadius: "12px",
-                  padding: "1.5rem 1.75rem",
-                  marginBottom: "1.75rem",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "1.25rem",
-                  boxShadow: isLight ? "0 4px 15px rgba(37, 99, 235, 0.08)" : T.shadow,
-                }}
-              >
-                <div style={{ flex: "1 1 500px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem" }}>
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        padding: "0.2rem 0.6rem",
-                        borderRadius: "9999px",
-                        backgroundColor: isLight ? "#dbeafe" : "#312e81",
-                        color: isLight ? "#1d4ed8" : "#93c5fd",
-                      }}
-                    >
-                      🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
-                    </span>
-                    <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
-                      30 câu trắc nghiệm • 15-20 phút
-                    </span>
-                  </div>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: T.text, margin: "0 0 0.35rem 0" }}>
-                    Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
-                  </h3>
-                  <p style={{ fontSize: "0.85rem", color: T.textSecondary, margin: 0, lineHeight: 1.45 }}>
-                    Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => setCurrentView("diagnostic")}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    padding: "0.75rem 1.5rem",
-                    borderRadius: "0.6rem",
-                    backgroundColor: T.accent,
-                    color: "#ffffff",
-                    fontSize: "0.9rem",
-                    fontWeight: 700,
-                    border: "none",
-                    cursor: "pointer",
-                    boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  <span>Khám phá trình độ ngay</span>
-                  <span>➔</span>
-                </button>
-              </div>
-
-              {/* MILESTONE 2.5: SPACED REPETITION & KNOWLEDGE GRAPH MASTERY PANEL */}
-              <div style={{ marginBottom: "1.75rem" }}>
-                <SpacedRepetitionPanel
-                  userId={!currentUser?.isGuest ? currentUser?.id : null}
-                  authToken={activeAuthToken}
-                  isLight={isLight}
-                  onOpenLessonByCode={openLessonByCode}
-                />
-              </div>
-
-              {/* MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & 12-TOPIC MASTERY INTELLIGENCE */}
-              <div style={{ marginBottom: "1.75rem" }}>
-                <MasteryIntelligenceDashboard
-                  userId={!currentUser?.isGuest ? currentUser?.id : null}
-                  authToken={activeAuthToken}
-                  userTracker={userTracker}
-                  isLight={isLight}
-                  onStartAdaptivePractice={startAdaptivePractice}
-                />
-              </div>
-
-              {/* SMART DAILY RECOMMENDATION CARD */}
-              <div
-                style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f6"}`,
-                  borderRadius: "12px",
-                  padding: "1.5rem 1.75rem",
-                  marginBottom: "1.75rem",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow: isLight ? "0 4px 15px rgba(37, 99, 235, 0.08)" : T.shadow,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
-                      <span
-                        style={{
-                          fontSize: "0.7rem",
-                          fontFamily: "Geist Mono",
-                          backgroundColor: `${dailyRecommendation.tagColor}20`,
-                          color: dailyRecommendation.tagColor,
-                          border: `1px solid ${dailyRecommendation.tagColor}50`,
-                          padding: "0.15rem 0.5rem",
-                          borderRadius: "4px",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {dailyRecommendation.tag}
-                      </span>
-                      <span style={{ fontSize: "0.8rem", color: isLight ? "#1d4ed8" : "#93c5fd", fontWeight: "600" }}>Đề xuất học hôm nay</span>
+                          ⚡ Nâng cấp VIP để mở khóa không giới hạn
+                        </button>
+                      )}
                     </div>
-
-                    <h2 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, margin: "0.35rem 0" }}>
-                      Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
-                    </h2>
-
-                    <p style={{ fontSize: "0.875rem", color: T.textMuted, margin: "0.2rem 0 0.85rem 0" }}>
-                      {dailyRecommendation.reason}
-                    </p>
                   </div>
 
-                  <button
-                    onClick={startRecommendedLesson}
+                  {/* 7-Day Mini Calendar */}
+                  <div
                     style={{
-                      padding: "0.65rem 1.5rem",
-                      backgroundColor: "#2563eb",
-                      color: "#ffffff",
-                      border: "none",
-                      borderRadius: "6px",
-                      fontSize: "0.875rem",
-                      fontWeight: "700",
-                      cursor: "pointer",
-                      boxShadow: "0 4px 15px rgba(37, 99, 235, 0.35)",
+                      backgroundColor: "var(--ds-card)",
+                      border: "1px solid var(--ds-border)",
+                      padding: "1rem 1.2rem",
+                      borderRadius: "10px",
+                      boxShadow: "var(--ds-shadow-sm)",
                     }}
                   >
-                    Bắt đầu học ngay hôm nay →
-                  </button>
-                </div>
-
-                {/* Daily Goal Progress Bar */}
-                <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: `1px solid ${T.border}` }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8rem", marginBottom: "0.4rem" }}>
-                    <span style={{ color: "#a1a1aa" }}>
-                      🎯 Mục tiêu hàng ngày: <strong>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
-                    </span>
-                    <span style={{ color: "#34d399", fontFamily: "Geist Mono", fontWeight: "600" }}>
-                      {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
-                    </span>
-                  </div>
-                  <div style={{ width: "100%", height: "6px", backgroundColor: isLight ? "#e2e8f0" : "#27272a", borderRadius: "999px", overflow: "hidden" }}>
-                    <div
-                      style={{
-                        width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
-                        height: "100%",
-                        backgroundColor: "#10b981",
-                        borderRadius: "999px",
-                        transition: "width 0.3s ease",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* 4 Analytics Metrics Grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: "#71717a", textTransform: "uppercase", fontWeight: "600" }}>
-                    Bài học đã hoàn thành
-                  </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>/ {totalLessonsCount}</span>
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "#34d399" }}>
-                    {overallLessonsProgress}% toàn bộ khóa học
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
-                    Câu hỏi đã giải đúng
-                  </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>/ {totalQuestionsCount}</span>
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "#60a5fa" }}>
-                    Tích lũy từ bài tập & Quiz
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
-                    Tổng điểm kinh nghiệm
-                  </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: T.text, margin: "0.4rem 0" }}>
-                    {userTracker.xp} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>XP</span>
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "#f59e0b" }}>
-                    {userRank.title}
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: T.card, border: `1px solid ${T.border}`, borderRadius: "8px", padding: "1.25rem", boxShadow: T.shadow }}>
-                  <div style={{ fontSize: "0.75rem", color: T.textMuted, textTransform: "uppercase", fontWeight: "600" }}>
-                    Sổ tay câu sai cần ôn
-                  </div>
-                  <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "#fb7185" : T.text, margin: "0.4rem 0" }}>
-                    {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: T.textMuted }}>câu</span>
-                  </div>
-                  <div
-                    onClick={() => setCurrentView("mistakes")}
-                    style={{ fontSize: "0.8rem", color: "#fb7185", cursor: "pointer", textDecoration: "underline" }}
-                  >
-                    Xem và luyện lại ngay →
-                  </div>
-                </div>
-              </div>
-
-              {/* 12 Chapters Mastery Map */}
-              <div style={{ marginBottom: "2rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem" }}>
-                  <div>
-                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                      Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
-                    </h3>
-                    <p style={{ fontSize: "0.85rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
-                      Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương của tài khoản {currentUser.name}.
-                    </p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
-                  {previewData.chapters.map((ch) => {
-                    const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
-                    const pct = Math.round((doneLessons / ch.lessons.length) * 100);
-
-                    return (
-                      <div
-                        key={ch.id}
-                        onClick={() => {
-                          handleSelectChapter(ch);
-                          setCurrentView("study");
-                        }}
-                        style={{
-                          backgroundColor: T.card,
-                          border: `1px solid ${T.border}`,
-                          borderRadius: "8px",
-                          padding: "1.1rem 1.25rem",
-                          cursor: "pointer",
-                          transition: "border-color 0.15s ease",
-                          boxShadow: T.shadow,
-                        }}
-                      >
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                          <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700" }}>
-                            CHƯƠNG {String(ch.number).padStart(2, "0")}
+                    <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
+                      LỊCH HOẠT ĐỘNG 7 NGÀY
+                    </div>
+                    <div style={{ display: "flex", gap: "0.55rem" }}>
+                      {last7Days.map((d, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "0.35rem",
+                          }}
+                        >
+                          <span style={{ fontSize: "0.68rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
+                            {d.dayName}
                           </span>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: pct === 100 ? (isLight ? "#047857" : "#34d399") : (isLight ? "#475569" : "#a1a1aa"), fontWeight: "600" }}>
-                            {doneLessons} / {ch.lessons.length} bài
-                          </span>
-                        </div>
-
-                        <div style={{ fontSize: "0.95rem", fontWeight: "700", color: T.text, marginBottom: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          {ch.title_vi}
-                        </div>
-
-                        {/* Progress Bar */}
-                        <div style={{ width: "100%", height: "4px", backgroundColor: isLight ? "#e2e8f0" : "#27272a", borderRadius: "999px", overflow: "hidden", marginBottom: "0.5rem" }}>
                           <div
                             style={{
-                              width: `${pct}%`,
-                              height: "100%",
-                              backgroundColor: pct === 100 ? "#10b981" : "#3b82f6",
-                              borderRadius: "999px",
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-bg-elevated)",
+                              color: d.isActive ? "#ffffff" : "var(--ds-text-muted)",
+                              fontSize: "0.85rem",
+                              fontWeight: "700",
+                              border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
                             }}
-                          />
+                          >
+                            {d.isActive ? "🔥" : d.dayNum}
+                          </div>
                         </div>
-
-                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: isLight ? "#475569" : "#71717a" }}>
-                          <span>{ch.exercises?.length || 0} bài tập</span>
-                          <span style={{ color: pct > 0 ? (isLight ? "#0f172a" : "#fafafa") : (isLight ? "#475569" : "#71717a"), fontWeight: pct > 0 ? "700" : "500" }}>{pct}% hoàn thành</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Dashboard Zone A / Zone B Bento Switcher */}
+              <div className="ge-bento-zone-tabs">
+                <div className="ge-bento-zone-pills" role="tablist" aria-label="Phân vùng Tổng quan">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={dashboardZone === "today"}
+                    onClick={() => setDashboardZone("today")}
+                    className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "today" ? "is-active" : ""}`}
+                  >
+                    Hôm nay &amp; Mục tiêu
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={dashboardZone === "analytics"}
+                    onClick={() => setDashboardZone("analytics")}
+                    className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "analytics" ? "is-active" : ""}`}
+                  >
+                    Phân tích &amp; 12 Chuyên đề
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={dashboardZone === "all"}
+                    onClick={() => setDashboardZone("all")}
+                    className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "all" ? "is-active" : ""}`}
+                  >
+                    Hiển thị tất cả
+                  </button>
+                </div>
+                <span style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                  {overallLessonsProgress}% hoàn thành • {totalLessonsCount} bài học
+                </span>
+              </div>
+
+              {/* ZONE A: TODAY FOCUS & MICRO-ACTION (MAX 4 CARDS) */}
+              {dashboardZone !== "analytics" && (
+                <div>
+                  {/* SMART DAILY RECOMMENDATION CARD */}
+                  <div
+                    style={{
+                      backgroundColor: "var(--ds-card)",
+                      border: "1px solid var(--ds-accent-border)",
+                      borderRadius: "12px",
+                      padding: "1.5rem 1.75rem",
+                      marginBottom: "1.5rem",
+                      position: "relative",
+                      overflow: "hidden",
+                      boxShadow: "var(--ds-shadow-sm)",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
+                          <span
+                            style={{
+                              fontSize: "0.7rem",
+                              fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                              backgroundColor: dailyRecommendation.tagBg || "var(--ds-accent-bg)",
+                              color: dailyRecommendation.tagColor || "var(--ds-accent)",
+                              border: `1px solid ${dailyRecommendation.tagBorder || "var(--ds-accent-border)"}`,
+                              padding: "0.15rem 0.5rem",
+                              borderRadius: "4px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {dailyRecommendation.tag}
+                          </span>
+                          <span style={{ fontSize: "0.8rem", color: "var(--ds-accent)", fontWeight: "600" }}>Đề xuất học hôm nay</span>
+                        </div>
+
+                        <h2 style={{ fontSize: "1.3rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                          Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
+                        </h2>
+
+                        <p style={{ fontSize: "0.875rem", color: "var(--ds-text-muted)", margin: "0.2rem 0 0.85rem 0" }}>
+                          {dailyRecommendation.reason}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={startRecommendedLesson}
+                        className="ds-focusable"
+                        style={{
+                          padding: "0.65rem 1.5rem",
+                          backgroundColor: "var(--ds-btn-primary)",
+                          color: "#ffffff",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontSize: "0.875rem",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          boxShadow: "var(--ds-shadow-md)",
+                        }}
+                      >
+                        Bắt đầu học ngay hôm nay →
+                      </button>
+                    </div>
+
+                    {/* Daily Goal Progress Bar */}
+                    <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--ds-border-subtle)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8rem", marginBottom: "0.4rem" }}>
+                        <span style={{ color: "var(--ds-text-muted)" }}>
+                          🎯 Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
+                        </span>
+                        <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-mono, Geist Mono, monospace)", fontWeight: "600" }}>
+                          {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
+                        </span>
+                      </div>
+                      <div style={{ width: "100%", height: "6px", backgroundColor: "var(--ds-bg-elevated)", borderRadius: "999px", overflow: "hidden" }}>
+                        <div
+                          style={{
+                            width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
+                            height: "100%",
+                            backgroundColor: "var(--ds-btn-success)",
+                            borderRadius: "999px",
+                            transition: "width 0.3s ease",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* MILESTONE 2.5: SPACED REPETITION & KNOWLEDGE GRAPH MASTERY PANEL */}
+                  <div style={{ marginBottom: "1.5rem" }}>
+                    <SpacedRepetitionPanel
+                      userId={!currentUser?.isGuest ? currentUser?.id : null}
+                      authToken={activeAuthToken}
+                      isLight={isLight}
+                      onOpenLessonByCode={openLessonByCode}
+                    />
+                  </div>
+
+                  {/* MILESTONE 2.8: DIAGNOSTIC PLACEMENT ASSESSMENT HERO CALLOUT */}
+                  <div
+                    style={{
+                      backgroundColor: "var(--ds-accent-bg)",
+                      border: "1px solid var(--ds-accent-border)",
+                      borderRadius: "12px",
+                      padding: "1.4rem 1.75rem",
+                      marginBottom: "1.5rem",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "1.25rem",
+                      boxShadow: "var(--ds-shadow-sm)",
+                    }}
+                  >
+                    <div style={{ flex: "1 1 500px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem", flexWrap: "wrap" }}>
+                        <span
+                          style={{
+                            fontSize: "0.7rem",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            padding: "0.2rem 0.6rem",
+                            borderRadius: "9999px",
+                            backgroundColor: "var(--ds-indigo-bg)",
+                            color: "var(--ds-indigo)",
+                            border: "1px solid var(--ds-indigo-border)",
+                          }}
+                        >
+                          🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
+                        </span>
+                        <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
+                          30 câu trắc nghiệm • 15-20 phút
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.35rem 0" }}>
+                        Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
+                      </h3>
+                      <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
+                        Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setCurrentView("diagnostic")}
+                      className="ds-focusable"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        padding: "0.75rem 1.5rem",
+                        borderRadius: "0.6rem",
+                        backgroundColor: "var(--ds-btn-primary)",
+                        color: "#ffffff",
+                        fontSize: "0.9rem",
+                        fontWeight: 700,
+                        border: "none",
+                        cursor: "pointer",
+                        boxShadow: "var(--ds-shadow-sm)",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <span>Khám phá trình độ ngay</span>
+                      <span>➔</span>
+                    </button>
+                  </div>
+
+                  {/* 4 Analytics Metrics Grid */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                        Bài học đã hoàn thành
+                      </div>
+                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
+                        {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>/ {totalLessonsCount}</span>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "var(--ds-success)" }}>
+                        {overallLessonsProgress}% toàn bộ khóa học
+                      </div>
+                    </div>
+
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                        Câu hỏi đã giải đúng
+                      </div>
+                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
+                        {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>/ {totalQuestionsCount}</span>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "var(--ds-accent)" }}>
+                        Tích lũy từ bài tập &amp; Quiz
+                      </div>
+                    </div>
+
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                        Tổng điểm kinh nghiệm
+                      </div>
+                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
+                        {userTracker.xp} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>XP</span>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "var(--ds-warning)" }}>
+                        {userRank.title}
+                      </div>
+                    </div>
+
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                        Sổ tay câu sai cần ôn
+                      </div>
+                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.4rem 0" }}>
+                        {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>câu</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setCurrentView("mistakes")}
+                        className="ds-focusable"
+                        style={{ fontSize: "0.8rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0 }}
+                      >
+                        Xem và luyện lại ngay →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ZONE B: ANALYTICS & 12-CHAPTER MASTERY MAP */}
+              {dashboardZone !== "today" && (
+                <div>
+                  {/* MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & 12-TOPIC MASTERY INTELLIGENCE */}
+                  <div style={{ marginBottom: "1.75rem" }}>
+                    <MasteryIntelligenceDashboard
+                      userId={!currentUser?.isGuest ? currentUser?.id : null}
+                      authToken={activeAuthToken}
+                      userTracker={userTracker}
+                      isLight={isLight}
+                      onStartAdaptivePractice={startAdaptivePractice}
+                    />
+                  </div>
+
+                  {/* 12 Chapters Mastery Map */}
+                  <div style={{ marginBottom: "2rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem" }}>
+                      <div>
+                        <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: 0 }}>
+                          Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
+                        </h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", margin: "0.2rem 0 0 0" }}>
+                          Theo dõi tỷ lệ hoàn thành lý thuyết và bài tập từng chương của tài khoản {currentUser.name}.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+                      {previewData.chapters.map((ch) => {
+                        const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
+                        const pct = Math.round((doneLessons / ch.lessons.length) * 100);
+                        const chIcon = CHAPTER_ICON_MAP[Number(ch.number)] || CHAPTER_ICON_MAP[1];
+
+                        return (
+                          <button
+                            key={ch.id}
+                            type="button"
+                            onClick={() => {
+                              handleSelectChapter(ch);
+                              setCurrentView("study");
+                            }}
+                            className="ds-focusable"
+                            style={{
+                              textAlign: "left",
+                              backgroundColor: "var(--ds-card)",
+                              border: "1px solid var(--ds-border)",
+                              borderRadius: "10px",
+                              padding: "1.1rem 1.25rem",
+                              cursor: "pointer",
+                              transition: "border-color 0.15s ease",
+                              boxShadow: "var(--ds-shadow-sm)",
+                            }}
+                          >
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.45rem", fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-accent)", fontWeight: "700" }}>
+                                <img src={chIcon} alt="" width={20} height={20} aria-hidden="true" />
+                                CHƯƠNG {String(ch.number).padStart(2, "0")}
+                              </span>
+                              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: pct === 100 ? "var(--ds-success)" : "var(--ds-text-muted)", fontWeight: "600" }}>
+                                {doneLessons} / {ch.lessons.length} bài
+                              </span>
+                            </div>
+
+                            <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)", marginBottom: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {ch.title_vi}
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div style={{ width: "100%", height: "4px", backgroundColor: "var(--ds-bg-elevated)", borderRadius: "999px", overflow: "hidden", marginBottom: "0.5rem" }}>
+                              <div
+                                style={{
+                                  width: `${pct}%`,
+                                  height: "100%",
+                                  backgroundColor: pct === 100 ? "var(--ds-btn-success)" : "var(--ds-btn-primary)",
+                                  borderRadius: "999px",
+                                }}
+                              />
+                            </div>
+
+                            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
+                              <span>{ch.exercises?.length || 0} bài tập</span>
+                              <span style={{ color: pct > 0 ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: pct > 0 ? "700" : "500" }}>{pct}% hoàn thành</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
 
             </div>
           </div>
@@ -5172,186 +4896,7 @@ export default function Home() {
         {/* VIEW 1: STUDY MODE (12 CHAPTERS & LESSONS EXPLORER)             */}
         {/* ============================================================== */}
         {currentView === "study" && (
-          <div style={{ display: "flex", flex: 1, minHeight: "calc(100vh - 56px)" }}>
-            
-            {/* Left Sidebar — Chapters & Lessons Tree */}
-            <aside
-              id="chapter-sidebar"
-              data-no-dict="true"
-              style={{
-                width: "320px",
-                borderRight: `1px solid ${T.border}`,
-                backgroundColor: T.bgSub,
-                display: "flex",
-                flexDirection: "column",
-                flexShrink: 0,
-              }}
-            >
-              {/* Search Filter Header */}
-              <div style={{ padding: "0.85rem 1rem", borderBottom: `1px solid ${T.border}` }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    backgroundColor: isLight ? "#ffffff" : "#141417",
-                    border: `1px solid ${T.border}`,
-                    borderRadius: "6px",
-                    padding: "0.4rem 0.65rem",
-                    boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
-                  }}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.textMuted} strokeWidth="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.3-4.3"/>
-                  </svg>
-                  <input
-                    type="text"
-                    value={chapterSearch}
-                    onChange={(e) => setChapterSearch(e.target.value)}
-                    placeholder="Lọc 12 chuyên đề..."
-                    style={{
-                      backgroundColor: "transparent",
-                      border: "none",
-                      outline: "none",
-                      color: T.text,
-                      fontSize: "0.8rem",
-                      width: "100%",
-                    }}
-                  />
-                  {chapterSearch && (
-                    <button
-                      onClick={() => setChapterSearch("")}
-                      style={{ background: "none", border: "none", color: "#71717a", cursor: "pointer", fontSize: "0.8rem" }}
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Chapters Tree List */}
-              <div style={{ flex: 1, overflowY: "auto", padding: "0.6rem 0.5rem" }}>
-                <div
-                  style={{
-                    fontSize: "0.68rem",
-                    fontWeight: "600",
-                    color: "#71717a",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    padding: "0.4rem 0.65rem",
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  DANH MỤC 12 CHUYÊN ĐỀ ({filteredChapters.length})
-                </div>
-
-                {filteredChapters.map((ch) => {
-                  const isSelected = ch.id === selectedChapter?.id;
-                  const chapterNum = String(ch.number || "").padStart(2, "0");
-
-                  return (
-                    <div key={ch.id} style={{ marginBottom: "0.25rem" }}>
-                      <div
-                        onClick={() => handleSelectChapter(ch)}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "0.5rem 0.65rem",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                          backgroundColor: isSelected ? (isLight ? "#f1f5f9" : "#18181b") : "transparent",
-                          border: isSelected ? `1px solid ${T.border}` : "1px solid transparent",
-                          transition: "all 0.12s ease",
-                          gap: "0.65rem",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "0.72rem",
-                            fontFamily: "Geist Mono",
-                            color: isSelected ? "#60a5fa" : "#71717a",
-                            fontWeight: "700",
-                            minWidth: "22px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {chapterNum}
-                        </span>
-
-                        <span
-                          style={{
-                            fontSize: "0.835rem",
-                            color: isSelected ? T.text : T.textSecondary,
-                            fontWeight: isSelected ? "600" : "400",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            flex: 1,
-                          }}
-                        >
-                          {ch.title_vi}
-                        </span>
-
-                        <span
-                          style={{
-                            fontSize: "0.68rem",
-                            fontFamily: "Geist Mono",
-                            color: "#71717a",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {ch.lessons?.length || 0} bài
-                        </span>
-                      </div>
-
-                      {/* Expanded Sub-lessons if chapter is selected */}
-                      {isSelected && ch.lessons && ch.lessons.length > 0 && (
-                        <div style={{ marginLeft: "1.75rem", paddingLeft: "0.6rem", borderLeft: "1px solid #27272a", marginTop: "0.2rem", marginBottom: "0.4rem" }}>
-                          {ch.lessons.map((ls) => {
-                            const isLessonActive = selectedLesson?.id === ls.id;
-                            const isLessonCompleted = userTracker.completedLessons?.includes(ls.id);
-
-                            return (
-                              <div
-                                key={ls.id}
-                                onClick={() => {
-                                  setSelectedLessonId(ls.id);
-                                  setActiveTab("theory");
-                                }}
-                                style={{
-                                  padding: "0.35rem 0.5rem",
-                                  borderRadius: "4px",
-                                  fontSize: "0.78rem",
-                                  color: isLessonActive ? (isLight ? "#0284c7" : "#38bdf8") : isLessonCompleted ? "#10b981" : T.textMuted,
-                                  backgroundColor: isLessonActive ? (isLight ? "#eff6ff" : "#0f172a") : "transparent",
-                                  cursor: "pointer",
-                                  fontWeight: isLessonActive ? "600" : "400",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                                  {isLessonCompleted && <span style={{ color: "#10b981", fontSize: "0.7rem" }}>✓</span>}
-                                  {ls.title_vi}
-                                </span>
-                                <span style={{ fontSize: "0.68rem", color: "#52525b", fontFamily: "Geist Mono" }}>
-                                  {ls.sections?.length || 0} mục
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </aside>
-
-            {/* Main Content Area */}
-            <main id="learning-content-area" data-dict-area="true" style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem", maxWidth: "980px" }}>
+          <>
               
               {/* Breadcrumbs & Header */}
               <div style={{ marginBottom: "1.5rem" }}>
@@ -5369,7 +4914,7 @@ export default function Home() {
 
                 <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
                   <div>
-                    <h1 style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: T.text }}>
+                    <h1 className="ge-lesson-title-clamp" style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: "var(--ds-text-heading)" }}>
                       {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập thực hành: ${selectedChapter?.title_vi}`}
                     </h1>
                     <div style={{ fontSize: "0.875rem", color: T.textMuted, marginTop: "0.2rem" }}>
@@ -5388,7 +4933,7 @@ export default function Home() {
                         fontSize: "0.8rem",
                         fontWeight: activeTab === "theory" ? "600" : "500",
                         color: activeTab === "theory" ? T.text : T.textMuted,
-                        backgroundColor: activeTab === "theory" ? (isLight ? "#ffffff" : "#27272a") : "transparent", boxShadow: activeTab === "theory" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                        backgroundColor: activeTab === "theory" ? ("var(--ds-card)") : "transparent", boxShadow: activeTab === "theory" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                         cursor: "pointer",
                       }}
                     >
@@ -5403,7 +4948,7 @@ export default function Home() {
                         fontSize: "0.8rem",
                         fontWeight: activeTab === "exercises" ? "600" : "500",
                         color: activeTab === "exercises" ? T.text : T.textMuted,
-                        backgroundColor: activeTab === "exercises" ? (isLight ? "#ffffff" : "#27272a") : "transparent", boxShadow: activeTab === "exercises" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                        backgroundColor: activeTab === "exercises" ? ("var(--ds-card)") : "transparent", boxShadow: activeTab === "exercises" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
                         cursor: "pointer",
                       }}
                     >
@@ -5422,7 +4967,7 @@ export default function Home() {
                       <div
                         style={{
                           backgroundColor: T.card,
-                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px solid ${T.border}`,
+                          border: isCurrentLessonDone ? "1px solid var(--ds-success)" : `1px solid ${T.border}`,
                           borderRadius: "10px",
                           padding: "1.25rem 1.5rem",
                           marginBottom: "1.5rem",
@@ -5435,8 +4980,8 @@ export default function Home() {
                               style={{
                                 fontSize: "0.72rem",
                                 fontFamily: "Geist Mono",
-                                backgroundColor: isLight ? "#eff6ff" : "#27272a",
-                                color: isLight ? "#1d4ed8" : "#60a5fa",
+                                backgroundColor: "var(--ds-accent-bg)",
+                                color: "var(--ds-accent)",
                                 padding: "0.15rem 0.5rem",
                                 borderRadius: "4px",
                                 fontWeight: "700",
@@ -5444,15 +4989,15 @@ export default function Home() {
                             >
                               {selectedLesson.code}
                             </span>
-                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
                             <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {selectedLesson.sections?.length || 0} Phân mục
                             </span>
-                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
                             <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {totalLessonFormulas} Công thức
                             </span>
-                            <span style={{ fontSize: "0.75rem", color: "#a1a1aa" }}>•</span>
+                            <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
                             <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {selectedLesson.examples?.length || 0} Ví dụ
                             </span>
@@ -5467,9 +5012,9 @@ export default function Home() {
                               gap: "0.4rem",
                               padding: "0.4rem 0.9rem",
                               borderRadius: "6px",
-                              border: isCurrentLessonDone ? "1px solid #10b981" : `1px solid ${T.border}`,
-                              backgroundColor: isCurrentLessonDone ? (isLight ? "#ecfdf5" : "rgba(16, 185, 129, 0.15)") : (isLight ? "#f8fafc" : "#18181b"),
-                              color: isCurrentLessonDone ? "#059669" : T.text,
+                              border: isCurrentLessonDone ? "1px solid var(--ds-success)" : `1px solid ${T.border}`,
+                              backgroundColor: isCurrentLessonDone ? ("var(--ds-success-bg)") : ("var(--ds-bg-elevated)"),
+                              color: isCurrentLessonDone ? "var(--ds-success)" : T.text,
                               fontSize: "0.8rem",
                               fontWeight: "600",
                               cursor: "pointer",
@@ -5496,9 +5041,9 @@ export default function Home() {
                                   href={`#sec-${idx}`}
                                   style={{
                                     fontSize: "0.75rem",
-                                    backgroundColor: isLight ? "#f1f5f9" : "#18181b",
+                                    backgroundColor: "var(--ds-bg-elevated)",
                                     border: `1px solid ${T.border}`,
-                                    color: isLight ? "#1e293b" : "#cbd5e1",
+                                    color: "var(--ds-text-secondary)",
                                     padding: "0.25rem 0.65rem",
                                     borderRadius: "4px",
                                     textDecoration: "none",
@@ -5518,14 +5063,12 @@ export default function Home() {
                         <div
                           style={{
                             backgroundColor: T.card,
-                            border: `1px solid ${isLight ? "#bfdbfe" : "#1e3a8a"}`,
+                            border: `1px solid ${"var(--ds-accent-border)"}`,
                             borderRadius: "12px",
                             padding: "1.5rem 1.75rem",
                             marginBottom: "1.75rem",
                             boxShadow: isLight ? "0 4px 20px rgba(37, 99, 235, 0.08)" : T.shadow,
-                            background: isLight
-                              ? "linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%)"
-                              : "linear-gradient(135deg, #111116 0%, #0d1527 100%)",
+                            background: "linear-gradient(135deg, var(--ds-card) 0%, var(--ds-accent-bg) 100%)",
                           }}
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
@@ -5546,9 +5089,9 @@ export default function Home() {
                                 fontFamily: "Geist Mono",
                                 padding: "0.25rem 0.65rem",
                                 borderRadius: "999px",
-                                backgroundColor: isLight ? "#eff6ff" : "#1e293b",
-                                color: isLight ? "#1d4ed8" : "#60a5fa",
-                                border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f650"}`,
+                                backgroundColor: "var(--ds-accent-bg)",
+                                color: "var(--ds-accent)",
+                                border: `1px solid ${"var(--ds-accent-border)"}`,
                                 fontWeight: "700",
                               }}
                             >
@@ -5564,7 +5107,7 @@ export default function Home() {
                               lineHeight: "1.6",
                               marginBottom: "1.25rem",
                               padding: "0.65rem 0.95rem",
-                              backgroundColor: isLight ? "#ffffff" : "rgba(15, 23, 42, 0.6)",
+                              backgroundColor: "var(--ds-card)",
                               borderRadius: "8px",
                               border: `1px solid ${T.border}`,
                             }}
@@ -5578,10 +5121,10 @@ export default function Home() {
                               const isPos = f.type.includes("(+)");
                               const isNeg = f.type.includes("(-)");
                               const colorTheme = isPos
-                                ? { border: "#10b981", bg: isLight ? "#f0fdf4" : "rgba(16, 185, 129, 0.08)", text: isLight ? "#047857" : "#34d399", label: "KHẲNG ĐỊNH (+)" }
+                                ? { border: "var(--ds-success-border)", bg: "var(--ds-success-bg)", text: "var(--ds-success)", label: "KHẲNG ĐỊNH (+)" }
                                 : isNeg
-                                ? { border: "#f43f5e", bg: isLight ? "#fef2f2" : "rgba(244, 63, 94, 0.08)", text: isLight ? "#b91c1c" : "#fb7185", label: "PHỦ ĐỊNH (-)" }
-                                : { border: "#0284c7", bg: isLight ? "#f0f9ff" : "rgba(2, 132, 199, 0.08)", text: isLight ? "#0369a1" : "#38bdf8", label: "NGHI VẤN (?)" };
+                                ? { border: "var(--ds-danger-border)", bg: "var(--ds-danger-bg)", text: "var(--ds-danger)", label: "PHỦ ĐỊNH (-)" }
+                                : { border: "var(--ds-accent-border)", bg: "var(--ds-accent-bg)", text: "var(--ds-accent)", label: "NGHI VẤN (?)" };
 
                               return (
                                 <div
@@ -5626,9 +5169,9 @@ export default function Home() {
                                   style={{
                                     fontSize: "0.75rem",
                                     fontFamily: "Geist Mono",
-                                    backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                    backgroundColor: "var(--ds-card)",
                                     border: `1px solid ${T.border}`,
-                                    color: isLight ? "#2563eb" : "#38bdf8",
+                                    color: "var(--ds-accent)",
                                     padding: "0.15rem 0.5rem",
                                     borderRadius: "4px",
                                     fontWeight: "600",
@@ -5644,12 +5187,12 @@ export default function Home() {
                           {selectedLesson.cheatSheet.examTip && (
                             <div
                               style={{
-                                backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.1)",
-                                border: "1px solid #f59e0b",
+                                backgroundColor: "var(--ds-warning-bg)",
+                                border: "1px solid var(--ds-warning)",
                                 borderRadius: "6px",
                                 padding: "0.65rem 0.95rem",
                                 fontSize: "0.825rem",
-                                color: isLight ? "#92400e" : "#fef3c7",
+                                color: "var(--ds-warning)",
                                 lineHeight: "1.5",
                               }}
                             >
@@ -5670,17 +5213,17 @@ export default function Home() {
                       <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
                         {selectedLesson.sections?.map((sec, secIdx) => {
                           const badgeColor = isLight ? (
-                            sec.badge?.includes("CÔNG THỨC") ? { bg: "#ecfdf5", border: "#a7f3d0", text: "#047857" } :
-                            sec.badge?.includes("LƯU Ý") ? { bg: "#fffbeb", border: "#fde68a", text: "#b45309" } :
-                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "#faf5ff", border: "#e9d5ff", text: "#7e22ce" } :
-                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "#eff6ff", border: "#bfdbfe", text: "#1d4ed8" } :
-                            { bg: "#f1f5f9", border: "#cbd5e1", text: "#334155" }
+                            sec.badge?.includes("CÔNG THỨC") ? { bg: "var(--ds-success-bg)", border: "var(--ds-success-border)", text: "var(--ds-success)" } :
+                            sec.badge?.includes("LƯU Ý") ? { bg: "var(--ds-warning-bg)", border: "var(--ds-warning-border)", text: "var(--ds-warning)" } :
+                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "var(--ds-purple-bg)", border: "var(--ds-purple-border)", text: "var(--ds-purple)" } :
+                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "var(--ds-accent-bg)", border: "var(--ds-accent-border)", text: "var(--ds-accent)" } :
+                            { bg: "var(--ds-bg-elevated)", border: "var(--ds-border)", text: "var(--ds-text-secondary)" }
                           ) : (
-                            sec.badge?.includes("CÔNG THỨC") ? { bg: "#064e3b30", border: "#05966970", text: "#34d399" } :
-                            sec.badge?.includes("LƯU Ý") ? { bg: "#451a0330", border: "#d9770670", text: "#fbbf24" } :
-                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "#3b076430", border: "#9333ea70", text: "#c084fc" } :
-                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "#0c4a6e30", border: "#0284c770", text: "#38bdf8" } :
-                            { bg: "#1e1b4b30", border: "#6366f170", text: "#a5b4fc" }
+                            sec.badge?.includes("CÔNG THỨC") ? { bg: "var(--ds-success-bg)", border: "var(--ds-success-border)", text: "var(--ds-success)" } :
+                            sec.badge?.includes("LƯU Ý") ? { bg: "var(--ds-warning-bg)", border: "var(--ds-warning-border)", text: "var(--ds-warning)" } :
+                            sec.badge?.includes("BẢNG") || sec.badge?.includes("PHÂN LOẠI") ? { bg: "var(--ds-purple-bg)", border: "var(--ds-purple-border)", text: "var(--ds-purple)" } :
+                            sec.badge?.includes("CÁCH DÙNG") ? { bg: "var(--ds-accent-bg)", border: "var(--ds-accent-border)", text: "var(--ds-accent)" } :
+                            { bg: "var(--ds-indigo-bg)", border: "var(--ds-indigo-border)", text: "var(--ds-indigo)" }
                           );
 
                           return (
@@ -5696,15 +5239,15 @@ export default function Home() {
                               }}
                             >
                               {/* Section Header with Number Badge & Category Pill */}
-                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1.25rem", paddingBottom: "0.75rem", borderBottom: "1px solid #1f1f26" }}>
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1.25rem", paddingBottom: "0.75rem", borderBottom: "1px solid var(--ds-border-subtle)" }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
                                   <span
                                     style={{
                                       fontSize: "0.78rem",
                                       fontFamily: "Geist Mono",
-                                      backgroundColor: isLight ? "#eff6ff" : "#18181f",
-                                      border: `1px solid ${isLight ? "#bfdbfe" : "#3f3f4e"}`,
-                                      color: isLight ? "#2563eb" : "#818cf8",
+                                      backgroundColor: "var(--ds-accent-bg)",
+                                      border: `1px solid ${"var(--ds-accent-border)"}`,
+                                      color: "var(--ds-accent)",
                                       padding: "0.2rem 0.55rem",
                                       borderRadius: "6px",
                                       fontWeight: "800",
@@ -5741,151 +5284,196 @@ export default function Home() {
                               {/* 1. Formulas Box (Syntax-colored & Prominent) */}
                               {sec.formulas && sec.formulas.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginBottom: "1.35rem" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     ⚡ CÔNG THỨC CHUẨN XÁC:
                                   </div>
-                                  {sec.formulas.map((f, fIdx) => (
-                                    <div
-                                      key={fIdx}
-                                      style={{
-                                        backgroundColor: isLight ? "#f8fafc" : "#09090d",
-                                        border: `1px solid ${isLight ? "#cbd5e1" : "#272732"}`,
-                                        borderLeft: f.type?.includes("(+)")
-                                          ? "4px solid #10b981"
-                                          : f.type?.includes("(-)")
-                                          ? "4px solid #f43f5e"
-                                          : "4px solid #38bdf8",
-                                        borderRadius: "8px",
-                                        padding: "0.85rem 1.15rem",
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        flexWrap: "wrap",
-                                        gap: "0.75rem",
-                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
-                                      }}
-                                    >
-                                      <div style={{ fontFamily: "Geist Mono", fontSize: "0.95rem", color: isLight ? "#065f46" : "#34d399", fontWeight: "700", letterSpacing: "0.02em" }}>
-                                        {f.text}
-                                      </div>
-                                      <span
+                                  {sec.formulas.map((f, fIdx) => {
+                                    const formulaKindClass = f.type?.includes("(+)")
+                                      ? "is-pos"
+                                      : f.type?.includes("(-)")
+                                      ? "is-neg"
+                                      : "is-q";
+                                    const badgeKindColor = f.type?.includes("(+)")
+                                      ? "var(--ds-formula-pos)"
+                                      : f.type?.includes("(-)")
+                                      ? "var(--ds-formula-neg)"
+                                      : "var(--ds-formula-q)";
+                                    return (
+                                      <div
+                                        key={fIdx}
+                                        className={`ge-formula-box ${formulaKindClass}`}
                                         style={{
-                                          fontSize: "0.7rem",
-                                          fontFamily: "Geist Mono",
-                                          backgroundColor: isLight ? "#ffffff" : "#18181f",
-                                          color: f.type?.includes("(+)") ? (isLight ? "#059669" : "#34d399") : f.type?.includes("(-)") ? "#fb7185" : "#38bdf8",
-                                          padding: "0.2rem 0.55rem",
-                                          borderRadius: "6px",
-                                          border: `1px solid ${isLight ? "#cbd5e1" : "#333342"}`,
-                                          fontWeight: "700",
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          flexWrap: "wrap",
+                                          gap: "0.75rem",
+                                          boxShadow: "var(--ds-shadow-sm)",
                                         }}
                                       >
-                                        {f.type}
-                                      </span>
-                                    </div>
-                                  ))}
+                                        <div style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.95rem", color: "var(--ds-success)", fontWeight: "700", letterSpacing: "0.02em" }}>
+                                          {f.text}
+                                        </div>
+                                        <span
+                                          style={{
+                                            fontSize: "0.7rem",
+                                            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                                            backgroundColor: "var(--ds-card)",
+                                            color: badgeKindColor,
+                                            padding: "0.2rem 0.55rem",
+                                            borderRadius: "6px",
+                                            border: "1px solid var(--ds-border)",
+                                            fontWeight: "700",
+                                            flexShrink: 0,
+                                          }}
+                                        >
+                                          {f.type}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
 
                               {/* 2. Numbered Rules (Đánh số thứ tự 1, 2, 3... rõ ràng, có tiêu đề & ví dụ) */}
                               {sec.rules && sec.rules.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "1.15rem 0" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#4338ca" : "#818cf8", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-indigo)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG:
                                   </div>
-                                  {sec.rules.map((rule, rIdx) => (
-                                    <div
-                                      key={rIdx}
-                                      style={{
-                                        backgroundColor: T.cardSubtle,
-                                        border: `1px solid ${T.border}`,
-                                        borderRadius: "10px",
-                                        padding: "1rem 1.25rem",
-                                      }}
-                                    >
-                                      {/* Rule Header */}
-                                      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.65rem" }}>
-                                        <span
-                                          style={{
-                                            width: "26px",
-                                            height: "26px",
-                                            borderRadius: "6px",
-                                            backgroundColor: "#1e1b4b",
-                                            border: "1px solid #4f46e5",
-                                            color: "#a5b4fc",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontSize: "0.82rem",
-                                            fontWeight: "800",
-                                            flexShrink: 0,
-                                          }}
-                                        >
-                                          {rule.num || String(rIdx + 1)}
-                                        </span>
-                                        <h3 style={{ fontSize: "1rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
-                                          {rule.title}
-                                        </h3>
-                                      </div>
+                                  {sec.rules.map((rule, rIdx) => {
+                                    const ruleKey = `${selectedLesson?.id || "ls"}-${secIdx}-${rIdx}`;
+                                    const examples = rule.examples || [];
+                                    const isExpanded = Boolean(expandedRulesMap[ruleKey]);
+                                    const visibleExamples = isExpanded || examples.length <= 4 ? examples : examples.slice(0, 4);
 
-                                      {/* Rule Content */}
-                                      {rule.content && (
-                                        <p style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
-                                          {rule.content}
-                                        </p>
-                                      )}
+                                    return (
+                                      <div
+                                        key={rIdx}
+                                        style={{
+                                          backgroundColor: "var(--ds-card-subtle)",
+                                          border: "1px solid var(--ds-border)",
+                                          borderRadius: "10px",
+                                          padding: "1rem 1.25rem",
+                                        }}
+                                      >
+                                        {/* Rule Header */}
+                                        <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.65rem" }}>
+                                          <span
+                                            style={{
+                                              width: "26px",
+                                              height: "26px",
+                                              borderRadius: "6px",
+                                              backgroundColor: "var(--ds-indigo-bg)",
+                                              border: "1px solid var(--ds-indigo-border)",
+                                              color: "var(--ds-indigo)",
+                                              display: "flex",
+                                              alignItems: "center",
+                                              justifyContent: "center",
+                                              fontSize: "0.82rem",
+                                              fontWeight: "800",
+                                              flexShrink: 0,
+                                            }}
+                                          >
+                                            {rule.num || String(rIdx + 1)}
+                                          </span>
+                                          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: 0 }}>
+                                            {rule.title}
+                                          </h3>
+                                        </div>
 
-                                      {/* Rule Examples */}
-                                      {rule.examples && rule.examples.length > 0 && (
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem", paddingLeft: "0.75rem", borderLeft: "2px solid #3b82f650" }}>
-                                          {rule.examples.map((ex, exIdx) => (
-                                            <div
-                                              key={exIdx}
-                                              style={{
-                                                backgroundColor: isLight ? "#ffffff" : "#0d0d12",
-                                                border: `1px solid ${isLight ? "#e2e8f0" : "#1f1f28"}`,
-                                                borderRadius: "6px",
-                                                padding: "0.55rem 0.85rem",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                                gap: "0.75rem",
-                                                boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.04)" : "none",
-                                              }}
-                                            >
-                                              <div>
-                                                <div style={{ fontSize: "0.92rem", fontWeight: "600", color: T.text }}>
-                                                  {ex.en}
-                                                </div>
-                                                {ex.vi && (
-                                                  <div style={{ fontSize: "0.82rem", color: "#34d399", marginTop: "0.15rem" }}>
-                                                    🇻🇳 {ex.vi}
-                                                  </div>
-                                                )}
-                                              </div>
-                                              <button
-                                                onClick={() => playWordAudio(ex.en, null)}
-                                                title="Nghe phát âm chuẩn câu này"
+                                        {/* Rule Content */}
+                                        {rule.content && (
+                                          <p style={{ fontSize: "0.92rem", color: "var(--ds-text-secondary)", lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
+                                            {rule.content}
+                                          </p>
+                                        )}
+
+                                        {/* Rule Examples (<= 4 visible by default; collapsible beyond 4) */}
+                                        {examples.length > 0 && (
+                                          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem", paddingLeft: "0.75rem", borderLeft: "2px solid var(--ds-accent-border)" }}>
+                                            {visibleExamples.map((ex, exIdx) => (
+                                              <div
+                                                key={exIdx}
                                                 style={{
-                                                  backgroundColor: "#181824",
-                                                  border: "1px solid #313146",
-                                                  color: "#38bdf8",
+                                                  backgroundColor: "var(--ds-card)",
+                                                  border: "1px solid var(--ds-border-subtle)",
                                                   borderRadius: "6px",
-                                                  padding: "0.25rem 0.55rem",
-                                                  fontSize: "0.75rem",
-                                                  fontWeight: "600",
-                                                  cursor: "pointer",
-                                                  flexShrink: 0,
+                                                  padding: "0.55rem 0.85rem",
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  justifyContent: "space-between",
+                                                  gap: "0.75rem",
+                                                  boxShadow: "var(--ds-shadow-sm)",
                                                 }}
                                               >
-                                                🔊 Đọc
+                                                <div>
+                                                  <div style={{ fontSize: "0.92rem", fontWeight: "600", color: "var(--ds-text)" }}>
+                                                    {ex.en}
+                                                  </div>
+                                                  {ex.vi && (
+                                                    <div style={{ fontSize: "0.82rem", color: "var(--ds-success)", marginTop: "0.15rem" }}>
+                                                      🇻🇳 {ex.vi}
+                                                    </div>
+                                                  )}
+                                                </div>
+                                                <button
+                                                  type="button"
+                                                  onClick={() => playWordAudio(ex.en, null)}
+                                                  title="Nghe phát âm chuẩn câu này"
+                                                  className="ds-focusable"
+                                                  style={{
+                                                    display: "inline-flex",
+                                                    alignItems: "center",
+                                                    gap: "0.3rem",
+                                                    backgroundColor: "var(--ds-accent-bg)",
+                                                    border: "1px solid var(--ds-accent-border)",
+                                                    color: "var(--ds-accent)",
+                                                    borderRadius: "6px",
+                                                    padding: "0.28rem 0.6rem",
+                                                    fontSize: "0.75rem",
+                                                    fontWeight: "600",
+                                                    cursor: "pointer",
+                                                    flexShrink: 0,
+                                                  }}
+                                                >
+                                                  <KitIcon name="tool-audio" size={13} />
+                                                  <span>Đọc</span>
+                                                </button>
+                                              </div>
+                                            ))}
+
+                                            {examples.length > 4 && (
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  setExpandedRulesMap((prev) => ({
+                                                    ...prev,
+                                                    [ruleKey]: !prev[ruleKey],
+                                                  }))
+                                                }
+                                                className="ds-focusable"
+                                                style={{
+                                                  alignSelf: "flex-start",
+                                                  marginTop: "0.2rem",
+                                                  padding: "0.35rem 0.75rem",
+                                                  borderRadius: "6px",
+                                                  border: "1px solid var(--ds-accent-border)",
+                                                  backgroundColor: "var(--ds-accent-bg)",
+                                                  color: "var(--ds-accent)",
+                                                  fontSize: "0.78rem",
+                                                  fontWeight: 700,
+                                                  cursor: "pointer",
+                                                }}
+                                              >
+                                                {isExpanded ? "Thu gọn ví dụ ▴" : `Xem thêm ${examples.length - 4} ví dụ ▾`}
                                               </button>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
 
@@ -5910,7 +5498,7 @@ export default function Home() {
                                         width: "100%",
                                         borderCollapse: "separate",
                                         borderSpacing: 0,
-                                        backgroundColor: isLight ? "#ffffff" : "#0d0d12",
+                                        backgroundColor: "var(--ds-card)",
                                         border: `1px solid ${T.border}`,
                                         borderRadius: "8px",
                                         overflow: "hidden",
@@ -5920,14 +5508,14 @@ export default function Home() {
                                     >
                                       {tbl.headers && tbl.headers.some((h) => h) && (
                                         <thead>
-                                          <tr style={{ backgroundColor: isLight ? "#f8fafc" : "#181822" }}>
+                                          <tr style={{ backgroundColor: "var(--ds-card-subtle)" }}>
                                             {tbl.headers.map((h, hIdx) => (
                                               <th
                                                 key={hIdx}
                                                 style={{
                                                   padding: "0.7rem 0.9rem",
                                                   borderBottom: `1px solid ${T.border}`,
-                                                  color: isLight ? "#1d4ed8" : "#60a5fa",
+                                                  color: "var(--ds-accent)",
                                                   fontWeight: "700",
                                                   textAlign: "left",
                                                   fontFamily: "Geist Mono",
@@ -5946,7 +5534,7 @@ export default function Home() {
                                           <tr
                                             key={rIdx}
                                             style={{
-                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : (isLight ? "#f8fafc" : "#14141d"),
+                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : ("var(--ds-card-subtle)"),
                                             }}
                                           >
                                             {row.map((cell, cIdx) => (
@@ -5954,8 +5542,8 @@ export default function Home() {
                                                 key={cIdx}
                                                 style={{
                                                   padding: "0.65rem 0.9rem",
-                                                  borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1e1e28"}`,
-                                                  color: isLight ? "#334155" : "#e2e8f0",
+                                                  borderBottom: `1px solid ${"var(--ds-border-subtle)"}`,
+                                                  color: "var(--ds-text-secondary)",
                                                   lineHeight: "1.55",
                                                 }}
                                               >
@@ -5987,7 +5575,7 @@ export default function Home() {
                                         boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
                                       }}
                                     >
-                                      <span style={{ color: "#38bdf8", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
+                                      <span style={{ color: "var(--ds-accent)", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
                                       <div style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65", width: "100%" }}>
                                         {renderFormattedText(b)}
                                       </div>
@@ -6003,9 +5591,9 @@ export default function Home() {
                                     <div
                                       key={nIdx}
                                       style={{
-                                        backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.08)",
-                                        border: isLight ? "1px solid #fde68a" : "1px solid rgba(245, 158, 11, 0.4)",
-                                        borderLeft: "4px solid #f59e0b",
+                                        backgroundColor: "var(--ds-warning-bg)",
+                                        border: "1px solid var(--ds-warning-border)",
+                                        borderLeft: "4px solid var(--ds-warning)",
                                         borderRadius: "8px",
                                         padding: "0.85rem 1.15rem",
                                         boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.02)" : "none",
@@ -6013,11 +5601,11 @@ export default function Home() {
                                     >
                                       <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
                                         <span style={{ fontSize: "1.05rem" }}>⚠️</span>
-                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: isLight ? "#b45309" : "#fbbf24", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: "var(--ds-warning)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                           LƯU Ý QUAN TRỌNG & BẪY THI CỬ:
                                         </span>
                                       </div>
-                                      <div style={{ fontSize: "0.9rem", color: isLight ? "#78350f" : "#fef3c7", lineHeight: "1.65" }}>
+                                      <div style={{ fontSize: "0.9rem", color: "var(--ds-warning)", lineHeight: "1.65" }}>
                                         {n}
                                       </div>
                                     </div>
@@ -6076,7 +5664,7 @@ export default function Home() {
                                     {renderFormattedText(ex.en)}
                                   </div>
                                   {ex.vi && (
-                                    <div style={{ fontSize: "0.82rem", color: isLight ? "#059669" : "#34d399", marginTop: "0.3rem", lineHeight: "1.4" }}>
+                                    <div style={{ fontSize: "0.82rem", color: "var(--ds-success)", marginTop: "0.3rem", lineHeight: "1.4" }}>
                                       🇻🇳 {ex.vi}
                                     </div>
                                   )}
@@ -6085,9 +5673,9 @@ export default function Home() {
                                   onClick={() => playWordAudio(ex.en.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
                                   title="Nghe phát âm bản ngữ câu này"
                                   style={{
-                                    backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                    backgroundColor: "var(--ds-card)",
                                     border: `1px solid ${T.border}`,
-                                    color: isLight ? "#2563eb" : "#38bdf8",
+                                    color: "var(--ds-accent)",
                                     borderRadius: "6px",
                                     padding: "0.35rem 0.6rem",
                                     fontSize: "0.75rem",
@@ -6110,7 +5698,7 @@ export default function Home() {
                           marginTop: "2rem",
                           padding: "1.75rem",
                           backgroundColor: T.card,
-                          border: isCurrentLessonDone ? "1px solid #10b981" : `1px dashed ${isLight ? "#3b82f6" : "#3b82f6"}`,
+                          border: isCurrentLessonDone ? "1px solid var(--ds-success)" : `1px dashed ${isLight ? "var(--ds-accent)" : "var(--ds-accent)"}`,
                           borderRadius: "10px",
                           textAlign: "center",
                           boxShadow: T.shadow,
@@ -6128,7 +5716,7 @@ export default function Home() {
                             onClick={() => toggleLessonCompletion(selectedLesson.id)}
                             style={{
                               padding: "0.6rem 1.25rem",
-                              backgroundColor: isCurrentLessonDone ? "#10b981" : (isLight ? "#f1f5f9" : "#18181b"),
+                              backgroundColor: isCurrentLessonDone ? "var(--ds-btn-success)" : "var(--ds-bg-elevated)",
                               border: isCurrentLessonDone ? "none" : `1px solid ${T.border}`,
                               borderRadius: "6px",
                               color: isCurrentLessonDone ? "#ffffff" : T.text,
@@ -6144,7 +5732,7 @@ export default function Home() {
                             onClick={() => setActiveTab("exercises")}
                             style={{
                               padding: "0.6rem 1.5rem",
-                              backgroundColor: "#2563eb",
+                              backgroundColor: "var(--ds-btn-primary)",
                               border: "none",
                               borderRadius: "6px",
                               color: "#ffffff",
@@ -6182,7 +5770,7 @@ export default function Home() {
                   <div
                     style={{
                       backgroundColor: currentUser.role === "VIP" ? "rgba(245, 158, 11, 0.08)" : "rgba(59, 130, 246, 0.08)",
-                      border: `1px solid ${currentUser.role === "VIP" ? "#f59e0b50" : "#3b82f650"}`,
+                      border: `1px solid ${currentUser.role === "VIP" ? "var(--ds-warning-border)" : "var(--ds-accent-border)"}`,
                       borderRadius: "8px",
                       padding: "0.85rem 1.25rem",
                       marginBottom: "1.5rem",
@@ -6206,8 +5794,8 @@ export default function Home() {
                       <button
                         onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Mở khóa 100% Bài tập Chuyên đề", description: "Không còn bị giới hạn 10 câu mỗi chương. Học và sửa lỗi chi tiết toàn bộ 2,939 câu." })}
                         style={{
-                          backgroundColor: "#f59e0b",
-                          color: "#09090b",
+                          backgroundColor: "var(--ds-btn-warning)",
+                          color: "#ffffff",
                           border: "none",
                           padding: "0.35rem 0.85rem",
                           borderRadius: "4px",
@@ -6251,15 +5839,15 @@ export default function Home() {
                                       fontFamily: "Geist Mono",
                                       padding: "0.15rem 0.45rem",
                                       borderRadius: "4px",
-                                      backgroundColor: isLight ? "#e0f2fe" : "#27272a",
-                                      color: isLight ? "#0369a1" : "#fafafa",
-                                      border: isLight ? "1px solid #bae6fd" : "none",
+                                      backgroundColor: "var(--ds-accent-bg)",
+                                      color: "var(--ds-accent)",
+                                      border: "1px solid var(--ds-accent-border)",
                                       fontWeight: "700",
                                     }}
                                   >
                                     EXERCISE {ex.roman || eIdx + 1}
                                   </span>
-                                  <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
+                                  <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
                                     {ex.questions?.length || 0} câu hỏi
                                   </span>
                                 </div>
@@ -6267,7 +5855,7 @@ export default function Home() {
                                   {ex.instruction_vi || ex.title}
                                 </div>
                                 {ex.instruction_vi && ex.title && (
-                                  <div style={{ fontSize: "0.825rem", color: "#71717a", marginTop: "0.2rem" }}>
+                                  <div style={{ fontSize: "0.825rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
                                     {ex.title}
                                   </div>
                                 )}
@@ -6279,8 +5867,8 @@ export default function Home() {
                                   style={{
                                     padding: "0.4rem 0.75rem",
                                     borderRadius: "4px",
-                                    backgroundColor: isLight ? "#2563eb" : "#27272a",
-                                      border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
+                                    backgroundColor: "var(--ds-btn-primary)",
+                                      border: "1px solid var(--ds-btn-primary)",
                                       color: "#ffffff",
                                     fontSize: "0.75rem",
                                     fontWeight: "600",
@@ -6295,8 +5883,8 @@ export default function Home() {
                                     padding: "0.4rem 0.65rem",
                                     borderRadius: "4px",
                                     backgroundColor: "transparent",
-                                    border: isLight ? "1px solid #cbd5e1" : "1px solid #27272a",
-                                      color: isLight ? "#64748b" : "#a1a1aa",
+                                    border: "1px solid var(--ds-border)",
+                                      color: "var(--ds-text-muted)",
                                     fontSize: "0.75rem",
                                     cursor: "pointer",
                                   }}
@@ -6358,18 +5946,18 @@ export default function Home() {
                                   <div
                                     key={q.id || qIdx}
                                     style={{
-                                      backgroundColor: isLight ? "#f8fafc" : "#18181b",
+                                      backgroundColor: "var(--ds-bg-elevated)",
                                       border: res?.checked
                                         ? res.isCorrect
-                                          ? "1px solid #10b981"
-                                          : "1px solid #f43f5e"
+                                          ? "1px solid var(--ds-success)"
+                                          : "1px solid var(--ds-danger)"
                                         : `1px solid ${T.border}`,
                                       borderRadius: "6px",
                                       padding: "1.1rem",
                                     }}
                                   >
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                                      <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "#71717a", fontWeight: "600" }}>
+                                      <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "600" }}>
                                         CÂU {q.num || qIdx + 1}
                                       </span>
                                       <span
@@ -6378,8 +5966,8 @@ export default function Home() {
                                           fontFamily: "Geist Mono",
                                           padding: "0.15rem 0.45rem",
                                           borderRadius: "4px",
-                                          backgroundColor: isLight ? "#f1f5f9" : "#09090b",
-                                          color: isLight ? "#334155" : "#a1a1aa",
+                                          backgroundColor: "var(--ds-bg-elevated)",
+                                          color: "var(--ds-text-secondary)",
                                           border: `1px solid ${T.border}`,
                                           fontWeight: "700",
                                         }}
@@ -6397,9 +5985,9 @@ export default function Home() {
                                         onClick={() => playWordAudio(q.stem.replace(/\(.*?\)|_.*?_/g, "").trim(), null)}
                                         title="Nghe phát âm câu hỏi này"
                                         style={{
-                                          backgroundColor: isLight ? "#ffffff" : "#1e1e28",
+                                          backgroundColor: "var(--ds-card)",
                                           border: `1px solid ${T.border}`,
-                                          color: isLight ? "#2563eb" : "#38bdf8",
+                                          color: "var(--ds-accent)",
                                           borderRadius: "4px",
                                           padding: "0.2rem 0.5rem",
                                           fontSize: "0.72rem",
@@ -6419,16 +6007,16 @@ export default function Home() {
                                           display: "flex",
                                           alignItems: "center",
                                           gap: "0.5rem",
-                                          backgroundColor: isLight ? "#fffbeb" : "#1c1917",
-                                          border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
+                                          backgroundColor: "var(--ds-warning-bg)",
+                                          border: "1px solid var(--ds-warning-border)",
                                           padding: "0.45rem 0.75rem",
                                           borderRadius: "6px",
                                           fontSize: "0.825rem",
-                                          color: isLight ? "#b45309" : "#f59e0b",
+                                          color: "var(--ds-warning)",
                                           marginBottom: "0.75rem",
                                         }}
                                       >
-                                        <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.75rem", fontWeight: "700" }}>GỢI Ý MỞ ĐẦU:</span>
+                                        <span style={{ color: "var(--ds-warning)", fontSize: "0.75rem", fontWeight: "700" }}>GỢI Ý MỞ ĐẦU:</span>
                                         <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
                                       </div>
                                     )}
@@ -6447,11 +6035,11 @@ export default function Home() {
                                           flex: 1,
                                           minWidth: "220px",
                                           padding: "0.5rem 0.75rem",
-                                          backgroundColor: isLight ? "#ffffff" : "#09090b",
+                                          backgroundColor: "var(--ds-card)",
                                           border: res?.checked
                                             ? res.isCorrect
-                                              ? "1px solid #10b981"
-                                              : "1px solid #f43f5e"
+                                              ? "1px solid var(--ds-success)"
+                                              : "1px solid var(--ds-danger)"
                                             : `1px solid ${T.border}`,
                                           borderRadius: "5px",
                                           color: T.text,
@@ -6464,8 +6052,8 @@ export default function Home() {
                                         onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx)}
                                         style={{
                                           padding: "0.5rem 0.9rem",
-                                          backgroundColor: isLight ? "#2563eb" : "#27272a",
-                                          border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
+                                          backgroundColor: "var(--ds-btn-primary)",
+                                          border: "1px solid var(--ds-btn-primary)",
                                           borderRadius: "5px",
                                           color: "#ffffff",
                                           fontSize: "0.8rem",
@@ -6480,7 +6068,7 @@ export default function Home() {
                                         onClick={() => toggleShowAnswer(q.id)}
                                         style={{
                                           padding: "0.5rem 0.75rem",
-                                          backgroundColor: isLight ? "#f8fafc" : "transparent",
+                                          backgroundColor: "var(--ds-card-subtle)",
                                           border: `1px solid ${T.border}`,
                                           borderRadius: "5px",
                                           color: T.textSecondary,
@@ -6500,7 +6088,7 @@ export default function Home() {
                                           marginTop: "0.6rem",
                                           fontSize: "0.825rem",
                                           fontWeight: "500",
-                                          color: res.isCorrect ? "#34d399" : "#fb7185",
+                                          color: res.isCorrect ? "var(--ds-success)" : "var(--ds-danger)",
                                         }}
                                       >
                                         {res.feedback}
@@ -6522,15 +6110,15 @@ export default function Home() {
                                         style={{
                                           marginTop: "0.75rem",
                                           padding: "0.75rem 0.95rem",
-                                          backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                                          backgroundColor: "var(--ds-card-subtle)",
                                           border: `1px solid ${T.border}`,
                                           borderRadius: "6px",
                                         }}
                                       >
-                                        <div style={{ fontSize: "0.72rem", color: isLight ? "#475569" : "#71717a", fontWeight: "600", textTransform: "uppercase" }}>
+                                        <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontWeight: "600", textTransform: "uppercase" }}>
                                           Đáp án chính xác:
                                         </div>
-                                        <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                                        <div style={{ fontSize: "0.95rem", color: "var(--ds-accent)", fontWeight: "700", marginTop: "0.2rem" }}>
                                           {q.answers.map((a) => a.correct).join("  /  ")}
                                         </div>
                                         {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
@@ -6551,8 +6139,7 @@ export default function Home() {
                   )}
                 </div>
               )}
-            </main>
-          </div>
+            </>
         )}
 
         {/* ============================================================== */}
@@ -6567,25 +6154,25 @@ export default function Home() {
                 <div
                   style={{
                     backgroundColor: "rgba(239, 68, 68, 0.12)",
-                    border: "1px solid #ef4444",
+                    border: "1px solid var(--ds-danger)",
                     borderRadius: "8px",
                     padding: "1.25rem",
                     marginBottom: "1.5rem",
                     textAlign: "center",
                   }}
                 >
-                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f87171", marginBottom: "0.35rem" }}>
+                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--ds-danger)", marginBottom: "0.35rem" }}>
                     🔒 Giới hạn lượt thi Quiz hôm nay
                   </div>
-                  <p style={{ fontSize: "0.875rem", color: "#d4d4d8", margin: "0 0 1rem 0" }}>
+                  <p style={{ fontSize: "0.875rem", color: "var(--ds-text-secondary)", margin: "0 0 1rem 0" }}>
                     Tài khoản Miễn phí được làm tối đa {accessPolicy.freeDailyQuizLimit} đề Quiz mỗi ngày (Bạn đã làm {userTracker.quizzesCompletedToday || 0}/{accessPolicy.freeDailyQuizLimit} đề). Nâng cấp lên VIP để làm bài thi không giới hạn!
                   </p>
                   <button
                     onClick={() => openContextualSmartPaywall("milestone_100_q", { title: "Luyện Thi Quiz & Đề Thích Ứng Không Giới Hạn", description: "Gỡ bỏ giới hạn Quiz trong ngày và sử dụng bộ trộn đề 50/30/20 không giới hạn." })}
                     style={{
                       padding: "0.55rem 1.25rem",
-                      backgroundColor: "#f59e0b",
-                      color: "#09090b",
+                      backgroundColor: "var(--ds-btn-warning)",
+                      color: "#ffffff",
                       border: "none",
                       borderRadius: "6px",
                       fontSize: "0.85rem",
@@ -6642,10 +6229,10 @@ export default function Home() {
                       onClick={() => startNewQuiz(selectedQuizTopic)}
                       style={{
                         padding: "0.5rem 1rem",
-                        backgroundColor: isQuizLimitReached ? "#27272a" : "#2563eb",
-                        border: "1px solid #3f3f46",
+                        backgroundColor: isQuizLimitReached ? "var(--ds-bg-active)" : "var(--ds-btn-primary)",
+                        border: "1px solid var(--ds-border-strong)",
                         borderRadius: "6px",
-                        color: isQuizLimitReached ? "#71717a" : "#ffffff",
+                        color: isQuizLimitReached ? "var(--ds-text-muted)" : "#ffffff",
                         fontSize: "0.825rem",
                         fontWeight: "600",
                         cursor: isQuizLimitReached ? "not-allowed" : "pointer",
@@ -6659,10 +6246,10 @@ export default function Home() {
                         onClick={submitQuiz}
                         style={{
                           padding: "0.5rem 1.25rem",
-                          backgroundColor: "#10b981",
+                          backgroundColor: "var(--ds-btn-success)",
                           border: "none",
                           borderRadius: "6px",
-                          color: "#042f1a",
+                          color: "#ffffff",
                           fontSize: "0.825rem",
                           fontWeight: "700",
                           cursor: "pointer",
@@ -6704,7 +6291,7 @@ export default function Home() {
                 )}
 
                 {/* Topic Selector & Progress Bar */}
-                <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid #1f1f23", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+                <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid var(--ds-border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Chủ đề kiểm tra:</label>
                     <select
@@ -6715,7 +6302,7 @@ export default function Home() {
                         startNewQuiz(e.target.value);
                       }}
                       style={{
-                        backgroundColor: isLight ? "#ffffff" : "#18181b",
+                        backgroundColor: "var(--ds-card)",
                         border: `1px solid ${T.border}`,
                         borderRadius: "6px",
                         padding: "0.45rem 0.75rem",
@@ -6736,7 +6323,7 @@ export default function Home() {
 
                   {activeQuizQuestions.length > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#a1a1aa" }}>
+                      <span style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                         Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
                       </span>
                     </div>
@@ -6749,7 +6336,7 @@ export default function Home() {
                 <div
                   style={{
                     backgroundColor: T.card,
-                    border: quizResults.percentage >= 80 ? "1px solid #10b981" : "1px solid #f43f5e",
+                    border: quizResults.percentage >= 80 ? "1px solid var(--ds-success)" : "1px solid var(--ds-danger)",
                     borderRadius: "10px",
                     padding: "1.75rem",
                     marginBottom: "1.75rem",
@@ -6757,23 +6344,23 @@ export default function Home() {
                     boxShadow: T.shadow,
                   }}
                 >
-                  <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "#71717a", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     KẾT QUẢ ĐÁNH GIÁ
                   </div>
                   <div
                     style={{
                       fontSize: "2.25rem",
                       fontWeight: "700",
-                      color: quizResults.percentage >= 80 ? "#34d399" : "#fb7185",
+                      color: quizResults.percentage >= 80 ? "var(--ds-success)" : "var(--ds-danger)",
                       margin: "0.4rem 0",
                     }}
                   >
                     {quizResults.score} / {quizResults.total}
-                    <span style={{ fontSize: "1.1rem", color: "#71717a", marginLeft: "0.5rem" }}>
+                    <span style={{ fontSize: "1.1rem", color: "var(--ds-text-muted)", marginLeft: "0.5rem" }}>
                       ({quizResults.percentage}%)
                     </span>
                   </div>
-                  <p style={{ fontSize: "0.875rem", color: "#a1a1aa" }}>
+                  <p style={{ fontSize: "0.875rem", color: "var(--ds-text-muted)" }}>
                     {quizResults.percentage >= 80
                       ? "Kết quả rất tốt! Bạn đã nắm chắc kiến thức chuyên đề này."
                       : "Các câu làm sai đã được tự động lưu vào Sổ tay để bạn có thể xem lại và làm lại bất cứ lúc nào."}
@@ -6797,12 +6384,12 @@ export default function Home() {
                         backgroundColor: T.card,
                         border: quizSubmitted
                           ? detail?.isCorrect
-                            ? "1px solid #10b981"
-                            : "1px solid #f43f5e"
+                            ? "1px solid var(--ds-success)"
+                            : "1px solid var(--ds-danger)"
                           : singleCheck?.checked
                           ? singleCheck.isCorrect
-                            ? "1px solid #10b981"
-                            : "1px solid #f43f5e"
+                            ? "1px solid var(--ds-success)"
+                            : "1px solid var(--ds-danger)"
                           : `1px solid ${T.border}`,
                         borderRadius: "8px",
                         padding: "1.25rem 1.5rem",
@@ -6815,7 +6402,7 @@ export default function Home() {
                           <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, fontWeight: "600" }}>
                             CÂU {idx + 1} / {activeQuizQuestions.length}
                           </span>
-                          <span style={{ fontSize: "0.75rem", color: "#52525b" }}>•</span>
+                          <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
                           <span style={{ fontSize: "0.75rem", color: T.textMuted }}>{q.topic_name}</span>
                         </div>
 
@@ -6841,8 +6428,8 @@ export default function Home() {
                               fontFamily: "Geist Mono",
                               padding: "0.15rem 0.45rem",
                               borderRadius: "4px",
-                              backgroundColor: isLight ? "#f1f5f9" : "#18181b",
-                              color: isLight ? "#334155" : "#a1a1aa",
+                              backgroundColor: "var(--ds-bg-elevated)",
+                              color: "var(--ds-text-secondary)",
                               border: `1px solid ${T.border}`,
                               fontWeight: "700",
                             }}
@@ -6856,19 +6443,19 @@ export default function Home() {
                       {q.instruction && (
                         <div
                           style={{
-                            backgroundColor: isLight ? "#eff6ff" : "#0d1b2a",
-                            borderLeft: isLight ? "4px solid #2563eb" : "3px solid #38bdf8",
-                            border: isLight ? `1px solid #bfdbfe` : "none",
+                            backgroundColor: "var(--ds-accent-bg)",
+                            borderLeft: "4px solid var(--ds-accent)",
+                            border: "1px solid var(--ds-accent-border)",
                             padding: "0.5rem 0.85rem",
                             borderRadius: "6px",
                             marginBottom: "0.85rem",
                             fontSize: "0.825rem",
-                            color: isLight ? "#1e40af" : "#bae6fd",
+                            color: "var(--ds-accent)",
                             lineHeight: "1.5",
                             boxShadow: isLight ? "0 1px 2px rgba(37,99,235,0.05)" : "none",
                           }}
                         >
-                          <strong style={{ color: isLight ? "#1d4ed8" : "#7dd3fc" }}>Yêu cầu:</strong> {q.instruction}
+                          <strong style={{ color: "var(--ds-accent)" }}>Yêu cầu:</strong> {q.instruction}
                         </div>
                       )}
 
@@ -6884,16 +6471,16 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             gap: "0.5rem",
-                            backgroundColor: isLight ? "#fffbeb" : "#1c1917",
-                            border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
+                            backgroundColor: "var(--ds-warning-bg)",
+                            border: "1px solid var(--ds-warning-border)",
                             padding: "0.45rem 0.75rem",
                             borderRadius: "6px",
                             fontSize: "0.825rem",
-                            color: isLight ? "#b45309" : "#f59e0b",
+                            color: "var(--ds-warning)",
                             marginBottom: "0.85rem",
                           }}
                         >
-                          <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
+                          <span style={{ color: "var(--ds-warning)", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
                           <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
                         </div>
                       )}
@@ -6916,11 +6503,11 @@ export default function Home() {
                             borderRadius: "6px",
                             border: singleCheck?.checked
                               ? singleCheck.isCorrect
-                                ? "1px solid #10b981"
-                                : "1px solid #f43f5e"
+                                ? "1px solid var(--ds-success)"
+                                : "1px solid var(--ds-danger)"
                               : `1px solid ${T.border}`,
                             fontSize: "0.875rem",
-                            backgroundColor: isLight ? "#ffffff" : "#09090b",
+                            backgroundColor: "var(--ds-card)",
                             color: T.text,
                             outline: "none",
                           }}
@@ -6931,7 +6518,7 @@ export default function Home() {
                             <button
                               onClick={() => checkSingleQuizQuestion(q)}
                               style={{
-                                backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                                backgroundColor: "var(--ds-bg-elevated)",
                                 color: T.text,
                                 border: `1px solid ${T.border}`,
                                 padding: "0.55rem 1rem",
@@ -6946,7 +6533,7 @@ export default function Home() {
                             <button
                               onClick={() => toggleQuizShowAnswer(q.id)}
                               style={{
-                                backgroundColor: isLight ? "#f8fafc" : "transparent",
+                                backgroundColor: "var(--ds-card-subtle)",
                                 color: T.textSecondary,
                                 border: `1px solid ${T.border}`,
                                 padding: "0.55rem 0.85rem",
@@ -6969,7 +6556,7 @@ export default function Home() {
                             marginTop: "0.55rem",
                             fontSize: "0.8rem",
                             fontWeight: "500",
-                            color: singleCheck.isCorrect ? "#34d399" : "#fb7185",
+                            color: singleCheck.isCorrect ? "var(--ds-success)" : "var(--ds-danger)",
                           }}
                         >
                           {singleCheck.feedback}
@@ -6982,7 +6569,7 @@ export default function Home() {
                           style={{
                             marginTop: "0.75rem",
                             padding: "0.75rem 0.95rem",
-                            backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                            backgroundColor: "var(--ds-card-subtle)",
                             border: `1px solid ${T.border}`,
                             borderRadius: "6px",
                           }}
@@ -6990,7 +6577,7 @@ export default function Home() {
                           <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase" }}>
                             Đáp án chính xác:
                           </div>
-                          <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                          <div style={{ fontSize: "0.95rem", color: "var(--ds-accent)", fontWeight: "700", marginTop: "0.2rem" }}>
                             {q.answers.join("  /  ")}
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
@@ -7008,10 +6595,10 @@ export default function Home() {
                             border: `1px solid ${detail.isCorrect ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`,
                           }}
                         >
-                          <div style={{ fontSize: "0.8rem", color: detail.isCorrect ? "#34d399" : "#fb7185", fontWeight: "600" }}>
+                          <div style={{ fontSize: "0.8rem", color: detail.isCorrect ? "var(--ds-success)" : "var(--ds-danger)", fontWeight: "600" }}>
                             {detail.isCorrect ? "✓ Chính xác" : "✕ Chưa đúng"}
                           </div>
-                          <div style={{ fontSize: "0.825rem", color: "#d4d4d8", marginTop: "0.25rem" }}>
+                          <div style={{ fontSize: "0.825rem", color: "var(--ds-text-secondary)", marginTop: "0.25rem" }}>
                             Đáp án chuẩn: <strong style={{ color: T.text }}>{q.answers.join(" / ")}</strong>
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
@@ -7037,8 +6624,8 @@ export default function Home() {
                     onClick={submitQuiz}
                     style={{
                       padding: "0.75rem 2.5rem",
-                      backgroundColor: "#10b981",
-                      color: "#042f1a",
+                      backgroundColor: "var(--ds-btn-success)",
+                      color: "#ffffff",
                       border: "none",
                       borderRadius: "6px",
                       fontSize: "0.95rem",
@@ -7077,7 +6664,7 @@ export default function Home() {
                     <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
                       Sổ tay câu hỏi cần ôn lại của {currentUser.name}
                     </h1>
-                    <p style={{ fontSize: "0.85rem", color: "#71717a", marginTop: "0.35rem" }}>
+                    <p style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", marginTop: "0.35rem" }}>
                       Lưu trữ tự động các câu bạn đã làm chưa đúng trong phần bài tập và bài thi Quiz. Dữ liệu được lưu riêng cho tài khoản của bạn.
                     </p>
                   </div>
@@ -7088,8 +6675,8 @@ export default function Home() {
                       style={{
                         padding: "0.45rem 0.85rem",
                         backgroundColor: "transparent",
-                        border: "1px solid #ef4444",
-                        color: "#ef4444",
+                        border: "1px solid var(--ds-danger)",
+                        color: "var(--ds-danger)",
                         borderRadius: "6px",
                         fontSize: "0.8rem",
                         cursor: "pointer",
@@ -7102,13 +6689,13 @@ export default function Home() {
 
                 {/* Filter Topic bar */}
                 {savedMistakes.length > 0 && (
-                  <div style={{ marginTop: "1.25rem", paddingTop: "1rem", borderTop: "1px solid #1f1f23", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div style={{ marginTop: "1.25rem", paddingTop: "1rem", borderTop: "1px solid var(--ds-border-subtle)", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <span style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Lọc theo chủ đề:</span>
                     <select
                       value={mistakeFilterTopic}
                       onChange={(e) => setMistakeFilterTopic(e.target.value)}
                       style={{
-                        backgroundColor: isLight ? "#ffffff" : "#18181b",
+                        backgroundColor: "var(--ds-card)",
                         border: `1px solid ${T.border}`,
                         borderRadius: "6px",
                         padding: "0.35rem 0.65rem",
@@ -7153,8 +6740,8 @@ export default function Home() {
                     }}
                     style={{
                       padding: "0.55rem 1.25rem",
-                      backgroundColor: isLight ? "#2563eb" : "#27272a",
-                      border: isLight ? "1px solid #2563eb" : "1px solid #3f3f46",
+                      backgroundColor: "var(--ds-btn-primary)",
+                      border: "1px solid var(--ds-btn-primary)",
                       borderRadius: "6px",
                       color: "#ffffff",
                       fontSize: "0.825rem",
@@ -7179,8 +6766,8 @@ export default function Home() {
                           backgroundColor: T.card,
                           border: res?.checked
                             ? res.isCorrect
-                              ? "1px solid #10b981"
-                              : "1px solid #f43f5e"
+                              ? "1px solid var(--ds-success)"
+                              : "1px solid var(--ds-danger)"
                             : `1px solid ${T.border}`,
                           borderRadius: "8px",
                           padding: "1.25rem 1.5rem",
@@ -7208,17 +6795,17 @@ export default function Home() {
                         {item.instruction && (
                           <div
                             style={{
-                              backgroundColor: isLight ? "#eff6ff" : "#0d1b2a",
-                              borderLeft: isLight ? "4px solid #2563eb" : "3px solid #38bdf8",
-                              border: isLight ? `1px solid #bfdbfe` : "none",
+                              backgroundColor: "var(--ds-accent-bg)",
+                              borderLeft: "4px solid var(--ds-accent)",
+                              border: "1px solid var(--ds-accent-border)",
                               padding: "0.45rem 0.75rem",
                               borderRadius: "6px",
                               marginBottom: "0.75rem",
                               fontSize: "0.8rem",
-                              color: isLight ? "#1e40af" : "#bae6fd",
+                              color: "var(--ds-accent)",
                             }}
                           >
-                            <strong style={{ color: isLight ? "#1d4ed8" : "#7dd3fc" }}>Yêu cầu:</strong> {item.instruction}
+                            <strong style={{ color: "var(--ds-accent)" }}>Yêu cầu:</strong> {item.instruction}
                           </div>
                         )}
 
@@ -7232,16 +6819,16 @@ export default function Home() {
                               display: "flex",
                               alignItems: "center",
                               gap: "0.5rem",
-                              backgroundColor: isLight ? "#fffbeb" : "#1c1917",
-                              border: isLight ? "1px solid #fde68a" : "1px solid #44403c",
+                              backgroundColor: "var(--ds-warning-bg)",
+                              border: "1px solid var(--ds-warning-border)",
                               padding: "0.45rem 0.75rem",
                               borderRadius: "6px",
                               fontSize: "0.825rem",
-                              color: isLight ? "#b45309" : "#f59e0b",
+                              color: "var(--ds-warning)",
                               marginBottom: "0.75rem",
                             }}
                           >
-                            <span style={{ color: isLight ? "#78350f" : "#a8a29e", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
+                            <span style={{ color: "var(--ds-warning)", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
                             <span style={{ fontWeight: "600" }}>"{item.starter_prompt}..."</span>
                           </div>
                         )}
@@ -7263,11 +6850,11 @@ export default function Home() {
                               borderRadius: "6px",
                               border: res?.checked
                                 ? res.isCorrect
-                                  ? "1px solid #10b981"
-                                  : "1px solid #f43f5e"
+                                  ? "1px solid var(--ds-success)"
+                                  : "1px solid var(--ds-danger)"
                                 : `1px solid ${T.border}`,
                               fontSize: "0.875rem",
-                              backgroundColor: isLight ? "#ffffff" : "#09090b",
+                              backgroundColor: "var(--ds-card)",
                               color: T.text,
                               outline: "none",
                             }}
@@ -7276,7 +6863,7 @@ export default function Home() {
                           <button
                             onClick={() => checkSingleMistake(item)}
                             style={{
-                              backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                              backgroundColor: "var(--ds-bg-elevated)",
                               color: T.text,
                               border: `1px solid ${T.border}`,
                               padding: "0.55rem 1rem",
@@ -7292,7 +6879,7 @@ export default function Home() {
                           <button
                             onClick={() => setShowMistakeAnswers((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
                             style={{
-                              backgroundColor: isLight ? "#f8fafc" : "transparent",
+                              backgroundColor: "var(--ds-card-subtle)",
                               color: T.textSecondary,
                               border: `1px solid ${T.border}`,
                               padding: "0.55rem 0.85rem",
@@ -7312,7 +6899,7 @@ export default function Home() {
                               marginTop: "0.55rem",
                               fontSize: "0.8rem",
                               fontWeight: "500",
-                              color: res.isCorrect ? "#34d399" : "#fb7185",
+                              color: res.isCorrect ? "var(--ds-success)" : "var(--ds-danger)",
                             }}
                           >
                             {res.feedback}
@@ -7324,7 +6911,7 @@ export default function Home() {
                             style={{
                               marginTop: "0.75rem",
                               padding: "0.75rem 0.95rem",
-                              backgroundColor: isLight ? "#f8fafc" : "#09090b",
+                              backgroundColor: "var(--ds-card-subtle)",
                               border: `1px solid ${T.border}`,
                               borderRadius: "6px",
                             }}
@@ -7332,7 +6919,7 @@ export default function Home() {
                             <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase" }}>
                               Đáp án chuẩn:
                             </div>
-                            <div style={{ fontSize: "0.95rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontWeight: "700", marginTop: "0.2rem" }}>
+                            <div style={{ fontSize: "0.95rem", color: "var(--ds-accent)", fontWeight: "700", marginTop: "0.2rem" }}>
                               {item.answers.join("  /  ")}
                             </div>
                             {renderPedagogicalExplanation(item.explanation, item.pedagogy, item)}
@@ -7346,7 +6933,7 @@ export default function Home() {
             </div>
           </div>
         )}
-      </div>
-    </>
+      </AppShell2026>
+    </div>
   );
 }

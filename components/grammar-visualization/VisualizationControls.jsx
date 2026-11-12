@@ -1,4 +1,5 @@
 import React from "react";
+import { getThemeTokens } from "../../lib/tokens/design-tokens";
 
 export default function VisualizationControls({
   onReset,
@@ -6,6 +7,8 @@ export default function VisualizationControls({
   onToggleExpand,
   isLight = false,
 }) {
+  const T = getThemeTokens(isLight);
+
   return (
     <div
       style={{
@@ -16,16 +19,18 @@ export default function VisualizationControls({
     >
       {onReset && (
         <button
+          type="button"
           onClick={onReset}
           title="Đặt lại trạng thái ban đầu"
+          className="ds-focusable"
           style={{
             padding: "0.3rem 0.6rem",
             fontSize: "0.75rem",
-            fontFamily: "Geist Mono",
-            backgroundColor: isLight ? "#f1f5f9" : "#1e1e28",
-            border: `1px solid ${isLight ? "#cbd5e1" : "#2d2d3d"}`,
+            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+            backgroundColor: T.bgElevated,
+            border: `1px solid ${T.border}`,
             borderRadius: "6px",
-            color: isLight ? "#334155" : "#a1a1aa",
+            color: T.textSecondary,
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
@@ -39,16 +44,18 @@ export default function VisualizationControls({
 
       {onToggleExpand && (
         <button
+          type="button"
           onClick={onToggleExpand}
           title={isExpanded ? "Thu gọn giao diện" : "Mở rộng giao diện"}
+          className="ds-focusable"
           style={{
             padding: "0.3rem 0.6rem",
             fontSize: "0.75rem",
-            fontFamily: "Geist Mono",
-            backgroundColor: isLight ? "#f1f5f9" : "#1e1e28",
-            border: `1px solid ${isLight ? "#cbd5e1" : "#2d2d3d"}`,
+            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+            backgroundColor: T.bgElevated,
+            border: `1px solid ${T.border}`,
             borderRadius: "6px",
-            color: isLight ? "#334155" : "#a1a1aa",
+            color: T.textSecondary,
             cursor: "pointer",
             display: "flex",
             alignItems: "center",

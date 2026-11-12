@@ -66,7 +66,7 @@ export default function DiagnosticQuestionReview({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: isLight ? "#f8fafc" : "#121215",
+            backgroundColor: "var(--ds-bg-elevated)",
           }}
         >
           <div>
@@ -84,7 +84,7 @@ export default function DiagnosticQuestionReview({
               width: "36px",
               height: "36px",
               borderRadius: "50%",
-              backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+              backgroundColor: "var(--ds-card-border)",
               color: T.text,
               border: "none",
               fontSize: "1.1rem",
@@ -106,7 +106,7 @@ export default function DiagnosticQuestionReview({
             borderBottom: `1px solid ${T.borderSubtle}`,
             display: "flex",
             gap: "0.75rem",
-            backgroundColor: isLight ? "#ffffff" : "#18181b",
+            backgroundColor: "var(--ds-card)",
           }}
         >
           <button
@@ -117,7 +117,7 @@ export default function DiagnosticQuestionReview({
               fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
-              backgroundColor: filterMode === "ALL" ? T.accent : isLight ? "#f1f5f9" : "#27272a",
+              backgroundColor: filterMode === "ALL" ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
               color: filterMode === "ALL" ? "#ffffff" : T.text,
               border: "none",
             }}
@@ -133,8 +133,8 @@ export default function DiagnosticQuestionReview({
               fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
-              backgroundColor: filterMode === "INCORRECT" ? T.danger : isLight ? "#fee2e2" : "#7f1d1d",
-              color: filterMode === "INCORRECT" ? "#ffffff" : isLight ? "#dc2626" : "#fca5a5",
+              backgroundColor: filterMode === "INCORRECT" ? T.danger : "var(--ds-danger-bg)",
+              color: filterMode === "INCORRECT" ? "#ffffff" : "var(--ds-danger)",
               border: "none",
             }}
           >
@@ -149,8 +149,8 @@ export default function DiagnosticQuestionReview({
               fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
-              backgroundColor: filterMode === "CORRECT" ? T.success : isLight ? "#dcfce7" : "#064e3b",
-              color: filterMode === "CORRECT" ? "#ffffff" : isLight ? "#15803d" : "#86efac",
+              backgroundColor: filterMode === "CORRECT" ? T.success : "var(--ds-success-bg)",
+              color: filterMode === "CORRECT" ? "#ffffff" : "var(--ds-success)",
               border: "none",
             }}
           >
@@ -175,8 +175,8 @@ export default function DiagnosticQuestionReview({
               style={{
                 borderRadius: "0.75rem",
                 padding: "1.5rem",
-                backgroundColor: isLight ? "#f8fafc" : "#18181b",
-                border: `1px solid ${q.is_correct ? (isLight ? "#a7f3d0" : "#064e3b") : isLight ? "#fecaca" : "#7f1d1d"}`,
+                backgroundColor: "var(--ds-bg-elevated)",
+                border: `1px solid ${q.is_correct ? "var(--ds-success-border)" : "var(--ds-danger-border)"}`,
               }}
             >
               {/* Question Meta */}
@@ -206,7 +206,7 @@ export default function DiagnosticQuestionReview({
                       fontWeight: 600,
                       padding: "0.15rem 0.5rem",
                       borderRadius: "0.3rem",
-                      backgroundColor: isLight ? "#e2e8f0" : "#27272a",
+                      backgroundColor: "var(--ds-card-border)",
                       color: T.textMuted,
                     }}
                   >
@@ -221,8 +221,8 @@ export default function DiagnosticQuestionReview({
                       fontWeight: 700,
                       padding: "0.2rem 0.6rem",
                       borderRadius: "9999px",
-                      backgroundColor: q.is_correct ? (isLight ? "#dcfce7" : "#064e3b") : isLight ? "#fee2e2" : "#7f1d1d",
-                      color: q.is_correct ? (isLight ? "#15803d" : "#86efac") : isLight ? "#dc2626" : "#fca5a5",
+                      backgroundColor: q.is_correct ? "var(--ds-success-bg)" : "var(--ds-danger-bg)",
+                      color: q.is_correct ? "var(--ds-success)" : "var(--ds-danger)",
                     }}
                   >
                     {q.is_correct ? "✓ Trả lời Đúng" : "✕ Trả lời Sai"}
@@ -246,18 +246,18 @@ export default function DiagnosticQuestionReview({
                   const isUserSelection = q.selected_answer === opt.key;
                   const isAnswerCorrect = q.correct_answer === opt.key;
 
-                  let optBg = isLight ? "#ffffff" : "#27272a";
+                  let optBg = "var(--ds-card)";
                   let optBorder = T.borderSubtle;
                   let optColor = T.textSecondary;
 
                   if (isAnswerCorrect) {
-                    optBg = isLight ? "#dcfce7" : "#064e3b";
-                    optBorder = isLight ? "#86efac" : "#10b981";
-                    optColor = isLight ? "#15803d" : "#86efac";
+                    optBg = "var(--ds-success-bg)";
+                    optBorder = "var(--ds-success-border)";
+                    optColor = "var(--ds-success)";
                   } else if (isUserSelection && !q.is_correct) {
-                    optBg = isLight ? "#fee2e2" : "#7f1d1d";
-                    optBorder = isLight ? "#fca5a5" : "#ef4444";
-                    optColor = isLight ? "#dc2626" : "#fca5a5";
+                    optBg = "var(--ds-danger-bg)";
+                    optBorder = "var(--ds-danger-border)";
+                    optColor = "var(--ds-danger)";
                   }
 
                   return (

@@ -13,8 +13,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
   return (
     <div
       style={{
-        backgroundColor: isLight ? "#ffffff" : "#111116",
-        border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+        backgroundColor: "var(--ds-card)",
+        border: `1px solid ${"var(--ds-border)"}`,
         borderRadius: "12px",
         padding: "1.5rem",
         boxShadow: isLight ? "0 2px 10px rgba(0,0,0,0.04)" : "0 8px 24px rgba(0,0,0,0.4)",
@@ -27,7 +27,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             style={{
               fontSize: "1.15rem",
               fontWeight: "700",
-              color: isLight ? "#0f172a" : "#fafafa",
+              color: "var(--ds-text-heading)",
               margin: 0,
             }}
           >
@@ -37,9 +37,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             style={{
               fontSize: "0.72rem",
               fontFamily: "Geist Mono",
-              backgroundColor: isLight ? "#f0fdf4" : "#064e3b",
-              border: `1px solid ${isLight ? "#a7f3d0" : "#059669"}`,
-              color: isLight ? "#047857" : "#34d399",
+              backgroundColor: "var(--ds-success-bg)",
+              border: `1px solid ${"var(--ds-success-border)"}`,
+              color: "var(--ds-success)",
               padding: "0.2rem 0.6rem",
               borderRadius: "999px",
               fontWeight: "700",
@@ -51,7 +51,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
         <p
           style={{
             fontSize: "0.85rem",
-            color: isLight ? "#475569" : "#a1a1aa",
+            color: "var(--ds-text-muted)",
             margin: "0.35rem 0 0 0",
             lineHeight: "1.5",
           }}
@@ -65,7 +65,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
         style={{
           display: "flex",
           gap: "0.45rem",
-          borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+          borderBottom: `1px solid ${"var(--ds-card-border)"}`,
           paddingBottom: "0.75rem",
           marginBottom: "1.25rem",
           overflowX: "auto",
@@ -77,9 +77,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "flow" ? "700" : "500",
-            backgroundColor: activeTab === "flow" ? (isLight ? "#2563eb" : "#3b82f6") : "transparent",
-            color: activeTab === "flow" ? "#ffffff" : (isLight ? "#334155" : "#a1a1aa"),
-            border: `1px solid ${activeTab === "flow" ? "transparent" : (isLight ? "#cbd5e1" : "#272733")}`,
+            backgroundColor: activeTab === "flow" ? "var(--ds-btn-primary)" : "transparent",
+            color: activeTab === "flow" ? "#ffffff" : "var(--ds-text-secondary)",
+            border: `1px solid ${activeTab === "flow" ? "transparent" : "var(--ds-border)"}`,
             borderRadius: "6px",
             cursor: "pointer",
           }}
@@ -93,9 +93,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "backshift" ? "700" : "500",
-            backgroundColor: activeTab === "backshift" ? (isLight ? "#2563eb" : "#3b82f6") : "transparent",
-            color: activeTab === "backshift" ? "#ffffff" : (isLight ? "#334155" : "#a1a1aa"),
-            border: `1px solid ${activeTab === "backshift" ? "transparent" : (isLight ? "#cbd5e1" : "#272733")}`,
+            backgroundColor: activeTab === "backshift" ? "var(--ds-btn-primary)" : "transparent",
+            color: activeTab === "backshift" ? "#ffffff" : "var(--ds-text-secondary)",
+            border: `1px solid ${activeTab === "backshift" ? "transparent" : "var(--ds-border)"}`,
             borderRadius: "6px",
             cursor: "pointer",
           }}
@@ -109,9 +109,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "adverbs" ? "700" : "500",
-            backgroundColor: activeTab === "adverbs" ? (isLight ? "#2563eb" : "#3b82f6") : "transparent",
-            color: activeTab === "adverbs" ? "#ffffff" : (isLight ? "#334155" : "#a1a1aa"),
-            border: `1px solid ${activeTab === "adverbs" ? "transparent" : (isLight ? "#cbd5e1" : "#272733")}`,
+            backgroundColor: activeTab === "adverbs" ? "var(--ds-btn-primary)" : "transparent",
+            color: activeTab === "adverbs" ? "#ffffff" : "var(--ds-text-secondary)",
+            border: `1px solid ${activeTab === "adverbs" ? "transparent" : "var(--ds-border)"}`,
             borderRadius: "6px",
             cursor: "pointer",
           }}
@@ -125,9 +125,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "exceptions" ? "700" : "500",
-            backgroundColor: activeTab === "exceptions" ? (isLight ? "#2563eb" : "#3b82f6") : "transparent",
-            color: activeTab === "exceptions" ? "#ffffff" : (isLight ? "#334155" : "#a1a1aa"),
-            border: `1px solid ${activeTab === "exceptions" ? "transparent" : (isLight ? "#cbd5e1" : "#272733")}`,
+            backgroundColor: activeTab === "exceptions" ? "var(--ds-btn-primary)" : "transparent",
+            color: activeTab === "exceptions" ? "#ffffff" : "var(--ds-text-secondary)",
+            border: `1px solid ${activeTab === "exceptions" ? "transparent" : "var(--ds-border)"}`,
             borderRadius: "6px",
             cursor: "pointer",
           }}
@@ -158,12 +158,12 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     padding: "0.6rem 0.75rem",
                     textAlign: "left",
                     backgroundColor: isSelected
-                      ? (isLight ? "#eff6ff" : "#1e1b4b")
-                      : (isLight ? "#f8fafc" : "#14141c"),
+                      ? "var(--ds-accent-bg)"
+                      : "var(--ds-bg-elevated)",
                     border: `1px solid ${
                       isSelected
-                        ? (isLight ? "#3b82f6" : "#6366f1")
-                        : (isLight ? "#cbd5e1" : "#272733")
+                        ? "var(--ds-accent)"
+                        : "var(--ds-border)"
                     }`,
                     borderRadius: "8px",
                     cursor: "pointer",
@@ -175,7 +175,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                       fontSize: "0.68rem",
                       fontFamily: "Geist Mono",
                       fontWeight: "700",
-                      color: isSelected ? (isLight ? "#1d4ed8" : "#818cf8") : (isLight ? "#64748b" : "#71717a"),
+                      color: isSelected ? "var(--ds-accent)" : "var(--ds-text-muted)",
                     }}
                   >
                     GIAI ĐOẠN {st.stage}
@@ -184,7 +184,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     style={{
                       fontSize: "0.78rem",
                       fontWeight: "700",
-                      color: isLight ? "#0f172a" : "#fafafa",
+                      color: "var(--ds-text-heading)",
                       marginTop: "0.15rem",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -204,8 +204,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             return (
               <div
                 style={{
-                  backgroundColor: isLight ? "#f8fafc" : "#0d0d12",
-                  border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                  backgroundColor: "var(--ds-bg-elevated)",
+                  border: `1px solid ${"var(--ds-card-border)"}`,
                   borderRadius: "10px",
                   padding: "1.25rem",
                   marginBottom: "1.25rem",
@@ -214,7 +214,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
                   <span
                     style={{
-                      backgroundColor: isLight ? "#2563eb" : "#3b82f6",
+                      backgroundColor: "var(--ds-btn-primary)",
                       color: "#ffffff",
                       width: "24px",
                       height: "24px",
@@ -228,24 +228,24 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                   >
                     {st.stage}
                   </span>
-                  <h4 style={{ fontSize: "1rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa", margin: 0 }}>
+                  <h4 style={{ fontSize: "1rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: 0 }}>
                     {st.title}
                   </h4>
                 </div>
 
-                <p style={{ fontSize: "0.85rem", color: isLight ? "#334155" : "#d4d4d8", lineHeight: "1.6", margin: "0 0 0.85rem 0" }}>
+                <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", lineHeight: "1.6", margin: "0 0 0.85rem 0" }}>
                   {st.detail}
                 </p>
 
                 <div
                   style={{
-                    backgroundColor: isLight ? "#ffffff" : "#161622",
-                    border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                    backgroundColor: "var(--ds-card)",
+                    border: `1px solid ${"var(--ds-border)"}`,
                     borderRadius: "6px",
                     padding: "0.75rem 1rem",
                     fontSize: "0.82rem",
                     fontFamily: "Geist Mono",
-                    color: isLight ? "#1d4ed8" : "#93c5fd",
+                    color: "var(--ds-accent)",
                   }}
                 >
                   💡 <strong>Ví dụ mẫu:</strong> {st.example}
@@ -256,7 +256,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
 
           {/* Interactive Examples Walkthrough */}
           <div>
-            <div style={{ fontSize: "0.78rem", fontFamily: "Geist Mono", color: isLight ? "#475569" : "#a1a1aa", fontWeight: "700", marginBottom: "0.5rem", textTransform: "uppercase" }}>
+            <div style={{ fontSize: "0.78rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.5rem", textTransform: "uppercase" }}>
               Các dạng câu tường thuật thường gặp:
             </div>
             <div style={{ display: "flex", gap: "0.45rem", marginBottom: "0.85rem", flexWrap: "wrap" }}>
@@ -268,9 +268,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     padding: "0.4rem 0.75rem",
                     fontSize: "0.78rem",
                     fontWeight: idx === activeExampleIndex ? "700" : "500",
-                    backgroundColor: idx === activeExampleIndex ? (isLight ? "#eff6ff" : "#1e1b4b") : (isLight ? "#f1f5f9" : "#181820"),
-                    color: idx === activeExampleIndex ? (isLight ? "#1d4ed8" : "#a5b4fc") : (isLight ? "#334155" : "#a1a1aa"),
-                    border: `1px solid ${idx === activeExampleIndex ? (isLight ? "#3b82f6" : "#6366f1") : (isLight ? "#cbd5e1" : "#272733")}`,
+                    backgroundColor: idx === activeExampleIndex ? "var(--ds-accent-bg)" : "var(--ds-bg-elevated)",
+                    color: idx === activeExampleIndex ? "var(--ds-accent)" : "var(--ds-text-secondary)",
+                    border: `1px solid ${idx === activeExampleIndex ? "var(--ds-accent)" : "var(--ds-border)"}`,
                     borderRadius: "6px",
                     cursor: "pointer",
                   }}
@@ -283,8 +283,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             {currentExample && (
               <div
                 style={{
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                  backgroundColor: "var(--ds-card)",
+                  border: `1px solid ${"var(--ds-border)"}`,
                   borderRadius: "10px",
                   padding: "1.25rem",
                 }}
@@ -292,35 +292,35 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 {/* Direct */}
                 <div style={{ marginBottom: "1rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#b45309" : "#fbbf24", fontWeight: "800", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-warning)", fontWeight: "800", textTransform: "uppercase" }}>
                       Câu Trực Tiếp (Direct Speech)
                     </span>
                     <AudioPlayer text={currentExample.direct} isLight={isLight} compact={true} />
                   </div>
-                  <div style={{ fontSize: "0.95rem", fontStyle: "italic", color: isLight ? "#0f172a" : "#fafafa", padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#fffbeb" : "#451a0330", borderRadius: "6px", border: `1px solid ${isLight ? "#fde68a" : "#b4530970"}` }}>
+                  <div style={{ fontSize: "0.95rem", fontStyle: "italic", color: "var(--ds-text-heading)", padding: "0.5rem 0.75rem", backgroundColor: "var(--ds-warning-bg)", borderRadius: "6px", border: `1px solid ${"var(--ds-warning-border)"}` }}>
                     "{currentExample.direct}"
                   </div>
                 </div>
 
-                <div style={{ textAlign: "center", color: isLight ? "#64748b" : "#71717a", fontSize: "1.2rem", margin: "0.35rem 0" }}>
+                <div style={{ textAlign: "center", color: "var(--ds-text-muted)", fontSize: "1.2rem", margin: "0.35rem 0" }}>
                   ⇣ Chuyển đổi tường thuật ⇣
                 </div>
 
                 {/* Reported */}
                 <div style={{ marginBottom: "1rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: isLight ? "#047857" : "#34d399", fontWeight: "800", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "800", textTransform: "uppercase" }}>
                       Câu Gián Tiếp (Reported Speech)
                     </span>
                     <AudioPlayer text={currentExample.reported} isLight={isLight} compact={true} />
                   </div>
-                  <div style={{ fontSize: "0.95rem", fontWeight: "600", color: isLight ? "#0f172a" : "#fafafa", padding: "0.5rem 0.75rem", backgroundColor: isLight ? "#f0fdf4" : "#064e3b30", borderRadius: "6px", border: `1px solid ${isLight ? "#bbf7d0" : "#05966970"}` }}>
+                  <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "var(--ds-text-heading)", padding: "0.5rem 0.75rem", backgroundColor: "var(--ds-success-bg)", borderRadius: "6px", border: `1px solid ${"var(--ds-success-border)"}` }}>
                     "{currentExample.reported}"
                   </div>
                 </div>
 
                 {/* Changes List */}
-                <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#475569" : "#a1a1aa", fontWeight: "700", marginBottom: "0.45rem" }}>
+                <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.45rem" }}>
                   CHI TIẾT CÁC BƯỚC BIẾN ĐỔI:
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
@@ -329,13 +329,13 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                       key={chIdx}
                       style={{
                         fontSize: "0.82rem",
-                        color: isLight ? "#334155" : "#cbd5e1",
+                        color: "var(--ds-text-secondary)",
                         display: "flex",
                         alignItems: "center",
                         gap: "0.45rem",
                       }}
                     >
-                      <span style={{ color: isLight ? "#2563eb" : "#38bdf8" }}>✓</span>
+                      <span style={{ color: "var(--ds-accent)" }}>✓</span>
                       <span>{ch}</span>
                     </div>
                   ))}
@@ -354,24 +354,24 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               width: "100%",
               borderCollapse: "separate",
               borderSpacing: 0,
-              backgroundColor: isLight ? "#ffffff" : "#14141c",
-              border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+              backgroundColor: "var(--ds-card)",
+              border: `1px solid ${"var(--ds-border)"}`,
               borderRadius: "8px",
               overflow: "hidden",
             }}
           >
             <thead>
-              <tr style={{ backgroundColor: isLight ? "#f8fafc" : "#181822" }}>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`, textAlign: "left", fontSize: "0.8rem", color: isLight ? "#1d4ed8" : "#60a5fa", fontFamily: "Geist Mono" }}>
+              <tr style={{ backgroundColor: "var(--ds-bg-elevated)" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
                   Thì Trực Tiếp (Direct)
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`, textAlign: "center", fontSize: "0.8rem", color: isLight ? "#64748b" : "#71717a", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "center", fontSize: "0.8rem", color: "var(--ds-text-muted)", fontFamily: "Geist Mono" }}>
                   Biến Đổi
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`, textAlign: "left", fontSize: "0.8rem", color: isLight ? "#047857" : "#34d399", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-success)", fontFamily: "Geist Mono" }}>
                   Lùi Thì Gián Tiếp (Reported)
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`, textAlign: "left", fontSize: "0.8rem", color: isLight ? "#334155" : "#e2e8f0", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-text-secondary)", fontFamily: "Geist Mono" }}>
                   Ví dụ trực quan
                 </th>
               </tr>
@@ -381,19 +381,19 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 <tr
                   key={idx}
                   style={{
-                    backgroundColor: idx % 2 === 0 ? "transparent" : (isLight ? "#f8fafc" : "#181820"),
+                    backgroundColor: idx % 2 === 0 ? "transparent" : "var(--ds-bg-elevated)",
                   }}
                 >
-                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1f1f2a"}`, fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                     {item.direct}
                   </td>
-                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1f1f2a"}`, textAlign: "center", fontSize: "1rem", color: isLight ? "#2563eb" : "#38bdf8" }}>
+                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, textAlign: "center", fontSize: "1rem", color: "var(--ds-accent)" }}>
                     ➔
                   </td>
-                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1f1f2a"}`, fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#15803d" : "#4ade80" }}>
+                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-success)" }}>
                     {item.reported}
                   </td>
-                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${isLight ? "#f1f5f9" : "#1f1f2a"}`, fontSize: "0.8rem", fontFamily: "Geist Mono", color: isLight ? "#475569" : "#a1a1aa" }}>
+                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                     {item.example}
                   </td>
                 </tr>
@@ -409,13 +409,13 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
           {/* Time Adverbs */}
           <div
             style={{
-              backgroundColor: isLight ? "#f8fafc" : "#14141c",
-              border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-border)"}`,
               borderRadius: "8px",
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#1d4ed8" : "#60a5fa", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
               ⏳ Trạng từ thời gian (Time)
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
@@ -426,15 +426,15 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     display: "flex",
                     justifyContent: "space-between",
                     padding: "0.45rem 0.65rem",
-                    backgroundColor: isLight ? "#ffffff" : "#1a1a24",
-                    border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                    backgroundColor: "var(--ds-card)",
+                    border: `1px solid ${"var(--ds-card-border)"}`,
                     borderRadius: "6px",
                     fontSize: "0.82rem",
                   }}
                 >
-                  <span style={{ color: isLight ? "#b45309" : "#fbbf24", fontWeight: "600" }}>{adv.direct}</span>
-                  <span style={{ color: isLight ? "#64748b" : "#71717a" }}>➔</span>
-                  <span style={{ color: isLight ? "#15803d" : "#4ade80", fontWeight: "700" }}>{adv.reported}</span>
+                  <span style={{ color: "var(--ds-warning)", fontWeight: "600" }}>{adv.direct}</span>
+                  <span style={{ color: "var(--ds-text-muted)" }}>➔</span>
+                  <span style={{ color: "var(--ds-success)", fontWeight: "700" }}>{adv.reported}</span>
                 </div>
               ))}
             </div>
@@ -443,13 +443,13 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
           {/* Place Adverbs */}
           <div
             style={{
-              backgroundColor: isLight ? "#f8fafc" : "#14141c",
-              border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-border)"}`,
               borderRadius: "8px",
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#7e22ce" : "#c084fc", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-purple)", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
               📍 Trạng từ nơi chốn / Đại từ chỉ định
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
@@ -460,15 +460,15 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     display: "flex",
                     justifyContent: "space-between",
                     padding: "0.45rem 0.65rem",
-                    backgroundColor: isLight ? "#ffffff" : "#1a1a24",
-                    border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                    backgroundColor: "var(--ds-card)",
+                    border: `1px solid ${"var(--ds-card-border)"}`,
                     borderRadius: "6px",
                     fontSize: "0.82rem",
                   }}
                 >
-                  <span style={{ color: isLight ? "#b45309" : "#fbbf24", fontWeight: "600" }}>{adv.direct}</span>
-                  <span style={{ color: isLight ? "#64748b" : "#71717a" }}>➔</span>
-                  <span style={{ color: isLight ? "#15803d" : "#4ade80", fontWeight: "700" }}>{adv.reported}</span>
+                  <span style={{ color: "var(--ds-warning)", fontWeight: "600" }}>{adv.direct}</span>
+                  <span style={{ color: "var(--ds-text-muted)" }}>➔</span>
+                  <span style={{ color: "var(--ds-success)", fontWeight: "700" }}>{adv.reported}</span>
                 </div>
               ))}
             </div>
@@ -484,19 +484,19 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               key={idx}
               style={{
                 padding: "1rem 1.25rem",
-                backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.08)",
-                border: isLight ? "1px solid #fde68a" : "1px solid rgba(245, 158, 11, 0.4)",
-                borderLeft: "4px solid #f59e0b",
+                backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.08)",
+                border: isLight ? "1px solid var(--ds-warning-border)" : "1px solid rgba(245, 158, 11, 0.4)",
+                borderLeft: "4px solid var(--ds-warning)",
                 borderRadius: "8px",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
                 <span style={{ fontSize: "1.1rem" }}>⚠️</span>
-                <span style={{ fontSize: "0.85rem", fontWeight: "800", color: isLight ? "#b45309" : "#fbbf24" }}>
+                <span style={{ fontSize: "0.85rem", fontWeight: "800", color: "var(--ds-warning)" }}>
                   {exc.rule}
                 </span>
               </div>
-              <div style={{ fontSize: "0.82rem", color: isLight ? "#78350f" : "#fef3c7", marginBottom: "0.5rem" }}>
+              <div style={{ fontSize: "0.82rem", color: "var(--ds-warning)", marginBottom: "0.5rem" }}>
                 {exc.explanation}
               </div>
               <div
@@ -504,10 +504,10 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                   fontSize: "0.82rem",
                   fontFamily: "Geist Mono",
                   padding: "0.45rem 0.75rem",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
+                  backgroundColor: "var(--ds-card)",
                   borderRadius: "6px",
-                  border: `1px solid ${isLight ? "#fde68a" : "#b45309"}`,
-                  color: isLight ? "#0f172a" : "#fafafa",
+                  border: `1px solid ${"var(--ds-warning-border)"}`,
+                  color: "var(--ds-text-heading)",
                 }}
               >
                 📝 Ví dụ: {exc.example}

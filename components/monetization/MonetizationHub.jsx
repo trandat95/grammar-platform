@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
+import { BANNER_PATHS } from "../ui-2026/assetMap";
 
 const PROVIDERS = [
   { id: "vnpay", label: "VNPay QR / Ngân hàng" },
@@ -248,17 +249,24 @@ export default function MonetizationHub({
         </Alert>
       )}
 
-      {/* Behavioral Psychology Value Banner */}
+      {/* Behavioral Psychology Value Banner + 2026 AI Coach VIP Artwork */}
       <div
+        className="ge-hero-banner-card"
         style={{
-          backgroundColor: T.card,
           border: `1px solid ${hasVip ? T.successBorder : T.accentBorder}`,
-          borderRadius: "14px",
           padding: "1.35rem",
-          boxShadow: T.shadowSm,
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+        <img
+          src={BANNER_PATHS.vip}
+          alt="Học viên luyện phát âm IPA & AI Study Coach VIP"
+          className="ge-hero-banner-bg"
+        />
+        <div className="ge-hero-banner-scrim" />
+        <div
+          className="ge-hero-banner-content"
+          style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}
+        >
           <div style={{ flex: "1 1 520px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.45rem" }}>
               <Badge tone={hasVip ? "success" : "accent"} isLight={isLight}>
@@ -428,6 +436,7 @@ export default function MonetizationHub({
           {features.map((f) => (
             <div
               key={f.feature_key}
+              className="ge-vip-matrix-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1.6fr 0.7fr 0.8fr",

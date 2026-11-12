@@ -18,7 +18,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
         style={{
           display: "flex",
           gap: "0.5rem",
-          borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+          borderBottom: `1px solid ${"var(--ds-card-border)"}`,
           paddingBottom: "0.75rem",
           overflowX: "auto",
         }}
@@ -33,9 +33,9 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
             style={{
               padding: "0.55rem 0.95rem",
               borderRadius: "8px",
-              border: activeTab === tab.id ? (isLight ? "1px solid #3b82f6" : "1px solid #60a5fa") : "1px solid transparent",
-              backgroundColor: activeTab === tab.id ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
-              color: activeTab === tab.id ? (isLight ? "#1d4ed8" : "#93c5fd") : (isLight ? "#475569" : "#a1a1aa"),
+              border: activeTab === tab.id ? (isLight ? "1px solid var(--ds-accent)" : "1px solid var(--ds-accent)") : "1px solid transparent",
+              backgroundColor: activeTab === tab.id ? "var(--ds-accent-bg)" : "transparent",
+              color: activeTab === tab.id ? "var(--ds-accent)" : "var(--ds-text-muted)",
               fontSize: "0.825rem",
               fontWeight: activeTab === tab.id ? "700" : "500",
               cursor: "pointer",
@@ -67,9 +67,9 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   fontSize: "0.78rem",
                   fontFamily: "Geist Mono",
                   fontWeight: selectedRootWord === item.root ? "800" : "500",
-                  backgroundColor: selectedRootWord === item.root ? (isLight ? "#3b82f6" : "#2563eb") : (isLight ? "#f1f5f9" : "#1c1c24"),
-                  color: selectedRootWord === item.root ? "#ffffff" : (isLight ? "#334155" : "#cbd5e1"),
-                  border: `1px solid ${selectedRootWord === item.root ? "#2563eb" : (isLight ? "#cbd5e1" : "#2d2d3f")}`,
+                  backgroundColor: selectedRootWord === item.root ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
+                  color: selectedRootWord === item.root ? "#ffffff" : "var(--ds-text-secondary)",
+                  border: `1px solid ${selectedRootWord === item.root ? "var(--ds-accent)" : "var(--ds-border)"}`,
                   cursor: "pointer",
                 }}
               >
@@ -83,8 +83,8 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
             style={{
               padding: "1.5rem",
               borderRadius: "12px",
-              backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-              border: `1px solid ${isLight ? "#e2e8f0" : "#1e293b"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-card-border)"}`,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -96,19 +96,19 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
               style={{
                 padding: "0.75rem 1.75rem",
                 borderRadius: "999px",
-                backgroundColor: isLight ? "#1e293b" : "#0f172a",
-                border: "2px solid #38bdf8",
+                backgroundColor: "var(--ds-card)",
+                border: "2px solid var(--ds-accent)",
                 boxShadow: "0 0 20px rgba(56, 189, 248, 0.25)",
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "0.7rem", color: "#94a3b8", fontWeight: "700", textTransform: "uppercase" }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--ds-border-strong)", fontWeight: "700", textTransform: "uppercase" }}>
                 GỐC TỪ CỐT LÕI (ROOT)
               </div>
-              <div style={{ fontSize: "1.35rem", fontWeight: "900", color: "#38bdf8", fontFamily: "Geist Mono" }}>
+              <div style={{ fontSize: "1.35rem", fontWeight: "900", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
                 {curFamily.root}
               </div>
-              <div style={{ fontSize: "0.78rem", color: "#34d399", fontWeight: "600", marginTop: "0.15rem" }}>
+              <div style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600", marginTop: "0.15rem" }}>
                 🇻🇳 {curFamily.vietnamese_concept}
               </div>
             </div>
@@ -127,26 +127,26 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 style={{
                   padding: "1rem",
                   borderRadius: "8px",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `2px solid #10b981`,
-                  borderTop: "6px solid #10b981",
+                  backgroundColor: "var(--ds-card)",
+                  border: `2px solid var(--ds-success)`,
+                  borderTop: "6px solid var(--ds-success)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.4rem",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "#10b981", textTransform: "uppercase" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-success)", textTransform: "uppercase" }}>
                     Danh Từ (Noun)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#64748b" : "#94a3b8" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                     {curFamily.noun.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
                   {curFamily.noun.word}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#475569" : "#a1a1aa", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
                   "{curFamily.noun.example}"
                 </div>
                 <div style={{ marginTop: "auto", paddingTop: "0.4rem" }}>
@@ -159,26 +159,26 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 style={{
                   padding: "1rem",
                   borderRadius: "8px",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `2px solid #ef4444`,
-                  borderTop: "6px solid #ef4444",
+                  backgroundColor: "var(--ds-card)",
+                  border: `2px solid var(--ds-danger)`,
+                  borderTop: "6px solid var(--ds-danger)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.4rem",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "#ef4444", textTransform: "uppercase" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-danger)", textTransform: "uppercase" }}>
                     Động Từ (Verb)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#64748b" : "#94a3b8" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                     {curFamily.verb.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
                   {curFamily.verb.word}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#475569" : "#a1a1aa", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
                   "{curFamily.verb.example}"
                 </div>
                 <div style={{ marginTop: "auto", paddingTop: "0.4rem" }}>
@@ -191,26 +191,26 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 style={{
                   padding: "1rem",
                   borderRadius: "8px",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `2px solid #3b82f6`,
-                  borderTop: "6px solid #3b82f6",
+                  backgroundColor: "var(--ds-card)",
+                  border: `2px solid var(--ds-accent)`,
+                  borderTop: "6px solid var(--ds-accent)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.4rem",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "#3b82f6", textTransform: "uppercase" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-accent)", textTransform: "uppercase" }}>
                     Tính Từ (Adjective)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#64748b" : "#94a3b8" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                     {curFamily.adjective.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
                   {curFamily.adjective.word}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#475569" : "#a1a1aa", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
                   "{curFamily.adjective.example}"
                 </div>
                 <div style={{ marginTop: "auto", paddingTop: "0.4rem" }}>
@@ -223,26 +223,26 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 style={{
                   padding: "1rem",
                   borderRadius: "8px",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `2px solid #8b5cf6`,
-                  borderTop: "6px solid #8b5cf6",
+                  backgroundColor: "var(--ds-card)",
+                  border: `2px solid var(--ds-purple)`,
+                  borderTop: "6px solid var(--ds-purple)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.4rem",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "#8b5cf6", textTransform: "uppercase" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-purple)", textTransform: "uppercase" }}>
                     Trạng Từ (Adverb)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#64748b" : "#94a3b8" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
                     {curFamily.adverb.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
                   {curFamily.adverb.word}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#475569" : "#a1a1aa", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
                   "{curFamily.adverb.example}"
                 </div>
                 <div style={{ marginTop: "auto", paddingTop: "0.4rem" }}>
@@ -263,8 +263,8 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
               style={{
                 padding: "1.15rem",
                 borderRadius: "10px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
                 borderTop: `4px solid ${rule.color}`,
                 display: "flex",
                 flexDirection: "column",
@@ -272,7 +272,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: "800", color: isLight ? "#0f172a" : "#fafafa" }}>
+                <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: "800", color: "var(--ds-text-heading)" }}>
                   {rule.part_of_speech}
                 </h4>
                 <span style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", fontWeight: "700", color: rule.color, backgroundColor: `${rule.color}20`, padding: "0.15rem 0.45rem", borderRadius: "4px" }}>
@@ -280,25 +280,25 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 </span>
               </div>
 
-              <div style={{ fontSize: "0.78rem", color: isLight ? "#334155" : "#cbd5e1" }}>
+              <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)" }}>
                 📍 <strong>Vị trí đứng trong câu:</strong> {rule.position}
               </div>
 
               {rule.formula && (
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#1d4ed8" : "#93c5fd", fontWeight: "600" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
                   📐 <strong>Công thức:</strong> {rule.formula}
                 </div>
               )}
 
               {rule.special_notes && (
-                <div style={{ fontSize: "0.72rem", backgroundColor: isLight ? "#fef3c7" : "#78350f30", color: isLight ? "#92400e" : "#fde68a", padding: "0.35rem 0.5rem", borderRadius: "4px" }}>
+                <div style={{ fontSize: "0.72rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.35rem 0.5rem", borderRadius: "4px" }}>
                   ⚠️ {rule.special_notes}
                 </div>
               )}
 
               {/* Suffixes list */}
               <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", marginTop: "0.25rem" }}>
-                <div style={{ fontSize: "0.72rem", fontWeight: "700", color: isLight ? "#64748b" : "#94a3b8", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.72rem", fontWeight: "700", color: "var(--ds-text-muted)", textTransform: "uppercase" }}>
                   Hậu tố nhận diện thường gặp:
                 </div>
                 {rule.suffixes.map((s, sIdx) => (
@@ -310,20 +310,20 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                       alignItems: "center",
                       padding: "0.3rem 0.5rem",
                       borderRadius: "4px",
-                      backgroundColor: isLight ? "#f8fafc" : "#0d1117",
+                      backgroundColor: "var(--ds-bg-elevated)",
                       fontSize: "0.75rem",
                     }}
                   >
                     <span style={{ fontWeight: "800", color: rule.color, fontFamily: "Geist Mono" }}>
                       {s.suffix}
                     </span>
-                    <span style={{ color: isLight ? "#475569" : "#a1a1aa" }}>{s.example}</span>
+                    <span style={{ color: "var(--ds-text-muted)" }}>{s.example}</span>
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}` }}>
-                <div style={{ fontSize: "0.8rem", color: isLight ? "#1e40af" : "#93c5fd", fontWeight: "600" }}>
+              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
+                <div style={{ fontSize: "0.8rem", color: "var(--ds-accent)", fontWeight: "600" }}>
                   "{rule.sample_sentence}"
                 </div>
                 <div style={{ marginTop: "0.35rem" }}>

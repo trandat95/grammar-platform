@@ -1,194 +1,88 @@
 import React from "react";
+import { getThemeTokens } from "../../lib/tokens/design-tokens";
+
+const LEGEND_MAP = {
+  timeline: [
+    { color: "var(--ds-accent)", circle: true, label: "Đơn (Simple): Chấm điểm xác định" },
+    { color: "var(--ds-success)", circle: true, label: "Tiếp diễn (Continuous): Khoảng kéo dài ~" },
+    { color: "var(--ds-warning)", circle: true, label: "Hoàn thành (Perfect): Cầu nối trước ➔ sau" },
+    { color: "var(--ds-purple)", circle: true, label: "Hoàn thành tiếp diễn: Kéo dài liên tục" },
+  ],
+  "decision-tree": [
+    { color: "var(--ds-accent)", label: "Câu hỏi rẽ nhánh (Question Node)" },
+    { color: "var(--ds-success)", label: "Kết luận loại câu điều kiện (Leaf Node)" },
+    { color: "var(--ds-warning)", label: "Đảo ngữ (Inversion Rule)" },
+  ],
+  transformation: [
+    { color: "var(--ds-accent)", label: "Chủ ngữ (Subject - S)" },
+    { color: "var(--ds-warning)", label: "Động từ (Verb - V)" },
+    { color: "var(--ds-success)", label: "Tân ngữ (Object - O)" },
+    { color: "var(--ds-cyan)", label: "Tác nhân (By + O)" },
+  ],
+  "conversion-flow": [
+    { color: "var(--ds-accent)", label: "Câu trực tiếp (Direct Speech)" },
+    { color: "var(--ds-purple)", label: "Lùi thì (Backshift Step)" },
+    { color: "var(--ds-success)", label: "Câu gián tiếp (Reported Speech)" },
+  ],
+  "sentence-tree": [
+    { color: "var(--ds-accent)", label: "Danh từ đi trước (Antecedent)" },
+    { color: "var(--ds-purple)", label: "Đại từ quan hệ (Pronoun)" },
+    { color: "var(--ds-warning)", label: "Vị ngữ mệnh đề quan hệ" },
+    { color: "var(--ds-success)", label: "Vị ngữ mệnh đề chính" },
+  ],
+  "comparison-scale": [
+    { color: "var(--ds-success)", label: "Bằng nhau (=): as... as" },
+    { color: "var(--ds-accent)", label: "Hơn (>): -er / more ... than" },
+    { color: "var(--ds-purple)", label: "Nhất (MAX): the -est / the most" },
+    { color: "var(--ds-warning)", label: "Kép (↗↗): The more... the more..." },
+  ],
+  "modal-matrix": [
+    { color: "var(--ds-danger)", label: "0% Impossible (can't)" },
+    { color: "var(--ds-warning)", label: "30-50% Possibility (might, may)" },
+    { color: "var(--ds-accent)", label: "75% Expectation (should)" },
+    { color: "var(--ds-success)", label: "100% Certainty (must)" },
+  ],
+  "word-family-tree": [
+    { color: "var(--ds-success)", label: "Danh từ (Noun)" },
+    { color: "var(--ds-danger)", label: "Động từ (Verb)" },
+    { color: "var(--ds-accent)", label: "Tính từ (Adjective)" },
+    { color: "var(--ds-purple)", label: "Trạng từ (Adverb)" },
+  ],
+};
 
 export default function VisualizationLegend({ type, isLight = false }) {
-  const containerStyle = {
-    display: "flex",
-    gap: "1rem",
-    flexWrap: "wrap",
-    padding: "0.65rem 1rem",
-    backgroundColor: isLight ? "#f8fafc" : "#14141c",
-    border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
-    borderRadius: "8px",
-    fontSize: "0.75rem",
-    fontFamily: "Geist Mono",
-    marginTop: "1rem",
-  };
+  const items = LEGEND_MAP[type];
+  if (!items) return null;
+  const T = getThemeTokens(isLight);
 
-  if (type === "timeline") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Đơn (Simple): Chấm điểm xác định</span>
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        flexWrap: "wrap",
+        padding: "0.65rem 1rem",
+        backgroundColor: T.bgElevated,
+        border: `1px solid ${T.borderSubtle}`,
+        borderRadius: "8px",
+        fontSize: "0.75rem",
+        fontFamily: "var(--font-mono, Geist Mono, monospace)",
+        marginTop: "1rem",
+      }}
+    >
+      {items.map((item) => (
+        <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <span
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: item.circle ? "50%" : "3px",
+              backgroundColor: item.color,
+            }}
+          />
+          <span style={{ color: T.textSecondary }}>{item.label}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Tiếp diễn (Continuous): Khoảng kéo dài ~</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Hoàn thành (Perfect): Cầu nối trước ➔ sau</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#8b5cf6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Hoàn thành tiếp diễn: Kéo dài liên tục</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "decision-tree") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Câu hỏi rẽ nhánh (Question Node)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Kết luận loại câu điều kiện (Leaf Node)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Đảo ngữ (Inversion Rule)</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "transformation") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Chủ ngữ (Subject - S)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Động từ (Verb - V)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Tân ngữ (Object - O)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#06b6d4" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Tác nhân (By + O)</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "conversion-flow") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Câu trực tiếp (Direct Speech)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#8b5cf6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Lùi thì (Backshift Step)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Câu gián tiếp (Reported Speech)</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "sentence-tree") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Danh từ đi trước (Antecedent)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#9333ea" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Đại từ quan hệ (Pronoun)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Vị ngữ mệnh đề quan hệ</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Vị ngữ mệnh đề chính</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "comparison-scale") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Bằng nhau (=): as... as</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Hơn (&gt;): -er / more ... than</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#8b5cf6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Nhất (MAX): the -est / the most</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Kép (↗↗): The more... the more...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "modal-matrix") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#ef4444" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>0% Impossible (can't)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#f59e0b" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>30-50% Possibility (might, may)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>75% Expectation (should)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>100% Certainty (must)</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === "word-family-tree") {
-    return (
-      <div style={containerStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#10b981" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Danh từ (Noun)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#ef4444" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Động từ (Verb)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#3b82f6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Tính từ (Adjective)</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          <span style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: "#8b5cf6" }} />
-          <span style={{ color: isLight ? "#334155" : "#cbd5e1" }}>Trạng từ (Adverb)</span>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
+      ))}
+    </div>
+  );
 }

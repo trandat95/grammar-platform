@@ -1,0 +1,594 @@
+/**
+ * GRAMMAR ENGINE v1.4 PRO — 2026 DESIGN SYSTEM & RESPONSIVE BREAKPOINTS
+ * Giải quyết triệt để:
+ *  - [P0] Bổ sung @media breakpoints cho Laptop (1280px), Tablet (768px), Mobile (375px)
+ *  - [P0] Tái cấu trúc Sticky Header 56px (5 Hubs) + Bottom Navigation Bar trên Mobile
+ *  - [P0] Chuyển Sidebar 320px cứng sang Collapsible 280px (Desktop) & Slide-over Drawer (Mobile)
+ *  - [P1] Chuẩn hóa toàn bộ CSS Custom Properties cho Light/Dark Mode (WCAG 2.2 AA 28/28 cặp)
+ *  - [P1] Focus Visible, Target Size 44x44px (pointer: coarse) & Reduced Motion
+ */
+
+:root,
+[data-theme="light"] {
+  --ds-bg: #f8fafc;
+  --ds-bg-sub: #ffffff;
+  --ds-bg-active: #e2e8f0;
+  --ds-card: #ffffff;
+  --ds-card-subtle: #f8fafc;
+  --ds-card-hover: #f1f5f9;
+  --ds-bg-elevated: #f1f5f9;
+  --ds-card-border: #e2e8f0;
+  --ds-border: #cbd5e1;
+  --ds-border-subtle: #e2e8f0;
+  --ds-border-strong: #94a3b8;
+  --ds-text: #0f172a;
+  --ds-text-heading: #0f172a;
+  --ds-text-secondary: #334155;
+  --ds-text-muted: #475569;
+  --ds-accent: #2563eb;
+  --ds-accent-hover: #1d4ed8;
+  --ds-accent-bg: #eff6ff;
+  --ds-accent-border: #bfdbfe;
+  --ds-success: #047857;
+  --ds-success-bg: #ecfdf5;
+  --ds-success-border: #a7f3d0;
+  --ds-warning: #b45309;
+  --ds-warning-bg: #fffbeb;
+  --ds-warning-border: #fde68a;
+  --ds-danger: #dc2626;
+  --ds-danger-bg: #fef2f2;
+  --ds-danger-border: #fecaca;
+  --ds-indigo: #4338ca;
+  --ds-indigo-bg: #eef2ff;
+  --ds-indigo-border: #c7d2fe;
+  --ds-purple: #7e22ce;
+  --ds-purple-bg: #faf5ff;
+  --ds-purple-border: #e9d5ff;
+  --ds-cyan: #0891b2;
+  --ds-cyan-bg: #ecfeff;
+  --ds-cyan-border: #a5f3fc;
+  --ds-orange: #c2410c;
+  --ds-pink: #be185d;
+  --ds-formula-pos: #047857;
+  --ds-formula-neg: #dc2626;
+  --ds-formula-q: #2563eb;
+  --ds-btn-primary: #2563eb;
+  --ds-btn-success: #047857;
+  --ds-btn-danger: #dc2626;
+  --ds-btn-warning: #b45309;
+  --ds-btn-purple: #7e22ce;
+  --ds-backdrop: rgba(15, 23, 42, 0.56);
+  --ds-glass: rgba(255, 255, 255, 0.88);
+  --ds-banner-scrim: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.90) 48%, rgba(255, 255, 255, 0.22) 100%);
+  --ds-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --ds-shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+  --ds-shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.16);
+  --ds-header-h: 56px;
+  --ds-sidebar-w: 280px;
+}
+
+[data-theme="dark"] {
+  --ds-bg: #09090b;
+  --ds-bg-sub: #121215;
+  --ds-bg-active: #27272a;
+  --ds-card: #111115;
+  --ds-card-subtle: #15151b;
+  --ds-card-hover: #18181b;
+  --ds-bg-elevated: #18181b;
+  --ds-card-border: #272733;
+  --ds-border: #27272a;
+  --ds-border-subtle: #1f1f26;
+  --ds-border-strong: #3f3f46;
+  --ds-text: #fafafa;
+  --ds-text-heading: #ffffff;
+  --ds-text-secondary: #d4d4d8;
+  --ds-text-muted: #a1a1aa;
+  --ds-accent: #38bdf8;
+  --ds-accent-hover: #7dd3fc;
+  --ds-accent-bg: rgba(12, 74, 110, 0.30);
+  --ds-accent-border: #0369a1;
+  --ds-success: #34d399;
+  --ds-success-bg: rgba(6, 78, 59, 0.30);
+  --ds-success-border: #047857;
+  --ds-warning: #fbbf24;
+  --ds-warning-bg: rgba(69, 26, 3, 0.30);
+  --ds-warning-border: #b45309;
+  --ds-danger: #f87171;
+  --ds-danger-bg: rgba(69, 10, 10, 0.30);
+  --ds-danger-border: #b91c1c;
+  --ds-indigo: #a5b4fc;
+  --ds-indigo-bg: rgba(30, 27, 75, 0.45);
+  --ds-indigo-border: #4338ca;
+  --ds-purple: #c084fc;
+  --ds-purple-bg: rgba(59, 7, 100, 0.35);
+  --ds-purple-border: #7e22ce;
+  --ds-cyan: #22d3ee;
+  --ds-cyan-bg: rgba(8, 145, 178, 0.25);
+  --ds-cyan-border: #0891b2;
+  --ds-orange: #fb923c;
+  --ds-pink: #f472b6;
+  --ds-formula-pos: #34d399;
+  --ds-formula-neg: #f87171;
+  --ds-formula-q: #38bdf8;
+  --ds-btn-primary: #2563eb;
+  --ds-btn-success: #059669;
+  --ds-btn-danger: #dc2626;
+  --ds-btn-warning: #b45309;
+  --ds-btn-purple: #7e22ce;
+  --ds-backdrop: rgba(2, 6, 23, 0.74);
+  --ds-glass: rgba(18, 18, 21, 0.88);
+  --ds-banner-scrim: linear-gradient(90deg, rgba(17, 17, 21, 0.96) 0%, rgba(17, 17, 21, 0.88) 48%, rgba(17, 17, 21, 0.28) 100%);
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ds-shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+  --ds-shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+}
+
+html {
+  scroll-padding-top: 76px;
+  background-color: var(--ds-bg);
+  color: var(--ds-text);
+  font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* WCAG 2.4.11 & 2.4.7 High-Contrast Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--ds-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px var(--ds-accent-bg) !important;
+}
+
+/* 1. STICKY HEADER 2026 (5-HUB ARCHITECTURE) */
+.ge-app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--ds-bg);
+  color: var(--ds-text);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ge-header-2026 {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--ds-header-h);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--ds-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ds-card-border);
+}
+
+.ge-hub-nav {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-card-border);
+}
+
+.ge-hub-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 7px;
+  font-size: 0.815rem;
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  white-space: nowrap;
+  transition: all 160ms ease;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ge-hub-tab:hover {
+  color: var(--ds-text);
+}
+
+.ge-hub-tab[aria-current="page"],
+.ge-hub-tab.is-active {
+  background: var(--ds-card);
+  color: var(--ds-accent);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ge-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Segmented Sub-Bar inside Hubs (Study/Diagnostic & Quiz/Mistakes) */
+.ge-subnav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 24px;
+  background: var(--ds-bg-sub);
+  border-bottom: 1px solid var(--ds-card-border);
+}
+
+.ge-subnav-pills {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 9px;
+  background: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-card-border);
+}
+
+.ge-subnav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ge-subnav-btn.is-active {
+  background: var(--ds-card);
+  color: var(--ds-accent);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+/* Dashboard Bento Zone Tabs */
+.ge-bento-zone-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.ge-bento-zone-pills {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-card-border);
+}
+
+.ge-bento-zone-btn {
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ge-bento-zone-btn.is-active {
+  background: var(--ds-card);
+  color: var(--ds-accent);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+/* 2026 Hero Banner Artwork Container */
+.ge-hero-banner-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--ds-card-border);
+  background: var(--ds-card);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ge-hero-banner-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.ge-hero-banner-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--ds-banner-scrim);
+  pointer-events: none;
+}
+
+.ge-hero-banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. STUDY EXPLORER 2-COLUMN LAYOUT (FIX P0 320px OVERFLOW) */
+.ge-study-shell {
+  display: grid;
+  grid-template-columns: var(--ds-sidebar-w) minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+.ge-study-shell.is-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .ge-study-shell.is-collapsed .ge-chapter-sidebar {
+    display: none;
+  }
+}
+
+.ge-chapter-sidebar {
+  position: sticky;
+  top: var(--ds-header-h);
+  height: calc(100vh - var(--ds-header-h));
+  overflow-y: auto;
+  background: var(--ds-bg-sub);
+  border-right: 1px solid var(--ds-card-border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ge-study-main {
+  max-width: 980px;
+  width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 28px 36px;
+  box-sizing: border-box;
+}
+
+.ge-lesson-title-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+}
+
+.ge-drawer-backdrop {
+  display: none;
+}
+
+/* Long Formula & Stem Safety (Max 165 chars formula / 749 chars stem) */
+.ge-formula-box {
+  font-family: 'Geist Mono', 'JetBrains Mono', monospace;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ds-card-border);
+  border-left: 4px solid var(--ds-accent);
+  background: var(--ds-bg-elevated);
+}
+
+.ge-formula-box.is-pos {
+  border-left-color: var(--ds-formula-pos);
+}
+
+.ge-formula-box.is-neg {
+  border-left-color: var(--ds-formula-neg);
+}
+
+.ge-formula-box.is-q {
+  border-left-color: var(--ds-formula-q);
+}
+
+/* 3. MOBILE BOTTOM NAVIGATION (HIDDEN ON DESKTOP) */
+.ge-mobile-bottom-nav {
+  display: none;
+}
+
+.ge-mobile-chapter-bar {
+  display: none;
+}
+
+.ge-show-mobile-only {
+  display: none;
+}
+
+/* =========================================================
+   4. RESPONSIVE MEDIA QUERIES (FIX P0 MISSING BREAKPOINTS)
+   ========================================================= */
+
+/* Laptop Standard (<= 1280px) */
+@media (max-width: 1280px) {
+  :root {
+    --ds-sidebar-w: 256px;
+  }
+  .ge-header-2026 {
+    padding: 0 14px;
+    gap: 8px;
+  }
+  .ge-hub-tab {
+    padding: 6px 8px;
+    font-size: 0.775rem;
+  }
+  .ge-study-main {
+    padding: 24px 22px;
+  }
+  .ge-hide-laptop-compact {
+    display: none !important;
+  }
+}
+
+/* Compact Laptop & Tablet (<= 1120px) */
+@media (max-width: 1120px) {
+  .ge-search-wrap {
+    display: none !important;
+  }
+  .ge-hide-tablet {
+    display: none !important;
+  }
+}
+
+/* Tablet Portrait (<= 1023px / 768px) */
+@media (max-width: 1023px) {
+  .ge-study-shell {
+    grid-template-columns: 1fr;
+  }
+  .ge-chapter-sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--ds-header-h);
+    width: min(300px, 86vw);
+    height: calc(100vh - var(--ds-header-h));
+    z-index: 220;
+    transform: translateX(-105%);
+    box-shadow: var(--ds-shadow-lg);
+  }
+  .ge-chapter-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .ge-drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--ds-header-h) 0 0 0;
+    background: var(--ds-backdrop);
+    z-index: 210;
+  }
+  .ge-mobile-chapter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--ds-accent-bg);
+    border-bottom: 1px solid var(--ds-accent-border);
+    position: sticky;
+    top: var(--ds-header-h);
+    z-index: 35;
+  }
+  .ge-hide-desktop-toggle {
+    display: none !important;
+  }
+  .ge-hero-banner-bg {
+    width: 100%;
+    opacity: 0.18;
+  }
+}
+
+/* Mobile Standard (<= 767px / 375px Viewport) */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 66px; /* Chừa chỗ cho Bottom Navigation Bar */
+  }
+  .ge-header-2026 {
+    padding: 0 12px;
+  }
+  .ge-hub-nav {
+    display: none; /* Chuyển xuống Bottom Nav 5 nút */
+  }
+  .ge-hide-mobile {
+    display: none !important;
+  }
+  .ge-show-mobile-only {
+    display: inline-flex;
+  }
+  .ge-subnav-bar {
+    padding: 8px 14px;
+  }
+  .ge-study-main {
+    padding: 16px 14px;
+  }
+  .ge-mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--ds-glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--ds-card-border);
+    padding: 4px 6px env(safe-area-inset-bottom, 0px);
+  }
+  .ge-mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--ds-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .ge-mobile-nav-item.is-active {
+    color: var(--ds-accent);
+  }
+  /* #dict-popup biến thành Bottom Sheet trên màn hình 375px */
+  #dict-popup {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 68px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 62vh !important;
+    overflow-y: auto !important;
+    border-radius: 16px !important;
+  }
+  .ge-vip-matrix-row {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+}
+
+/* WCAG 2.5.8 Touch Target >= 44x44px trên thiết bị cảm ứng */
+@media (pointer: coarse) {
+  .ds-btn,
+  .ds-touch-target,
+  .ge-hub-tab,
+  .ge-subnav-btn,
+  .ge-mobile-nav-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* WCAG 2.3.3 Tôn trọng Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

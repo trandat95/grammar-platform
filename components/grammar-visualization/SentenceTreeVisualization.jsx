@@ -21,7 +21,7 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
         style={{
           display: "flex",
           gap: "0.5rem",
-          borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+          borderBottom: `1px solid ${"var(--ds-card-border)"}`,
           paddingBottom: "0.75rem",
           overflowX: "auto",
         }}
@@ -38,9 +38,9 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
             style={{
               padding: "0.55rem 0.95rem",
               borderRadius: "8px",
-              border: activeTab === tab.id ? (isLight ? "1px solid #3b82f6" : "1px solid #60a5fa") : "1px solid transparent",
-              backgroundColor: activeTab === tab.id ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
-              color: activeTab === tab.id ? (isLight ? "#1d4ed8" : "#93c5fd") : (isLight ? "#475569" : "#a1a1aa"),
+              border: activeTab === tab.id ? (isLight ? "1px solid var(--ds-accent)" : "1px solid var(--ds-accent)") : "1px solid transparent",
+              backgroundColor: activeTab === tab.id ? "var(--ds-accent-bg)" : "transparent",
+              color: activeTab === tab.id ? "var(--ds-accent)" : "var(--ds-text-muted)",
               fontSize: "0.825rem",
               fontWeight: activeTab === tab.id ? "700" : "500",
               cursor: "pointer",
@@ -72,9 +72,9 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                   fontSize: "0.75rem",
                   fontFamily: "Geist Mono",
                   fontWeight: selectedSentenceId === sent.id ? "700" : "500",
-                  backgroundColor: selectedSentenceId === sent.id ? (isLight ? "#3b82f6" : "#2563eb") : (isLight ? "#f1f5f9" : "#1c1c24"),
-                  color: selectedSentenceId === sent.id ? "#ffffff" : (isLight ? "#334155" : "#cbd5e1"),
-                  border: `1px solid ${selectedSentenceId === sent.id ? "#2563eb" : (isLight ? "#cbd5e1" : "#2d2d3f")}`,
+                  backgroundColor: selectedSentenceId === sent.id ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
+                  color: selectedSentenceId === sent.id ? "#ffffff" : "var(--ds-text-secondary)",
+                  border: `1px solid ${selectedSentenceId === sent.id ? "var(--ds-accent)" : "var(--ds-border)"}`,
                   cursor: "pointer",
                 }}
               >
@@ -88,8 +88,8 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
             style={{
               padding: "1.25rem",
               borderRadius: "10px",
-              backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-              border: `1px solid ${isLight ? "#e2e8f0" : "#1e293b"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-card-border)"}`,
               display: "flex",
               flexDirection: "column",
               gap: "1.25rem",
@@ -103,46 +103,46 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                 alignItems: "center",
                 gap: "0.6rem",
                 padding: "1rem",
-                backgroundColor: isLight ? "#ffffff" : "#161b22",
+                backgroundColor: "var(--ds-card)",
                 borderRadius: "8px",
-                border: `1px dashed ${isLight ? "#cbd5e1" : "#30363d"}`,
+                border: `1px dashed ${"var(--ds-border)"}`,
               }}
             >
               {/* Antecedent */}
               <div
                 style={{
                   padding: "0.5rem 0.75rem",
-                  backgroundColor: isLight ? "#dbeafe" : "#1e3a8a30",
-                  border: `2px solid ${isLight ? "#3b82f6" : "#3b82f6"}`,
+                  backgroundColor: "var(--ds-accent-bg)",
+                  border: `2px solid ${"var(--ds-accent)"}`,
                   borderRadius: "6px",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: isLight ? "#1e40af" : "#93c5fd", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: "var(--ds-accent)", textTransform: "uppercase" }}>
                   Danh từ đi trước (Antecedent)
                 </div>
-                <div style={{ fontSize: "1rem", fontWeight: "800", color: isLight ? "#1d4ed8" : "#60a5fa", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-accent)", marginTop: "0.2rem" }}>
                   {curSentence.antecedent}
                 </div>
               </div>
 
               {/* Arrow Connector */}
-              <span style={{ fontSize: "1.2rem", color: isLight ? "#64748b" : "#8b949e" }}>➔</span>
+              <span style={{ fontSize: "1.2rem", color: "var(--ds-text-muted)" }}>➔</span>
 
               {/* Relative Pronoun */}
               <div
                 style={{
                   padding: "0.5rem 0.75rem",
-                  backgroundColor: isLight ? "#f3e8ff" : "#581c8730",
-                  border: `2px solid ${isLight ? "#9333ea" : "#a855f7"}`,
+                  backgroundColor: "var(--ds-purple-bg)",
+                  border: `2px solid ${"var(--ds-purple)"}`,
                   borderRadius: "6px",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: isLight ? "#6b21a8" : "#d8b4fe", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: "var(--ds-purple)", textTransform: "uppercase" }}>
                   Đại từ quan hệ (Pronoun)
                 </div>
-                <div style={{ fontSize: "1rem", fontWeight: "800", color: isLight ? "#7e22ce" : "#c084fc", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-purple)", marginTop: "0.2rem" }}>
                   {curSentence.pronoun}
                 </div>
               </div>
@@ -151,16 +151,16 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               <div
                 style={{
                   padding: "0.5rem 0.75rem",
-                  backgroundColor: isLight ? "#fef3c7" : "#78350f30",
-                  border: `2px solid ${isLight ? "#f59e0b" : "#f59e0b"}`,
+                  backgroundColor: "var(--ds-warning-bg)",
+                  border: `2px solid ${"var(--ds-warning)"}`,
                   borderRadius: "6px",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: isLight ? "#92400e" : "#fde68a", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: "var(--ds-warning)", textTransform: "uppercase" }}>
                   Vị ngữ mệnh đề quan hệ
                 </div>
-                <div style={{ fontSize: "1rem", fontWeight: "800", color: isLight ? "#b45309" : "#fbbf24", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-warning)", marginTop: "0.2rem" }}>
                   {curSentence.relative_clause}
                 </div>
               </div>
@@ -169,16 +169,16 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               <div
                 style={{
                   padding: "0.5rem 0.75rem",
-                  backgroundColor: isLight ? "#dcfce7" : "#064e3b30",
-                  border: `2px solid ${isLight ? "#10b981" : "#10b981"}`,
+                  backgroundColor: "var(--ds-success-bg)",
+                  border: `2px solid ${"var(--ds-success)"}`,
                   borderRadius: "6px",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: isLight ? "#14532d" : "#86efac", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.68rem", fontWeight: "700", color: "var(--ds-success-border)", textTransform: "uppercase" }}>
                   Vị ngữ mệnh đề chính
                 </div>
-                <div style={{ fontSize: "1rem", fontWeight: "800", color: isLight ? "#15803d" : "#34d399", marginTop: "0.2rem" }}>
+                <div style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-success)", marginTop: "0.2rem" }}>
                   {curSentence.main_predicate}
                 </div>
               </div>
@@ -193,16 +193,16 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                 flexWrap: "wrap",
                 gap: "0.75rem",
                 padding: "0.85rem 1rem",
-                backgroundColor: isLight ? "#ffffff" : "#161b22",
+                backgroundColor: "var(--ds-card)",
                 borderRadius: "8px",
-                border: `1px solid ${isLight ? "#e2e8f0" : "#30363d"}`,
+                border: `1px solid ${"var(--ds-card-border)"}`,
               }}
             >
               <div>
-                <div style={{ fontSize: "1.05rem", fontWeight: "700", color: isLight ? "#0f172a" : "#f0f6fc", lineHeight: 1.4 }}>
+                <div style={{ fontSize: "1.05rem", fontWeight: "700", color: "var(--ds-text-heading)", lineHeight: 1.4 }}>
                   "{curSentence.full_sentence}"
                 </div>
-                <div style={{ fontSize: "0.825rem", color: isLight ? "#059669" : "#34d399", fontStyle: "italic", marginTop: "0.25rem" }}>
+                <div style={{ fontSize: "0.825rem", color: "var(--ds-success)", fontStyle: "italic", marginTop: "0.25rem" }}>
                   🇻🇳 {curSentence.translation}
                 </div>
               </div>
@@ -222,8 +222,8 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               style={{
                 padding: "1rem",
                 borderRadius: "8px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.5rem",
@@ -238,40 +238,40 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                     fontFamily: "Geist Mono",
                     color: p.color,
                     padding: "0.2rem 0.6rem",
-                    backgroundColor: isLight ? "#f8fafc" : "#1c1c24",
+                    backgroundColor: "var(--ds-bg-elevated)",
                     border: `1px solid ${p.color}40`,
                     borderRadius: "6px",
                   }}
                 >
                   {p.pronoun}
                 </span>
-                <span style={{ fontSize: "0.72rem", color: isLight ? "#475569" : "#a1a1aa", fontWeight: "600" }}>
+                <span style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontWeight: "600" }}>
                   {p.replaces}
                 </span>
               </div>
 
-              <div style={{ fontSize: "0.78rem", color: isLight ? "#334155" : "#cbd5e1", lineHeight: 1.4 }}>
+              <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)", lineHeight: 1.4 }}>
                 <strong>Chức năng:</strong> {p.role}
               </div>
 
               <div
                 style={{
                   fontSize: "0.75rem",
-                  backgroundColor: isLight ? "#f8fafc" : "#0d1117",
+                  backgroundColor: "var(--ds-bg-elevated)",
                   padding: "0.5rem",
                   borderRadius: "6px",
                   borderLeft: `3px solid ${p.color}`,
-                  color: isLight ? "#1e293b" : "#e2e8f0",
+                  color: "var(--ds-text-heading)",
                 }}
               >
                 💡 {p.rule_tip}
               </div>
 
-              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}` }}>
-                <div style={{ fontSize: "0.825rem", color: isLight ? "#0f172a" : "#f4f4f5", fontWeight: "600" }}>
+              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
+                <div style={{ fontSize: "0.825rem", color: "var(--ds-text-heading)", fontWeight: "600" }}>
                   "{p.example}"
                 </div>
-                <div style={{ fontSize: "0.75rem", color: isLight ? "#059669" : "#34d399", fontStyle: "italic", marginTop: "0.15rem" }}>
+                <div style={{ fontSize: "0.75rem", color: "var(--ds-success)", fontStyle: "italic", marginTop: "0.15rem" }}>
                   🇻🇳 {p.translation}
                 </div>
                 <div style={{ marginTop: "0.4rem" }}>
@@ -292,18 +292,18 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               style={{
                 padding: "1.15rem",
                 borderRadius: "10px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${c.type === "DEFINING" ? (isLight ? "#bfdbfe" : "#1e3a8a") : (isLight ? "#fde68a" : "#78350f")}`,
-                borderTop: `4px solid ${c.type === "DEFINING" ? "#3b82f6" : "#f59e0b"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${c.type === "DEFINING" ? "var(--ds-accent-border)" : "var(--ds-warning-border)"}`,
+                borderTop: `4px solid ${c.type === "DEFINING" ? "var(--ds-accent)" : "var(--ds-warning)"}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.65rem",
               }}
             >
-              <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+              <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                 {c.title}
               </h4>
-              <p style={{ margin: 0, fontSize: "0.8rem", color: isLight ? "#475569" : "#a1a1aa", lineHeight: 1.4 }}>
+              <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--ds-text-muted)", lineHeight: 1.4 }}>
                 {c.description}
               </p>
 
@@ -318,14 +318,14 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                   marginTop: "0.5rem",
                   padding: "0.75rem",
                   borderRadius: "6px",
-                  backgroundColor: isLight ? "#f8fafc" : "#0d1117",
-                  border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                  backgroundColor: "var(--ds-bg-elevated)",
+                  border: `1px solid ${"var(--ds-card-border)"}`,
                 }}
               >
-                <div style={{ fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#1e40af" : "#93c5fd" }}>
+                <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)" }}>
                   "{c.example}"
                 </div>
-                <div style={{ fontSize: "0.75rem", color: isLight ? "#475569" : "#94a3b8", marginTop: "0.25rem" }}>
+                <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", marginTop: "0.25rem" }}>
                   {c.analysis}
                 </div>
                 <div style={{ marginTop: "0.4rem" }}>
@@ -346,34 +346,34 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               style={{
                 padding: "1rem",
                 borderRadius: "8px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.5rem",
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.9rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+                <span style={{ fontSize: "0.9rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                   {r.pattern}
                 </span>
-                <span style={{ fontSize: "0.72rem", backgroundColor: isLight ? "#ecfdf5" : "#064e3b", color: isLight ? "#047857" : "#34d399", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
+                <span style={{ fontSize: "0.72rem", backgroundColor: "var(--ds-success-bg)", color: "var(--ds-success)", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
                   QUY TẮC {idx + 1}
                 </span>
               </div>
 
-              <div style={{ fontSize: "0.8rem", color: isLight ? "#475569" : "#a1a1aa" }}>
+              <div style={{ fontSize: "0.8rem", color: "var(--ds-text-muted)" }}>
                 <strong>Điều kiện áp dụng:</strong> {r.condition}
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", padding: "0.75rem", backgroundColor: isLight ? "#f8fafc" : "#0d1117", borderRadius: "6px" }}>
-                <div style={{ fontSize: "0.8rem", color: isLight ? "#64748b" : "#94a3b8", textDecoration: "line-through" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", padding: "0.75rem", backgroundColor: "var(--ds-bg-elevated)", borderRadius: "6px" }}>
+                <div style={{ fontSize: "0.8rem", color: "var(--ds-text-muted)", textDecoration: "line-through" }}>
                   Câu gốc: "{r.original}"
                 </div>
-                <div style={{ fontSize: "0.875rem", fontWeight: "700", color: isLight ? "#15803d" : "#34d399" }}>
+                <div style={{ fontSize: "0.875rem", fontWeight: "700", color: "var(--ds-success)" }}>
                   ➔ Rút gọn: "{r.reduced}"
                 </div>
-                <div style={{ fontSize: "0.72rem", color: isLight ? "#b45309" : "#fbbf24", marginTop: "0.15rem" }}>
+                <div style={{ fontSize: "0.72rem", color: "var(--ds-warning)", marginTop: "0.15rem" }}>
                   💡 {r.rule_step}
                 </div>
               </div>

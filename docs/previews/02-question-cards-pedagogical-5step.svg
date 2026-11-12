@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" fill="none">
+  <rect width="1200" height="640" rx="16" fill="#F8FAFC"/>
+  <text x="36" y="42" font-family="Geist, Inter, sans-serif" font-size="20" font-weight="800" fill="#0F172A">THIẾT KẾ THẺ CÂU HỎI THÍCH ỨNG &amp; LỜI GIẢI SƯ PHẠM 5 BƯỚC (PEDAGOGICAL CLARITY)</text>
+  <text x="36" y="66" font-family="Geist, Inter, sans-serif" font-size="13" fill="#475569">Đáp ứng chuẩn Text Envelope thực tế: Đề câu hỏi tối đa 749 ký tự, Công thức 165 ký tự, Lời giải 5 bước tối đa 1,190 ký tự</text>
+
+  <!-- Left: Adaptive Text/Transformation Card (2,939 questions) -->
+  <rect x="36" y="90" width="550" height="514" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+  <rect x="56" y="110" width="110" height="24" rx="12" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="111" y="126" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10.5" font-weight="700" fill="#2563EB">CÂU 08 / 20</text>
+  <rect x="176" y="110" width="165" height="24" rx="12" fill="#ECFDF5" stroke="#A7F3D0"/>
+  <text x="258" y="126" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="#047857">REWRITE_SENTENCES</text>
+  <rect x="476" y="110" width="90" height="24" rx="12" fill="#F1F5F9"/>
+  <text x="521" y="126" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="600" fill="#334155">🔊 Nghe câu</text>
+
+  <!-- Stem (supports up to 749 chars) -->
+  <text x="56" y="158" font-family="Geist, sans-serif" font-size="14" font-weight="600" fill="#0F172A">"I have never read such an inspiring grammar book before," said Minh.</text>
+  <text x="56" y="178" font-family="Geist, sans-serif" font-size="11.5" fill="#475569">(Gợi ý: Chuyển sang câu gián tiếp hoặc cấu trúc đảo ngữ nhấn mạnh tương đương)</text>
+
+  <!-- Starter Prompt Box -->
+  <rect x="56" y="192" width="510" height="36" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="70" y="215" font-family="Geist Mono, monospace" font-size="12" font-weight="700" fill="#B45309">BẮT ĐẦU VỚI: Never before had Minh...</text>
+
+  <!-- Input Area -->
+  <rect x="56" y="240" width="510" height="44" rx="8" fill="#F8FAFC" stroke="#2563EB" stroke-width="2"/>
+  <text x="70" y="267" font-family="Geist, sans-serif" font-size="13.5" font-weight="500" fill="#0F172A">Never before had Minh read such an inspiring grammar book.</text>
+
+  <!-- 5-Step Structured Explanation -->
+  <rect x="56" y="300" width="510" height="284" rx="10" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="72" y="324" font-family="Geist, sans-serif" font-size="12.5" font-weight="800" fill="#0F172A">LỜI GIẢI SƯ PHẠM 5 BƯỚC</text>
+  <rect x="350" y="308" width="200" height="24" rx="6" fill="#E2E8F0"/>
+  <text x="450" y="324" text-anchor="middle" font-family="Geist, sans-serif" font-size="10" font-weight="700" fill="#0F172A">Basic | Intermediate | Advanced</text>
+
+  <text x="72" y="354" font-family="Geist, sans-serif" font-size="11.5" font-weight="700" fill="#2563EB">1. Dấu hiệu &amp; Ngữ cảnh (Signal):</text>
+  <text x="72" y="372" font-family="Geist, sans-serif" font-size="11" fill="#334155">Trạng từ phủ định "Never before" đặt đầu câu để nhấn mạnh trải nghiệm chưa từng có.</text>
+
+  <text x="72" y="398" font-family="Geist, sans-serif" font-size="11.5" font-weight="700" fill="#047857">2. Quy tắc &amp; Công thức (Rule):</text>
+  <rect x="72" y="406" width="478" height="26" rx="4" fill="#ECFDF5" stroke="#A7F3D0"/>
+  <text x="82" y="423" font-family="Geist Mono, monospace" font-size="11" font-weight="700" fill="#047857">Never (before) + had + S + V3/ed + such + (a/an) + Adj + N</text>
+
+  <text x="72" y="452" font-family="Geist, sans-serif" font-size="11.5" font-weight="700" fill="#0F172A">3. Dịch nghĩa &amp; Từ vựng: <tspan font-weight="500" fill="#334155">Chưa bao giờ trước đây Minh đọc một cuốn sách...</tspan></text>
+  <text x="72" y="478" font-family="Geist, sans-serif" font-size="11.5" font-weight="700" fill="#DC2626">4. Bẫy hay gặp (Common Mistakes): <tspan font-weight="500" fill="#334155">Quên đảo trợ động từ "had" lên trước chủ ngữ Minh.</tspan></text>
+  <text x="72" y="504" font-family="Geist, sans-serif" font-size="11.5" font-weight="700" fill="#B45309">5. Chiến thuật thi cử (Exam Tips): <tspan font-weight="500" fill="#334155">Kiểm tra lùi thì (have read ➔ had read) + đảo ngữ.</tspan></text>
+
+  <text x="72" y="568" font-family="Geist, sans-serif" font-size="10.5" font-weight="600" fill="#475569">🚩 Báo lỗi nội dung sư phạm</text>
+  <text x="410" y="568" font-family="Geist Mono, monospace" font-size="10.5" font-weight="700" fill="#047857">SM-2 Next Review: +7 ngày</text>
+
+  <!-- Right Top: Ethical Smart Paywall & FREE Lock Gate -->
+  <rect x="614" y="90" width="550" height="250" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+  <text x="634" y="118" font-family="Geist, sans-serif" font-size="14" font-weight="800" fill="#0F172A">SMART PAYWALL &amp; THẺ KHÓA CÂU 11+ (FTC ANTI-DARK-PATTERN)</text>
+  <rect x="634" y="132" width="510" height="78" rx="10" fill="#FFFBEB" stroke="#F59E0B" stroke-dasharray="6 4" stroke-width="1.5"/>
+  <text x="652" y="156" font-family="Geist, sans-serif" font-size="12.5" font-weight="700" fill="#B45309">🔒 Câu 11/82: Nội dung mở rộng dành cho Thành viên VIP</text>
+  <text x="652" y="176" font-family="Geist, sans-serif" font-size="11" fill="#334155">Bạn đã hoàn thành xuất sắc 10/10 câu miễn phí của Chương 01 (Độ chính xác: 90%).</text>
+  <text x="652" y="196" font-family="Geist, sans-serif" font-size="11" font-weight="700" fill="#2563EB">Mở khóa trọn bộ 2,939 câu + AI Study Coach • Dùng thử 7 ngày (0đ)</text>
+
+  <rect x="634" y="222" width="510" height="102" rx="10" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="650" y="244" font-family="Geist, sans-serif" font-size="11.5" font-weight="800" fill="#2563EB">CAM KẾT MINH BẠCH 100% (FTC COMPLIANT):</text>
+  <text x="650" y="264" font-family="Geist, sans-serif" font-size="11" fill="#334155">• Giá rõ ràng sau dùng thử: 99,000đ/tháng hoặc 699,000đ/năm (tiết kiệm 41%).</text>
+  <text x="650" y="284" font-family="Geist, sans-serif" font-size="11" fill="#334155">• Hủy VIP trong đúng 2 chạm bất kỳ lúc nào — Giữ nguyên 100% XP, Streak &amp; Sổ tay câu sai.</text>
+  <text x="650" y="304" font-family="Geist, sans-serif" font-size="11" fill="#047857">• Không bao giờ chen ngang khi đang làm dở bài tập miễn phí (Daily Cap: tối đa 2 lần/ngày).</text>
+
+  <!-- Right Bottom: Click Dictionary #dict-popup & Gamification Privacy -->
+  <rect x="614" y="356" width="550" height="248" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+  <text x="634" y="384" font-family="Geist, sans-serif" font-size="14" font-weight="800" fill="#0F172A">POPOVER TRA TỪ TỨC THÌ (#dict-popup) &amp; BẢNG XẾP HẠNG PRIVACY-FIRST</text>
+  <rect x="634" y="400" width="250" height="184" rx="12" fill="#09090B" stroke="#272733"/>
+  <text x="650" y="426" font-family="Geist, sans-serif" font-size="15" font-weight="800" fill="#38BDF8">inspiring</text>
+  <rect x="730" y="412" width="46" height="18" rx="4" fill="#18181B"/>
+  <text x="753" y="425" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9.5" font-weight="700" fill="#A1A1AA">ADJ</text>
+  <text x="650" y="448" font-family="Geist Mono, monospace" font-size="11.5" fill="#D4D4D8">/ɪnˈspaɪər.ɪŋ/  🔊 US/UK</text>
+  <rect x="650" y="460" width="218" height="44" rx="6" fill="#064E3B"/>
+  <text x="660" y="478" font-family="Geist, sans-serif" font-size="11" font-weight="700" fill="#34D399">Truyền cảm hứng, khích lệ</text>
+  <text x="660" y="494" font-family="Geist, sans-serif" font-size="10" fill="#A7F3D0">Syn: encouraging, motivating</text>
+  <rect x="650" y="516" width="218" height="28" rx="6" fill="#2563EB"/>
+  <text x="759" y="534" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF">☆ Lưu vào Sổ từ vựng</text>
+  <text x="650" y="566" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">Cambridge Dictionary ↗ • Esc để đóng</text>
+
+  <rect x="900" y="400" width="244" height="184" rx="12" fill="#F8FAFC" stroke="#CBD5E1"/>
+  <text x="916" y="424" font-family="Geist, sans-serif" font-size="12" font-weight="800" fill="#0F172A">🏆 Leaderboard Privacy</text>
+  <text x="916" y="446" font-family="Geist, sans-serif" font-size="10.5" fill="#334155">Chế độ hiển thị của bạn:</text>
+  <rect x="916" y="456" width="212" height="28" rx="6" fill="#FFFFFF" stroke="#2563EB"/>
+  <text x="926" y="474" font-family="Geist, sans-serif" font-size="10.5" font-weight="700" fill="#2563EB">● Công khai / Ẩn danh #4829 ▾</text>
+  <text x="916" y="506" font-family="Geist, sans-serif" font-size="10.5" fill="#334155">Tie-breaker: Độ chính xác (%)</text>
+  <text x="916" y="526" font-family="Geist, sans-serif" font-size="10.5" fill="#047857">✓ Chống farm câu đã Mastered</text>
+  <text x="916" y="546" font-family="Geist, sans-serif" font-size="10.5" fill="#B45309">• Memory Decay: -5%/tuần (&gt;14d)</text>
+  <text x="916" y="568" font-family="Geist, sans-serif" font-size="10.5" fill="#475569">• Reduced Motion Toggle: BẬT</text>
+</svg>

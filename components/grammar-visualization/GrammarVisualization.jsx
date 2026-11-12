@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import VisualizationRenderer from "./VisualizationRenderer";
 import VisualizationLegend from "./VisualizationLegend";
 import VisualizationControls from "./VisualizationControls";
+import { getThemeTokens } from "../../lib/tokens/design-tokens";
+import { VIZ_ICON_MAP } from "../ui-2026/assetMap";
 import {
   getVisualizationForLesson,
   VISUALIZATION_CATALOG,
@@ -16,8 +18,8 @@ export default function GrammarVisualization({
   const [isOpen, setIsOpen] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
+  const T = getThemeTokens(isLight);
 
-  // Auto-detect visualization model when lesson/chapter changes
   useEffect(() => {
     const recommended = getVisualizationForLesson(lesson, chapter);
     if (recommended) {
@@ -28,16 +30,17 @@ export default function GrammarVisualization({
   const recommendedVis = getVisualizationForLesson(lesson, chapter);
   const activeType = selectedType || recommendedVis?.type || VISUALIZATION_TYPES.TIMELINE;
   const currentCatalogItem = VISUALIZATION_CATALOG[activeType] || VISUALIZATION_CATALOG[VISUALIZATION_TYPES.TIMELINE];
+  const activeIconPath = VIZ_ICON_MAP[activeType] || VIZ_ICON_MAP.timeline;
 
   return (
     <div
       style={{
         marginBottom: "1.75rem",
-        backgroundColor: isLight ? "#ffffff" : "#111116",
-        border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+        backgroundColor: T.card,
+        border: `1px solid ${T.cardBorder}`,
         borderRadius: "12px",
         overflow: "hidden",
-        boxShadow: isLight ? "0 4px 12px rgba(0, 0, 0, 0.05)" : "0 8px 30px rgba(0, 0, 0, 0.4)",
+        boxShadow: T.shadow,
         transition: "all 0.2s ease",
       }}
     >
@@ -48,8 +51,8 @@ export default function GrammarVisualization({
           justifyContent: "space-between",
           alignItems: "center",
           padding: "1rem 1.25rem",
-          backgroundColor: isLight ? "#f8fafc" : "#14141c",
-          borderBottom: isOpen ? `1px solid ${isLight ? "#e2e8f0" : "#272733"}` : "none",
+          backgroundColor: T.bgSub,
+          borderBottom: isOpen ? `1px solid ${T.borderSubtle}` : "none",
           flexWrap: "wrap",
           gap: "0.75rem",
         }}
@@ -57,22 +60,24 @@ export default function GrammarVisualization({
         <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
           <span
             style={{
-              fontSize: "1.2rem",
-              backgroundColor: isLight ? "#eff6ff" : "#1e1b4b",
-              border: `1px solid ${isLight ? "#bfdbfe" : "#3b82f6"}`,
-              padding: "0.25rem 0.5rem",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: T.accentBg,
+              border: `1px solid ${T.accentBorder}`,
+              padding: "0.4rem",
               borderRadius: "8px",
             }}
           >
-            {currentCatalogItem.icon}
+            <img src={activeIconPath} alt={currentCatalogItem.title} width={22} height={22} />
           </span>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
               <h3
                 style={{
                   fontSize: "1rem",
                   fontWeight: "700",
-                  color: isLight ? "#0f172a" : "#fafafa",
+                  color: T.textHeading,
                   margin: 0,
                   letterSpacing: "-0.01em",
                 }}
@@ -82,10 +87,10 @@ export default function GrammarVisualization({
               <span
                 style={{
                   fontSize: "0.68rem",
-                  fontFamily: "Geist Mono",
-                  backgroundColor: isLight ? "#ecfdf5" : "#064e3b",
-                  border: `1px solid ${isLight ? "#a7f3d0" : "#059669"}`,
-                  color: isLight ? "#047857" : "#34d399",
+                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                  backgroundColor: T.successBg,
+                  border: `1px solid ${T.successBorder}`,
+                  color: T.success,
                   padding: "0.15rem 0.5rem",
                   borderRadius: "999px",
                   fontWeight: "800",
@@ -95,7 +100,7 @@ export default function GrammarVisualization({
                 {currentCatalogItem.badge}
               </span>
             </div>
-            <p style={{ fontSize: "0.78rem", color: isLight ? "#475569" : "#a1a1aa", margin: "0.15rem 0 0 0" }}>
+            <p style={{ fontSize: "0.78rem", color: T.textMuted, margin: "0.15rem 0 0 0" }}>
               {currentCatalogItem.description}
             </p>
           </div>
@@ -112,16 +117,18 @@ export default function GrammarVisualization({
           )}
 
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
+            className="ds-focusable"
             style={{
               padding: "0.35rem 0.75rem",
               fontSize: "0.75rem",
-              fontFamily: "Geist Mono",
+              fontFamily: "var(--font-mono, Geist Mono, monospace)",
               fontWeight: "700",
-              backgroundColor: isLight ? "#ffffff" : "#1c1c26",
-              border: `1px solid ${isLight ? "#cbd5e1" : "#2d2d3f"}`,
+              backgroundColor: T.card,
+              border: `1px solid ${T.border}`,
               borderRadius: "6px",
-              color: isLight ? "#0f172a" : "#fafafa",
+              color: T.text,
               cursor: "pointer",
             }}
           >
@@ -138,43 +145,65 @@ export default function GrammarVisualization({
             alignItems: "center",
             gap: "0.4rem",
             padding: "0.6rem 1.25rem",
-            backgroundColor: isLight ? "#f1f5f9" : "#181822",
-            borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+            backgroundColor: T.bgElevated,
+            borderBottom: `1px solid ${T.borderSubtle}`,
             overflowX: "auto",
           }}
         >
-          <span style={{ fontSize: "0.7rem", fontWeight: "700", color: isLight ? "#64748b" : "#94a3b8", textTransform: "uppercase", whiteSpace: "nowrap", marginRight: "0.25rem" }}>
+          <span
+            style={{
+              fontSize: "0.7rem",
+              fontWeight: "700",
+              color: T.textMuted,
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              marginRight: "0.25rem",
+            }}
+          >
             Mô hình ({Object.keys(VISUALIZATION_CATALOG).length}):
           </span>
 
           {Object.values(VISUALIZATION_CATALOG).map((item) => {
             const isCurrent = activeType === item.type;
             const isRecommended = recommendedVis?.type === item.type;
+            const iconSrc = VIZ_ICON_MAP[item.type] || VIZ_ICON_MAP.timeline;
             return (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => setSelectedType(item.type)}
                 title={item.description}
+                className="ds-focusable"
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "0.3rem",
-                  padding: "0.25rem 0.55rem",
+                  gap: "0.35rem",
+                  padding: "0.28rem 0.6rem",
                   borderRadius: "6px",
                   fontSize: "0.72rem",
-                  fontFamily: "Geist Mono",
+                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
                   fontWeight: isCurrent ? "800" : "500",
-                  backgroundColor: isCurrent ? (isLight ? "#2563eb" : "#3b82f6") : (isLight ? "#ffffff" : "#111116"),
-                  color: isCurrent ? "#ffffff" : (isLight ? "#334155" : "#cbd5e1"),
-                  border: isCurrent ? "1px solid #2563eb" : `1px solid ${isLight ? "#cbd5e1" : "#2d2d3f"}`,
+                  backgroundColor: isCurrent ? "var(--ds-btn-primary)" : T.card,
+                  color: isCurrent ? "#ffffff" : T.textSecondary,
+                  border: isCurrent ? "1px solid var(--ds-btn-primary)" : `1px solid ${T.border}`,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
                 }}
               >
-                <span>{item.icon}</span>
+                <img
+                  src={iconSrc}
+                  alt=""
+                  width={14}
+                  height={14}
+                  aria-hidden="true"
+                  style={{ filter: isCurrent ? "brightness(0) invert(1)" : "none" }}
+                />
                 <span>{item.badge}</span>
                 {isRecommended && !isCurrent && (
-                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#10b981" }} title="Gợi ý cho bài học này" />
+                  <span
+                    style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: T.success }}
+                    title="Gợi ý cho bài học này"
+                  />
                 )}
               </button>
             );
@@ -187,7 +216,7 @@ export default function GrammarVisualization({
         <div
           style={{
             padding: isExpanded ? "1.75rem" : "1.25rem",
-            backgroundColor: isLight ? "#ffffff" : "#0d0d12",
+            backgroundColor: T.card,
           }}
         >
           <VisualizationRenderer

@@ -22,7 +22,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
         style={{
           display: "flex",
           gap: "0.5rem",
-          borderBottom: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+          borderBottom: `1px solid ${"var(--ds-card-border)"}`,
           paddingBottom: "0.75rem",
           overflowX: "auto",
         }}
@@ -38,9 +38,9 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
             style={{
               padding: "0.55rem 0.95rem",
               borderRadius: "8px",
-              border: activeTab === tab.id ? (isLight ? "1px solid #3b82f6" : "1px solid #60a5fa") : "1px solid transparent",
-              backgroundColor: activeTab === tab.id ? (isLight ? "#eff6ff" : "#1e1b4b") : "transparent",
-              color: activeTab === tab.id ? (isLight ? "#1d4ed8" : "#93c5fd") : (isLight ? "#475569" : "#a1a1aa"),
+              border: activeTab === tab.id ? (isLight ? "1px solid var(--ds-accent)" : "1px solid var(--ds-accent)") : "1px solid transparent",
+              backgroundColor: activeTab === tab.id ? "var(--ds-accent-bg)" : "transparent",
+              color: activeTab === tab.id ? "var(--ds-accent)" : "var(--ds-text-muted)",
               fontSize: "0.825rem",
               fontWeight: activeTab === tab.id ? "700" : "500",
               cursor: "pointer",
@@ -68,9 +68,9 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
               alignItems: "center",
               gap: "0.5rem",
               padding: "1rem",
-              backgroundColor: isLight ? "#f8fafc" : "#14141c",
+              backgroundColor: "var(--ds-bg-elevated)",
               borderRadius: "10px",
-              border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+              border: `1px solid ${"var(--ds-card-border)"}`,
               overflowX: "auto",
             }}
           >
@@ -86,7 +86,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                     padding: "0.75rem 0.5rem",
                     borderRadius: "8px",
                     border: `2px solid ${isSelected ? step.color : "transparent"}`,
-                    backgroundColor: isSelected ? (isLight ? "#ffffff" : "#1e1e2c") : "transparent",
+                    backgroundColor: isSelected ? "var(--ds-card)" : "transparent",
                     cursor: "pointer",
                     display: "flex",
                     flexDirection: "column",
@@ -109,7 +109,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: "700",
-                      color: isLight ? "#0f172a" : "#fafafa",
+                      color: "var(--ds-text-heading)",
                       textAlign: "center",
                     }}
                   >
@@ -118,7 +118,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                   <span
                     style={{
                       fontSize: "0.65rem",
-                      color: isLight ? "#475569" : "#a1a1aa",
+                      color: "var(--ds-text-muted)",
                       textAlign: "center",
                       whiteSpace: "nowrap",
                     }}
@@ -135,7 +135,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
             style={{
               padding: "1.25rem",
               borderRadius: "10px",
-              backgroundColor: isLight ? "#ffffff" : "#121218",
+              backgroundColor: "var(--ds-card)",
               border: `2px solid ${curProb.color}`,
               display: "flex",
               flexDirection: "column",
@@ -159,7 +159,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                   {curProb.percentage}
                 </span>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa" }}>
+                  <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                     {curProb.label}
                   </h4>
                   <div style={{ fontSize: "0.78rem", color: curProb.color, fontWeight: "600" }}>
@@ -169,7 +169,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
               </div>
             </div>
 
-            <p style={{ margin: 0, fontSize: "0.85rem", color: isLight ? "#334155" : "#cbd5e1", lineHeight: 1.5 }}>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ds-text-secondary)", lineHeight: 1.5 }}>
               {curProb.explanation}
             </p>
 
@@ -181,13 +181,13 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 flexWrap: "wrap",
                 gap: "0.75rem",
                 padding: "0.85rem 1rem",
-                backgroundColor: isLight ? "#f8fafc" : "#0d1117",
+                backgroundColor: "var(--ds-bg-elevated)",
                 borderRadius: "8px",
-                border: `1px solid ${isLight ? "#e2e8f0" : "#272733"}`,
+                border: `1px solid ${"var(--ds-card-border)"}`,
               }}
             >
               <div>
-                <div style={{ fontSize: "0.95rem", fontWeight: "700", color: isLight ? "#0f172a" : "#f4f4f5" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                   "{curProb.example}"
                 </div>
               </div>
@@ -211,9 +211,9 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                   borderRadius: "6px",
                   fontSize: "0.78rem",
                   fontWeight: selectedFunctionId === func.id ? "700" : "500",
-                  backgroundColor: selectedFunctionId === func.id ? (isLight ? "#3b82f6" : "#2563eb") : (isLight ? "#f1f5f9" : "#1c1c24"),
-                  color: selectedFunctionId === func.id ? "#ffffff" : (isLight ? "#334155" : "#cbd5e1"),
-                  border: `1px solid ${selectedFunctionId === func.id ? "#2563eb" : (isLight ? "#cbd5e1" : "#2d2d3f")}`,
+                  backgroundColor: selectedFunctionId === func.id ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
+                  color: selectedFunctionId === func.id ? "#ffffff" : "var(--ds-text-secondary)",
+                  border: `1px solid ${selectedFunctionId === func.id ? "var(--ds-accent)" : "var(--ds-border)"}`,
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -234,28 +234,28 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 style={{
                   padding: "1rem",
                   borderRadius: "8px",
-                  backgroundColor: isLight ? "#ffffff" : "#14141c",
-                  border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+                  backgroundColor: "var(--ds-card)",
+                  border: `1px solid ${"var(--ds-border)"}`,
                   display: "flex",
                   flexDirection: "column",
                   gap: "0.5rem",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "1.05rem", fontWeight: "800", color: isLight ? "#2563eb" : "#60a5fa", fontFamily: "Geist Mono" }}>
+                  <span style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
                     {rule.modal}
                   </span>
-                  <span style={{ fontSize: "0.7rem", backgroundColor: isLight ? "#eff6ff" : "#1e1b4b", color: isLight ? "#1d4ed8" : "#93c5fd", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
+                  <span style={{ fontSize: "0.7rem", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
                     {rule.time}
                   </span>
                 </div>
 
-                <div style={{ fontSize: "0.78rem", color: isLight ? "#334155" : "#cbd5e1", lineHeight: 1.4 }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)", lineHeight: 1.4 }}>
                   {rule.usage}
                 </div>
 
-                <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}` }}>
-                  <div style={{ fontSize: "0.825rem", color: isLight ? "#0f172a" : "#f4f4f5", fontWeight: "600" }}>
+                <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
+                  <div style={{ fontSize: "0.825rem", color: "var(--ds-text-heading)", fontWeight: "600" }}>
                     "{rule.example}"
                   </div>
                   <div style={{ marginTop: "0.35rem" }}>
@@ -277,28 +277,28 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
               style={{
                 padding: "1.15rem",
                 borderRadius: "8px",
-                backgroundColor: isLight ? "#ffffff" : "#14141c",
-                border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
-                borderLeft: "4px solid #8b5cf6",
+                backgroundColor: "var(--ds-card)",
+                border: `1px solid ${"var(--ds-border)"}`,
+                borderLeft: "4px solid var(--ds-purple)",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "1rem", fontWeight: "800", fontFamily: "Geist Mono", color: isLight ? "#6d28d9" : "#a78bfa" }}>
+              <div style={{ fontSize: "1rem", fontWeight: "800", fontFamily: "Geist Mono", color: "var(--ds-purple)" }}>
                 {pm.formula}
               </div>
 
-              <div style={{ fontSize: "0.85rem", fontWeight: "600", color: isLight ? "#0f172a" : "#fafafa" }}>
+              <div style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--ds-text-heading)" }}>
                 🇻🇳 {pm.meaning}
               </div>
 
-              <div style={{ fontSize: "0.75rem", backgroundColor: isLight ? "#fef3c7" : "#78350f30", color: isLight ? "#92400e" : "#fde68a", padding: "0.45rem 0.65rem", borderRadius: "6px" }}>
+              <div style={{ fontSize: "0.75rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.45rem 0.65rem", borderRadius: "6px" }}>
                 ⚠️ <strong>Cảnh báo bẫy thi:</strong> {pm.trap_alert}
               </div>
 
-              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}` }}>
-                <div style={{ fontSize: "0.825rem", color: isLight ? "#1e40af" : "#93c5fd" }}>
+              <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
+                <div style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>
                   "{pm.example}"
                 </div>
                 <div style={{ marginTop: "0.35rem" }}>

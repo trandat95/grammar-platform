@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
+import { AVATAR_PATHS, BANNER_PATHS, getBadgeTierIconPath, getLevelIconPath } from "../ui-2026/assetMap";
 
 const BOARD_TABS = [
   { id: "weekly_xp", label: "XP Tuần", unit: "XP" },
@@ -250,6 +251,33 @@ export default function GamificationHub({
         </Alert>
       )}
 
+      {/* Community Gamification Editorial Banner */}
+      <div
+        className="ge-hero-banner-card"
+        style={{
+          padding: "1.2rem 1.4rem",
+          border: `1px solid ${T.accentBorder}`,
+        }}
+      >
+        <img
+          src={BANNER_PATHS.gamification}
+          alt="Cộng đồng học viên ăn mừng chuỗi Streak & Thành tích"
+          className="ge-hero-banner-bg"
+        />
+        <div className="ge-hero-banner-scrim" />
+        <div className="ge-hero-banner-content" style={{ maxWidth: "620px" }}>
+          <Badge tone="warning" isLight={isLight}>
+            Cộng đồng &amp; Bảng Xếp Hạng UTC+7
+          </Badge>
+          <div style={{ fontSize: "1.1rem", fontWeight: 800, color: T.textHeading, marginTop: "0.45rem" }}>
+            Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
+          </div>
+          <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem", lineHeight: 1.5 }}>
+            Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
+          </div>
+        </div>
+      </div>
+
       {/* Top Grid: Level Progression & Timezone Streak System */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem" }}>
         {/* Level & Authoritative XP Card */}
@@ -264,7 +292,13 @@ export default function GamificationHub({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-              <span style={{ fontSize: "2rem" }}>{xpState.badgeIcon || "🌱"}</span>
+              <img
+                src={getLevelIconPath(xpState.level || 1)}
+                alt={xpState.title || "Beginner"}
+                width={40}
+                height={40}
+                style={{ width: 40, height: 40, flexShrink: 0 }}
+              />
               <div>
                 <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
                   Level {xpState.level || 1} — {xpState.title || "Beginner"}
@@ -486,7 +520,13 @@ export default function GamificationHub({
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.45rem" }}>
-                <span style={{ fontSize: "1.45rem" }}>{b.icon}</span>
+                <img
+                  src={getBadgeTierIconPath(b.tier, b.unlocked, b.is_hidden)}
+                  alt={`${b.tier} badge`}
+                  width={32}
+                  height={32}
+                  style={{ width: 32, height: 32 }}
+                />
                 <div style={{ display: "flex", gap: "0.3rem" }}>
                   <Badge tone={getTierTone(b.tier)} isLight={isLight}>
                     {b.tier}
@@ -590,6 +630,21 @@ export default function GamificationHub({
                     <strong style={{ minWidth: "28px", color: row.rank <= 3 ? T.warning : T.textMuted }}>
                       #{row.rank}
                     </strong>
+                    <img
+                      src={AVATAR_PATHS[(row.rank - 1) % AVATAR_PATHS.length]}
+                      alt={row.display_name}
+                      width={28}
+                      height={28}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        border: `1px solid ${T.borderSubtle}`,
+                        opacity: row.is_anonymous ? 0.55 : 1,
+                        filter: row.is_anonymous ? "grayscale(100%)" : "none",
+                      }}
+                    />
                     <div>
                       <div style={{ fontSize: "0.84rem", fontWeight: 700, color: T.textHeading }}>
                         {row.display_name} {row.isCurrentUser ? "(Bạn)" : ""}

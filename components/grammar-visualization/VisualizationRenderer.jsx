@@ -15,7 +15,7 @@ export default function VisualizationRenderer({ type, data, isLight = false }) {
         style={{
           padding: "2rem",
           textAlign: "center",
-          color: isLight ? "#64748b" : "#71717a",
+          color: "var(--ds-text-muted)",
           fontSize: "0.9rem",
         }}
       >
@@ -47,7 +47,7 @@ export default function VisualizationRenderer({ type, data, isLight = false }) {
           style={{
             padding: "2rem",
             textAlign: "center",
-            color: isLight ? "#64748b" : "#71717a",
+            color: "var(--ds-text-muted)",
           }}
         >
           Loại sơ đồ trực quan "{type}" chưa được hỗ trợ.

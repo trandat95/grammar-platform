@@ -69,13 +69,19 @@ for mode, spec in PAIRS.items():
 
 STRICT_TOKEN_DIRS = [
     "components/design-system",
+    "components/ui-2026",
     "components/admin",
     "components/sync",
+    "components/diagnostic",
     "components/gamification",
     "components/monetization",
+    "components/grammar-visualization",
+    "components/explanation",
+    "components/audio",
     "components/learning/SpacedRepetitionPanel.jsx",
     "components/learning/RemedialRecommendationCard.jsx",
     "components/learning/MasteryIntelligenceDashboard.jsx",
+    "pages/index.js",
 ]
 HEX_PATTERN = re.compile(r"#[0-9a-fA-F]{6}\b")
 ALLOWLIST = {"#ffffff"}

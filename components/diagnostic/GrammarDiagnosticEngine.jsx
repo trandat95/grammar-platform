@@ -312,7 +312,7 @@ export default function GrammarDiagnosticEngine({
         <div
           style={{
             borderBottom: `1px solid ${T.borderSubtle}`,
-            backgroundColor: isLight ? "#ffffff" : "#18181b",
+            backgroundColor: "var(--ds-card)",
             padding: "0.5rem 1.5rem",
           }}
         >
@@ -336,7 +336,7 @@ export default function GrammarDiagnosticEngine({
                   fontSize: "0.85rem",
                   fontWeight: 700,
                   cursor: "pointer",
-                  backgroundColor: diagnosticMode === "results" ? T.accent : "transparent",
+                  backgroundColor: diagnosticMode === "results" ? "var(--ds-btn-primary)" : "transparent",
                   color: diagnosticMode === "results" ? "#ffffff" : T.textMuted,
                   border: "none",
                 }}
@@ -352,7 +352,7 @@ export default function GrammarDiagnosticEngine({
                   fontSize: "0.85rem",
                   fontWeight: 700,
                   cursor: "pointer",
-                  backgroundColor: diagnosticMode === "roadmap" ? T.accent : "transparent",
+                  backgroundColor: diagnosticMode === "roadmap" ? "var(--ds-btn-primary)" : "transparent",
                   color: diagnosticMode === "roadmap" ? "#ffffff" : T.textMuted,
                   border: "none",
                 }}
@@ -369,7 +369,7 @@ export default function GrammarDiagnosticEngine({
                 gap: "0.35rem",
                 padding: "0.35rem 0.75rem",
                 borderRadius: "0.4rem",
-                backgroundColor: isLight ? "#f1f5f9" : "#27272a",
+                backgroundColor: "var(--ds-bg-elevated)",
                 color: T.text,
                 fontSize: "0.8rem",
                 fontWeight: 600,

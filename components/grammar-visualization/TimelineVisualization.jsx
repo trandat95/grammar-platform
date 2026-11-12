@@ -38,8 +38,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           position: "relative",
           width: "100%",
           height: "80px",
-          backgroundColor: isLight ? "#f1f5f9" : "#0d0d12",
-          border: `1px solid ${isLight ? "#cbd5e1" : "#22222d"}`,
+          backgroundColor: "var(--ds-bg-elevated)",
+          border: `1px solid ${"var(--ds-border)"}`,
           borderRadius: "8px",
           padding: "0.5rem 1rem",
           display: "flex",
@@ -56,7 +56,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
             right: "10%",
             top: "50%",
             height: "3px",
-            backgroundColor: isLight ? "#94a3b8" : "#3f3f46",
+            backgroundColor: "var(--ds-border-strong)",
             transform: "translateY(-50%)",
           }}
         />
@@ -65,20 +65,20 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
         <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 10%" }}>
           {/* Past Reference Node */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "#f59e0b", fontWeight: "700" }}>QUÁ KHỨ</span>
-            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#f59e0b", marginTop: "2px" }} />
+            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "var(--ds-warning)", fontWeight: "700" }}>QUÁ KHỨ</span>
+            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "var(--ds-warning)", marginTop: "2px" }} />
           </div>
 
           {/* Present (Now) Reference Node */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "#10b981", fontWeight: "800" }}>HIỆN TẠI (NOW)</span>
-            <div style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: "#10b981", border: "2px solid #ffffff", marginTop: "2px", boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)" }} />
+            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "800" }}>HIỆN TẠI (NOW)</span>
+            <div style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: "var(--ds-btn-success)", border: "2px solid #ffffff", marginTop: "2px", boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)" }} />
           </div>
 
           {/* Future Reference Node */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "#3b82f6", fontWeight: "700" }}>TƯƠNG LAI</span>
-            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#3b82f6", marginTop: "2px" }} />
+            <span style={{ fontSize: "0.65rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700" }}>TƯƠNG LAI</span>
+            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "var(--ds-accent)", marginTop: "2px" }} />
           </div>
 
           {/* Dynamic Action Span / Marker */}
@@ -92,7 +92,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 width: "22px",
                 height: "22px",
                 borderRadius: "50%",
-                backgroundColor: isPast ? "#f59e0b" : isPresent ? "#10b981" : "#3b82f6",
+                backgroundColor: isPast ? "var(--ds-warning)" : isPresent ? "var(--ds-success)" : "var(--ds-accent)",
                 border: "3px solid #ffffff",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
                 zIndex: 3,
@@ -119,7 +119,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 height: "14px",
                 transform: "translateY(-50%)",
                 backgroundColor: isLight ? "rgba(16, 185, 129, 0.4)" : "rgba(16, 185, 129, 0.5)",
-                border: "2px dashed #10b981",
+                border: "2px dashed var(--ds-success)",
                 borderRadius: "999px",
                 zIndex: 3,
                 display: "flex",
@@ -127,7 +127,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 justifyContent: "center",
                 fontSize: "0.6rem",
                 fontFamily: "Geist Mono",
-                color: isLight ? "#065f46" : "#ffffff",
+                color: "var(--ds-success)",
                 fontWeight: "700",
               }}
             >
@@ -144,7 +144,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 width: "28%",
                 height: "8px",
                 transform: "translateY(-50%)",
-                background: "linear-gradient(90deg, #f59e0b 0%, #10b981 100%)",
+                background: "linear-gradient(90deg, var(--ds-warning) 0%, var(--ds-success) 100%)",
                 borderRadius: "999px",
                 zIndex: 3,
                 boxShadow: "0 0 6px rgba(16, 185, 129, 0.5)",
@@ -162,15 +162,15 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 width: "16%",
                 height: "10px",
                 transform: "translateY(-50%)",
-                backgroundColor: isLight ? "#e0e7ff" : "rgba(99, 102, 241, 0.4)",
-                border: "2px solid #6366f1",
+                backgroundColor: isLight ? "var(--ds-purple-bg)" : "rgba(99, 102, 241, 0.4)",
+                border: "2px solid var(--ds-accent)",
                 borderRadius: "4px",
                 zIndex: 3,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "0.55rem",
-                color: isLight ? "#3730a3" : "#c7d2fe",
+                color: "var(--ds-accent-border)",
                 fontWeight: "700",
               }}
             >
@@ -200,7 +200,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                     width: "8px",
                     height: "8px",
                     borderRadius: "50%",
-                    backgroundColor: "#10b981",
+                    backgroundColor: "var(--ds-btn-success)",
                     border: "1px solid #ffffff",
                   }}
                   title="Thói quen / Sự thật lặp đi lặp lại"
@@ -219,7 +219,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem" }}>
         {/* Time Sphere Filters */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "0.75rem", color: isLight ? "#64748b" : "#a1a1aa", fontWeight: "700" }}>Thời gian:</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", fontWeight: "700" }}>Thời gian:</span>
           {[
             { id: "ALL", label: "Tất cả (13)" },
             { id: "present", label: "🟢 Hiện tại (4)" },
@@ -234,9 +234,9 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 fontSize: "0.72rem",
                 fontWeight: activeFilter === f.id ? "700" : "500",
                 borderRadius: "6px",
-                backgroundColor: activeFilter === f.id ? (isLight ? "#eff6ff" : "#1e3a8a40") : (isLight ? "#ffffff" : "#18181f"),
-                color: activeFilter === f.id ? (isLight ? "#1d4ed8" : "#60a5fa") : (isLight ? "#475569" : "#a1a1aa"),
-                border: `1px solid ${activeFilter === f.id ? (isLight ? "#bfdbfe" : "#3b82f680") : (isLight ? "#cbd5e1" : "#272733")}`,
+                backgroundColor: activeFilter === f.id ? "var(--ds-accent-bg)" : "var(--ds-card)",
+                color: activeFilter === f.id ? "var(--ds-accent)" : "var(--ds-text-muted)",
+                border: `1px solid ${activeFilter === f.id ? "var(--ds-accent-border)" : "var(--ds-border)"}`,
                 cursor: "pointer",
               }}
             >
@@ -254,9 +254,9 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
               fontSize: "0.75rem",
               fontWeight: "700",
               borderRadius: "6px",
-              backgroundColor: compareMode ? (isLight ? "#fef3c7" : "#78350f40") : (isLight ? "#ffffff" : "#18181f"),
-              color: compareMode ? (isLight ? "#b45309" : "#fbbf24") : (isLight ? "#475569" : "#a1a1aa"),
-              border: `1px solid ${compareMode ? (isLight ? "#fde68a" : "#f59e0b80") : (isLight ? "#cbd5e1" : "#272733")}`,
+              backgroundColor: compareMode ? "var(--ds-warning-bg)" : "var(--ds-card)",
+              color: compareMode ? "var(--ds-warning)" : "var(--ds-text-muted)",
+              border: `1px solid ${compareMode ? "var(--ds-warning-border)" : "var(--ds-border)"}`,
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -294,16 +294,16 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
               }}
               style={{
                 backgroundColor: isSelected
-                  ? (isLight ? "#eff6ff" : "rgba(30, 58, 138, 0.25)")
+                  ? (isLight ? "var(--ds-accent-bg)" : "rgba(30, 58, 138, 0.25)")
                   : isComparing
-                  ? (isLight ? "#fffbeb" : "rgba(120, 53, 15, 0.25)")
-                  : (isLight ? "#ffffff" : "#111116"),
+                  ? (isLight ? "var(--ds-warning-bg)" : "rgba(120, 53, 15, 0.25)")
+                  : "var(--ds-card)",
                 border: `1px solid ${
                   isSelected
-                    ? "#3b82f6"
+                    ? "var(--ds-accent)"
                     : isComparing
-                    ? "#f59e0b"
-                    : (isLight ? "#e2e8f0" : "#23232f")
+                    ? "var(--ds-warning)"
+                    : "var(--ds-card-border)"
                 }`,
                 borderRadius: "8px",
                 padding: "0.65rem 0.85rem",
@@ -317,20 +317,20 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                   {aspectMeta.label}
                 </span>
                 {isSelected && (
-                  <span style={{ fontSize: "0.65rem", backgroundColor: "#3b82f6", color: "#ffffff", padding: "0.1rem 0.35rem", borderRadius: "999px", fontWeight: "700" }}>
+                  <span style={{ fontSize: "0.65rem", backgroundColor: "var(--ds-btn-primary)", color: "#ffffff", padding: "0.1rem 0.35rem", borderRadius: "999px", fontWeight: "700" }}>
                     ĐANG XEM
                   </span>
                 )}
                 {isComparing && (
-                  <span style={{ fontSize: "0.65rem", backgroundColor: "#f59e0b", color: "#ffffff", padding: "0.1rem 0.35rem", borderRadius: "999px", fontWeight: "700" }}>
+                  <span style={{ fontSize: "0.65rem", backgroundColor: "var(--ds-btn-warning)", color: "#ffffff", padding: "0.1rem 0.35rem", borderRadius: "999px", fontWeight: "700" }}>
                     SO SÁNH
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: "0.85rem", fontWeight: "700", color: isLight ? "#0f172a" : "#fafafa", lineHeight: "1.3" }}>
+              <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)", lineHeight: "1.3" }}>
                 {t.name_vi}
               </div>
-              <div style={{ fontSize: "0.72rem", color: isLight ? "#64748b" : "#a1a1aa", fontFamily: "Geist Mono", marginTop: "0.15rem" }}>
+              <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontFamily: "Geist Mono", marginTop: "0.15rem" }}>
                 {t.name_en}
               </div>
             </div>
@@ -341,8 +341,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
       {/* 3. Focused Interactive Timeline Display */}
       <div
         style={{
-          backgroundColor: isLight ? "#ffffff" : "#111116",
-          border: `1px solid ${isLight ? "#cbd5e1" : "#272733"}`,
+          backgroundColor: "var(--ds-card)",
+          border: `1px solid ${"var(--ds-border)"}`,
           borderRadius: "12px",
           padding: "1.25rem 1.5rem",
           display: "flex",
@@ -354,11 +354,11 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <span style={{ fontSize: "1.1rem" }}>⏱️</span>
-              <h4 style={{ fontSize: "1.05rem", fontWeight: "800", color: isLight ? "#0f172a" : "#ffffff", margin: 0 }}>
+              <h4 style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
                 {selectedTense.name_vi} ({selectedTense.name_en})
               </h4>
             </div>
-            <div style={{ fontSize: "0.825rem", color: isLight ? "#334155" : "#d4d4d8", marginTop: "0.25rem" }}>
+            <div style={{ fontSize: "0.825rem", color: "var(--ds-text-secondary)", marginTop: "0.25rem" }}>
               {selectedTense.usage}
             </div>
           </div>
@@ -367,13 +367,13 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           <div
             style={{
               padding: "0.35rem 0.75rem",
-              backgroundColor: isLight ? "#f8fafc" : "#09090d",
-              border: `1px solid ${isLight ? "#cbd5e1" : "#333342"}`,
+              backgroundColor: "var(--ds-bg-elevated)",
+              border: `1px solid ${"var(--ds-border)"}`,
               borderRadius: "6px",
               fontFamily: "Geist Mono",
               fontSize: "0.825rem",
               fontWeight: "700",
-              color: isLight ? "#059669" : "#34d399",
+              color: "var(--ds-success)",
             }}
           >
             {selectedTense.formula}
@@ -386,8 +386,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
         {/* Example Sentence with Audio Player */}
         <div
           style={{
-            backgroundColor: isLight ? "#f8fafc" : "#15151b",
-            border: `1px solid ${isLight ? "#e2e8f0" : "#262633"}`,
+            backgroundColor: "var(--ds-bg-elevated)",
+            border: `1px solid ${"var(--ds-card-border)"}`,
             borderRadius: "8px",
             padding: "0.85rem 1rem",
             display: "flex",
@@ -397,13 +397,13 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
             <div>
-              <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: isLight ? "#2563eb" : "#38bdf8", fontWeight: "700", textTransform: "uppercase" }}>
+              <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase" }}>
                 VÍ DỤ TRỰC QUAN:
               </div>
-              <div style={{ fontSize: "0.95rem", fontWeight: "600", color: isLight ? "#0f172a" : "#fafafa", marginTop: "0.15rem" }}>
+              <div style={{ fontSize: "0.95rem", fontWeight: "600", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>
                 "{selectedTense.example.en}"
               </div>
-              <div style={{ fontSize: "0.825rem", color: isLight ? "#475569" : "#a1a1aa", fontStyle: "italic", marginTop: "0.1rem" }}>
+              <div style={{ fontSize: "0.825rem", color: "var(--ds-text-muted)", fontStyle: "italic", marginTop: "0.1rem" }}>
                 {selectedTense.example.vi}
               </div>
             </div>
@@ -412,13 +412,13 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
             <AudioPlayer text={selectedTense.example.en} compact={true} isLight={isLight} />
           </div>
 
-          <div style={{ fontSize: "0.75rem", color: isLight ? "#059669" : "#34d399", borderTop: `1px dashed ${isLight ? "#e2e8f0" : "#272733"}`, paddingTop: "0.4rem" }}>
+          <div style={{ fontSize: "0.75rem", color: "var(--ds-success)", borderTop: `1px dashed ${"var(--ds-card-border)"}`, paddingTop: "0.4rem" }}>
             💡 <strong>Phân tích ngữ pháp:</strong> {selectedTense.example.breakdown}
           </div>
         </div>
 
         {/* Common Mistakes Callout */}
-        <div style={{ fontSize: "0.78rem", color: isLight ? "#b45309" : "#fbbf24", backgroundColor: isLight ? "#fffbeb" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "#fde68a" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.5rem 0.75rem" }}>
+        <div style={{ fontSize: "0.78rem", color: "var(--ds-warning)", backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "var(--ds-warning-border)" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.5rem 0.75rem" }}>
           ⚠️ <strong>Lỗi người học hay gặp:</strong> {selectedTense.common_mistakes}
         </div>
       </div>
@@ -427,8 +427,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
       {compareMode && (
         <div
           style={{
-            backgroundColor: isLight ? "#fffbeb" : "#1a1608",
-            border: `2px solid ${isLight ? "#fde68a" : "#d9770670"}`,
+            backgroundColor: "var(--ds-warning-bg)",
+            border: `2px solid ${"var(--ds-warning-border)"}`,
             borderRadius: "12px",
             padding: "1.25rem 1.5rem",
             display: "flex",
@@ -437,25 +437,25 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h4 style={{ fontSize: "0.95rem", fontWeight: "800", color: isLight ? "#92400e" : "#fbbf24", margin: 0 }}>
+            <h4 style={{ fontSize: "0.95rem", fontWeight: "800", color: "var(--ds-warning)", margin: 0 }}>
               ⚖️ Đối So Sánh: {selectedTense.name_vi} VS {compareTense.name_vi}
             </h4>
-            <span style={{ fontSize: "0.75rem", color: isLight ? "#b45309" : "#f59e0b" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)" }}>
               Bấm chọn thẻ bất kỳ để đổi đối tượng so sánh
             </span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-            <div style={{ backgroundColor: isLight ? "#ffffff" : "#121217", padding: "0.85rem", borderRadius: "8px", border: `1px solid ${isLight ? "#fde68a" : "#3f3f46"}` }}>
-              <div style={{ fontWeight: "700", color: "#3b82f6", fontSize: "0.85rem", marginBottom: "0.3rem" }}>{selectedTense.name_vi}</div>
-              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#059669" : "#34d399", marginBottom: "0.3rem" }}>{selectedTense.formula}</div>
-              <div style={{ fontSize: "0.78rem", color: isLight ? "#334155" : "#d4d4d8", lineHeight: "1.4" }}>{selectedTense.usage}</div>
+            <div style={{ backgroundColor: "var(--ds-card)", padding: "0.85rem", borderRadius: "8px", border: `1px solid ${"var(--ds-warning-border)"}` }}>
+              <div style={{ fontWeight: "700", color: "var(--ds-accent)", fontSize: "0.85rem", marginBottom: "0.3rem" }}>{selectedTense.name_vi}</div>
+              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-success)", marginBottom: "0.3rem" }}>{selectedTense.formula}</div>
+              <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)", lineHeight: "1.4" }}>{selectedTense.usage}</div>
             </div>
 
-            <div style={{ backgroundColor: isLight ? "#ffffff" : "#121217", padding: "0.85rem", borderRadius: "8px", border: `1px solid ${isLight ? "#fde68a" : "#3f3f46"}` }}>
-              <div style={{ fontWeight: "700", color: "#f59e0b", fontSize: "0.85rem", marginBottom: "0.3rem" }}>{compareTense.name_vi}</div>
-              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: isLight ? "#059669" : "#34d399", marginBottom: "0.3rem" }}>{compareTense.formula}</div>
-              <div style={{ fontSize: "0.78rem", color: isLight ? "#334155" : "#d4d4d8", lineHeight: "1.4" }}>{compareTense.usage}</div>
+            <div style={{ backgroundColor: "var(--ds-card)", padding: "0.85rem", borderRadius: "8px", border: `1px solid ${"var(--ds-warning-border)"}` }}>
+              <div style={{ fontWeight: "700", color: "var(--ds-warning)", fontSize: "0.85rem", marginBottom: "0.3rem" }}>{compareTense.name_vi}</div>
+              <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-success)", marginBottom: "0.3rem" }}>{compareTense.formula}</div>
+              <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)", lineHeight: "1.4" }}>{compareTense.usage}</div>
             </div>
           </div>
         </div>
