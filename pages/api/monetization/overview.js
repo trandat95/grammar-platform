@@ -25,23 +25,31 @@ export function invalidateMonetizationCatalogCache() {
 }
 
 async function getMonetizationCatalog(serverClient) {
-  // Always fetch live subscription_plans so Admin zero-code price changes take effect immediately across all Vercel Lambdas
+  // Always fetch live subscription_plans & sepay gateway config so Admin zero-code changes take effect immediately
   const livePlansPromise = serverClient
     .from("subscription_plans")
     .select("*")
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
 
+  const liveGatewayPromise = serverClient
+    .from("payment_gateway_configs")
+    .select("provider, bank_code, account_number, account_name, va_prefix, qr_template, is_active")
+    .eq("provider", "sepay")
+    .maybeSingle();
+
   if (monetizationCatalogCache.data && Date.now() - monetizationCatalogCache.ts < MON_CATALOG_TTL_MS) {
-    const { data: livePlans } = await livePlansPromise;
+    const [{ data: livePlans }, { data: sepayGateway }] = await Promise.all([livePlansPromise, liveGatewayPromise]);
     return {
       ...monetizationCatalogCache.data,
       plans: livePlans || monetizationCatalogCache.data.plans,
+      sepayGateway: sepayGateway || monetizationCatalogCache.data.sepayGateway || null,
     };
   }
-  const [{ data: plans }, { data: features }, { data: campaigns }, { data: paywallConfigs }, { data: experiments }] =
+  const [{ data: plans }, { data: sepayGateway }, { data: features }, { data: campaigns }, { data: paywallConfigs }, { data: experiments }] =
     await Promise.all([
       livePlansPromise,
+      liveGatewayPromise,
       serverClient.from("feature_entitlements").select("*").order("sort_order", { ascending: true }),
       serverClient.from("pricing_campaigns").select("*").eq("is_active", true),
       serverClient.from("paywall_configs").select("*").eq("is_active", true),
@@ -49,6 +57,7 @@ async function getMonetizationCatalog(serverClient) {
     ]);
   const bundle = {
     plans: plans || [],
+    sepayGateway: sepayGateway || null,
     features: features || [],
     ethicalCampaigns: (campaigns || []).filter((c) => validateEthicalCampaign(c).valid),
     paywallConfigs: paywallConfigs || [],
@@ -65,7 +74,7 @@ async function getMonetizationCatalog(serverClient) {
  * Milestone 2.12: Monetization Overview, Behavioral Psychology, Paywall Capping & Coupon Validator API
  */
 export default async function handler(req, res) {
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
     try {
@@ -83,7 +92,7 @@ export default async function handler(req, res) {
         return res.status(403).json({ success: false, error: "Forbidden: Cross-user monetization read denied." });
       }
 
-      const { plans, features, ethicalCampaigns, paywallConfigs, mainExp } = catalog;
+      const { plans, sepayGateway, features, ethicalCampaigns, paywallConfigs, mainExp } = catalog;
 
       if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
         res.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
@@ -93,6 +102,7 @@ export default async function handler(req, res) {
           guestMode: true,
           entitlement: { effectiveRole: "FREE", hasVipAccess: false, subscription: null, features: {} },
           plans,
+          sepayGateway,
           features,
           campaigns: ethicalCampaigns,
           paywallConfigs,
@@ -118,7 +128,7 @@ export default async function handler(req, res) {
         serverClient.from("user_segments").select("*").eq("user_id", requestedUserId).maybeSingle(),
         serverClient
           .from("payment_transactions")
-          .select("id, provider, amount_vnd, discount_vnd, final_amount_vnd, coupon_code, status, created_at, plan:subscription_plans(name_vi, billing_cycle)")
+          .select("id, provider, provider_tx_id, amount_vnd, discount_vnd, final_amount_vnd, coupon_code, status, created_at, plan:subscription_plans(name_vi, billing_cycle)")
           .eq("user_id", requestedUserId)
           .order("created_at", { ascending: false })
           .limit(20),
@@ -164,6 +174,7 @@ export default async function handler(req, res) {
         guestMode: false,
         entitlement,
         plans: plans || [],
+        sepayGateway,
         features: features || [],
         campaigns: ethicalCampaigns,
         paywallConfigs: paywallConfigs || [],

@@ -24,6 +24,17 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
   });
   const [savingCoupon, setSavingCoupon] = useState(false);
   const [busyCouponCode, setBusyCouponCode] = useState(null);
+  const [sepayDraft, setSepayDraft] = useState({
+    bank_code: "MBBank",
+    account_number: "",
+    account_name: "",
+    va_prefix: "GEVIP",
+    qr_template: "compact",
+    webhook_api_key: "",
+    is_active: true,
+  });
+  const [savingSepay, setSavingSepay] = useState(false);
+  const [copiedWebhookField, setCopiedWebhookField] = useState("");
 
   const loadMetrics = useCallback(async () => {
     setLoading(true);
@@ -43,6 +54,17 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
           };
         }
         setPlanDrafts(drafts);
+        if (json.sepayConfig) {
+          setSepayDraft((prev) => ({
+            ...prev,
+            bank_code: json.sepayConfig.bank_code || "MBBank",
+            account_number: json.sepayConfig.account_number || "",
+            account_name: json.sepayConfig.account_name || "",
+            va_prefix: json.sepayConfig.va_prefix || "GEVIP",
+            qr_template: json.sepayConfig.qr_template || "compact",
+            is_active: json.sepayConfig.is_active !== false,
+          }));
+        }
       }
     } catch (err) {
       console.warn("Admin monetization fetch warning:", err.message);
@@ -248,10 +270,71 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
     });
   };
 
+  const generateRandomSepayKey = () => {
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let key = "sepay_";
+    for (let i = 0; i < 26; i += 1) {
+      key += chars[Math.floor(Math.random() * chars.length)];
+    }
+    setSepayDraft((prev) => ({ ...prev, webhook_api_key: key }));
+  };
+
+  const copyWebhookField = async (label, value) => {
+    try {
+      await navigator.clipboard.writeText(String(value || ""));
+      setCopiedWebhookField(label);
+      setTimeout(() => setCopiedWebhookField(""), 1800);
+    } catch {}
+  };
+
+  const handleSaveSepayConfig = async (e) => {
+    e.preventDefault();
+    setSavingSepay(true);
+    setNotice("");
+    try {
+      const res = await fetch("/api/admin/monetization", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        },
+        body: JSON.stringify({
+          action: "save_sepay_config",
+          ...sepayDraft,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        invalidateMonetizationClientCache();
+        setNoticeTone("success");
+        setNotice("✅ Đã lưu cấu hình Tài khoản VA & Webhook SePay VietQR thành công!");
+        setSepayDraft((prev) => ({ ...prev, webhook_api_key: "" }));
+        await loadMetrics();
+      } else {
+        setNoticeTone("danger");
+        setNotice(`⚠️ Lỗi lưu cấu hình SePay: ${json.error || "Không rõ"}`);
+      }
+    } catch (err) {
+      setNoticeTone("danger");
+      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+    } finally {
+      setSavingSepay(false);
+    }
+  };
+
   if (loading) return <Skeleton height="160px" width="100%" />;
   if (!data) return null;
 
-  const { metrics = {}, funnel = [], abTesting = {}, paywallConfigs = [], plans = [], coupons = [] } = data;
+  const {
+    metrics = {},
+    funnel = [],
+    abTesting = {},
+    paywallConfigs = [],
+    plans = [],
+    coupons = [],
+    sepayConfig = {},
+    sepayTransactions = [],
+  } = data;
   const maxFunnel = Math.max(1, ...funnel.map((f) => f.users));
 
   return (
@@ -812,6 +895,333 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
                   </div>
                 );
               })}
+            </div>
+          )}
+        </div>
+
+        {/* SePay VA & Dynamic VietQR Gateway Config */}
+        <div style={{ marginTop: "0.95rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.95rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <div>
+              <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
+                🏦 Cổng Thanh Toán SePay VA &amp; VietQR Tự Động
+              </div>
+              <div style={{ fontSize: "0.74rem", color: T.textMuted }}>
+                Cấu hình Tài khoản ảo (VA) từ SePay và Webhook API Key để tự động kích hoạt VIP sau khi user chuyển khoản VietQR.
+              </div>
+            </div>
+            <Badge tone={sepayDraft.account_number ? "success" : "warning"} isLight={isLight}>
+              {sepayDraft.account_number ? `Đã kết nối: ${sepayDraft.bank_code}` : "Chưa nhập số VA"}
+            </Badge>
+          </div>
+
+          <div
+            style={{
+              backgroundColor: T.card,
+              border: `1px solid ${T.cardBorder}`,
+              borderRadius: "10px",
+              padding: "0.8rem",
+              marginBottom: "0.75rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.45rem",
+            }}
+          >
+            <div style={{ fontSize: "0.74rem", fontWeight: 700, color: T.textHeading }}>
+              🔗 Thông tin dán vào SePay Dashboard (Webhooks ➔ Thêm Webhook):
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+              <code
+                style={{
+                  flex: "1 1 280px",
+                  fontSize: "0.74rem",
+                  color: T.accent,
+                  backgroundColor: T.accentBg,
+                  border: `1px solid ${T.accentBorder}`,
+                  padding: "0.35rem 0.55rem",
+                  borderRadius: "6px",
+                  wordBreak: "break-all",
+                }}
+              >
+                {typeof window !== "undefined" && window.location.hostname === "localhost"
+                  ? "https://grammar-platform.vercel.app/api/monetization/sepay-webhook"
+                  : `${typeof window !== "undefined" ? window.location.origin : "https://grammar-platform.vercel.app"}/api/monetization/sepay-webhook`}
+              </code>
+              <Button
+                size="sm"
+                variant="secondary"
+                isLight={isLight}
+                onClick={() =>
+                  copyWebhookField(
+                    "url",
+                    typeof window !== "undefined" && window.location.hostname !== "localhost"
+                      ? `${window.location.origin}/api/monetization/sepay-webhook`
+                      : "https://grammar-platform.vercel.app/api/monetization/sepay-webhook"
+                  )
+                }
+                style={{ fontSize: "0.72rem", minHeight: "30px" }}
+              >
+                {copiedWebhookField === "url" ? "✓ Đã copy URL" : "Copy URL Webhook"}
+              </Button>
+            </div>
+            <div style={{ fontSize: "0.71rem", color: T.textMuted }}>
+              • Loại giao dịch: <strong>Tiền vào</strong> • Định dạng: <strong>JSON</strong> • Bảo mật (Bước 3 trên SePay): chọn <strong>API Key</strong> và điền đúng API Key bạn lưu bên dưới.
+            </div>
+          </div>
+
+          <form
+            onSubmit={handleSaveSepayConfig}
+            style={{
+              backgroundColor: T.card,
+              border: `1px solid ${T.cardBorder}`,
+              borderRadius: "10px",
+              padding: "0.85rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.7rem",
+            }}
+          >
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(175px, 1fr))", gap: "0.6rem" }}>
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <span>Ngân hàng (chuẩn SePay)</span>
+                <select
+                  value={sepayDraft.bank_code}
+                  onChange={(e) => setSepayDraft((prev) => ({ ...prev, bank_code: e.target.value }))}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.38rem 0.5rem",
+                    borderRadius: "6px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.inputBg,
+                    color: T.textHeading,
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  {[
+                    "MBBank",
+                    "Vietcombank",
+                    "ACB",
+                    "BIDV",
+                    "Techcombank",
+                    "VPBank",
+                    "TPBank",
+                    "VietinBank",
+                    "OCB",
+                    "MSB",
+                    "Sacombank",
+                    "VIB",
+                    "SHB",
+                    "HDBank",
+                    "Eximbank",
+                    "KienLongBank",
+                    "LPBank",
+                  ].map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <span>Số Tài khoản / Số VA SePay *</span>
+                <input
+                  type="text"
+                  required
+                  placeholder="VD: VQRQAA123456 hoặc 090..."
+                  value={sepayDraft.account_number}
+                  onChange={(e) => setSepayDraft((prev) => ({ ...prev, account_number: e.target.value }))}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.38rem 0.5rem",
+                    borderRadius: "6px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.inputBg,
+                    color: T.textHeading,
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                  }}
+                />
+              </label>
+
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <span>Tên chủ tài khoản</span>
+                <input
+                  type="text"
+                  placeholder="VD: TRAN DAT"
+                  value={sepayDraft.account_name}
+                  onChange={(e) => setSepayDraft((prev) => ({ ...prev, account_name: e.target.value }))}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.38rem 0.5rem",
+                    borderRadius: "6px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.inputBg,
+                    color: T.textHeading,
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                  }}
+                />
+              </label>
+
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <span>Tiền tố mã đơn (VA Prefix)</span>
+                <input
+                  type="text"
+                  placeholder="VD: GEVIP"
+                  value={sepayDraft.va_prefix}
+                  onChange={(e) => setSepayDraft((prev) => ({ ...prev, va_prefix: e.target.value.toUpperCase() }))}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.38rem 0.5rem",
+                    borderRadius: "6px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.inputBg,
+                    color: T.textHeading,
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                  }}
+                />
+              </label>
+
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <span>Mẫu VietQR</span>
+                <select
+                  value={sepayDraft.qr_template}
+                  onChange={(e) => setSepayDraft((prev) => ({ ...prev, qr_template: e.target.value }))}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.38rem 0.5rem",
+                    borderRadius: "6px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.inputBg,
+                    color: T.textSecondary,
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                  }}
+                >
+                  <option value="compact">Compact (Logo + Thông tin)</option>
+                  <option value="qronly">QR Only (Chỉ mã QR)</option>
+                  <option value="default">Mặc định</option>
+                </select>
+              </label>
+
+              <label style={{ fontSize: "0.71rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem", gridColumn: "1 / -1" }}>
+                <span>
+                  SePay Webhook API Key (Bước 3 Bảo mật trên SePay:{" "}
+                  <strong style={{ color: sepayConfig.has_webhook_key ? T.success : T.warning }}>
+                    {sepayConfig.has_webhook_key
+                      ? `Đã lưu (${sepayConfig.webhook_key_preview}) — để trống nếu giữ nguyên`
+                      : "Chưa lưu — bấm Tạo ngẫu nhiên hoặc dán Key từ SePay"}
+                  </strong>
+                  )
+                </span>
+                <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                  <input
+                    type="text"
+                    placeholder={sepayConfig.has_webhook_key ? "Nhập key mới nếu muốn thay đổi..." : "Dán hoặc tạo API Key (>= 6 ký tự)"}
+                    value={sepayDraft.webhook_api_key}
+                    onChange={(e) => setSepayDraft((prev) => ({ ...prev, webhook_api_key: e.target.value }))}
+                    className="ds-focusable"
+                    style={{
+                      flex: "1 1 240px",
+                      padding: "0.38rem 0.55rem",
+                      borderRadius: "6px",
+                      border: `1px solid ${T.border}`,
+                      backgroundColor: T.inputBg,
+                      color: T.textHeading,
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                    }}
+                  />
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    isLight={isLight}
+                    onClick={generateRandomSepayKey}
+                    style={{ fontSize: "0.72rem", minHeight: "32px" }}
+                  >
+                    Tạo Key ngẫu nhiên
+                  </Button>
+                  {sepayDraft.webhook_api_key && (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      isLight={isLight}
+                      onClick={() => copyWebhookField("key", sepayDraft.webhook_api_key)}
+                      style={{ fontSize: "0.72rem", minHeight: "32px" }}
+                    >
+                      {copiedWebhookField === "key" ? "✓ Đã copy Key" : "Copy Key"}
+                    </Button>
+                  )}
+                </div>
+              </label>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.65rem" }}>
+              {sepayDraft.account_number.trim().length >= 4 ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                  <div style={{ backgroundColor: "#ffffff", padding: "4px", borderRadius: "6px", border: `1px solid ${T.border}` }}>
+                    <img
+                      src={`https://qr.sepay.vn/img?acc=${encodeURIComponent(sepayDraft.account_number.replace(/\s+/g, ""))}&bank=${encodeURIComponent(sepayDraft.bank_code)}&amount=79000&des=${encodeURIComponent(`${sepayDraft.va_prefix || "GEVIP"}TEST`)}&template=${encodeURIComponent(sepayDraft.qr_template || "compact")}`}
+                      alt="Xem trước VietQR SePay"
+                      style={{ width: "54px", height: "54px", objectFit: "contain", display: "block" }}
+                    />
+                  </div>
+                  <span style={{ fontSize: "0.72rem", color: T.textSecondary }}>
+                    Xem trước QR thực tế qua <code>qr.sepay.vn</code>
+                  </span>
+                </div>
+              ) : (
+                <span style={{ fontSize: "0.72rem", color: T.textMuted }}>
+                  Nhập số tài khoản / VA để xem trước ảnh VietQR.
+                </span>
+              )}
+
+              <Button type="submit" size="sm" variant="primary" isLight={isLight} disabled={savingSepay}>
+                {savingSepay ? "Đang lưu cấu hình..." : "💾 Lưu cấu hình SePay VA"}
+              </Button>
+            </div>
+          </form>
+
+          {sepayTransactions.length > 0 && (
+            <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+              <div style={{ fontSize: "0.76rem", fontWeight: 700, color: T.textHeading }}>
+                🧾 Giao dịch VietQR SePay gần đây ({sepayTransactions.length}):
+              </div>
+              {sepayTransactions.slice(0, 6).map((tx) => (
+                <div
+                  key={tx.id}
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.borderSubtle}`,
+                    borderRadius: "8px",
+                    padding: "0.45rem 0.65rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: "0.74rem",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <div>
+                    <strong style={{ color: T.accent }}>{tx.provider_tx_id}</strong>{" "}
+                    <span style={{ color: T.textMuted }}>• {new Date(tx.created_at).toLocaleString("vi-VN")}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                    <strong style={{ color: T.textHeading }}>{Number(tx.final_amount_vnd || 0).toLocaleString()}đ</strong>
+                    <Badge tone={tx.status === "succeeded" ? "success" : tx.status === "pending" ? "warning" : "danger"} isLight={isLight}>
+                      {tx.status === "succeeded" ? "Thành công" : tx.status === "pending" ? "Chờ CK" : tx.status}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

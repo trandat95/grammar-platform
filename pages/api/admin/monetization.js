@@ -26,6 +26,8 @@ export default async function handler(req, res) {
         { data: convEvents },
         { data: segments },
         { data: profiles },
+        { data: sepayGateway },
+        { data: sepaySecret },
       ] = await Promise.all([
         serverClient.from("subscription_plans").select("*").order("sort_order", { ascending: true }),
         serverClient.from("user_subscriptions").select("*, plan:subscription_plans(code, billing_cycle, price_vnd)"),
@@ -36,6 +38,8 @@ export default async function handler(req, res) {
         serverClient.from("conversion_events").select("user_id, funnel_stage"),
         serverClient.from("user_segments").select("segment, intent_score"),
         serverClient.from("profiles").select("id, role"),
+        serverClient.from("payment_gateway_configs").select("*").eq("provider", "sepay").maybeSingle(),
+        serverClient.from("payment_gateway_secrets").select("provider, webhook_api_key, updated_at").eq("provider", "sepay").maybeSingle(),
       ]);
 
       const succeededTxs = (txs || []).filter((t) => t.status === "succeeded");
@@ -116,6 +120,19 @@ export default async function handler(req, res) {
         plans: plans || [],
         coupons: coupons || [],
         paywallConfigs: paywallConfigs || [],
+        sepayConfig: {
+          bank_code: sepayGateway?.bank_code || "MBBank",
+          account_number: sepayGateway?.account_number || "",
+          account_name: sepayGateway?.account_name || "",
+          va_prefix: sepayGateway?.va_prefix || "GEVIP",
+          qr_template: sepayGateway?.qr_template || "compact",
+          is_active: sepayGateway?.is_active !== false,
+          has_webhook_key: Boolean(sepaySecret?.webhook_api_key?.trim()),
+          webhook_key_preview: sepaySecret?.webhook_api_key?.trim()
+            ? `${sepaySecret.webhook_api_key.trim().slice(0, 4)}••••••••${sepaySecret.webhook_api_key.trim().slice(-4)}`
+            : "",
+        },
+        sepayTransactions: (txs || []).filter((t) => t.provider === "sepay").slice(0, 12),
       });
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });
@@ -302,6 +319,68 @@ export default async function handler(req, res) {
         const { error: delErr } = await serverClient.from("discount_coupons").delete().eq("id", existing.id);
         if (delErr) throw delErr;
         return res.status(200).json({ success: true, deleted: true, code: normalizedCode });
+      }
+
+      if (action === "save_sepay_config") {
+        const { bank_code, account_number, account_name, va_prefix, qr_template, webhook_api_key } = req.body || {};
+        const cleanAcc = String(account_number || "").replace(/\s+/g, "").trim();
+        const cleanBank = String(bank_code || "MBBank").trim();
+        if (!cleanAcc || cleanAcc.length < 4) {
+          return res.status(400).json({
+            success: false,
+            error: "Số tài khoản / Virtual Account SePay không hợp lệ (tối thiểu 4 ký tự).",
+          });
+        }
+        const cleanPrefix = String(va_prefix || "GEVIP")
+          .toUpperCase()
+          .replace(/[^A-Z0-9]/g, "")
+          .slice(0, 12) || "GEVIP";
+        const allowedTemplate = ["compact", "qronly", "default"].includes(String(qr_template))
+          ? String(qr_template)
+          : "compact";
+
+        const { data: savedCfg, error: cfgErr } = await serverClient
+          .from("payment_gateway_configs")
+          .upsert(
+            {
+              provider: "sepay",
+              bank_code: cleanBank,
+              account_number: cleanAcc,
+              account_name: String(account_name || "").trim().slice(0, 120),
+              va_prefix: cleanPrefix,
+              qr_template: allowedTemplate,
+              is_active: typeof is_active === "boolean" ? is_active : true,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "provider" }
+          )
+          .select()
+          .maybeSingle();
+        if (cfgErr) throw cfgErr;
+
+        if (typeof webhook_api_key === "string" && webhook_api_key.trim().length > 0) {
+          const cleanKey = webhook_api_key.trim();
+          if (cleanKey.length < 6) {
+            return res.status(400).json({
+              success: false,
+              error: "SePay Webhook API Key phải có ít nhất 6 ký tự.",
+            });
+          }
+          const { error: secErr } = await serverClient
+            .from("payment_gateway_secrets")
+            .upsert(
+              {
+                provider: "sepay",
+                webhook_api_key: cleanKey,
+                updated_at: new Date().toISOString(),
+              },
+              { onConflict: "provider" }
+            );
+          if (secErr) throw secErr;
+        }
+
+        invalidateMonetizationCatalogCache();
+        return res.status(200).json({ success: true, gateway: savedCfg });
       }
 
       return res.status(400).json({ success: false, error: `Unsupported admin monetization action '${action}'.` });

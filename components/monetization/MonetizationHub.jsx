@@ -4,11 +4,7 @@ import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS } from "../ui-2026/assetMap";
 
-const PROVIDERS = [
-  { id: "vnpay", label: "VNPay QR / Ngân hàng" },
-  { id: "momo", label: "Ví MoMo" },
-  { id: "stripe", label: "Thẻ Visa / Mastercard (Stripe)" },
-];
+const DEFAULT_PROVIDER = "sepay";
 
 // Client-side SWR cache eliminates 2-3s Skeleton reload & prevents double-fetch loops
 const monetizationOverviewCache = new Map();
@@ -56,16 +52,26 @@ export default function MonetizationHub({
   const [data, setData] = useState(cachedInitial);
   const [loading, setLoading] = useState(!cachedInitial);
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [provider, setProvider] = useState("vnpay");
   const [couponInput, setCouponInput] = useState("");
   const [couponPreview, setCouponPreview] = useState(null);
   const [couponError, setCouponError] = useState("");
   const [checkoutBusy, setCheckoutBusy] = useState(false);
+  const [sepayOrder, setSepayOrder] = useState(null);
+  const [checkingSepay, setCheckingSepay] = useState(false);
+  const [copiedField, setCopiedField] = useState("");
   const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState("COMPLETED_GOAL");
   const [statusNotice, setStatusNotice] = useState(null);
   const onEntSyncRef = useRef(onEntitlementSync);
   onEntSyncRef.current = onEntitlementSync;
+
+  const copyText = async (label, value) => {
+    try {
+      await navigator.clipboard.writeText(String(value || ""));
+      setCopiedField(label);
+      setTimeout(() => setCopiedField(""), 1800);
+    } catch {}
+  };
 
   const loadOverview = useCallback(async () => {
     if (!monetizationOverviewCache.has(cacheKey)) setLoading(true);
@@ -134,6 +140,56 @@ export default function MonetizationHub({
     }
   };
 
+  const [checkoutError, setCheckoutError] = useState("");
+
+  const checkSepayOrderStatus = useCallback(
+    async (orderCode, silent = false) => {
+      if (!orderCode) return;
+      if (!silent) setCheckingSepay(true);
+      try {
+        const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+        const res = await fetch(
+          `/api/monetization/sepay-status?order_code=${encodeURIComponent(orderCode)}`,
+          { headers }
+        );
+        const json = await res.json();
+        if (res.ok && json.paid) {
+          setSepayOrder(null);
+          setSelectedPlan(null);
+          setCheckoutError("");
+          setCouponPreview(null);
+          setCouponInput("");
+          invalidateMonetizationClientCache();
+          setStatusNotice({
+            tone: "success",
+            text: "🎉 SePay VA đã xác nhận chuyển khoản VietQR thành công! Toàn bộ đặc quyền VIP đã được kích hoạt.",
+          });
+          if (onEntSyncRef.current && json.entitlement) {
+            onEntSyncRef.current(json.entitlement);
+          }
+          await loadOverview();
+        } else if (!silent && res.ok) {
+          setCheckoutError(
+            `Đơn ${orderCode} đang chờ SePay xác nhận tiền vào (nếu bạn vừa chuyển khoản xong, vui lòng đợi 3–5 giây rồi bấm kiểm tra lại).`
+          );
+        }
+      } catch {
+        // Silent retry on poll
+      } finally {
+        if (!silent) setCheckingSepay(false);
+      }
+    },
+    [authToken, loadOverview]
+  );
+
+  useEffect(() => {
+    if (!selectedPlan || !sepayOrder?.order_code) return undefined;
+    const timer = setInterval(() => {
+      checkSepayOrderStatus(sepayOrder.order_code, true);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [selectedPlan, sepayOrder?.order_code, checkSepayOrderStatus]);
+
   const handleCheckoutAction = async (actionType, planObj = selectedPlan) => {
     if (!userId) {
       if (onRequireLogin) onRequireLogin();
@@ -141,6 +197,7 @@ export default function MonetizationHub({
     }
     setCheckoutBusy(true);
     setStatusNotice(null);
+    setCheckoutError("");
     try {
       const res = await fetch("/api/monetization/checkout", {
         method: "POST",
@@ -152,7 +209,7 @@ export default function MonetizationHub({
           action: actionType,
           user_id: userId,
           plan_code: planObj?.code || "VIP_YEARLY",
-          provider,
+          provider: DEFAULT_PROVIDER,
           coupon_code: couponPreview ? couponInput.trim() : null,
           idempotency_key: StorageAdapter.generateUUIDv4(),
           cancellation_reason: cancelReason,
@@ -160,9 +217,21 @@ export default function MonetizationHub({
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        setStatusNotice({ tone: "danger", text: json.error || "Giao dịch chưa hoàn thành." });
+        const errMsg = json.error || "Giao dịch chưa hoàn thành.";
+        setCheckoutError(errMsg);
+        setStatusNotice({ tone: "danger", text: errMsg });
         return;
       }
+      if (json.pendingPayment && json.gateway) {
+        setSepayOrder({
+          order_code: json.order_code,
+          transaction: json.transaction,
+          gateway: json.gateway,
+        });
+        await loadOverview();
+        return;
+      }
+      setSepayOrder(null);
       setSelectedPlan(null);
       setCancelConfirmOpen(false);
       setCouponPreview(null);
@@ -235,6 +304,7 @@ export default function MonetizationHub({
     guestMode,
     entitlement = {},
     plans = [],
+    sepayGateway = null,
     features = [],
     campaigns = [],
     psychology = {},
@@ -391,6 +461,8 @@ export default function MonetizationHub({
                       return;
                     }
                     setSelectedPlan(p);
+                    setSepayOrder(null);
+                    setCheckoutError("");
                     setCouponPreview(null);
                     setCouponError("");
                     fetch("/api/monetization/overview", {
@@ -504,16 +576,20 @@ export default function MonetizationHub({
                   }}
                 >
                   <div>
-                    <strong style={{ color: T.textHeading }}>{tx.plan?.name_vi || tx.provider}</strong>
+                    <strong style={{ color: T.textHeading }}>{tx.plan?.name_vi || (tx.provider === "sepay" ? "SePay VA VietQR" : tx.provider)}</strong>
                     <div style={{ fontSize: "0.68rem", color: T.textMuted }}>
-                      {tx.provider?.toUpperCase()} • {new Date(tx.created_at).toLocaleString("vi-VN")}
+                      {tx.provider === "sepay" ? "SEPAY VA" : tx.provider?.toUpperCase()}
+                      {tx.provider_tx_id ? ` • ${tx.provider_tx_id}` : ""} • {new Date(tx.created_at).toLocaleString("vi-VN")}
                       {tx.coupon_code ? ` • Mã ${tx.coupon_code}` : ""}
                     </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontWeight: 800, color: T.textHeading }}>{Number(tx.final_amount_vnd).toLocaleString()}đ</div>
-                    <Badge tone={tx.status === "succeeded" ? "success" : "danger"} isLight={isLight}>
-                      {tx.status}
+                    <Badge
+                      tone={tx.status === "succeeded" ? "success" : tx.status === "pending" ? "warning" : "danger"}
+                      isLight={isLight}
+                    >
+                      {tx.status === "succeeded" ? "Thành công" : tx.status === "pending" ? "Chờ CK" : tx.status}
                     </Badge>
                   </div>
                 </div>
@@ -544,16 +620,16 @@ export default function MonetizationHub({
             onChange={handleToggleMarketingOptOut}
           />
           <div style={{ fontSize: "0.76rem", color: T.textMuted, lineHeight: 1.5 }}>
-            Mọi giao dịch thanh toán đều sử dụng `idempotency_key` chống trừ tiền kép, chữ ký HMAC Webhook và giữ nguyên 100% lịch sử học tập khi hủy gói.
+            Mọi giao dịch thanh toán VietQR qua SePay VA đều sử dụng `idempotency_key` chống trùng lặp, đối soát Webhook tự động bảo mật API Key và giữ nguyên 100% lịch sử học tập khi hủy gói.
           </div>
         </div>
       </div>
 
-      {/* Checkout Modal */}
+      {/* Checkout Modal (SePay VA & Dynamic VietQR) */}
       <Modal
         isOpen={Boolean(selectedPlan)}
         onClose={() => {
-          if (selectedPlan && userId) {
+          if (selectedPlan && !sepayOrder && userId) {
             fetch("/api/monetization/overview", {
               method: "POST",
               headers: {
@@ -563,79 +639,251 @@ export default function MonetizationHub({
               body: JSON.stringify({ action: "track_event", user_id: userId, event_name: "CHECKOUT_ABANDONED", metadata: { planCode: selectedPlan.code } }),
             }).catch(() => {});
           }
+          setSepayOrder(null);
+          setCheckoutError("");
           setSelectedPlan(null);
         }}
-        title={selectedPlan ? `Thanh toán: ${selectedPlan.name_vi}` : "Thanh toán VIP"}
+        title={
+          selectedPlan
+            ? sepayOrder
+              ? `Quét VietQR (SePay VA): ${selectedPlan.name_vi}`
+              : `Thanh toán: ${selectedPlan.name_vi}`
+            : "Thanh toán VIP"
+        }
         isLight={isLight}
-        maxWidth="520px"
+        maxWidth="540px"
       >
         {selectedPlan && (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}>
-            <div style={{ backgroundColor: T.bgElevated, padding: "0.85rem", borderRadius: "10px", border: `1px solid ${T.borderSubtle}` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.86rem" }}>
-                <span style={{ color: T.textSecondary }}>Giá gói niêm yết:</span>
-                <strong style={{ color: T.textHeading }}>{Number(selectedPlan.price_vnd).toLocaleString()}đ</strong>
-              </div>
-              {couponPreview && (
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.84rem", color: T.success, marginTop: "0.25rem" }}>
-                  <span>Giảm giá ({couponPreview.couponApplied}):</span>
-                  <strong>-{Number(couponPreview.discountVnd).toLocaleString()}đ</strong>
+            {checkoutError && (
+              <Alert tone="danger" isLight={isLight}>
+                {checkoutError}
+              </Alert>
+            )}
+
+            {!sepayOrder ? (
+              <>
+                <div style={{ backgroundColor: T.bgElevated, padding: "0.85rem", borderRadius: "10px", border: `1px solid ${T.borderSubtle}` }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.86rem" }}>
+                    <span style={{ color: T.textSecondary }}>Giá gói niêm yết:</span>
+                    <strong style={{ color: T.textHeading }}>{Number(selectedPlan.price_vnd).toLocaleString()}đ</strong>
+                  </div>
+                  {couponPreview && (
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.84rem", color: T.success, marginTop: "0.25rem" }}>
+                      <span>Giảm giá ({couponPreview.couponApplied}):</span>
+                      <strong>-{Number(couponPreview.discountVnd).toLocaleString()}đ</strong>
+                    </div>
+                  )}
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "1rem", fontWeight: 800, color: T.accent, marginTop: "0.45rem", paddingTop: "0.45rem", borderTop: `1px solid ${T.borderSubtle}` }}>
+                    <span>Tổng thanh toán:</span>
+                    <span>{Number(couponPreview ? couponPreview.finalPrice : selectedPlan.price_vnd).toLocaleString()}đ</span>
+                  </div>
                 </div>
-              )}
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "1rem", fontWeight: 800, color: T.accent, marginTop: "0.45rem", paddingTop: "0.45rem", borderTop: `1px solid ${T.borderSubtle}` }}>
-                <span>Tổng thanh toán:</span>
-                <span>{Number(couponPreview ? couponPreview.finalPrice : selectedPlan.price_vnd).toLocaleString()}đ</span>
-              </div>
-            </div>
 
-            <div>
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: T.textSecondary, marginBottom: "0.35rem" }}>
-                Chọn Cổng thanh toán:
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                {PROVIDERS.map((pv) => (
-                  <Button
-                    key={pv.id}
-                    size="sm"
-                    variant={provider === pv.id ? "primary" : "secondary"}
-                    isLight={isLight}
-                    onClick={() => setProvider(pv.id)}
-                  >
-                    {pv.label}
+                <div
+                  style={{
+                    backgroundColor: T.accentBg,
+                    border: `1px solid ${T.accentBorder}`,
+                    borderRadius: "10px",
+                    padding: "0.75rem 0.85rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.25rem",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>
+                      🏦 Chuyển khoản VietQR Tự Động (SePay VA)
+                    </span>
+                    <Badge tone={sepayGateway?.account_number ? "success" : "warning"} isLight={isLight}>
+                      {sepayGateway?.account_number ? `${sepayGateway.bank_code} • Sẵn sàng` : "Chờ cấu hình VA"}
+                    </Badge>
+                  </div>
+                  <div style={{ fontSize: "0.76rem", color: T.textSecondary, lineHeight: 1.45 }}>
+                    Quét mã VietQR bằng mọi app Ngân hàng Việt Nam. Hệ thống đối soát qua Tài khoản ảo (VA) SePay và tự động kích hoạt VIP sau 1–5 giây.
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end" }}>
+                  <div style={{ flex: 1 }}>
+                    <Input
+                      label="Mã ưu đãi (Thử WELCOME15 hoặc STUDENT20):"
+                      isLight={isLight}
+                      value={couponInput}
+                      onChange={(e) => setCouponInput(e.target.value)}
+                      error={couponError}
+                      placeholder="Nhập mã giảm giá..."
+                    />
+                  </div>
+                  <Button variant="secondary" isLight={isLight} onClick={handleValidateCoupon}>
+                    Áp dụng
                   </Button>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end" }}>
-              <div style={{ flex: 1 }}>
-                <Input
-                  label="Mã ưu đãi (Thử WELCOME15 hoặc STUDENT20):"
-                  isLight={isLight}
-                  value={couponInput}
-                  onChange={(e) => setCouponInput(e.target.value)}
-                  error={couponError}
-                  placeholder="Nhập mã giảm giá..."
-                />
-              </div>
-              <Button variant="secondary" isLight={isLight} onClick={handleValidateCoupon}>
-                Áp dụng
-              </Button>
-            </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+                  <Button variant="ghost" isLight={isLight} onClick={() => setSelectedPlan(null)}>
+                    Đóng
+                  </Button>
+                  <Button
+                    variant="primary"
+                    isLight={isLight}
+                    disabled={checkoutBusy}
+                    onClick={() => handleCheckoutAction("create_sepay_order", selectedPlan)}
+                  >
+                    {checkoutBusy ? "Đang tạo mã VietQR..." : "Tạo mã VietQR thanh toán ➔"}
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                    gap: "0.9rem",
+                    alignItems: "center",
+                    backgroundColor: T.bgElevated,
+                    border: `1px solid ${T.borderSubtle}`,
+                    borderRadius: "12px",
+                    padding: "0.9rem",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#ffffff",
+                        padding: "0.65rem",
+                        borderRadius: "10px",
+                        border: `1px solid ${T.border}`,
+                      }}
+                    >
+                      <img
+                        src={sepayOrder.gateway.qr_url}
+                        alt={`VietQR SePay ${sepayOrder.order_code}`}
+                        style={{ width: "200px", height: "200px", objectFit: "contain", display: "block" }}
+                      />
+                    </div>
+                    <span style={{ fontSize: "0.7rem", color: T.textMuted }}>
+                      Quét bằng App Ngân hàng (VietQR / NAPAS 247)
+                    </span>
+                  </div>
 
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-              <Button variant="ghost" isLight={isLight} onClick={() => setSelectedPlan(null)}>
-                Đóng
-              </Button>
-              <Button
-                variant="primary"
-                isLight={isLight}
-                disabled={checkoutBusy}
-                onClick={() => handleCheckoutAction(hasVip ? "upgrade_switch" : "checkout", selectedPlan)}
-              >
-                {checkoutBusy ? "Đang xác thực..." : "Xác nhận Thanh toán VIP ➔"}
-              </Button>
-            </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.8rem" }}>
+                    <div>
+                      <div style={{ fontSize: "0.7rem", color: T.textMuted }}>Ngân hàng thụ hưởng:</div>
+                      <strong style={{ color: T.textHeading }}>{sepayOrder.gateway.bank_code}</strong>
+                    </div>
+
+                    <div>
+                      <div style={{ fontSize: "0.7rem", color: T.textMuted }}>Số tài khoản / VA SePay:</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                        <strong style={{ color: T.textHeading, fontSize: "0.9rem" }}>{sepayOrder.gateway.account_number}</strong>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          isLight={isLight}
+                          onClick={() => copyText("acc", sepayOrder.gateway.account_number)}
+                          style={{ fontSize: "0.68rem", minHeight: "24px", padding: "0 0.45rem" }}
+                        >
+                          {copiedField === "acc" ? "✓ Đã copy" : "Copy"}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {sepayOrder.gateway.account_name && (
+                      <div>
+                        <div style={{ fontSize: "0.7rem", color: T.textMuted }}>Chủ tài khoản:</div>
+                        <strong style={{ color: T.textHeading }}>{sepayOrder.gateway.account_name}</strong>
+                      </div>
+                    )}
+
+                    <div>
+                      <div style={{ fontSize: "0.7rem", color: T.textMuted }}>Số tiền chính xác:</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                        <strong style={{ color: T.success, fontSize: "0.95rem" }}>
+                          {Number(sepayOrder.transaction?.final_amount_vnd || 0).toLocaleString()}đ
+                        </strong>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          isLight={isLight}
+                          onClick={() => copyText("amount", sepayOrder.transaction?.final_amount_vnd || 0)}
+                          style={{ fontSize: "0.68rem", minHeight: "24px", padding: "0 0.45rem" }}
+                        >
+                          {copiedField === "amount" ? "✓ Đã copy" : "Copy"}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div style={{ fontSize: "0.7rem", color: T.textMuted }}>Nội dung chuyển khoản (Bắt buộc):</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                        <code
+                          style={{
+                            fontSize: "0.86rem",
+                            fontWeight: 800,
+                            color: T.accent,
+                            backgroundColor: T.accentBg,
+                            border: `1px solid ${T.accentBorder}`,
+                            padding: "0.18rem 0.45rem",
+                            borderRadius: "6px",
+                          }}
+                        >
+                          {sepayOrder.order_code}
+                        </code>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          isLight={isLight}
+                          onClick={() => copyText("code", sepayOrder.order_code)}
+                          style={{ fontSize: "0.68rem", minHeight: "24px", padding: "0 0.45rem" }}
+                        >
+                          {copiedField === "code" ? "✓ Đã copy" : "Copy"}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Alert tone="info" isLight={isLight}>
+                  ⏳ Hệ thống tự động kiểm tra giao dịch mỗi 3 giây. Giữ nguyên nội dung <strong>{sepayOrder.order_code}</strong> và số tiền để SePay mở khóa VIP tức thì ngay khi tiền vào!
+                </Alert>
+
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <Button
+                    variant="ghost"
+                    isLight={isLight}
+                    onClick={() => {
+                      setSepayOrder(null);
+                      setCheckoutError("");
+                    }}
+                  >
+                    ← Đổi mã giảm giá
+                  </Button>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <Button
+                      variant="secondary"
+                      isLight={isLight}
+                      onClick={() => {
+                        setSepayOrder(null);
+                        setCheckoutError("");
+                        setSelectedPlan(null);
+                      }}
+                    >
+                      Đóng
+                    </Button>
+                    <Button
+                      variant="primary"
+                      isLight={isLight}
+                      disabled={checkingSepay}
+                      onClick={() => checkSepayOrderStatus(sepayOrder.order_code, false)}
+                    >
+                      {checkingSepay ? "Đang kiểm tra..." : "🔄 Kiểm tra đã chuyển khoản"}
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </Modal>

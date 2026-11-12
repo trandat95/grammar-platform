@@ -19,17 +19,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
 
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
   if (req.headers?.authorization && !authUser) {
     return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
   }
 
   const {
-    action = "checkout", // checkout | start_trial | cancel | upgrade_switch | simulate_failure
+    action = "checkout", // checkout | create_sepay_order | start_trial | cancel | upgrade_switch | simulate_failure
     user_id,
     plan_code = "VIP_YEARLY",
-    provider = "vnpay",
+    provider = "sepay",
     coupon_code = null,
     idempotency_key,
     cancellation_reason = null,
@@ -47,8 +47,58 @@ export default async function handler(req, res) {
   const nowIso = now.toISOString();
 
   try {
+    // 0. Create Pending SePay VA VietQR Order (Activated strictly by SePay Webhook)
+    if (
+      action === "create_sepay_order" ||
+      ((action === "checkout" || action === "upgrade_switch") && String(provider || "").toLowerCase() === "sepay")
+    ) {
+      if (!authUser) {
+        return res.status(401).json({ success: false, error: "Vui lòng đăng nhập bằng tài khoản Supabase để thanh toán VietQR." });
+      }
+      const { data: rpcRes, error: rpcErr } = await serverClient.rpc("create_sepay_checkout_order", {
+        p_plan_code: plan_code,
+        p_coupon_code: coupon_code || null,
+        p_idempotency_key: idempotency_key || null,
+      });
+      if (rpcErr) throw rpcErr;
+      if (!rpcRes?.ok) {
+        return res.status(Number(rpcRes?.http_status || 400)).json({
+          success: false,
+          error: rpcRes?.error || "Không thể khởi tạo đơn VietQR SePay.",
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        pendingPayment: true,
+        deduped: Boolean(rpcRes.deduped),
+        order_code: rpcRes.order_code,
+        transaction: rpcRes.transaction,
+        gateway: rpcRes.gateway,
+      });
+    }
+
     // 1. Transparent 2-Click Cancel (preserves 100% learning progress)
     if (action === "cancel") {
+      if (!process.env.SUPABASE_SERVICE_ROLE_KEY && authUser) {
+        const { data: rpcCancel, error: rpcCancelErr } = await serverClient.rpc("cancel_active_vip_subscription", {
+          p_reason: cancellation_reason || null,
+        });
+        if (rpcCancelErr) throw rpcCancelErr;
+        if (!rpcCancel?.ok) {
+          return res.status(Number(rpcCancel?.http_status || 400)).json({
+            success: false,
+            error: rpcCancel?.error || "Không thể hủy gói VIP.",
+          });
+        }
+        const ent = await resolveUserEntitlement({ serverClient, userId: resolvedUserId });
+        return res.status(200).json({
+          success: true,
+          subscription: rpcCancel.subscription,
+          entitlement: ent,
+          message: "Đã hủy gói VIP thành công. Toàn bộ lịch sử học tập, Streak, XP và Mastery của bạn được bảo toàn 100%.",
+        });
+      }
+
       const { data: activeSub } = await serverClient
         .from("user_subscriptions")
         .select("*")
@@ -114,6 +164,25 @@ export default async function handler(req, res) {
 
     // 2. Start Transparent Free Trial (Day 0 -> Day 7)
     if (action === "start_trial") {
+      if (!process.env.SUPABASE_SERVICE_ROLE_KEY && authUser) {
+        const { data: rpcTrial, error: rpcTrialErr } = await serverClient.rpc("start_vip_trial_order", {
+          p_plan_code: plan_code,
+        });
+        if (rpcTrialErr) throw rpcTrialErr;
+        if (!rpcTrial?.ok) {
+          return res.status(Number(rpcTrial?.http_status || 400)).json({
+            success: false,
+            error: rpcTrial?.error || "Không thể kích hoạt dùng thử VIP.",
+          });
+        }
+        const entitlement = await resolveUserEntitlement({ serverClient, userId: resolvedUserId });
+        return res.status(200).json({
+          success: true,
+          subscription: rpcTrial.subscription,
+          entitlement,
+          disclosure: `Bạn đang dùng thử miễn phí ${plan.trial_days} ngày. Sau ${new Date(rpcTrial.subscription.trial_ends_at).toLocaleDateString("vi-VN")}, giá niêm yết là ${Number(plan.price_vnd).toLocaleString()}đ/${plan.billing_cycle}. Bạn có thể hủy bất kỳ lúc nào.`,
+        });
+      }
       if (Number(plan.trial_days || 0) <= 0) {
         return res.status(400).json({ success: false, error: "Gói đã chọn không áp dụng dùng thử miễn phí." });
       }
