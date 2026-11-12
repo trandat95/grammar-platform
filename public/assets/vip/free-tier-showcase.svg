@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 170" role="img" aria-label="Gói Free - Trải nghiệm cơ bản có giới hạn">
+  <defs>
+    <linearGradient id="fBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="fSlate" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <linearGradient id="fLock" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <filter id="fSh" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="360" height="170" rx="16" fill="url(#fBg)"/>
+  <!-- Subtle dotted quota grid -->
+  <circle cx="62" cy="85" r="52" fill="#cbd5e1" opacity="0.32"/>
+  <circle cx="295" cy="85" r="44" fill="#cbd5e1" opacity="0.28"/>
+
+  <!-- Left: Locked Feature Mini Cards (Blurred/Muted) -->
+  <g filter="url(#fSh)" opacity="0.88">
+    <rect x="34" y="42" width="76" height="86" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 4"/>
+    <path d="M58 76 V66 A14 14 0 0 1 86 66 V76" fill="none" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+    <rect x="52" y="74" width="40" height="32" rx="7" fill="url(#fLock)"/>
+    <circle cx="72" cy="88" r="4" fill="#f8fafc"/>
+    <rect x="70" y="90" width="4" height="8" rx="2" fill="#f8fafc"/>
+  </g>
+
+  <!-- Center: Basic Starter Book with Small Quota Tag -->
+  <g filter="url(#fSh)">
+    <rect x="134" y="34" width="92" height="104" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+    <rect x="144" y="46" width="72" height="14" rx="5" fill="#e2e8f0"/>
+    <rect x="144" y="68" width="54" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="144" y="82" width="66" height="8" rx="4" fill="#cbd5e1"/>
+    <!-- Low progress quota meter (15%) -->
+    <rect x="144" y="102" width="72" height="10" rx="5" fill="#e2e8f0"/>
+    <rect x="144" y="102" width="16" height="10" rx="5" fill="#64748b"/>
+    <text x="180" y="127" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="11" fill="#475569">GIỚI HẠN LƯỢT</text>
+  </g>
+
+  <!-- Right: Sandglass Timer -->
+  <g filter="url(#fSh)" opacity="0.9">
+    <rect x="250" y="44" width="76" height="82" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M272 62 H304 L290 85 L304 108 H272 L286 85 Z" fill="#e2e8f0" stroke="url(#fSlate)" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="278,105 298,105 288,92" fill="#64748b"/>
+    <line x1="268" y1="60" x2="308" y2="60" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+    <line x1="268" y1="110" x2="308" y2="110" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

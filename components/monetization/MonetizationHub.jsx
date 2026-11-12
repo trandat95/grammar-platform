@@ -2,7 +2,17 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
-import { BANNER_PATHS } from "../ui-2026/assetMap";
+import { BANNER_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
+
+const FEATURE_VISUAL_META = {
+  unlimited_exercises: { icon: "📚", freeLabel: "10 câu / bài", pct: 8 },
+  unlimited_quizzes: { icon: "🎯", freeLabel: "2 đề / ngày", pct: 12 },
+  diagnostic_root_cause: { icon: "🧭", freeLabel: "1 lần xem thử", pct: 15 },
+  ai_advisor_full: { icon: "🤖", freeLabel: "3 lượt / phiên", pct: 15 },
+  advanced_mastery_radar: { icon: "📈", freeLabel: "1 biểu đồ cơ bản", pct: 12 },
+  fsrs_unlimited_sr: { icon: "🧠", freeLabel: "20 thẻ tối đa", pct: 14 },
+  pdf_exam_export: { icon: "📥", freeLabel: "Khóa hoàn toàn", pct: 0 },
+};
 
 const DEFAULT_PROVIDER = "sepay";
 
@@ -562,50 +572,273 @@ export default function MonetizationHub({
         })}
       </div>
 
-      {/* FREE vs VIP Feature Matrix */}
+      {/* Visual Side-by-Side Tier Duel + Detailed FREE vs VIP Matrix */}
       <div
         style={{
           backgroundColor: T.card,
           border: `1px solid ${T.cardBorder}`,
-          borderRadius: "14px",
-          padding: "1.25rem",
+          borderRadius: "16px",
+          padding: "1.35rem",
           boxShadow: T.shadowSm,
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.25rem",
         }}
       >
-        <h2 style={{ margin: "0 0 0.85rem", fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
-          📊 So sánh Quyền lợi Hệ thống FREE vs VIP
-        </h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-          {features.map((f) => (
-            <div
-              key={f.feature_key}
-              className="ge-vip-matrix-row"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1.6fr 0.7fr 0.8fr",
-                gap: "0.5rem",
-                alignItems: "center",
-                padding: "0.65rem 0.75rem",
-                borderRadius: "8px",
-                backgroundColor: T.bgElevated,
-                border: `1px solid ${T.borderSubtle}`,
-                fontSize: "0.82rem",
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
+          <div>
+            <h2 style={{ margin: 0, fontSize: "1.08rem", fontWeight: 800, color: T.textHeading }}>
+              ⚖️ Khác biệt Trực quan: Gói FREE vs Thành viên VIP
+            </h2>
+            <p style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
+              So sánh trực tiếp giới hạn học thử so với đặc quyền bứt phá không giới hạn của tài khoản VIP.
+            </p>
+          </div>
+          {!hasVip && plans.length > 0 && (
+            <Button
+              size="sm"
+              variant="primary"
+              isLight={isLight}
+              onClick={() => {
+                const rec = plans.find((p) => p.is_recommended) || plans[0];
+                if (!userId) {
+                  if (onRequireLogin) onRequireLogin();
+                  return;
+                }
+                setSelectedPlan(rec);
+                setSepayOrder(null);
+                setCheckoutError("");
               }}
             >
-              <div>
-                <div style={{ fontWeight: 700, color: T.textHeading }}>{f.title_vi}</div>
-                <div style={{ fontSize: "0.73rem", color: T.textMuted }}>{f.description_vi}</div>
+              ⚡ Mở khóa VIP ngay ➔
+            </Button>
+          )}
+        </div>
+
+        {/* Side-by-Side Illustrated Comparison Cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+          {/* FREE Card */}
+          <div
+            style={{
+              backgroundColor: T.bgElevated,
+              border: `1px solid ${T.border}`,
+              borderRadius: "14px",
+              padding: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.75rem",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
+              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textSecondary }}>
+                👤 Gói FREE (Cơ bản)
               </div>
-              <div style={{ textAlign: "center", color: T.textSecondary, fontWeight: 600 }}>
-                {f.free_quota > 0 ? `Free: Giới hạn (${f.free_quota})` : "🔒 Khóa"}
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <Badge tone="success" isLight={isLight}>
-                  ✅ VIP: Không giới hạn
-                </Badge>
-              </div>
+              <Badge tone="neutral" isLight={isLight}>
+                Giới hạn lượt
+              </Badge>
             </div>
-          ))}
+
+            <div
+              style={{
+                borderRadius: "10px",
+                overflow: "hidden",
+                border: `1px solid ${T.borderSubtle}`,
+                backgroundColor: T.card,
+              }}
+            >
+              <img
+                src={VIP_SHOWCASE_PATHS.free}
+                alt="Minh họa Gói FREE có giới hạn lượt học"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textSecondary }}>
+              <div>⏱️ Chỉ mở <strong>10 câu / bài tập</strong> và <strong>2 lượt Quiz / ngày</strong></div>
+              <div>🤖 AI Grammar Coach giới hạn <strong>3 câu hỏi / phiên</strong></div>
+              <div>🧠 Ôn tập Spaced Repetition tối đa <strong>20 thẻ</strong></div>
+              <div style={{ color: T.textMuted }}>🔒 Khóa Radar 12 Chuyên đề chuyên sâu &amp; Xuất báo cáo</div>
+            </div>
+          </div>
+
+          {/* VIP Card */}
+          <div
+            className="ge-lb-row-top1"
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              backgroundColor: T.accentBg,
+              border: `2px solid ${T.accentBorder}`,
+              borderRadius: "14px",
+              padding: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.75rem",
+              boxShadow: T.shadowSm,
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
+              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textHeading }}>
+                👑 Thành viên VIP Toàn diện
+              </div>
+              <Badge tone="success" isLight={isLight}>
+                ∞ Không giới hạn
+              </Badge>
+            </div>
+
+            <div
+              style={{
+                borderRadius: "10px",
+                overflow: "hidden",
+                border: `1px solid ${T.accentBorder}`,
+                backgroundColor: T.card,
+              }}
+            >
+              <img
+                src={VIP_SHOWCASE_PATHS.vip}
+                alt="Minh họa Thành viên VIP mở khóa 100% tính năng"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textHeading, fontWeight: 600 }}>
+              <div>✅ Mở khóa trọn bộ <strong>2,939 câu hỏi</strong> &amp; Quiz 50/30/20 không giới hạn</div>
+              <div>✅ <strong>AI Grammar Coach ∞</strong> giải thích cặn kẽ mọi bẫy thi cử</div>
+              <div>✅ <strong>Radar 12 Chuyên đề</strong> + Spaced Repetition FSRS mọi câu sai</div>
+              <div>✅ <strong>Xuất Báo cáo Năng lực</strong> &amp; Bộ đề cá nhân hóa mọi lúc</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Detailed Visual Quota Comparison Table */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <div
+            className="ge-vip-matrix-row"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1.6fr 0.85fr 0.85fr",
+              gap: "0.65rem",
+              padding: "0.55rem 0.85rem",
+              borderRadius: "8px",
+              backgroundColor: T.bgSub,
+              border: `1px solid ${T.borderSubtle}`,
+              fontSize: "0.72rem",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.04em",
+              color: T.textMuted,
+            }}
+          >
+            <div>Tính năng &amp; Công cụ Học thuật</div>
+            <div style={{ textAlign: "center" }}>👤 Gói FREE</div>
+            <div style={{ textAlign: "center", color: T.success }}>👑 Thành viên VIP</div>
+          </div>
+
+          {features.map((f) => {
+            const meta = FEATURE_VISUAL_META[f.feature_key] || {
+              icon: "✨",
+              freeLabel: f.free_quota > 0 ? `Giới hạn (${f.free_quota})` : "Khóa",
+              pct: f.free_quota > 0 ? 15 : 0,
+            };
+            const isLockedFree = Number(f.free_quota || 0) <= 0;
+            return (
+              <div
+                key={f.feature_key}
+                className="ge-vip-matrix-row"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1.6fr 0.85fr 0.85fr",
+                  gap: "0.65rem",
+                  alignItems: "center",
+                  padding: "0.7rem 0.85rem",
+                  borderRadius: "10px",
+                  backgroundColor: T.bgElevated,
+                  border: `1px solid ${T.borderSubtle}`,
+                  fontSize: "0.82rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
+                  <div
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "9px",
+                      backgroundColor: T.card,
+                      border: `1px solid ${T.borderSubtle}`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.1rem",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {meta.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 800, color: T.textHeading }}>{f.title_vi}</div>
+                    <div style={{ fontSize: "0.73rem", color: T.textMuted, marginTop: "0.1rem" }}>{f.description_vi}</div>
+                  </div>
+                </div>
+
+                {/* FREE Quota Visual Meter */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem" }}>
+                  {isLockedFree ? (
+                    <Badge tone="danger" isLight={isLight}>
+                      🔒 Chưa mở
+                    </Badge>
+                  ) : (
+                    <>
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: T.textSecondary }}>
+                        {meta.freeLabel}
+                      </span>
+                      <div
+                        style={{
+                          width: "92px",
+                          height: "6px",
+                          borderRadius: "999px",
+                          backgroundColor: T.borderSubtle,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: `${meta.pct}%`,
+                            height: "100%",
+                            backgroundColor: T.textMuted,
+                            borderRadius: "999px",
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* VIP Unlimited Highlight */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
+                  <Badge tone="success" isLight={isLight}>
+                    {isLockedFree ? "✓ Mở khóa 100%" : "∞ Không giới hạn"}
+                  </Badge>
+                  <div
+                    className="ge-energy-bar-track"
+                    style={{
+                      width: "92px",
+                      height: "6px",
+                      backgroundColor: T.successBg,
+                    }}
+                  >
+                    <div
+                      className="ge-energy-bar-fill"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: T.success,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

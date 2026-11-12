@@ -9,6 +9,11 @@ export const BANNER_PATHS = {
   vip: "/assets/banners/04-vip-ai-study-coach.jpg",
 };
 
+export const VIP_SHOWCASE_PATHS = {
+  free: "/assets/vip/free-tier-showcase.svg",
+  vip: "/assets/vip/vip-tier-showcase.svg",
+};
+
 export const AVATAR_PATHS = [
   "/assets/avatars/avatar-01-vn-student-female.jpg",
   "/assets/avatars/avatar-02-uk-mentor-male.jpg",
