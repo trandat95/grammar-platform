@@ -9,9 +9,14 @@ import {
 } from "../../../lib/gamification/challenge-streak-engine";
 
 const ALLOWED_BOARDS = ["weekly_xp", "monthly_xp", "all_time_xp", "weekly_consistency", "grammar_mastery"];
-const LEADERBOARD_CACHE_TTL_MS = 20 * 1000;
+const LEADERBOARD_CACHE_TTL_MS = 10 * 1000;
 let leaderboardTablesCache = { data: null, expiresAt: 0 };
 const xpWindowCache = new Map();
+
+export function invalidateLeaderboardServerCache() {
+  leaderboardTablesCache = { data: null, expiresAt: 0 };
+  xpWindowCache.clear();
+}
 
 async function getLeaderboardBaseTables(serverClient) {
   const nowMs = Date.now();
@@ -49,9 +54,6 @@ async function getXpWindowRows(serverClient, board, now) {
   return rows;
 }
 
-/**
- * Computes masked public display label preserving privacy when anonymous mode is enabled.
- */
 function formatDisplayName(profile, userId, visibility) {
   if (visibility === "anonymous") {
     return `Học viên Ẩn danh #${String(userId).slice(0, 4).toUpperCase()}`;
@@ -62,7 +64,7 @@ function formatDisplayName(profile, userId, visibility) {
 
 /**
  * Milestone 2.10.6: 5-Mode Competitive Leaderboard Endpoint
- * Supports Top 10 / Top 50 pagination, deterministic tie-breaking, privacy opt-out & anonymous masking.
+ * Uses SECURITY DEFINER RPC get_leaderboard_snapshot so per-user RLS never hides XP on public rankings.
  */
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -70,7 +72,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
 
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
   const board = ALLOWED_BOARDS.includes(req.query?.board) ? req.query.board : "weekly_xp";
   const limit = Math.min(50, Math.max(5, Number(req.query?.limit || 10)));
   const offset = Math.max(0, Number(req.query?.offset || 0));
@@ -85,96 +87,131 @@ export default async function handler(req, res) {
       : getLocalWeekKey(now, tzOffset);
 
   try {
-    // Run auth verification, base tables, and windowed XP fetch in parallel (eliminates 3-step sequential waterfall)
-    const [authUser, baseTables, txWindow] = await Promise.all([
-      verifyServerSession(req),
-      getLeaderboardBaseTables(serverClient),
-      getXpWindowRows(serverClient, board, now),
+    const [authUser, rpcRes] = await Promise.all([
+      req.headers?.authorization ? verifyServerSession(req) : Promise.resolve(null),
+      serverClient.rpc("get_leaderboard_snapshot", { p_tz_offset: tzOffset }),
     ]);
     const requestedUserId = authUser?.id || req.query?.user_id || null;
 
-    if (!requestedUserId) {
-      res.setHeader("Cache-Control", "public, s-maxage=20, stale-while-revalidate=40");
+    res.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
+
+    let rankedRaw = [];
+
+    if (!rpcRes?.error && Array.isArray(rpcRes.data)) {
+      for (const row of rpcRes.data) {
+        const uid = row.user_id;
+        const vis = row.leaderboard_visibility || "public";
+        if (vis === "hidden") continue;
+
+        const totalXp = Number(row.total_xp || 0);
+        const lvl = calculateLevelProgress(totalXp);
+        const accuracy = Number(row.accuracy || 0);
+        const avgMastery = Number(row.avg_mastery || 0);
+        const currentStreak = Number(row.current_streak || 0);
+
+        let score = totalXp;
+        if (board === "weekly_xp") {
+          score = Number(row.weekly_xp ?? totalXp);
+        } else if (board === "monthly_xp") {
+          score = Number(row.monthly_xp ?? totalXp);
+        } else if (board === "weekly_consistency") {
+          score = currentStreak * 10 + Number(row.active_days_7d || 0);
+        } else if (board === "grammar_mastery") {
+          score = avgMastery;
+        }
+
+        rankedRaw.push({
+          board_type: board,
+          period_key: periodKey,
+          user_id: uid,
+          display_name: row.display_name || "Học viên Grammar",
+          is_anonymous: vis === "anonymous",
+          score: Math.round(score * 100) / 100,
+          tie_breaker_accuracy: Math.round(accuracy * 100) / 100,
+          level: lvl.level,
+          title: lvl.title,
+          isCurrentUser: requestedUserId === uid,
+        });
+      }
     } else {
-      res.setHeader("Cache-Control", "private, max-age=0, must-revalidate");
-    }
+      const [baseTables, txWindow] = await Promise.all([
+        getLeaderboardBaseTables(serverClient),
+        getXpWindowRows(serverClient, board, now),
+      ]);
+      const { profiles, xpRows, trackerRows, streakRows, progRows } = baseTables;
 
-    const { profiles, xpRows, trackerRows, streakRows, progRows } = baseTables;
+      const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
+      const xpMap = new Map((xpRows || []).map((x) => [x.user_id, x]));
+      const trackerMap = new Map((trackerRows || []).map((t) => [t.user_id, t]));
+      const streakMap = new Map((streakRows || []).map((s) => [s.user_id, s]));
 
-    const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
-    const xpMap = new Map((xpRows || []).map((x) => [x.user_id, x]));
-    const trackerMap = new Map((trackerRows || []).map((t) => [t.user_id, t]));
-    const streakMap = new Map((streakRows || []).map((s) => [s.user_id, s]));
-
-    // Aggregate per-user mastery average and overall accuracy for tie-breaking
-    const masteryAgg = new Map();
-    for (const pr of progRows || []) {
-      const cur = masteryAgg.get(pr.user_id) || { sum: 0, count: 0, attempts: 0, correct: 0 };
-      if (Number(pr.attempts || 0) > 0) {
-        cur.sum += Number(pr.mastery_score || 0);
-        cur.count += 1;
-        cur.attempts += Number(pr.attempts || 0);
-        cur.correct += Number(pr.correct_attempts || 0);
-      }
-      masteryAgg.set(pr.user_id, cur);
-    }
-
-    // Windowed XP calculation when weekly_xp or monthly_xp selected
-    const windowXpMap = new Map();
-    for (const tx of txWindow || []) {
-      windowXpMap.set(tx.user_id, (windowXpMap.get(tx.user_id) || 0) + Number(tx.xp_amount || 0));
-    }
-
-    const candidateIds = new Set([...profileMap.keys(), ...xpMap.keys(), ...trackerMap.keys()]);
-    const rankedRaw = [];
-
-    for (const uid of candidateIds) {
-      const xpObj = xpMap.get(uid);
-      const vis = xpObj?.leaderboard_visibility || "public";
-      if (vis === "hidden") continue;
-
-      const prof = profileMap.get(uid);
-      if (!prof) continue;
-
-      const totalXp = xpObj ? Number(xpObj.total_xp || 0) : Number(trackerMap.get(uid)?.xp || 0);
-      const lvl = calculateLevelProgress(totalXp);
-      const stObj = streakMap.get(uid);
-      const trObj = trackerMap.get(uid);
-      const mObj = masteryAgg.get(uid) || { sum: 0, count: 0, attempts: 0, correct: 0 };
-
-      const accuracy = mObj.attempts > 0 ? Math.round((mObj.correct / mObj.attempts) * 10000) / 100 : 0;
-      const avgMastery = mObj.count > 0 ? Math.round((mObj.sum / mObj.count) * 100) / 100 : 0;
-      const currentStreak = Number(stObj?.current_streak ?? trObj?.streak ?? 0);
-
-      let score = totalXp;
-      if (board === "weekly_xp") {
-        score = windowXpMap.has(uid) ? windowXpMap.get(uid) : Math.min(totalXp, 50);
-      } else if (board === "monthly_xp") {
-        score = windowXpMap.has(uid) ? windowXpMap.get(uid) : totalXp;
-      } else if (board === "weekly_consistency") {
-        const datesCount = Array.isArray(stObj?.active_dates_30d)
-          ? stObj.active_dates_30d.filter((d) => {
-              const cutoff = getLocalDateKey(new Date(now.getTime() - 7 * 86400000), tzOffset);
-              return d >= cutoff;
-            }).length
-          : 0;
-        score = currentStreak * 10 + datesCount;
-      } else if (board === "grammar_mastery") {
-        score = avgMastery;
+      const masteryAgg = new Map();
+      for (const pr of progRows || []) {
+        const cur = masteryAgg.get(pr.user_id) || { sum: 0, count: 0, attempts: 0, correct: 0 };
+        if (Number(pr.attempts || 0) > 0) {
+          cur.sum += Number(pr.mastery_score || 0);
+          cur.count += 1;
+          cur.attempts += Number(pr.attempts || 0);
+          cur.correct += Number(pr.correct_attempts || 0);
+        }
+        masteryAgg.set(pr.user_id, cur);
       }
 
-      rankedRaw.push({
-        board_type: board,
-        period_key: periodKey,
-        user_id: uid,
-        display_name: formatDisplayName(prof, uid, vis),
-        is_anonymous: vis === "anonymous",
-        score: Math.round(score * 100) / 100,
-        tie_breaker_accuracy: accuracy,
-        level: lvl.level,
-        title: lvl.title,
-        isCurrentUser: requestedUserId === uid,
-      });
+      const windowXpMap = new Map();
+      for (const tx of txWindow || []) {
+        windowXpMap.set(tx.user_id, (windowXpMap.get(tx.user_id) || 0) + Number(tx.xp_amount || 0));
+      }
+
+      const candidateIds = new Set([...profileMap.keys(), ...xpMap.keys(), ...trackerMap.keys()]);
+
+      for (const uid of candidateIds) {
+        const xpObj = xpMap.get(uid);
+        const vis = xpObj?.leaderboard_visibility || "public";
+        if (vis === "hidden") continue;
+
+        const prof = profileMap.get(uid);
+        if (!prof) continue;
+
+        const totalXp = Math.max(Number(xpObj?.total_xp || 0), Number(trackerMap.get(uid)?.xp || 0));
+        const lvl = calculateLevelProgress(totalXp);
+        const stObj = streakMap.get(uid);
+        const trObj = trackerMap.get(uid);
+        const mObj = masteryAgg.get(uid) || { sum: 0, count: 0, attempts: 0, correct: 0 };
+
+        const accuracy = mObj.attempts > 0 ? Math.round((mObj.correct / mObj.attempts) * 10000) / 100 : 0;
+        const avgMastery = mObj.count > 0 ? Math.round((mObj.sum / mObj.count) * 100) / 100 : 0;
+        const currentStreak = Number(stObj?.current_streak ?? trObj?.streak ?? 0);
+
+        let score = totalXp;
+        if (board === "weekly_xp") {
+          score = windowXpMap.has(uid) ? Math.max(windowXpMap.get(uid), totalXp) : totalXp;
+        } else if (board === "monthly_xp") {
+          score = windowXpMap.has(uid) ? Math.max(windowXpMap.get(uid), totalXp) : totalXp;
+        } else if (board === "weekly_consistency") {
+          const datesCount = Array.isArray(stObj?.active_dates_30d)
+            ? stObj.active_dates_30d.filter((d) => {
+                const cutoff = getLocalDateKey(new Date(now.getTime() - 7 * 86400000), tzOffset);
+                return d >= cutoff;
+              }).length
+            : 0;
+          score = currentStreak * 10 + datesCount;
+        } else if (board === "grammar_mastery") {
+          score = avgMastery;
+        }
+
+        rankedRaw.push({
+          board_type: board,
+          period_key: periodKey,
+          user_id: uid,
+          display_name: formatDisplayName(prof, uid, vis),
+          is_anonymous: vis === "anonymous",
+          score: Math.round(score * 100) / 100,
+          tie_breaker_accuracy: accuracy,
+          level: lvl.level,
+          title: lvl.title,
+          isCurrentUser: requestedUserId === uid,
+        });
+      }
     }
 
     // Deterministic tie-breaking: score DESC -> accuracy DESC -> level DESC -> user_id ASC
@@ -189,19 +226,6 @@ export default async function handler(req, res) {
       ...entry,
       rank_position: idx + 1,
     }));
-
-    // Cache top 50 snapshot asynchronously cleanly
-    if (positioned.length > 0) {
-      const snapshotPayload = positioned.slice(0, 50).map(({ isCurrentUser, ...row }) => ({
-        ...row,
-        snapshot_at: now.toISOString(),
-      }));
-      serverClient
-        .from("leaderboard_snapshots")
-        .upsert(snapshotPayload, { onConflict: "board_type,period_key,user_id" })
-        .then(() => {})
-        .catch(() => {});
-    }
 
     const currentUserEntry = requestedUserId ? positioned.find((e) => e.user_id === requestedUserId) || null : null;
     const pagedEntries = positioned.slice(offset, offset + limit).map((e) => ({

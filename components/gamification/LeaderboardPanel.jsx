@@ -43,33 +43,46 @@ export default function LeaderboardPanel({
     }
   }, []);
 
-  const loadLeaderboard = useCallback(async () => {
-    const key = `${boardType}_${boardLimit}_${userId || "guest"}`;
-    if (!leaderboardCache.has(key)) setLbLoading(true);
-    try {
-      const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
-      const params = new URLSearchParams({
-        board: boardType,
-        limit: String(boardLimit),
-        tzOffsetMinutes: String(tzOffsetMinutes),
-      });
-      if (userId) params.set("user_id", userId);
-      const res = await fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers });
-      const json = await res.json();
-      if (res.ok && json.success) {
-        leaderboardCache.set(key, json);
-        setLeaderboard(json);
+  const loadLeaderboard = useCallback(
+    async (forceFresh = false) => {
+      const key = `${boardType}_${boardLimit}_${userId || "guest"}`;
+      if (!forceFresh && !leaderboardCache.has(key)) setLbLoading(true);
+      try {
+        const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+        const params = new URLSearchParams({
+          board: boardType,
+          limit: String(boardLimit),
+          tzOffsetMinutes: String(tzOffsetMinutes),
+        });
+        if (userId) params.set("user_id", userId);
+        if (forceFresh) params.set("t", String(Date.now()));
+        const res = await fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers });
+        const json = await res.json();
+        if (res.ok && json.success) {
+          leaderboardCache.set(key, json);
+          setLeaderboard(json);
+        }
+      } catch (err) {
+        console.warn("Leaderboard load warning:", err.message);
+      } finally {
+        setLbLoading(false);
       }
-    } catch (err) {
-      console.warn("Leaderboard load warning:", err.message);
-    } finally {
-      setLbLoading(false);
-    }
-  }, [boardType, boardLimit, userId, authToken, tzOffsetMinutes]);
+    },
+    [boardType, boardLimit, userId, authToken, tzOffsetMinutes]
+  );
 
   useEffect(() => {
-    loadLeaderboard();
+    loadLeaderboard(false);
   }, [loadLeaderboard, refreshKey]);
+
+  useEffect(() => {
+    const onRefresh = () => {
+      leaderboardCache.clear();
+      loadLeaderboard(true);
+    };
+    window.addEventListener("ge:leaderboard-refresh", onRefresh);
+    return () => window.removeEventListener("ge:leaderboard-refresh", onRefresh);
+  }, [loadLeaderboard]);
 
   const activeUnit = BOARD_TABS.find((b) => b.id === boardType)?.unit || "XP";
 

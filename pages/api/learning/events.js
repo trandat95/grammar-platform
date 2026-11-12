@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
   }
 
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
   if (req.headers?.authorization && !authUser) {
     return res.status(401).json({ success: false, error: "Invalid Bearer session token." });

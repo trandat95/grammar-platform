@@ -9,6 +9,7 @@ import {
   recoverStreakWithFreeze,
 } from "../../../lib/gamification/challenge-streak-engine";
 import { ensureActiveChallengesForUser } from "../../../lib/gamification/gamification-processor";
+import { invalidateLeaderboardServerCache } from "./leaderboard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -117,7 +118,7 @@ export default async function handler(req, res) {
         ensureActiveChallengesForUser({ serverClient, userId: effectiveUserId, now, tzOffsetMinutes: tzOffset }),
       ]);
 
-      const authoritativeXp = xpRow ? Number(xpRow.total_xp || 0) : Number(trackerRow?.xp || 0);
+      const authoritativeXp = Math.max(Number(xpRow?.total_xp || 0), Number(trackerRow?.xp || 0));
       const xpState = calculateLevelProgress(authoritativeXp);
       const streakEvaluated = updateStreakState({
         streakRow: streakRow || { current_streak: trackerRow?.streak || 0, freeze_tokens: 1 },
@@ -164,6 +165,42 @@ export default async function handler(req, res) {
     }
 
     try {
+      if (action === "record_xp_activity") {
+        const {
+          idempotency_key,
+          source_type = "learning_activity",
+          xp_amount = 0,
+          min_xp_floor = 0,
+          streak = null,
+          metadata = {},
+        } = req.body || {};
+
+        const { data: rpcRes, error: rpcErr } = await serverClient.rpc("award_user_gamification_xp", {
+          p_user_id: resolvedUserId,
+          p_idempotency_key: String(idempotency_key || `sync_${Date.now()}`),
+          p_source_type: String(source_type || "learning_activity"),
+          p_xp_amount: Math.max(0, Math.min(100, Math.round(Number(xp_amount || 0)))),
+          p_min_xp_floor: Math.max(0, Math.min(50000, Math.round(Number(min_xp_floor || 0)))),
+          p_streak: streak !== null && streak !== undefined ? Number(streak) : null,
+          p_tz_offset: tzOffset,
+          p_metadata: metadata || {},
+        });
+
+        if (rpcErr) {
+          return res.status(400).json({ success: false, error: rpcErr.message });
+        }
+
+        invalidateLeaderboardServerCache();
+        const totalXp = Number(rpcRes?.total_xp || 0);
+        return res.status(200).json({
+          success: true,
+          xpState: calculateLevelProgress(totalXp),
+          xpAdded: Number(rpcRes?.xp_added || 0),
+          deduped: Boolean(rpcRes?.deduped),
+          currentStreak: Number(rpcRes?.current_streak || 1),
+        });
+      }
+
       if (action === "update_preferences") {
         const allowedVis = ["public", "anonymous", "hidden"];
         const { data: existingXp } = await serverClient

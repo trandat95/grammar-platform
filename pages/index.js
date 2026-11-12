@@ -495,6 +495,33 @@ export default function Home() {
     }
   }, [currentUser?.id]);
 
+  // Reconcile existing tracker XP to Supabase Leaderboard on authenticated load
+  useEffect(() => {
+    if (!currentUser?.id || currentUser.isGuest || !activeAuthToken || !userTracker?.xp) return;
+    const tzOffsetMinutes = -new Date().getTimezoneOffset();
+    fetch("/api/gamification/summary", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${activeAuthToken}`,
+      },
+      body: JSON.stringify({
+        action: "record_xp_activity",
+        user_id: currentUser.id,
+        idempotency_key: `reconcile_${currentUser.id}_${userTracker.xp}`,
+        source_type: "tracker_reconcile",
+        xp_amount: 0,
+        min_xp_floor: Number(userTracker.xp || 0),
+        streak: Number(userTracker.streak || 1),
+        tzOffsetMinutes,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) window.dispatchEvent(new Event("ge:leaderboard-refresh"));
+      })
+      .catch(() => {});
+  }, [currentUser?.id, currentUser?.isGuest, activeAuthToken, userTracker?.xp]);
+
   // Background idle prefetch for Thành tích & Nâng cấp VIP tabs (eliminates Skeleton wait on click)
   useEffect(() => {
     if (!currentUser?.id) return;
@@ -1561,6 +1588,41 @@ export default function Home() {
     }
   };
 
+  const syncServerXpActivity = async ({
+    sourceType,
+    xpAmount = 0,
+    idempotencyKey,
+    minXpFloor = 0,
+    streak = 1,
+    metadata = {},
+  }) => {
+    if (!currentUser?.id || currentUser.isGuest || !activeAuthToken) return;
+    try {
+      const tzOffsetMinutes = -new Date().getTimezoneOffset();
+      const res = await fetch("/api/gamification/summary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${activeAuthToken}`,
+        },
+        body: JSON.stringify({
+          action: "record_xp_activity",
+          user_id: currentUser.id,
+          idempotency_key: idempotencyKey,
+          source_type: sourceType,
+          xp_amount: xpAmount,
+          min_xp_floor: minXpFloor,
+          streak,
+          tzOffsetMinutes,
+          metadata,
+        }),
+      });
+      if (res.ok) {
+        window.dispatchEvent(new Event("ge:leaderboard-refresh"));
+      }
+    } catch {}
+  };
+
   // --- Learning Gamification Handlers ---
   const toggleLessonCompletion = (lessonId) => {
     const isDone = userTracker.completedLessons.includes(lessonId);
@@ -1577,11 +1639,23 @@ export default function Home() {
           logActivity(currentUser.id, currentUser.email, "STUDY_LESSON", { lesson_id: lessonId });
         }
       }
-      return {
+      const next = {
         ...prev,
         xp: prev.xp + xpGain,
         completedLessons: nextList,
       };
+      if (!isDone && currentUser?.id && !currentUser.isGuest) {
+        upsertTracker(currentUser.id, next).catch(() => {});
+        syncServerXpActivity({
+          sourceType: "lesson_completed",
+          xpAmount: 25,
+          idempotencyKey: `lesson_${lessonId}`,
+          minXpFloor: next.xp,
+          streak: next.streak || 1,
+          metadata: { lesson_id: lessonId },
+        });
+      }
+      return next;
     });
   };
 
@@ -1597,7 +1671,7 @@ export default function Home() {
         triggerXpGain(xpReward, isQuiz ? "Chính xác câu Quiz: +15 XP!" : "Đúng bài tập: +10 XP!");
       }
 
-      return {
+      const next = {
         ...prev,
         xp: prev.xp + (alreadyDone ? 0 : xpReward),
         completedQuestions: nextQuestions,
@@ -1607,6 +1681,18 @@ export default function Home() {
           date: today,
         },
       };
+      if (!alreadyDone && currentUser?.id && !currentUser.isGuest) {
+        upsertTracker(currentUser.id, next).catch(() => {});
+        syncServerXpActivity({
+          sourceType: isQuiz ? "quiz_question_correct" : "exercise_question_correct",
+          xpAmount: xpReward,
+          idempotencyKey: `q_${questionId}`,
+          minXpFloor: next.xp,
+          streak: next.streak || 1,
+          metadata: { question_id: questionId, is_quiz: isQuiz },
+        });
+      }
+      return next;
     });
   };
 

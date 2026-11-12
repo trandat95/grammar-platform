@@ -37,7 +37,7 @@ const DIFF_TO_SCORE = { Beginner: 1, Elementary: 2, Intermediate: 3, Advanced: 4
  * Milestone 2.5 & 2.9: Adaptive 12-Topic Concept Mastery, 5-State SM-2 & Forgetting Curve API
  */
 export default async function handler(req, res) {
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
 
   if (req.headers?.authorization && !authUser) {
