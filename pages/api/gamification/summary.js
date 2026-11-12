@@ -37,7 +37,7 @@ async function getGamificationCatalog(serverClient) {
  * Security: total_xp/level/achievements can NEVER be modified via POST body (Server Authoritative).
  */
 export default async function handler(req, res) {
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
     const requestedUserId = req.query?.user_id;

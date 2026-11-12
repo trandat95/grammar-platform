@@ -18,6 +18,7 @@ import GamificationHub, { prefetchGamificationData } from "../components/gamific
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
 import MonetizationHub, { prefetchMonetizationData } from "../components/monetization/MonetizationHub";
 import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
+import AccountProfileCard from "../components/auth/AccountProfileCard";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
 import AdminMonetizationPanel from "../components/admin/AdminMonetizationPanel";
@@ -129,6 +130,7 @@ export default function Home() {
   const [authSuccess, setAuthSuccess] = useState("");
   const [authUnconfirmedEmail, setAuthUnconfirmedEmail] = useState("");
   const [authSubmitting, setAuthSubmitting] = useState(false);
+  const [showSwitchAuthForm, setShowSwitchAuthForm] = useState(false);
 
   // Admin Panel states
   const [adminPolicyForm, setAdminPolicyForm] = useState(DEFAULT_ACCESS_POLICY);
@@ -2824,11 +2826,14 @@ export default function Home() {
         isOpen={authModalOpen}
         onClose={() => {
           setAuthModalOpen(false);
+          setShowSwitchAuthForm(false);
           setAuthError("");
           setAuthSuccess("");
         }}
         title={
-          authTab === "login"
+          !currentUser.isGuest && !showSwitchAuthForm && authTab !== "reset"
+            ? "Hồ sơ Tài khoản, Gói VIP & Thành tích"
+            : authTab === "login"
             ? "Đăng nhập tài khoản"
             : authTab === "register"
             ? "Đăng ký thành viên"
@@ -2836,59 +2841,62 @@ export default function Home() {
             ? "Khôi phục mật khẩu"
             : "Đặt lại mật khẩu mới"
         }
-        maxWidth="460px"
+        maxWidth={!currentUser.isGuest && !showSwitchAuthForm && authTab !== "reset" ? "580px" : "460px"}
         padding="24px"
       >
-        {!currentUser.isGuest && (
-          <div style={{ marginBottom: "1.25rem", padding: "0.75rem 1rem", backgroundColor: T.bgElevated, borderRadius: "8px", border: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
-            <div>
-              <div style={{ fontSize: "0.72rem", color: T.textMuted, textTransform: "uppercase" }}>Đang đăng nhập:</div>
-              <div style={{ fontSize: "0.85rem", fontWeight: "700", color: T.text }}>{currentUser.name} ({currentUser.role})</div>
-              <div style={{ fontSize: "0.75rem", color: T.textSecondary }}>{currentUser.email}</div>
-            </div>
-            <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
-              {currentUser.role === "FREE" && (
+        {!currentUser.isGuest && !showSwitchAuthForm && authTab !== "reset" ? (
+          <AccountProfileCard
+            currentUser={currentUser}
+            authToken={activeAuthToken}
+            completedLessonsCount={(userTracker?.completedLessons || []).length}
+            totalLessonsCount={53}
+            userTracker={userTracker}
+            savedMistakesCount={savedMistakes.length}
+            savedVocabCount={savedVocab.length}
+            isLight={isLight}
+            onEntitlementSync={handleServerEntitlementSync}
+            onOpenVipHub={() => {
+              setAuthModalOpen(false);
+              setCurrentView("vip");
+            }}
+            onOpenGamificationHub={() => {
+              setAuthModalOpen(false);
+              setCurrentView("gamification");
+            }}
+            onSwitchAccount={() => {
+              setAuthError("");
+              setAuthSuccess("");
+              setAuthTab("login");
+              setShowSwitchAuthForm(true);
+            }}
+            onLogout={handleLogout}
+          />
+        ) : (
+          <>
+            {!currentUser.isGuest && showSwitchAuthForm && authTab !== "reset" && (
+              <div style={{ marginBottom: "0.9rem" }}>
                 <button
                   type="button"
                   onClick={() => {
-                    setAuthModalOpen(false);
-                    setCurrentView("vip");
+                    setShowSwitchAuthForm(false);
+                    setAuthError("");
+                    setAuthSuccess("");
                   }}
                   className="ds-focusable"
                   style={{
-                    padding: "0.4rem 0.75rem",
-                    backgroundColor: "var(--ds-btn-primary)",
+                    background: "none",
                     border: "none",
-                    color: "#ffffff",
-                    borderRadius: "6px",
-                    fontSize: "0.75rem",
+                    padding: 0,
+                    color: T.accent,
+                    fontSize: "0.82rem",
                     fontWeight: "700",
                     cursor: "pointer",
                   }}
                 >
-                  💎 Nâng cấp VIP
+                  ← Quay lại Hồ sơ ({currentUser.name})
                 </button>
-              )}
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="ds-focusable"
-                style={{
-                  padding: "0.4rem 0.8rem",
-                  backgroundColor: T.dangerBg,
-                  border: `1px solid ${T.dangerBorder}`,
-                  color: T.danger,
-                  borderRadius: "6px",
-                  fontSize: "0.75rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                }}
-              >
-                🚪 Đăng xuất
-              </button>
-            </div>
-          </div>
-        )}
+              </div>
+            )}
 
         {authError && (
           <div style={{ padding: "0.65rem 0.85rem", backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "6px", color: T.danger, fontSize: "0.84rem", marginBottom: "1rem", lineHeight: 1.45 }}>
@@ -3283,6 +3291,8 @@ export default function Home() {
                 : "Tạo tài khoản học tập"}
             </button>
           </form>
+        )}
+          </>
         )}
       </FocusTrapModal2026>
 
@@ -3796,6 +3806,7 @@ export default function Home() {
         onToggleTheme={toggleTheme}
         onOpenVocabModal={() => setVocabModalOpen(true)}
         onOpenAuthModal={() => {
+          setShowSwitchAuthForm(false);
           setAuthTab("login");
           setAuthModalOpen(true);
         }}

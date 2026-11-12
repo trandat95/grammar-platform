@@ -10,6 +10,10 @@ const DEFAULT_PROVIDER = "sepay";
 const monetizationOverviewCache = new Map();
 const monetizationOverviewInflight = new Map();
 
+export function getCachedMonetizationOverview(userId = null) {
+  return monetizationOverviewCache.get(userId || "guest") || null;
+}
+
 export function invalidateMonetizationClientCache() {
   monetizationOverviewCache.clear();
   monetizationOverviewInflight.clear();
@@ -154,6 +158,14 @@ export default function MonetizationHub({
         );
         const json = await res.json();
         if (res.ok && json.paid) {
+          const paidSub = json.entitlement?.subscription;
+          const paidPlanName = paidSub?.plan?.name_vi || selectedPlan?.name_vi || "Gói VIP";
+          const isLife = paidSub?.plan?.billing_cycle === "lifetime";
+          const paidExpiry = isLife
+            ? "Trọn đời (Vĩnh viễn)"
+            : paidSub?.current_period_end
+            ? new Date(paidSub.current_period_end).toLocaleDateString("vi-VN")
+            : "đã kích hoạt";
           setSepayOrder(null);
           setSelectedPlan(null);
           setCheckoutError("");
@@ -162,7 +174,7 @@ export default function MonetizationHub({
           invalidateMonetizationClientCache();
           setStatusNotice({
             tone: "success",
-            text: "🎉 SePay VA đã xác nhận chuyển khoản VietQR thành công! Toàn bộ đặc quyền VIP đã được kích hoạt.",
+            text: `🎉 SePay VA đã xác nhận chuyển khoản! ${paidPlanName} đã được kích hoạt (Hạn sử dụng: ${paidExpiry}).`,
           });
           if (onEntSyncRef.current && json.entitlement) {
             onEntSyncRef.current(json.entitlement);
@@ -364,6 +376,60 @@ export default function MonetizationHub({
             <div style={{ fontSize: "0.78rem", color: T.textMuted, marginTop: "0.4rem" }}>
               {psychology.goalGradientHint} • {psychology.selfDeterminationNote}
             </div>
+
+            {hasVip && sub && (
+              <div
+                style={{
+                  marginTop: "0.75rem",
+                  backgroundColor: T.card,
+                  border: `1px solid ${T.successBorder}`,
+                  borderRadius: "10px",
+                  padding: "0.65rem 0.85rem",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0.9rem",
+                  fontSize: "0.78rem",
+                }}
+              >
+                <div>
+                  <span style={{ color: T.textMuted }}>Gói đang dùng: </span>
+                  <strong style={{ color: T.textHeading }}>{sub.plan?.name_vi || "Gói VIP"}</strong>
+                </div>
+                <div>
+                  <span style={{ color: T.textMuted }}>Ngày kích hoạt: </span>
+                  <strong style={{ color: T.textSecondary }}>
+                    {sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString("vi-VN") : "—"}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ color: T.textMuted }}>Ngày hết hạn: </span>
+                  <strong style={{ color: T.success }}>
+                    {sub.plan?.billing_cycle === "lifetime"
+                      ? "Trọn đời (Vĩnh viễn)"
+                      : (sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end)
+                      ? `${new Date(
+                          sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
+                        ).toLocaleDateString("vi-VN")} (Còn ${Math.max(
+                          0,
+                          Math.ceil(
+                            (new Date(
+                              sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
+                            ).getTime() -
+                              Date.now()) /
+                              86400000
+                          )
+                        )} ngày)`
+                      : "—"}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ color: T.textMuted }}>Cổng: </span>
+                  <strong style={{ color: T.accent }}>
+                    {sub.provider === "sepay" ? "SePay VA (VietQR)" : sub.provider === "manual" ? "Dùng thử / Hệ thống" : sub.provider?.toUpperCase()}
+                  </strong>
+                </div>
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>

@@ -17,6 +17,10 @@ const gamificationLeaderboardCache = new Map();
 const gamificationSummaryInflight = new Map();
 const gamificationLbInflight = new Map();
 
+export function getCachedGamificationSummary(userId = null) {
+  return gamificationSummaryCache.get(userId || "guest") || null;
+}
+
 export function prefetchGamificationData({ userId = null, authToken = null } = {}) {
   if (typeof window === "undefined") return Promise.resolve();
   const summaryKey = userId || "guest";
