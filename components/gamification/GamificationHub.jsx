@@ -1,21 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
-import { AVATAR_PATHS, BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
-
-const BOARD_TABS = [
-  { id: "weekly_xp", label: "XP Tuần", unit: "XP" },
-  { id: "monthly_xp", label: "XP Tháng", unit: "XP" },
-  { id: "all_time_xp", label: "Tổng XP", unit: "XP" },
-  { id: "weekly_consistency", label: "Chăm chỉ", unit: "điểm" },
-  { id: "grammar_mastery", label: "Mastery", unit: "%" },
-];
+import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
 
 // Client-side SWR cache: renders Gamification tab instantaneously (0ms) on revisit & after prefetch
 const gamificationSummaryCache = new Map();
-const gamificationLeaderboardCache = new Map();
 const gamificationSummaryInflight = new Map();
-const gamificationLbInflight = new Map();
 
 export function getCachedGamificationSummary(userId = null) {
   return gamificationSummaryCache.get(userId || "guest") || null;
@@ -24,10 +15,8 @@ export function getCachedGamificationSummary(userId = null) {
 export function prefetchGamificationData({ userId = null, authToken = null } = {}) {
   if (typeof window === "undefined") return Promise.resolve();
   const summaryKey = userId || "guest";
-  const lbKey = `weekly_xp_10_${summaryKey}`;
   const tzOffsetMinutes = -new Date().getTimezoneOffset();
   const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
-  const jobs = [];
 
   if (!gamificationSummaryCache.has(summaryKey) && !gamificationSummaryInflight.has(summaryKey)) {
     const params = new URLSearchParams({ tzOffsetMinutes: String(tzOffsetMinutes) });
@@ -40,28 +29,10 @@ export function prefetchGamificationData({ userId = null, authToken = null } = {
       .catch(() => {})
       .finally(() => gamificationSummaryInflight.delete(summaryKey));
     gamificationSummaryInflight.set(summaryKey, p);
-    jobs.push(p);
+    return p;
   }
 
-  if (!gamificationLeaderboardCache.has(lbKey) && !gamificationLbInflight.has(lbKey)) {
-    const params = new URLSearchParams({
-      board: "weekly_xp",
-      limit: "10",
-      tzOffsetMinutes: String(tzOffsetMinutes),
-    });
-    if (userId) params.set("user_id", userId);
-    const p = fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json?.success) gamificationLeaderboardCache.set(lbKey, json);
-      })
-      .catch(() => {})
-      .finally(() => gamificationLbInflight.delete(lbKey));
-    gamificationLbInflight.set(lbKey, p);
-    jobs.push(p);
-  }
-
-  return Promise.all(jobs);
+  return Promise.resolve();
 }
 
 const BADGE_CATEGORIES = [
@@ -99,12 +70,7 @@ export default function GamificationHub({
   const initialSummary = gamificationSummaryCache.get(summaryKey) || null;
   const [summary, setSummary] = useState(initialSummary);
   const [loading, setLoading] = useState(!initialSummary);
-  const [boardType, setBoardType] = useState("weekly_xp");
-  const [boardLimit, setBoardLimit] = useState(10);
-  const lbKey = `${boardType}_${boardLimit}_${userId || "guest"}`;
-  const initialLb = gamificationLeaderboardCache.get(lbKey) || { entries: [], totalEntries: 0, currentUserEntry: null };
-  const [leaderboard, setLeaderboard] = useState(initialLb);
-  const [lbLoading, setLbLoading] = useState(!gamificationLeaderboardCache.has(lbKey));
+  const [lbRefreshKey, setLbRefreshKey] = useState(0);
   const [badgeFilter, setBadgeFilter] = useState("ALL");
   const [actionNotice, setActionNotice] = useState(null);
   const onPrefsRef = useRef(onPreferencesChange);
@@ -140,37 +106,9 @@ export default function GamificationHub({
     }
   }, [userId, authToken, tzOffsetMinutes, summaryKey]);
 
-  const loadLeaderboard = useCallback(async () => {
-    const key = `${boardType}_${boardLimit}_${userId || "guest"}`;
-    if (!gamificationLeaderboardCache.has(key)) setLbLoading(true);
-    try {
-      const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
-      const params = new URLSearchParams({
-        board: boardType,
-        limit: String(boardLimit),
-        tzOffsetMinutes: String(tzOffsetMinutes),
-      });
-      if (userId) params.set("user_id", userId);
-      const res = await fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers });
-      const json = await res.json();
-      if (res.ok && json.success) {
-        gamificationLeaderboardCache.set(key, json);
-        setLeaderboard(json);
-      }
-    } catch (err) {
-      console.warn("Leaderboard load warning:", err.message);
-    } finally {
-      setLbLoading(false);
-    }
-  }, [boardType, boardLimit, userId, authToken, tzOffsetMinutes]);
-
   useEffect(() => {
     loadSummary();
   }, [loadSummary]);
-
-  useEffect(() => {
-    loadLeaderboard();
-  }, [loadLeaderboard]);
 
   const handleServerAction = async (payload) => {
     if (!userId) {
@@ -194,7 +132,8 @@ export default function GamificationHub({
       setActionNotice({ tone: "success", text: "Đã đồng bộ thành công với máy chủ!" });
       await loadSummary();
       if (payload.action === "update_preferences") {
-        await loadLeaderboard();
+        invalidateLeaderboardCache();
+        setLbRefreshKey((k) => k + 1);
       }
     } catch (err) {
       setActionNotice({ tone: "danger", text: err.message });
@@ -349,12 +288,17 @@ export default function GamificationHub({
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <div>
-              <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
-                🔥 Chuỗi Học Tập: {streakState.current_streak || 0} ngày
+            <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
+              <div className="ge-streak-orb" aria-hidden="true">
+                <span className="ge-streak-flame-live" style={{ fontSize: "1.45rem" }}>🔥</span>
               </div>
-              <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
-                Kỷ lục dài nhất: {streakState.longest_streak || 0} ngày • Freeze Tokens: {streakState.freeze_tokens ?? 1}
+              <div>
+                <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
+                  Chuỗi Học Tập: {streakState.current_streak || 0} ngày
+                </div>
+                <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
+                  Kỷ lục dài nhất: {streakState.longest_streak || 0} ngày • Freeze Tokens: {streakState.freeze_tokens ?? 1}
+                </div>
               </div>
             </div>
             {streakState.can_recover && (
@@ -364,21 +308,22 @@ export default function GamificationHub({
             )}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.4rem", marginTop: "0.5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.45rem", marginTop: "0.5rem" }}>
             {weekCalendar.map((d) => (
               <div
                 key={d.iso}
+                className={d.active ? "ge-streak-day-active" : undefined}
                 style={{
-                  backgroundColor: d.active ? T.successBg : T.bgElevated,
-                  border: `1px solid ${d.active ? T.successBorder : T.borderSubtle}`,
-                  borderRadius: "8px",
+                  backgroundColor: d.active ? T.warningBg : T.bgElevated,
+                  border: `1.5px solid ${d.active ? T.warningBorder : T.borderSubtle}`,
+                  borderRadius: "10px",
                   padding: "0.45rem 0.25rem",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "0.68rem", color: T.textMuted, fontWeight: 700 }}>{d.label}</div>
-                <div style={{ fontSize: "0.86rem", fontWeight: 800, color: d.active ? T.success : T.textSecondary, marginTop: "0.15rem" }}>
-                  {d.active ? "🔥" : d.dayNum}
+                <div style={{ fontSize: "0.68rem", color: d.active ? T.warning : T.textMuted, fontWeight: 700 }}>{d.label}</div>
+                <div style={{ fontSize: "0.92rem", fontWeight: 800, color: d.active ? T.warning : T.textSecondary, marginTop: "0.15rem" }}>
+                  {d.active ? <span className="ge-streak-flame-live">🔥</span> : d.dayNum}
                 </div>
               </div>
             ))}
@@ -649,116 +594,12 @@ export default function GamificationHub({
 
       {/* 5-Mode Leaderboard + Privacy & Motion Preferences + Reward History */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1rem" }}>
-        {/* Leaderboard */}
-        <div
-          style={{
-            backgroundColor: T.card,
-            border: `1px solid ${T.cardBorder}`,
-            borderRadius: "14px",
-            padding: "1.25rem",
-            boxShadow: T.shadowSm,
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.6rem", marginBottom: "0.8rem" }}>
-            <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
-              🏆 Bảng Xếp Hạng (Leaderboard)
-            </h2>
-            <div style={{ display: "flex", gap: "0.35rem" }}>
-              {[10, 50].map((lim) => (
-                <Button
-                  key={lim}
-                  size="sm"
-                  variant={boardLimit === lim ? "primary" : "secondary"}
-                  isLight={isLight}
-                  onClick={() => setBoardLimit(lim)}
-                  style={{ fontSize: "0.72rem", padding: "0.2rem 0.55rem", minHeight: "28px" }}
-                >
-                  Top {lim}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "0.85rem" }}>
-            {BOARD_TABS.map((tb) => (
-              <Button
-                key={tb.id}
-                size="sm"
-                variant={boardType === tb.id ? "primary" : "ghost"}
-                isLight={isLight}
-                onClick={() => setBoardType(tb.id)}
-                style={{ fontSize: "0.73rem", padding: "0.25rem 0.6rem", minHeight: "28px" }}
-              >
-                {tb.label}
-              </Button>
-            ))}
-          </div>
-
-          {leaderboard.currentUserEntry && (
-            <Alert tone="info" isLight={isLight} style={{ marginBottom: "0.75rem" }}>
-              Thứ hạng của bạn: <strong>#{leaderboard.currentUserEntry.rank}</strong> • Điểm:{" "}
-              <strong>{leaderboard.currentUserEntry.score}</strong> • Accuracy Tie-break:{" "}
-              <strong>{leaderboard.currentUserEntry.tie_breaker_accuracy}%</strong>
-            </Alert>
-          )}
-
-          {lbLoading ? (
-            <Skeleton height="160px" width="100%" />
-          ) : (leaderboard.entries || []).length === 0 ? (
-            <div style={{ fontSize: "0.82rem", color: T.textMuted, padding: "1rem 0", textAlign: "center" }}>
-              Chưa có dữ liệu xếp hạng trong chu kỳ này.
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem", maxHeight: "340px", overflowY: "auto" }}>
-              {leaderboard.entries.map((row) => (
-                <div
-                  key={`${row.rank}-${row.display_name}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "0.55rem 0.75rem",
-                    borderRadius: "8px",
-                    backgroundColor: row.isCurrentUser ? T.accentBg : T.bgElevated,
-                    border: `1px solid ${row.isCurrentUser ? T.accentBorder : T.borderSubtle}`,
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                    <strong style={{ minWidth: "28px", color: row.rank <= 3 ? T.warning : T.textMuted }}>
-                      #{row.rank}
-                    </strong>
-                    <img
-                      src={AVATAR_PATHS[(row.rank - 1) % AVATAR_PATHS.length]}
-                      alt={row.display_name}
-                      width={28}
-                      height={28}
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        border: `1px solid ${T.borderSubtle}`,
-                        opacity: row.is_anonymous ? 0.55 : 1,
-                        filter: row.is_anonymous ? "grayscale(100%)" : "none",
-                      }}
-                    />
-                    <div>
-                      <div style={{ fontSize: "0.84rem", fontWeight: 700, color: T.textHeading }}>
-                        {row.display_name} {row.isCurrentUser ? "(Bạn)" : ""}
-                      </div>
-                      <div style={{ fontSize: "0.7rem", color: T.textMuted }}>
-                        Lv {row.level} • {row.title} • Acc {row.tie_breaker_accuracy}%
-                      </div>
-                    </div>
-                  </div>
-                  <Badge tone="accent" isLight={isLight}>
-                    {row.score} {BOARD_TABS.find((b) => b.id === boardType)?.unit || "XP"}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <LeaderboardPanel
+          userId={userId}
+          authToken={authToken}
+          isLight={isLight}
+          refreshKey={lbRefreshKey}
+        />
 
         {/* Privacy, Accessibility Settings & Reward Ledger */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>

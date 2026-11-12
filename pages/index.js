@@ -17,6 +17,7 @@ import AcademicRichText, { stripMarkdownFormatting } from "../components/learnin
 import AcademicSectionBody from "../components/learning/AcademicSectionBody";
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
 import GamificationHub, { prefetchGamificationData } from "../components/gamification/GamificationHub";
+import LeaderboardPanel from "../components/gamification/LeaderboardPanel";
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
 import MonetizationHub, { prefetchMonetizationData } from "../components/monetization/MonetizationHub";
 import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
@@ -4871,8 +4872,10 @@ export default function Home() {
                   }}
                 >
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
-                      <span style={{ fontSize: "1.6rem" }} aria-hidden="true">🔥</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                      <div className="ge-streak-orb" aria-hidden="true">
+                        <span className="ge-streak-flame-live" style={{ fontSize: "1.55rem" }}>🔥</span>
+                      </div>
                       <h1 style={{ fontSize: "1.45rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
                         Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
                       </h1>
@@ -4950,21 +4953,22 @@ export default function Home() {
                             {d.dayName}
                           </span>
                           <div
+                            className={d.isActive ? "ge-streak-day-active" : undefined}
                             style={{
-                              width: "32px",
-                              height: "32px",
+                              width: "34px",
+                              height: "34px",
                               borderRadius: "50%",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                               backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-bg-elevated)",
                               color: d.isActive ? "#ffffff" : "var(--ds-text-muted)",
-                              fontSize: "0.85rem",
+                              fontSize: "0.88rem",
                               fontWeight: "700",
                               border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
                             }}
                           >
-                            {d.isActive ? "🔥" : d.dayNum}
+                            {d.isActive ? <span className="ge-streak-flame-live">🔥</span> : d.dayNum}
                           </div>
                         </div>
                       ))}
@@ -5084,14 +5088,13 @@ export default function Home() {
                           {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
                         </span>
                       </div>
-                      <div style={{ width: "100%", height: "6px", backgroundColor: "var(--ds-bg-elevated)", borderRadius: "999px", overflow: "hidden" }}>
+                      <div className="ge-energy-bar-track" style={{ width: "100%", height: "8px", backgroundColor: "var(--ds-bg-elevated)" }}>
                         <div
+                          className="ge-energy-bar-fill"
                           style={{
                             width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
                             height: "100%",
                             backgroundColor: "var(--ds-btn-success)",
-                            borderRadius: "999px",
-                            transition: "width 0.3s ease",
                           }}
                         />
                       </div>
@@ -5232,6 +5235,17 @@ export default function Home() {
                         Xem và luyện lại ngay →
                       </button>
                     </div>
+                  </div>
+
+                  {/* HOME LEADERBOARD SHOWCASE (LIVE RANKING & ENERGY) */}
+                  <div style={{ marginBottom: "1.75rem" }}>
+                    <LeaderboardPanel
+                      userId={!currentUser?.isGuest ? currentUser?.id : null}
+                      authToken={activeAuthToken}
+                      isLight={isLight}
+                      compact={true}
+                      onOpenFullAchievements={() => setCurrentView("gamification")}
+                    />
                   </div>
                 </div>
               )}

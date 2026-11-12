@@ -299,12 +299,12 @@ export default function AppShell2026({
             type="button"
             onClick={() => onSelectView("dashboard")}
             title="Chuỗi ngày học liên tiếp"
-            className="ds-focusable"
+            className="ds-focusable ge-streak-pill-live"
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "3px",
-              padding: "4px 8px",
+              gap: "4px",
+              padding: "4px 10px",
               borderRadius: "999px",
               border: "1px solid var(--ds-warning-border)",
               backgroundColor: "var(--ds-warning-bg)",
@@ -315,7 +315,7 @@ export default function AppShell2026({
               whiteSpace: "nowrap",
             }}
           >
-            <span aria-hidden="true">🔥</span>
+            <span className="ge-streak-flame-live" aria-hidden="true">🔥</span>
             <span>{userTracker?.streak || 0}d</span>
           </button>
 

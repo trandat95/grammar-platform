@@ -602,6 +602,219 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================
+   Energetic Motion: Streak Energy, XP Bars & Live Leaderboard
+   ============================================================ */
+@keyframes geFlameFlicker {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(-2deg);
+    filter: drop-shadow(0 0 6px var(--ds-warning));
+  }
+  35% {
+    transform: translateY(-2px) scale(1.12) rotate(3deg);
+    filter: drop-shadow(0 0 12px var(--ds-warning));
+  }
+  70% {
+    transform: translateY(-1px) scale(1.05) rotate(-1deg);
+    filter: drop-shadow(0 0 9px var(--ds-warning));
+  }
+}
+
+@keyframes geEnergyRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.72;
+  }
+  70% {
+    transform: scale(1.38);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.38);
+    opacity: 0;
+  }
+}
+
+@keyframes geEnergySheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes geLiveDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--ds-success-border);
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0.85;
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes geTrophyFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+}
+
+@keyframes geRowRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ge-streak-flame-live {
+  display: inline-block;
+  animation: geFlameFlicker 1.7s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.ge-streak-pill-live {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--ds-warning-border), 0 2px 10px -2px var(--ds-warning-bg);
+}
+
+.ge-streak-pill-live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: geEnergySheen 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ge-streak-orb {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--ds-warning-bg);
+  border: 1.5px solid var(--ds-warning-border);
+  box-shadow: 0 4px 14px -4px var(--ds-warning-border);
+  flex-shrink: 0;
+}
+
+.ge-streak-orb::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 15px;
+  border: 2px solid var(--ds-warning);
+  animation: geEnergyRing 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  pointer-events: none;
+}
+
+.ge-streak-day-active {
+  position: relative;
+  box-shadow: 0 2px 10px -2px var(--ds-warning);
+  transition: transform 180ms ease;
+}
+
+.ge-streak-day-active:hover {
+  transform: translateY(-2px) scale(1.06);
+}
+
+.ge-streak-day-active::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1.5px solid var(--ds-warning);
+  animation: geEnergyRing 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.ge-energy-bar-track {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.ge-energy-bar-fill {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  transition: width 550ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ge-energy-bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  animation: geEnergySheen 2.1s linear infinite;
+}
+
+.ge-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: var(--ds-success-bg);
+  border: 1px solid var(--ds-success-border);
+  color: var(--ds-success);
+}
+
+.ge-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-success);
+  animation: geLiveDot 1.6s ease-in-out infinite;
+}
+
+.ge-trophy-float {
+  display: inline-block;
+  animation: geTrophyFloat 2.4s ease-in-out infinite;
+}
+
+.ge-lb-row {
+  position: relative;
+  overflow: hidden;
+  animation: geRowRiseIn 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.ge-lb-row:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ge-lb-row-top1::after,
+.ge-lb-row-me::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  animation: geEnergySheen 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
 /* WCAG 2.3.3 Tôn trọng Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
