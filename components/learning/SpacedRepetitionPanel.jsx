@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import StructuredExplanation from "../explanation/StructuredExplanation";
+import { migrateQuestionExplanation } from "../../lib/explanation/explanation.migrator";
 
 /**
  * Milestone 2.5.7, 2.5.9, 2.5.10 & 2.5.11:
@@ -11,6 +12,7 @@ import StructuredExplanation from "../explanation/StructuredExplanation";
 export default function SpacedRepetitionPanel({
   userId = null,
   authToken = null,
+  hasVipAccess = false,
   isLight = false,
   onOpenLessonByCode,
 }) {
@@ -260,9 +262,9 @@ export default function SpacedRepetitionPanel({
                 </button>
               </div>
               <StructuredExplanation
+                explanation={migrateQuestionExplanation(currentQuestion)}
                 questionId={currentQuestion.id}
-                fallbackExplanation={currentQuestion.explanation}
-                pedagogyFallback={currentQuestion.pedagogy}
+                hasVipAccess={hasVipAccess}
                 isLight={isLight}
                 userId={userId}
               />

@@ -4,6 +4,7 @@ import FocusTrapModal2026 from "../ui-2026/FocusTrapModal2026";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import {
   DIFFICULTY_LEVELS,
+  DISPLAY_DIFFICULTY_LEVELS,
   adaptExplanationForLevel,
   FEEDBACK_ERROR_CATEGORIES,
 } from "../../lib/explanation/explanation.schema";
@@ -11,7 +12,6 @@ import {
 const LEVEL_SUBLABELS = {
   [DIFFICULTY_LEVELS.BEGINNER]: "Cơ bản",
   [DIFFICULTY_LEVELS.ELEMENTARY]: "Sơ cấp",
-  [DIFFICULTY_LEVELS.INTERMEDIATE]: "Trung cấp",
   [DIFFICULTY_LEVELS.ADVANCED]: "Nâng cao",
 };
 
@@ -19,11 +19,12 @@ export default function StructuredExplanation({
   explanation: initialExplanation,
   questionId,
   userId,
+  hasVipAccess = false,
+  onUpgradeVip = null,
   isLight = false,
 }) {
-  const [currentLevel, setCurrentLevel] = useState(
-    initialExplanation?.difficulty || DIFFICULTY_LEVELS.INTERMEDIATE
-  );
+  // Always open on Basic (Cơ bản) first when revealing answers
+  const [currentLevel, setCurrentLevel] = useState(DIFFICULTY_LEVELS.BEGINNER);
   const [feedbackSent, setFeedbackSent] = useState(null); // 'helpful' | 'report_error'
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportCategory, setReportCategory] = useState(FEEDBACK_ERROR_CATEGORIES[0]);
@@ -31,11 +32,31 @@ export default function StructuredExplanation({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setCurrentLevel(initialExplanation?.difficulty || DIFFICULTY_LEVELS.INTERMEDIATE);
+    setCurrentLevel(DIFFICULTY_LEVELS.BEGINNER);
     setFeedbackSent(null);
   }, [initialExplanation?.question_id, questionId]);
 
   if (!initialExplanation) return null;
+
+  const isAdvancedLocked = currentLevel === DIFFICULTY_LEVELS.ADVANCED && !hasVipAccess;
+  const triggerVipUpgrade = () => {
+    if (typeof onUpgradeVip === "function") {
+      onUpgradeVip();
+      return;
+    }
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ge:open-vip-paywall", {
+          detail: {
+            preview: {
+              title: "Mở khóa Giải thích Nâng cao 5 Bước (VIP)",
+              description: "Phân tích sâu ngoại lệ ngữ pháp, bẫy đề thi và chiến thuật loại trừ nhanh cho 2,939 câu hỏi.",
+            },
+          },
+        })
+      );
+    }
+  };
 
   const T = getThemeTokens(isLight);
   const expl = adaptExplanationForLevel(initialExplanation, currentLevel);
@@ -145,7 +166,7 @@ export default function StructuredExplanation({
           </div>
         </div>
 
-        {/* Difficulty Level Switcher Tabs */}
+        {/* Difficulty Level Switcher Tabs (Only Cơ bản, Sơ cấp, Nâng cao [VIP]) */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
           <span
             style={{
@@ -158,37 +179,148 @@ export default function StructuredExplanation({
           >
             Mức chi tiết:
           </span>
-          {Object.values(DIFFICULTY_LEVELS).map((lvl) => {
+          {DISPLAY_DIFFICULTY_LEVELS.map((lvl) => {
             const isSelected = lvl === currentLevel;
+            const isVipTab = lvl === DIFFICULTY_LEVELS.ADVANCED;
             return (
               <button
                 key={lvl}
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => setCurrentLevel(lvl)}
-                title={`Chuyển sang độ sâu giải thích: ${LEVEL_SUBLABELS[lvl] || lvl}`}
+                title={
+                  isVipTab && !hasVipAccess
+                    ? "Giải thích Nâng cao (Yêu cầu tài khoản VIP)"
+                    : `Chuyển sang độ sâu giải thích: ${LEVEL_SUBLABELS[lvl] || lvl}`
+                }
                 className="ds-focusable"
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
                   padding: "0.28rem 0.65rem",
                   fontSize: "0.72rem",
                   fontFamily: "var(--font-sans)",
                   fontWeight: isSelected ? "700" : "600",
-                  backgroundColor: isSelected ? "var(--ds-btn-primary)" : T.bgElevated,
-                  color: isSelected ? "#ffffff" : T.textSecondary,
-                  border: `1px solid ${isSelected ? "var(--ds-btn-primary)" : T.cardBorder}`,
+                  backgroundColor: isSelected
+                    ? isVipTab && !hasVipAccess
+                      ? "var(--ds-btn-warning)"
+                      : "var(--ds-btn-primary)"
+                    : T.bgElevated,
+                  color: isSelected ? "#ffffff" : isVipTab && !hasVipAccess ? T.warning : T.textSecondary,
+                  border: `1px solid ${
+                    isSelected
+                      ? isVipTab && !hasVipAccess
+                        ? "var(--ds-btn-warning)"
+                        : "var(--ds-btn-primary)"
+                      : isVipTab && !hasVipAccess
+                      ? T.warningBorder
+                      : T.cardBorder
+                  }`,
                   borderRadius: "6px",
                   cursor: "pointer",
                   transition: "all 0.12s ease",
                 }}
               >
-                {LEVEL_SUBLABELS[lvl] || lvl}
+                {isVipTab && <span aria-hidden="true">{hasVipAccess ? "⭐" : "🔒"}</span>}
+                <span>{LEVEL_SUBLABELS[lvl] || lvl}</span>
+                {isVipTab && !hasVipAccess && (
+                  <span style={{ fontSize: "0.62rem", fontWeight: "800", opacity: 0.9 }}>VIP</span>
+                )}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* 5 CORE PEDAGOGICAL SECTIONS */}
+      {/* 5 CORE PEDAGOGICAL SECTIONS (or VIP Paywall Gate for Advanced when !hasVipAccess) */}
+      {isAdvancedLocked ? (
+        <div
+          style={{
+            backgroundColor: T.warningBg,
+            border: `1px solid ${T.warningBorder}`,
+            borderRadius: "10px",
+            padding: "1.25rem 1.35rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ fontSize: "1.2rem" }} aria-hidden="true">🔒</span>
+              <h5 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "800", color: T.textHeading }}>
+                Giải thích Nâng cao dành riêng cho thành viên VIP
+              </h5>
+            </div>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                fontWeight: "800",
+                padding: "0.15rem 0.55rem",
+                borderRadius: "999px",
+                backgroundColor: "var(--ds-btn-warning)",
+                color: "#ffffff",
+              }}
+            >
+              VIP ONLY
+            </span>
+          </div>
+
+          <p style={{ margin: 0, fontSize: "0.84rem", color: T.textSecondary, lineHeight: 1.55 }}>
+            Mở khóa gói VIP để xem trọn vẹn phân tích 5 bước nâng cao cho từng câu hỏi:
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.5rem", fontSize: "0.8rem", color: T.text }}>
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
+              🎯 <strong>Ngoại lệ &amp; Bẫy đề thi</strong> (Tránh các cấu trúc dễ gây nhầm)
+            </div>
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
+              ✓ <strong>Cách sửa chi tiết từng lỗi</strong> (Đối chiếu đáp án chuẩn)
+            </div>
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
+              ⚡ <strong>Bước 5: Chiến thuật loại trừ</strong> (Mẹo giải nhanh phòng thi)
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", marginTop: "0.2rem" }}>
+            <button
+              type="button"
+              onClick={triggerVipUpgrade}
+              className="ds-btn ds-focusable"
+              style={{
+                padding: "0.5rem 1.05rem",
+                borderRadius: "8px",
+                border: "none",
+                backgroundColor: "var(--ds-btn-warning)",
+                color: "#ffffff",
+                fontSize: "0.82rem",
+                fontWeight: "800",
+                cursor: "pointer",
+              }}
+            >
+              ⚡ Nâng cấp VIP để mở khóa
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentLevel(DIFFICULTY_LEVELS.ELEMENTARY)}
+              className="ds-focusable"
+              style={{
+                padding: "0.48rem 0.85rem",
+                borderRadius: "8px",
+                border: `1px solid ${T.border}`,
+                backgroundColor: T.card,
+                color: T.textSecondary,
+                fontSize: "0.78rem",
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
+            >
+              Xem mức Sơ cấp (Miễn phí)
+            </button>
+          </div>
+        </div>
+      ) : (
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {/* 1. SIGNAL */}
         <div
@@ -505,28 +637,47 @@ export default function StructuredExplanation({
           </div>
         )}
 
-        {/* Quick Expand Button when viewing Beginner simplified summary */}
+        {/* Quick Expand Button when viewing Beginner or Elementary */}
         {currentLevel === DIFFICULTY_LEVELS.BEGINNER && (
-          <button
-            type="button"
-            onClick={() => setCurrentLevel(DIFFICULTY_LEVELS.INTERMEDIATE)}
-            className="ds-focusable"
-            style={{
-              alignSelf: "flex-start",
-              padding: "0.4rem 0.8rem",
-              fontSize: "0.78rem",
-              fontWeight: "700",
-              borderRadius: "6px",
-              border: `1px solid ${T.accentBorder}`,
-              backgroundColor: T.accentBg,
-              color: T.accent,
-              cursor: "pointer",
-            }}
-          >
-            Mở rộng thêm Bước 4 &amp; Bước 5 (Phân tích lỗi sai + Mẹo thi) ➔
-          </button>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={() => setCurrentLevel(DIFFICULTY_LEVELS.ELEMENTARY)}
+              className="ds-focusable"
+              style={{
+                padding: "0.4rem 0.8rem",
+                fontSize: "0.78rem",
+                fontWeight: "700",
+                borderRadius: "6px",
+                border: `1px solid ${T.accentBorder}`,
+                backgroundColor: T.accentBg,
+                color: T.accent,
+                cursor: "pointer",
+              }}
+            >
+              Xem thêm Điều kiện &amp; Lỗi sai (Sơ cấp) ➔
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentLevel(DIFFICULTY_LEVELS.ADVANCED)}
+              className="ds-focusable"
+              style={{
+                padding: "0.4rem 0.8rem",
+                fontSize: "0.78rem",
+                fontWeight: "700",
+                borderRadius: "6px",
+                border: `1px solid ${T.warningBorder}`,
+                backgroundColor: T.warningBg,
+                color: T.warning,
+                cursor: "pointer",
+              }}
+            >
+              {hasVipAccess ? "⭐ Xem phân tích Nâng cao ➔" : "🔒 Mở phân tích Nâng cao (VIP) ➔"}
+            </button>
+          </div>
         )}
       </div>
+      )}
 
       {/* FEEDBACK ACTION BAR */}
       <div

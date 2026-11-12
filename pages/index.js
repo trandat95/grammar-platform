@@ -1544,6 +1544,20 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const onOpenVipPaywall = (evt) => {
+      openContextualSmartPaywall(
+        "vip_feature_click",
+        evt?.detail?.preview || {
+          title: "Mở khóa Phân tích Nâng cao 5 Bước (VIP)",
+          description: "Xem trọn vẹn ngoại lệ ngữ pháp, bẫy đề thi và chiến thuật loại trừ nhanh.",
+        }
+      );
+    };
+    window.addEventListener("ge:open-vip-paywall", onOpenVipPaywall);
+    return () => window.removeEventListener("ge:open-vip-paywall", onOpenVipPaywall);
+  }, [currentUser?.id, currentUser?.role, activeAuthToken]);
+
   const syncQuestionMastery = (question, isCorrect, errorCategory = null) => {
     if (!question?.id || !currentUser?.id || currentUser.isGuest) return;
     const startedAt = questionFocusTimestampsRef.current?.[question.id];
@@ -1774,11 +1788,20 @@ export default function Home() {
           topic_name: selectedChapter?.title_vi || "Ngữ pháp",
         });
 
+    const hasVipAccess = !currentUser?.isGuest && (currentUser?.role === "VIP" || currentUser?.role === "ADMIN");
+
     return (
       <StructuredExplanation
         explanation={structured}
         questionId={question?.id || structured?.question_id}
         userId={currentUser?.id}
+        hasVipAccess={hasVipAccess}
+        onUpgradeVip={() =>
+          openContextualSmartPaywall("vip_feature_click", {
+            title: "Mở khóa Giải thích Nâng cao 5 Bước (VIP)",
+            description: "Xem trọn vẹn ngoại lệ ngữ pháp, phân tích bẫy đề thi và chiến thuật loại trừ nhanh cho 2,939 câu hỏi.",
+          })
+        }
         isLight={isLight}
       />
     );
@@ -4670,6 +4693,7 @@ export default function Home() {
                     <SpacedRepetitionPanel
                       userId={!currentUser?.isGuest ? currentUser?.id : null}
                       authToken={activeAuthToken}
+                      hasVipAccess={!currentUser?.isGuest && (currentUser?.role === "VIP" || currentUser?.role === "ADMIN")}
                       isLight={isLight}
                       onOpenLessonByCode={openLessonByCode}
                     />

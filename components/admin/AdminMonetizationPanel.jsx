@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Skeleton } from "../design-system";
+import { invalidateMonetizationClientCache } from "../monetization/MonetizationHub";
 
 /**
- * Milestone 2.12.14: Admin Monetization Revenue (MRR/ARR/LTV), 14-Stage Funnel & A/B Experiment Dashboard
+ * Milestone 2.12.14: Admin Monetization Revenue (MRR/ARR/LTV), 14-Stage Funnel & Dynamic Plan Pricing Editor
  */
 export default function AdminMonetizationPanel({ authToken = null, isLight = false }) {
   const T = getThemeTokens(isLight);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
+  const [planDrafts, setPlanDrafts] = useState({});
+  const [savingPlanCode, setSavingPlanCode] = useState(null);
 
   const loadMetrics = useCallback(async () => {
     setLoading(true);
@@ -19,6 +22,15 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       const json = await res.json();
       if (res.ok && json.success) {
         setData(json);
+        const drafts = {};
+        for (const p of json.plans || []) {
+          drafts[p.code] = {
+            price_vnd: String(p.price_vnd ?? 0),
+            original_price_vnd: String(p.original_price_vnd ?? p.price_vnd ?? 0),
+            is_active: p.is_active !== false,
+          };
+        }
+        setPlanDrafts(drafts);
       }
     } catch (err) {
       console.warn("Admin monetization fetch warning:", err.message);
@@ -47,6 +59,41 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
     }
   };
 
+  const handleSavePlanPrice = async (planCode, overrideActive = null) => {
+    const draft = planDrafts[planCode];
+    if (!draft) return;
+    setSavingPlanCode(planCode);
+    setNotice("");
+    try {
+      const res = await fetch("/api/admin/monetization", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        },
+        body: JSON.stringify({
+          action: "update_plan_price",
+          plan_code: planCode,
+          price_vnd: Math.max(0, Math.round(Number(draft.price_vnd || 0))),
+          original_price_vnd: Math.max(0, Math.round(Number(draft.original_price_vnd || 0))),
+          is_active: typeof overrideActive === "boolean" ? overrideActive : Boolean(draft.is_active),
+        }),
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        invalidateMonetizationClientCache();
+        setNotice(`✅ Đã cập nhật giá gói ${planCode} (${Number(json.plan?.price_vnd || draft.price_vnd).toLocaleString()}đ) trực tiếp trên Database & áp dụng ngay!`);
+        await loadMetrics();
+      } else {
+        setNotice(`⚠️ Lỗi cập nhật gói ${planCode}: ${json.error || "Không rõ"}`);
+      }
+    } catch (err) {
+      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+    } finally {
+      setSavingPlanCode(null);
+    }
+  };
+
   if (loading) return <Skeleton height="160px" width="100%" />;
   if (!data) return null;
 
@@ -61,7 +108,7 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
           border: `1px solid ${T.cardBorder}`,
           borderRadius: "14px",
           padding: "1.25rem",
-          boxShadow: T.shadowSm,
+          boxShadow: T.shadow,
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.9rem" }}>
@@ -166,9 +213,131 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
           </div>
         </div>
 
-        {/* Active Plan Pricing Overview */}
-        <div style={{ marginTop: "0.75rem", fontSize: "0.76rem", color: T.textMuted }}>
-          Các gói đang mở bán: {plans.map((p) => `${p.code} (${Number(p.price_vnd).toLocaleString()}đ)`).join(" • ")}
+        {/* Dynamic VIP Plan Pricing Manager (Zero-Code Database Pricing) */}
+        <div style={{ marginTop: "0.95rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.95rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.65rem" }}>
+            <div>
+              <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
+                💳 Quản Lý &amp; Điều Chỉnh Giá Gói VIP (Lưu DB — Không Cần Sửa Code)
+              </div>
+              <div style={{ fontSize: "0.74rem", color: T.textMuted }}>
+                Thay đổi giá bán, giá niêm yết hoặc bật/tắt gói trực tiếp trên Supabase PostgreSQL. Trang nâng cấp VIP đồng bộ tức thì.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.7rem" }}>
+            {plans.map((p) => {
+              const draft = planDrafts[p.code] || {
+                price_vnd: String(p.price_vnd ?? 0),
+                original_price_vnd: String(p.original_price_vnd ?? p.price_vnd ?? 0),
+                is_active: p.is_active !== false,
+              };
+              const isSaving = savingPlanCode === p.code;
+              return (
+                <div
+                  key={p.code}
+                  style={{
+                    backgroundColor: T.card,
+                    border: `1px solid ${draft.is_active ? T.cardBorder : T.dangerBorder}`,
+                    borderRadius: "10px",
+                    padding: "0.75rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.4rem" }}>
+                    <div>
+                      <div style={{ fontSize: "0.8rem", fontWeight: 800, color: T.textHeading }}>{p.name_vi || p.code}</div>
+                      <div style={{ fontSize: "0.68rem", color: T.textMuted }}>{p.code} • {p.billing_cycle}</div>
+                    </div>
+                    <Badge tone={draft.is_active ? "success" : "danger"} isLight={isLight}>
+                      {draft.is_active ? "Đang bán" : "Tạm ẩn"}
+                    </Badge>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.45rem" }}>
+                    <label style={{ fontSize: "0.7rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                      <span>Giá bán (VNĐ)</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step={1000}
+                        value={draft.price_vnd}
+                        onChange={(e) =>
+                          setPlanDrafts((prev) => ({
+                            ...prev,
+                            [p.code]: { ...draft, price_vnd: e.target.value },
+                          }))
+                        }
+                        className="ds-focusable"
+                        style={{
+                          width: "100%",
+                          padding: "0.35rem 0.5rem",
+                          borderRadius: "6px",
+                          border: `1px solid ${T.border}`,
+                          backgroundColor: T.inputBg,
+                          color: T.textHeading,
+                          fontSize: "0.8rem",
+                          fontWeight: 700,
+                        }}
+                      />
+                    </label>
+                    <label style={{ fontSize: "0.7rem", color: T.textMuted, display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                      <span>Giá gốc (VNĐ)</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step={1000}
+                        value={draft.original_price_vnd}
+                        onChange={(e) =>
+                          setPlanDrafts((prev) => ({
+                            ...prev,
+                            [p.code]: { ...draft, original_price_vnd: e.target.value },
+                          }))
+                        }
+                        className="ds-focusable"
+                        style={{
+                          width: "100%",
+                          padding: "0.35rem 0.5rem",
+                          borderRadius: "6px",
+                          border: `1px solid ${T.border}`,
+                          backgroundColor: T.inputBg,
+                          color: T.textSecondary,
+                          fontSize: "0.8rem",
+                          fontWeight: 600,
+                        }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.15rem" }}>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      isLight={isLight}
+                      disabled={isSaving}
+                      onClick={() => handleSavePlanPrice(p.code)}
+                      style={{ flex: 1, fontSize: "0.74rem", minHeight: "30px" }}
+                    >
+                      {isSaving ? "Đang lưu..." : "Lưu giá"}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      isLight={isLight}
+                      disabled={isSaving}
+                      onClick={() => handleSavePlanPrice(p.code, !draft.is_active)}
+                      style={{ fontSize: "0.72rem", minHeight: "30px" }}
+                    >
+                      {draft.is_active ? "Ẩn" : "Mở bán"}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

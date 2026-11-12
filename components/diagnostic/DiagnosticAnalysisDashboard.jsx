@@ -611,6 +611,7 @@ export default function DiagnosticAnalysisDashboard({
       {showReviewModal && (
         <DiagnosticQuestionReview
           detailedAnswers={scoreResult.detailed_answers || []}
+          hasVipAccess={!currentUser?.isGuest && (currentUser?.role === "VIP" || currentUser?.role === "ADMIN")}
           onClose={() => setShowReviewModal(false)}
           T={T}
           isLight={isLight}

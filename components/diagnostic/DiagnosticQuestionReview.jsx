@@ -4,6 +4,7 @@ import { migrateQuestionExplanation } from "../../lib/explanation/explanation.mi
 
 export default function DiagnosticQuestionReview({
   detailedAnswers = [],
+  hasVipAccess = false,
   onClose,
   T,
   isLight,
@@ -321,6 +322,7 @@ export default function DiagnosticQuestionReview({
                       explanation: q.pedagogy.rule?.explanation || "",
                     })}
                     questionId={q.question_id}
+                    hasVipAccess={hasVipAccess}
                     isLight={isLight}
                   />
                 </div>

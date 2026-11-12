@@ -20,13 +20,28 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 let monetizationCatalogCache = { ts: 0, data: null };
 const MON_CATALOG_TTL_MS = 5 * 60 * 1000;
 
+export function invalidateMonetizationCatalogCache() {
+  monetizationCatalogCache = { ts: 0, data: null };
+}
+
 async function getMonetizationCatalog(serverClient) {
+  // Always fetch live subscription_plans so Admin zero-code price changes take effect immediately across all Vercel Lambdas
+  const livePlansPromise = serverClient
+    .from("subscription_plans")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
   if (monetizationCatalogCache.data && Date.now() - monetizationCatalogCache.ts < MON_CATALOG_TTL_MS) {
-    return monetizationCatalogCache.data;
+    const { data: livePlans } = await livePlansPromise;
+    return {
+      ...monetizationCatalogCache.data,
+      plans: livePlans || monetizationCatalogCache.data.plans,
+    };
   }
   const [{ data: plans }, { data: features }, { data: campaigns }, { data: paywallConfigs }, { data: experiments }] =
     await Promise.all([
-      serverClient.from("subscription_plans").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
+      livePlansPromise,
       serverClient.from("feature_entitlements").select("*").order("sort_order", { ascending: true }),
       serverClient.from("pricing_campaigns").select("*").eq("is_active", true),
       serverClient.from("paywall_configs").select("*").eq("is_active", true),
@@ -71,7 +86,7 @@ export default async function handler(req, res) {
       const { plans, features, ethicalCampaigns, paywallConfigs, mainExp } = catalog;
 
       if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
-        res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120");
+        res.setHeader("Cache-Control", "no-store, max-age=0, must-revalidate");
         const guestVariant = assignDeterministicAbVariant(mainExp.experiment_key, "guest", mainExp.variants);
         return res.status(200).json({
           success: true,

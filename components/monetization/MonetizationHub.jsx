@@ -14,6 +14,11 @@ const PROVIDERS = [
 const monetizationOverviewCache = new Map();
 const monetizationOverviewInflight = new Map();
 
+export function invalidateMonetizationClientCache() {
+  monetizationOverviewCache.clear();
+  monetizationOverviewInflight.clear();
+}
+
 export function prefetchMonetizationData({ userId = null, authToken = null } = {}) {
   if (typeof window === "undefined") return Promise.resolve();
   const cacheKey = userId || "guest";

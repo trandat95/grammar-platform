@@ -2,6 +2,7 @@ import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { FUNNEL_STAGES } from "../../../lib/monetization/behavioral-engine";
 import { computeAbSignificance } from "../../../lib/monetization/paywall-ab-engine";
+import { invalidateMonetizationCatalogCache } from "../monetization/overview";
 
 /**
  * Milestone 2.12.14: Admin Monetization Revenue (MRR/ARR/LTV), 14-Stage Funnel & A/B Dashboard API
@@ -122,17 +123,28 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { action, plan_code, price_vnd, trigger_key, is_active, daily_cap, coupon_code, discount_value } = req.body || {};
+    const { action, plan_code, price_vnd, original_price_vnd, trigger_key, is_active, daily_cap, coupon_code, discount_value } = req.body || {};
 
     try {
       if (action === "update_plan_price" && plan_code) {
+        const updatePayload = { updated_at: new Date().toISOString() };
+        if (price_vnd !== undefined && price_vnd !== null && !Number.isNaN(Number(price_vnd))) {
+          updatePayload.price_vnd = Math.max(0, Math.round(Number(price_vnd)));
+        }
+        if (original_price_vnd !== undefined && original_price_vnd !== null && !Number.isNaN(Number(original_price_vnd))) {
+          updatePayload.original_price_vnd = Math.max(0, Math.round(Number(original_price_vnd)));
+        }
+        if (typeof is_active === "boolean") {
+          updatePayload.is_active = is_active;
+        }
         const { data: updatedPlan, error } = await serverClient
           .from("subscription_plans")
-          .update({ price_vnd: Math.max(0, Math.round(Number(price_vnd))), updated_at: new Date().toISOString() })
+          .update(updatePayload)
           .eq("code", plan_code)
           .select()
           .single();
         if (error) throw error;
+        invalidateMonetizationCatalogCache();
         return res.status(200).json({ success: true, plan: updatedPlan });
       }
 
