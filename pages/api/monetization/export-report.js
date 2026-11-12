@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       `Chuoi hoc tap: ${streakRow?.current_streak || 0} ngay (Ky luc: ${streakRow?.longest_streak || 0} ngay)`,
       `Ngay xuat: ${new Date().toISOString()}`,
       "",
-      "CHI TIET THANH THAO 12 CHUYEN DE (MAI LAN HUONG):",
+      "CHI TIET THANH THAO 12 CHUYEN DE NGU PHAP:",
       ...twelveTopics.map(
         (t) =>
           `- Chuong ${String(t.chapter_number).padStart(2, "0")}: ${t.chapter_title_vi} | Mastery: ${t.mastery_score}% (${t.tier}) | Accuracy: ${t.accuracy}%`

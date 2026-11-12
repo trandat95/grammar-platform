@@ -37,7 +37,7 @@ INSERT INTO public.subscription_plans (code, name_vi, billing_cycle, price_vnd, 
   ('VIP_MONTHLY', 'VIP Tháng Linh Hoạt', 'monthly', 99000, 129000, 7, 'Dùng thử 7 ngày', false, true, 10),
   ('VIP_QUARTERLY', 'VIP 3 Tháng Bứt Phá', 'quarterly', 249000, 297000, 7, 'Tiết kiệm 16%', false, true, 20),
   ('VIP_YEARLY', 'VIP Năm Chuyên Sâu', 'yearly', 699000, 1188000, 7, 'Best Value • Tiết kiệm 41%', true, true, 30),
-  ('VIP_LIFETIME', 'VIP Trọn Đời Mai Lan Hương', 'lifetime', 1990000, 2990000, 0, 'Sở hữu vĩnh viễn', false, true, 40)
+  ('VIP_LIFETIME', 'VIP Trọn Đời Toàn Diện', 'lifetime', 1990000, 2990000, 0, 'Sở hữu vĩnh viễn', false, true, 40)
 ON CONFLICT (code) DO UPDATE SET
   name_vi = EXCLUDED.name_vi,
   billing_cycle = EXCLUDED.billing_cycle,

@@ -217,7 +217,7 @@ export default function DiagnosticOnboarding({
           Ma Trận Đánh Giá 10 Nhóm Kiến Thức Ngữ Pháp Chuẩn Hóa
         </h2>
         <p style={{ fontSize: "0.875rem", color: T.textMuted, marginBottom: "1.25rem" }}>
-          Được trích xuất từ 2.939 câu hỏi giáo trình chuẩn Mai Lan Hương &amp; Hà Thanh Uyên, phân bổ cân đối theo độ khó.
+          Được trích xuất từ 2.939 câu hỏi ngữ pháp học thuật chuẩn hóa, phân bổ cân đối theo độ khó.
         </p>
 
         <div style={{ overflowX: "auto" }}>

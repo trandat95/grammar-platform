@@ -368,7 +368,7 @@ export default function MonetizationHub({
             <h1 style={{ margin: "0 0 0.4rem", fontSize: "1.22rem", fontWeight: 800, color: T.textHeading }}>
               {hasVip
                 ? "Bạn đang sở hữu Toàn quyền Hệ thống Ngữ pháp Cá nhân hóa VIP"
-                : "Đầu tư Hệ thống Cải thiện Ngữ pháp Cá nhân hóa Chuẩn Mai Lan Hương"}
+                : "Đầu tư Hệ thống Cải thiện Ngữ pháp Cá nhân hóa Toàn Diện"}
             </h1>
             <p style={{ margin: 0, fontSize: "0.86rem", color: T.textSecondary, lineHeight: 1.55 }}>
               <strong>{psychology.progressHighlight}</strong> {psychology.personalizedHook}
