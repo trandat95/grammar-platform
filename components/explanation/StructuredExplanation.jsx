@@ -119,6 +119,7 @@ export default function StructuredExplanation({
 
   return (
     <div
+      className="ge-expl-card"
       style={{
         backgroundColor: T.card,
         border: `1px solid ${T.cardBorder}`,
@@ -176,8 +177,9 @@ export default function StructuredExplanation({
         </div>
 
         {/* Difficulty Level Switcher Tabs (Only Cơ bản, Sơ cấp, Nâng cao [VIP]) */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
+        <div className="ge-expl-levels" style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
           <span
+            className="ge-expl-levels-label"
             style={{
               fontSize: "0.75rem",
               fontFamily: "var(--font-sans)",
@@ -333,6 +335,7 @@ export default function StructuredExplanation({
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {/* 1. SIGNAL */}
         <div
+          className="ge-expl-step"
           style={{
             backgroundColor: T.infoBg,
             border: `1px solid ${T.infoBorder}`,
@@ -389,6 +392,7 @@ export default function StructuredExplanation({
 
         {/* 2. RULE & FORMULA */}
         <div
+          className="ge-expl-step"
           style={{
             backgroundColor: T.successBg,
             border: `1px solid ${T.successBorder}`,
@@ -482,6 +486,7 @@ export default function StructuredExplanation({
 
         {/* 3. TRANSLATION & VOCABULARY */}
         <div
+          className="ge-expl-step"
           style={{
             backgroundColor: T.bgElevated,
             border: `1px solid ${T.cardBorder}`,
@@ -542,6 +547,7 @@ export default function StructuredExplanation({
         {/* 4. COMMON MISTAKES (Elementary / Intermediate / Advanced) */}
         {pres.visibleSteps.includes(4) && expl.common_mistakes && expl.common_mistakes.length > 0 && (
           <div
+            className="ge-expl-step"
             style={{
               backgroundColor: T.dangerBg,
               border: `1px solid ${T.dangerBorder}`,
@@ -591,6 +597,7 @@ export default function StructuredExplanation({
         {/* 5. EXAM TIPS (Intermediate / Advanced) */}
         {pres.visibleSteps.includes(5) && expl.exam_tips && expl.exam_tips.length > 0 && (
           <div
+            className="ge-expl-step"
             style={{
               backgroundColor: T.warningBg,
               border: `1px solid ${T.warningBorder}`,

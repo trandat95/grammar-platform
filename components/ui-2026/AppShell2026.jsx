@@ -84,7 +84,7 @@ export default function AppShell2026({
       {/* 1. Sticky Header (56px) */}
       <header className="ge-header-2026" role="banner">
         {/* Left: Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+        <div className="ge-brand-wrap" style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
           <div
             style={{
               width: 28,
@@ -97,16 +97,21 @@ export default function AppShell2026({
               fontWeight: 800,
               fontSize: "0.85rem",
               boxShadow: "var(--ds-shadow-sm)",
+              flexShrink: 0,
             }}
           >
             G
           </div>
           <span
+            className="ge-brand-title"
             style={{
               fontWeight: 800,
               fontSize: "0.92rem",
               letterSpacing: "-0.02em",
               color: "var(--ds-text-heading)",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             Grammar Engine
@@ -275,10 +280,11 @@ export default function AppShell2026({
             onClick={onToggleTheme}
             aria-label={isLight ? "Chuyển sang giao diện Tối" : "Chuyển sang giao diện Sáng"}
             title={isLight ? "Chuyển sang Dark Mode" : "Chuyển sang Light Mode"}
-            className="ds-btn ds-focusable"
+            className="ds-btn ds-focusable ge-theme-btn"
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "4px",
               padding: "4px 8px",
               borderRadius: "999px",
@@ -367,10 +373,11 @@ export default function AppShell2026({
           <button
             type="button"
             onClick={onOpenAuthModal}
-            className="ds-btn ds-focusable"
+            className="ds-btn ds-focusable ge-auth-pill"
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "6px",
               padding: "5px 11px",
               borderRadius: "999px",
@@ -381,6 +388,7 @@ export default function AppShell2026({
               fontWeight: 700,
               cursor: "pointer",
               maxWidth: "130px",
+              whiteSpace: "nowrap",
             }}
           >
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

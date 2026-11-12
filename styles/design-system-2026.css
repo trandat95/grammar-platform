@@ -154,9 +154,15 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
   background-color: var(--ds-bg);
   color: var(--ds-text);
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ge-app-root table {
+  max-width: 100%;
 }
 
 .ge-header-2026 {
@@ -164,6 +170,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 0;
   z-index: 40;
   width: 100%;
+  max-width: 100vw;
   box-sizing: border-box;
   height: var(--ds-header-h);
   padding: 0 20px;
@@ -516,13 +523,47 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Mobile Standard (<= 767px / 375px Viewport) */
+/* Mobile Standard (<= 767px / 375px-430px Viewport) */
 @media (max-width: 767px) {
   body {
-    padding-bottom: 66px; /* Chừa chỗ cho Bottom Navigation Bar */
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)); /* Chừa chỗ cho Bottom Nav + iOS safe-area */
   }
   .ge-header-2026 {
-    padding: 0 12px;
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .ge-brand-wrap {
+    gap: 6px !important;
+  }
+  .ge-brand-title {
+    font-size: 0.84rem !important;
+    max-width: 124px;
+  }
+  .ge-header-actions {
+    gap: 5px !important;
+    flex-shrink: 0;
+  }
+  .ge-theme-btn {
+    padding: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    gap: 0 !important;
+    justify-content: center !important;
+  }
+  .ge-streak-pill-live {
+    padding: 4px 8px !important;
+    font-size: 0.72rem !important;
+    min-height: 36px !important;
+    min-width: auto !important;
+  }
+  .ge-auth-pill {
+    padding: 5px 10px !important;
+    font-size: 0.74rem !important;
+    max-width: 102px !important;
+    min-height: 36px !important;
+    min-width: auto !important;
   }
   .ge-hub-nav {
     display: none; /* Chuyển xuống Bottom Nav 5 nút */
@@ -534,17 +575,96 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex;
   }
   .ge-subnav-bar {
-    padding: 8px 14px;
+    padding: 8px 10px;
+  }
+  .ge-subnav-pills {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .ge-subnav-btn {
+    justify-content: center;
+    font-size: 0.75rem;
+    padding: 6px 8px;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.25;
   }
   .ge-study-main {
-    padding: 16px 14px;
+    padding: 14px 10px;
+  }
+  .ge-quiz-area {
+    padding: 12px 10px 84px !important;
+  }
+  .ge-diag-wrap {
+    padding: 12px 10px 84px !important;
+  }
+  .ge-diag-topbar {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  .ge-diag-card {
+    padding: 14px 12px !important;
+    border-radius: 12px !important;
+  }
+  .ge-diag-palette {
+    padding: 12px 10px !important;
+    margin-bottom: 14px !important;
+  }
+  .ge-diag-palette-head {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .ge-diag-legend {
+    flex-wrap: wrap !important;
+    gap: 8px 12px !important;
+  }
+  .ge-diag-legend > span {
+    white-space: nowrap;
+  }
+  .ge-diag-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .ge-diag-btn-prev,
+  .ge-diag-btn-next {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 10px !important;
+    font-size: 0.84rem !important;
+    white-space: nowrap;
+  }
+  .ge-diag-btn-submit {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: center;
+    padding: 12px 14px !important;
+    font-size: 0.9rem !important;
+    white-space: nowrap;
+  }
+  .ge-expl-card {
+    padding: 12px 10px !important;
+  }
+  .ge-expl-levels {
+    width: 100%;
+  }
+  .ge-expl-levels-label {
+    flex-basis: 100%;
+    margin-bottom: 2px;
+  }
+  .ge-expl-step {
+    padding: 10px 12px !important;
   }
   .ge-mobile-bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
     z-index: 90;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -590,9 +710,9 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* WCAG 2.5.8 Touch Target >= 44x44px trên thiết bị cảm ứng */
+/* WCAG 2.5.8 Touch Target >= 44x44px trên thiết bị cảm ứng (ngoại trừ nút header compact) */
 @media (pointer: coarse) {
-  .ds-btn,
+  .ds-btn:not(.ge-theme-btn):not(.ge-auth-pill),
   .ds-touch-target,
   .ge-hub-tab,
   .ge-subnav-btn,

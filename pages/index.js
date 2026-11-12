@@ -6473,7 +6473,7 @@ export default function Home() {
         {/* VIEW 2: QUIZ ENGINE (50 RANDOM QUESTIONS BY TOPIC)             */}
         {/* ============================================================== */}
         {currentView === "quiz" && (
-          <div id="quiz-area" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div id="quiz-area" className="ge-quiz-area" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Daily Quiz Limit Notice for Free User */}

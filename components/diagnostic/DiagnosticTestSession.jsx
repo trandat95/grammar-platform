@@ -150,6 +150,7 @@ export default function DiagnosticTestSession({
 
   return (
     <div
+      className="ge-diag-wrap"
       style={{
         maxWidth: "960px",
         margin: "0 auto",
@@ -161,6 +162,7 @@ export default function DiagnosticTestSession({
     >
       {/* Top Header Bar */}
       <div
+        className="ge-diag-topbar"
         style={{
           display: "flex",
           alignItems: "center",
@@ -257,6 +259,7 @@ export default function DiagnosticTestSession({
 
       {/* Question Card */}
       <div
+        className="ge-diag-card"
         style={{
           backgroundColor: T.card,
           borderRadius: "1rem",
@@ -422,6 +425,7 @@ export default function DiagnosticTestSession({
 
         {/* Question Drawer / Palette (30 numbers) */}
         <div
+          className="ge-diag-palette"
           style={{
             padding: "1rem",
             backgroundColor: "var(--ds-bg-elevated)",
@@ -431,17 +435,20 @@ export default function DiagnosticTestSession({
           }}
         >
           <div
+            className="ge-diag-palette-head"
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "0.5rem",
               marginBottom: "0.75rem",
               fontSize: "0.75rem",
               color: T.textMuted,
             }}
           >
-            <span>Bảng danh sách câu hỏi:</span>
-            <div style={{ display: "flex", gap: "0.75rem" }}>
+            <span style={{ fontWeight: 700, color: T.textSecondary }}>Bảng danh sách câu hỏi:</span>
+            <div className="ge-diag-legend" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
               <span>🟢 Đã chọn ({answeredCount})</span>
               <span>🚩 Đánh dấu ({flaggedCount})</span>
               <span>⚪ Chưa chọn ({unansweredCount})</span>
@@ -451,8 +458,8 @@ export default function DiagnosticTestSession({
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(32px, 1fr))",
-              gap: "0.35rem",
+              gridTemplateColumns: "repeat(auto-fill, minmax(36px, 1fr))",
+              gap: "0.4rem",
             }}
           >
             {questions.map((q, idx) => {
@@ -483,8 +490,8 @@ export default function DiagnosticTestSession({
                   key={q.id}
                   onClick={() => handleJumpToQuestion(idx)}
                   style={{
-                    height: "32px",
-                    borderRadius: "0.4rem",
+                    height: "36px",
+                    borderRadius: "0.45rem",
                     border: `2px solid ${isCurr ? T.accent : borderColor}`,
                     backgroundColor: bgColor,
                     color: textColor,
@@ -519,19 +526,25 @@ export default function DiagnosticTestSession({
 
         {/* Bottom Actions Bar */}
         <div
+          className="ge-diag-actions"
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             marginTop: "auto",
-            gap: "1rem",
+            gap: "0.75rem",
             flexWrap: "wrap",
           }}
         >
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
+            className="ge-diag-btn-prev"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: "auto",
               padding: "0.75rem 1.25rem",
               borderRadius: "0.6rem",
               backgroundColor: "var(--ds-card)",
@@ -541,48 +554,57 @@ export default function DiagnosticTestSession({
               fontWeight: 600,
               cursor: currentIndex === 0 ? "not-allowed" : "pointer",
               opacity: currentIndex === 0 ? 0.4 : 1,
+              whiteSpace: "nowrap",
             }}
           >
             ← Câu trước
           </button>
 
-          <div style={{ display: "flex", gap: "0.75rem" }}>
-            {currentIndex < totalQuestions - 1 ? (
-              <button
-                onClick={handleNext}
-                style={{
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "0.6rem",
-                  backgroundColor: "var(--ds-btn-primary)",
-                  color: "#ffffff",
-                  border: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                Câu tiếp theo →
-              </button>
-            ) : null}
-
+          {currentIndex < totalQuestions - 1 ? (
             <button
-              onClick={() => setShowSubmitModal(true)}
-              disabled={isSubmitting}
+              onClick={handleNext}
+              className="ge-diag-btn-next"
               style={{
-                padding: "0.75rem 1.75rem",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0.75rem 1.5rem",
                 borderRadius: "0.6rem",
-                backgroundColor: "var(--ds-btn-success)",
+                backgroundColor: "var(--ds-btn-primary)",
                 color: "#ffffff",
                 border: "none",
-                fontSize: "0.95rem",
+                fontSize: "0.9rem",
                 fontWeight: 700,
-                cursor: isSubmitting ? "wait" : "pointer",
-                boxShadow: "0 2px 8px rgba(5, 150, 105, 0.3)",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
               }}
             >
-              {isSubmitting ? "Đang chấm điểm..." : "Nộp bài kiểm tra ➔"}
+              Câu tiếp theo →
             </button>
-          </div>
+          ) : null}
+
+          <button
+            onClick={() => setShowSubmitModal(true)}
+            disabled={isSubmitting}
+            className="ge-diag-btn-submit"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "0.75rem 1.75rem",
+              borderRadius: "0.6rem",
+              backgroundColor: "var(--ds-btn-success)",
+              color: "#ffffff",
+              border: "none",
+              fontSize: "0.95rem",
+              fontWeight: 700,
+              cursor: isSubmitting ? "wait" : "pointer",
+              boxShadow: "0 2px 8px rgba(5, 150, 105, 0.3)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {isSubmitting ? "Đang chấm điểm..." : "Nộp bài kiểm tra ➔"}
+          </button>
         </div>
       </div>
 
