@@ -19,6 +19,8 @@ export default function FocusTrapModal2026({
   const titleId = useId();
   const dialogRef = useRef(null);
   const previousFocusRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -30,6 +32,14 @@ export default function FocusTrapModal2026({
     const timer = setTimeout(() => {
       const modalEl = dialogRef.current;
       if (!modalEl) return;
+      if (modalEl.contains(document.activeElement) && document.activeElement !== modalEl) {
+        return;
+      }
+      const firstInput = modalEl.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+      if (firstInput) {
+        firstInput.focus();
+        return;
+      }
       const focusables = modalEl.querySelectorAll(focusableSelector);
       if (focusables.length > 0) {
         focusables[0].focus();
@@ -39,10 +49,10 @@ export default function FocusTrapModal2026({
     }, 10);
 
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && onClose) {
+      if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
         e.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key === "Tab" && dialogRef.current) {
@@ -68,7 +78,7 @@ export default function FocusTrapModal2026({
         previousFocusRef.current.focus();
       }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

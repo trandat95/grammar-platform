@@ -15,6 +15,8 @@ export function Modal({
 }) {
   const dialogRef = useRef(null);
   const previousFocusRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   const T = getThemeTokens(isLight);
   const C = getComponentTokens(isLight);
 
@@ -23,21 +25,30 @@ export function Modal({
     previousFocusRef.current = document.activeElement;
 
     const timer = setTimeout(() => {
-      if (!dialogRef.current) return;
-      const focusables = dialogRef.current.querySelectorAll(
+      const modalEl = dialogRef.current;
+      if (!modalEl) return;
+      if (modalEl.contains(document.activeElement) && document.activeElement !== modalEl) {
+        return;
+      }
+      const firstInput = modalEl.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])');
+      if (firstInput) {
+        firstInput.focus();
+        return;
+      }
+      const focusables = modalEl.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
       if (focusables.length > 0) {
         focusables[0].focus();
       } else {
-        dialogRef.current.focus();
+        modalEl.focus();
       }
     }, 10);
 
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && onClose) {
+      if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key === "Tab" && dialogRef.current) {
@@ -67,7 +78,7 @@ export function Modal({
         previousFocusRef.current.focus();
       }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
