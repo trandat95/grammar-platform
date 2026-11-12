@@ -24,11 +24,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: "22"
 
       - name: Run Engine, Design Token & Security Validation Suites
         run: |
@@ -39,7 +38,7 @@ jobs:
           python scripts/validate-milestone-211.py
 
       - name: Install dependencies (Next.js / Prisma)
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Verify Production Next.js Build
         env:
