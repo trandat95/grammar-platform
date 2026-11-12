@@ -18,7 +18,7 @@ function escapeCsvCell(val) {
  * - Paginated search & UTF-8 BOM CSV export (?format=csv)
  */
 export default async function handler(req, res) {
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
     const adminContext = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_users_read" });

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const adminCtx = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_monetization" });
   if (!adminCtx) return;
 
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
     try {
@@ -166,8 +166,14 @@ export default async function handler(req, res) {
           .update(updatePayload)
           .eq("code", plan_code)
           .select()
-          .single();
+          .maybeSingle();
         if (error) throw error;
+        if (!updatedPlan) {
+          return res.status(403).json({
+            success: false,
+            error: `Không thể lưu thay đổi cho gói '${plan_code}' (không tìm thấy bản ghi hoặc thiếu quyền RLS).`,
+          });
+        }
         invalidateMonetizationCatalogCache();
         return res.status(200).json({ success: true, plan: updatedPlan });
       }
@@ -182,8 +188,14 @@ export default async function handler(req, res) {
           })
           .eq("trigger_key", trigger_key)
           .select()
-          .single();
+          .maybeSingle();
         if (error) throw error;
+        if (!updatedPw) {
+          return res.status(403).json({
+            success: false,
+            error: `Không thể cập nhật paywall '${trigger_key}' (không tìm thấy hoặc thiếu quyền RLS).`,
+          });
+        }
         return res.status(200).json({ success: true, paywallConfig: updatedPw });
       }
 
@@ -226,8 +238,14 @@ export default async function handler(req, res) {
             { onConflict: "code" }
           )
           .select()
-          .single();
+          .maybeSingle();
         if (error) throw error;
+        if (!created) {
+          return res.status(403).json({
+            success: false,
+            error: `Không thể lưu mã giảm giá '${normalizedCode}' (thiếu quyền ghi RLS).`,
+          });
+        }
         return res.status(200).json({ success: true, coupon: created });
       }
 
@@ -238,8 +256,14 @@ export default async function handler(req, res) {
           .update({ is_active: Boolean(is_active) })
           .eq("code", normalizedCode)
           .select()
-          .single();
+          .maybeSingle();
         if (error) throw error;
+        if (!updatedCoupon) {
+          return res.status(404).json({
+            success: false,
+            error: `Không thể cập nhật trạng thái mã '${normalizedCode}' (không tìm thấy hoặc thiếu quyền RLS).`,
+          });
+        }
         return res.status(200).json({ success: true, coupon: updatedCoupon });
       }
 
@@ -249,7 +273,7 @@ export default async function handler(req, res) {
           .from("discount_coupons")
           .select("id, code, used_count")
           .eq("code", normalizedCode)
-          .single();
+          .maybeSingle();
         if (fetchErr || !existing) {
           return res.status(404).json({ success: false, error: `Không tìm thấy mã giảm giá '${normalizedCode}'.` });
         }
@@ -264,8 +288,14 @@ export default async function handler(req, res) {
             .update({ is_active: false })
             .eq("id", existing.id)
             .select()
-            .single();
+            .maybeSingle();
           if (archErr) throw archErr;
+          if (!archived) {
+            return res.status(403).json({
+              success: false,
+              error: `Không thể tạm dừng mã '${normalizedCode}' (thiếu quyền ghi RLS).`,
+            });
+          }
           return res.status(200).json({ success: true, softDeactivated: true, coupon: archived });
         }
 

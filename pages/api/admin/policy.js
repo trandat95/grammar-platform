@@ -6,7 +6,7 @@ import { AuditRepository } from "../../../repositories/audit.repository";
  * Milestone 2.4.7 & 2.4.9: Dynamic Quota Policies with Policy Versioning & Step-Up Auth
  */
 export default async function handler(req, res) {
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
     const adminContext = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_policy_read" });

@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const adminContext = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_overview" });
   if (!adminContext) return;
 
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
   const today = new Date().toISOString().split("T")[0];
   const weekAgoIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const dayAgoIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
