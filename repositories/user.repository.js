@@ -6,7 +6,7 @@ export const UserRepository = {
       .from("profiles")
       .select("*")
       .eq("id", userId)
-      .single();
+      .maybeSingle();
     if (error && error.code !== "PGRST116") throw error;
     return data;
   },
@@ -36,7 +36,7 @@ export const UserRepository = {
       .from("user_learning_trackers")
       .select("*")
       .eq("user_id", userId)
-      .single();
+      .maybeSingle();
     if (error && error.code !== "PGRST116") throw error;
     return data;
   },
