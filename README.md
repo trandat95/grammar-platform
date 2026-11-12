@@ -54,7 +54,7 @@ grammar-platform/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/doanphuongtanthoihiep-crypto/grammar-platform.git
+   git clone https://github.com/trandat95/grammar-platform.git
    cd grammar-platform
    ```
 

@@ -34,7 +34,7 @@
   *(Ghi chú Vận hành: Mọi thao tác ghi Server-Authoritative trên Production yêu cầu bổ sung `SUPABASE_SERVICE_ROLE_KEY` vào Vercel Environment Variables của project `grammar-platform`).*
 * **Thông tin Môi trường kết nối:**
   - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
-  - 🐙 **GitHub Repository:** [doanphuongtanthoihiep-crypto/grammar-platform](https://github.com/doanphuongtanthoihiep-crypto/grammar-platform)
+  - 🐙 **GitHub Repository:** [trandat95/grammar-platform](https://github.com/trandat95/grammar-platform)
   - ⚡ **Vercel Project ID:** `prj_yfOLrVVbBV0b8O8G2ihrDhR5HLsa`
   - 🐘 **Supabase Project:**
     - Project ID / Ref: `wtvlbbcyvtqqygtojxay`
