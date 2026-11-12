@@ -5013,122 +5013,26 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* ZONE A: TODAY FOCUS & MICRO-ACTION (MAX 4 CARDS) */}
+              {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone !== "analytics" && (
                 <div>
-                  {/* SMART DAILY RECOMMENDATION CARD */}
-                  <div
-                    style={{
-                      backgroundColor: "var(--ds-card)",
-                      border: "1px solid var(--ds-accent-border)",
-                      borderRadius: "12px",
-                      padding: "1.5rem 1.75rem",
-                      marginBottom: "1.5rem",
-                      position: "relative",
-                      overflow: "hidden",
-                      boxShadow: "var(--ds-shadow-sm)",
-                    }}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                      <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.4rem" }}>
-                          <span
-                            style={{
-                              fontSize: "0.7rem",
-                              fontFamily: "var(--font-sans)",
-                              backgroundColor: dailyRecommendation.tagBg || "var(--ds-accent-bg)",
-                              color: dailyRecommendation.tagColor || "var(--ds-accent)",
-                              border: `1px solid ${dailyRecommendation.tagBorder || "var(--ds-accent-border)"}`,
-                              padding: "0.15rem 0.5rem",
-                              borderRadius: "4px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            {dailyRecommendation.tag}
-                          </span>
-                          <span style={{ fontSize: "0.8rem", color: "var(--ds-accent)", fontWeight: "600" }}>Đề xuất học hôm nay</span>
-                        </div>
-
-                        <h2 style={{ fontSize: "1.3rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                          Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
-                        </h2>
-
-                        <p style={{ fontSize: "0.875rem", color: "var(--ds-text-muted)", margin: "0.2rem 0 0.85rem 0" }}>
-                          {dailyRecommendation.reason}
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={startRecommendedLesson}
-                        className="ds-focusable"
-                        style={{
-                          padding: "0.65rem 1.5rem",
-                          backgroundColor: "var(--ds-btn-primary)",
-                          color: "#ffffff",
-                          border: "none",
-                          borderRadius: "8px",
-                          fontSize: "0.875rem",
-                          fontWeight: "700",
-                          cursor: "pointer",
-                          boxShadow: "var(--ds-shadow-md)",
-                        }}
-                      >
-                        Bắt đầu học ngay hôm nay →
-                      </button>
-                    </div>
-
-                    {/* Daily Goal Progress Bar */}
-                    <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--ds-border-subtle)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8rem", marginBottom: "0.4rem" }}>
-                        <span style={{ color: "var(--ds-text-muted)" }}>
-                          🎯 Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
-                        </span>
-                        <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-sans)", fontWeight: "600" }}>
-                          {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
-                        </span>
-                      </div>
-                      <div className="ge-energy-bar-track" style={{ width: "100%", height: "8px", backgroundColor: "var(--ds-bg-elevated)" }}>
-                        <div
-                          className="ge-energy-bar-fill"
-                          style={{
-                            width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
-                            height: "100%",
-                            backgroundColor: "var(--ds-btn-success)",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* MILESTONE 2.5: SPACED REPETITION & KNOWLEDGE GRAPH MASTERY PANEL */}
-                  <div style={{ marginBottom: "1.5rem" }}>
-                    <SpacedRepetitionPanel
-                      userId={!currentUser?.isGuest ? currentUser?.id : null}
-                      authToken={activeAuthToken}
-                      hasVipAccess={!currentUser?.isGuest && (currentUser?.role === "VIP" || currentUser?.role === "ADMIN")}
-                      isLight={isLight}
-                      onOpenLessonByCode={openLessonByCode}
-                    />
-                  </div>
-
-                  {/* MILESTONE 2.8: DIAGNOSTIC PLACEMENT ASSESSMENT HERO CALLOUT */}
+                  {/* 1. PRIORITY #1: DIAGNOSTIC PLACEMENT ASSESSMENT & PERSONALIZED ROADMAP */}
                   <div
                     style={{
                       backgroundColor: "var(--ds-accent-bg)",
                       border: "1px solid var(--ds-accent-border)",
                       borderRadius: "12px",
-                      padding: "1.4rem 1.75rem",
-                      marginBottom: "1.5rem",
+                      padding: "1.35rem 1.65rem",
+                      marginBottom: "1.35rem",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
                       flexWrap: "wrap",
-                      gap: "1.25rem",
+                      gap: "1.15rem",
                       boxShadow: "var(--ds-shadow-sm)",
                     }}
                   >
-                    <div style={{ flex: "1 1 500px" }}>
+                    <div style={{ flex: "1 1 480px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem", flexWrap: "wrap" }}>
                         <span
                           style={{
@@ -5148,7 +5052,7 @@ export default function Home() {
                           30 câu trắc nghiệm • 15-20 phút
                         </span>
                       </div>
-                      <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.35rem 0" }}>
+                      <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.3rem 0" }}>
                         Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
                       </h3>
                       <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
@@ -5181,63 +5085,171 @@ export default function Home() {
                     </button>
                   </div>
 
-                  {/* 4 Analytics Metrics Grid */}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                  {/* 2. 4 ANALYTICS METRICS SNAPSHOT GRID */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Bài học đã hoàn thành
                       </div>
-                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
-                        {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>/ {totalLessonsCount}</span>
+                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                        {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalLessonsCount}</span>
                       </div>
-                      <div style={{ fontSize: "0.8rem", color: "var(--ds-success)" }}>
+                      <div style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600" }}>
                         {overallLessonsProgress}% toàn bộ khóa học
                       </div>
                     </div>
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Câu hỏi đã giải đúng
                       </div>
-                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
-                        {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>/ {totalQuestionsCount}</span>
+                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                        {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalQuestionsCount}</span>
                       </div>
-                      <div style={{ fontSize: "0.8rem", color: "var(--ds-accent)" }}>
+                      <div style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
                         Tích lũy từ bài tập &amp; Quiz
                       </div>
                     </div>
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Tổng điểm kinh nghiệm
                       </div>
-                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: "0.4rem 0" }}>
-                        {userTracker.xp} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>XP</span>
+                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                        {userTracker.xp} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>XP</span>
                       </div>
-                      <div style={{ fontSize: "0.8rem", color: "var(--ds-warning)" }}>
+                      <div style={{ fontSize: "0.78rem", color: "var(--ds-warning)", fontWeight: "600" }}>
                         {userRank.title}
                       </div>
                     </div>
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.25rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "600" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
+                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Sổ tay câu sai cần ôn
                       </div>
-                      <div style={{ fontSize: "1.75rem", fontWeight: "700", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.4rem 0" }}>
-                        {savedMistakes.length} <span style={{ fontSize: "0.95rem", color: "var(--ds-text-muted)" }}>câu</span>
+                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                        {savedMistakes.length} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>câu</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => setCurrentView("mistakes")}
                         className="ds-focusable"
-                        style={{ fontSize: "0.8rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0 }}
+                        style={{ fontSize: "0.78rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0, fontWeight: "600" }}
                       >
                         Xem và luyện lại ngay →
                       </button>
                     </div>
                   </div>
 
-                  {/* HOME LEADERBOARD SHOWCASE (LIVE RANKING & ENERGY) */}
+                  {/* 3. TWO-COLUMN STUDY FOCUS: DAILY LESSON + SPACED REPETITION */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+                      gap: "1.15rem",
+                      alignItems: "stretch",
+                      marginBottom: "1.35rem",
+                    }}
+                  >
+                    {/* SMART DAILY RECOMMENDATION CARD */}
+                    <div
+                      style={{
+                        backgroundColor: "var(--ds-card)",
+                        border: "1px solid var(--ds-accent-border)",
+                        borderRadius: "12px",
+                        padding: "1.35rem 1.5rem",
+                        position: "relative",
+                        overflow: "hidden",
+                        boxShadow: "var(--ds-shadow-sm)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.45rem", flexWrap: "wrap" }}>
+                          <span
+                            style={{
+                              fontSize: "0.7rem",
+                              fontFamily: "var(--font-sans)",
+                              backgroundColor: dailyRecommendation.tagBg || "var(--ds-accent-bg)",
+                              color: dailyRecommendation.tagColor || "var(--ds-accent)",
+                              border: `1px solid ${dailyRecommendation.tagBorder || "var(--ds-accent-border)"}`,
+                              padding: "0.15rem 0.5rem",
+                              borderRadius: "4px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {dailyRecommendation.tag}
+                          </span>
+                          <span style={{ fontSize: "0.8rem", color: "var(--ds-accent)", fontWeight: "600" }}>Đề xuất học hôm nay</span>
+                        </div>
+
+                        <h2 style={{ fontSize: "1.22rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                          Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
+                        </h2>
+
+                        <p style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", margin: "0.2rem 0 1rem 0", lineHeight: 1.45 }}>
+                          {dailyRecommendation.reason}
+                        </p>
+                      </div>
+
+                      <div>
+                        <button
+                          type="button"
+                          onClick={startRecommendedLesson}
+                          className="ds-focusable"
+                          style={{
+                            padding: "0.6rem 1.35rem",
+                            backgroundColor: "var(--ds-btn-primary)",
+                            color: "#ffffff",
+                            border: "none",
+                            borderRadius: "8px",
+                            fontSize: "0.86rem",
+                            fontWeight: "700",
+                            cursor: "pointer",
+                            boxShadow: "var(--ds-shadow-md)",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          Bắt đầu học ngay hôm nay →
+                        </button>
+
+                        {/* Daily Goal Progress Bar */}
+                        <div style={{ paddingTop: "0.9rem", borderTop: "1px solid var(--ds-border-subtle)" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.78rem", marginBottom: "0.4rem" }}>
+                            <span style={{ color: "var(--ds-text-muted)" }}>
+                              🎯 Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
+                            </span>
+                            <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-sans)", fontWeight: "700" }}>
+                              {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
+                            </span>
+                          </div>
+                          <div className="ge-energy-bar-track" style={{ width: "100%", height: "8px", backgroundColor: "var(--ds-bg-elevated)" }}>
+                            <div
+                              className="ge-energy-bar-fill"
+                              style={{
+                                width: `${Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%`,
+                                height: "100%",
+                                backgroundColor: "var(--ds-btn-success)",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* MILESTONE 2.5: SPACED REPETITION & KNOWLEDGE GRAPH MASTERY PANEL */}
+                    <SpacedRepetitionPanel
+                      userId={!currentUser?.isGuest ? currentUser?.id : null}
+                      authToken={activeAuthToken}
+                      hasVipAccess={!currentUser?.isGuest && (currentUser?.role === "VIP" || currentUser?.role === "ADMIN")}
+                      isLight={isLight}
+                      onOpenLessonByCode={openLessonByCode}
+                    />
+                  </div>
+
+                  {/* 4. HOME LEADERBOARD SHOWCASE (LIVE RANKING & ENERGY) */}
                   <div style={{ marginBottom: "1.75rem" }}>
                     <LeaderboardPanel
                       userId={!currentUser?.isGuest ? currentUser?.id : null}
