@@ -4,7 +4,7 @@ import {
   findPrerequisites,
   getDependentConcepts,
 } from "../../../lib/knowledge/knowledge-graph";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.5.7: Grammar Knowledge Graph (DAG) API

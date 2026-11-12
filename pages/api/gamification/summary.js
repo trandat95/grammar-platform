@@ -10,7 +10,7 @@ import {
 } from "../../../lib/gamification/challenge-streak-engine";
 import { ensureActiveChallengesForUser } from "../../../lib/gamification/gamification-processor";
 import { invalidateLeaderboardServerCache } from "./leaderboard";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

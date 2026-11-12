@@ -3,7 +3,7 @@ import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { FUNNEL_STAGES } from "../../../lib/monetization/behavioral-engine";
 import { computeAbSignificance } from "../../../lib/monetization/paywall-ab-engine";
 import { invalidateMonetizationCatalogCache } from "../monetization/overview";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.12.14: Admin Monetization Revenue (MRR/ARR/LTV), 14-Stage Funnel & A/B Dashboard API

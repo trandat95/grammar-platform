@@ -7,7 +7,7 @@ import {
   getLocalWeekKey,
   getLocalMonthKey,
 } from "../../../lib/gamification/challenge-streak-engine";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const ALLOWED_BOARDS = ["weekly_xp", "monthly_xp", "all_time_xp", "weekly_consistency", "grammar_mastery"];
 const LEADERBOARD_CACHE_TTL_MS = 10 * 1000;

@@ -1,6 +1,6 @@
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 export default async function handler(req, res) {
   const correlationId = attachCorrelationId(req, res);

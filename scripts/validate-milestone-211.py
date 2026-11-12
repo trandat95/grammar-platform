@@ -130,7 +130,37 @@ def check_3_api_routes_hygiene_and_idor_guards():
     adapter = read_text("lib/monetization/payment-provider-adapter.js")
     assert 'process.env.NODE_ENV !== "production"' in adapter, "Webhook secret fallback not gated by NODE_ENV !== production"
 
-    print(f"[PASS] 2.11-API-03: All {route_count} API routes have method checks, correlation IDs, 0 raw 500 leaks & IDOR guards")
+    # Verify all relative JS/JSX imports resolve on disk (prevents Webpack Module Not Found build failures)
+    unresolved = []
+    for folder in ("pages", "components", "lib", "services", "repositories"):
+        base = os.path.join(ROOT, folder)
+        if not os.path.isdir(base):
+            continue
+        for dirpath, _, filenames in os.walk(base):
+            for fn in filenames:
+                if not fn.endswith((".js", ".jsx")):
+                    continue
+                fp = os.path.join(dirpath, fn)
+                with open(fp, "r", encoding="utf-8", errors="ignore") as f:
+                    txt = f.read()
+                for m in re.finditer(r'(?:from|import\()\s*["\'](\.[^"\']+)["\']', txt):
+                    cand = os.path.normpath(os.path.join(dirpath, m.group(1)))
+                    if not any(
+                        os.path.isfile(c)
+                        for c in (
+                            cand,
+                            cand + ".js",
+                            cand + ".jsx",
+                            cand + ".json",
+                            cand + ".css",
+                            os.path.join(cand, "index.js"),
+                            os.path.join(cand, "index.jsx"),
+                        )
+                    ):
+                        unresolved.append(f"{os.path.relpath(fp, ROOT)} -> {m.group(1)}")
+    assert not unresolved, f"Unresolved relative imports: {unresolved}"
+
+    print(f"[PASS] 2.11-API-03: All {route_count} API routes & relative imports verified (0 raw 500 leaks, 0 missing modules)")
 
 
 def check_4_migration_014_and_workflows():

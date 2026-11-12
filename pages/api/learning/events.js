@@ -3,7 +3,7 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery } from "../../../lib/learning/mastery-tracker";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

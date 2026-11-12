@@ -2,7 +2,7 @@ import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
 import { getClientIp } from "../../../lib/admin/admin-guard";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 function escapeCsvCell(val) {
   const s = val === null || val === undefined ? "" : String(val);

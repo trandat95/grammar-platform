@@ -2,7 +2,7 @@ import { getAdminClient } from "../../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../../lib/admin/admin-guard";
 import { KNOWLEDGE_GRAPH, resolveConceptForQuestion } from "../../../../lib/knowledge/knowledge-graph";
 import quizData from "../../../../data/ui/quiz_bank.json";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../../lib/api/security-guard";
 
 const QUESTION_LOOKUP = (() => {
   const map = new Map();

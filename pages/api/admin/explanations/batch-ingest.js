@@ -5,7 +5,7 @@ import { DIFFICULTY_LEVELS, validateExplanation } from "../../../../lib/explanat
 import { migrateQuestionExplanation } from "../../../../lib/explanation/explanation.migrator";
 import { KNOWLEDGE_GRAPH, resolveConceptForQuestion } from "../../../../lib/knowledge/knowledge-graph";
 import quizData from "../../../../data/ui/quiz_bank.json";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../../lib/api/security-guard";
 
 const CHUNK_SIZE = 500;
 

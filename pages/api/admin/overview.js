@@ -1,6 +1,6 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.4.5: Real-Time Operational Health Dashboard API (/api/admin/overview)

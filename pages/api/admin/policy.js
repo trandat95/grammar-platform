@@ -1,7 +1,7 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard, getClientIp } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.4.7 & 2.4.9: Dynamic Quota Policies with Policy Versioning & Step-Up Auth

@@ -13,7 +13,7 @@ import {
   validateEthicalCampaign,
 } from "../../../lib/monetization/paywall-ab-engine";
 import { calculateServerOrderPricing } from "../../../lib/monetization/payment-provider-adapter";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

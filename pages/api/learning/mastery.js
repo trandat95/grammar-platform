@@ -14,7 +14,7 @@ import {
 import { generatePersonalRecommendations } from "../../../lib/learning/adaptive-question-engine";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
 import quizData from "../../../data/ui/quiz_bank.json";
-import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
