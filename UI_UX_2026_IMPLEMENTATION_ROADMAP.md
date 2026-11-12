@@ -16,7 +16,7 @@
 | **UI-2026.4** | Tích hợp 4 Hero Banners, Avatars, 43 SVG Icons & Dashboard Zone A / B Bento | `P1` Dashboard Cognitive Overload, `P2` OS Emoji | **P1** | ✅ Hoàn thành |
 | **UI-2026.5** | Tuân thủ Text Envelope (`749` stem / `165` formula / `>4` examples collapse) | Text Truncation & Mobile Reading Layout | **P1** | ✅ Hoàn thành |
 | **UI-2026.6** | Khử Toàn bộ Mã Màu HEX Cứng (`pages/index.js` + `grammar-viz`, `diagnostic`, `explanation`, `audio` ➔ `var(--ds-*)` & `T.*`) | `P1` Token Debt (`0` hex violations) | **P1** | ✅ Hoàn thành |
-| **UI-2026.7** | Automated QA Gate, Git Commit/Push & Live Vercel Production Verification | WCAG AA, Zero Overflow, Live URL Audit | **P0** | 🔄 Đang Deploy & Kiểm định |
+| **UI-2026.7** | Automated QA Gate, Git Commit/Push & Live Vercel Production Verification | WCAG AA, Zero Overflow, Live URL Audit | **P0** | ✅ Hoàn thành |
 
 ---
 
@@ -63,5 +63,5 @@
 
 ### 🔹 UI-2026.7 — QA Compliance Gate & Vercel Production Verification (P0)
 - [x] **UI-2026.7.1:** Chạy `validate-design-tokens.py`, `validate-mastery-engine.py`, `validate-gamification-engine.py`, `validate-monetization-engine.py`, kiểm tra 39 `/assets/...` và relative imports — tất cả PASS 100%.
-- [ ] **UI-2026.7.2:** Commit & Push lên GitHub `main`, theo dõi Vercel Deploy đạt `READY` (`sin1`).
-- [ ] **UI-2026.7.3:** Kiểm tra HTTP `200` trên Production (`https://grammar-platform.vercel.app`) cho các trang & static assets (`/assets/banners/...`, `/assets/icons/...`), đối chiếu không vỡ Light/Dark, FTC Anti-Dark-Pattern và cập nhật lại checkbox `[x]` cuối cùng.
+- [x] **UI-2026.7.2:** Commit & Push lên GitHub `main`, theo dõi Vercel Deploy đạt `READY` (`sin1`, commit `2147c20` -> `dpl_9oexLHN69HVVz8fv3abN9ogQKRj1`).
+- [x] **UI-2026.7.3:** Kiểm tra HTTP `200` trên Production (`https://grammar-platform.vercel.app`) cho 12 endpoint & static assets (`/assets/banners/...`, `/assets/avatars/...`, `/assets/icons/...`, `/api/...`), đối chiếu CSS bundle + tokens Light/Dark chuẩn WCAG AA và hoàn tất checkbox `[x]` cuối cùng.
