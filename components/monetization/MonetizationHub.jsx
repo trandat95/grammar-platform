@@ -50,8 +50,8 @@ export function prefetchMonetizationData({ userId = null, authToken = null } = {
 
 /**
  * Milestone 2.12: Intelligent Monetization, Pricing Psychology, Checkout & Subscription Management Hub
- * Unifies: Value Comparison, 4 Plans (Monthly/Quarterly/Yearly/Lifetime), Free Trial, Coupon Engine,
- * Checkout Adapter, 2-Click Transparent Cancel, Marketing Opt-out & Protected VIP Report Export.
+ * Unifies: Value Comparison, 4 Plans (Monthly/Quarterly/Yearly/Lifetime), Coupon Engine,
+ * SePay VA Dynamic VietQR Checkout, 2-Click Transparent Cancel, Marketing Opt-out & Protected VIP Report Export.
  */
 export default function MonetizationHub({
   userId = null,
@@ -59,12 +59,14 @@ export default function MonetizationHub({
   isLight = false,
   onEntitlementSync,
   onRequireLogin,
+  onRequireRegister,
 }) {
   const T = getThemeTokens(isLight);
   const cacheKey = userId || "guest";
   const cachedInitial = monetizationOverviewCache.get(cacheKey) || null;
   const [data, setData] = useState(cachedInitial);
   const [loading, setLoading] = useState(!cachedInitial);
+  const [loadError, setLoadError] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [couponInput, setCouponInput] = useState("");
   const [couponPreview, setCouponPreview] = useState(null);
@@ -89,10 +91,15 @@ export default function MonetizationHub({
 
   const loadOverview = useCallback(async () => {
     if (!monetizationOverviewCache.has(cacheKey)) setLoading(true);
+    setLoadError("");
     try {
-      const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+      const headers = userId && authToken ? { Authorization: `Bearer ${authToken}` } : {};
       const url = userId ? `/api/monetization/overview?user_id=${encodeURIComponent(userId)}` : "/api/monetization/overview";
-      const res = await fetch(url, { headers });
+      let res = await fetch(url, { headers });
+      if (res.status === 401 && headers.Authorization) {
+        // Retry as public catalog if Bearer token expired
+        res = await fetch("/api/monetization/overview");
+      }
       const json = await res.json();
       if (res.ok && json.success) {
         monetizationOverviewCache.set(cacheKey, json);
@@ -100,9 +107,12 @@ export default function MonetizationHub({
         if (onEntSyncRef.current && json.entitlement) {
           onEntSyncRef.current(json.entitlement);
         }
+      } else {
+        setLoadError(json?.error || "Không thể tải bảng giá VIP lúc này.");
       }
     } catch (err) {
       console.warn("Monetization overview warning:", err.message);
+      setLoadError(err?.message || "Lỗi kết nối khi tải thông tin gói VIP.");
     } finally {
       setLoading(false);
     }
@@ -320,7 +330,41 @@ export default function MonetizationHub({
     );
   }
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div
+        style={{
+          backgroundColor: T.card,
+          border: `1px solid ${T.cardBorder}`,
+          borderRadius: "14px",
+          padding: "1.5rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.85rem",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: "1.5rem" }}>💎</div>
+        <div style={{ fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
+          {loadError || "Chưa thể tải bảng giá Gói VIP"}
+        </div>
+        <div style={{ fontSize: "0.82rem", color: T.textMuted, maxWidth: "460px" }}>
+          Bạn cần đăng ký hoặc đăng nhập tài khoản để nâng cấp VIP và lưu tiến độ học tập.
+        </div>
+        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", justifyContent: "center" }}>
+          <Button variant="secondary" isLight={isLight} onClick={loadOverview}>
+            🔄 Thử tải lại
+          </Button>
+          {(onRequireRegister || onRequireLogin) && (
+            <Button variant="primary" isLight={isLight} onClick={() => (onRequireRegister ? onRequireRegister() : onRequireLogin())}>
+              📝 Đăng ký / Đăng nhập ngay
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   const {
     guestMode,
@@ -338,12 +382,55 @@ export default function MonetizationHub({
   const hasVip = Boolean(entitlement.hasVipAccess);
   const sub = entitlement.subscription;
 
+  const requireGuestAuth = () => {
+    if (onRequireRegister) {
+      onRequireRegister();
+    } else if (onRequireLogin) {
+      onRequireLogin();
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {statusNotice && (
         <Alert tone={statusNotice.tone} isLight={isLight}>
           {statusNotice.text}
         </Alert>
+      )}
+
+      {(guestMode || !userId) && (
+        <div
+          style={{
+            backgroundColor: T.warningBg,
+            border: `1px solid ${T.warningBorder}`,
+            borderRadius: "12px",
+            padding: "1rem 1.25rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.85rem",
+          }}
+        >
+          <div style={{ flex: "1 1 380px" }}>
+            <div style={{ fontSize: "0.92rem", fontWeight: 800, color: T.textHeading }}>
+              🔒 Bạn chưa đăng nhập — Cần đăng ký tài khoản để nâng cấp VIP
+            </div>
+            <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.2rem", lineHeight: 1.45 }}>
+              Hãy tạo tài khoản miễn phí (chỉ 15 giây) hoặc đăng nhập trước khi thanh toán để hệ thống kích hoạt đặc quyền VIP và đồng bộ toàn bộ tiến độ cho bạn.
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            {onRequireLogin && (
+              <Button size="sm" variant="secondary" isLight={isLight} onClick={onRequireLogin}>
+                🔑 Đăng nhập
+              </Button>
+            )}
+            <Button size="sm" variant="primary" isLight={isLight} onClick={requireGuestAuth}>
+              📝 Đăng ký tài khoản ngay
+            </Button>
+          </div>
+        </div>
       )}
 
       {/* Behavioral Psychology Value Banner + 2026 AI Coach VIP Artwork */}
@@ -435,7 +522,7 @@ export default function MonetizationHub({
                 <div>
                   <span style={{ color: T.textMuted }}>Cổng: </span>
                   <strong style={{ color: T.accent }}>
-                    {sub.provider === "sepay" ? "SePay VA (VietQR)" : sub.provider === "manual" ? "Dùng thử / Hệ thống" : sub.provider?.toUpperCase()}
+                    {sub.provider === "sepay" ? "SePay VA (VietQR)" : sub.provider === "manual" ? "Kích hoạt Hệ thống" : sub.provider?.toUpperCase()}
                   </strong>
                 </div>
               </div>
@@ -533,7 +620,7 @@ export default function MonetizationHub({
                   disabled={checkoutBusy}
                   onClick={() => {
                     if (!userId) {
-                      if (onRequireLogin) onRequireLogin();
+                      requireGuestAuth();
                       return;
                     }
                     setSelectedPlan(p);
@@ -551,21 +638,8 @@ export default function MonetizationHub({
                     }).catch(() => {});
                   }}
                 >
-                  {hasVip ? "Chuyển sang gói này" : "Chọn gói VIP"}
+                  {!userId ? "📝 Đăng ký để nâng cấp VIP" : hasVip ? "Chuyển sang gói này" : "Chọn gói VIP"}
                 </Button>
-
-                {!hasVip && !sub && Number(p.trial_days || 0) > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    isLight={isLight}
-                    disabled={checkoutBusy}
-                    onClick={() => handleCheckoutAction("start_trial", p)}
-                    style={{ fontSize: "0.74rem" }}
-                  >
-                    🎁 Dùng thử {p.trial_days} ngày miễn phí
-                  </Button>
-                )}
               </div>
             </div>
           );
@@ -602,7 +676,7 @@ export default function MonetizationHub({
               onClick={() => {
                 const rec = plans.find((p) => p.is_recommended) || plans[0];
                 if (!userId) {
-                  if (onRequireLogin) onRequireLogin();
+                  requireGuestAuth();
                   return;
                 }
                 setSelectedPlan(rec);
@@ -610,7 +684,7 @@ export default function MonetizationHub({
                 setCheckoutError("");
               }}
             >
-              ⚡ Mở khóa VIP ngay ➔
+              {!userId ? "📝 Đăng ký để mở khóa VIP ➔" : "⚡ Mở khóa VIP ngay ➔"}
             </Button>
           )}
         </div>

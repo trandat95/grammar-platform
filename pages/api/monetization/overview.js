@@ -288,8 +288,8 @@ export default async function handler(req, res) {
               user_id: resolvedUserId,
               campaign_key: "abandoned_checkout_followup",
               channel: "in_app",
-              title_vi: "Trải nghiệm 7 ngày Dùng thử Miễn phí không rủi ro",
-              body_vi: "Bạn có thể kích hoạt dùng thử VIP 7 ngày và hủy chỉ với 2 chạm bất kỳ lúc nào trước ngày gia hạn.",
+              title_vi: "Ưu đãi nâng cấp VIP Toàn diện với mã WELCOME15",
+              body_vi: "Áp dụng mã WELCOME15 khi thanh toán VietQR Tự Động qua SePay VA để nhận ưu đãi 15% và mở khóa trọn bộ 2,939 câu hỏi.",
               status: "sent",
             });
           }

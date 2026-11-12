@@ -19,7 +19,7 @@ import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engi
 import GamificationHub, { prefetchGamificationData } from "../components/gamification/GamificationHub";
 import LeaderboardPanel from "../components/gamification/LeaderboardPanel";
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
-import MonetizationHub, { prefetchMonetizationData } from "../components/monetization/MonetizationHub";
+import MonetizationHub, { prefetchMonetizationData, invalidateMonetizationClientCache } from "../components/monetization/MonetizationHub";
 import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
 import AccountProfileCard from "../components/auth/AccountProfileCard";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
@@ -1209,6 +1209,8 @@ export default function Home() {
       console.warn("Logout error:", err);
     }
     localStorage.removeItem("grammar_active_user_id");
+    setActiveAuthToken(null);
+    invalidateMonetizationClientCache();
     setCurrentUser(GUEST_USER);
     if (currentView === "admin") {
       setCurrentView("dashboard");
@@ -1677,7 +1679,7 @@ export default function Home() {
           config: {
             trigger_key: triggerKey,
             title_vi: preview?.title || "Mở khóa Hệ sinh thái Ngữ pháp Cá nhân hóa VIP",
-            subtitle_vi: "Đăng ký miễn phí và kích hoạt dùng thử VIP 7 ngày để trải nghiệm trọn bộ 2,939 câu hỏi & AI Coach.",
+            subtitle_vi: "Đăng ký tài khoản miễn phí để nâng cấp VIP và mở khóa trọn bộ 2,939 câu hỏi, AI Coach & Lộ trình cá nhân hóa.",
           },
         },
         preview,
@@ -4783,10 +4785,14 @@ export default function Home() {
           psychology={paywallPsych}
           abVariant={smartPaywall.context?.variantKey || "control"}
           featurePreview={smartPaywall.preview}
+          isGuest={Boolean(currentUser?.isGuest || !currentUser?.id || currentUser?.id === "guest")}
           onOpenFullPricing={() => setCurrentView("vip")}
-          onStartTrial={() => {
-            setSmartPaywall((p) => ({ ...p, open: false }));
-            setCurrentView("vip");
+          onRequireRegister={() => {
+            setAuthError("");
+            setAuthSuccess("Vui lòng đăng ký tài khoản mới (hoặc chuyển sang Đăng nhập) để nâng cấp gói VIP.");
+            setAuthTab("register");
+            setShowSwitchAuthForm(false);
+            setAuthModalOpen(true);
           }}
           isLight={isLight}
         />
@@ -4798,11 +4804,24 @@ export default function Home() {
           <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1020px", margin: "0 auto" }}>
               <MonetizationHub
-                userId={!currentUser?.isGuest ? currentUser?.id : null}
-                authToken={activeAuthToken}
+                userId={!currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null}
+                authToken={!currentUser?.isGuest ? activeAuthToken : null}
                 isLight={isLight}
                 onEntitlementSync={handleServerEntitlementSync}
-                onRequireLogin={() => setAuthModalOpen(true)}
+                onRequireLogin={() => {
+                  setAuthError("");
+                  setAuthSuccess("");
+                  setAuthTab("login");
+                  setShowSwitchAuthForm(false);
+                  setAuthModalOpen(true);
+                }}
+                onRequireRegister={() => {
+                  setAuthError("");
+                  setAuthSuccess("Vui lòng đăng ký tài khoản mới (hoặc chuyển sang Đăng nhập) để thanh toán nâng cấp VIP.");
+                  setAuthTab("register");
+                  setShowSwitchAuthForm(false);
+                  setAuthModalOpen(true);
+                }}
               />
             </div>
           </div>

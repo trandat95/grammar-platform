@@ -5,7 +5,7 @@ import { Alert, Badge, Button, Modal } from "../design-system";
 /**
  * Milestone 2.12.8 & 2.12.9: Contextual Smart Paywall Modal
  * - Grounded in genuine learner progress (Progress Principle & Goal Gradient)
- * - Strictly Anti-Dark-Pattern: transparent terms, zero fake reset timers or streak-loss threats
+ * - Strictly Anti-Dark-Pattern: transparent terms, requires account registration for guests before VIP upgrade
  */
 export default function SmartPaywallModal({
   isOpen = false,
@@ -15,8 +15,9 @@ export default function SmartPaywallModal({
   psychology = {},
   abVariant = "control",
   featurePreview = null,
+  isGuest = false,
   onOpenFullPricing,
-  onStartTrial,
+  onRequireRegister,
   isLight = false,
 }) {
   if (!isOpen) return null;
@@ -55,7 +56,9 @@ export default function SmartPaywallModal({
             {title}
           </h3>
           <p style={{ margin: 0, fontSize: "0.84rem", color: T.textSecondary, lineHeight: 1.5 }}>
-            {cfg.subtitle_vi || psychology.personalizedHook || "Mở khóa toàn bộ 2,939 câu bài tập, AI Tutor & Phân tích chuyên sâu."}
+            {cfg.subtitle_vi ||
+              psychology.personalizedHook ||
+              "Mở khóa toàn bộ 2,939 câu bài tập, AI Coach & Lộ trình cá nhân hóa."}
           </p>
         </div>
 
@@ -82,6 +85,12 @@ export default function SmartPaywallModal({
           </div>
         )}
 
+        {isGuest && (
+          <Alert tone="warning" isLight={isLight}>
+            <strong>Yêu cầu tài khoản:</strong> Bạn đang truy cập ở chế độ Khách. Vui lòng <strong>đăng ký tài khoản</strong> (hoặc đăng nhập) để hệ thống gắn quyền VIP vào hồ sơ cá nhân của bạn.
+          </Alert>
+        )}
+
         <div
           style={{
             fontSize: "0.78rem",
@@ -93,16 +102,23 @@ export default function SmartPaywallModal({
             lineHeight: 1.45,
           }}
         >
-          <strong>Cam kết Minh bạch 100%:</strong> Dùng thử 7 ngày hoàn toàn miễn phí (giá sau dùng thử từ 99,000đ/tháng hoặc 699,000đ/năm). Hủy chỉ với 2 chạm bất kỳ lúc nào mà vẫn giữ nguyên toàn bộ XP, Streak &amp; Sổ tay.
+          <strong>Cam kết Minh bạch 100%:</strong> Thanh toán chuyển khoản VietQR Tự Động (SePay VA) kích hoạt VIP tức thì trong 1–5 giây, bảo lưu trọn vẹn XP, Streak &amp; Sổ tay câu sai của bạn.
         </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end", flexWrap: "wrap", gap: "0.6rem" }}>
           <Button variant="ghost" isLight={isLight} onClick={handleDismiss}>
             Để sau (Tiếp tục gói Free)
           </Button>
-          {onStartTrial && (
-            <Button variant="secondary" isLight={isLight} onClick={onStartTrial}>
-              🎁 Dùng thử 7 ngày
+          {isGuest && onRequireRegister && (
+            <Button
+              variant="secondary"
+              isLight={isLight}
+              onClick={() => {
+                if (onClose) onClose();
+                onRequireRegister();
+              }}
+            >
+              📝 Đăng ký để nâng cấp VIP
             </Button>
           )}
           <Button
@@ -113,7 +129,7 @@ export default function SmartPaywallModal({
               if (onClose) onClose();
             }}
           >
-            {cfg.cta_label || "Xem Bảng Giá & Ưu Đãi VIP ➔"}
+            {cfg.cta_label || "Xem Bảng Giá & Quyền Lợi VIP ➔"}
           </Button>
         </div>
       </div>
