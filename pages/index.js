@@ -13,6 +13,8 @@ import StructuredExplanation from "../components/explanation/StructuredExplanati
 import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
 import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
 import MasteryIntelligenceDashboard from "../components/learning/MasteryIntelligenceDashboard";
+import AcademicRichText, { stripMarkdownFormatting } from "../components/learning/AcademicRichText";
+import AcademicSectionBody from "../components/learning/AcademicSectionBody";
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
 import GamificationHub, { prefetchGamificationData } from "../components/gamification/GamificationHub";
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
@@ -1902,55 +1904,7 @@ export default function Home() {
       );
     }
 
-    const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|~~[^~]+~~|\[NOT\s+[^\]]+\])/g;
-    const parts = [];
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(str)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push(str.substring(lastIndex, match.index));
-      }
-      const token = match[0];
-      if (token.startsWith("***") && token.endsWith("***")) {
-        parts.push(
-          <strong key={match.index} style={{ fontWeight: "700", fontStyle: "italic", color: "var(--ds-text-secondary)" }}>
-            {token.slice(3, -3)}
-          </strong>
-        );
-      } else if (token.startsWith("**") && token.endsWith("**")) {
-        parts.push(
-          <strong key={match.index} style={{ fontWeight: "700", color: "var(--ds-text-heading)" }}>
-            {token.slice(2, -2)}
-          </strong>
-        );
-      } else if (token.startsWith("*") && token.endsWith("*")) {
-        parts.push(
-          <span key={match.index} style={{ fontStyle: "italic", fontWeight: "600", color: "var(--ds-accent)" }}>
-            {token.slice(1, -1)}
-          </span>
-        );
-      } else if (token.startsWith("~~") && token.endsWith("~~")) {
-        parts.push(
-          <span key={match.index} style={{ textDecoration: "line-through", color: "var(--ds-danger)", fontWeight: "600", margin: "0 2px" }}>
-            {token.slice(2, -2)}
-          </span>
-        );
-      } else if (token.startsWith("[NOT") && token.endsWith("]")) {
-        parts.push(
-          <span key={match.index} style={{ backgroundColor: "var(--ds-danger-bg)", border: "1px solid var(--ds-danger-border)", color: "var(--ds-danger)", padding: "0.1rem 0.35rem", borderRadius: "4px", fontSize: "0.78rem", fontWeight: "700", margin: "0 4px" }}>
-            ⚠️ {token.slice(1, -1)}
-          </span>
-        );
-      }
-      lastIndex = regex.lastIndex;
-    }
-
-    if (lastIndex < str.length) {
-      parts.push(str.substring(lastIndex));
-    }
-
-    return parts;
+    return <AcademicRichText text={str} />;
   };
 
   const renderPedagogicalExplanation = (explanation, pedagogy, question = null) => {
@@ -5516,26 +5470,36 @@ export default function Home() {
                         {/* Quick Table of Contents Pills */}
                         {selectedLesson.sections && selectedLesson.sections.length > 1 && (
                           <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: `1px solid ${T.border}` }}>
-                            <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
-                              NỘI DUNG CHÍNH TRONG BÀI:
+                            <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.55rem", letterSpacing: "0.05em", fontWeight: "700" }}>
+                              MỤC LỤC NỘI DUNG ({selectedLesson.sections.length} PHẦN):
                             </div>
-                            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
                               {selectedLesson.sections.map((s, idx) => (
                                 <a
                                   key={idx}
                                   href={`#sec-${idx}`}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById(`sec-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                  }}
                                   style={{
-                                    fontSize: "0.75rem",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.35rem",
+                                    fontSize: "0.76rem",
                                     backgroundColor: "var(--ds-bg-elevated)",
                                     border: `1px solid ${T.border}`,
                                     color: "var(--ds-text-secondary)",
-                                    padding: "0.25rem 0.65rem",
-                                    borderRadius: "4px",
+                                    padding: "0.3rem 0.65rem",
+                                    borderRadius: "6px",
                                     textDecoration: "none",
-                                    fontWeight: "500",
+                                    fontWeight: "600",
                                   }}
                                 >
-                                  {s.title}
+                                  <span style={{ color: "var(--ds-accent)", fontWeight: "800" }}>
+                                    {String(idx + 1).padStart(2, "0")}.
+                                  </span>
+                                  <span>{stripMarkdownFormatting(s.title)}</span>
                                 </a>
                               ))}
                             </div>
@@ -5737,12 +5701,13 @@ export default function Home() {
                                       borderRadius: "6px",
                                       fontWeight: "800",
                                       letterSpacing: "0.05em",
+                                      flexShrink: 0,
                                     }}
                                   >
                                     {String(secIdx + 1).padStart(2, "0")}
                                   </span>
-                                  <h2 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.textHeading, margin: 0, letterSpacing: "-0.01em" }}>
-                                    {sec.title}
+                                  <h2 style={{ fontSize: "1.12rem", fontWeight: "700", color: T.textHeading, margin: 0, letterSpacing: "-0.01em", lineHeight: "1.4" }}>
+                                    <AcademicRichText text={sec.title} multiline={false} />
                                   </h2>
                                 </div>
 
@@ -5766,344 +5731,27 @@ export default function Home() {
                                 )}
                               </div>
 
-                              {/* 1. Formulas Box (Syntax-colored & Prominent) */}
-                              {sec.formulas && sec.formulas.length > 0 && (
-                                <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginBottom: "1.35rem" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                                    ⚡ CÔNG THỨC CHUẨN XÁC:
-                                  </div>
-                                  {sec.formulas.map((f, fIdx) => {
-                                    const formulaKindClass = f.type?.includes("(+)")
-                                      ? "is-pos"
-                                      : f.type?.includes("(-)")
-                                      ? "is-neg"
-                                      : "is-q";
-                                    const badgeKindColor = f.type?.includes("(+)")
-                                      ? "var(--ds-formula-pos)"
-                                      : f.type?.includes("(-)")
-                                      ? "var(--ds-formula-neg)"
-                                      : "var(--ds-formula-q)";
-                                    return (
-                                      <div
-                                        key={fIdx}
-                                        className={`ge-formula-box ${formulaKindClass}`}
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                          flexWrap: "wrap",
-                                          gap: "0.75rem",
-                                          boxShadow: "var(--ds-shadow-sm)",
-                                        }}
-                                      >
-                                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.95rem", color: "var(--ds-success)", fontWeight: "700", letterSpacing: "0.02em" }}>
-                                          {f.text}
-                                        </div>
-                                        <span
-                                          style={{
-                                            fontSize: "0.7rem",
-                                            fontFamily: "var(--font-sans)",
-                                            backgroundColor: "var(--ds-card)",
-                                            color: badgeKindColor,
-                                            padding: "0.2rem 0.55rem",
-                                            borderRadius: "6px",
-                                            border: "1px solid var(--ds-border)",
-                                            fontWeight: "700",
-                                            flexShrink: 0,
-                                          }}
-                                        >
-                                          {f.type}
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
-
-                              {/* 2. Numbered Rules (Đánh số thứ tự 1, 2, 3... rõ ràng, có tiêu đề & ví dụ) */}
-                              {sec.rules && sec.rules.length > 0 && (
-                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "1.15rem 0" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-indigo)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                                    📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG:
-                                  </div>
-                                  {sec.rules.map((rule, rIdx) => {
-                                    const ruleKey = `${selectedLesson?.id || "ls"}-${secIdx}-${rIdx}`;
-                                    const examples = rule.examples || [];
-                                    const isExpanded = Boolean(expandedRulesMap[ruleKey]);
-                                    const visibleExamples = isExpanded || examples.length <= 4 ? examples : examples.slice(0, 4);
-
-                                    return (
-                                      <div
-                                        key={rIdx}
-                                        style={{
-                                          backgroundColor: "var(--ds-card-subtle)",
-                                          border: "1px solid var(--ds-border)",
-                                          borderRadius: "10px",
-                                          padding: "1rem 1.25rem",
-                                        }}
-                                      >
-                                        {/* Rule Header */}
-                                        <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.65rem" }}>
-                                          <span
-                                            style={{
-                                              width: "26px",
-                                              height: "26px",
-                                              borderRadius: "6px",
-                                              backgroundColor: "var(--ds-indigo-bg)",
-                                              border: "1px solid var(--ds-indigo-border)",
-                                              color: "var(--ds-indigo)",
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              fontSize: "0.82rem",
-                                              fontWeight: "800",
-                                              flexShrink: 0,
-                                            }}
-                                          >
-                                            {rule.num || String(rIdx + 1)}
-                                          </span>
-                                          <h3 style={{ fontSize: "1rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: 0 }}>
-                                            {rule.title}
-                                          </h3>
-                                        </div>
-
-                                        {/* Rule Content */}
-                                        {rule.content && (
-                                          <p style={{ fontSize: "0.92rem", color: "var(--ds-text-secondary)", lineHeight: "1.7", margin: "0 0 0.85rem 0" }}>
-                                            {rule.content}
-                                          </p>
-                                        )}
-
-                                        {/* Rule Examples (<= 4 visible by default; collapsible beyond 4) */}
-                                        {examples.length > 0 && (
-                                          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "0.5rem", paddingLeft: "0.75rem", borderLeft: "2px solid var(--ds-accent-border)" }}>
-                                            {visibleExamples.map((ex, exIdx) => (
-                                              <div
-                                                key={exIdx}
-                                                style={{
-                                                  backgroundColor: "var(--ds-card)",
-                                                  border: "1px solid var(--ds-border-subtle)",
-                                                  borderRadius: "6px",
-                                                  padding: "0.55rem 0.85rem",
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent: "space-between",
-                                                  gap: "0.75rem",
-                                                  boxShadow: "var(--ds-shadow-sm)",
-                                                }}
-                                              >
-                                                <div>
-                                                  <div style={{ fontSize: "0.92rem", fontWeight: "600", color: "var(--ds-text)" }}>
-                                                    {ex.en}
-                                                  </div>
-                                                  {ex.vi && (
-                                                    <div style={{ fontSize: "0.82rem", color: "var(--ds-success)", marginTop: "0.15rem" }}>
-                                                      🇻🇳 {ex.vi}
-                                                    </div>
-                                                  )}
-                                                </div>
-                                                <button
-                                                  type="button"
-                                                  onClick={() => playWordAudio(ex.en, null)}
-                                                  title="Nghe phát âm chuẩn câu này"
-                                                  className="ds-focusable"
-                                                  style={{
-                                                    display: "inline-flex",
-                                                    alignItems: "center",
-                                                    gap: "0.3rem",
-                                                    backgroundColor: "var(--ds-accent-bg)",
-                                                    border: "1px solid var(--ds-accent-border)",
-                                                    color: "var(--ds-accent)",
-                                                    borderRadius: "6px",
-                                                    padding: "0.28rem 0.6rem",
-                                                    fontSize: "0.75rem",
-                                                    fontWeight: "600",
-                                                    cursor: "pointer",
-                                                    flexShrink: 0,
-                                                  }}
-                                                >
-                                                  <KitIcon name="tool-audio" size={13} />
-                                                  <span>Đọc</span>
-                                                </button>
-                                              </div>
-                                            ))}
-
-                                            {examples.length > 4 && (
-                                              <button
-                                                type="button"
-                                                onClick={() =>
-                                                  setExpandedRulesMap((prev) => ({
-                                                    ...prev,
-                                                    [ruleKey]: !prev[ruleKey],
-                                                  }))
-                                                }
-                                                className="ds-focusable"
-                                                style={{
-                                                  alignSelf: "flex-start",
-                                                  marginTop: "0.2rem",
-                                                  padding: "0.35rem 0.75rem",
-                                                  borderRadius: "6px",
-                                                  border: "1px solid var(--ds-accent-border)",
-                                                  backgroundColor: "var(--ds-accent-bg)",
-                                                  color: "var(--ds-accent)",
-                                                  fontSize: "0.78rem",
-                                                  fontWeight: 700,
-                                                  cursor: "pointer",
-                                                }}
-                                              >
-                                                {isExpanded ? "Thu gọn ví dụ ▴" : `Xem thêm ${examples.length - 4} ví dụ ▾`}
-                                              </button>
-                                            )}
-                                          </div>
-                                        )}
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
-
-                              {/* 3. General Paragraphs */}
-                              {sec.paragraphs && sec.paragraphs.length > 0 && (
-                                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1rem" }}>
-                                  {sec.paragraphs.map((p, pIdx) => (
-                                    <div key={pIdx} style={{ fontSize: "0.92rem", color: T.textSecondary, lineHeight: "1.75", margin: 0, fontWeight: "400" }}>
-                                      {renderFormattedText(p)}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* 4. Structured Tables */}
-                              {sec.tables && sec.tables.length > 0 && (
-                                <div style={{ overflowX: "auto", margin: "1.25rem 0" }}>
-                                  {sec.tables.map((tbl, tIdx) => (
-                                    <table
-                                      key={tIdx}
-                                      style={{
-                                        width: "100%",
-                                        borderCollapse: "separate",
-                                        borderSpacing: 0,
-                                        backgroundColor: "var(--ds-card)",
-                                        border: `1px solid ${T.border}`,
-                                        borderRadius: "8px",
-                                        overflow: "hidden",
-                                        fontSize: "0.86rem",
-                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
-                                      }}
-                                    >
-                                      {tbl.headers && tbl.headers.some((h) => h) && (
-                                        <thead>
-                                          <tr style={{ backgroundColor: "var(--ds-card-subtle)" }}>
-                                            {tbl.headers.map((h, hIdx) => (
-                                              <th
-                                                key={hIdx}
-                                                style={{
-                                                  padding: "0.7rem 0.9rem",
-                                                  borderBottom: `1px solid ${T.border}`,
-                                                  color: "var(--ds-accent)",
-                                                  fontWeight: "700",
-                                                  textAlign: "left",
-                                                  fontFamily: "var(--font-sans)",
-                                                  fontSize: "0.82rem",
-                                                  letterSpacing: "0.03em",
-                                                }}
-                                              >
-                                                {h}
-                                              </th>
-                                            ))}
-                                          </tr>
-                                        </thead>
-                                      )}
-                                      <tbody>
-                                        {tbl.rows?.map((row, rIdx) => (
-                                          <tr
-                                            key={rIdx}
-                                            style={{
-                                              backgroundColor: rIdx % 2 === 0 ? "transparent" : ("var(--ds-card-subtle)"),
-                                            }}
-                                          >
-                                            {row.map((cell, cIdx) => (
-                                              <td
-                                                key={cIdx}
-                                                style={{
-                                                  padding: "0.65rem 0.9rem",
-                                                  borderBottom: `1px solid ${"var(--ds-border-subtle)"}`,
-                                                  color: "var(--ds-text-secondary)",
-                                                  lineHeight: "1.55",
-                                                }}
-                                              >
-                                                {cell}
-                                              </td>
-                                            ))}
-                                          </tr>
-                                        ))}
-                                      </tbody>
-                                    </table>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* 5. Bullet Points (Đánh dấu phân mục với icon rõ ràng) */}
-                              {sec.bullets && sec.bullets.length > 0 && (
-                                <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", margin: "1rem 0" }}>
-                                  {sec.bullets.map((b, bIdx) => (
-                                    <div
-                                      key={bIdx}
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: "0.7rem",
-                                        backgroundColor: T.cardSubtle,
-                                        padding: "0.7rem 0.95rem",
-                                        borderRadius: "8px",
-                                        border: `1px solid ${T.border}`,
-                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.03)" : "none",
-                                      }}
-                                    >
-                                      <span style={{ color: "var(--ds-accent)", fontSize: "0.95rem", lineHeight: "1.4", flexShrink: 0 }}>🔹</span>
-                                      <div style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: "1.65", width: "100%" }}>
-                                        {renderFormattedText(b)}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* 6. Notes & Exam Pitfalls (Lưu ý & Bẫy ngữ pháp nổi bật) */}
-                              {sec.notes && sec.notes.length > 0 && (
-                                <div style={{ margin: "1.15rem 0", display: "flex", flexDirection: "column", gap: "0.65rem" }}>
-                                  {sec.notes.map((n, nIdx) => (
-                                    <div
-                                      key={nIdx}
-                                      style={{
-                                        backgroundColor: "var(--ds-warning-bg)",
-                                        border: "1px solid var(--ds-warning-border)",
-                                        borderLeft: "4px solid var(--ds-warning)",
-                                        borderRadius: "8px",
-                                        padding: "0.85rem 1.15rem",
-                                        boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.02)" : "none",
-                                      }}
-                                    >
-                                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
-                                        <span style={{ fontSize: "1.05rem" }}>⚠️</span>
-                                        <span style={{ fontSize: "0.78rem", fontWeight: "800", color: "var(--ds-warning)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                                          LƯU Ý QUAN TRỌNG & BẪY THI CỬ:
-                                        </span>
-                                      </div>
-                                      <div style={{ fontSize: "0.9rem", color: "var(--ds-warning)", lineHeight: "1.65" }}>
-                                        {n}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              <AcademicSectionBody
+                                sec={sec}
+                                secIdx={secIdx}
+                                lessonId={selectedLesson?.id}
+                                isLight={isLight}
+                                expandedRulesMap={expandedRulesMap}
+                                setExpandedRulesMap={setExpandedRulesMap}
+                                playWordAudio={playWordAudio}
+                              />
                             </section>
                           );
                         })}
                       </div>
 
                       {/* Bilingual Examples Library (Milestone 2.7) */}
-                      {selectedLesson.examples && selectedLesson.examples.length > 0 && (
+                      {selectedLesson.examples && selectedLesson.examples.length > 0 && (() => {
+                        const lessonExKey = `lesson-ex-${selectedLesson.id || "ls"}`;
+                        const isLibExpanded = Boolean(expandedRulesMap[lessonExKey]);
+                        const allExamples = selectedLesson.examples;
+                        const visibleLibExamples = isLibExpanded || allExamples.length <= 8 ? allExamples : allExamples.slice(0, 8);
+                        return (
                         <div
                           style={{
                             marginTop: "1.75rem",
@@ -6118,52 +5766,53 @@ export default function Home() {
                             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
                               <span style={{ fontSize: "1.3rem" }}>📚</span>
                               <div>
-                                <h3 style={{ fontSize: "1.1rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
-                                  Thư viện Ví dụ Mẫu Song ngữ ({selectedLesson.examples.length} câu)
+                                <h3 style={{ fontSize: "1.08rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
+                                  Thư viện Ví dụ Mẫu ({allExamples.length} câu)
                                 </h3>
                                 <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.15rem 0 0 0" }}>
-                                  Các ngữ cảnh câu thực tế được chuẩn hóa kèm phát âm bản ngữ
+                                  Ngữ cảnh câu thực tế được chuẩn hóa kèm phát âm bản ngữ
                                 </p>
                               </div>
                             </div>
                           </div>
 
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "0.85rem" }}>
-                            {selectedLesson.examples.map((ex, exIdx) => (
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "0.75rem" }}>
+                            {visibleLibExamples.map((ex, exIdx) => (
                               <div
                                 key={exIdx}
                                 style={{
                                   backgroundColor: T.cardSubtle,
                                   border: `1px solid ${T.border}`,
                                   borderRadius: "8px",
-                                  padding: "0.85rem 1rem",
+                                  padding: "0.75rem 0.95rem",
                                   display: "flex",
                                   justifyContent: "space-between",
                                   alignItems: "center",
                                   gap: "0.75rem",
-                                  boxShadow: isLight ? "0 1px 3px rgba(0,0,0,0.02)" : "none",
+                                  boxShadow: isLight ? "var(--ds-shadow-sm)" : "none",
                                 }}
                               >
                                 <div>
-                                  <div style={{ fontSize: "0.92rem", fontWeight: "600", color: T.text, lineHeight: "1.5" }}>
-                                    {renderFormattedText(ex.en)}
+                                  <div style={{ fontSize: "0.91rem", fontWeight: "600", color: T.text, lineHeight: "1.5" }}>
+                                    <AcademicRichText text={ex.en} />
                                   </div>
                                   {ex.vi && (
-                                    <div style={{ fontSize: "0.82rem", color: "var(--ds-success)", marginTop: "0.3rem", lineHeight: "1.4" }}>
+                                    <div style={{ fontSize: "0.81rem", color: "var(--ds-success)", marginTop: "0.28rem", lineHeight: "1.4" }}>
                                       🇻🇳 {ex.vi}
                                     </div>
                                   )}
                                 </div>
                                 <button
-                                  onClick={() => playWordAudio(ex.en.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
+                                  type="button"
+                                  onClick={() => playWordAudio(String(ex.en || "").replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
                                   title="Nghe phát âm bản ngữ câu này"
                                   style={{
                                     backgroundColor: "var(--ds-card)",
                                     border: `1px solid ${T.border}`,
                                     color: "var(--ds-accent)",
                                     borderRadius: "6px",
-                                    padding: "0.35rem 0.6rem",
-                                    fontSize: "0.75rem",
+                                    padding: "0.3rem 0.55rem",
+                                    fontSize: "0.74rem",
                                     fontWeight: "600",
                                     cursor: "pointer",
                                     flexShrink: 0,
@@ -6174,8 +5823,35 @@ export default function Home() {
                               </div>
                             ))}
                           </div>
+
+                          {allExamples.length > 8 && (
+                            <div style={{ marginTop: "1rem", textAlign: "center" }}>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setExpandedRulesMap((prev) => ({
+                                    ...prev,
+                                    [lessonExKey]: !prev[lessonExKey],
+                                  }))
+                                }
+                                style={{
+                                  padding: "0.45rem 1rem",
+                                  borderRadius: "8px",
+                                  border: "1px solid var(--ds-accent-border)",
+                                  backgroundColor: "var(--ds-accent-bg)",
+                                  color: "var(--ds-accent)",
+                                  fontSize: "0.8rem",
+                                  fontWeight: "700",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {isLibExpanded ? "Thu gọn thư viện ví dụ ▴" : `Xem toàn bộ ${allExamples.length} ví dụ mẫu ▾`}
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      )}
+                        );
+                      })()}
 
                       {/* Bottom Completion & Practice Bar */}
                       <div
