@@ -123,7 +123,24 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { action, plan_code, price_vnd, original_price_vnd, trigger_key, is_active, daily_cap, coupon_code, discount_value } = req.body || {};
+    const {
+      action,
+      plan_code,
+      price_vnd,
+      compare_at_vnd,
+      original_price_vnd,
+      trial_days,
+      badge_text,
+      trigger_key,
+      is_active,
+      daily_cap,
+      coupon_code,
+      discount_type,
+      discount_value,
+      min_amount_vnd,
+      max_uses,
+      expires_in_days,
+    } = req.body || {};
 
     try {
       if (action === "update_plan_price" && plan_code) {
@@ -131,8 +148,15 @@ export default async function handler(req, res) {
         if (price_vnd !== undefined && price_vnd !== null && !Number.isNaN(Number(price_vnd))) {
           updatePayload.price_vnd = Math.max(0, Math.round(Number(price_vnd)));
         }
-        if (original_price_vnd !== undefined && original_price_vnd !== null && !Number.isNaN(Number(original_price_vnd))) {
-          updatePayload.original_price_vnd = Math.max(0, Math.round(Number(original_price_vnd)));
+        const rawCompareAt = compare_at_vnd !== undefined ? compare_at_vnd : original_price_vnd;
+        if (rawCompareAt !== undefined && rawCompareAt !== null && !Number.isNaN(Number(rawCompareAt))) {
+          updatePayload.compare_at_vnd = Math.max(0, Math.round(Number(rawCompareAt)));
+        }
+        if (trial_days !== undefined && trial_days !== null && !Number.isNaN(Number(trial_days))) {
+          updatePayload.trial_days = Math.min(365, Math.max(0, Math.round(Number(trial_days))));
+        }
+        if (typeof badge_text === "string") {
+          updatePayload.badge_text = badge_text.trim().slice(0, 48) || null;
         }
         if (typeof is_active === "boolean") {
           updatePayload.is_active = is_active;
@@ -164,14 +188,40 @@ export default async function handler(req, res) {
       }
 
       if (action === "create_coupon" && coupon_code) {
+        const normalizedCode = String(coupon_code).trim().toUpperCase();
+        if (!/^[A-Z0-9_-]{3,32}$/.test(normalizedCode)) {
+          return res.status(400).json({
+            success: false,
+            error: "Mã giảm giá phải dài 3–32 ký tự và chỉ gồm chữ cái A-Z, số 0-9, '-' hoặc '_'.",
+          });
+        }
+        const normalizedType = discount_type === "fixed_vnd" ? "fixed_vnd" : "percent";
+        const parsedDiscount = Number(discount_value);
+        const boundedDiscount =
+          normalizedType === "percent"
+            ? Math.min(90, Math.max(1, Math.round(Number.isFinite(parsedDiscount) ? parsedDiscount : 15)))
+            : Math.min(5000000, Math.max(1000, Math.round(Number.isFinite(parsedDiscount) ? parsedDiscount : 20000)));
+        const parsedMinAmount = Number(min_amount_vnd);
+        const boundedMinAmount = Math.max(0, Math.round(Number.isFinite(parsedMinAmount) ? parsedMinAmount : 0));
+        const parsedMaxUses = Number(max_uses);
+        const boundedMaxUses = Math.min(1000000, Math.max(1, Math.round(Number.isFinite(parsedMaxUses) ? parsedMaxUses : 1000)));
+        const parsedDays = Number(expires_in_days);
+        const expiresAt =
+          expires_in_days !== undefined && expires_in_days !== null && Number.isFinite(parsedDays) && parsedDays > 0
+            ? new Date(Date.now() + Math.min(3650, parsedDays) * 86400000).toISOString()
+            : null;
+
         const { data: created, error } = await serverClient
           .from("discount_coupons")
           .upsert(
             {
-              code: String(coupon_code).trim().toUpperCase(),
-              discount_type: "percent",
-              discount_value: Math.min(80, Math.max(5, Number(discount_value || 15))),
-              is_active: true,
+              code: normalizedCode,
+              discount_type: normalizedType,
+              discount_value: boundedDiscount,
+              min_amount_vnd: boundedMinAmount,
+              max_uses: boundedMaxUses,
+              expires_at: expiresAt,
+              is_active: typeof is_active === "boolean" ? is_active : true,
             },
             { onConflict: "code" }
           )
@@ -179,6 +229,49 @@ export default async function handler(req, res) {
           .single();
         if (error) throw error;
         return res.status(200).json({ success: true, coupon: created });
+      }
+
+      if (action === "toggle_coupon" && coupon_code) {
+        const normalizedCode = String(coupon_code).trim().toUpperCase();
+        const { data: updatedCoupon, error } = await serverClient
+          .from("discount_coupons")
+          .update({ is_active: Boolean(is_active) })
+          .eq("code", normalizedCode)
+          .select()
+          .single();
+        if (error) throw error;
+        return res.status(200).json({ success: true, coupon: updatedCoupon });
+      }
+
+      if (action === "delete_coupon" && coupon_code) {
+        const normalizedCode = String(coupon_code).trim().toUpperCase();
+        const { data: existing, error: fetchErr } = await serverClient
+          .from("discount_coupons")
+          .select("id, code, used_count")
+          .eq("code", normalizedCode)
+          .single();
+        if (fetchErr || !existing) {
+          return res.status(404).json({ success: false, error: `Không tìm thấy mã giảm giá '${normalizedCode}'.` });
+        }
+        const { count: refCount } = await serverClient
+          .from("user_coupons")
+          .select("id", { count: "exact", head: true })
+          .eq("coupon_id", existing.id);
+
+        if ((existing.used_count || 0) > 0 || (refCount || 0) > 0) {
+          const { data: archived, error: archErr } = await serverClient
+            .from("discount_coupons")
+            .update({ is_active: false })
+            .eq("id", existing.id)
+            .select()
+            .single();
+          if (archErr) throw archErr;
+          return res.status(200).json({ success: true, softDeactivated: true, coupon: archived });
+        }
+
+        const { error: delErr } = await serverClient.from("discount_coupons").delete().eq("id", existing.id);
+        if (delErr) throw delErr;
+        return res.status(200).json({ success: true, deleted: true, code: normalizedCode });
       }
 
       return res.status(400).json({ success: false, error: `Unsupported admin monetization action '${action}'.` });
