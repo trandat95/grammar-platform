@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Skeleton } from "../design-system";
-import { getBadgeTierIconPath, getLevelIconPath } from "../ui-2026/assetMap";
+import { getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
 import { getCachedMonetizationOverview } from "../monetization/MonetizationHub";
 import { getCachedGamificationSummary } from "../gamification/GamificationHub";
 
@@ -384,11 +384,11 @@ export default function AccountProfileCard({
                 }}
               >
                 <img
-                  src={getBadgeTierIconPath(b.tier, true)}
+                  src={getBadgeArtworkPath(b.code, b.tier, true, b.is_hidden)}
                   alt={b.title_vi}
-                  width={26}
-                  height={26}
-                  style={{ width: 26, height: 26, flexShrink: 0 }}
+                  width={36}
+                  height={36}
+                  style={{ width: 36, height: 36, borderRadius: "8px", objectFit: "cover", flexShrink: 0 }}
                 />
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ fontSize: "0.76rem", fontWeight: 800, color: T.textHeading, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -429,11 +429,11 @@ export default function AccountProfileCard({
                   }}
                 >
                   <img
-                    src={getBadgeTierIconPath(b.tier, false)}
+                    src={getBadgeArtworkPath(b.code, b.tier, false, b.is_hidden)}
                     alt={b.title_vi}
-                    width={22}
-                    height={22}
-                    style={{ width: 22, height: 22, flexShrink: 0 }}
+                    width={32}
+                    height={32}
+                    style={{ width: 32, height: 32, borderRadius: "7px", objectFit: "cover", flexShrink: 0 }}
                   />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: "0.74rem", fontWeight: 700, color: T.textSecondary }}>{b.title_vi}</div>

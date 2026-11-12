@@ -1,6 +1,7 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Badge, Button, Modal } from "../design-system";
+import { getBadgeArtworkPath } from "../ui-2026/assetMap";
 
 /**
  * Milestone 2.10.7: Accessible Level Up Celebration & Achievement Unlock Modal
@@ -102,7 +103,13 @@ export default function GamificationCelebrationModal({
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                  <span style={{ fontSize: "1.5rem" }}>{b.icon || "🏆"}</span>
+                  <img
+                    src={getBadgeArtworkPath(b.code, b.tier, true, b.is_hidden)}
+                    alt={b.title_vi}
+                    width={42}
+                    height={42}
+                    style={{ width: 42, height: 42, borderRadius: "10px", objectFit: "cover", flexShrink: 0 }}
+                  />
                   <div>
                     <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>{b.title_vi}</div>
                     <div style={{ fontSize: "0.75rem", color: T.textMuted }}>{b.description_vi}</div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
-import { AVATAR_PATHS, BANNER_PATHS, getBadgeTierIconPath, getLevelIconPath } from "../ui-2026/assetMap";
+import { AVATAR_PATHS, BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
 
 const BOARD_TABS = [
   { id: "weekly_xp", label: "XP Tuần", unit: "XP" },
@@ -511,46 +511,116 @@ export default function GamificationHub({
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(225px, 1fr))", gap: "0.75rem" }}>
-          {filteredBadges.map((b) => (
-            <div
-              key={b.code}
-              style={{
-                backgroundColor: T.bgElevated,
-                border: `1px solid ${b.unlocked ? T.successBorder : T.borderSubtle}`,
-                borderRadius: "10px",
-                padding: "0.8rem",
-                opacity: b.unlocked ? 1 : 0.72,
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.45rem" }}>
-                <img
-                  src={getBadgeTierIconPath(b.tier, b.unlocked, b.is_hidden)}
-                  alt={`${b.tier} badge`}
-                  width={32}
-                  height={32}
-                  style={{ width: 32, height: 32 }}
-                />
-                <div style={{ display: "flex", gap: "0.3rem" }}>
-                  <Badge tone={getTierTone(b.tier)} isLight={isLight}>
-                    {b.tier}
-                  </Badge>
-                  {b.unlocked && (
-                    <Badge tone="success" isLight={isLight}>
-                      Đã mở
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(235px, 1fr))", gap: "0.9rem" }}>
+          {filteredBadges.map((b) => {
+            const isMysteryLocked = Boolean(!b.unlocked && b.is_hidden);
+            const tierFrameBorder = b.unlocked
+              ? T.successBorder
+              : b.tier === "Diamond"
+              ? T.accentBorder
+              : b.tier === "Gold"
+              ? T.warningBorder
+              : b.tier === "Silver"
+              ? T.border
+              : T.borderSubtle;
+
+            return (
+              <div
+                key={b.code}
+                style={{
+                  backgroundColor: T.bgElevated,
+                  border: `1px solid ${b.unlocked ? T.successBorder : tierFrameBorder}`,
+                  borderRadius: "14px",
+                  padding: "0.95rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  gap: "0.65rem",
+                  boxShadow: b.unlocked ? T.shadowSm : "none",
+                  transition: "transform 160ms ease, box-shadow 160ms ease",
+                }}
+              >
+                <div>
+                  {/* Top Pill Row */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.7rem" }}>
+                    <Badge tone={getTierTone(b.tier)} isLight={isLight}>
+                      {b.tier}
                     </Badge>
-                  )}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                      {isMysteryLocked && (
+                        <Badge tone="neutral" isLight={isLight}>
+                          🔒 Bí ẩn
+                        </Badge>
+                      )}
+                      {b.unlocked ? (
+                        <Badge tone="success" isLight={isLight}>
+                          ✓ Đã mở
+                        </Badge>
+                      ) : !isMysteryLocked ? (
+                        <span style={{ fontSize: "0.66rem", fontWeight: 700, color: T.textMuted }}>
+                          Chưa đạt
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* Centerpiece Artwork Medallion */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+                    <div
+                      style={{
+                        width: "74px",
+                        height: "74px",
+                        borderRadius: "16px",
+                        overflow: "hidden",
+                        flexShrink: 0,
+                        border: `2px solid ${tierFrameBorder}`,
+                        backgroundColor: T.card,
+                        boxShadow: b.unlocked ? T.shadowSm : "none",
+                        position: "relative",
+                      }}
+                    >
+                      <img
+                        src={getBadgeArtworkPath(b.code, b.tier, b.unlocked, b.is_hidden)}
+                        alt={b.title_vi}
+                        width={74}
+                        height={74}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                          filter: b.unlocked || isMysteryLocked ? "none" : "saturate(0.82) contrast(0.98)",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontSize: "0.88rem", fontWeight: 800, color: T.textHeading, lineHeight: 1.3 }}>
+                        {b.title_vi}
+                      </div>
+                      <div style={{ fontSize: "0.73rem", color: T.textSecondary, marginTop: "0.28rem", lineHeight: 1.42 }}>
+                        {b.description_vi}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingTop: "0.5rem",
+                    borderTop: `1px solid ${T.borderSubtle}`,
+                    fontSize: "0.72rem",
+                  }}
+                >
+                  <span style={{ color: T.accent, fontWeight: 800 }}>Thưởng: +{b.xp_bonus} XP</span>
+                  <span style={{ color: T.textMuted, fontSize: "0.68rem" }}>{b.category}</span>
                 </div>
               </div>
-              <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>{b.title_vi}</div>
-              <div style={{ fontSize: "0.73rem", color: T.textMuted, marginTop: "0.2rem", lineHeight: 1.4 }}>
-                {b.description_vi}
-              </div>
-              <div style={{ fontSize: "0.7rem", color: T.accent, fontWeight: 700, marginTop: "0.45rem" }}>
-                Thưởng: +{b.xp_bonus} XP
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

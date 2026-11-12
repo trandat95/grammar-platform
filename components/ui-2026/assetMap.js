@@ -55,6 +55,36 @@ export function getBadgeTierIconPath(tier = "Bronze", unlocked = false, isHidden
   }
 }
 
+export const BADGE_ART_MAP = {
+  first_step: "/assets/badges/first_step.jpg",
+  daily_learner_3: "/assets/badges/daily_learner_3.jpg",
+  streak_7_days: "/assets/badges/streak_7_days.jpg",
+  warrior_30_days: "/assets/badges/warrior_30_days.jpg",
+  consistency_master_100: "/assets/badges/consistency_master_100.jpg",
+  night_owl_hidden: "/assets/badges/night_owl_hidden.jpg",
+  tense_explorer: "/assets/badges/tense_explorer.jpg",
+  master_13_tenses: "/assets/badges/master_13_tenses.jpg",
+  conditional_expert: "/assets/badges/conditional_expert.jpg",
+  passive_voice_master: "/assets/badges/passive_voice_master.svg",
+  grammar_legend_12: "/assets/badges/grammar_legend_12.jpg",
+  perfect_score: "/assets/badges/perfect_score.jpg",
+  sharp_shooter: "/assets/badges/sharp_shooter.svg",
+  error_hunter: "/assets/badges/error_hunter.svg",
+  comeback_king: "/assets/badges/comeback_king.svg",
+  lightning_master_hidden: "/assets/badges/lightning_master_hidden.svg",
+  quiz_starter: "/assets/badges/quiz_starter.svg",
+  century_club: "/assets/badges/century_club.svg",
+  knowledge_collector: "/assets/badges/knowledge_collector.svg",
+  review_master: "/assets/badges/review_master.svg",
+  mystery_locked: "/assets/badges/mystery_locked.jpg",
+};
+
+export function getBadgeArtworkPath(code, tier = "Bronze", unlocked = false, isHidden = false) {
+  if (!unlocked && isHidden) return BADGE_ART_MAP.mystery_locked;
+  if (code && BADGE_ART_MAP[code]) return BADGE_ART_MAP[code];
+  return getBadgeTierIconPath(tier, unlocked, isHidden);
+}
+
 export const VIZ_ICON_MAP = {
   timeline: "/assets/icons/visualizations/viz-01-timeline-13-tenses.svg",
   "decision-tree": "/assets/icons/visualizations/viz-02-decision-tree-conditionals.svg",
