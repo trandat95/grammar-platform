@@ -2,6 +2,7 @@ import { getAdminClient } from "../../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../../lib/admin/admin-guard";
 import { KNOWLEDGE_GRAPH, resolveConceptForQuestion } from "../../../../lib/knowledge/knowledge-graph";
 import quizData from "../../../../data/ui/quiz_bank.json";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const QUESTION_LOOKUP = (() => {
   const map = new Map();
@@ -24,6 +25,7 @@ const QUESTION_LOOKUP = (() => {
  * Protected with Zero-Trust Admin RBAC & Sliding-Window Rate Limiter.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "GET") {
     return res.status(405).json({ success: false, error: "Method not allowed. Use GET." });
   }
@@ -140,6 +142,6 @@ export default async function handler(req, res) {
       recentReports,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message || "Internal server error fetching feedback summary." });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/explanations/feedback-summary", err: err.message || "Internal server error fetching feedback summary." });
   }
 }

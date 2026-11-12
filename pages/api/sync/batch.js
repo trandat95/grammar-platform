@@ -1,7 +1,12 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAX_BATCH_SIZE = 50;
 
 /**
@@ -12,23 +17,33 @@ const MAX_BATCH_SIZE = 50;
  * - Applies Conflict Resolution Matrix (XP Delta, UTC Streak, Set Union, Tombstone Deletes)
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    res.setHeader("Allow", ["POST"]);
+    return res.status(405).json({ error: "Method not allowed", correlationId });
+  }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "sync_batch", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
+
+  const authUser = await verifyServerSession(req);
+  if (!authUser) {
+    return res.status(401).json({ error: "Unauthorized: Valid Bearer session required", correlationId });
   }
 
   const { userId, deviceId = null, items } = req.body || {};
 
-  if (!userId || !UUID_REGEX.test(userId) || !Array.isArray(items)) {
-    return res.status(400).json({ error: "Invalid request payload: valid userId UUID and items array required" });
+  if (!isValidUuid(userId) || !Array.isArray(items)) {
+    return res.status(400).json({ error: "Invalid request payload: valid userId UUID and items array required", correlationId });
   }
 
-  const authUser = await verifyServerSession(req);
-  if (authUser && authUser.id !== userId) {
-    return res.status(403).json({ error: "Forbidden: Cross-user sync write denied" });
+  if (authUser.id !== userId) {
+    return res.status(403).json({ error: "Forbidden: Cross-user sync write denied", correlationId });
   }
 
   const boundedItems = items.slice(0, MAX_BATCH_SIZE);
-  const supabaseClient = getAdminClient();
+  const supabaseClient = getAdminClient(req);
 
   try {
     // 1. Check idempotency keys already processed for this user
@@ -287,7 +302,11 @@ export default async function handler(req, res) {
       serverTime: nowIso,
     });
   } catch (err) {
-    console.error("Batch sync error:", err);
-    return res.status(500).json({ error: "Failed to process batch sync", details: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/sync/batch",
+      err,
+      publicMessage: "Không thể xử lý đồng bộ hàng loạt.",
+    });
   }
 }

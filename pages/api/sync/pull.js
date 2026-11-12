@@ -1,7 +1,11 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.3.9: Multi-Device Delta Pull Endpoint (/api/sync/pull)
@@ -9,24 +13,33 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  */
 
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" });
+    res.setHeader("Allow", ["GET"]);
+    return res.status(405).json({ error: "Method not allowed", correlationId });
   }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "sync_pull", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
 
   const authUser = await verifyServerSession(req);
-  const queryUserId = req.query.userId;
-
-  if (!queryUserId || !UUID_REGEX.test(queryUserId)) {
-    return res.status(400).json({ success: false, error: "Valid userId UUID required" });
+  if (!authUser) {
+    return res.status(401).json({ success: false, error: "Unauthorized: Valid Bearer session required.", correlationId });
   }
 
-  // Enforce ownership when authenticated Bearer session is present
-  if (authUser && authUser.id !== queryUserId) {
-    return res.status(403).json({ success: false, error: "Forbidden: Cross-user sync access denied." });
+  const queryUserId = req.query.userId || authUser.id;
+
+  if (!isValidUuid(queryUserId)) {
+    return res.status(400).json({ success: false, error: "Valid userId UUID required", correlationId });
+  }
+
+  if (authUser.id !== queryUserId) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cross-user sync access denied.", correlationId });
   }
 
   const since = req.query.since || null;
-  const serverClient = getAdminClient();
+  const serverClient = getAdminClient(req);
 
   try {
     const { data: tracker } = await serverClient
@@ -85,7 +98,11 @@ export default async function handler(req, res) {
       policy: policy || null,
     });
   } catch (err) {
-    console.error("[Sync Pull Error]:", err);
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/sync/pull",
+      err,
+      publicMessage: "Không thể đồng bộ dữ liệu từ máy chủ.",
+    });
   }
 }

@@ -143,12 +143,16 @@ export default function GrammarDiagnosticEngine({
   const handleSubmitTest = async (submissionPayload) => {
     setIsSubmitting(true);
     try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      };
       const res = await fetch("/api/diagnostic/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           ...submissionPayload,
-          user_id: currentUser?.id,
+          user_id: !currentUser?.isGuest ? currentUser?.id : null,
           user_tracker: userTracker,
         }),
       });
@@ -289,16 +293,21 @@ export default function GrammarDiagnosticEngine({
       localStorage.setItem("grammar_user_roadmap", JSON.stringify(updatedRoadmap));
     } catch (e) {}
 
-    // Async sync to server
-    fetch("/api/diagnostic/roadmap", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        task_id: taskId,
-        is_completed: isChecked,
-        user_id: currentUser?.id,
-      }),
-    }).catch(() => {});
+    // Async sync to server (authenticated users only)
+    if (authToken && currentUser?.id && !currentUser.isGuest) {
+      fetch("/api/diagnostic/roadmap", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          task_id: taskId,
+          is_completed: isChecked,
+          user_id: currentUser.id,
+        }),
+      }).catch(() => {});
+    }
   };
 
   const handleRetakeTest = () => {

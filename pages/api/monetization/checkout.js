@@ -7,22 +7,35 @@ import {
   normalizePaymentProviderAdapter,
 } from "../../../lib/monetization/payment-provider-adapter";
 import { resolveUserEntitlement } from "../../../lib/monetization/entitlement-engine";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.12.4 & 2.12.10: Server-Authoritative Subscription Checkout, Free Trial & Transparent Cancel API
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res.status(405).json({ success: false, error: "Method not allowed", correlationId });
   }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "monetization_checkout", maxRequests: 30, correlationId });
+  if (!rate.allowed) return;
 
   const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
-  if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
+  if (!authUser) {
+    return res.status(401).json({
+      success: false,
+      error: "Unauthorized: Vui lòng đăng nhập để thực hiện thao tác gói VIP.",
+      correlationId,
+    });
   }
 
   const {
@@ -35,12 +48,12 @@ export default async function handler(req, res) {
     cancellation_reason = null,
   } = req.body || {};
 
-  const resolvedUserId = authUser?.id || user_id;
-  if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId)) {
-    return res.status(400).json({ success: false, error: "Valid authenticated user_id UUID required." });
+  const resolvedUserId = authUser.id;
+  if (!isValidUuid(resolvedUserId)) {
+    return res.status(400).json({ success: false, error: "Valid authenticated user_id UUID required.", correlationId });
   }
-  if (authUser && user_id && authUser.id !== user_id) {
-    return res.status(403).json({ success: false, error: "Forbidden: Cross-user checkout denied." });
+  if (user_id && authUser.id !== user_id) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cross-user checkout denied.", correlationId });
   }
 
   const now = new Date();
@@ -411,6 +424,11 @@ export default async function handler(req, res) {
       entitlement,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/monetization/checkout",
+      err,
+      publicMessage: "Không thể xử lý yêu cầu thanh toán lúc này.",
+    });
   }
 }

@@ -3,6 +3,7 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery, applyKnowledgeDecay } from "../../../lib/learning/mastery-tracker";
 import { buildAdaptiveQuestionSet } from "../../../lib/learning/adaptive-question-engine";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -11,6 +12,7 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  * Supports GET (?user_id=...&count=20&mode=adaptive|manual_review&topicId=...) and POST.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "GET" && req.method !== "POST") {
     res.setHeader("Allow", ["GET", "POST"]);
     return res.status(405).json({ success: false, error: "Method not allowed" });
@@ -65,6 +67,6 @@ export default async function handler(req, res) {
       ...result,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/learning/adaptive-mix", err: err.message });
   }
 }

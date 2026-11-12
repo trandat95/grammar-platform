@@ -3,12 +3,14 @@ import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { FUNNEL_STAGES } from "../../../lib/monetization/behavioral-engine";
 import { computeAbSignificance } from "../../../lib/monetization/paywall-ab-engine";
 import { invalidateMonetizationCatalogCache } from "../monetization/overview";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 /**
  * Milestone 2.12.14: Admin Monetization Revenue (MRR/ARR/LTV), 14-Stage Funnel & A/B Dashboard API
  * Zero-Trust RBAC & Rate-Limited via verifyAdminWithGuard.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const adminCtx = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_monetization" });
   if (!adminCtx) return;
 
@@ -135,7 +137,7 @@ export default async function handler(req, res) {
         sepayTransactions: (txs || []).filter((t) => t.provider === "sepay").slice(0, 12),
       });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/monetization", err: err.message });
     }
   }
 
@@ -385,7 +387,7 @@ export default async function handler(req, res) {
 
       return res.status(400).json({ success: false, error: `Unsupported admin monetization action '${action}'.` });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/monetization", err: err.message });
     }
   }
 

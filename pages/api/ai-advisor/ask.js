@@ -2,8 +2,13 @@ import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { analyzeDiagnosticRootCauses, findTopicPrerequisites } from "../../../lib/diagnostic/knowledge.graph";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sanitizeShortText,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 function buildGroundedSuggestions(scoreResult, questionText = "") {
   const skills = scoreResult?.skill_results || [];
@@ -128,16 +133,22 @@ function synthesizeDeterministicAdvice({ questionText, scoreResult, rootCauses, 
  * Strict Anti-Hallucination Guardrails: All scores & lesson IDs grounded in Scorer + 53-lesson DAG.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
+    return res.status(405).json({ success: false, error: "Method not allowed. Use POST.", correlationId });
   }
 
-  const serverClient = getAdminClient();
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "ai_advisor_ask", maxRequests: 20, correlationId });
+  if (!rate.allowed) return;
+
   const authUser = await verifyServerSession(req);
   if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
+    return res.status(401).json({ success: false, error: "Invalid Bearer session token.", correlationId });
   }
+
+  const serverClient = getAdminClient(req);
 
   try {
     const {
@@ -147,19 +158,24 @@ export default async function handler(req, res) {
       score_result = null,
     } = req.body || {};
 
-    if (!question_text || typeof question_text !== "string") {
-      return res.status(400).json({ success: false, error: "Missing question_text prompt." });
+    const cleanQuestion = sanitizeShortText(question_text, 600);
+    if (!cleanQuestion) {
+      return res.status(400).json({ success: false, error: "Missing question_text prompt.", correlationId });
+    }
+
+    if (authUser && user_id && isValidUuid(user_id) && authUser.id !== user_id) {
+      return res.status(403).json({ success: false, error: "Forbidden: Cross-user AI advisor request denied.", correlationId });
     }
 
     const rootCauses =
       score_result?.root_cause_analysis ||
       analyzeDiagnosticRootCauses(score_result?.detailed_answers || [], score_result?.skill_results || []);
 
-    const focusData = buildGroundedSuggestions(score_result, question_text);
+    const focusData = buildGroundedSuggestions(score_result, cleanQuestion);
 
     // Default to deterministic zero-hallucination synthesis
     let advisorResponse = synthesizeDeterministicAdvice({
-      questionText: question_text,
+      questionText: cleanQuestion,
       scoreResult: score_result,
       rootCauses,
       focusData,
@@ -186,8 +202,9 @@ Dữ liệu thật: ${JSON.stringify({
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            signal: AbortSignal.timeout(8000),
             body: JSON.stringify({
-              contents: [{ parts: [{ text: `${systemPrompt}\n\nCâu hỏi học viên: ${question_text}` }] }],
+              contents: [{ parts: [{ text: `${systemPrompt}\n\nCâu hỏi học viên: ${cleanQuestion}` }] }],
               generationConfig: { temperature: 0.3, maxOutputTokens: 450 },
             }),
           }
@@ -205,14 +222,14 @@ Dữ liệu thật: ${JSON.stringify({
       }
     }
 
-    const resolvedUserId = authUser?.id || user_id;
-    if (resolvedUserId && UUID_REGEX.test(resolvedUserId)) {
+    const resolvedUserId = authUser?.id || null;
+    if (resolvedUserId) {
       await serverClient
         .from("ai_advisor_logs")
         .insert({
           user_id: resolvedUserId,
-          attempt_id: attempt_id && UUID_REGEX.test(attempt_id) ? attempt_id : null,
-          question_text,
+          attempt_id: attempt_id && isValidUuid(attempt_id) ? attempt_id : null,
+          question_text: cleanQuestion,
           advisor_response: advisorResponse,
           context_snapshot: {
             providerMode,
@@ -225,12 +242,18 @@ Dữ liệu thật: ${JSON.stringify({
 
     return res.status(200).json({
       success: true,
+      correlationId,
       providerMode,
       answer: advisorResponse,
       suggestedLessons: focusData.verifiedLessons,
       rootCause: rootCauses?.primaryRootCause || null,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/ai-advisor/ask",
+      err,
+      publicMessage: "Cố vấn học tập hiện không khả dụng, vui lòng thử lại.",
+    });
   }
 }

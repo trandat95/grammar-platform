@@ -2,30 +2,43 @@ import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { analyzeDiagnosticRootCauses } from "../../../lib/diagnostic/knowledge.graph";
 import { calculateRetentionMetrics } from "../../../lib/spaced-repetition/retention.tracker";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.8.4 & 2.8.9: Diagnostic Analytics & Multi-Attempt Growth Comparison API
  * GET /api/diagnostic/analytics?user_id=...
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ success: false, error: "Method not allowed. Use GET." });
+    return res.status(405).json({ success: false, error: "Method not allowed. Use GET.", correlationId });
   }
 
-  const serverClient = getAdminClient();
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "diag_analytics", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
+
   const authUser = await verifyServerSession(req);
   if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
+    return res.status(401).json({ success: false, error: "Invalid Bearer session token.", correlationId });
   }
 
-  const requestedUserId = authUser?.id || req.query?.user_id;
-  if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
+  if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cross-user analytics denied.", correlationId });
+  }
+
+  const serverClient = getAdminClient(req);
+  const requestedUserId = authUser?.id || null;
+  if (!requestedUserId) {
     return res.status(200).json({
       success: true,
       guestMode: true,
+      correlationId,
       attempts: [],
       roadmapVersions: [],
       retentionMetrics: calculateRetentionMetrics({}),
@@ -133,6 +146,11 @@ export default async function handler(req, res) {
       rootCauseSummary,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/diagnostic/analytics",
+      err,
+      publicMessage: "Không thể tải dữ liệu phân tích chẩn đoán.",
+    });
   }
 }

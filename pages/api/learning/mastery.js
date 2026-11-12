@@ -14,6 +14,7 @@ import {
 import { generatePersonalRecommendations } from "../../../lib/learning/adaptive-question-engine";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
 import quizData from "../../../data/ui/quiz_bank.json";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -37,6 +38,7 @@ const DIFF_TO_SCORE = { Beginner: 1, Elementary: 2, Intermediate: 3, Advanced: 4
  * Milestone 2.5 & 2.9: Adaptive 12-Topic Concept Mastery, 5-State SM-2 & Forgetting Curve API
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
 
@@ -227,7 +229,7 @@ export default async function handler(req, res) {
         },
       });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/learning/mastery", err: err.message });
     }
   }
 
@@ -432,7 +434,7 @@ export default async function handler(req, res) {
         gamification,
       });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/learning/mastery", err: err.message });
     }
   }
 

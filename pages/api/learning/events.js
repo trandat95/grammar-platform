@@ -3,6 +3,7 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery } from "../../../lib/learning/mastery-tracker";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -11,6 +12,7 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  * Records idempotent QUESTION_ANSWERED / QUIZ_COMPLETED events atomically cleanly avoiding duplicates.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
@@ -84,6 +86,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, processed, deduped, gamification: latestGamification });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/learning/events", err: err.message });
   }
 }

@@ -1,11 +1,13 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 /**
  * Milestone 2.4.5: Real-Time Operational Health Dashboard API (/api/admin/overview)
  * Protected by Zero-Trust RBAC + Edge Caching (s-maxage=30, stale-while-revalidate=60).
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "GET") {
     return res.status(405).json({ success: false, error: `Method ${req.method} not allowed` });
   }
@@ -116,6 +118,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error("[Admin Overview Error]:", err);
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/overview", err: err.message });
   }
 }

@@ -2,6 +2,7 @@ import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
 import { getClientIp } from "../../../lib/admin/admin-guard";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 function escapeCsvCell(val) {
   const s = val === null || val === undefined ? "" : String(val);
@@ -18,6 +19,7 @@ function escapeCsvCell(val) {
  * - Paginated search & UTF-8 BOM CSV export (?format=csv)
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
@@ -121,7 +123,7 @@ export default async function handler(req, res) {
         limit: limitNum,
       });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/users", err: e.message });
     }
   }
 
@@ -183,7 +185,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ success: true, profile: updated });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/users", err: e.message });
     }
   }
 

@@ -1,8 +1,12 @@
 import { getAdminClient } from "../../../../lib/supabase/server";
 import { verifyServerSession } from "../../../../lib/supabase/middleware";
 import { evaluateAdaptiveAdjustments } from "../../../../lib/diagnostic/adaptive.learning.engine";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../../lib/api/security-guard";
 
 /**
  * Milestone 2.8.8: Dynamic Adaptive Roadmap Adjustment API
@@ -11,16 +15,22 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  * persists an immutable snapshot into public.roadmap_versions, and updates active roadmap.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
+    return res.status(405).json({ success: false, error: "Method not allowed. Use POST.", correlationId });
   }
 
-  const serverClient = getAdminClient();
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "diag_adjust", maxRequests: 30, correlationId });
+  if (!rate.allowed) return;
+
   const authUser = await verifyServerSession(req);
   if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
+    return res.status(401).json({ success: false, error: "Invalid Bearer session token.", correlationId });
   }
+
+  const serverClient = getAdminClient(req);
 
   try {
     const {
@@ -32,13 +42,17 @@ export default async function handler(req, res) {
     } = req.body || {};
 
     if (!roadmap || !Array.isArray(roadmap.weeks)) {
-      return res.status(400).json({ success: false, error: "Missing active roadmap object with weeks array." });
+      return res.status(400).json({ success: false, error: "Missing active roadmap object with weeks array.", correlationId });
     }
 
-    const resolvedUserId = authUser?.id || user_id;
+    if (authUser && user_id && isValidUuid(user_id) && authUser.id !== user_id) {
+      return res.status(403).json({ success: false, error: "Forbidden: Cross-user roadmap adjustment denied.", correlationId });
+    }
+
+    const resolvedUserId = authUser?.id || null;
     let conceptProgress = [];
 
-    if (resolvedUserId && UUID_REGEX.test(resolvedUserId)) {
+    if (resolvedUserId) {
       const { data: progRows } = await serverClient
         .from("user_concept_progress")
         .select("*")
@@ -61,7 +75,7 @@ export default async function handler(req, res) {
 
     let persistedVersion = false;
 
-    if (resolvedUserId && UUID_REGEX.test(resolvedUserId) && roadmap.db_id && UUID_REGEX.test(roadmap.db_id)) {
+    if (resolvedUserId && roadmap.db_id && isValidUuid(roadmap.db_id)) {
       try {
         await serverClient
           .from("user_learning_roadmaps")
@@ -97,6 +111,11 @@ export default async function handler(req, res) {
       persistedToCloud: persistedVersion,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/diagnostic/adaptive/adjust",
+      err,
+      publicMessage: "Không thể điều chỉnh lộ trình học tập.",
+    });
   }
 }

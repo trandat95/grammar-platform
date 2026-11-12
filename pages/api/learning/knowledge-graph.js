@@ -4,6 +4,7 @@ import {
   findPrerequisites,
   getDependentConcepts,
 } from "../../../lib/knowledge/knowledge-graph";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 /**
  * Milestone 2.5.7: Grammar Knowledge Graph (DAG) API
@@ -11,6 +12,7 @@ import {
  * Returns topological acyclic validation, prerequisite chain (< 5ms), and dependent lessons.
  */
 export default function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "GET") {
     return res.status(405).json({ success: false, error: "Method not allowed. Use GET." });
   }
@@ -44,6 +46,6 @@ export default function handler(req, res) {
       queryDurationMs,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message || "Knowledge Graph lookup failed." });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/learning/knowledge-graph", err: err.message || "Knowledge Graph lookup failed." });
   }
 }

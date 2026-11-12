@@ -7,6 +7,7 @@ import {
   getLocalWeekKey,
   getLocalMonthKey,
 } from "../../../lib/gamification/challenge-streak-engine";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const ALLOWED_BOARDS = ["weekly_xp", "monthly_xp", "all_time_xp", "weekly_consistency", "grammar_mastery"];
 const LEADERBOARD_CACHE_TTL_MS = 10 * 1000;
@@ -67,6 +68,7 @@ function formatDisplayName(profile, userId, visibility) {
  * Uses SECURITY DEFINER RPC get_leaderboard_snapshot so per-user RLS never hides XP on public rankings.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
     return res.status(405).json({ success: false, error: "Method not allowed" });
@@ -259,6 +261,6 @@ export default async function handler(req, res) {
         : null,
     });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/gamification/leaderboard", err: err.message });
   }
 }

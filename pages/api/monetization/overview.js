@@ -13,6 +13,7 @@ import {
   validateEthicalCampaign,
 } from "../../../lib/monetization/paywall-ab-engine";
 import { calculateServerOrderPricing } from "../../../lib/monetization/payment-provider-adapter";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -74,6 +75,7 @@ async function getMonetizationCatalog(serverClient) {
  * Milestone 2.12: Monetization Overview, Behavioral Psychology, Paywall Capping & Coupon Validator API
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
@@ -194,7 +196,7 @@ export default async function handler(req, res) {
         marketingOptOut,
       });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/monetization/overview", err: err.message });
     }
   }
 
@@ -402,7 +404,7 @@ export default async function handler(req, res) {
 
       return res.status(400).json({ success: false, error: `Unsupported action '${action}'.` });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/monetization/overview", err: err.message });
     }
   }
 

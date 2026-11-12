@@ -1,0 +1,85 @@
+name: Automated Encrypted Supabase Backup
+
+on:
+  schedule:
+    # Daily backup at 02:15 UTC (09:15 UTC+7)
+    - cron: "15 2 * * *"
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "Backup retention tier (daily | weekly | monthly)"
+        required: false
+        default: "daily"
+        type: choice
+        options:
+          - daily
+          - weekly
+          - monthly
+
+jobs:
+  encrypted-backup:
+    name: Dump, Compress & AES-256 Encrypt Database
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Required Backup Secrets
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ] || [ -z "$BACKUP_ENCRYPTION_PASSPHRASE" ]; then
+            echo "::notice::SUPABASE_DB_URL or BACKUP_ENCRYPTION_PASSPHRASE secret not yet configured in GitHub Secrets. Exiting cleanly."
+            exit 0
+          fi
+
+      - name: Install PostgreSQL 17 Client & Supabase CLI
+        if: ${{ secrets.SUPABASE_DB_URL != '' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17 || sudo apt-get install -y postgresql-client
+          curl -fsSL https://raw.githubusercontent.com/supabase/cli/main/install.sh | sh || true
+
+      - name: Export Schema + Public Data & Encrypt with AES-256-CBC (PBKDF2)
+        if: ${{ secrets.SUPABASE_DB_URL != '' && secrets.BACKUP_ENCRYPTION_PASSPHRASE != '' }}
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_ENCRYPTION_PASSPHRASE: ${{ secrets.BACKUP_ENCRYPTION_PASSPHRASE }}
+          INPUT_TIER: ${{ github.event.inputs.tier || 'daily' }}
+        run: |
+          mkdir -p backup_out
+          STAMP=$(date -u +%Y%m%d_%H%M%S)
+          DAY_OF_WEEK=$(date -u +%u)
+          DAY_OF_MONTH=$(date -u +%d)
+          TIER="$INPUT_TIER"
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            if [ "$DAY_OF_MONTH" = "01" ]; then TIER="monthly"
+            elif [ "$DAY_OF_WEEK" = "7" ]; then TIER="weekly"
+            else TIER="daily"; fi
+          fi
+
+          BASENAME="grammar_db_${TIER}_${STAMP}.sql.gz"
+          pg_dump "$SUPABASE_DB_URL" --schema=public --no-owner --no-privileges --clean --if-exists | gzip > "backup_out/$BASENAME"
+          sha256sum "backup_out/$BASENAME" > "backup_out/${BASENAME}.sha256"
+
+          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 100000 \
+            -in "backup_out/$BASENAME" \
+            -out "backup_out/${BASENAME}.enc" \
+            -pass env:BACKUP_ENCRYPTION_PASSPHRASE
+
+          # Remove plaintext archive immediately before artifact upload
+          rm -f "backup_out/$BASENAME"
+          echo "TIER=$TIER" >> $GITHUB_ENV
+          echo "BACKUP_FILE=${BASENAME}.enc" >> $GITHUB_ENV
+
+      - name: Upload Private Encrypted Backup Artifact
+        if: ${{ secrets.SUPABASE_DB_URL != '' && secrets.BACKUP_ENCRYPTION_PASSPHRASE != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ env.TIER }}-${{ github.run_number }}
+          path: |
+            backup_out/*.enc
+            backup_out/*.sha256
+          retention-days: 30

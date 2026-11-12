@@ -11,6 +11,7 @@ import {
 import { migrateQuestionExplanation } from "../../../../lib/explanation/explanation.migrator";
 import { resolveConceptForQuestion } from "../../../../lib/knowledge/knowledge-graph";
 import quizData from "../../../../data/ui/quiz_bank.json";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 function findQuestionInBank(questionId) {
   for (const topic of quizData.topics || []) {
@@ -32,6 +33,7 @@ function findQuestionInBank(questionId) {
  * PUT: Validate strict 5-field JSON, publish incremented version, and record immutable audit log
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const adminContext = await verifyAdminWithGuard(req, res, {
     rateLimitKeyPrefix: req.method === "GET" ? "admin_expl_read" : "admin_expl_write",
   });
@@ -74,7 +76,7 @@ export default async function handler(req, res) {
         explanation,
       });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/explanations/[questionId]", err: e.message });
     }
   }
 
@@ -150,7 +152,7 @@ export default async function handler(req, res) {
         version: nextVersion,
       });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/explanations/[questionId]", err: e.message });
     }
   }
 

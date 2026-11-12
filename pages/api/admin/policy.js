@@ -1,11 +1,13 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard, getClientIp } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 /**
  * Milestone 2.4.7 & 2.4.9: Dynamic Quota Policies with Policy Versioning & Step-Up Auth
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
@@ -37,7 +39,7 @@ export default async function handler(req, res) {
         versions: versions || [],
       });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/policy", err: e.message });
     }
   }
 
@@ -109,7 +111,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ success: true, policy: updated });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/policy", err: e.message });
     }
   }
 

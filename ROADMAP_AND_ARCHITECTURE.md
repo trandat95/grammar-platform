@@ -15,7 +15,7 @@
          ✅ HOÀN THÀNH                                ✅ CORE LIVE TRÊN PROD                         🚀 SẴN SÀNG TRIỂN KHAI TỪNG MILESTONE
 ```
 
-* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 & 2.12 (INTELLIGENT MONETIZATION & CONVERSION ENGINE) — CHỜ CỔNG KIỂM ĐỊNH PRE-PROD CUỐI CÙNG (MILESTONE 2.11)**.
+* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 & 2.12 (INTELLIGENT MONETIZATION & CONVERSION ENGINE) — MILESTONE 2.11 HARDENING & SECURITY VERIFICATION LIVE (CÒN CỔNG LIGHTHOUSE / K6 / PLAYWRIGHT TRÊN RUNNER)**.
 * **Hiện trạng Thực tế trên Production (`https://grammar-platform.vercel.app`):**
   1. **Database PostgreSQL 17 Live (55 Bảng & 100% RLS):** Đã vận hành 12 bảng Core/Auth/Audit (+`user_achievements` upgraded) + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard + 18 bảng Monetization/Behavioral/A-B/Subscriptions trên Supabase (`wtvlbbcyvtqqygtojxay`).
   2. **Layered Architecture Bảo mật:** Tách biệt hoàn toàn Browser Client (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) và Server Admin Client (`SUPABASE_SERVICE_ROLE_KEY`), Repositories (`7 files`), Services (`7 files`), Server Guard (`admin-guard.js`).
@@ -61,7 +61,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành (100% — Enhanced Spec Live) |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ✅ Hoàn thành (100% — Live on Prod) |
-| **Quality** | **2.11**| **Performance, Security Hardening & Pre-Prod Verification** | **P0 (Pre-Prod)**| ⏳ Kế tiếp (Prod Readiness Spec Active) |
+| **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 
 ---
@@ -2079,68 +2079,483 @@ Liên kết trực tiếp với hệ thống `auth.users`, `profiles` & `system_
 
 ---
 
-### 🔹 Milestone 2.11: Performance Optimization, Security Hardening & Pre-Production Verification (P0)
+### 🔹 Milestone 2.11: Free-Tier Safe Performance, Security Hardening & Pre-Production Verification (P0)
 
-> **Mục tiêu:** Chuyển hóa toàn bộ nền tảng sang trạng thái **Production Ready** — đảm bảo tính bảo mật, hiệu năng chịu tải cao, khả năng sao lưu phục hồi thảm họa và quy trình CI/CD tự động trước khi công bố chính thức.
+> **Mục tiêu:** Nâng cao Security, Performance, Reliability và Code Quality của Grammar Learning Platform, đảm bảo ứng dụng hoạt động ổn định trên hạ tầng hiện tại gồm Vercel Hobby (Free) và Supabase Free.
+>
+> **Infrastructure Constraints:**
+> - Không nâng cấp Vercel Hobby hoặc Supabase Free.
+> - Không sử dụng dịch vụ trả phí mới.
+> - Không triển khai giải pháp yêu cầu Enterprise infrastructure.
+> - Không tạo workload vượt quá quota hiện tại.
+> - Không thực hiện destructive database operations.
+> - Không thay đổi business logic hiện tại.
+> - Không ảnh hưởng đến 12 chapters, 53 lessons và 2,939 questions.
+> - Không làm thay đổi kết quả Learning, Quiz, Mastery, Gamification và Monetization Engine.
 
-- [ ] **2.11.1 Security Architecture Review & STRIDE Threat Modeling (P0):**
-  * Đánh giá toàn diện Attack Surface của ứng dụng; lập mô hình đe dọa (Threat Model) theo khung STRIDE và tiêu chuẩn OWASP Top 10.
-  * Xuất bản báo cáo đánh giá an ninh (Security Assessment Report) và sổ đăng ký rủi ro (Risk Register) phân cấp Critical / High / Medium / Low.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.1):** 100% các lỗ hổng Critical và High được khắc phục triệt để trước khi phát hành.
-- [ ] **2.11.2 Database Security & RLS Penetration Testing (P0):**
-  * Kiểm thử xâm nhập Row-Level Security trên toàn bộ các bảng chứa dữ liệu người dùng (`profiles`, `user_*`, `diagnostic_*`, `audit_logs`).
-  * Xác minh ngăn chặn tuyệt đối các kịch bản: IDOR (Insecure Direct Object Reference), Horizontal/Vertical Privilege Escalation, JWT Manipulation, Anonymous Bypass, và rò rỉ `SUPABASE_SERVICE_ROLE_KEY` ở Frontend.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.2):** User A không thể đọc/ghi bất kỳ bản ghi nào của User B; không bảng nhạy cảm nào bị thiếu RLS.
-- [ ] **2.11.3 API Security & OWASP Top 10 Hardening (P0):**
-  * Kiểm thử bảo mật toàn diện trên tất cả các Serverless API Routes: kiểm tra Authentication, Role Authorization (RBAC), Input Sanitization chống SQL Injection, XSS, CSRF, Rate Limiting (30-60 req/min), Brute Force Protection và Replay Attacks.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.3):** Mọi request không hợp lệ nhận mã lỗi chuẩn (401/403/422/429); không để lộ stack trace hay thông tin máy chủ nội bộ.
-- [ ] **2.11.4 Authentication & Session Security Hardening (P0):**
-  * Tăng cường an ninh phiên đăng nhập: cơ chế hết hạn phiên (Session Expiration), xoay vòng Refresh Token (Token Rotation), bảo vệ quên mật khẩu an toàn, chống dò quét tài khoản (Account Enumeration Protection).
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.4):** JWT hết hạn bị từ chối tức thì; đăng xuất thu hồi phiên hoàn toàn trên mọi tab.
-- [ ] **2.11.5 Database Performance Optimization & EXPLAIN ANALYZE (P0):**
-  * Kiểm toán toàn bộ truy vấn cơ sở dữ liệu bằng `EXPLAIN ANALYZE`; triệt tiêu hoàn toàn các truy vấn N+1 và Full Table Scans trên các bảng lớn; bổ sung Composite Indexes cho các bộ lọc tìm kiếm và bảng xếp hạng.
-  * Cấu hình Connection Pooling và kiểm soát Lock Contention.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.5):** 95% các truy vấn cơ sở dữ liệu thực thi dưới 50ms trên tập dữ liệu mô phỏng 50,000 học viên.
-- [ ] **2.11.6 Frontend Performance & Core Web Vitals Optimization (P0):**
-  * Tối ưu hóa Code Splitting, Dynamic Imports, Lazy Loading hình ảnh/âm thanh, Tree Shaking, Bundle Size (< 150KB initial JS), tối ưu hóa font chữ và bộ nhớ đệm (Caching Strategy).
-  * Đạt chỉ số Google Lighthouse trên cả Mobile và Desktop:
-    * **Performance $\ge 90$** | **Accessibility $\ge 95$** | **Best Practices $\ge 95$** | **SEO $\ge 90$**.
-    * **Core Web Vitals:** LCP $\le 2.5\text{s}$, INP $\le 200\text{ms}$, CLS $\le 0.1$, FCP $\le 1.8\text{s}$, TTFB $\le 800\text{ms}$.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.6):** Điểm Lighthouse đo trên trang chủ, bài học, làm quiz và dashboard đều đạt $\ge 90$ trên môi trường Slow 4G.
-- [ ] **2.11.7 Backend & API Load & Stress Testing (P1):**
-  * Kiểm thử tải (Load/Stress/Endurance Testing) trên 9 cụm API trọng yếu dưới tải mô phỏng 500 - 1,000 người dùng đồng thời: Auth, Questions, Quiz Submit, Learning History, Mastery Dashboard, Spaced Repetition, Leaderboard, Achievement, Challenges.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.7):** Thời gian phản hồi API P95 < 500ms, P99 < 1,000ms; tỷ lệ lỗi HTTP 5xx < 0.05% trong suốt bài kiểm tra tải.
-- [ ] **2.11.8 Reliability, Error Monitoring & Observability (P0):**
-  * Thiết lập hệ thống giám sát lỗi tập trung (Centralized Error Logging) với Request Correlation ID, Health Checks định kỳ và cảnh báo tự động khi phát sinh lỗi bất thường.
-  * Xử lý an toàn 8 tình huống sự cố: API timeout, mất kết nối DB, ngắt mạng khi nộp Quiz, request trùng lặp, lỗi background jobs.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.8):** Học viên không bị mất kết quả thi khi rớt mạng; tự động lưu cục bộ và thử lại khi có kết nối.
-- [ ] **2.11.9 Automated Backup, Integrity Verification & Disaster Recovery (P0):**
-  * Xây dựng lịch sao lưu tự động (Daily / Weekly / Monthly) có mã hóa và chính sách lưu trữ phiên bản.
-  * Xác định rõ RPO (Recovery Point Objective $\le 1\text{h}$) và RTO (Recovery Time Objective $\le 30\text{m}$).
-  * **Tiến hành diễn tập phục hồi thực tế (Restore Testing):** Xác minh tính toàn vẹn 100% của dữ liệu sau khi khôi phục từ bản backup.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.9):** Biên bản diễn tập khôi phục chứng minh hệ thống phục hồi hoàn hảo mà không mất mát dữ liệu học tập.
-- [ ] **2.11.10 CI/CD Deployment Pipeline & Automated Rollback Strategy (P0):**
-  * Thiết lập quy trình phát hành 9 bước: Code Review $\rightarrow$ Lint & Typecheck $\rightarrow$ Unit/Integration Tests $\rightarrow$ Security Scan $\rightarrow$ Staging Deploy $\rightarrow$ Smoke Tests $\rightarrow$ Production Deploy $\rightarrow$ Post-deploy Verification $\rightarrow$ Rollback khẩn cấp nếu lỗi.
-  * Kịch bản Rollback an toàn cho cả mã nguồn ứng dụng và Database Migrations mà không làm mất dữ liệu người dùng mới.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.10):** Thời gian kích hoạt và hoàn tất Rollback về phiên bản ổn định trước đó $\le 5$ phút.
-- [ ] **2.11.11 Cross-Browser & Device Compatibility Testing (P1):**
-  * Kiểm thử tương thích trên 4 trình duyệt lớn: Chrome, Edge, Firefox, Safari trên các thiết bị Desktop, Laptop, Tablet và Mobile.
-  * Kiểm tra đầy đủ: Quiz Engine, Audio Playback, Sổ tay câu sai, Bản đồ 12 chuyên đề và Lưu trữ ngoại tuyến.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.11):** 100% tính năng hoạt động đồng nhất, không phát sinh lỗi vỡ layout hay lỗi JavaScript trên bất kỳ nền tảng nào.
-- [ ] **2.11.12 Accessibility & WCAG 2.2 Level AA Compliance Audit (P1):**
-  * Đánh giá toàn diện theo tiêu chuẩn quốc tế WCAG 2.2 AA: điều hướng hoàn toàn bằng bàn phím (Keyboard Navigation), tương thích Screen Reader, Focus Management, Semantic HTML, tỷ lệ tương phản màu $\ge 4.5:1$, và hỗ trợ tùy chọn Reduced Motion.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.12):** Báo cáo kiểm định không còn lỗi vi phạm Accessibility mức nghiêm trọng (Zero Critical A11y Issues).
-- [ ] **2.11.13 Pre-Production E2E Regression & Final Release Gate (P0):**
-  * Thực hiện kiểm thử hồi quy tự động trên 18 luồng người dùng trọng yếu (Critical User Journeys): từ Đăng ký, Đăng nhập, Chẩn đoán 30 câu, Học 53 bài, Luyện Quiz 50 câu, Mastery, Spaced Repetition, Thử thách ngày, Bảng xếp hạng, đến Đồng bộ ngoại tuyến.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.13 - Production Release Gate):**
-    * 100% Critical Test Cases vượt qua (Zero Failures).
-    * 0 lỗi Security Critical / High còn mở.
-    * 100% bảng nhạy cảm có RLS hoạt động chuẩn xác.
-    * Lighthouse Performance $\ge 90$ và Core Web Vitals đạt chuẩn.
-    * Diễn tập Backup & Restore thành công.
-- [ ] **2.11.14 Hoàn Thiện Bộ 12 Tài Liệu Vận Hành Production (P1):**
-  * Xuất bản đầy đủ bộ tài liệu bàn giao: System Architecture, Database Schema Docs, API Documentation, Security Assessment Report, Performance Benchmark Report, Backup & Recovery Guide, Deployment Guide, Rollback Runbook, Incident Response Procedure, Production Configuration, Known Limitations.
-  * **Tiêu chuẩn Nghiệm thu (AC-2.11.14):** Bộ tài liệu hoàn chỉnh sẵn sàng cho đội ngũ vận hành và bảo trì dài hạn.
+---
+
+#### [x] 2.11.1 Security Architecture Review & STRIDE Threat Modeling (P0)
+
+- Kiểm tra toàn bộ Attack Surface của ứng dụng.
+- Xây dựng Threat Model theo STRIDE.
+- Đánh giá theo OWASP Top 10.
+- Kiểm tra Authentication, Authorization, Input Validation, Session Management và Secret Management.
+- Kiểm tra các dependency có lỗ hổng bảo mật đã được công bố.
+- Xuất bản Security Assessment Report và Risk Register.
+- Phân loại Critical / High / Medium / Low.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.1):**
+- 100% Critical và High vulnerabilities được xử lý hoặc có biện pháp giảm thiểu được xác minh.
+- Không xuất hiện secret hoặc API key nhạy cảm trong Git repository.
+- Không làm thay đổi hành vi của các chức năng hiện tại.
+
+#### [x] 2.11.2 Database Security & RLS Verification (P0)
+
+- Audit toàn bộ RLS policies trên các bảng chứa dữ liệu người dùng:
+  - `profiles`
+  - `user_*`
+  - `diagnostic_*`
+  - `audit_logs`
+  - Các bảng lưu Learning History, Quiz, Mastery và Subscription.
+- Kiểm tra IDOR, Horizontal Privilege Escalation và Vertical Privilege Escalation.
+- Kiểm tra Anonymous Access và JWT Authorization.
+- Kiểm tra quyền SELECT, INSERT, UPDATE và DELETE.
+- Kiểm tra `SUPABASE_SERVICE_ROLE_KEY` không xuất hiện trong frontend bundle.
+- Xây dựng bộ kiểm thử RLS bằng hai tài khoản độc lập.
+
+**Nguyên tắc triển khai:**
+- Ưu tiên audit và kiểm thử trước.
+- Không tự động thay đổi RLS policies hàng loạt.
+- Không thay đổi quyền truy cập của các chức năng đang hoạt động nếu chưa xác minh đầy đủ.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.2):**
+- User A không thể truy cập dữ liệu riêng tư của User B.
+- Không có bảng nhạy cảm nào thiếu RLS hoặc có policy sai phạm.
+- Không làm mất quyền truy cập hợp lệ của các chức năng hiện tại.
+
+#### [x] 2.11.3 API Security & OWASP Top 10 Hardening (P0)
+
+- Audit toàn bộ Next.js Serverless API Routes.
+- Kiểm tra Authentication và Role Authorization.
+- Chuẩn hóa Input Validation và Output Sanitization.
+- Kiểm tra SQL Injection, XSS, CSRF và Broken Access Control.
+- Kiểm tra Rate Limiting cho các API nhạy cảm.
+- Kiểm tra Brute Force Protection và Replay Attacks.
+- Chuẩn hóa HTTP Error Responses:
+  - 400: Bad Request.
+  - 401: Unauthorized.
+  - 403: Forbidden.
+  - 404: Not Found.
+  - 422: Validation Error.
+  - 429: Too Many Requests.
+  - 500: Internal Server Error.
+
+**Nguyên tắc triển khai:**
+- Không thêm middleware nặng ảnh hưởng toàn bộ request.
+- Rate Limiting phải phù hợp với infrastructure hiện tại.
+- Không sử dụng Supabase Database làm bộ đếm request tần suất cao.
+- Không để lộ stack trace, database credentials hoặc internal server information.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.3):**
+- API nhạy cảm được bảo vệ bằng Authentication và Authorization phù hợp.
+- Request không hợp lệ nhận HTTP status code chính xác.
+- Không phát sinh lỗi tương thích với frontend hiện tại.
+
+#### [x] 2.11.4 Authentication & Session Security Hardening (P0)
+
+- Audit Supabase Authentication Configuration.
+- Kiểm tra Access Token Expiration.
+- Kiểm tra Refresh Token Rotation.
+- Kiểm tra Password Recovery Flow.
+- Chống Account Enumeration.
+- Kiểm tra Session Invalidation khi logout.
+- Kiểm tra session synchronization giữa nhiều browser tabs.
+- Kiểm tra các trường hợp JWT hết hạn và refresh thất bại.
+
+**Nguyên tắc triển khai:**
+- Tận dụng Supabase Auth có sẵn.
+- Không xây dựng lại Authentication Engine.
+- Không tự quản lý JWT nếu Supabase đã đảm nhiệm.
+- Không thay đổi login flow đang hoạt động nếu chưa có regression test.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.4):**
+- Token hết hạn không thể truy cập API được bảo vệ.
+- Logout đồng bộ trạng thái đăng nhập trên các tab.
+- Password Recovery hoạt động chính xác.
+- Không ảnh hưởng đến tài khoản hiện tại.
+
+#### [x] 2.11.5 Database Performance Optimization & Query Audit (P0)
+
+- Kiểm tra các truy vấn PostgreSQL quan trọng.
+- Sử dụng `EXPLAIN` và `EXPLAIN ANALYZE` trong môi trường kiểm thử phù hợp.
+- Phát hiện N+1 Queries.
+- Phát hiện Full Table Scans không cần thiết.
+- Kiểm tra Composite Indexes hiện có.
+- Phân tích các truy vấn:
+  - Learning History.
+  - Quiz Results.
+  - Mastery Dashboard.
+  - Spaced Repetition.
+  - Leaderboard.
+  - Achievement.
+  - Challenges.
+- Kiểm tra các truy vấn có nguy cơ Lock Contention.
+
+**Nguyên tắc triển khai:**
+- Không tạo index hàng loạt khi chưa có bằng chứng từ Query Plan.
+- Không chạy benchmark nặng trên production database.
+- Không thực hiện VACUUM FULL hoặc thao tác gây khóa bảng trên production.
+- Không thay đổi schema nếu chưa chứng minh được lợi ích.
+- Mọi migration phải có phương án rollback.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.5):**
+- Các truy vấn chậm được xác định và có phương án tối ưu.
+- Không còn N+1 Query nghiêm trọng chưa được xử lý.
+- Không phát sinh regression về dữ liệu hoặc business logic.
+- Benchmark được thực hiện trên dữ liệu mô phỏng hoặc môi trường kiểm thử.
+
+#### [ ] 2.11.6 Frontend Performance & Core Web Vitals Optimization (P0)
+
+- Kiểm tra Bundle Size.
+- Tối ưu Code Splitting và Dynamic Imports.
+- Lazy Loading hình ảnh và audio.
+- Tree Shaking.
+- Tối ưu Font Loading.
+- Tối ưu Static Assets.
+- Kiểm tra Caching Strategy.
+- Tối ưu React Rendering và Component Re-rendering.
+- Kiểm tra Memory Leaks.
+- Đo Lighthouse trên:
+  - Homepage.
+  - Lesson Page.
+  - Quiz Page.
+  - Dashboard.
+
+**Mục tiêu đánh giá:**
+- Lighthouse Performance ≥ 90 nếu điều kiện môi trường cho phép.
+- Accessibility ≥ 95.
+- Best Practices ≥ 95.
+- SEO ≥ 90.
+- LCP ≤ 2.5s.
+- INP ≤ 200ms.
+- CLS ≤ 0.1.
+
+**Nguyên tắc triển khai:**
+- Ưu tiên tối ưu frontend mà không cần tăng infrastructure.
+- Không chuyển toàn bộ ứng dụng sang Client Rendering.
+- Không thêm thư viện lớn nếu chức năng có thể thực hiện bằng native APIs.
+- Không ảnh hưởng đến Audio Playback, Quiz Timer và Learning Experience.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.6):**
+- Không có regression về giao diện và chức năng.
+- Không có horizontal overflow trên các viewport mục tiêu.
+- Lighthouse được đo và lưu báo cáo với điều kiện test rõ ràng.
+
+#### [ ] 2.11.7 Controlled API Performance Testing (P1)
+
+- Kiểm tra hiệu năng của 9 cụm API:
+  - Authentication.
+  - Questions.
+  - Quiz Submit.
+  - Learning History.
+  - Mastery Dashboard.
+  - Spaced Repetition.
+  - Leaderboard.
+  - Achievement.
+  - Challenges.
+- Xây dựng test scenarios bằng k6.
+- Sử dụng mock server hoặc dữ liệu kiểm thử riêng.
+- Đánh giá response time P50, P95 và P99.
+- Xác định API bottlenecks.
+- Đánh giá mức sử dụng tài nguyên và giới hạn Free Tier.
+
+**Nguyên tắc triển khai:**
+- Không stress test trên production.
+- Không chạy 500–1,000 concurrent users trực tiếp vào Supabase Free.
+- Không tạo hàng loạt tài khoản hoặc dữ liệu rác trên production.
+- Không thực hiện test làm tiêu hao quota hoặc gây pause project.
+- Chỉ thực hiện load test giới hạn trên môi trường được phép.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.7):**
+- Có Performance Benchmark Report.
+- Xác định được giới hạn hiện tại của từng nhóm API.
+- Có danh sách bottleneck và hướng tối ưu.
+- Không gây gián đoạn dịch vụ production.
+
+#### [x] 2.11.8 Reliability, Error Monitoring & Observability (P0)
+
+- Chuẩn hóa Error Handling.
+- Xây dựng Request Correlation ID.
+- Phân loại Client Errors và Server Errors.
+- Kiểm tra Health Check.
+- Ghi nhận lỗi API và lỗi frontend.
+- Xử lý an toàn các tình huống:
+  - API Timeout.
+  - Database Connection Failure.
+  - Network Disconnection khi nộp Quiz.
+  - Duplicate Requests.
+  - Authentication Expiration.
+  - Background Job Failure.
+  - Payment Webhook Retry.
+  - Browser Tab Unexpected Closure.
+- Đảm bảo Quiz Result được lưu an toàn.
+
+**Nguyên tắc triển khai:**
+- Ưu tiên logging có cấu trúc và nhẹ.
+- Không ghi password, JWT, payment secrets hoặc dữ liệu nhạy cảm vào logs.
+- Không triển khai hệ thống monitoring gây vượt quota.
+- Không bắt buộc sử dụng dịch vụ monitoring trả phí.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.8):**
+- Lỗi được phân loại và truy vết.
+- Request có thể được đối chiếu thông qua Correlation ID.
+- Quiz submission có cơ chế chống gửi trùng.
+- Kết quả học tập không bị mất khi mất kết nối tạm thời.
+
+#### [ ] 2.11.9 Independent Backup & Restore Verification (P0)
+
+- Thiết lập backup database bằng Supabase CLI.
+- Sử dụng GitHub Actions để lập lịch backup.
+- Lưu backup ngoài Supabase.
+- Mã hóa backup trước khi lưu trữ.
+- Quản lý phiên bản backup:
+  - Daily.
+  - Weekly.
+  - Monthly.
+- Xây dựng hướng dẫn restore.
+- Kiểm tra tính toàn vẹn sau restore.
+- Tài liệu hóa quy trình phục hồi dữ liệu.
+
+**Nguyên tắc triển khai:**
+- Không phụ thuộc vào Supabase Automatic Backup hoặc PITR của gói trả phí.
+- Không thực hiện restore trực tiếp lên production trong quá trình kiểm thử.
+- Không ghi secrets vào GitHub repository.
+- Không để file backup chứa dữ liệu nhạy cảm ở nơi công khai.
+- Kiểm tra cả database schema, data và các thành phần cần thiết khác.
+- Xác định rõ những thành phần không nằm trong database backup, chẳng hạn Storage Objects.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.9):**
+- Backup được tạo tự động theo lịch.
+- Backup có thể giải mã và phục hồi.
+- Có biên bản Restore Testing.
+- Không tuyên bố đạt RPO ≤ 1 giờ hoặc RTO ≤ 30 phút nếu chưa kiểm chứng được bằng thử nghiệm thực tế.
+- Ghi nhận rõ giới hạn phục hồi của Supabase Free.
+
+#### [x] 2.11.10 Safe CI/CD & Deployment Verification (P0)
+
+- Chuẩn hóa quy trình CI/CD:
+  1. Code Review.
+  2. Lint.
+  3. Typecheck.
+  4. Unit Tests.
+  5. Integration Tests.
+  6. Security Scan.
+  7. Preview Deployment.
+  8. Smoke Tests.
+  9. Production Deployment và Verification.
+- Sử dụng GitHub Actions và Vercel Git Integration.
+- Kiểm tra Environment Variables.
+- Kiểm tra Database Migration trước khi triển khai.
+- Xây dựng quy trình Rollback ứng dụng.
+- Kiểm tra khả năng tương thích ngược của database migrations.
+
+**Nguyên tắc triển khai:**
+- Tận dụng Vercel Hobby và GitHub Actions Free quotas.
+- Không tạo quá nhiều deployment không cần thiết.
+- Không chạy toàn bộ test suite nặng trên mỗi commit.
+- Không tự động chạy destructive migration.
+- Database migration phải theo nguyên tắc Expand-and-Contract khi có thay đổi ảnh hưởng dữ liệu.
+- Ưu tiên rollback application code mà không rollback dữ liệu người dùng.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.10):**
+- CI/CD hoạt động ổn định trong giới hạn quota.
+- Deployment có Smoke Test.
+- Có quy trình rollback được tài liệu hóa.
+- Không mất dữ liệu người dùng khi rollback ứng dụng.
+
+#### [ ] 2.11.11 Cross-Browser & Device Compatibility Testing (P1)
+
+- Kiểm thử:
+  - Chrome.
+  - Edge.
+  - Firefox.
+  - Safari.
+- Thiết bị:
+  - Desktop.
+  - Laptop.
+  - Tablet.
+  - Mobile.
+- Kiểm tra:
+  - Quiz Engine.
+  - Audio Playback.
+  - Wrong Answer Notebook.
+  - 12-Chapter Learning Map.
+  - Offline Storage.
+  - Authentication.
+  - Responsive Navigation.
+
+**Nguyên tắc triển khai:**
+- Sử dụng Playwright.
+- Tái sử dụng test infrastructure hiện có.
+- Không tạo thêm dịch vụ trả phí.
+- Không thay đổi logic ứng dụng chỉ để phù hợp với một browser duy nhất.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.11):**
+- Không có Critical Browser Compatibility Issues.
+- Không có lỗi JavaScript nghiêm trọng.
+- Các chức năng chính hoạt động trên các trình duyệt mục tiêu.
+
+#### [x] 2.11.12 Accessibility & WCAG 2.2 AA Verification (P1)
+
+- Kiểm tra Keyboard Navigation.
+- Kiểm tra Screen Reader Compatibility.
+- Kiểm tra Focus Management.
+- Kiểm tra Semantic HTML.
+- Kiểm tra Color Contrast ≥ 4.5:1 đối với text thông thường.
+- Kiểm tra Reduced Motion.
+- Kiểm tra Form Labels và Error Messages.
+- Kiểm tra Modal Focus Trap.
+- Kiểm tra Touch Target Size theo WCAG 2.2.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.12):**
+- Không còn lỗi Accessibility nghiêm trọng.
+- Các luồng học tập chính có thể sử dụng bằng bàn phím.
+- Không làm suy giảm giao diện hiện tại.
+
+#### [ ] 2.11.13 Pre-Production E2E Regression & Final Release Gate (P0)
+
+Thực hiện regression testing cho 18 Critical User Journeys:
+
+1. User Registration.
+2. User Login.
+3. Password Recovery.
+4. Diagnostic Test – 30 Questions.
+5. Chapter Navigation.
+6. Lesson Learning.
+7. Quiz – 50 Questions.
+8. Quiz Submission.
+9. Learning History.
+10. Wrong Answer Notebook.
+11. Mastery Dashboard.
+12. Spaced Repetition.
+13. Daily Challenges.
+14. Leaderboard.
+15. Achievements.
+16. Offline Learning.
+17. Cross-Device Synchronization.
+18. VIP Purchase and Payment Verification.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.13):**
+- 100% Critical Test Cases PASS.
+- Zero unresolved Critical / High Security Issues.
+- 100% sensitive tables have verified RLS.
+- Lighthouse reports are available.
+- Backup and Restore Testing PASS.
+- Payment verification works correctly.
+- Không phát sinh regression trên các Engine hiện tại.
+
+#### [x] 2.11.14 Production Documentation & Operational Readiness (P1)
+
+Hoàn thiện tài liệu:
+
+1. System Architecture.
+2. Database Schema Documentation.
+3. API Documentation.
+4. Security Assessment Report.
+5. Performance Benchmark Report.
+6. Backup & Recovery Guide.
+7. Deployment Guide.
+8. Rollback Runbook.
+9. Incident Response Procedure.
+10. Production Environment Configuration.
+11. Known Limitations.
+12. Free-Tier Infrastructure Limitations.
+
+**Tiêu chuẩn nghiệm thu (AC-2.11.14):**
+- Tài liệu đầy đủ.
+- Có thể sử dụng để bảo trì và xử lý sự cố.
+- Có danh sách rõ ràng các giới hạn của Vercel Hobby và Supabase Free.
+- Có hướng dẫn nâng cấp infrastructure trong tương lai mà không yêu cầu thay đổi business logic.
+
+---
+
+## Implementation Guardrails
+
+AI Agent MUST follow these rules throughout the milestone:
+
+1. Audit Before Modification:
+   - Kiểm tra code và kiến trúc hiện tại trước khi chỉnh sửa.
+   - Không giả định các chức năng chưa tồn tại.
+   - Không tạo file hoặc module trùng lặp.
+
+2. Zero Business Logic Regression:
+   - Không sửa Learning Engine.
+   - Không sửa Quiz Engine.
+   - Không sửa Mastery Engine.
+   - Không sửa Gamification Engine.
+   - Không sửa Monetization Engine.
+   - Chỉ sửa khi có security vulnerability được chứng minh và có test bảo vệ.
+
+3. Data Integrity:
+   - Giữ nguyên 12 chapters.
+   - Giữ nguyên 53 lessons.
+   - Giữ nguyên 2,939 questions.
+   - Không xóa hoặc reset dữ liệu người dùng.
+
+4. Infrastructure Safety:
+   - Không nâng cấp Vercel hoặc Supabase.
+   - Không thêm dịch vụ trả phí.
+   - Không chạy stress test trên production.
+   - Không vượt quota Free Tier có chủ đích.
+   - Không thực hiện thao tác có thể gây pause hoặc gián đoạn project.
+
+5. Incremental Implementation:
+   - Audit → Plan → Implement → Test → Review → Commit.
+   - Thực hiện từng sub-milestone.
+   - Chạy regression test sau mỗi thay đổi.
+   - Dừng nếu phát hiện nguy cơ ảnh hưởng dữ liệu hoặc production.
+
+6. No False Production Claims:
+   - Không tuyên bố đạt SLA mà infrastructure Free không bảo đảm.
+   - Không tuyên bố đạt 1,000 concurrent users nếu chưa có benchmark hợp lệ.
+   - Không tuyên bố RPO/RTO đạt chuẩn nếu chưa restore test thực tế.
+   - Phân biệt Verified, Partially Verified và Not Supported.
+
+---
+
+## Deferred – Future Paid Infrastructure
+
+Các hạng mục sau không triển khai trong milestone này:
+
+- Native Supabase Point-in-Time Recovery.
+- Supabase Automatic Daily Backups.
+- Guaranteed RPO ≤ 1 hour.
+- Guaranteed RTO ≤ 30 minutes.
+- Production Stress Testing 500–1,000 Concurrent Users.
+- Guaranteed High Availability.
+- Paid Centralized Monitoring.
+- Enterprise-grade Disaster Recovery.
+- Production SLA Guarantees.
+
+Các hạng mục này chỉ được đưa vào roadmap nâng cấp khi có nhu cầu thực tế và ngân sách phù hợp.
+
+## Final Definition of Done
+
+Milestone 2.11 được xem là hoàn thành khi:
+
+- Security được audit và không còn Critical / High vulnerabilities chưa xử lý.
+- RLS được xác minh.
+- API và Authentication được harden.
+- Frontend và Database được tối ưu trong khả năng hiện tại.
+- Không có regression trên các Engine.
+- Backup và Restore được kiểm chứng.
+- CI/CD hoạt động.
+- E2E Regression PASS.
+- Có đầy đủ tài liệu vận hành.
+- Tất cả giới hạn Free Tier được ghi nhận minh bạch.
+
+**Kết quả mong muốn:** Một ứng dụng được harden và kiểm chứng trong phạm vi infrastructure hiện tại, không phát sinh chi phí, không phá vỡ kiến trúc và sẵn sàng nâng cấp khi quy mô người dùng tăng.
 
 ### 🔹 Milestone 2.12: Intelligent Monetization, Behavioral Psychology & Premium Conversion Engine (P0)
 

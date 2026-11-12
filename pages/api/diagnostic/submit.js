@@ -1,24 +1,39 @@
 /**
  * API: POST /api/diagnostic/submit
  * Deterministic assessment submission, grading, and personalized roadmap generation.
- * Server-Side Validation: Anti-tampering, 1-shot grading, RLS-safe DB persistence.
+ * Server-Side Validation: Anti-tampering, JWT-verified cloud persistence, RLS-safe writes.
  */
 
 import { scoreDiagnosticAttempt } from "../../../lib/diagnostic/diagnostic.scoring";
 import { generatePersonalizedRoadmap } from "../../../lib/diagnostic/roadmap.generator";
 import { analyzeDiagnosticRootCauses } from "../../../lib/diagnostic/knowledge.graph";
-import { supabaseServer } from "../../../lib/supabase/server";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function isValidUUID(str) {
-  return typeof str === "string" && UUID_REGEX.test(str);
-}
+import { getAdminClient } from "../../../lib/supabase/server";
+import { verifyServerSession } from "../../../lib/supabase/middleware";
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res.status(405).json({ success: false, error: "Method not allowed", correlationId });
+  }
+
+  const rate = checkApiRateLimit(req, res, {
+    keyPrefix: "diagnostic_submit",
+    maxRequests: 30,
+    correlationId,
+  });
+  if (!rate.allowed) return;
+
+  const authUser = await verifyServerSession(req);
+  if (req.headers?.authorization && !authUser) {
+    return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token.", correlationId });
   }
 
   try {
@@ -28,10 +43,20 @@ export default async function handler(req, res) {
       duration_seconds = 0,
       user_id,
       user_tracker = {},
-    } = req.body;
+    } = req.body || {};
+
+    if (!Array.isArray(answers) || answers.length > 100) {
+      return res.status(422).json({ success: false, error: "Invalid answers payload.", correlationId });
+    }
+
+    if (authUser && user_id && isValidUuid(user_id) && authUser.id !== user_id) {
+      return res.status(403).json({ success: false, error: "Forbidden: Cross-user diagnostic submission denied.", correlationId });
+    }
+
+    const safeDuration = Math.max(0, Math.min(7200, Number(duration_seconds) || 0));
 
     // 1. Layer 1: Deterministic Scorer (Zero Hallucination)
-    const scoreResult = scoreDiagnosticAttempt(answers, duration_seconds);
+    const scoreResult = scoreDiagnosticAttempt(answers, safeDuration);
     scoreResult.root_cause_analysis = analyzeDiagnosticRootCauses(
       scoreResult.detailed_answers,
       scoreResult.skill_results
@@ -55,21 +80,22 @@ export default async function handler(req, res) {
     let savedToCloud = false;
     let attemptId = null;
 
-    // 3. Persist to Supabase if valid user UUID is provided
-    if (user_id && isValidUUID(user_id)) {
+    // 3. Persist to Supabase ONLY for authenticated Bearer session users (prevents spoofing)
+    const verifiedUserId = authUser?.id || null;
+    if (verifiedUserId) {
+      const serverClient = getAdminClient(req);
       try {
-        // Insert diagnostic attempt
-        const { data: attemptData, error: attemptError } = await supabaseServer
+        const { data: attemptData, error: attemptError } = await serverClient
           .from("diagnostic_attempts")
           .insert({
-            user_id: user_id,
-            test_id: isValidUUID(test_id) ? test_id : null,
+            user_id: verifiedUserId,
+            test_id: isValidUuid(test_id) ? test_id : null,
             total_questions: scoreResult.total_questions,
             correct_answers: scoreResult.correct_answers,
             total_score: scoreResult.total_score,
             estimated_level: scoreResult.estimated_level.code,
             status: "COMPLETED",
-            started_at: new Date(Date.now() - duration_seconds * 1000).toISOString(),
+            started_at: new Date(Date.now() - safeDuration * 1000).toISOString(),
             completed_at: scoreResult.completed_at,
           })
           .select("id")
@@ -79,7 +105,6 @@ export default async function handler(req, res) {
           attemptId = attemptData.id;
           savedToCloud = true;
 
-          // Insert answers snapshot
           const answerInserts = scoreResult.detailed_answers.map((ans) => ({
             attempt_id: attemptId,
             question_id: ans.question_id,
@@ -96,13 +121,12 @@ export default async function handler(req, res) {
           }));
 
           if (answerInserts.length > 0) {
-            await supabaseServer.from("diagnostic_answers").insert(answerInserts);
+            await serverClient.from("diagnostic_answers").insert(answerInserts);
           }
 
-          // Insert skill results
           const skillInserts = scoreResult.skill_results.map((skill) => ({
             attempt_id: attemptId,
-            user_id: user_id,
+            user_id: verifiedUserId,
             topic_id: skill.topic_id,
             topic_name: skill.topic_name,
             total_questions: skill.total_questions,
@@ -113,14 +137,13 @@ export default async function handler(req, res) {
           }));
 
           if (skillInserts.length > 0) {
-            await supabaseServer.from("diagnostic_skill_results").insert(skillInserts);
+            await serverClient.from("diagnostic_skill_results").insert(skillInserts);
           }
 
-          // Insert personalized learning roadmap
-          const { data: roadmapData, error: roadmapError } = await supabaseServer
+          const { data: roadmapData, error: roadmapError } = await serverClient
             .from("user_learning_roadmaps")
             .insert({
-              user_id: user_id,
+              user_id: verifiedUserId,
               diagnostic_attempt_id: attemptId,
               title: roadmap.title,
               target_level: roadmap.target_level,
@@ -132,13 +155,12 @@ export default async function handler(req, res) {
           if (!roadmapError && roadmapData?.id) {
             roadmap.db_id = roadmapData.id;
 
-            // Flatten weekly tasks for roadmap_items
             const taskInserts = [];
             roadmap.weeks.forEach((week) => {
               week.tasks.forEach((task) => {
                 taskInserts.push({
                   roadmap_id: roadmapData.id,
-                  user_id: user_id,
+                  user_id: verifiedUserId,
                   lesson_id: task.lesson_id,
                   topic_id: task.lesson_code,
                   title: task.title,
@@ -152,13 +174,12 @@ export default async function handler(req, res) {
             });
 
             if (taskInserts.length > 0) {
-              await supabaseServer.from("roadmap_items").insert(taskInserts);
+              await serverClient.from("roadmap_items").insert(taskInserts);
             }
 
-            // Record initial version v1 snapshot in roadmap_versions
-            await supabaseServer.from("roadmap_versions").insert({
+            await serverClient.from("roadmap_versions").insert({
               roadmap_id: roadmapData.id,
-              user_id: user_id,
+              user_id: verifiedUserId,
               version_number: 1,
               trigger_reason: "initial_diagnostic",
               adjustment_summary: [
@@ -182,12 +203,14 @@ export default async function handler(req, res) {
       roadmap: roadmap,
       saved_to_cloud: savedToCloud,
       attempt_id: attemptId,
+      correlationId,
     });
   } catch (error) {
-    console.error("Diagnostic submission error:", error);
-    return res.status(500).json({
-      success: false,
-      error: "Internal server error while evaluating diagnostic test",
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/diagnostic/submit",
+      err: error,
+      publicMessage: "Internal server error while evaluating diagnostic test",
     });
   }
 }

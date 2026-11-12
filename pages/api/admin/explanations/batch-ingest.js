@@ -5,6 +5,7 @@ import { DIFFICULTY_LEVELS, validateExplanation } from "../../../../lib/explanat
 import { migrateQuestionExplanation } from "../../../../lib/explanation/explanation.migrator";
 import { KNOWLEDGE_GRAPH, resolveConceptForQuestion } from "../../../../lib/knowledge/knowledge-graph";
 import quizData from "../../../../data/ui/quiz_bank.json";
+import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const CHUNK_SIZE = 500;
 
@@ -13,6 +14,7 @@ const CHUNK_SIZE = 500;
  * POST: Validates & upserts all 2,939 questions into `explanations` and `question_concepts`.
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   if (req.method !== "POST") {
     return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
   }
@@ -102,6 +104,6 @@ export default async function handler(req, res) {
       invalidSkipped: invalidCount,
     });
   } catch (e) {
-    return res.status(500).json({ success: false, error: e.message });
+    return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/explanations/batch-ingest", err: e.message });
   }
 }

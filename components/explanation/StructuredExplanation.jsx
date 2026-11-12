@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
 import FocusTrapModal2026 from "../ui-2026/FocusTrapModal2026";
+import { supabase } from "../../lib/supabase/client";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import {
   DIFFICULTY_LEVELS,
@@ -75,11 +76,19 @@ export default function StructuredExplanation({
   const handleSendFeedback = async (type, category = null, comment = null) => {
     setIsSubmitting(true);
     try {
+      let token = null;
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        token = sessionData?.session?.access_token || null;
+      } catch {}
       const res = await fetch("/api/explanation-feedback", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
-          user_id: userId || null,
+          user_id: token && userId ? userId : null,
           question_id: questionId || expl.question_id,
           explanation_version: expl.version || 1,
           feedback_type: type,

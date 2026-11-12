@@ -1,16 +1,34 @@
-export default async function handler(req, res) {
-  const { word } = req.query;
+import { attachCorrelationId, checkApiRateLimit } from "../../lib/api/security-guard";
 
-  if (!word || typeof word !== 'string') {
-    return res.status(400).json({ error: 'Word parameter is required' });
+export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
+  if (req.method !== "GET") {
+    res.setHeader("Allow", ["GET"]);
+    return res.status(405).json({ error: "Method not allowed", correlationId });
   }
 
-  // Clean word: remove surrounding non-letters, trim
-  const cleanWord = word.trim().replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, '').toLowerCase();
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "dictionary", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
+
+  const { word } = req.query || {};
+
+  if (!word || typeof word !== "string") {
+    return res.status(400).json({ error: "Word parameter is required", correlationId });
+  }
+
+  // Clean word: remove surrounding non-letters, trim, bound length to prevent abuse
+  const cleanWord = word
+    .trim()
+    .replace(/^[^a-zA-Z0-9-]+|[^a-zA-Z0-9-]+$/g, "")
+    .toLowerCase()
+    .slice(0, 64);
 
   if (!cleanWord) {
-    return res.status(400).json({ error: 'Invalid word format' });
+    return res.status(400).json({ error: "Invalid word format", correlationId });
   }
+
+  res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
 
   try {
     // 1. Fetch from Google Translate GTX for Vietnamese translation & parts of speech

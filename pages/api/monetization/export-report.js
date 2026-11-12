@@ -3,29 +3,55 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { assertVipEntitlement } from "../../../lib/monetization/entitlement-engine";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery } from "../../../lib/learning/mastery-tracker";
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  isValidUuid,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.12.3: Protected VIP Mastery & Diagnostic Export Endpoint
- * Enforces strictly server-side VIP/ADMIN access (HTTP 403 for FREE / unauthenticated users).
+ * Enforces strictly server-side session + VIP/ADMIN access (HTTP 401/403 for invalid/FREE users).
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res.status(405).json({ success: false, error: "Method not allowed", correlationId });
   }
 
-  const serverClient = getAdminClient();
-  const authUser = await verifyServerSession(req);
-  const requestedUserId = authUser?.id || req.query?.user_id || null;
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "monetization_export", maxRequests: 20, correlationId });
+  if (!rate.allowed) return;
 
-  if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
+  const authUser = await verifyServerSession(req);
+  if (req.headers?.authorization && !authUser) {
+    return res.status(401).json({
+      success: false,
+      error: "Invalid or expired Bearer session token.",
+      correlationId,
+    });
+  }
+
+  if (!authUser || !isValidUuid(authUser.id)) {
     return res.status(403).json({
       success: false,
       error: "Forbidden: Vui lòng đăng nhập tài khoản VIP để xuất Báo cáo Năng lực Chuyên sâu.",
+      correlationId,
     });
   }
+
+  if (req.query?.user_id && req.query.user_id !== authUser.id) {
+    return res.status(403).json({
+      success: false,
+      error: "Forbidden: Cross-user VIP report export denied.",
+      correlationId,
+    });
+  }
+
+  const serverClient = getAdminClient(req);
+  const requestedUserId = authUser.id;
 
   const guard = await assertVipEntitlement({
     serverClient,
@@ -38,6 +64,7 @@ export default async function handler(req, res) {
       success: false,
       error: guard.error,
       effectiveRole: guard.entitlement.effectiveRole,
+      correlationId,
     });
   }
 
@@ -74,6 +101,11 @@ export default async function handler(req, res) {
     res.setHeader("Content-Disposition", `attachment; filename="grammar_mastery_report_${requestedUserId.slice(0, 8)}.txt"`);
     return res.status(200).send(lines.join("\n"));
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/monetization/export-report",
+      err,
+      publicMessage: "Không thể xuất báo cáo năng lực lúc này.",
+    });
   }
 }

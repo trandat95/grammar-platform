@@ -1,6 +1,11 @@
 import crypto from "crypto";
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyWebhookSignature } from "../../../lib/monetization/payment-provider-adapter";
+import {
+  attachCorrelationId,
+  checkApiRateLimit,
+  sendSafeServerError,
+} from "../../../lib/api/security-guard";
 
 /**
  * Milestone 2.12.5: Secure HMAC-Verified & Idempotent Payment Webhook Handler
@@ -8,10 +13,15 @@ import { verifyWebhookSignature } from "../../../lib/monetization/payment-provid
  * - Guarantees Duplicate Payment Processing = 0 via uq_webhook_provider_event
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res.status(405).json({ success: false, error: "Method not allowed", correlationId });
   }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "payment_webhook", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
 
   const serverClient = getAdminClient();
   const signature = req.headers?.["x-webhook-signature"];
@@ -100,8 +110,13 @@ export default async function handler(req, res) {
       { onConflict: "provider,external_event_id" }
     );
 
-    return res.status(200).json({ success: true, duplicate: false, event_type });
+    return res.status(200).json({ success: true, duplicate: false, event_type, correlationId });
   } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
+    return sendSafeServerError(res, {
+      correlationId,
+      route: "/api/monetization/webhook",
+      err,
+      publicMessage: "Webhook processing error.",
+    });
   }
 }

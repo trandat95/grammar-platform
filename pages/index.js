@@ -1,4 +1,5 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import { useState, useEffect, useMemo, useRef } from "react";
 import previewData from "../data/ui/preview_data.json";
 import quizData from "../data/ui/quiz_bank.json";
@@ -7,32 +8,34 @@ import { SYNC_EVENT_TYPES } from "../lib/sync/sync-queue";
 import { StorageAdapter } from "../lib/sync/indexed-db";
 import SyncStatusIndicator from "../components/sync/SyncStatusIndicator";
 import { getThemeTokens } from "../lib/tokens/design-tokens";
-import GrammarVisualization from "../components/grammar-visualization/GrammarVisualization";
 import { speechService } from "../lib/audio/speech.service";
 import StructuredExplanation from "../components/explanation/StructuredExplanation";
 import RemedialRecommendationCard from "../components/learning/RemedialRecommendationCard";
-import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
-import MasteryIntelligenceDashboard from "../components/learning/MasteryIntelligenceDashboard";
 import AcademicRichText, { stripMarkdownFormatting } from "../components/learning/AcademicRichText";
 import AcademicSectionBody from "../components/learning/AcademicSectionBody";
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
 import GamificationHub, { prefetchGamificationData } from "../components/gamification/GamificationHub";
 import LeaderboardPanel from "../components/gamification/LeaderboardPanel";
-import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
 import MonetizationHub, { prefetchMonetizationData, invalidateMonetizationClientCache } from "../components/monetization/MonetizationHub";
-import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
-import AccountProfileCard from "../components/auth/AccountProfileCard";
-import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
-import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
-import AdminMonetizationPanel from "../components/admin/AdminMonetizationPanel";
-import PedagogicalQualityDashboard from "../components/admin/PedagogicalQualityDashboard";
-import StepUpConfirmModal from "../components/admin/StepUpConfirmModal";
 import AppShell2026 from "../components/ui-2026/AppShell2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
 import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
+
+// Milestone 2.11.6: Code-split secondary heavy workspaces & modals out of the initial Homepage JS bundle
+const GrammarVisualization = dynamic(() => import("../components/grammar-visualization/GrammarVisualization"), { ssr: false });
+const SpacedRepetitionPanel = dynamic(() => import("../components/learning/SpacedRepetitionPanel"), { ssr: false });
+const MasteryIntelligenceDashboard = dynamic(() => import("../components/learning/MasteryIntelligenceDashboard"), { ssr: false });
+const GamificationCelebrationModal = dynamic(() => import("../components/gamification/GamificationCelebrationModal"), { ssr: false, loading: () => null });
+const SmartPaywallModal = dynamic(() => import("../components/monetization/SmartPaywallModal"), { ssr: false, loading: () => null });
+const AccountProfileCard = dynamic(() => import("../components/auth/AccountProfileCard"), { ssr: false });
+const GrammarDiagnosticEngine = dynamic(() => import("../components/diagnostic/GrammarDiagnosticEngine"), { ssr: false });
+const AdminOverviewPanel = dynamic(() => import("../components/admin/AdminOverviewPanel"), { ssr: false });
+const AdminMonetizationPanel = dynamic(() => import("../components/admin/AdminMonetizationPanel"), { ssr: false });
+const PedagogicalQualityDashboard = dynamic(() => import("../components/admin/PedagogicalQualityDashboard"), { ssr: false });
+const StepUpConfirmModal = dynamic(() => import("../components/admin/StepUpConfirmModal"), { ssr: false, loading: () => null });
 import {
   supabase,
   getProfile,
@@ -428,12 +431,41 @@ export default function Home() {
         setAuthConfirmPassword("");
         setAuthTab("reset");
         setAuthModalOpen(true);
-      } else if (event === "SIGNED_IN" && session?.access_token) {
+      } else if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session?.access_token) {
         setActiveAuthToken(session.access_token);
+      } else if (event === "SIGNED_OUT") {
+        localStorage.removeItem("grammar_active_user_id");
+        setActiveAuthToken(null);
+        invalidateMonetizationClientCache();
+        setCurrentUser(GUEST_USER);
+        setCurrentView((prev) => (prev === "admin" ? "dashboard" : prev));
       }
     });
 
+    const handleCrossTabStorageSync = (evt) => {
+      if (!evt || !evt.key) return;
+      if (evt.key === "grammar_active_user_id" && !evt.newValue) {
+        setActiveAuthToken(null);
+        invalidateMonetizationClientCache();
+        setCurrentUser(GUEST_USER);
+        setCurrentView((prev) => (prev === "admin" ? "dashboard" : prev));
+      } else if (evt.key.startsWith("sb-") && evt.key.endsWith("-auth-token")) {
+        if (!evt.newValue) {
+          localStorage.removeItem("grammar_active_user_id");
+          setActiveAuthToken(null);
+          invalidateMonetizationClientCache();
+          setCurrentUser(GUEST_USER);
+        } else {
+          try {
+            const parsed = JSON.parse(evt.newValue);
+            if (parsed?.access_token) setActiveAuthToken(parsed.access_token);
+          } catch {}
+        }
+      }
+    };
+
     if (typeof window !== "undefined") {
+      window.addEventListener("storage", handleCrossTabStorageSync);
       const hash = window.location.hash || "";
       const search = window.location.search || "";
       if (hash.includes("type=recovery") || search.includes("type=recovery")) {
@@ -445,6 +477,9 @@ export default function Home() {
     }
 
     return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("storage", handleCrossTabStorageSync);
+      }
       if (typeof unsubscribe === "function") unsubscribe();
     };
   }, []);

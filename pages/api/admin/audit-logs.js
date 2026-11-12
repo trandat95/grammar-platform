@@ -1,7 +1,9 @@
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const adminContext = await verifyAdminWithGuard(req, res, { rateLimitKeyPrefix: "admin_audit_read" });
   if (!adminContext) return;
 
@@ -11,7 +13,7 @@ export default async function handler(req, res) {
       const logs = await AuditRepository.getRecentAuditLogs(limit);
       return res.status(200).json({ success: true, logs });
     } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/audit-logs", err: e.message });
     }
   }
 

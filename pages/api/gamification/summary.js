@@ -10,6 +10,7 @@ import {
 } from "../../../lib/gamification/challenge-streak-engine";
 import { ensureActiveChallengesForUser } from "../../../lib/gamification/gamification-processor";
 import { invalidateLeaderboardServerCache } from "./leaderboard";
+import { attachCorrelationId, sendSafeServerError } from "../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -38,6 +39,7 @@ async function getGamificationCatalog(serverClient) {
  * Security: total_xp/level/achievements can NEVER be modified via POST body (Server Authoritative).
  */
 export default async function handler(req, res) {
+  const correlationId = attachCorrelationId(req, res);
   const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {
@@ -143,7 +145,7 @@ export default async function handler(req, res) {
         },
       });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/gamification/summary", err: err.message });
     }
   }
 
@@ -313,7 +315,7 @@ export default async function handler(req, res) {
 
       return res.status(400).json({ success: false, error: `Unsupported action '${action}'.` });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/gamification/summary", err: err.message });
     }
   }
 
