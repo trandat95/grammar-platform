@@ -93,6 +93,19 @@ export const AuthService = {
     return data;
   },
 
+  async resendConfirmationEmail(email, emailRedirectTo) {
+    const options = emailRedirectTo ? { emailRedirectTo } : undefined;
+    const { data, error } = await withAuthTimeout(() =>
+      supabase.auth.resend({
+        type: "signup",
+        email,
+        options,
+      })
+    );
+    if (error) throw formatAuthTimeoutError(error);
+    return data;
+  },
+
   async updatePassword(newPassword) {
     const { data, error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) throw error;

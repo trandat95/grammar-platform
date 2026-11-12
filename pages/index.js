@@ -47,6 +47,7 @@ import {
   signUpWithSupabase,
   signOutSupabase,
   resetPasswordWithSupabase,
+  resendConfirmationWithSupabase,
   updatePasswordWithSupabase,
   onSupabaseAuthStateChange,
   getAllProfiles,
@@ -126,6 +127,7 @@ export default function Home() {
   const [authName, setAuthName] = useState("");
   const [authError, setAuthError] = useState("");
   const [authSuccess, setAuthSuccess] = useState("");
+  const [authUnconfirmedEmail, setAuthUnconfirmedEmail] = useState("");
   const [authSubmitting, setAuthSubmitting] = useState(false);
 
   // Admin Panel states
@@ -919,6 +921,7 @@ export default function Home() {
     if (e) e.preventDefault();
     setAuthError("");
     setAuthSuccess("");
+    setAuthUnconfirmedEmail("");
     const email = authEmail.trim();
     const password = authPassword;
 
@@ -965,6 +968,14 @@ export default function Home() {
     } catch (authErr) {
       console.warn("Supabase Auth API sign in notice:", authErr.message);
 
+      if (/email not confirmed|email_not_confirmed/i.test(`${authErr?.message || ""} ${authErr?.code || ""}`)) {
+        setAuthUnconfirmedEmail(email);
+        setAuthError(
+          `Tài khoản "${email}" chưa được xác thực email trên Supabase. Vui lòng mở link xác nhận trong hộp thư (kiểm tra cả Spam), bấm "Gửi lại email xác nhận" bên dưới, hoặc dùng "Quên mật khẩu?" để xác thực nhanh.`
+        );
+        return;
+      }
+
       // 2. Offline / Local Fallback
       const localUser = usersList.find(
         (u) => u.email.toLowerCase() === email.toLowerCase() && (u.password === password || password === "admin" || password === "vip" || password === "free")
@@ -991,10 +1002,31 @@ export default function Home() {
     }
   };
 
+  const handleResendConfirmation = async () => {
+    const targetEmail = (authUnconfirmedEmail || authEmail).trim();
+    if (!targetEmail) return;
+    setAuthSubmitting(true);
+    setAuthError("");
+    setAuthSuccess("");
+    try {
+      const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
+      await resendConfirmationWithSupabase(targetEmail, redirectTo);
+      setAuthUnconfirmedEmail("");
+      setAuthSuccess(
+        `✅ Đã gửi lại email xác nhận tới ${targetEmail}. Vui lòng mở Hộp thư đến (hoặc Spam) và bấm vào link xác thực rồi đăng nhập lại.`
+      );
+    } catch (err) {
+      setAuthError(err?.message || "Không thể gửi lại email xác nhận. Vui lòng thử lại sau!");
+    } finally {
+      setAuthSubmitting(false);
+    }
+  };
+
   const handleRegister = async (e) => {
     if (e) e.preventDefault();
     setAuthError("");
     setAuthSuccess("");
+    setAuthUnconfirmedEmail("");
     const name = authName.trim();
     const email = authEmail.trim();
     const password = authPassword;
@@ -1020,6 +1052,10 @@ export default function Home() {
         setActiveAuthToken(data.session.access_token);
       }
       if (data?.user) {
+        if (!data.session && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          setAuthError(`Email "${email}" đã được đăng ký trước đó. Vui lòng chuyển sang tab Đăng nhập hoặc dùng Quên mật khẩu!`);
+          return;
+        }
         const newUser = {
           id: data.user.id,
           name: name,
@@ -1042,7 +1078,10 @@ export default function Home() {
           triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
           logActivity(data.user.id, email, "REGISTER", { full_name: name });
         } else {
-          setAuthSuccess("✅ Đã tạo tài khoản thành công! Vui lòng kiểm tra email xác nhận hoặc đăng nhập ngay.");
+          setAuthUnconfirmedEmail(email);
+          setAuthSuccess(
+            `✅ Đã tạo tài khoản "${email}". Tuy nhiên Supabase vẫn đang BẬT "Confirm email" nên bạn cần bấm link xác nhận trong email trước khi đăng nhập (hoặc tắt "Confirm email" tại Auth > Providers > Email trên Supabase Dashboard để đăng ký mới vào thẳng luôn).`
+          );
           setAuthConfirmPassword("");
           setAuthTab("login");
         }
@@ -2852,8 +2891,30 @@ export default function Home() {
         )}
 
         {authError && (
-          <div style={{ padding: "0.6rem 0.85rem", backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "6px", color: T.danger, fontSize: "0.85rem", marginBottom: "1rem" }}>
-            {authError}
+          <div style={{ padding: "0.65rem 0.85rem", backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "6px", color: T.danger, fontSize: "0.84rem", marginBottom: "1rem", lineHeight: 1.45 }}>
+            <div>{authError}</div>
+            {authUnconfirmedEmail && (
+              <div style={{ marginTop: "0.55rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  disabled={authSubmitting}
+                  onClick={handleResendConfirmation}
+                  className="ds-focusable"
+                  style={{
+                    padding: "0.35rem 0.7rem",
+                    backgroundColor: T.accentBg,
+                    border: `1px solid ${T.accentBorder}`,
+                    color: T.accent,
+                    borderRadius: "6px",
+                    fontSize: "0.78rem",
+                    fontWeight: "700",
+                    cursor: authSubmitting ? "not-allowed" : "pointer",
+                  }}
+                >
+                  📧 Gửi lại email xác nhận ({authUnconfirmedEmail})
+                </button>
+              </div>
+            )}
           </div>
         )}
 
