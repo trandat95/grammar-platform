@@ -513,37 +513,39 @@ export default function GamificationHub({
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(235px, 1fr))", gap: "0.9rem" }}>
           {filteredBadges.map((b) => {
-            const isMysteryLocked = Boolean(!b.unlocked && b.is_hidden);
-            const tierFrameBorder = b.unlocked
-              ? T.successBorder
+            const isUnlocked = Boolean(b.unlocked);
+            const isMysteryLocked = Boolean(!isUnlocked && b.is_hidden);
+            const tierFrameBorder = !isUnlocked
+              ? T.borderSubtle
               : b.tier === "Diamond"
               ? T.accentBorder
               : b.tier === "Gold"
               ? T.warningBorder
               : b.tier === "Silver"
               ? T.border
-              : T.borderSubtle;
+              : T.successBorder;
 
             return (
               <div
                 key={b.code}
                 style={{
-                  backgroundColor: T.bgElevated,
-                  border: `1px solid ${b.unlocked ? T.successBorder : tierFrameBorder}`,
+                  backgroundColor: isUnlocked ? T.card : T.bgElevated,
+                  border: `1px solid ${isUnlocked ? T.successBorder : T.borderSubtle}`,
                   borderRadius: "14px",
                   padding: "0.95rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                   gap: "0.65rem",
-                  boxShadow: b.unlocked ? T.shadowSm : "none",
-                  transition: "transform 160ms ease, box-shadow 160ms ease",
+                  boxShadow: isUnlocked ? T.shadowSm : "none",
+                  opacity: isUnlocked ? 1 : 0.82,
+                  transition: "transform 160ms ease, box-shadow 160ms ease, filter 200ms ease",
                 }}
               >
                 <div>
                   {/* Top Pill Row */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.7rem" }}>
-                    <Badge tone={getTierTone(b.tier)} isLight={isLight}>
+                    <Badge tone={isUnlocked ? getTierTone(b.tier) : "neutral"} isLight={isLight}>
                       {b.tier}
                     </Badge>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -552,13 +554,13 @@ export default function GamificationHub({
                           🔒 Bí ẩn
                         </Badge>
                       )}
-                      {b.unlocked ? (
+                      {isUnlocked ? (
                         <Badge tone="success" isLight={isLight}>
                           ✓ Đã mở
                         </Badge>
                       ) : !isMysteryLocked ? (
                         <span style={{ fontSize: "0.66rem", fontWeight: 700, color: T.textMuted }}>
-                          Chưa đạt
+                          🔒 Chưa đạt
                         </span>
                       ) : null}
                     </div>
@@ -574,13 +576,13 @@ export default function GamificationHub({
                         overflow: "hidden",
                         flexShrink: 0,
                         border: `2px solid ${tierFrameBorder}`,
-                        backgroundColor: T.card,
-                        boxShadow: b.unlocked ? T.shadowSm : "none",
+                        backgroundColor: isUnlocked ? T.card : T.bgSub,
+                        boxShadow: isUnlocked ? T.shadowSm : "none",
                         position: "relative",
                       }}
                     >
                       <img
-                        src={getBadgeArtworkPath(b.code, b.tier, b.unlocked, b.is_hidden)}
+                        src={getBadgeArtworkPath(b.code, b.tier, isUnlocked, b.is_hidden)}
                         alt={b.title_vi}
                         width={74}
                         height={74}
@@ -589,16 +591,35 @@ export default function GamificationHub({
                           height: "100%",
                           objectFit: "cover",
                           display: "block",
-                          filter: b.unlocked || isMysteryLocked ? "none" : "saturate(0.82) contrast(0.98)",
+                          filter: isUnlocked
+                            ? "none"
+                            : isMysteryLocked
+                            ? "grayscale(100%) brightness(0.48) contrast(1.18)"
+                            : "grayscale(100%) brightness(0.58) contrast(1.12)",
+                          opacity: isUnlocked ? 1 : 0.78,
                         }}
                       />
                     </div>
 
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontSize: "0.88rem", fontWeight: 800, color: T.textHeading, lineHeight: 1.3 }}>
+                      <div
+                        style={{
+                          fontSize: "0.88rem",
+                          fontWeight: 800,
+                          color: isUnlocked ? T.textHeading : T.textSecondary,
+                          lineHeight: 1.3,
+                        }}
+                      >
                         {b.title_vi}
                       </div>
-                      <div style={{ fontSize: "0.73rem", color: T.textSecondary, marginTop: "0.28rem", lineHeight: 1.42 }}>
+                      <div
+                        style={{
+                          fontSize: "0.73rem",
+                          color: isUnlocked ? T.textSecondary : T.textMuted,
+                          marginTop: "0.28rem",
+                          lineHeight: 1.42,
+                        }}
+                      >
                         {b.description_vi}
                       </div>
                     </div>
@@ -615,7 +636,9 @@ export default function GamificationHub({
                     fontSize: "0.72rem",
                   }}
                 >
-                  <span style={{ color: T.accent, fontWeight: 800 }}>Thưởng: +{b.xp_bonus} XP</span>
+                  <span style={{ color: isUnlocked ? T.accent : T.textMuted, fontWeight: 800 }}>
+                    Thưởng: +{b.xp_bonus} XP
+                  </span>
                   <span style={{ color: T.textMuted, fontSize: "0.68rem" }}>{b.category}</span>
                 </div>
               </div>

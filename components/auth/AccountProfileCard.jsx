@@ -433,7 +433,15 @@ export default function AccountProfileCard({
                     alt={b.title_vi}
                     width={32}
                     height={32}
-                    style={{ width: 32, height: 32, borderRadius: "7px", objectFit: "cover", flexShrink: 0 }}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "7px",
+                      objectFit: "cover",
+                      flexShrink: 0,
+                      filter: "grayscale(100%) brightness(0.58) contrast(1.12)",
+                      opacity: 0.78,
+                    }}
                   />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: "0.74rem", fontWeight: 700, color: T.textSecondary }}>{b.title_vi}</div>
