@@ -46,4 +46,22 @@ export const AuthService = {
       return false;
     }
   },
+
+  async resetPasswordForEmail(email, redirectTo) {
+    const options = redirectTo ? { redirectTo } : undefined;
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
+    if (error) throw error;
+    return data;
+  },
+
+  async updatePassword(newPassword) {
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+    return data;
+  },
+
+  onAuthStateChange(callback) {
+    const { data } = supabase.auth.onAuthStateChange(callback);
+    return () => data?.subscription?.unsubscribe();
+  },
 };

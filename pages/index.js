@@ -46,6 +46,9 @@ import {
   signInWithSupabase,
   signUpWithSupabase,
   signOutSupabase,
+  resetPasswordWithSupabase,
+  updatePasswordWithSupabase,
+  onSupabaseAuthStateChange,
   getAllProfiles,
   updateProfileRoleOrStatus,
   getActiveSession,
@@ -116,11 +119,14 @@ export default function Home() {
   const [adminActivityLogs, setAdminActivityLogs] = useState([]);
   const [accessPolicy, setAccessPolicy] = useState(DEFAULT_ACCESS_POLICY);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authTab, setAuthTab] = useState("login"); // 'login' | 'register'
+  const [authTab, setAuthTab] = useState("login"); // 'login' | 'register' | 'forgot' | 'reset'
   const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
+  const [authConfirmPassword, setAuthConfirmPassword] = useState("");
   const [authName, setAuthName] = useState("");
   const [authError, setAuthError] = useState("");
+  const [authSuccess, setAuthSuccess] = useState("");
+  const [authSubmitting, setAuthSubmitting] = useState(false);
 
   // Admin Panel states
   const [adminPolicyForm, setAdminPolicyForm] = useState(DEFAULT_ACCESS_POLICY);
@@ -405,6 +411,35 @@ export default function Home() {
         console.warn("Supabase initial cloud fetch warning:", err?.message || err);
       }
     })();
+
+    const unsubscribe = onSupabaseAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        if (session?.access_token) setActiveAuthToken(session.access_token);
+        setAuthError("");
+        setAuthSuccess("");
+        setAuthPassword("");
+        setAuthConfirmPassword("");
+        setAuthTab("reset");
+        setAuthModalOpen(true);
+      } else if (event === "SIGNED_IN" && session?.access_token) {
+        setActiveAuthToken(session.access_token);
+      }
+    });
+
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash || "";
+      const search = window.location.search || "";
+      if (hash.includes("type=recovery") || search.includes("type=recovery")) {
+        setAuthError("");
+        setAuthSuccess("");
+        setAuthTab("reset");
+        setAuthModalOpen(true);
+      }
+    }
+
+    return () => {
+      if (typeof unsubscribe === "function") unsubscribe();
+    };
   }, []);
 
   // Offline Sync Engine & Multi-Device Pull Initialization (Milestone 2.3)
@@ -883,6 +918,7 @@ export default function Home() {
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
     setAuthError("");
+    setAuthSuccess("");
     const email = authEmail.trim();
     const password = authPassword;
 
@@ -891,9 +927,13 @@ export default function Home() {
       return;
     }
 
+    setAuthSubmitting(true);
     try {
       // 1. Authenticate with Supabase Auth (GoTrue)
       const data = await signInWithSupabase(email, password);
+      if (data?.session?.access_token) {
+        setActiveAuthToken(data.session.access_token);
+      }
       if (data?.user) {
         // Fetch Live Profile from Postgres 17
         const profile = await getProfile(data.user.id);
@@ -946,12 +986,15 @@ export default function Home() {
       }
 
       setAuthError(authErr.message || "Email hoặc mật khẩu không chính xác!");
+    } finally {
+      setAuthSubmitting(false);
     }
   };
 
   const handleRegister = async (e) => {
     if (e) e.preventDefault();
     setAuthError("");
+    setAuthSuccess("");
     const name = authName.trim();
     const email = authEmail.trim();
     const password = authPassword;
@@ -965,9 +1008,13 @@ export default function Home() {
       return;
     }
 
+    setAuthSubmitting(true);
     try {
-      // 1. Register on Supabase Auth Cloud
+      // 1. Register on Supabase Auth Cloud (instant session when Confirm email is disabled)
       const data = await signUpWithSupabase(email, password, name);
+      if (data?.session?.access_token) {
+        setActiveAuthToken(data.session.access_token);
+      }
       if (data?.user) {
         const newUser = {
           id: data.user.id,
@@ -977,22 +1024,33 @@ export default function Home() {
           status: "ACTIVE",
           createdAt: getTodayDateStr(),
         };
-        const updatedUsers = [newUser, ...usersList];
+        const updatedUsers = [newUser, ...usersList.filter((u) => u.id !== newUser.id)];
         persistUsersList(updatedUsers);
-        setCurrentUser(newUser);
-        localStorage.setItem("grammar_active_user_id", newUser.id);
-        setAuthModalOpen(false);
-        setAuthTab("login");
-        setAuthName("");
-        setAuthEmail("");
-        setAuthPassword("");
-        triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
-        logActivity(data.user.id, email, "REGISTER", { full_name: name });
+        if (data.session) {
+          setCurrentUser(newUser);
+          localStorage.setItem("grammar_active_user_id", newUser.id);
+          setAuthModalOpen(false);
+          setAuthTab("login");
+          setAuthName("");
+          setAuthEmail("");
+          setAuthPassword("");
+          triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
+          logActivity(data.user.id, email, "REGISTER", { full_name: name });
+        } else {
+          setAuthSuccess("✅ Đã tạo tài khoản thành công! Vui lòng kiểm tra email xác nhận hoặc đăng nhập ngay.");
+          setAuthTab("login");
+        }
         return;
       }
     } catch (err) {
       console.warn("Supabase signup error:", err.message);
-      // Fallback local registration if offline
+      const isNetworkErr =
+        /failed to fetch|networkerror|network request failed/i.test(err?.message || "");
+      if (!isNetworkErr) {
+        setAuthError(err?.message || "Không thể tạo tài khoản. Vui lòng kiểm tra lại email!");
+        return;
+      }
+      // Fallback local registration only if offline
       if (usersList.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
         setAuthError("Email này đã được đăng ký trên hệ thống!");
         return;
@@ -1015,6 +1073,78 @@ export default function Home() {
       setAuthPassword("");
       triggerXpGain(50, `Chào mừng ${localNewUser.name} (+50 XP)!`);
       logActivity(localNewUser.id, email, "REGISTER", { full_name: name, offline: true });
+    } finally {
+      setAuthSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    if (e) e.preventDefault();
+    setAuthError("");
+    setAuthSuccess("");
+    const email = authEmail.trim();
+    if (!email) {
+      setAuthError("Vui lòng nhập email tài khoản cần khôi phục mật khẩu!");
+      return;
+    }
+
+    setAuthSubmitting(true);
+    try {
+      const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
+      await resetPasswordWithSupabase(email, redirectTo);
+      setAuthSuccess(
+        `✅ Đã gửi liên kết khôi phục mật khẩu tới ${email}. Vui lòng mở Hộp thư đến (hoặc mục Thư rác/Spam) và nhấn vào link để đặt mật khẩu mới.`
+      );
+    } catch (err) {
+      setAuthError(err?.message || "Không thể gửi email khôi phục mật khẩu. Vui lòng thử lại sau!");
+    } finally {
+      setAuthSubmitting(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    if (e) e.preventDefault();
+    setAuthError("");
+    setAuthSuccess("");
+    if (!authPassword || authPassword.length < 6) {
+      setAuthError("Mật khẩu mới phải có ít nhất 6 ký tự!");
+      return;
+    }
+    if (authPassword !== authConfirmPassword) {
+      setAuthError("Mật khẩu xác nhận không khớp!");
+      return;
+    }
+
+    setAuthSubmitting(true);
+    try {
+      await updatePasswordWithSupabase(authPassword);
+      const session = await getActiveSession();
+      if (session?.access_token) setActiveAuthToken(session.access_token);
+      if (session?.user) {
+        const profile = await getProfile(session.user.id);
+        const restoredUser = {
+          id: session.user.id,
+          name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email.split("@")[0],
+          email: session.user.email,
+          role: profile?.role || session.user.user_metadata?.role || "FREE",
+          status: profile?.status || "ACTIVE",
+          createdAt: profile?.created_at ? profile.created_at.split("T")[0] : getTodayDateStr(),
+        };
+        setCurrentUser(restoredUser);
+        localStorage.setItem("grammar_active_user_id", restoredUser.id);
+      }
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+      setAuthPassword("");
+      setAuthConfirmPassword("");
+      setAuthModalOpen(false);
+      setAuthTab("login");
+      triggerXpGain(0, "✅ Đã đặt lại mật khẩu mới thành công!");
+    } catch (err) {
+      setAuthError(err?.message || "Liên kết khôi phục đã hết hạn hoặc không hợp lệ. Vui lòng gửi lại yêu cầu Quên mật khẩu.");
+    } finally {
+      setAuthSubmitting(false);
     }
   };
 
@@ -2646,8 +2776,20 @@ export default function Home() {
       <FocusTrapModal2026
         id="auth-modal"
         isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        title={authTab === "login" ? "Đăng nhập tài khoản" : "Đăng ký thành viên"}
+        onClose={() => {
+          setAuthModalOpen(false);
+          setAuthError("");
+          setAuthSuccess("");
+        }}
+        title={
+          authTab === "login"
+            ? "Đăng nhập tài khoản"
+            : authTab === "register"
+            ? "Đăng ký thành viên"
+            : authTab === "forgot"
+            ? "Khôi phục mật khẩu"
+            : "Đặt lại mật khẩu mới"
+        }
         maxWidth="460px"
         padding="24px"
       >
@@ -2708,59 +2850,70 @@ export default function Home() {
           </div>
         )}
 
-        <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
-          <button
-            type="button"
-            onClick={() => { setAuthTab("login"); setAuthError(""); }}
-            className="ds-focusable"
-            style={{
-              flex: 1,
-              padding: "0.4rem",
-              borderRadius: "4px",
-              border: "none",
-              fontSize: "0.825rem",
-              fontWeight: authTab === "login" ? "700" : "500",
-              backgroundColor: authTab === "login" ? T.card : "transparent",
-              color: authTab === "login" ? T.text : T.textMuted,
-              boxShadow: authTab === "login" ? T.shadow : "none",
-              cursor: "pointer",
-            }}
-          >
-            Đăng nhập
-          </button>
-          <button
-            type="button"
-            onClick={() => { setAuthTab("register"); setAuthError(""); }}
-            className="ds-focusable"
-            style={{
-              flex: 1,
-              padding: "0.4rem",
-              borderRadius: "4px",
-              border: "none",
-              fontSize: "0.825rem",
-              fontWeight: authTab === "register" ? "700" : "500",
-              backgroundColor: authTab === "register" ? T.card : "transparent",
-              color: authTab === "register" ? T.text : T.textMuted,
-              boxShadow: authTab === "register" ? T.shadow : "none",
-              cursor: "pointer",
-            }}
-          >
-            Đăng ký mới
-          </button>
-        </div>
+        {authSuccess && (
+          <div style={{ padding: "0.65rem 0.85rem", backgroundColor: T.successBg, border: `1px solid ${T.successBorder}`, borderRadius: "6px", color: T.success, fontSize: "0.84rem", marginBottom: "1rem", lineHeight: 1.45 }}>
+            {authSuccess}
+          </div>
+        )}
 
-        <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
-          {authTab === "register" && (
-            <div style={{ marginBottom: "1rem" }}>
+        {(authTab === "login" || authTab === "register") && (
+          <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
+            <button
+              type="button"
+              onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); }}
+              className="ds-focusable"
+              style={{
+                flex: 1,
+                padding: "0.4rem",
+                borderRadius: "4px",
+                border: "none",
+                fontSize: "0.825rem",
+                fontWeight: authTab === "login" ? "700" : "500",
+                backgroundColor: authTab === "login" ? T.card : "transparent",
+                color: authTab === "login" ? T.text : T.textMuted,
+                boxShadow: authTab === "login" ? T.shadow : "none",
+                cursor: "pointer",
+              }}
+            >
+              Đăng nhập
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAuthTab("register"); setAuthError(""); setAuthSuccess(""); }}
+              className="ds-focusable"
+              style={{
+                flex: 1,
+                padding: "0.4rem",
+                borderRadius: "4px",
+                border: "none",
+                fontSize: "0.825rem",
+                fontWeight: authTab === "register" ? "700" : "500",
+                backgroundColor: authTab === "register" ? T.card : "transparent",
+                color: authTab === "register" ? T.text : T.textMuted,
+                boxShadow: authTab === "register" ? T.shadow : "none",
+                cursor: "pointer",
+              }}
+            >
+              Đăng ký mới
+            </button>
+          </div>
+        )}
+
+        {authTab === "forgot" ? (
+          <form onSubmit={handleForgotPassword}>
+            <p style={{ margin: "0 0 0.9rem", fontSize: "0.82rem", color: T.textSecondary, lineHeight: 1.5 }}>
+              Nhập email tài khoản đã đăng ký. Hệ thống sẽ gửi đường dẫn đặt lại mật khẩu trực tiếp qua email cho bạn.
+            </p>
+            <div style={{ marginBottom: "1.25rem" }}>
               <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-                Họ và tên:
+                Email khôi phục:
               </label>
               <input
-                type="text"
+                type="email"
                 required
-                value={authName}
-                placeholder="Nguyễn Văn A"
-                onChange={(e) => setAuthName(e.target.value)}
+                value={authEmail}
+                placeholder="name@example.com"
+                onChange={(e) => setAuthEmail(e.target.value)}
                 className="ds-focusable"
                 style={{
                   width: "100%",
@@ -2773,72 +2926,249 @@ export default function Home() {
                 }}
               />
             </div>
-          )}
-
-          <div style={{ marginBottom: "1rem" }}>
-            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-              Email:
-            </label>
-            <input
-              type="email"
-              required
-              value={authEmail}
-              placeholder="name@example.com"
-              onChange={(e) => setAuthEmail(e.target.value)}
-              className="ds-focusable"
+            <button
+              type="submit"
+              disabled={authSubmitting}
+              className="ds-btn ds-focusable"
               style={{
                 width: "100%",
-                padding: "0.55rem 0.75rem",
-                backgroundColor: T.inputBg,
-                border: `1px solid ${T.border}`,
+                padding: "0.65rem",
+                backgroundColor: "var(--ds-btn-primary)",
+                color: "#ffffff",
+                border: "none",
                 borderRadius: "6px",
-                color: T.text,
-                fontSize: "0.875rem",
+                fontWeight: "700",
+                fontSize: "0.9rem",
+                cursor: authSubmitting ? "not-allowed" : "pointer",
+                opacity: authSubmitting ? 0.75 : 1,
               }}
-            />
-          </div>
-
-          <div style={{ marginBottom: "1.5rem" }}>
-            <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
-              Mật khẩu:
-            </label>
-            <input
-              type="password"
-              required
-              value={authPassword}
-              placeholder="••••••••"
-              onChange={(e) => setAuthPassword(e.target.value)}
-              className="ds-focusable"
+            >
+              {authSubmitting ? "Đang gửi email..." : "Gửi link khôi phục mật khẩu"}
+            </button>
+            <div style={{ marginTop: "0.85rem", textAlign: "center" }}>
+              <button
+                type="button"
+                onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); }}
+                className="ds-focusable"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: T.accent,
+                  fontSize: "0.82rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                ← Quay lại đăng nhập
+              </button>
+            </div>
+          </form>
+        ) : authTab === "reset" ? (
+          <form onSubmit={handleResetPassword}>
+            <p style={{ margin: "0 0 0.9rem", fontSize: "0.82rem", color: T.textSecondary, lineHeight: 1.5 }}>
+              Vui lòng nhập mật khẩu mới (tối thiểu 6 ký tự) để hoàn tất khôi phục tài khoản.
+            </p>
+            <div style={{ marginBottom: "1rem" }}>
+              <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                Mật khẩu mới:
+              </label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={authPassword}
+                placeholder="Tối thiểu 6 ký tự"
+                onChange={(e) => setAuthPassword(e.target.value)}
+                className="ds-focusable"
+                style={{
+                  width: "100%",
+                  padding: "0.55rem 0.75rem",
+                  backgroundColor: T.inputBg,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "6px",
+                  color: T.text,
+                  fontSize: "0.875rem",
+                }}
+              />
+            </div>
+            <div style={{ marginBottom: "1.25rem" }}>
+              <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                Nhập lại mật khẩu mới:
+              </label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={authConfirmPassword}
+                placeholder="Xác nhận mật khẩu mới"
+                onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                className="ds-focusable"
+                style={{
+                  width: "100%",
+                  padding: "0.55rem 0.75rem",
+                  backgroundColor: T.inputBg,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "6px",
+                  color: T.text,
+                  fontSize: "0.875rem",
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={authSubmitting}
+              className="ds-btn ds-focusable"
               style={{
                 width: "100%",
-                padding: "0.55rem 0.75rem",
-                backgroundColor: T.inputBg,
-                border: `1px solid ${T.border}`,
+                padding: "0.65rem",
+                backgroundColor: "var(--ds-btn-primary)",
+                color: "#ffffff",
+                border: "none",
                 borderRadius: "6px",
-                color: T.text,
-                fontSize: "0.875rem",
+                fontWeight: "700",
+                fontSize: "0.9rem",
+                cursor: authSubmitting ? "not-allowed" : "pointer",
+                opacity: authSubmitting ? 0.75 : 1,
               }}
-            />
-          </div>
+            >
+              {authSubmitting ? "Đang lưu mật khẩu..." : "Lưu mật khẩu mới"}
+            </button>
+            <div style={{ marginTop: "0.85rem", textAlign: "center" }}>
+              <button
+                type="button"
+                onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); }}
+                className="ds-focusable"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: T.textMuted,
+                  fontSize: "0.8rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                Quay lại đăng nhập
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={authTab === "login" ? handleLogin : handleRegister}>
+            {authTab === "register" && (
+              <div style={{ marginBottom: "1rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                  Họ và tên:
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={authName}
+                  placeholder="Nguyễn Văn A"
+                  onChange={(e) => setAuthName(e.target.value)}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    backgroundColor: T.inputBg,
+                    border: `1px solid ${T.border}`,
+                    borderRadius: "6px",
+                    color: T.text,
+                    fontSize: "0.875rem",
+                  }}
+                />
+              </div>
+            )}
 
-          <button
-            type="submit"
-            className="ds-btn ds-focusable"
-            style={{
-              width: "100%",
-              padding: "0.65rem",
-              backgroundColor: "var(--ds-btn-primary)",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: "6px",
-              fontWeight: "700",
-              fontSize: "0.9rem",
-              cursor: "pointer",
-            }}
-          >
-            {authTab === "login" ? "Đăng nhập ngay" : "Tạo tài khoản học tập"}
-          </button>
-        </form>
+            <div style={{ marginBottom: "1rem" }}>
+              <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                Email:
+              </label>
+              <input
+                type="email"
+                required
+                value={authEmail}
+                placeholder="name@example.com"
+                onChange={(e) => setAuthEmail(e.target.value)}
+                className="ds-focusable"
+                style={{
+                  width: "100%",
+                  padding: "0.55rem 0.75rem",
+                  backgroundColor: T.inputBg,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "6px",
+                  color: T.text,
+                  fontSize: "0.875rem",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
+                <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>
+                  Mật khẩu:
+                </label>
+                {authTab === "login" && (
+                  <button
+                    type="button"
+                    onClick={() => { setAuthTab("forgot"); setAuthError(""); setAuthSuccess(""); }}
+                    className="ds-focusable"
+                    style={{
+                      background: "none",
+                      border: "none",
+                      padding: 0,
+                      color: T.accent,
+                      fontSize: "0.78rem",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Quên mật khẩu?
+                  </button>
+                )}
+              </div>
+              <input
+                type="password"
+                required
+                value={authPassword}
+                placeholder="••••••••"
+                onChange={(e) => setAuthPassword(e.target.value)}
+                className="ds-focusable"
+                style={{
+                  width: "100%",
+                  padding: "0.55rem 0.75rem",
+                  backgroundColor: T.inputBg,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: "6px",
+                  color: T.text,
+                  fontSize: "0.875rem",
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={authSubmitting}
+              className="ds-btn ds-focusable"
+              style={{
+                width: "100%",
+                padding: "0.65rem",
+                backgroundColor: "var(--ds-btn-primary)",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "700",
+                fontSize: "0.9rem",
+                cursor: authSubmitting ? "not-allowed" : "pointer",
+                opacity: authSubmitting ? 0.75 : 1,
+              }}
+            >
+              {authSubmitting
+                ? "Đang xử lý..."
+                : authTab === "login"
+                ? "Đăng nhập ngay"
+                : "Tạo tài khoản học tập"}
+            </button>
+          </form>
+        )}
       </FocusTrapModal2026>
 
       {/* Admin: Modal Add New User (WCAG FocusTrapModal2026) */}
