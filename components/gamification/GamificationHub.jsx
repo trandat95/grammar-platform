@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
 
@@ -9,6 +9,55 @@ const BOARD_TABS = [
   { id: "weekly_consistency", label: "Chăm chỉ", unit: "điểm" },
   { id: "grammar_mastery", label: "Mastery", unit: "%" },
 ];
+
+// Client-side SWR cache: renders Gamification tab instantaneously (0ms) on revisit & after prefetch
+const gamificationSummaryCache = new Map();
+const gamificationLeaderboardCache = new Map();
+const gamificationSummaryInflight = new Map();
+const gamificationLbInflight = new Map();
+
+export function prefetchGamificationData({ userId = null, authToken = null } = {}) {
+  if (typeof window === "undefined") return Promise.resolve();
+  const summaryKey = userId || "guest";
+  const lbKey = `weekly_xp_10_${summaryKey}`;
+  const tzOffsetMinutes = -new Date().getTimezoneOffset();
+  const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+  const jobs = [];
+
+  if (!gamificationSummaryCache.has(summaryKey) && !gamificationSummaryInflight.has(summaryKey)) {
+    const params = new URLSearchParams({ tzOffsetMinutes: String(tzOffsetMinutes) });
+    if (userId) params.set("user_id", userId);
+    const p = fetch(`/api/gamification/summary?${params.toString()}`, { headers })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json?.success) gamificationSummaryCache.set(summaryKey, json);
+      })
+      .catch(() => {})
+      .finally(() => gamificationSummaryInflight.delete(summaryKey));
+    gamificationSummaryInflight.set(summaryKey, p);
+    jobs.push(p);
+  }
+
+  if (!gamificationLeaderboardCache.has(lbKey) && !gamificationLbInflight.has(lbKey)) {
+    const params = new URLSearchParams({
+      board: "weekly_xp",
+      limit: "10",
+      tzOffsetMinutes: String(tzOffsetMinutes),
+    });
+    if (userId) params.set("user_id", userId);
+    const p = fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json?.success) gamificationLeaderboardCache.set(lbKey, json);
+      })
+      .catch(() => {})
+      .finally(() => gamificationLbInflight.delete(lbKey));
+    gamificationLbInflight.set(lbKey, p);
+    jobs.push(p);
+  }
+
+  return Promise.all(jobs);
+}
 
 const BADGE_CATEGORIES = [
   "ALL",
@@ -41,14 +90,20 @@ export default function GamificationHub({
   onStartAdaptivePractice,
 }) {
   const T = getThemeTokens(isLight);
-  const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const summaryKey = userId || "guest";
+  const initialSummary = gamificationSummaryCache.get(summaryKey) || null;
+  const [summary, setSummary] = useState(initialSummary);
+  const [loading, setLoading] = useState(!initialSummary);
   const [boardType, setBoardType] = useState("weekly_xp");
   const [boardLimit, setBoardLimit] = useState(10);
-  const [leaderboard, setLeaderboard] = useState({ entries: [], totalEntries: 0, currentUserEntry: null });
-  const [lbLoading, setLbLoading] = useState(false);
+  const lbKey = `${boardType}_${boardLimit}_${userId || "guest"}`;
+  const initialLb = gamificationLeaderboardCache.get(lbKey) || { entries: [], totalEntries: 0, currentUserEntry: null };
+  const [leaderboard, setLeaderboard] = useState(initialLb);
+  const [lbLoading, setLbLoading] = useState(!gamificationLeaderboardCache.has(lbKey));
   const [badgeFilter, setBadgeFilter] = useState("ALL");
   const [actionNotice, setActionNotice] = useState(null);
+  const onPrefsRef = useRef(onPreferencesChange);
+  onPrefsRef.current = onPreferencesChange;
 
   const tzOffsetMinutes = useMemo(() => {
     try {
@@ -59,7 +114,7 @@ export default function GamificationHub({
   }, []);
 
   const loadSummary = useCallback(async () => {
-    setLoading(true);
+    if (!gamificationSummaryCache.has(summaryKey)) setLoading(true);
     try {
       const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
       const params = new URLSearchParams({ tzOffsetMinutes: String(tzOffsetMinutes) });
@@ -67,9 +122,10 @@ export default function GamificationHub({
       const res = await fetch(`/api/gamification/summary?${params.toString()}`, { headers });
       const json = await res.json();
       if (res.ok && json.success) {
+        gamificationSummaryCache.set(summaryKey, json);
         setSummary(json);
-        if (onPreferencesChange && json.preferences) {
-          onPreferencesChange(json.preferences);
+        if (onPrefsRef.current && json.preferences) {
+          onPrefsRef.current(json.preferences);
         }
       }
     } catch (err) {
@@ -77,10 +133,11 @@ export default function GamificationHub({
     } finally {
       setLoading(false);
     }
-  }, [userId, authToken, tzOffsetMinutes, onPreferencesChange]);
+  }, [userId, authToken, tzOffsetMinutes, summaryKey]);
 
   const loadLeaderboard = useCallback(async () => {
-    setLbLoading(true);
+    const key = `${boardType}_${boardLimit}_${userId || "guest"}`;
+    if (!gamificationLeaderboardCache.has(key)) setLbLoading(true);
     try {
       const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
       const params = new URLSearchParams({
@@ -92,6 +149,7 @@ export default function GamificationHub({
       const res = await fetch(`/api/gamification/leaderboard?${params.toString()}`, { headers });
       const json = await res.json();
       if (res.ok && json.success) {
+        gamificationLeaderboardCache.set(key, json);
         setLeaderboard(json);
       }
     } catch (err) {

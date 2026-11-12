@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
@@ -8,6 +8,29 @@ const PROVIDERS = [
   { id: "momo", label: "Ví MoMo" },
   { id: "stripe", label: "Thẻ Visa / Mastercard (Stripe)" },
 ];
+
+// Client-side SWR cache eliminates 2-3s Skeleton reload & prevents double-fetch loops
+const monetizationOverviewCache = new Map();
+const monetizationOverviewInflight = new Map();
+
+export function prefetchMonetizationData({ userId = null, authToken = null } = {}) {
+  if (typeof window === "undefined") return Promise.resolve();
+  const cacheKey = userId || "guest";
+  if (monetizationOverviewCache.has(cacheKey) || monetizationOverviewInflight.has(cacheKey)) {
+    return monetizationOverviewInflight.get(cacheKey) || Promise.resolve();
+  }
+  const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+  const url = userId ? `/api/monetization/overview?user_id=${encodeURIComponent(userId)}` : "/api/monetization/overview";
+  const p = fetch(url, { headers })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json?.success) monetizationOverviewCache.set(cacheKey, json);
+    })
+    .catch(() => {})
+    .finally(() => monetizationOverviewInflight.delete(cacheKey));
+  monetizationOverviewInflight.set(cacheKey, p);
+  return p;
+}
 
 /**
  * Milestone 2.12: Intelligent Monetization, Pricing Psychology, Checkout & Subscription Management Hub
@@ -22,8 +45,10 @@ export default function MonetizationHub({
   onRequireLogin,
 }) {
   const T = getThemeTokens(isLight);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = userId || "guest";
+  const cachedInitial = monetizationOverviewCache.get(cacheKey) || null;
+  const [data, setData] = useState(cachedInitial);
+  const [loading, setLoading] = useState(!cachedInitial);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [provider, setProvider] = useState("vnpay");
   const [couponInput, setCouponInput] = useState("");
@@ -33,18 +58,21 @@ export default function MonetizationHub({
   const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState("COMPLETED_GOAL");
   const [statusNotice, setStatusNotice] = useState(null);
+  const onEntSyncRef = useRef(onEntitlementSync);
+  onEntSyncRef.current = onEntitlementSync;
 
   const loadOverview = useCallback(async () => {
-    setLoading(true);
+    if (!monetizationOverviewCache.has(cacheKey)) setLoading(true);
     try {
       const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
       const url = userId ? `/api/monetization/overview?user_id=${encodeURIComponent(userId)}` : "/api/monetization/overview";
       const res = await fetch(url, { headers });
       const json = await res.json();
       if (res.ok && json.success) {
+        monetizationOverviewCache.set(cacheKey, json);
         setData(json);
-        if (onEntitlementSync && json.entitlement) {
-          onEntitlementSync(json.entitlement);
+        if (onEntSyncRef.current && json.entitlement) {
+          onEntSyncRef.current(json.entitlement);
         }
       }
     } catch (err) {
@@ -52,7 +80,7 @@ export default function MonetizationHub({
     } finally {
       setLoading(false);
     }
-  }, [userId, authToken, onEntitlementSync]);
+  }, [userId, authToken, cacheKey]);
 
   useEffect(() => {
     loadOverview();

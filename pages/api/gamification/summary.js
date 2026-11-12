@@ -12,31 +12,53 @@ import { ensureActiveChallengesForUser } from "../../../lib/gamification/gamific
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Warm Lambda 5-minute catalog cache (achievements + daily_challenges rarely change)
+let catalogCache = { ts: 0, achievements: null, templates: null };
+const CATALOG_TTL_MS = 5 * 60 * 1000;
+
+async function getGamificationCatalog(serverClient) {
+  if (catalogCache.achievements && catalogCache.templates && Date.now() - catalogCache.ts < CATALOG_TTL_MS) {
+    return catalogCache;
+  }
+  const [{ data: achs }, { data: tpls }] = await Promise.all([
+    serverClient.from("achievements").select("*").order("sort_order", { ascending: true }),
+    serverClient.from("daily_challenges").select("*").eq("is_active", true),
+  ]);
+  catalogCache = {
+    ts: Date.now(),
+    achievements: achs?.length ? achs : DEFAULT_ACHIEVEMENT_CATALOG,
+    templates: tpls || [],
+  };
+  return catalogCache;
+}
+
 /**
  * Milestone 2.10: Authoritative Gamification Summary, Challenges, Streak Recovery & Preferences API
  * Security: total_xp/level/achievements can NEVER be modified via POST body (Server Authoritative).
  */
 export default async function handler(req, res) {
   const serverClient = getAdminClient();
-  const authUser = await verifyServerSession(req);
-
-  if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
-  }
 
   if (req.method === "GET") {
-    const requestedUserId = authUser?.id || req.query?.user_id;
+    const requestedUserId = req.query?.user_id;
     const tzOffset = Number(req.query?.tzOffsetMinutes || DEFAULT_TZ_OFFSET_MINUTES);
 
     try {
-      const { data: catalogRows } = await serverClient
-        .from("achievements")
-        .select("*")
-        .order("sort_order", { ascending: true });
-      const catalog = catalogRows?.length ? catalogRows : DEFAULT_ACHIEVEMENT_CATALOG;
+      // Single-hop parallelization for auth + cached catalog
+      const [authUser, catalogData] = await Promise.all([
+        req.headers?.authorization ? verifyServerSession(req) : Promise.resolve(null),
+        getGamificationCatalog(serverClient),
+      ]);
 
-      if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
-        const { data: templates } = await serverClient.from("daily_challenges").select("*").eq("is_active", true);
+      if (req.headers?.authorization && !authUser) {
+        return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
+      }
+
+      const effectiveUserId = authUser?.id || requestedUserId;
+      const catalog = catalogData.achievements;
+
+      if (!effectiveUserId || !UUID_REGEX.test(effectiveUserId)) {
+        res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120");
         return res.status(200).json({
           success: true,
           guestMode: true,
@@ -50,7 +72,7 @@ export default async function handler(req, res) {
             can_recover: false,
           },
           achievements: formatAchievementsForClient({ catalog, unlockedRows: [] }),
-          challenges: (templates || []).slice(0, 4).map((t) => ({
+          challenges: (catalogData.templates || []).slice(0, 4).map((t) => ({
             id: t.id,
             status: "preview",
             current_progress: 0,
@@ -78,21 +100,21 @@ export default async function handler(req, res) {
         { data: txRows },
         challengeBundle,
       ] = await Promise.all([
-        serverClient.from("user_xp").select("*").eq("user_id", requestedUserId).maybeSingle(),
-        serverClient.from("user_learning_trackers").select("xp, streak").eq("user_id", requestedUserId).maybeSingle(),
-        serverClient.from("user_streaks").select("*").eq("user_id", requestedUserId).maybeSingle(),
+        serverClient.from("user_xp").select("*").eq("user_id", effectiveUserId).maybeSingle(),
+        serverClient.from("user_learning_trackers").select("xp, streak").eq("user_id", effectiveUserId).maybeSingle(),
+        serverClient.from("user_streaks").select("*").eq("user_id", effectiveUserId).maybeSingle(),
         serverClient
           .from("user_achievements")
           .select("*")
-          .eq("user_id", requestedUserId)
+          .eq("user_id", effectiveUserId)
           .order("unlocked_at", { ascending: false }),
         serverClient
           .from("xp_transactions")
           .select("id, source_type, xp_amount, question_id, reference_id, metadata, created_at")
-          .eq("user_id", requestedUserId)
+          .eq("user_id", effectiveUserId)
           .order("created_at", { ascending: false })
           .limit(20),
-        ensureActiveChallengesForUser({ serverClient, userId: requestedUserId, now, tzOffsetMinutes: tzOffset }),
+        ensureActiveChallengesForUser({ serverClient, userId: effectiveUserId, now, tzOffsetMinutes: tzOffset }),
       ]);
 
       const authoritativeXp = xpRow ? Number(xpRow.total_xp || 0) : Number(trackerRow?.xp || 0);
@@ -125,6 +147,10 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    const authUser = req.headers?.authorization ? await verifyServerSession(req) : null;
+    if (req.headers?.authorization && !authUser) {
+      return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
+    }
     const { action, user_id, leaderboard_visibility, reduced_motion, user_challenge_id, tzOffsetMinutes } =
       req.body || {};
     const resolvedUserId = authUser?.id || user_id;

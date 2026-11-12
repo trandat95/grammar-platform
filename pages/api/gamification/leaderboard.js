@@ -9,6 +9,45 @@ import {
 } from "../../../lib/gamification/challenge-streak-engine";
 
 const ALLOWED_BOARDS = ["weekly_xp", "monthly_xp", "all_time_xp", "weekly_consistency", "grammar_mastery"];
+const LEADERBOARD_CACHE_TTL_MS = 20 * 1000;
+let leaderboardTablesCache = { data: null, expiresAt: 0 };
+const xpWindowCache = new Map();
+
+async function getLeaderboardBaseTables(serverClient) {
+  const nowMs = Date.now();
+  if (leaderboardTablesCache.data && nowMs < leaderboardTablesCache.expiresAt) {
+    return leaderboardTablesCache.data;
+  }
+  const [{ data: profiles }, { data: xpRows }, { data: trackerRows }, { data: streakRows }, { data: progRows }] =
+    await Promise.all([
+      serverClient.from("profiles").select("id, full_name, email, status").eq("status", "ACTIVE").limit(500),
+      serverClient.from("user_xp").select("*"),
+      serverClient.from("user_learning_trackers").select("user_id, xp, streak, active_days"),
+      serverClient.from("user_streaks").select("*"),
+      serverClient.from("user_concept_progress").select("user_id, mastery_score, attempts, correct_attempts"),
+    ]);
+  const payload = { profiles, xpRows, trackerRows, streakRows, progRows };
+  leaderboardTablesCache = { data: payload, expiresAt: nowMs + LEADERBOARD_CACHE_TTL_MS };
+  return payload;
+}
+
+async function getXpWindowRows(serverClient, board, now) {
+  if (board !== "weekly_xp" && board !== "monthly_xp") return [];
+  const nowMs = Date.now();
+  const cached = xpWindowCache.get(board);
+  if (cached && nowMs < cached.expiresAt) {
+    return cached.rows;
+  }
+  const lookbackDays = board === "monthly_xp" ? 30 : 7;
+  const sinceIso = new Date(now.getTime() - lookbackDays * 86400000).toISOString();
+  const { data: txWindow } = await serverClient
+    .from("xp_transactions")
+    .select("user_id, xp_amount")
+    .gte("created_at", sinceIso);
+  const rows = txWindow || [];
+  xpWindowCache.set(board, { rows, expiresAt: nowMs + LEADERBOARD_CACHE_TTL_MS });
+  return rows;
+}
 
 /**
  * Computes masked public display label preserving privacy when anonymous mode is enabled.
@@ -32,9 +71,6 @@ export default async function handler(req, res) {
   }
 
   const serverClient = getAdminClient();
-  const authUser = await verifyServerSession(req);
-  const requestedUserId = authUser?.id || req.query?.user_id || null;
-
   const board = ALLOWED_BOARDS.includes(req.query?.board) ? req.query.board : "weekly_xp";
   const limit = Math.min(50, Math.max(5, Number(req.query?.limit || 10)));
   const offset = Math.max(0, Number(req.query?.offset || 0));
@@ -49,14 +85,21 @@ export default async function handler(req, res) {
       : getLocalWeekKey(now, tzOffset);
 
   try {
-    const [{ data: profiles }, { data: xpRows }, { data: trackerRows }, { data: streakRows }, { data: progRows }] =
-      await Promise.all([
-        serverClient.from("profiles").select("id, full_name, email, status").eq("status", "ACTIVE").limit(500),
-        serverClient.from("user_xp").select("*"),
-        serverClient.from("user_learning_trackers").select("user_id, xp, streak, active_days"),
-        serverClient.from("user_streaks").select("*"),
-        serverClient.from("user_concept_progress").select("user_id, mastery_score, attempts, correct_attempts"),
-      ]);
+    // Run auth verification, base tables, and windowed XP fetch in parallel (eliminates 3-step sequential waterfall)
+    const [authUser, baseTables, txWindow] = await Promise.all([
+      verifyServerSession(req),
+      getLeaderboardBaseTables(serverClient),
+      getXpWindowRows(serverClient, board, now),
+    ]);
+    const requestedUserId = authUser?.id || req.query?.user_id || null;
+
+    if (!requestedUserId) {
+      res.setHeader("Cache-Control", "public, s-maxage=20, stale-while-revalidate=40");
+    } else {
+      res.setHeader("Cache-Control", "private, max-age=0, must-revalidate");
+    }
+
+    const { profiles, xpRows, trackerRows, streakRows, progRows } = baseTables;
 
     const profileMap = new Map((profiles || []).map((p) => [p.id, p]));
     const xpMap = new Map((xpRows || []).map((x) => [x.user_id, x]));
@@ -78,16 +121,8 @@ export default async function handler(req, res) {
 
     // Windowed XP calculation when weekly_xp or monthly_xp selected
     const windowXpMap = new Map();
-    if (board === "weekly_xp" || board === "monthly_xp") {
-      const lookbackDays = board === "monthly_xp" ? 30 : 7;
-      const sinceIso = new Date(now.getTime() - lookbackDays * 86400000).toISOString();
-      const { data: txWindow } = await serverClient
-        .from("xp_transactions")
-        .select("user_id, xp_amount")
-        .gte("created_at", sinceIso);
-      for (const tx of txWindow || []) {
-        windowXpMap.set(tx.user_id, (windowXpMap.get(tx.user_id) || 0) + Number(tx.xp_amount || 0));
-      }
+    for (const tx of txWindow || []) {
+      windowXpMap.set(tx.user_id, (windowXpMap.get(tx.user_id) || 0) + Number(tx.xp_amount || 0));
     }
 
     const candidateIds = new Set([...profileMap.keys(), ...xpMap.keys(), ...trackerMap.keys()]);

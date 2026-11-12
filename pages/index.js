@@ -14,9 +14,9 @@ import RemedialRecommendationCard from "../components/learning/RemedialRecommend
 import SpacedRepetitionPanel from "../components/learning/SpacedRepetitionPanel";
 import MasteryIntelligenceDashboard from "../components/learning/MasteryIntelligenceDashboard";
 import { buildAdaptiveQuestionSet } from "../lib/learning/adaptive-question-engine";
-import GamificationHub from "../components/gamification/GamificationHub";
+import GamificationHub, { prefetchGamificationData } from "../components/gamification/GamificationHub";
 import GamificationCelebrationModal from "../components/gamification/GamificationCelebrationModal";
-import MonetizationHub from "../components/monetization/MonetizationHub";
+import MonetizationHub, { prefetchMonetizationData } from "../components/monetization/MonetizationHub";
 import SmartPaywallModal from "../components/monetization/SmartPaywallModal";
 import GrammarDiagnosticEngine from "../components/diagnostic/GrammarDiagnosticEngine";
 import AdminOverviewPanel from "../components/admin/AdminOverviewPanel";
@@ -439,6 +439,17 @@ export default function Home() {
       }).catch(() => {});
     }
   }, [currentUser?.id]);
+
+  // Background idle prefetch for Thành tích & Nâng cấp VIP tabs (eliminates Skeleton wait on click)
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const targetUserId = !currentUser.isGuest && currentUser.id !== "guest" ? currentUser.id : null;
+    const timer = setTimeout(() => {
+      prefetchGamificationData({ userId: targetUserId, authToken: activeAuthToken });
+      prefetchMonetizationData({ userId: targetUserId, authToken: activeAuthToken });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [currentUser?.id, currentUser?.isGuest, activeAuthToken]);
 
   // 2. Load Per-User Tracker & Mistakes whenever currentUser changes
   useEffect(() => {
@@ -3353,6 +3364,18 @@ export default function Home() {
             {/* Tab 3.5: Thành tích & Xếp hạng (Milestone 2.10) */}
             <button
               onClick={() => setCurrentView("gamification")}
+              onMouseEnter={() =>
+                prefetchGamificationData({
+                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
+                  authToken: activeAuthToken,
+                })
+              }
+              onFocus={() =>
+                prefetchGamificationData({
+                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
+                  authToken: activeAuthToken,
+                })
+              }
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -3374,6 +3397,18 @@ export default function Home() {
             {/* Tab 3.6: Gói VIP & Lộ trình Chuyên sâu (Milestone 2.12) */}
             <button
               onClick={() => setCurrentView("vip")}
+              onMouseEnter={() =>
+                prefetchMonetizationData({
+                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
+                  authToken: activeAuthToken,
+                })
+              }
+              onFocus={() =>
+                prefetchMonetizationData({
+                  userId: !currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null,
+                  authToken: activeAuthToken,
+                })
+              }
               style={{
                 display: "flex",
                 alignItems: "center",

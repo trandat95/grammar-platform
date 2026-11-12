@@ -16,49 +16,71 @@ import { calculateServerOrderPricing } from "../../../lib/monetization/payment-p
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Warm Lambda 5-minute catalog cache for plans, features, campaigns, paywalls & experiments
+let monetizationCatalogCache = { ts: 0, data: null };
+const MON_CATALOG_TTL_MS = 5 * 60 * 1000;
+
+async function getMonetizationCatalog(serverClient) {
+  if (monetizationCatalogCache.data && Date.now() - monetizationCatalogCache.ts < MON_CATALOG_TTL_MS) {
+    return monetizationCatalogCache.data;
+  }
+  const [{ data: plans }, { data: features }, { data: campaigns }, { data: paywallConfigs }, { data: experiments }] =
+    await Promise.all([
+      serverClient.from("subscription_plans").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
+      serverClient.from("feature_entitlements").select("*").order("sort_order", { ascending: true }),
+      serverClient.from("pricing_campaigns").select("*").eq("is_active", true),
+      serverClient.from("paywall_configs").select("*").eq("is_active", true),
+      serverClient.from("ab_experiments").select("*").eq("is_active", true),
+    ]);
+  const bundle = {
+    plans: plans || [],
+    features: features || [],
+    ethicalCampaigns: (campaigns || []).filter((c) => validateEthicalCampaign(c).valid),
+    paywallConfigs: paywallConfigs || [],
+    mainExp: (experiments || [])[0] || {
+      experiment_key: "paywall_copy_value_v1",
+      variants: ["control", "progress_anchored"],
+    },
+  };
+  monetizationCatalogCache = { ts: Date.now(), data: bundle };
+  return bundle;
+}
+
 /**
  * Milestone 2.12: Monetization Overview, Behavioral Psychology, Paywall Capping & Coupon Validator API
  */
 export default async function handler(req, res) {
   const serverClient = getAdminClient();
-  const authUser = await verifyServerSession(req);
-
-  if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
-  }
 
   if (req.method === "GET") {
-    const requestedUserId = authUser?.id || req.query?.user_id || null;
-    if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
-      return res.status(403).json({ success: false, error: "Forbidden: Cross-user monetization read denied." });
-    }
-
     try {
-      const [{ data: plans }, { data: features }, { data: campaigns }, { data: paywallConfigs }, { data: experiments }] =
-        await Promise.all([
-          serverClient.from("subscription_plans").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
-          serverClient.from("feature_entitlements").select("*").order("sort_order", { ascending: true }),
-          serverClient.from("pricing_campaigns").select("*").eq("is_active", true),
-          serverClient.from("paywall_configs").select("*").eq("is_active", true),
-          serverClient.from("ab_experiments").select("*").eq("is_active", true),
-        ]);
+      const [authUser, catalog] = await Promise.all([
+        req.headers?.authorization ? verifyServerSession(req) : Promise.resolve(null),
+        getMonetizationCatalog(serverClient),
+      ]);
 
-      const ethicalCampaigns = (campaigns || []).filter((c) => validateEthicalCampaign(c).valid);
-      const mainExp = (experiments || [])[0] || {
-        experiment_key: "paywall_copy_value_v1",
-        variants: ["control", "progress_anchored"],
-      };
+      if (req.headers?.authorization && !authUser) {
+        return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
+      }
+
+      const requestedUserId = authUser?.id || req.query?.user_id || null;
+      if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
+        return res.status(403).json({ success: false, error: "Forbidden: Cross-user monetization read denied." });
+      }
+
+      const { plans, features, ethicalCampaigns, paywallConfigs, mainExp } = catalog;
 
       if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
+        res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=120");
         const guestVariant = assignDeterministicAbVariant(mainExp.experiment_key, "guest", mainExp.variants);
         return res.status(200).json({
           success: true,
           guestMode: true,
           entitlement: { effectiveRole: "FREE", hasVipAccess: false, subscription: null, features: {} },
-          plans: plans || [],
-          features: features || [],
+          plans,
+          features,
           campaigns: ethicalCampaigns,
-          paywallConfigs: paywallConfigs || [],
+          paywallConfigs,
           abVariant: { experiment_key: mainExp.experiment_key, variant_key: guestVariant },
           psychology: buildPsychologicalMessaging({ masteredChaptersCount: 0, totalAnswered: 0, streakDays: 1 }),
           segment: { segment: "New Explorer", intentScore: 0, intentBand: "Low" },
@@ -101,14 +123,18 @@ export default async function handler(req, res) {
           .maybeSingle(),
       ]);
 
-      // Persistent A/B Assignment
+      // Persistent A/B Assignment (non-blocking upsert so HTTP GET responds immediately)
       let variantKey = abRow?.variant_key;
       if (!variantKey) {
         variantKey = assignDeterministicAbVariant(mainExp.experiment_key, requestedUserId, mainExp.variants);
-        await serverClient.from("ab_assignments").upsert(
-          { experiment_key: mainExp.experiment_key, user_id: requestedUserId, variant_key: variantKey },
-          { onConflict: "experiment_key,user_id", ignoreDuplicates: true }
-        );
+        serverClient
+          .from("ab_assignments")
+          .upsert(
+            { experiment_key: mainExp.experiment_key, user_id: requestedUserId, variant_key: variantKey },
+            { onConflict: "experiment_key,user_id", ignoreDuplicates: true }
+          )
+          .then(() => {})
+          .catch(() => {});
       }
 
       const totalAttempts = (progRows || []).reduce((s, r) => s + Number(r.attempts || 0), 0);
@@ -147,6 +173,10 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    const authUser = req.headers?.authorization ? await verifyServerSession(req) : null;
+    if (req.headers?.authorization && !authUser) {
+      return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
+    }
     const { action, user_id, event_name, session_id, metadata = {}, trigger_key, action_taken, plan_code, coupon_code, opt_out } =
       req.body || {};
     const resolvedUserId = authUser?.id || user_id;
