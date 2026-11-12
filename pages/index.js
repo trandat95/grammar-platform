@@ -164,6 +164,19 @@ export default function Home() {
   });
   const [stepUpSubmitting, setStepUpSubmitting] = useState(false);
   const [stepUpError, setStepUpError] = useState("");
+  const [adminVipPlans, setAdminVipPlans] = useState([
+    { code: "VIP_MONTHLY", name_vi: "VIP Tháng Linh Hoạt", billing_cycle: "monthly", price_vnd: 29000 },
+    { code: "VIP_QUARTERLY", name_vi: "VIP 3 Tháng Bứt Phá", billing_cycle: "quarterly", price_vnd: 49000 },
+    { code: "VIP_YEARLY", name_vi: "VIP Năm Chuyên Sâu", billing_cycle: "yearly", price_vnd: 79000 },
+    { code: "VIP_LIFETIME", name_vi: "VIP Trọn Đời Toàn Diện", billing_cycle: "lifetime", price_vnd: 109000 },
+  ]);
+  const [vipGrantModal, setVipGrantModal] = useState({
+    open: false,
+    user: null,
+    planCode: "VIP_YEARLY",
+    submitting: false,
+    error: "",
+  });
   const [activeRemedialMap, setActiveRemedialMap] = useState({});
   const [dashboardZone, setDashboardZone] = useState("today"); // 'today' | 'analytics' | 'all'
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -1364,12 +1377,50 @@ export default function Home() {
     }
   };
 
+  const fetchAdminUsersWithSubscriptions = async () => {
+    try {
+      const headers = await getVerifiedAdminHeaders(true);
+      const res = await fetch("/api/admin/users?limit=200", { headers });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.users)) {
+          if (Array.isArray(json.vipPlans) && json.vipPlans.length > 0) {
+            setAdminVipPlans(json.vipPlans);
+          }
+          const mapped = json.users.map((p) => {
+            const trk = Array.isArray(p.user_learning_trackers)
+              ? p.user_learning_trackers[0]
+              : p.user_learning_trackers;
+            return {
+              id: p.id,
+              name: p.full_name || (p.email ? p.email.split("@")[0] : "Học viên"),
+              email: p.email,
+              password: p.role === "ADMIN" ? "admin" : p.role === "VIP" ? "vip" : "free",
+              role: p.role || "FREE",
+              status: p.status || "ACTIVE",
+              tracker: trk || { streak: 1, xp: 0, completed_lessons: [] },
+              activeSubscription: p.active_subscription || null,
+              createdAt: p.created_at ? p.created_at.split("T")[0] : getTodayDateStr(),
+            };
+          });
+          setUsersList(mapped);
+          localStorage.setItem("grammar_users_db", JSON.stringify(mapped));
+          return mapped;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load admin users with subscriptions:", e.message);
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (currentView === "admin" && currentUser?.role === "ADMIN") {
       getActiveSession().then((s) => {
         if (s?.access_token) setActiveAuthToken(s.access_token);
       }).catch(() => {});
       fetchServerAuditLogs();
+      fetchAdminUsersWithSubscriptions();
     }
   }, [currentView, currentUser?.role]);
 
@@ -1393,24 +1444,64 @@ export default function Home() {
     }
   };
 
-  const executeUpdateUserRole = async (userId, newRole, confirmationText = null) => {
+  const executeUpdateUserRole = async (userId, newRole, confirmationText = null, planCode = null) => {
     const headers = await getVerifiedAdminHeaders(true);
     const res = await fetch("/api/admin/users", {
       method: "PATCH",
       headers,
-      body: JSON.stringify({ userId, role: newRole, confirmationText }),
+      body: JSON.stringify({ userId, role: newRole, planCode, confirmationText }),
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
       throw new Error(json.error || `HTTP ${res.status}`);
     }
-    const updated = usersList.map((u) => (u.id === userId ? { ...u, role: newRole } : u));
+    const nextSub = newRole === "VIP" ? json.subscription || null : null;
+    const updated = usersList.map((u) =>
+      u.id === userId ? { ...u, role: newRole, activeSubscription: nextSub } : u
+    );
     persistUsersList(updated);
+    invalidateMonetizationClientCache();
     if (currentUser.id === userId) {
       setCurrentUser((prev) => ({ ...prev, role: newRole }));
     }
     fetchServerAuditLogs();
-    triggerXpGain(5, `Đã cập nhật quyền ${newRole} cho học viên thành công!`);
+    const cycleDesc =
+      nextSub?.billing_cycle === "monthly"
+        ? " (VIP 1 Tháng)"
+        : nextSub?.billing_cycle === "quarterly"
+        ? " (VIP 3 Tháng)"
+        : nextSub?.billing_cycle === "lifetime"
+        ? " (VIP Trọn Đời)"
+        : nextSub?.billing_cycle === "yearly"
+        ? " (VIP 1 Năm)"
+        : "";
+    triggerXpGain(5, `Đã cập nhật quyền ${newRole}${cycleDesc} cho học viên thành công!`);
+  };
+
+  const openVipGrantModal = (user) => {
+    const defaultPlan = user?.activeSubscription?.plan_code || "VIP_YEARLY";
+    setVipGrantModal({
+      open: true,
+      user,
+      planCode: defaultPlan,
+      submitting: false,
+      error: "",
+    });
+  };
+
+  const handleConfirmGrantVip = async () => {
+    if (!vipGrantModal.user || vipGrantModal.submitting) return;
+    setVipGrantModal((prev) => ({ ...prev, submitting: true, error: "" }));
+    try {
+      await executeUpdateUserRole(vipGrantModal.user.id, "VIP", null, vipGrantModal.planCode);
+      setVipGrantModal({ open: false, user: null, planCode: "VIP_YEARLY", submitting: false, error: "" });
+    } catch (err) {
+      setVipGrantModal((prev) => ({
+        ...prev,
+        submitting: false,
+        error: err.message || "Không thể cấp gói VIP trên máy chủ.",
+      }));
+    }
   };
 
   const handleUpdateUserRole = async (userId, newRole) => {
@@ -1533,20 +1624,24 @@ export default function Home() {
 
   const refreshAdminFromSupabase = async () => {
     try {
-      const liveProfiles = await getAllProfilesWithTrackers();
-      if (liveProfiles && liveProfiles.length > 0) {
-        const mapped = liveProfiles.map((p) => ({
-          id: p.id,
-          name: p.full_name || p.email.split("@")[0],
-          email: p.email,
-          password: p.role === "ADMIN" ? "admin" : p.role === "VIP" ? "vip" : "free",
-          role: p.role || "FREE",
-          status: p.status || "ACTIVE",
-          tracker: p.tracker,
-          createdAt: p.created_at ? p.created_at.split("T")[0] : getTodayDateStr(),
-        }));
-        setUsersList(mapped);
-        localStorage.setItem("grammar_users_db", JSON.stringify(mapped));
+      const apiUsers = await fetchAdminUsersWithSubscriptions();
+      if (!apiUsers) {
+        const liveProfiles = await getAllProfilesWithTrackers();
+        if (liveProfiles && liveProfiles.length > 0) {
+          const mapped = liveProfiles.map((p) => ({
+            id: p.id,
+            name: p.full_name || p.email.split("@")[0],
+            email: p.email,
+            password: p.role === "ADMIN" ? "admin" : p.role === "VIP" ? "vip" : "free",
+            role: p.role || "FREE",
+            status: p.status || "ACTIVE",
+            tracker: p.tracker,
+            activeSubscription: null,
+            createdAt: p.created_at ? p.created_at.split("T")[0] : getTodayDateStr(),
+          }));
+          setUsersList(mapped);
+          localStorage.setItem("grammar_users_db", JSON.stringify(mapped));
+        }
       }
       const logs = await getActivityLogs(30);
       if (logs) setAdminActivityLogs(logs);
@@ -4323,6 +4418,7 @@ export default function Home() {
                         <tr style={{ borderBottom: `2px solid ${T.border}` }}>
                           <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Họ tên & Email</th>
                           <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Vai trò (Role)</th>
+                          <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Gói VIP &amp; Hết hạn</th>
                           <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Tiến độ học tập</th>
                           <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Trạng thái</th>
                           <th style={{ textAlign: "left", padding: "0.75rem 0.5rem", fontSize: "0.78rem", color: T.textMuted, textTransform: "uppercase" }}>Ngày tạo</th>
@@ -4332,7 +4428,7 @@ export default function Home() {
                       <tbody>
                         {filteredAdminUsers.length === 0 ? (
                           <tr>
-                            <td colSpan={6} style={{ textAlign: "center", padding: "2.5rem 1rem", color: T.textMuted, fontSize: "0.85rem" }}>
+                            <td colSpan={7} style={{ textAlign: "center", padding: "2.5rem 1rem", color: T.textMuted, fontSize: "0.85rem" }}>
                               Không tìm thấy người dùng nào phù hợp với bộ lọc tìm kiếm.
                             </td>
                           </tr>
@@ -4381,6 +4477,83 @@ export default function Home() {
                                 </td>
 
                                 <td style={{ padding: "0.85rem 0.5rem" }}>
+                                  {u.role === "ADMIN" ? (
+                                    <span style={{ fontSize: "0.75rem", color: T.textMuted }}>Toàn quyền Hệ thống</span>
+                                  ) : u.role === "VIP" ? (
+                                    (() => {
+                                      const sub = u.activeSubscription;
+                                      if (!sub) {
+                                        return (
+                                          <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+                                            <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-warning)" }}>
+                                              VIP Thủ công
+                                            </span>
+                                            <span style={{ fontSize: "0.7rem", color: T.textMuted }}>
+                                              Chưa gắn thời hạn gói
+                                            </span>
+                                          </div>
+                                        );
+                                      }
+                                      const cycleTag =
+                                        sub.billing_cycle === "monthly"
+                                          ? "1 tháng"
+                                          : sub.billing_cycle === "quarterly"
+                                          ? "3 tháng"
+                                          : sub.billing_cycle === "lifetime"
+                                          ? "Trọn đời"
+                                          : "1 năm";
+                                      const endMs = sub.current_period_end ? new Date(sub.current_period_end).getTime() : null;
+                                      const daysLeft = endMs ? Math.ceil((endMs - Date.now()) / 86400000) : null;
+                                      const endDateFmt = endMs ? new Date(endMs).toLocaleDateString("vi-VN") : "—";
+                                      return (
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+                                          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
+                                            <span style={{ fontSize: "0.76rem", fontWeight: "700", color: T.textHeading }}>
+                                              {sub.plan_name || "Gói VIP"}
+                                            </span>
+                                            <span
+                                              style={{
+                                                fontSize: "0.66rem",
+                                                fontWeight: "700",
+                                                padding: "0.08rem 0.4rem",
+                                                borderRadius: "999px",
+                                                backgroundColor: "var(--ds-warning-bg)",
+                                                color: "var(--ds-warning)",
+                                                border: "1px solid var(--ds-warning-border)",
+                                              }}
+                                            >
+                                              {cycleTag}
+                                            </span>
+                                          </div>
+                                          {sub.billing_cycle === "lifetime" ? (
+                                            <span style={{ fontSize: "0.71rem", fontWeight: "700", color: "var(--ds-success)" }}>
+                                              ♾️ Vĩnh viễn (Trọn đời)
+                                            </span>
+                                          ) : (
+                                            <span
+                                              style={{
+                                                fontSize: "0.71rem",
+                                                color: daysLeft !== null && daysLeft <= 0 ? "var(--ds-danger)" : T.textMuted,
+                                                fontWeight: daysLeft !== null && daysLeft <= 0 ? "700" : "500",
+                                              }}
+                                            >
+                                              Hết hạn: {endDateFmt}
+                                              {daysLeft !== null
+                                                ? daysLeft > 0
+                                                  ? ` (còn ${daysLeft} ngày)`
+                                                  : " (Đã hết hạn)"
+                                                : ""}
+                                            </span>
+                                          )}
+                                        </div>
+                                      );
+                                    })()
+                                  ) : (
+                                    <span style={{ fontSize: "0.75rem", color: T.textMuted }}>Gói Miễn phí</span>
+                                  )}
+                                </td>
+
+                                <td style={{ padding: "0.85rem 0.5rem" }}>
                                   <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
                                     <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                                       <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)", fontWeight: "700" }}>
@@ -4416,7 +4589,7 @@ export default function Home() {
                                   <div style={{ display: "flex", gap: "0.4rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
                                     {u.role !== "VIP" && u.role !== "ADMIN" && (
                                       <button
-                                        onClick={() => handleUpdateUserRole(u.id, "VIP")}
+                                        onClick={() => openVipGrantModal(u)}
                                         style={{
                                           padding: "0.3rem 0.65rem",
                                           backgroundColor: "var(--ds-warning-bg)",
@@ -4433,21 +4606,38 @@ export default function Home() {
                                     )}
 
                                     {u.role === "VIP" && (
-                                      <button
-                                        onClick={() => handleUpdateUserRole(u.id, "FREE")}
-                                        style={{
-                                          padding: "0.3rem 0.65rem",
-                                          backgroundColor: "var(--ds-bg-elevated)",
-                                          border: `1px solid ${T.border}`,
-                                          color: T.textSecondary,
-                                          borderRadius: "4px",
-                                          fontSize: "0.75rem",
-                                          fontWeight: "600",
-                                          cursor: "pointer",
-                                        }}
-                                      >
-                                        Hạ FREE
-                                      </button>
+                                      <>
+                                        <button
+                                          onClick={() => openVipGrantModal(u)}
+                                          style={{
+                                            padding: "0.3rem 0.65rem",
+                                            backgroundColor: "var(--ds-warning-bg)",
+                                            border: "1px solid var(--ds-warning-border)",
+                                            color: "var(--ds-warning)",
+                                            borderRadius: "4px",
+                                            fontSize: "0.75rem",
+                                            fontWeight: "700",
+                                            cursor: "pointer",
+                                          }}
+                                        >
+                                          Đổi gói VIP
+                                        </button>
+                                        <button
+                                          onClick={() => handleUpdateUserRole(u.id, "FREE")}
+                                          style={{
+                                            padding: "0.3rem 0.65rem",
+                                            backgroundColor: "var(--ds-bg-elevated)",
+                                            border: `1px solid ${T.border}`,
+                                            color: T.textSecondary,
+                                            borderRadius: "4px",
+                                            fontSize: "0.75rem",
+                                            fontWeight: "600",
+                                            cursor: "pointer",
+                                          }}
+                                        >
+                                          Hạ FREE
+                                        </button>
+                                      </>
                                     )}
 
                                     {u.role !== "ADMIN" && (
@@ -4874,6 +5064,150 @@ export default function Home() {
           }}
           isLight={isLight}
         />
+
+        {/* Admin VIP Plan Selection Modal (1 Tháng / 3 Tháng / 1 Năm / Trọn Đời) */}
+        <FocusTrapModal2026
+          isOpen={vipGrantModal.open}
+          onClose={() => {
+            if (!vipGrantModal.submitting) {
+              setVipGrantModal({ open: false, user: null, planCode: "VIP_YEARLY", submitting: false, error: "" });
+            }
+          }}
+          title="Cấp / Cập nhật Gói VIP cho Học viên"
+          maxWidth="520px"
+        >
+          {vipGrantModal.user && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div
+                style={{
+                  padding: "0.75rem 0.9rem",
+                  borderRadius: "8px",
+                  backgroundColor: T.bgElevated,
+                  border: `1px solid ${T.cardBorder}`,
+                }}
+              >
+                <div style={{ fontWeight: "700", color: T.textHeading, fontSize: "0.92rem" }}>
+                  {vipGrantModal.user.name}
+                </div>
+                <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
+                  {vipGrantModal.user.email}
+                </div>
+              </div>
+
+              <div style={{ fontSize: "0.82rem", fontWeight: "700", color: T.textSecondary }}>
+                Chọn thời hạn gói VIP muốn cấp:
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.65rem" }}>
+                {adminVipPlans.map((plan) => {
+                  const selected = vipGrantModal.planCode === plan.code;
+                  const cycleText =
+                    plan.billing_cycle === "monthly"
+                      ? "Thời hạn 1 tháng"
+                      : plan.billing_cycle === "quarterly"
+                      ? "Thời hạn 3 tháng"
+                      : plan.billing_cycle === "lifetime"
+                      ? "Sử dụng Trọn đời (Vĩnh viễn)"
+                      : "Thời hạn 1 năm";
+                  const previewEnd = (() => {
+                    if (plan.billing_cycle === "lifetime") return "Không giới hạn (Trọn đời ♾️)";
+                    const d = new Date();
+                    if (plan.billing_cycle === "monthly") d.setMonth(d.getMonth() + 1);
+                    else if (plan.billing_cycle === "quarterly") d.setMonth(d.getMonth() + 3);
+                    else d.setFullYear(d.getFullYear() + 1);
+                    return `Kết thúc: ${d.toLocaleDateString("vi-VN")}`;
+                  })();
+                  return (
+                    <button
+                      key={plan.code}
+                      type="button"
+                      onClick={() => setVipGrantModal((prev) => ({ ...prev, planCode: plan.code, error: "" }))}
+                      style={{
+                        textAlign: "left",
+                        padding: "0.8rem 0.9rem",
+                        borderRadius: "10px",
+                        border: `2px solid ${selected ? "var(--ds-btn-warning)" : T.cardBorder}`,
+                        backgroundColor: selected ? "var(--ds-warning-bg)" : T.card,
+                        cursor: "pointer",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.25rem",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.4rem" }}>
+                        <span style={{ fontWeight: "800", fontSize: "0.86rem", color: T.textHeading }}>
+                          {plan.name_vi}
+                        </span>
+                        {selected && <span style={{ color: "var(--ds-warning)", fontWeight: "800" }}>✓</span>}
+                      </div>
+                      <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-warning)" }}>
+                        {cycleText}
+                      </span>
+                      <span style={{ fontSize: "0.72rem", color: T.textMuted }}>
+                        {previewEnd}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {vipGrantModal.error && (
+                <div
+                  style={{
+                    padding: "0.65rem 0.85rem",
+                    borderRadius: "8px",
+                    backgroundColor: "var(--ds-danger-bg)",
+                    border: "1px solid var(--ds-danger-border)",
+                    color: "var(--ds-danger)",
+                    fontSize: "0.8rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {vipGrantModal.error}
+                </div>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.65rem", marginTop: "0.25rem" }}>
+                <button
+                  type="button"
+                  disabled={vipGrantModal.submitting}
+                  onClick={() =>
+                    setVipGrantModal({ open: false, user: null, planCode: "VIP_YEARLY", submitting: false, error: "" })
+                  }
+                  style={{
+                    padding: "0.55rem 1rem",
+                    borderRadius: "8px",
+                    border: `1px solid ${T.border}`,
+                    backgroundColor: T.card,
+                    color: T.textSecondary,
+                    fontWeight: "600",
+                    fontSize: "0.84rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  disabled={vipGrantModal.submitting}
+                  onClick={handleConfirmGrantVip}
+                  style={{
+                    padding: "0.55rem 1.2rem",
+                    borderRadius: "8px",
+                    border: "none",
+                    backgroundColor: "var(--ds-btn-warning)",
+                    color: "#ffffff",
+                    fontWeight: "800",
+                    fontSize: "0.84rem",
+                    cursor: vipGrantModal.submitting ? "wait" : "pointer",
+                  }}
+                >
+                  {vipGrantModal.submitting ? "Đang cấp gói..." : "Xác nhận Cấp VIP ⭐"}
+                </button>
+              </div>
+            </div>
+          )}
+        </FocusTrapModal2026>
 
         <GamificationCelebrationModal
           celebration={gamificationCelebration}

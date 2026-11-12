@@ -1,7 +1,6 @@
 import { getAdminClient } from "../../../lib/supabase/server";
-import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
+import { verifyAdminWithGuard, getClientIp } from "../../../lib/admin/admin-guard";
 import { AuditRepository } from "../../../repositories/audit.repository";
-import { getClientIp } from "../../../lib/admin/admin-guard";
 import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
 
 function escapeCsvCell(val) {
@@ -12,11 +11,24 @@ function escapeCsvCell(val) {
   return s;
 }
 
+function formatSubSummary(sub) {
+  if (!sub) return "";
+  const cycleLabel =
+    sub.billing_cycle === "monthly"
+      ? "1 tháng"
+      : sub.billing_cycle === "quarterly"
+      ? "3 tháng"
+      : sub.billing_cycle === "lifetime"
+      ? "Trọn đời"
+      : "1 năm";
+  return `${sub.plan_name || sub.plan_code} (${cycleLabel})`;
+}
+
 /**
- * Milestone 2.4.6, 2.4.9, 2.4.10, 2.4.11: Admin User Governance API
+ * Milestone 2.4.6, 2.4.9, 2.4.10, 2.4.11 & 2.12 Admin VIP Governance API
  * - Server-side RBAC Guard + 30 ops/min Rate Limiting
  * - Step-Up Confirmation for locking accounts or promoting to ADMIN
- * - Paginated search & UTF-8 BOM CSV export (?format=csv)
+ * - Active VIP Subscription plan & expiration join + atomic Admin VIP grant/revoke RPC
  */
 export default async function handler(req, res) {
   const correlationId = attachCorrelationId(req, res);
@@ -53,10 +65,58 @@ export default async function handler(req, res) {
       if (role && role !== "ALL") query = query.eq("role", role);
       if (status && status !== "ALL") query = query.eq("status", status);
 
-      const { data: rawUsers, error } = await query;
+      const [{ data: rawUsers, error }, { data: activeSubs }, { data: plansRows }] = await Promise.all([
+        query,
+        serverClient
+          .from("user_subscriptions")
+          .select(
+            `
+            id,
+            user_id,
+            status,
+            provider,
+            current_period_start,
+            current_period_end,
+            created_at,
+            subscription_plans (
+              code,
+              name_vi,
+              billing_cycle,
+              price_vnd
+            )
+          `
+          )
+          .in("status", ["active", "trialing", "grace_period"])
+          .order("current_period_end", { ascending: false }),
+        serverClient
+          .from("subscription_plans")
+          .select("id, code, name_vi, billing_cycle, price_vnd, is_active")
+          .eq("is_active", true)
+          .order("price_vnd", { ascending: true }),
+      ]);
+
       if (error) throw error;
 
-      let users = rawUsers || [];
+      const subByUser = new Map();
+      for (const s of activeSubs || []) {
+        if (!s?.user_id || subByUser.has(s.user_id)) continue;
+        const plan = Array.isArray(s.subscription_plans) ? s.subscription_plans[0] : s.subscription_plans;
+        subByUser.set(s.user_id, {
+          id: s.id,
+          status: s.status,
+          provider: s.provider,
+          plan_code: plan?.code || null,
+          plan_name: plan?.name_vi || plan?.code || null,
+          billing_cycle: plan?.billing_cycle || null,
+          current_period_start: s.current_period_start || s.created_at || null,
+          current_period_end: s.current_period_end || null,
+        });
+      }
+
+      let users = (rawUsers || []).map((u) => ({
+        ...u,
+        active_subscription: subByUser.get(u.id) || null,
+      }));
 
       if (search && search.trim()) {
         const term = search.trim().toLowerCase();
@@ -79,19 +139,43 @@ export default async function handler(req, res) {
       }
 
       if (format === "csv") {
-        const header = ["UUID", "Họ và Tên", "Email", "Vai trò", "Trạng thái", "Streak", "XP", "Bài học đã xong", "Ngày tạo"];
+        const header = [
+          "UUID",
+          "Họ và Tên",
+          "Email",
+          "Vai trò",
+          "Gói VIP",
+          "Thời gian kết thúc VIP",
+          "Trạng thái",
+          "Streak",
+          "XP",
+          "Bài học đã xong",
+          "Ngày tạo",
+        ];
         const lines = [header.map(escapeCsvCell).join(",")];
         for (const u of users) {
           const tracker = Array.isArray(u.user_learning_trackers)
             ? u.user_learning_trackers[0]
             : u.user_learning_trackers;
           const lessonsCount = Array.isArray(tracker?.completed_lessons) ? tracker.completed_lessons.length : 0;
+          const sub = u.active_subscription;
+          const vipLabel = u.role === "VIP" ? (sub ? formatSubSummary(sub) : "VIP Thủ công") : "";
+          const vipEnd =
+            u.role === "VIP" && sub
+              ? sub.billing_cycle === "lifetime"
+                ? "Trọn đời (Vĩnh viễn)"
+                : sub.current_period_end
+                ? sub.current_period_end.split("T")[0]
+                : ""
+              : "";
           lines.push(
             [
               u.id,
               u.full_name || "",
               u.email,
               u.role,
+              vipLabel,
+              vipEnd,
               u.status,
               tracker?.streak ?? 1,
               tracker?.xp ?? 0,
@@ -103,7 +187,6 @@ export default async function handler(req, res) {
           );
         }
 
-        // UTF-8 BOM for proper Vietnamese rendering in Microsoft Excel
         const csvOutput = "\uFEFF" + lines.join("\r\n");
         res.setHeader("Content-Type", "text/csv; charset=utf-8");
         res.setHeader("Content-Disposition", 'attachment; filename="grammar-users-report.csv"');
@@ -117,20 +200,22 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
+        correlationId,
         users: pagedUsers,
+        vipPlans: plansRows || [],
         total: users.length,
         page: pageNum,
         limit: limitNum,
       });
     } catch (e) {
-      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/users", err: e.message });
+      return sendSafeServerError(res, { correlationId, route: "/api/admin/users", err: e });
     }
   }
 
   if (req.method === "PATCH") {
-    const { userId, role, status } = req.body || {};
+    const { userId, role, status, planCode } = req.body || {};
     if (!userId) {
-      return res.status(400).json({ success: false, error: "Missing required parameter: userId" });
+      return res.status(400).json({ success: false, error: "Missing required parameter: userId", correlationId });
     }
 
     const isHighRiskMutation = status === "LOCKED" || role === "ADMIN";
@@ -149,22 +234,47 @@ export default async function handler(req, res) {
         .eq("id", userId)
         .maybeSingle();
 
-      const updates = { updated_at: new Date().toISOString() };
-      if (role && ["FREE", "VIP", "ADMIN"].includes(role)) updates.role = role;
-      if (status && ["ACTIVE", "LOCKED"].includes(status)) updates.status = status;
-
       let updated = null;
-      if (beforeState) {
-        const { data, error } = await serverClient
+      let subscription = null;
+
+      if (role === "VIP" || role === "FREE") {
+        const { data: rpcRes, error: rpcErr } = await serverClient.rpc("admin_grant_user_vip_subscription", {
+          p_target_user_id: userId,
+          p_plan_code: role === "VIP" ? planCode || "VIP_YEARLY" : null,
+          p_action: role === "VIP" ? "grant_vip" : "revoke_vip",
+        });
+        if (rpcErr) throw rpcErr;
+        if (!rpcRes?.ok) {
+          return res.status(Number(rpcRes?.http_status || 400)).json({
+            success: false,
+            error: rpcRes?.error || "Không thể cập nhật gói VIP.",
+            correlationId,
+          });
+        }
+        subscription = rpcRes.subscription || null;
+        const { data: refreshed } = await serverClient
           .from("profiles")
-          .update(updates)
+          .select("id, email, full_name, role, status, created_at, updated_at")
           .eq("id", userId)
-          .select()
-          .single();
-        if (error) throw error;
-        updated = data;
+          .maybeSingle();
+        updated = refreshed || { id: userId, role };
       } else {
-        updated = { id: userId, role, status, ...updates };
+        const updates = { updated_at: new Date().toISOString() };
+        if (role && ["FREE", "VIP", "ADMIN"].includes(role)) updates.role = role;
+        if (status && ["ACTIVE", "LOCKED"].includes(status)) updates.status = status;
+
+        if (beforeState) {
+          const { data, error } = await serverClient
+            .from("profiles")
+            .update(updates)
+            .eq("id", userId)
+            .select()
+            .single();
+          if (error) throw error;
+          updated = data;
+        } else {
+          updated = { id: userId, role, status, ...updates };
+        }
       }
 
       const actionType = status
@@ -179,15 +289,15 @@ export default async function handler(req, res) {
         targetType: "PROFILE",
         targetId: userId,
         beforeState: beforeState || { id: userId },
-        afterState: updated,
+        afterState: subscription ? { ...updated, plan_code: subscription.plan_code, current_period_end: subscription.current_period_end } : updated,
         ipAddress: getClientIp(req),
       });
 
-      return res.status(200).json({ success: true, profile: updated });
+      return res.status(200).json({ success: true, profile: updated, subscription, correlationId });
     } catch (e) {
-      return sendSafeServerError(res, { correlationId: typeof correlationId !== "undefined" ? correlationId : null, route: "/api/admin/users", err: e.message });
+      return sendSafeServerError(res, { correlationId, route: "/api/admin/users", err: e });
     }
   }
 
-  return res.status(405).json({ success: false, error: `Method ${req.method} not allowed` });
+  return res.status(405).json({ success: false, error: `Method ${req.method} not allowed`, correlationId });
 }
