@@ -1007,6 +1007,10 @@ export default function Home() {
       setAuthError("Mật khẩu phải có ít nhất 6 ký tự để bảo mật!");
       return;
     }
+    if (password !== authConfirmPassword) {
+      setAuthError("Mật khẩu xác nhận không khớp! Vui lòng nhập 2 lần giống nhau.");
+      return;
+    }
 
     setAuthSubmitting(true);
     try {
@@ -1034,10 +1038,12 @@ export default function Home() {
           setAuthName("");
           setAuthEmail("");
           setAuthPassword("");
+          setAuthConfirmPassword("");
           triggerXpGain(50, `Chào mừng bạn mới ${newUser.name} (+50 XP)!`);
           logActivity(data.user.id, email, "REGISTER", { full_name: name });
         } else {
           setAuthSuccess("✅ Đã tạo tài khoản thành công! Vui lòng kiểm tra email xác nhận hoặc đăng nhập ngay.");
+          setAuthConfirmPassword("");
           setAuthTab("login");
         }
         return;
@@ -1071,6 +1077,7 @@ export default function Home() {
       setAuthName("");
       setAuthEmail("");
       setAuthPassword("");
+      setAuthConfirmPassword("");
       triggerXpGain(50, `Chào mừng ${localNewUser.name} (+50 XP)!`);
       logActivity(localNewUser.id, email, "REGISTER", { full_name: name, offline: true });
     } finally {
@@ -2860,7 +2867,7 @@ export default function Home() {
           <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
             <button
               type="button"
-              onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); }}
+              onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); setAuthConfirmPassword(""); }}
               className="ds-focusable"
               style={{
                 flex: 1,
@@ -2879,7 +2886,7 @@ export default function Home() {
             </button>
             <button
               type="button"
-              onClick={() => { setAuthTab("register"); setAuthError(""); setAuthSuccess(""); }}
+              onClick={() => { setAuthTab("register"); setAuthError(""); setAuthSuccess(""); setAuthConfirmPassword(""); }}
               className="ds-focusable"
               style={{
                 flex: 1,
@@ -3101,7 +3108,7 @@ export default function Home() {
               />
             </div>
 
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ marginBottom: authTab === "register" ? "1rem" : "1.5rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
                 <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>
                   Mật khẩu:
@@ -3109,7 +3116,7 @@ export default function Home() {
                 {authTab === "login" && (
                   <button
                     type="button"
-                    onClick={() => { setAuthTab("forgot"); setAuthError(""); setAuthSuccess(""); }}
+                    onClick={() => { setAuthTab("forgot"); setAuthError(""); setAuthSuccess(""); setAuthConfirmPassword(""); }}
                     className="ds-focusable"
                     style={{
                       background: "none",
@@ -3128,8 +3135,9 @@ export default function Home() {
               <input
                 type="password"
                 required
+                minLength={authTab === "register" ? 6 : undefined}
                 value={authPassword}
-                placeholder="••••••••"
+                placeholder={authTab === "register" ? "Tối thiểu 6 ký tự" : "••••••••"}
                 onChange={(e) => setAuthPassword(e.target.value)}
                 className="ds-focusable"
                 style={{
@@ -3143,6 +3151,52 @@ export default function Home() {
                 }}
               />
             </div>
+
+            {authTab === "register" && (
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", color: T.textSecondary, marginBottom: "0.35rem", fontWeight: "600" }}>
+                  Nhập lại mật khẩu:
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={authConfirmPassword}
+                  placeholder="Nhập lại mật khẩu giống ở trên"
+                  onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                  className="ds-focusable"
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.75rem",
+                    backgroundColor: T.inputBg,
+                    border: `1px solid ${
+                      authConfirmPassword.length > 0
+                        ? authPassword === authConfirmPassword
+                          ? T.successBorder
+                          : T.dangerBorder
+                        : T.border
+                    }`,
+                    borderRadius: "6px",
+                    color: T.text,
+                    fontSize: "0.875rem",
+                  }}
+                />
+                {authConfirmPassword.length > 0 && (
+                  <div
+                    style={{
+                      marginTop: "0.35rem",
+                      fontSize: "0.75rem",
+                      fontWeight: "600",
+                      color: authPassword === authConfirmPassword ? T.success : T.danger,
+                    }}
+                  >
+                    {authPassword === authConfirmPassword
+                      ? "✓ Hai mật khẩu đã khớp"
+                      : "⚠ Mật khẩu nhập lại chưa khớp"}
+                  </div>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"
