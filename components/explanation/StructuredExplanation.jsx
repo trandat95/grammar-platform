@@ -112,7 +112,7 @@ export default function StructuredExplanation({
           <span
             style={{
               fontSize: "0.75rem",
-              fontFamily: "var(--font-mono, Geist Mono, monospace)",
+              fontFamily: "var(--font-sans)",
               color: T.textMuted,
               fontWeight: "600",
               marginRight: "0.2rem",
@@ -132,7 +132,7 @@ export default function StructuredExplanation({
                 style={{
                   padding: "0.25rem 0.6rem",
                   fontSize: "0.72rem",
-                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: isSelected ? "700" : "500",
                   backgroundColor: isSelected ? T.accentBg : T.bgElevated,
                   color: isSelected ? T.accent : T.textMuted,
@@ -165,7 +165,7 @@ export default function StructuredExplanation({
             <span
               style={{
                 fontSize: "0.78rem",
-                fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                fontFamily: "var(--font-sans)",
                 fontWeight: "800",
                 color: T.accent,
                 textTransform: "uppercase",
@@ -183,7 +183,7 @@ export default function StructuredExplanation({
                   key={idx}
                   style={{
                     fontSize: "0.75rem",
-                    fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                    fontFamily: "var(--font-sans)",
                     padding: "0.15rem 0.5rem",
                     borderRadius: "4px",
                     backgroundColor: T.card,
@@ -221,7 +221,7 @@ export default function StructuredExplanation({
             <span
               style={{
                 fontSize: "0.78rem",
-                fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                fontFamily: "var(--font-sans)",
                 fontWeight: "800",
                 color: T.success,
                 textTransform: "uppercase",
@@ -271,7 +271,7 @@ export default function StructuredExplanation({
               <span
                 style={{
                   fontSize: "0.78rem",
-                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: "800",
                   color: T.textHeading,
                   textTransform: "uppercase",
@@ -329,7 +329,7 @@ export default function StructuredExplanation({
               <span
                 style={{
                   fontSize: "0.78rem",
-                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: "800",
                   color: T.danger,
                   textTransform: "uppercase",
@@ -368,7 +368,7 @@ export default function StructuredExplanation({
               <span
                 style={{
                   fontSize: "0.78rem",
-                  fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: "800",
                   color: T.warning,
                   textTransform: "uppercase",

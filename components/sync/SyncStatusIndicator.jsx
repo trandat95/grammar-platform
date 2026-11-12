@@ -144,7 +144,7 @@ export default function SyncStatusIndicator({
               borderRadius: "8px",
               padding: "0.6rem 0.75rem",
               fontSize: "0.72rem",
-              fontFamily: "Geist Mono, monospace",
+              fontFamily: "var(--font-sans)",
               color: T.textSecondary,
               display: "flex",
               flexDirection: "column",

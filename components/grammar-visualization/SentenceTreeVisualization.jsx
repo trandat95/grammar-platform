@@ -70,7 +70,7 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                   padding: "0.4rem 0.75rem",
                   borderRadius: "6px",
                   fontSize: "0.75rem",
-                  fontFamily: "Geist Mono",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: selectedSentenceId === sent.id ? "700" : "500",
                   backgroundColor: selectedSentenceId === sent.id ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
                   color: selectedSentenceId === sent.id ? "#ffffff" : "var(--ds-text-secondary)",
@@ -235,7 +235,7 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                   style={{
                     fontSize: "1.1rem",
                     fontWeight: "800",
-                    fontFamily: "Geist Mono",
+                    fontFamily: "var(--font-sans)",
                     color: p.color,
                     padding: "0.2rem 0.6rem",
                     backgroundColor: "var(--ds-bg-elevated)",

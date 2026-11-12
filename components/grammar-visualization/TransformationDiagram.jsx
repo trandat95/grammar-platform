@@ -36,7 +36,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
           <span
             style={{
               fontSize: "0.72rem",
-              fontFamily: "Geist Mono",
+              fontFamily: "var(--font-sans)",
               backgroundColor: "var(--ds-accent-bg)",
               border: `1px solid ${"var(--ds-accent-border)"}`,
               color: "var(--ds-accent)",
@@ -99,7 +99,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
                   <div
                     style={{
                       fontSize: "0.7rem",
-                      fontFamily: "Geist Mono",
+                      fontFamily: "var(--font-sans)",
                       fontWeight: "700",
                       color: isSelected
                         ? "var(--ds-accent)"
@@ -157,7 +157,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
 
       {/* Tense Switcher Tabs */}
       <div style={{ marginBottom: "1.25rem" }}>
-        <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.45rem", textTransform: "uppercase" }}>
+        <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.45rem", textTransform: "uppercase" }}>
           Chọn thì ngữ pháp để trực quan hoá:
         </div>
         <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
@@ -207,7 +207,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
             <span
               style={{
                 fontSize: "0.8rem",
-                fontFamily: "Geist Mono",
+                fontFamily: "var(--font-sans)",
                 fontWeight: "700",
                 backgroundColor: "var(--ds-warning-bg)",
                 border: `1px solid ${"var(--ds-warning-border)"}`,
@@ -231,7 +231,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-              <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", fontWeight: "800", color: "var(--ds-accent)", textTransform: "uppercase" }}>
+              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: "var(--ds-accent)", textTransform: "uppercase" }}>
                 1. Câu Chủ Động (Active Voice)
               </span>
               <AudioPlayer text={currentExample.active.full} isLight={isLight} compact={true} />
@@ -240,15 +240,15 @@ export default function TransformationDiagram({ data, isLight = false }) {
             {/* S - V - O Badges */}
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>
               <div style={{ backgroundColor: isLight ? "var(--ds-accent-bg)" : "rgba(37, 99, 235, 0.15)", border: `1px solid ${"var(--ds-accent-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700" }}>CHỦ NGỮ (S): </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700" }}>CHỦ NGỮ (S): </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.active.subject}</span>
               </div>
               <div style={{ backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.15)", border: `1px solid ${"var(--ds-warning-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-warning)", fontWeight: "700" }}>ĐỘNG TỪ (V): </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-warning)", fontWeight: "700" }}>ĐỘNG TỪ (V): </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.active.verb}</span>
               </div>
               <div style={{ backgroundColor: isLight ? "var(--ds-success-bg)" : "rgba(16, 185, 129, 0.15)", border: `1px solid ${"var(--ds-success-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "700" }}>TÂN NGỮ (O): </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "700" }}>TÂN NGỮ (O): </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.active.object}</span>
               </div>
             </div>
@@ -267,7 +267,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
               padding: "0.5rem 0",
               color: "var(--ds-text-muted)",
               fontSize: "0.8rem",
-              fontFamily: "Geist Mono",
+              fontFamily: "var(--font-sans)",
               fontWeight: "700",
             }}
           >
@@ -296,7 +296,7 @@ export default function TransformationDiagram({ data, isLight = false }) {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-              <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", fontWeight: "800", color: "var(--ds-success)", textTransform: "uppercase" }}>
+              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: "var(--ds-success)", textTransform: "uppercase" }}>
                 2. Câu Bị Động (Passive Voice Result)
               </span>
               <AudioPlayer text={currentExample.passive.full} isLight={isLight} compact={true} />
@@ -305,19 +305,19 @@ export default function TransformationDiagram({ data, isLight = false }) {
             {/* S(new) - BE - V3 - By Agent */}
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>
               <div style={{ backgroundColor: isLight ? "var(--ds-success-bg)" : "rgba(16, 185, 129, 0.2)", border: `1px solid ${"var(--ds-success-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "700" }}>CHỦ NGỮ MỚI: </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "700" }}>CHỦ NGỮ MỚI: </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.passive.subject}</span>
               </div>
               <div style={{ backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.2)", border: `1px solid ${"var(--ds-warning-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-warning)", fontWeight: "700" }}>TO BE: </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-warning)", fontWeight: "700" }}>TO BE: </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.passive.be_verb}</span>
               </div>
               <div style={{ backgroundColor: isLight ? "var(--ds-accent-bg)" : "rgba(59, 130, 246, 0.2)", border: `1px solid ${"var(--ds-accent-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700" }}>V3/V-ED: </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700" }}>V3/V-ED: </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.passive.past_participle}</span>
               </div>
               <div style={{ backgroundColor: isLight ? "var(--ds-purple-bg)" : "rgba(168, 85, 247, 0.2)", border: `1px solid ${"var(--ds-purple-border)"}`, padding: "0.3rem 0.6rem", borderRadius: "6px" }}>
-                <span style={{ fontSize: "0.68rem", fontFamily: "Geist Mono", color: "var(--ds-purple)", fontWeight: "700" }}>TÁC NHÂN: </span>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-purple)", fontWeight: "700" }}>TÁC NHÂN: </span>
                 <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>{currentExample.passive.agent}</span>
               </div>
             </div>

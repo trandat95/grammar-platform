@@ -15,20 +15,20 @@ export const HUB_ITEMS = [
   { id: "dashboard", label: "Tổng quan", mobileLabel: "Tổng quan", icon: "hub-overview" },
   {
     id: "study",
-    label: "Học & Chẩn đoán",
+    label: "Học tập",
     mobileLabel: "Học tập",
     icon: "hub-study",
     subViews: ["study", "diagnostic"],
   },
   {
     id: "quiz",
-    label: "Luyện tập & Ôn sai",
+    label: "Luyện tập",
     mobileLabel: "Luyện tập",
     icon: "hub-practice",
     subViews: ["quiz", "mistakes"],
   },
   { id: "gamification", label: "Thành tích", mobileLabel: "Thành tích", icon: "hub-achievements" },
-  { id: "vip", label: "VIP", mobileLabel: "VIP", icon: "hub-vip", isVip: true },
+  { id: "vip", label: "Gói VIP", mobileLabel: "VIP", icon: "hub-vip", isVip: true },
 ];
 
 export default function AppShell2026({
@@ -112,10 +112,9 @@ export default function AppShell2026({
             Grammar Engine
           </span>
           <span
-            className="ge-hide-mobile"
+            className="ge-hide-laptop-compact"
             style={{
               fontSize: "0.66rem",
-              fontFamily: "var(--font-mono, Geist Mono, monospace)",
               fontWeight: 700,
               padding: "2px 6px",
               borderRadius: "9999px",
@@ -124,7 +123,7 @@ export default function AppShell2026({
               border: "1px solid var(--ds-card-border)",
             }}
           >
-            v1.4 PRO
+            v1.4
           </span>
         </div>
 
@@ -134,7 +133,7 @@ export default function AppShell2026({
             const isActive =
               activeView === hub.id || (hub.subViews && hub.subViews.includes(activeView));
             const labelText =
-              hub.isVip && currentUser?.role === "VIP" ? "⭐ VIP" : hub.isVip ? "Nâng cấp VIP" : hub.label;
+              hub.isVip && currentUser?.role === "VIP" ? "⭐ VIP" : hub.label;
             return (
               <button
                 key={hub.id}
@@ -216,7 +215,7 @@ export default function AppShell2026({
                 borderRadius: "999px",
                 fontSize: "0.78rem",
                 color: "var(--ds-text)",
-                width: "128px",
+                width: "112px",
               }}
             />
           </div>
@@ -391,10 +390,10 @@ export default function AppShell2026({
         </div>
       </header>
 
-      {/* 2. Contextual Segmented Sub-Bar inside Cognitive Hubs */}
+      {/* 2. Contextual Segmented Sub-Bar inside Hubs */}
       {inStudyOrDiagnostic && (
         <div className="ge-subnav-bar" data-no-dict="true">
-          <div className="ge-subnav-pills" role="tablist" aria-label="Phân khu Học và Chẩn đoán">
+          <div className="ge-subnav-pills" role="tablist" aria-label="Phân khu Học tập">
             <button
               type="button"
               role="tab"
@@ -402,7 +401,7 @@ export default function AppShell2026({
               onClick={() => onSelectView("study")}
               className={`ge-subnav-btn ds-focusable ${activeView === "study" ? "is-active" : ""}`}
             >
-              📖 12 Chuyên đề (53 bài)
+              📖 Bài học ngữ pháp (12 chương)
             </button>
             <button
               type="button"
@@ -411,7 +410,7 @@ export default function AppShell2026({
               onClick={() => onSelectView("diagnostic")}
               className={`ge-subnav-btn ds-focusable ${activeView === "diagnostic" ? "is-active" : ""}`}
             >
-              🎯 Đánh Giá 30 Câu &amp; Lộ Trình 4 Tuần
+              🎯 Kiểm tra trình độ &amp; Lộ trình
             </button>
           </div>
 
@@ -431,7 +430,7 @@ export default function AppShell2026({
                 cursor: "pointer",
               }}
             >
-              {sidebarCollapsed ? "☰ Hiện mục lục chương" : "◧ Chế độ Đọc tập trung"}
+              {sidebarCollapsed ? "☰ Hiện mục lục chương" : "◧ Thu gọn mục lục"}
             </button>
           )}
         </div>
@@ -439,7 +438,7 @@ export default function AppShell2026({
 
       {inQuizOrMistakes && (
         <div className="ge-subnav-bar" data-no-dict="true">
-          <div className="ge-subnav-pills" role="tablist" aria-label="Phân khu Luyện tập và Ôn sai">
+          <div className="ge-subnav-pills" role="tablist" aria-label="Phân khu Luyện tập">
             <button
               type="button"
               role="tab"
@@ -447,7 +446,7 @@ export default function AppShell2026({
               onClick={() => handleSelectHub("quiz")}
               className={`ge-subnav-btn ds-focusable ${activeView === "quiz" ? "is-active" : ""}`}
             >
-              ⚡ Quiz Engine (50 câu &amp; 50/30/20)
+              ⚡ Làm đề trắc nghiệm
             </button>
             <button
               type="button"

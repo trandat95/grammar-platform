@@ -98,7 +98,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                   <span
                     style={{
                       fontSize: "1rem",
-                      fontFamily: "Geist Mono",
+                      fontFamily: "var(--font-sans)",
                       fontWeight: "800",
                       color: step.color,
                     }}
@@ -148,7 +148,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 <span
                   style={{
                     fontSize: "1.25rem",
-                    fontFamily: "Geist Mono",
+                    fontFamily: "var(--font-sans)",
                     fontWeight: "900",
                     color: "#ffffff",
                     backgroundColor: curProb.color,
@@ -242,7 +242,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
+                  <span style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-accent)", fontFamily: "var(--font-sans)" }}>
                     {rule.modal}
                   </span>
                   <span style={{ fontSize: "0.7rem", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
@@ -285,7 +285,7 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 gap: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "1rem", fontWeight: "800", fontFamily: "Geist Mono", color: "var(--ds-purple)" }}>
+              <div style={{ fontSize: "1rem", fontWeight: "800", fontFamily: "var(--font-sans)", color: "var(--ds-purple)" }}>
                 {pm.formula}
               </div>
 

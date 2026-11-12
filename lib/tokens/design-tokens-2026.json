@@ -87,8 +87,8 @@
     }
   },
   "typography": {
-    "fontSans": "'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-    "fontMono": "'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+    "fontSans": "'Google Sans Text', 'Google Sans', 'Product Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+    "fontMono": "'Google Sans Text', 'Google Sans', 'Product Sans', -apple-system, BlinkMacSystemFont, monospace",
     "scale": {
       "display": {
         "size": "clamp(1.75rem, 3.2vw, 2.5rem)",

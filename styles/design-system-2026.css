@@ -65,6 +65,9 @@
   --ds-shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.16);
   --ds-header-h: 56px;
   --ds-sidebar-w: 280px;
+  --font-sans: "Google Sans Text", "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Google Sans", "Product Sans", "Google Sans Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Google Sans Text", "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 [data-theme="dark"] {
@@ -123,12 +126,19 @@
   --ds-shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
 }
 
-html {
+html,
+body {
   scroll-padding-top: 76px;
   background-color: var(--ds-bg);
   color: var(--ds-text);
-  font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }
 
 /* WCAG 2.4.11 & 2.4.7 High-Contrast Focus Ring */
@@ -143,6 +153,7 @@ html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
   background-color: var(--ds-bg);
   color: var(--ds-text);
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -152,12 +163,14 @@ html {
   position: sticky;
   top: 0;
   z-index: 40;
+  width: 100%;
+  box-sizing: border-box;
   height: var(--ds-header-h);
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   background: var(--ds-glass);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -167,20 +180,21 @@ html {
 .ge-hub-nav {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
   padding: 3px;
   border-radius: 10px;
   background: var(--ds-bg-elevated);
   border: 1px solid var(--ds-card-border);
+  min-width: 0;
 }
 
 .ge-hub-tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 11px;
+  gap: 5px;
+  padding: 6px 10px;
   border-radius: 7px;
-  font-size: 0.815rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--ds-text-secondary);
   white-space: nowrap;
@@ -210,12 +224,14 @@ html {
 
 /* Segmented Sub-Bar inside Hubs (Study/Diagnostic & Quiz/Mistakes) */
 .ge-subnav-bar {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px 24px;
+  padding: 10px 20px;
   background: var(--ds-bg-sub);
   border-bottom: 1px solid var(--ds-card-border);
 }
@@ -322,14 +338,14 @@ html {
   z-index: 2;
 }
 
-/* 2. STUDY EXPLORER 2-COLUMN LAYOUT (FIX P0 320px OVERFLOW) */
+/* 2. STUDY EXPLORER 2-COLUMN LAYOUT (FIX P0 320px OVERFLOW & ALIGNMENT) */
 .ge-study-shell {
   display: grid;
   grid-template-columns: var(--ds-sidebar-w) minmax(0, 1fr);
   align-items: start;
   width: 100%;
-  max-width: 1360px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   flex: 1;
 }
 
@@ -378,7 +394,8 @@ html {
 
 /* Long Formula & Stem Safety (Max 165 chars formula / 749 chars stem) */
 .ge-formula-box {
-  font-family: 'Geist Mono', 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-word;
@@ -418,32 +435,36 @@ html {
    4. RESPONSIVE MEDIA QUERIES (FIX P0 MISSING BREAKPOINTS)
    ========================================================= */
 
-/* Laptop Standard (<= 1280px) */
-@media (max-width: 1280px) {
-  :root {
-    --ds-sidebar-w: 256px;
-  }
+/* Laptop Wide / Admin 6-Tab Compaction (<= 1400px) */
+@media (max-width: 1400px) {
   .ge-header-2026 {
     padding: 0 14px;
-    gap: 8px;
+    gap: 6px;
   }
   .ge-hub-tab {
-    padding: 6px 8px;
+    padding: 5px 8px;
     font-size: 0.775rem;
-  }
-  .ge-study-main {
-    padding: 24px 22px;
   }
   .ge-hide-laptop-compact {
     display: none !important;
   }
 }
 
-/* Compact Laptop & Tablet (<= 1120px) */
-@media (max-width: 1120px) {
+/* Laptop Standard (<= 1280px) */
+@media (max-width: 1280px) {
+  :root {
+    --ds-sidebar-w: 256px;
+  }
   .ge-search-wrap {
     display: none !important;
   }
+  .ge-study-main {
+    padding: 24px 22px;
+  }
+}
+
+/* Compact Laptop & Tablet (<= 1120px) */
+@media (max-width: 1120px) {
   .ge-hide-tablet {
     display: none !important;
   }

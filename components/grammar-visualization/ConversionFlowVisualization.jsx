@@ -36,7 +36,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
           <span
             style={{
               fontSize: "0.72rem",
-              fontFamily: "Geist Mono",
+              fontFamily: "var(--font-sans)",
               backgroundColor: "var(--ds-success-bg)",
               border: `1px solid ${"var(--ds-success-border)"}`,
               color: "var(--ds-success)",
@@ -173,7 +173,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                   <div
                     style={{
                       fontSize: "0.68rem",
-                      fontFamily: "Geist Mono",
+                      fontFamily: "var(--font-sans)",
                       fontWeight: "700",
                       color: isSelected ? "var(--ds-accent)" : "var(--ds-text-muted)",
                     }}
@@ -244,7 +244,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     borderRadius: "6px",
                     padding: "0.75rem 1rem",
                     fontSize: "0.82rem",
-                    fontFamily: "Geist Mono",
+                    fontFamily: "var(--font-sans)",
                     color: "var(--ds-accent)",
                   }}
                 >
@@ -256,7 +256,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
 
           {/* Interactive Examples Walkthrough */}
           <div>
-            <div style={{ fontSize: "0.78rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.5rem", textTransform: "uppercase" }}>
+            <div style={{ fontSize: "0.78rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.5rem", textTransform: "uppercase" }}>
               Các dạng câu tường thuật thường gặp:
             </div>
             <div style={{ display: "flex", gap: "0.45rem", marginBottom: "0.85rem", flexWrap: "wrap" }}>
@@ -292,7 +292,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 {/* Direct */}
                 <div style={{ marginBottom: "1rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-warning)", fontWeight: "800", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-warning)", fontWeight: "800", textTransform: "uppercase" }}>
                       Câu Trực Tiếp (Direct Speech)
                     </span>
                     <AudioPlayer text={currentExample.direct} isLight={isLight} compact={true} />
@@ -309,7 +309,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 {/* Reported */}
                 <div style={{ marginBottom: "1rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "800", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "800", textTransform: "uppercase" }}>
                       Câu Gián Tiếp (Reported Speech)
                     </span>
                     <AudioPlayer text={currentExample.reported} isLight={isLight} compact={true} />
@@ -320,7 +320,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                 </div>
 
                 {/* Changes List */}
-                <div style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.45rem" }}>
+                <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", fontWeight: "700", marginBottom: "0.45rem" }}>
                   CHI TIẾT CÁC BƯỚC BIẾN ĐỔI:
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
@@ -362,16 +362,16 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
           >
             <thead>
               <tr style={{ backgroundColor: "var(--ds-bg-elevated)" }}>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-accent)", fontFamily: "var(--font-sans)" }}>
                   Thì Trực Tiếp (Direct)
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "center", fontSize: "0.8rem", color: "var(--ds-text-muted)", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "center", fontSize: "0.8rem", color: "var(--ds-text-muted)", fontFamily: "var(--font-sans)" }}>
                   Biến Đổi
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-success)", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-success)", fontFamily: "var(--font-sans)" }}>
                   Lùi Thì Gián Tiếp (Reported)
                 </th>
-                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-text-secondary)", fontFamily: "Geist Mono" }}>
+                <th style={{ padding: "0.75rem 1rem", borderBottom: `1px solid ${"var(--ds-border)"}`, textAlign: "left", fontSize: "0.8rem", color: "var(--ds-text-secondary)", fontFamily: "var(--font-sans)" }}>
                   Ví dụ trực quan
                 </th>
               </tr>
@@ -393,7 +393,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                   <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-success)" }}>
                     {item.reported}
                   </td>
-                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                  <td style={{ padding: "0.7rem 1rem", borderBottom: `1px solid ${"var(--ds-bg-elevated)"}`, fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                     {item.example}
                   </td>
                 </tr>
@@ -415,7 +415,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
               ⏳ Trạng từ thời gian (Time)
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
@@ -449,7 +449,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-purple)", marginBottom: "0.75rem", fontFamily: "Geist Mono" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-purple)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
               📍 Trạng từ nơi chốn / Đại từ chỉ định
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
@@ -502,7 +502,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               <div
                 style={{
                   fontSize: "0.82rem",
-                  fontFamily: "Geist Mono",
+                  fontFamily: "var(--font-sans)",
                   padding: "0.45rem 0.75rem",
                   backgroundColor: "var(--ds-card)",
                   borderRadius: "6px",

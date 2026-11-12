@@ -80,7 +80,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: "800",
-                      fontFamily: "Geist Mono",
+                      fontFamily: "var(--font-sans)",
                       color: tier.color,
                       backgroundColor: `${tier.color}20`,
                       padding: "0.1rem 0.45rem",
@@ -141,7 +141,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                     }}
                   />
                 </div>
-                <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", fontWeight: "700", color: curTier.color }}>
+                <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: curTier.color }}>
                   {selectedTierId === "equal" ? "100%" : selectedTierId === "comparative" ? "140% (Hơn)" : "100% (Nhất)"}
                 </span>
               </div>
@@ -162,7 +162,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                       }}
                     />
                   </div>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", fontWeight: "700", color: "var(--ds-text-muted)" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: "var(--ds-text-muted)" }}>
                     100% (Chuẩn)
                   </span>
                 </div>
@@ -175,7 +175,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 <>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-success)", textTransform: "uppercase" }}>Khẳng định:</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_affirmative}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_affirmative}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.example_affirmative}"</span>
                       <AudioPlayer text={curTier.example_affirmative_audio} isLight={isLight} mode="compact" />
@@ -183,7 +183,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                   </div>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-danger)", textTransform: "uppercase" }}>Phủ định:</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_negative}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.formula_negative}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.example_negative}"</span>
                       <AudioPlayer text={curTier.example_negative_audio} isLight={isLight} mode="compact" />
@@ -196,7 +196,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 <>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-accent)", textTransform: "uppercase" }}>Tính từ ngắn (-er than):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.short_example}"</span>
                       <AudioPlayer text={curTier.short_example_audio} isLight={isLight} mode="compact" />
@@ -204,7 +204,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                   </div>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-purple)", textTransform: "uppercase" }}>Tính từ dài (more ... than):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.long_example}"</span>
                       <AudioPlayer text={curTier.long_example_audio} isLight={isLight} mode="compact" />
@@ -217,7 +217,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 <>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-purple)", textTransform: "uppercase" }}>Tính từ ngắn (the -est):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.short_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.short_example}"</span>
                       <AudioPlayer text={curTier.short_example_audio} isLight={isLight} mode="compact" />
@@ -225,7 +225,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                   </div>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-pink)", textTransform: "uppercase" }}>Tính từ dài (the most):</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.long_rule}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.long_example}"</span>
                       <AudioPlayer text={curTier.long_example_audio} isLight={isLight} mode="compact" />
@@ -238,7 +238,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 <>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-warning)", textTransform: "uppercase" }}>Dạng 1: Càng ngày càng...</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type1_formula}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type1_formula}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.type1_example}"</span>
                       <AudioPlayer text={curTier.type1_example_audio} isLight={isLight} mode="compact" />
@@ -246,7 +246,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                   </div>
                   <div style={{ padding: "0.75rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: `1px solid ${"var(--ds-card-border)"}` }}>
                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-success)", textTransform: "uppercase" }}>Dạng 2: Càng... thì càng...</div>
-                    <div style={{ fontSize: "0.85rem", fontFamily: "Geist Mono", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type2_formula}</div>
+                    <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>{curTier.type2_formula}</div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.4rem" }}>
                       <span style={{ fontSize: "0.825rem", color: "var(--ds-accent)" }}>"{curTier.type2_example}"</span>
                       <AudioPlayer text={curTier.type2_example_audio} isLight={isLight} mode="compact" />
@@ -283,7 +283,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 <span style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)" }}>
                   {rule.category}
                 </span>
-                <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700" }}>
+                <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700" }}>
                   {rule.rule}
                 </span>
               </div>
@@ -331,7 +331,7 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
+                <span style={{ fontSize: "1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "var(--font-sans)" }}>
                   {item.base}
                 </span>
                 <span style={{ fontSize: "0.72rem", color: "var(--ds-success)", fontWeight: "600" }}>

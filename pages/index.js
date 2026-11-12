@@ -1675,7 +1675,7 @@ export default function Home() {
             <span
               style={{
                 fontSize: "0.68rem",
-                fontFamily: "Geist Mono",
+                fontFamily: "var(--font-sans)",
                 backgroundColor: "var(--ds-accent-bg)",
                 color: "var(--ds-accent)",
                 padding: "0.1rem 0.35rem",
@@ -2427,7 +2427,7 @@ export default function Home() {
                 <span
                   style={{
                     fontSize: "0.68rem",
-                    fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                    fontFamily: "var(--font-sans)",
                     color: T.textMuted,
                     flexShrink: 0,
                   }}
@@ -2488,7 +2488,7 @@ export default function Home() {
                           style={{
                             fontSize: "0.66rem",
                             color: T.textMuted,
-                            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                            fontFamily: "var(--font-sans)",
                             flexShrink: 0,
                           }}
                         >
@@ -2514,7 +2514,7 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;700&family=Google+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </Head>
@@ -2528,10 +2528,14 @@ export default function Home() {
         html, body {
           background-color: var(--ds-bg);
           color: var(--ds-text);
-          font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          font-family: "Google Sans Text", "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           transition: background-color 0.15s ease, color 0.15s ease;
+          overflow-x: clip;
+        }
+        h1, h2, h3, h4, h5, h6 {
+          font-family: "Google Sans", "Product Sans", "Google Sans Text", -apple-system, BlinkMacSystemFont, sans-serif;
         }
         .theme-light input, .theme-light select, .theme-light textarea {
           background-color: #ffffff !important;
@@ -2562,7 +2566,8 @@ export default function Home() {
           background: var(--ds-border-strong);
         }
         code, kbd, pre {
-          font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          font-family: "Google Sans Text", "Google Sans", "Product Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+          font-variant-numeric: tabular-nums;
         }
         table {
           width: 100%;
@@ -2915,7 +2920,7 @@ export default function Home() {
                 <span
                   style={{
                     fontSize: "0.68rem",
-                    fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                    fontFamily: "var(--font-sans)",
                     backgroundColor: "var(--ds-accent-bg)",
                     color: "var(--ds-accent)",
                     border: "1px solid var(--ds-accent-border)",
@@ -2972,7 +2977,7 @@ export default function Home() {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   <span style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontWeight: "700" }}>IPA:</span>
-                  <span style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.9rem", color: "var(--ds-accent)", fontWeight: "700" }}>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--ds-accent)", fontWeight: "700" }}>
                     {dictPopup.phonetic || `/${dictPopup.word}/`}
                   </span>
                 </div>
@@ -3194,7 +3199,7 @@ export default function Home() {
                         <span style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--ds-accent)" }}>
                           {item.word}
                         </span>
-                        <span style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.82rem", color: "var(--ds-cyan)" }}>
+                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.82rem", color: "var(--ds-cyan)" }}>
                           {item.phonetic}
                         </span>
                         {item.partOfSpeech && (
@@ -3372,7 +3377,7 @@ export default function Home() {
                     <span
                       style={{
                         fontSize: "0.72rem",
-                        fontFamily: "Geist Mono",
+                        fontFamily: "var(--font-sans)",
                         backgroundColor: "var(--ds-success-bg)",
                         color: "var(--ds-success)",
                         border: `1px solid ${"var(--ds-success-border)"}`,
@@ -3795,7 +3800,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.72rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       fontWeight: "700",
                                       padding: "0.2rem 0.55rem",
                                       borderRadius: "4px",
@@ -3846,7 +3851,7 @@ export default function Home() {
                                   </span>
                                 </td>
 
-                                <td style={{ padding: "0.85rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "Geist Mono" }}>
+                                <td style={{ padding: "0.85rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "var(--font-sans)" }}>
                                   {u.createdAt}
                                 </td>
 
@@ -4128,7 +4133,7 @@ export default function Home() {
                             const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
                             return (
                               <tr key={log.id} style={{ borderBottom: `1px solid ${T.border}` }}>
-                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, whiteSpace: "nowrap" }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, whiteSpace: "nowrap" }}>
                                   {dateStr}
                                 </td>
                                 <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.78rem", fontWeight: "600", color: T.text }}>
@@ -4138,7 +4143,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.7rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       fontWeight: "700",
                                       padding: "0.15rem 0.5rem",
                                       borderRadius: "4px",
@@ -4163,10 +4168,10 @@ export default function Home() {
                                     {log.action_type}
                                   </span>
                                 </td>
-                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textSecondary }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textSecondary }}>
                                   {log.target_type}: {log.target_id?.substring(0, 12)}
                                 </td>
-                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: T.textMuted }}>
                                   <div style={{ maxWidth: "340px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                     {log.before_state && (
                                       <span style={{ textDecoration: "line-through", marginRight: "0.4rem", color: "var(--ds-danger)" }}>
@@ -4181,7 +4186,7 @@ export default function Home() {
                                     )}
                                   </div>
                                 </td>
-                                <td style={{ padding: "0.75rem 0.5rem", textAlign: "right", fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.textMuted }}>
+                                <td style={{ padding: "0.75rem 0.5rem", textAlign: "right", fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: T.textMuted }}>
                                   {log.ip_address || "127.0.0.1"}
                                 </td>
                               </tr>
@@ -4247,7 +4252,7 @@ export default function Home() {
                             const dateStr = log.created_at ? new Date(log.created_at).toLocaleString("vi-VN") : "Vừa xong";
                             return (
                               <tr key={log.id} style={{ borderBottom: `1px solid ${T.border}` }}>
-                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, whiteSpace: "nowrap" }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, whiteSpace: "nowrap" }}>
                                   {dateStr}
                                 </td>
                                 <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.8rem", fontWeight: "600", color: T.text }}>
@@ -4257,7 +4262,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.7rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       fontWeight: "700",
                                       padding: "0.15rem 0.5rem",
                                       borderRadius: "4px",
@@ -4278,7 +4283,7 @@ export default function Home() {
                                     {log.action_type}
                                   </span>
                                 </td>
-                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "Geist Mono" }}>
+                                <td style={{ padding: "0.75rem 0.5rem", fontSize: "0.75rem", color: T.textMuted, fontFamily: "var(--font-sans)" }}>
                                   {JSON.stringify(log.details || {})}
                                 </td>
                               </tr>
@@ -4494,7 +4499,7 @@ export default function Home() {
                       boxShadow: "var(--ds-shadow-sm)",
                     }}
                   >
-                    <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
+                    <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
                       LỊCH HOẠT ĐỘNG 7 NGÀY
                     </div>
                     <div style={{ display: "flex", gap: "0.55rem" }}>
@@ -4593,7 +4598,7 @@ export default function Home() {
                           <span
                             style={{
                               fontSize: "0.7rem",
-                              fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                              fontFamily: "var(--font-sans)",
                               backgroundColor: dailyRecommendation.tagBg || "var(--ds-accent-bg)",
                               color: dailyRecommendation.tagColor || "var(--ds-accent)",
                               border: `1px solid ${dailyRecommendation.tagBorder || "var(--ds-accent-border)"}`,
@@ -4642,7 +4647,7 @@ export default function Home() {
                         <span style={{ color: "var(--ds-text-muted)" }}>
                           🎯 Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
                         </span>
-                        <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-mono, Geist Mono, monospace)", fontWeight: "600" }}>
+                        <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-sans)", fontWeight: "600" }}>
                           {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
                         </span>
                       </div>
@@ -4851,11 +4856,11 @@ export default function Home() {
                             }}
                           >
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.45rem", fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-accent)", fontWeight: "700" }}>
+                              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.45rem", fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700" }}>
                                 <img src={chIcon} alt="" width={20} height={20} aria-hidden="true" />
                                 CHƯƠNG {String(ch.number).padStart(2, "0")}
                               </span>
-                              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: pct === 100 ? "var(--ds-success)" : "var(--ds-text-muted)", fontWeight: "600" }}>
+                              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: pct === 100 ? "var(--ds-success)" : "var(--ds-text-muted)", fontWeight: "600" }}>
                                 {doneLessons} / {ch.lessons.length} bài
                               </span>
                             </div>
@@ -4979,7 +4984,7 @@ export default function Home() {
                             <span
                               style={{
                                 fontSize: "0.72rem",
-                                fontFamily: "Geist Mono",
+                                fontFamily: "var(--font-sans)",
                                 backgroundColor: "var(--ds-accent-bg)",
                                 color: "var(--ds-accent)",
                                 padding: "0.15rem 0.5rem",
@@ -5031,7 +5036,7 @@ export default function Home() {
                         {/* Quick Table of Contents Pills */}
                         {selectedLesson.sections && selectedLesson.sections.length > 1 && (
                           <div style={{ marginTop: "1rem", paddingTop: "0.85rem", borderTop: `1px solid ${T.border}` }}>
-                            <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
+                            <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", color: T.textMuted, textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>
                               NỘI DUNG CHÍNH TRONG BÀI:
                             </div>
                             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
@@ -5076,17 +5081,17 @@ export default function Home() {
                               <span style={{ fontSize: "1.35rem" }}>⚡</span>
                               <div>
                                 <h3 style={{ fontSize: "1.05rem", fontWeight: "800", color: T.text, margin: 0, letterSpacing: "-0.01em" }}>
-                                  Sơ đồ Tóm tắt Cú pháp & Dấu hiệu (Cheat-Sheet Cấp tốc)
+                                  Tóm tắt nhanh: Công thức &amp; Dấu hiệu nhận biết
                                 </h3>
                                 <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.15rem 0 0 0" }}>
-                                  Bản chất ngữ pháp và ma trận 3 thể để ghi nhớ tức thì
+                                  Công thức khẳng định, phủ định, nghi vấn và dấu hiệu nhận biết trọng tâm
                                 </p>
                               </div>
                             </div>
                             <span
                               style={{
                                 fontSize: "0.72rem",
-                                fontFamily: "Geist Mono",
+                                fontFamily: "var(--font-sans)",
                                 padding: "0.25rem 0.65rem",
                                 borderRadius: "999px",
                                 backgroundColor: "var(--ds-accent-bg)",
@@ -5140,10 +5145,10 @@ export default function Home() {
                                   }}
                                 >
                                   <div>
-                                    <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", fontWeight: "800", color: colorTheme.text, textTransform: "uppercase", marginBottom: "0.35rem" }}>
+                                    <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: colorTheme.text, textTransform: "uppercase", marginBottom: "0.35rem" }}>
                                       {colorTheme.label}
                                     </div>
-                                    <div style={{ fontFamily: "Geist Mono", fontSize: "0.88rem", fontWeight: "700", color: T.text, lineHeight: "1.4", marginBottom: "0.5rem" }}>
+                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.88rem", fontWeight: "700", color: T.text, lineHeight: "1.4", marginBottom: "0.5rem" }}>
                                       {f.text}
                                     </div>
                                   </div>
@@ -5160,7 +5165,7 @@ export default function Home() {
                           {/* Signal Words Chips */}
                           {selectedLesson.cheatSheet.signals && selectedLesson.cheatSheet.signals.length > 0 && (
                             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-                              <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", fontWeight: "700", color: T.textMuted, textTransform: "uppercase" }}>
+                              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: T.textMuted, textTransform: "uppercase" }}>
                                 🏷️ TỪ NHẬN BIẾT VÀNG:
                               </span>
                               {selectedLesson.cheatSheet.signals.map((sig, sIdx) => (
@@ -5168,7 +5173,7 @@ export default function Home() {
                                   key={sIdx}
                                   style={{
                                     fontSize: "0.75rem",
-                                    fontFamily: "Geist Mono",
+                                    fontFamily: "var(--font-sans)",
                                     backgroundColor: "var(--ds-card)",
                                     border: `1px solid ${T.border}`,
                                     color: "var(--ds-accent)",
@@ -5244,7 +5249,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.78rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       backgroundColor: "var(--ds-accent-bg)",
                                       border: `1px solid ${"var(--ds-accent-border)"}`,
                                       color: "var(--ds-accent)",
@@ -5265,7 +5270,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.68rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       backgroundColor: badgeColor.bg,
                                       border: `1px solid ${badgeColor.border}`,
                                       color: badgeColor.text,
@@ -5284,7 +5289,7 @@ export default function Home() {
                               {/* 1. Formulas Box (Syntax-colored & Prominent) */}
                               {sec.formulas && sec.formulas.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginBottom: "1.35rem" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     ⚡ CÔNG THỨC CHUẨN XÁC:
                                   </div>
                                   {sec.formulas.map((f, fIdx) => {
@@ -5311,13 +5316,13 @@ export default function Home() {
                                           boxShadow: "var(--ds-shadow-sm)",
                                         }}
                                       >
-                                        <div style={{ fontFamily: "var(--font-mono, Geist Mono, monospace)", fontSize: "0.95rem", color: "var(--ds-success)", fontWeight: "700", letterSpacing: "0.02em" }}>
+                                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.95rem", color: "var(--ds-success)", fontWeight: "700", letterSpacing: "0.02em" }}>
                                           {f.text}
                                         </div>
                                         <span
                                           style={{
                                             fontSize: "0.7rem",
-                                            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+                                            fontFamily: "var(--font-sans)",
                                             backgroundColor: "var(--ds-card)",
                                             color: badgeKindColor,
                                             padding: "0.2rem 0.55rem",
@@ -5338,7 +5343,7 @@ export default function Home() {
                               {/* 2. Numbered Rules (Đánh số thứ tự 1, 2, 3... rõ ràng, có tiêu đề & ví dụ) */}
                               {sec.rules && sec.rules.length > 0 && (
                                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "1.15rem 0" }}>
-                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, Geist Mono, monospace)", color: "var(--ds-indigo)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                                  <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-indigo)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                                     📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG:
                                   </div>
                                   {sec.rules.map((rule, rIdx) => {
@@ -5518,7 +5523,7 @@ export default function Home() {
                                                   color: "var(--ds-accent)",
                                                   fontWeight: "700",
                                                   textAlign: "left",
-                                                  fontFamily: "Geist Mono",
+                                                  fontFamily: "var(--font-sans)",
                                                   fontSize: "0.82rem",
                                                   letterSpacing: "0.03em",
                                                 }}
@@ -5836,7 +5841,7 @@ export default function Home() {
                                   <span
                                     style={{
                                       fontSize: "0.72rem",
-                                      fontFamily: "Geist Mono",
+                                      fontFamily: "var(--font-sans)",
                                       padding: "0.15rem 0.45rem",
                                       borderRadius: "4px",
                                       backgroundColor: "var(--ds-accent-bg)",
@@ -5957,13 +5962,13 @@ export default function Home() {
                                     }}
                                   >
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                                      <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", fontWeight: "600" }}>
+                                      <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", fontWeight: "600" }}>
                                         CÂU {q.num || qIdx + 1}
                                       </span>
                                       <span
                                         style={{
                                           fontSize: "0.68rem",
-                                          fontFamily: "Geist Mono",
+                                          fontFamily: "var(--font-sans)",
                                           padding: "0.15rem 0.45rem",
                                           borderRadius: "4px",
                                           backgroundColor: "var(--ds-bg-elevated)",
@@ -6323,7 +6328,7 @@ export default function Home() {
 
                   {activeQuizQuestions.length > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                      <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                         Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
                       </span>
                     </div>
@@ -6344,7 +6349,7 @@ export default function Home() {
                     boxShadow: T.shadow,
                   }}
                 >
-                  <div style={{ fontSize: "0.8rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  <div style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     KẾT QUẢ ĐÁNH GIÁ
                   </div>
                   <div
@@ -6399,7 +6404,7 @@ export default function Home() {
                       {/* Question meta header */}
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, fontWeight: "600" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, fontWeight: "600" }}>
                             CÂU {idx + 1} / {activeQuizQuestions.length}
                           </span>
                           <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
@@ -6425,7 +6430,7 @@ export default function Home() {
                           <span
                             style={{
                               fontSize: "0.68rem",
-                              fontFamily: "Geist Mono",
+                              fontFamily: "var(--font-sans)",
                               padding: "0.15rem 0.45rem",
                               borderRadius: "4px",
                               backgroundColor: "var(--ds-bg-elevated)",
@@ -6775,7 +6780,7 @@ export default function Home() {
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: T.textMuted, fontWeight: "600" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, fontWeight: "600" }}>
                             CÂU {idx + 1} • {item.topic_name}
                           </span>
                           <button

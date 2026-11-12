@@ -62,7 +62,7 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
               <span
                 style={{
                   fontSize: "0.72rem",
-                  fontFamily: "Geist Mono",
+                  fontFamily: "var(--font-sans)",
                   backgroundColor: isLight ? "var(--ds-accent-bg)" : "rgba(59, 130, 246, 0.15)",
                   color: "var(--ds-accent)",
                   padding: "0.15rem 0.45rem",
@@ -127,7 +127,7 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
         >
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
-              <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
+              <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", padding: "0.15rem 0.45rem", borderRadius: "4px", fontWeight: "700" }}>
                 BƯỚC {history.length + 1} CỦA CÂY QUYẾT ĐỊNH
               </span>
             </div>
@@ -205,13 +205,13 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
           {/* Result Header */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem" }}>
             <div>
-              <span style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", backgroundColor: isLight ? "var(--ds-success-bg)" : "rgba(16, 185, 129, 0.2)", color: "var(--ds-success)", padding: "0.15rem 0.5rem", borderRadius: "999px", fontWeight: "700" }}>
+              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", backgroundColor: isLight ? "var(--ds-success-bg)" : "rgba(16, 185, 129, 0.2)", color: "var(--ds-success)", padding: "0.15rem 0.5rem", borderRadius: "999px", fontWeight: "700" }}>
                 KẾT QUẢ ĐÃ XÁC ĐỊNH
               </span>
               <h3 style={{ fontSize: "1.35rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0 0 0" }}>
                 {currentResult.name_vi}
               </h3>
-              <div style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", fontFamily: "Geist Mono" }}>
+              <div style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", fontFamily: "var(--font-sans)" }}>
                 {currentResult.name_en}
               </div>
             </div>
@@ -265,10 +265,10 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
             }}
           >
             <div>
-              <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: "var(--ds-success)", fontWeight: "700", textTransform: "uppercase" }}>
+              <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "700", textTransform: "uppercase" }}>
                 CÔNG THỨC CHUẨN XÁC:
               </div>
-              <div style={{ fontSize: "1.05rem", fontFamily: "Geist Mono", fontWeight: "800", color: "var(--ds-text-heading)", marginTop: "0.2rem" }}>
+              <div style={{ fontSize: "1.05rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: "var(--ds-text-heading)", marginTop: "0.2rem" }}>
                 {currentResult.formula}
               </div>
             </div>
@@ -314,7 +314,7 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
               <div>
-                <div style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase" }}>
+                <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700", textTransform: "uppercase" }}>
                   VÍ DỤ VẬN DỤNG THỰC TẾ:
                 </div>
                 <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--ds-text-heading)", marginTop: "0.15rem" }}>

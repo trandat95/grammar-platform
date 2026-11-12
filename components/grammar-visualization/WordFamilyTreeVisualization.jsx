@@ -65,7 +65,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   padding: "0.45rem 0.85rem",
                   borderRadius: "6px",
                   fontSize: "0.78rem",
-                  fontFamily: "Geist Mono",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: selectedRootWord === item.root ? "800" : "500",
                   backgroundColor: selectedRootWord === item.root ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
                   color: selectedRootWord === item.root ? "#ffffff" : "var(--ds-text-secondary)",
@@ -105,7 +105,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
               <div style={{ fontSize: "0.7rem", color: "var(--ds-border-strong)", fontWeight: "700", textTransform: "uppercase" }}>
                 GỐC TỪ CỐT LÕI (ROOT)
               </div>
-              <div style={{ fontSize: "1.35rem", fontWeight: "900", color: "var(--ds-accent)", fontFamily: "Geist Mono" }}>
+              <div style={{ fontSize: "1.35rem", fontWeight: "900", color: "var(--ds-accent)", fontFamily: "var(--font-sans)" }}>
                 {curFamily.root}
               </div>
               <div style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600", marginTop: "0.15rem" }}>
@@ -139,11 +139,11 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-success)", textTransform: "uppercase" }}>
                     Danh Từ (Noun)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                     {curFamily.noun.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "var(--font-sans)" }}>
                   {curFamily.noun.word}
                 </div>
                 <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
@@ -171,11 +171,11 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-danger)", textTransform: "uppercase" }}>
                     Động Từ (Verb)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                     {curFamily.verb.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "var(--font-sans)" }}>
                   {curFamily.verb.word}
                 </div>
                 <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
@@ -203,11 +203,11 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-accent)", textTransform: "uppercase" }}>
                     Tính Từ (Adjective)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                     {curFamily.adjective.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "var(--font-sans)" }}>
                   {curFamily.adjective.word}
                 </div>
                 <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
@@ -235,11 +235,11 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                   <span style={{ fontSize: "0.75rem", fontWeight: "800", color: "var(--ds-purple)", textTransform: "uppercase" }}>
                     Trạng Từ (Adverb)
                   </span>
-                  <span style={{ fontSize: "0.75rem", fontFamily: "Geist Mono", color: "var(--ds-text-muted)" }}>
+                  <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                     {curFamily.adverb.phonetic}
                   </span>
                 </div>
-                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "Geist Mono" }}>
+                <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--ds-text-heading)", fontFamily: "var(--font-sans)" }}>
                   {curFamily.adverb.word}
                 </div>
                 <div style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", marginTop: "0.2rem" }}>
@@ -275,7 +275,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 <h4 style={{ margin: 0, fontSize: "1rem", fontWeight: "800", color: "var(--ds-text-heading)" }}>
                   {rule.part_of_speech}
                 </h4>
-                <span style={{ fontSize: "0.7rem", fontFamily: "Geist Mono", fontWeight: "700", color: rule.color, backgroundColor: `${rule.color}20`, padding: "0.15rem 0.45rem", borderRadius: "4px" }}>
+                <span style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: rule.color, backgroundColor: `${rule.color}20`, padding: "0.15rem 0.45rem", borderRadius: "4px" }}>
                   {rule.badge}
                 </span>
               </div>
@@ -314,7 +314,7 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                       fontSize: "0.75rem",
                     }}
                   >
-                    <span style={{ fontWeight: "800", color: rule.color, fontFamily: "Geist Mono" }}>
+                    <span style={{ fontWeight: "800", color: rule.color, fontFamily: "var(--font-sans)" }}>
                       {s.suffix}
                     </span>
                     <span style={{ color: "var(--ds-text-muted)" }}>{s.example}</span>

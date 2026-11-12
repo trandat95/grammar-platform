@@ -68,7 +68,7 @@ export default function RemedialRecommendationCard({
             marginBottom: "0.85rem",
           }}
         >
-          <div style={{ fontSize: "0.72rem", fontFamily: "Geist Mono", color: T.success, fontWeight: 700, marginBottom: "0.3rem" }}>
+          <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: T.success, fontWeight: 700, marginBottom: "0.3rem" }}>
             HÀNH ĐỘNG GỢI Ý ĐỂ KHẮC PHỤC:
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>

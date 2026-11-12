@@ -66,7 +66,7 @@ export default function VisualizationLegend({ type, isLight = false }) {
         border: `1px solid ${T.borderSubtle}`,
         borderRadius: "8px",
         fontSize: "0.75rem",
-        fontFamily: "var(--font-mono, Geist Mono, monospace)",
+        fontFamily: "var(--font-sans)",
         marginTop: "1rem",
       }}
     >

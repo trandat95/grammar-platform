@@ -26,7 +26,7 @@ export default function VisualizationControls({
           style={{
             padding: "0.3rem 0.6rem",
             fontSize: "0.75rem",
-            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+            fontFamily: "var(--font-sans)",
             backgroundColor: T.bgElevated,
             border: `1px solid ${T.border}`,
             borderRadius: "6px",
@@ -51,7 +51,7 @@ export default function VisualizationControls({
           style={{
             padding: "0.3rem 0.6rem",
             fontSize: "0.75rem",
-            fontFamily: "var(--font-mono, Geist Mono, monospace)",
+            fontFamily: "var(--font-sans)",
             backgroundColor: T.bgElevated,
             border: `1px solid ${T.border}`,
             borderRadius: "6px",

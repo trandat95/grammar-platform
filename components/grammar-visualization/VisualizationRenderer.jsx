@@ -8,7 +8,7 @@ import ComparisonScaleVisualization from "./ComparisonScaleVisualization";
 import ModalMatrixVisualization from "./ModalMatrixVisualization";
 import WordFamilyTreeVisualization from "./WordFamilyTreeVisualization";
 
-export default function VisualizationRenderer({ type, data, isLight = false }) {
+export default function VisualizationRenderer({ type, data, initialFocusId = null, isLight = false }) {
   if (!data) {
     return (
       <div
@@ -26,7 +26,7 @@ export default function VisualizationRenderer({ type, data, isLight = false }) {
 
   switch (type) {
     case "timeline":
-      return <TimelineVisualization data={data} isLight={isLight} />;
+      return <TimelineVisualization data={data} initialFocusId={initialFocusId} isLight={isLight} />;
     case "decision-tree":
       return <DecisionTreeVisualization data={data} isLight={isLight} />;
     case "transformation":
