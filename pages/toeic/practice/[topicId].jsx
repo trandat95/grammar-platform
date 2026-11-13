@@ -327,8 +327,6 @@ export default function TopicPracticePage() {
           triggerId={entitlement.activeTriggerId}
           context={entitlement.paywallContext}
         />
-          </div>
-        </div>
       </AppShell2026>
     </>
   );
