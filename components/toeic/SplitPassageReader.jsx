@@ -177,7 +177,8 @@ export default function SplitPassageReader({
                             </th>
                           ))}
                         </tr>
-                      )}
+                      </thead>
+                    )}
                     <tbody>
                       {table.rows?.map((row, ri) => (
                         <tr key={ri} className="border-b last:border-0" style={{ borderColor: 'var(--ds-border)' }}>
