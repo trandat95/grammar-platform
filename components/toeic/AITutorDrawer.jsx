@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 /**
- * AITutorDrawer Component (Milestone E6 & Section 6)
+ * AITutorDrawer Component (Milestone E6, AC-U6.5)
  * Conversational AI Tutor slide-over grounded in question ai_tutor_rag_context,
  * sentence_xray and micro-rule formulas.
  * Strict Design Token Discipline: var(--ds-*).
@@ -66,27 +66,34 @@ export default function AITutorDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-fadeIn">
+    <div className="toeic-drawer-overlay" onClick={onClose}>
       <div
-        className="w-full max-w-md h-full flex flex-col border-l shadow-2xl transition-all"
-        style={{
-          backgroundColor: 'var(--ds-surface)',
-          borderColor: 'var(--ds-border)'
-        }}
+        className="toeic-drawer-panel"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* HEADER */}
-        <div className="p-4 border-b flex items-center justify-between"
-             style={{ borderColor: 'var(--ds-border)' }}>
-          <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
-                  style={{ backgroundColor: 'var(--ds-primary-subtle)', color: 'var(--ds-primary)' }}>
+        <div className="toeic-drawer-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <span
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                backgroundColor: 'var(--ds-accent-bg)',
+                color: 'var(--ds-accent)'
+              }}
+            >
               🧑‍🏫
             </span>
             <div>
-              <h3 className="font-bold text-sm" style={{ color: 'var(--ds-text-primary)' }}>
+              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0, color: 'var(--ds-text)' }}>
                 AI Gia Sư Ngữ Pháp TOEIC
               </h3>
-              <p className="text-[11px]" style={{ color: 'var(--ds-text-muted)' }}>
+              <p style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', margin: 0 }}>
                 Chủ điểm: {question.ai_analysis?.primary_topic_name_vi || question.primary_grammar_topic_id}
               </p>
             </div>
@@ -95,26 +102,44 @@ export default function AITutorDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold border hover:bg-[var(--ds-surface-secondary)]"
-            style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-card)',
+              color: 'var(--ds-text)',
+              cursor: 'pointer'
+            }}
           >
             ✕
           </button>
         </div>
 
         {/* CHAT MESSAGES BODY */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm">
+        <div className="toeic-drawer-body">
           {/* Welcome Message */}
-          <div className="p-3.5 rounded-2xl border space-y-1.5"
-               style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)' }}>
-            <div className="font-bold text-xs" style={{ color: 'var(--ds-primary)' }}>
+          <div
+            style={{
+              padding: '1rem',
+              borderRadius: '1rem',
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-bg-elevated)'
+            }}
+          >
+            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-accent)', marginBottom: '0.35rem' }}>
               Xin chào! Tôi có thể giải thích chi tiết câu hỏi #{question.number || question.id}:
             </div>
-            <p className="italic text-xs" style={{ color: 'var(--ds-text-secondary)' }}>
+            <p style={{ fontSize: '0.85rem', fontStyle: 'italic', color: 'var(--ds-text)', margin: '0 0 0.5rem 0', lineHeight: 1.5 }}>
               "{question.context_sentence || question.stem}"
             </p>
             {question.ai_analysis?.micro_rule_formula_vi && (
-              <div className="text-[11px] font-mono font-semibold pt-1" style={{ color: 'var(--ds-text-primary)' }}>
+              <div style={{ fontSize: '0.8rem', fontFamily: 'monospace', fontWeight: 700, color: 'var(--ds-success)' }}>
                 Công thức: {question.ai_analysis.micro_rule_formula_vi}
               </div>
             )}
@@ -124,41 +149,28 @@ export default function AITutorDrawer({
           {messages.map((m, i) => (
             <div
               key={i}
-              className={`p-3 rounded-2xl text-xs sm:text-sm leading-relaxed max-w-[85%] ${
-                m.role === 'user' ? 'ml-auto text-right' : 'mr-auto text-left border'
-              }`}
-              style={{
-                backgroundColor: m.role === 'user' ? 'var(--ds-primary)' : 'var(--ds-surface)',
-                borderColor: 'var(--ds-border)',
-                color: m.role === 'user' ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-              }}
+              className={`toeic-chat-bubble ${m.role === 'user' ? 'toeic-chat-user' : 'toeic-chat-ai'}`}
             >
-              <div className="whitespace-pre-line">{m.text}</div>
+              <div style={{ whiteSpace: 'pre-line' }}>{m.text}</div>
             </div>
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 text-xs italic" style={{ color: 'var(--ds-text-muted)' }}>
-              <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: 'var(--ds-primary)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', fontStyle: 'italic', color: 'var(--ds-text-muted)' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-accent)' }} />
               AI Gia Sư đang phân tích dữ liệu...
             </div>
           )}
         </div>
 
         {/* QUICK PROMPT CHIPS */}
-        <div className="p-3 border-t flex flex-wrap gap-1.5"
-             style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)' }}>
+        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--ds-border)', backgroundColor: 'var(--ds-bg-elevated)', display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
           {quickPrompts.map((p, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleSendMessage(p)}
-              className="px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all hover:bg-[var(--ds-surface)]"
-              style={{
-                backgroundColor: 'var(--ds-surface)',
-                borderColor: 'var(--ds-border)',
-                color: 'var(--ds-text-secondary)'
-              }}
+              className="toeic-prompt-chip"
             >
               {p}
             </button>
@@ -166,8 +178,7 @@ export default function AITutorDrawer({
         </div>
 
         {/* INPUT BOX */}
-        <div className="p-3 border-t flex items-center gap-2"
-             style={{ borderColor: 'var(--ds-border)' }}>
+        <div className="toeic-drawer-footer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input
             type="text"
             value={inputText}
@@ -176,11 +187,15 @@ export default function AITutorDrawer({
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSendMessage();
             }}
-            className="flex-1 px-3 py-2 rounded-xl text-xs sm:text-sm border focus:outline-none focus:border-[var(--ds-primary)]"
             style={{
-              backgroundColor: 'var(--ds-surface)',
-              borderColor: 'var(--ds-border)',
-              color: 'var(--ds-text-primary)'
+              flex: 1,
+              padding: '0.55rem 0.85rem',
+              borderRadius: '0.75rem',
+              fontSize: '0.85rem',
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-card)',
+              color: 'var(--ds-text)',
+              outline: 'none'
             }}
           />
 
@@ -188,8 +203,8 @@ export default function AITutorDrawer({
             type="button"
             disabled={!inputText.trim() || isLoading}
             onClick={() => handleSendMessage()}
-            className="px-4 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40"
-            style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
+            className="toeic-btn toeic-btn-primary"
+            style={{ padding: '0.55rem 1rem', fontSize: '0.8rem', opacity: !inputText.trim() || isLoading ? 0.4 : 1 }}
           >
             Gửi
           </button>

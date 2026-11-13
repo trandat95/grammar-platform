@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import SentenceXRayCard from '../../../components/toeic/SentenceXRayCard';
+import AITutorDrawer from '../../../components/toeic/AITutorDrawer';
 
 export default function TopicPracticePage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function TopicPracticePage() {
   const [correctCount, setCorrectCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
+  const [aiTutorContext, setAiTutorContext] = useState({ question: null, selectedOption: null });
 
   useEffect(() => {
     if (!topicId) return;
@@ -197,8 +200,17 @@ export default function TopicPracticePage() {
                     alert(`Đã lưu "${word}" vào Sổ tay Ôn tập Ngắt quãng (SRS)!`);
                   }}
                   onOpenAiTutor={(q, opt) => {
-                    alert(`AI Gia Sư: Chủ điểm "${q.ai_analysis?.primary_topic_name_vi}". Công thức cốt lõi: ${q.ai_analysis?.micro_rule_formula_vi}`);
+                    setAiTutorContext({ question: q, selectedOption: opt });
+                    setIsAiTutorOpen(true);
                   }}
+                />
+
+                {/* AI Tutor Drawer Component */}
+                <AITutorDrawer
+                  isOpen={isAiTutorOpen}
+                  onClose={() => setIsAiTutorOpen(false)}
+                  question={aiTutorContext.question}
+                  selectedOption={aiTutorContext.selectedOption}
                 />
 
                 {/* BOTTOM NAVIGATION */}

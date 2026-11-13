@@ -1,7 +1,8 @@
 import React from 'react';
+import { ToeicBadge, ToeicButton } from './ui';
 
 /**
- * MilestoneSkillTree Component (Milestone E3 & Section 5.4)
+ * MilestoneSkillTree Component (Milestone E3, Section 5.4 & U3.4)
  * Renders the 7-Milestone Skill Tree with personal weakness injection,
  * drill progress counters, and Boss Gate evaluation checkpoints.
  * Strict Design Token Discipline: var(--ds-*).
@@ -13,9 +14,8 @@ export default function MilestoneSkillTree({
 }) {
   if (!milestones || milestones.length === 0) {
     return (
-      <div className="rounded-2xl p-8 border text-center"
-           style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-        <p className="text-sm" style={{ color: 'var(--ds-text-secondary)' }}>
+      <div className="toeic-card" style={{ textAlign: 'center', padding: '2.5rem' }}>
+        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--ds-text-secondary)', margin: 0 }}>
           Chưa có dữ liệu lộ trình. Hãy hoàn thành bài kiểm tra chẩn đoán đầu vào để AI khởi tạo lộ trình cá nhân hóa!
         </p>
       </div>
@@ -23,36 +23,37 @@ export default function MilestoneSkillTree({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
+    <div style={{ width: '100%', maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h2 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--ds-text-primary)' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.35rem 0', color: 'var(--ds-text)', letterSpacing: '-0.02em' }}>
             Lộ Trình Vượt Trạm 7 Milestones Cá Nhân Hóa
           </h2>
-          <p className="text-sm" style={{ color: 'var(--ds-text-secondary)' }}>
+          <p style={{ fontSize: '0.9rem', color: 'var(--ds-text-secondary)', margin: 0 }}>
             Hệ thống tự động tinh chỉnh theo điểm yếu thực tế và miễn học các trạm bạn đã nắm vững
           </p>
         </div>
 
-        <div className="flex items-center gap-3 text-xs">
-          <span className="flex items-center gap-1.5 font-medium" style={{ color: 'var(--ds-success)' }}>
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: 'var(--ds-success)' }} />
+        {/* Legend */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.75rem', fontWeight: 700 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-success)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-success)' }} />
             Đã hoàn thành
           </span>
-          <span className="flex items-center gap-1.5 font-medium" style={{ color: 'var(--ds-primary)' }}>
-            <span className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: 'var(--ds-primary)' }} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-accent)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-accent)' }} />
             Đang học
           </span>
-          <span className="flex items-center gap-1.5 font-medium" style={{ color: 'var(--ds-text-muted)' }}>
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: 'var(--ds-border)' }} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-text-muted)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-border)' }} />
             Chưa mở khóa
           </span>
         </div>
       </div>
 
       {/* 7 STATIONS TIMELINE / TREE */}
-      <div className="relative pl-6 sm:pl-8 space-y-6 before:content-[''] before:absolute before:left-3 sm:before:left-4 before:top-4 before:bottom-4 before:w-0.5 before:bg-[var(--ds-border)]">
+      <div className="toeic-timeline-wrap">
         {milestones.map((ms, index) => {
           const isCompleted = ms.status === 'COMPLETED';
           const isInProgress = ms.status === 'IN_PROGRESS';
@@ -63,81 +64,56 @@ export default function MilestoneSkillTree({
           const progressPct = Math.min(100, Math.round(((ms.completed_drill_questions || 0) / (ms.required_drill_questions || 48)) * 100));
 
           return (
-            <div key={ms.milestone_id || index} className="relative group">
+            <div key={ms.milestone_id || index} style={{ position: 'relative' }}>
               {/* NODE ICON / BULLET */}
-              <div
-                className={`absolute -left-6 sm:-left-8 top-5 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all shadow-sm ${
-                  isInProgress ? 'ring-4 ring-[var(--ds-primary-subtle)]' : ''
-                }`}
-                style={{
-                  backgroundColor: isCompleted
-                    ? 'var(--ds-success)'
-                    : isInProgress
-                    ? 'var(--ds-primary)'
-                    : 'var(--ds-surface)',
-                  borderColor: isCompleted
-                    ? 'var(--ds-success)'
-                    : isInProgress
-                    ? 'var(--ds-primary)'
-                    : 'var(--ds-border)',
-                  color: isCompleted || isInProgress ? 'var(--ds-surface)' : 'var(--ds-text-muted)'
-                }}
-              >
+              <div className={`toeic-timeline-node ${isCompleted ? 'completed' : isInProgress ? 'in-progress' : ''}`}>
                 {isCompleted ? '✓' : ms.milestone_order || index + 1}
               </div>
 
               {/* CARD CONTAINER */}
               <div
-                className={`rounded-2xl p-5 sm:p-6 border transition-all ${
-                  isInProgress ? 'shadow-md border-[var(--ds-primary)]' : 'shadow-sm'
-                }`}
+                className="toeic-card"
                 style={{
-                  backgroundColor: 'var(--ds-surface)',
-                  borderColor: isInProgress ? 'var(--ds-primary)' : 'var(--ds-border)',
+                  padding: '1.5rem',
+                  border: isInProgress ? '1.5px solid var(--ds-accent)' : '1px solid var(--ds-border)',
+                  boxShadow: isInProgress ? '0 4px 16px rgba(37,99,235,0.08)' : '0 1px 3px rgba(0,0,0,0.02)',
                   opacity: isLocked ? 0.75 : 1.0
                 }}
               >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="space-y-1.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider"
-                            style={{
-                              backgroundColor: isCompleted
-                                ? 'var(--ds-success-subtle)'
-                                : isInProgress
-                                ? 'var(--ds-primary-subtle)'
-                                : 'var(--ds-surface-secondary)',
-                              color: isCompleted
-                                ? 'var(--ds-success)'
-                                : isInProgress
-                                ? 'var(--ds-primary)'
-                                : 'var(--ds-text-muted)'
-                            }}>
+                <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                      <ToeicBadge variant={isCompleted ? 'success' : isInProgress ? 'primary' : 'muted'}>
                         {isCompleted ? 'Trạm Đã Đạt' : isInProgress ? 'Trạm Hiện Tại' : 'Chưa Mở Khóa'}
-                      </span>
+                      </ToeicBadge>
 
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded"
-                            style={{ backgroundColor: 'var(--ds-surface-secondary)', color: 'var(--ds-text-secondary)' }}>
+                      <span
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '0.35rem',
+                          backgroundColor: 'var(--ds-bg-elevated)',
+                          color: 'var(--ds-text-secondary)'
+                        }}
+                      >
                         Mục tiêu Band {ms.target_band_score}+
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-bold" style={{ color: 'var(--ds-text-primary)' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, color: 'var(--ds-text)' }}>
                       Trạm {ms.milestone_order || index + 1}: {ms.title_vi}
                     </h3>
                   </div>
 
                   {/* ACTION BUTTONS */}
-                  <div className="flex items-center gap-2 self-start md:self-auto">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                     {isInProgress && (
                       <button
                         type="button"
                         onClick={() => onStartDrill && onStartDrill(ms)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm hover:opacity-90 active:scale-95"
-                        style={{
-                          backgroundColor: 'var(--ds-primary)',
-                          color: 'var(--ds-surface)'
-                        }}
+                        className="toeic-btn toeic-btn-primary"
+                        style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
                       >
                         ⚡ Luyện Trạm Này
                       </button>
@@ -147,11 +123,8 @@ export default function MilestoneSkillTree({
                       <button
                         type="button"
                         onClick={() => onStartBossGate && onStartBossGate(ms)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold border transition-all hover:bg-[var(--ds-surface-secondary)] active:scale-95 flex items-center gap-1.5"
-                        style={{
-                          borderColor: 'var(--ds-border)',
-                          color: 'var(--ds-text-primary)'
-                        }}
+                        className="toeic-btn toeic-btn-secondary"
+                        style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
                       >
                         <span>🏆 Thi Vượt Trạm Boss Gate</span>
                       </button>
@@ -160,19 +133,23 @@ export default function MilestoneSkillTree({
                 </div>
 
                 {/* TOPICS & WEAKNESS INJECTION TAGS */}
-                <div className="mt-4 pt-3 border-t space-y-2" style={{ borderColor: 'var(--ds-border)' }}>
-                  <div className="text-xs font-medium" style={{ color: 'var(--ds-text-muted)' }}>
+                <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--ds-border)' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', marginBottom: '0.5rem' }}>
                     Chủ điểm trọng tâm của trạm:
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                     {focusTopics.map((tid, i) => (
                       <span
                         key={i}
-                        className="text-xs px-2.5 py-1 rounded-lg border font-mono font-medium"
                         style={{
-                          backgroundColor: 'var(--ds-surface-secondary)',
-                          borderColor: 'var(--ds-border)',
-                          color: 'var(--ds-text-primary)'
+                          fontSize: '0.75rem',
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '0.35rem',
+                          border: '1px solid var(--ds-border)',
+                          backgroundColor: 'var(--ds-bg-elevated)',
+                          color: 'var(--ds-text)',
+                          fontFamily: 'monospace',
+                          fontWeight: 600
                         }}
                       >
                         {tid}
@@ -183,42 +160,57 @@ export default function MilestoneSkillTree({
                     {injectedTopics.map((wid, i) => (
                       <span
                         key={`inj_${i}`}
-                        className="text-xs px-2.5 py-1 rounded-lg border font-mono font-bold flex items-center gap-1"
                         style={{
-                          backgroundColor: 'var(--ds-danger-subtle)',
-                          borderColor: 'var(--ds-danger)',
-                          color: 'var(--ds-danger)'
+                          fontSize: '0.75rem',
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '0.35rem',
+                          border: '1px solid var(--ds-danger-border)',
+                          backgroundColor: 'var(--ds-danger-bg)',
+                          color: 'var(--ds-danger)',
+                          fontFamily: 'monospace',
+                          fontWeight: 700
                         }}
                       >
-                        <span>🎯 Điểm yếu bổ trợ: {wid}</span>
+                        🎯 Điểm yếu bổ trợ: {wid}
                       </span>
                     ))}
                   </div>
                 </div>
 
                 {/* PROGRESS BAR & CRITERIA */}
-                <div className="mt-4 pt-3 border-t flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
-                     style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }}>
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div
+                  className="toeic-flex-between"
+                  style={{
+                    marginTop: '1rem',
+                    paddingTop: '0.75rem',
+                    borderTop: '1px solid var(--ds-border)',
+                    fontSize: '0.8rem',
+                    color: 'var(--ds-text-secondary)',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <span>Tiến độ luyện tập:</span>
-                    <div className="w-28 sm:w-36 h-2 rounded-full overflow-hidden"
-                         style={{ backgroundColor: 'var(--ds-surface-secondary)' }}>
+                    <div style={{ width: '120px', height: '8px', borderRadius: '9999px', backgroundColor: 'var(--ds-bg-elevated)', overflow: 'hidden' }}>
                       <div
-                        className="h-full rounded-full transition-all"
                         style={{
+                          height: '100%',
+                          borderRadius: '9999px',
                           width: `${progressPct}%`,
-                          backgroundColor: isCompleted ? 'var(--ds-success)' : 'var(--ds-primary)'
+                          backgroundColor: isCompleted ? 'var(--ds-success)' : 'var(--ds-accent)',
+                          transition: 'width 0.6s ease'
                         }}
                       />
                     </div>
-                    <span className="font-semibold" style={{ color: 'var(--ds-text-primary)' }}>
+                    <span style={{ fontWeight: 800, color: 'var(--ds-text)' }}>
                       {ms.completed_drill_questions || 0} / {ms.required_drill_questions || 48} câu
                     </span>
                   </div>
 
                   {ms.boss_gate_criteria && (
-                    <div className="text-[11px]" style={{ color: 'var(--ds-text-muted)' }}>
-                      Boss Gate: {ms.boss_gate_criteria.question_count} câu • Tối đa {Math.round(ms.boss_gate_criteria.max_time_sec / 60)} phút • Độ chính xác ≥ {ms.boss_gate_criteria.min_accuracy_pct}%
+                    <div style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                      Boss Gate: {ms.boss_gate_criteria.question_count} câu • Tối đa {Math.round(ms.boss_gate_criteria.max_time_sec / 60)} phút • Độ chính xác &ge; {ms.boss_gate_criteria.min_accuracy_pct}%
                     </div>
                   )}
                 </div>
