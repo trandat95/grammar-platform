@@ -71,61 +71,64 @@ export default function MistakesSrsPage() {
       </Head>
 
       <AppShell2026
-        activeView="quiz"
+        activeView="toeic"
+        toeicSubView="srs"
         onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'study') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
+          if (v === 'toeic') {
+            if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+              window.location.href = '/toeic';
+            }
+            return;
+          }
+          if (typeof window !== 'undefined') {
+            window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+          }
         }}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="Sổ Tay Câu Sai & Từ Vựng (SRS)"
       >
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6" style={{ backgroundColor: 'var(--ds-background)' }}>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="toeic-page-wrap">
+          <div className="toeic-container" style={{ maxWidth: '780px' }}>
+            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
               <a
                 href="/toeic"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: 'var(--ds-primary)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: 'var(--ds-accent)',
+                  textDecoration: 'none'
+                }}
               >
-                <span>← Quay lại TOEIC Hub</span>
+                <span>&larr; Quay lại TOEIC Hub</span>
               </a>
 
               {/* CARD TYPE FILTER */}
-              <div className="flex items-center gap-1 p-1 rounded-xl border text-xs"
-                   style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.25rem', borderRadius: '0.75rem', border: '1px solid var(--ds-border)', backgroundColor: 'var(--ds-card)' }}>
                 <button
                   type="button"
                   onClick={() => { setCardType('ALL'); setCurrentIndex(0); setIsFlipped(false); }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all ${cardType === 'ALL' ? 'shadow-sm' : ''}`}
-                  style={{
-                    backgroundColor: cardType === 'ALL' ? 'var(--ds-primary)' : 'transparent',
-                    color: cardType === 'ALL' ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-                  }}
+                  className={`toeic-target-chip ${cardType === 'ALL' ? 'active' : ''}`}
+                  style={{ padding: '0.3rem 0.75rem', fontSize: '0.8rem' }}
                 >
                   Tất cả ({srsCards.length})
                 </button>
                 <button
                   type="button"
                   onClick={() => { setCardType('MISTAKE_QUESTION'); setCurrentIndex(0); setIsFlipped(false); }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all ${cardType === 'MISTAKE_QUESTION' ? 'shadow-sm' : ''}`}
-                  style={{
-                    backgroundColor: cardType === 'MISTAKE_QUESTION' ? 'var(--ds-primary)' : 'transparent',
-                    color: cardType === 'MISTAKE_QUESTION' ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-                  }}
+                  className={`toeic-target-chip ${cardType === 'MISTAKE_QUESTION' ? 'active' : ''}`}
+                  style={{ padding: '0.3rem 0.75rem', fontSize: '0.8rem' }}
                 >
                   Câu sai
                 </button>
                 <button
                   type="button"
                   onClick={() => { setCardType('VOCABULARY'); setCurrentIndex(0); setIsFlipped(false); }}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all ${cardType === 'VOCABULARY' ? 'shadow-sm' : ''}`}
-                  style={{
-                    backgroundColor: cardType === 'VOCABULARY' ? 'var(--ds-primary)' : 'transparent',
-                    color: cardType === 'VOCABULARY' ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-                  }}
+                  className={`toeic-target-chip ${cardType === 'VOCABULARY' ? 'active' : ''}`}
+                  style={{ padding: '0.3rem 0.75rem', fontSize: '0.8rem' }}
                 >
                   Từ vựng
                 </button>
@@ -295,7 +298,7 @@ export default function MistakesSrsPage() {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </AppShell2026>
     </>
   );

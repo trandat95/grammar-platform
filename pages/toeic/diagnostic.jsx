@@ -6,6 +6,18 @@ import ToeicDiagnosticSession from '../../components/toeic/ToeicDiagnosticSessio
 export default function ToeicDiagnosticPage() {
   const [isLight, setIsLight] = useState(true);
 
+  const handleSelectView = (v) => {
+    if (v === 'toeic') {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+        window.location.href = '/toeic';
+      }
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -14,13 +26,9 @@ export default function ToeicDiagnosticPage() {
       </Head>
 
       <AppShell2026
-        activeView="diagnostic"
-        onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'study') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
-        }}
+        activeView="toeic"
+        toeicSubView="diagnostic"
+        onSelectView={handleSelectView}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="TOEIC AI Diagnostic Test"

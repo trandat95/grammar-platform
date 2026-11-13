@@ -80,38 +80,55 @@ export default function TestSimulationPage() {
       </Head>
 
       <AppShell2026
-        activeView="quiz"
+        activeView="toeic"
+        toeicSubView="tests"
         onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'study') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
+          if (v === 'toeic') {
+            if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+              window.location.href = '/toeic';
+            }
+            return;
+          }
+          if (typeof window !== 'undefined') {
+            window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+          }
         }}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle={`${series} Test ${testNum}`}
       >
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6" style={{ backgroundColor: 'var(--ds-background)' }}>
-          <div className="max-w-6xl mx-auto space-y-6">
+        <div className="toeic-page-wrap">
+          <div className="toeic-container">
             {/* TOP BAR */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
               <a
                 href="/toeic/tests"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: 'var(--ds-primary)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: 'var(--ds-accent)',
+                  textDecoration: 'none'
+                }}
               >
-                <span>← Danh sách 20 đề thi</span>
+                <span>&larr; Danh sách 20 đề thi</span>
               </a>
 
-              <div className="flex items-center gap-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <button
                   type="button"
                   onClick={() => setIsReviewMode(prev => !prev)}
-                  className="px-4 py-1.5 rounded-xl text-xs font-bold border transition-all"
                   style={{
-                    backgroundColor: isReviewMode ? 'var(--ds-warning-subtle)' : 'var(--ds-surface)',
-                    borderColor: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-border)',
-                    color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text-primary)'
+                    padding: '0.45rem 0.9rem',
+                    borderRadius: '0.75rem',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    border: '1px solid var(--ds-border)',
+                    backgroundColor: isReviewMode ? 'var(--ds-warning-bg)' : 'var(--ds-card)',
+                    color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text)',
+                    cursor: 'pointer'
                   }}
                 >
                   {isReviewMode ? '✓ Đang Xem Giải Thích & Dẫn Chứng' : 'Chế Độ Xem Giải Thích'}
@@ -192,7 +209,7 @@ export default function TestSimulationPage() {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </AppShell2026>
     </>
   );

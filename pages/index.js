@@ -187,6 +187,18 @@ export default function Home() {
 
   useEffect(() => {
     try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const viewParam = params.get("view");
+        if (viewParam && ["dashboard", "study", "quiz", "gamification", "vip", "admin"].includes(viewParam)) {
+          setCurrentView(viewParam);
+        }
+      }
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    try {
       const saved = localStorage.getItem("grammar_theme");
       if (saved === "light" || saved === "dark") {
         setThemeMode(saved);

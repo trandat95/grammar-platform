@@ -40,6 +40,7 @@ export const HUB_ITEMS = [
 export default function AppShell2026({
   activeView,
   onSelectView,
+  toeicSubView,
   currentUser,
   userTracker,
   savedMistakesCount = 0,
@@ -74,19 +75,41 @@ export default function AppShell2026({
   const handleSelectHub = (hubId) => {
     if (hubId === "toeic") {
       if (typeof window !== "undefined") {
-        window.location.href = "/toeic";
+        if (window.location.pathname !== "/toeic") {
+          window.location.href = "/toeic";
+        }
       }
       return;
     }
     if (hubId === "quiz" && onStartQuizIfEmpty) {
       onStartQuizIfEmpty();
     }
-    onSelectView(hubId);
+    if (onSelectView) {
+      onSelectView(hubId);
+    }
   };
 
   const isAdmin = !currentUser?.isGuest && currentUser?.role === "ADMIN";
-  const inStudyOrDiagnostic = activeView === "study" || activeView === "diagnostic";
-  const inQuizOrMistakes = activeView === "quiz" || activeView === "mistakes";
+  const inStudyOrDiagnostic = (activeView === "study" || activeView === "diagnostic") && activeView !== "toeic";
+  const inQuizOrMistakes = (activeView === "quiz" || activeView === "mistakes") && activeView !== "toeic";
+  const inToeic = activeView === "toeic";
+
+  // Determine current active TOEIC sub-view
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
+  const activeToeicSub = toeicSubView || (
+    currentPath.startsWith("/toeic/diagnostic") ? "diagnostic" :
+    currentPath.startsWith("/toeic/tests") ? "tests" :
+    currentPath.startsWith("/toeic/dictation") ? "dictation" :
+    currentPath.startsWith("/toeic/mistakes") ? "srs" :
+    "hub"
+  );
+
+  const handleToeicNav = (targetPath) => {
+    if (typeof window !== "undefined") {
+      if (window.location.pathname === targetPath) return;
+      window.location.href = targetPath;
+    }
+  };
 
   return (
     <div
@@ -495,6 +518,58 @@ export default function AppShell2026({
               }}
             >
               ⭐ Sổ từ ({savedVocabCount})
+            </button>
+          </div>
+        </div>
+      )}
+
+      {inToeic && (
+        <div className="ge-subnav-bar" data-no-dict="true">
+          <div className="ge-subnav-pills" role="tablist" aria-label="Phân khu TOEIC AI">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeToeicSub === "hub"}
+              onClick={() => handleToeicNav("/toeic")}
+              className={`ge-subnav-btn ds-focusable ${activeToeicSub === "hub" ? "is-active" : ""}`}
+            >
+              🏠 Trung tâm TOEIC
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeToeicSub === "diagnostic"}
+              onClick={() => handleToeicNav("/toeic/diagnostic")}
+              className={`ge-subnav-btn ds-focusable ${activeToeicSub === "diagnostic" ? "is-active" : ""}`}
+            >
+              🎯 Test Chẩn Đoán AI
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeToeicSub === "tests"}
+              onClick={() => handleToeicNav("/toeic/tests")}
+              className={`ge-subnav-btn ds-focusable ${activeToeicSub === "tests" ? "is-active" : ""}`}
+            >
+              📚 20 Đề Thi ETS
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeToeicSub === "dictation"}
+              onClick={() => handleToeicNav("/toeic/dictation")}
+              className={`ge-subnav-btn ds-focusable ${activeToeicSub === "dictation" ? "is-active" : ""}`}
+            >
+              🎧 Dictation Studio
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeToeicSub === "srs"}
+              onClick={() => handleToeicNav("/toeic/mistakes-srs")}
+              className={`ge-subnav-btn ds-focusable ${activeToeicSub === "srs" ? "is-active" : ""}`}
+            >
+              🔄 Sổ Tay Flashcard
             </button>
           </div>
         </div>

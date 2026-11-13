@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
+import taxonomyData from '../../data/toeic/grammar_taxonomy.json';
 
 export default function ToeicHubPage() {
   const [isLight, setIsLight] = useState(true);
   const [targetScore, setTargetScore] = useState(750);
-  const [topics, setTopics] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState('ALL');
   const [userStats, setUserStats] = useState({
     estimatedScore: 625,
@@ -17,20 +17,19 @@ export default function ToeicHubPage() {
     dictationCompleted: 18
   });
 
-  useEffect(() => {
-    // Load topics from taxonomy API
-    fetch('/api/toeic/practice/drill?topicId=GRM_POS_NOUN&limit=1')
-      .then(res => res.json())
-      .then(() => {
-        // Load full taxonomy safely
-        import('../../data/toeic/grammar_taxonomy.json')
-          .then(m => {
-            setTopics(m.default?.topics || m.topics || []);
-          })
-          .catch(() => {});
-      })
-      .catch(() => {});
-  }, []);
+  const topics = taxonomyData?.topics || [];
+
+  const handleSelectView = (v) => {
+    if (v === 'toeic') {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+        window.location.href = '/toeic';
+      }
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+    }
+  };
 
   const featureCards = [
     {
@@ -43,7 +42,7 @@ export default function ToeicHubPage() {
       href: '/toeic/diagnostic',
       stats: '3 Chặng • IRT 3PL EAP',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <polygon points="12 8 8 12 12 16 16 12 12 8" />
         </svg>
@@ -59,7 +58,7 @@ export default function ToeicHubPage() {
       href: '/toeic/practice/GRM_POS_NOUN',
       stats: '24 Chủ Điểm • Lời giải 3 bước',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20M12 2v20" />
           <circle cx="12" cy="12" r="4" />
         </svg>
@@ -68,14 +67,14 @@ export default function ToeicHubPage() {
     {
       id: 'tests',
       title: 'Kho 20 Đề Thi Chuẩn ETS 2024 & 2026',
-      desc: '4.000 câu hỏi chia đôi màn hình Split-Passage Reader, cuộn độc lập và tự động tìm dẫn chứng Auto-Highlight.',
+      desc: '4.000 câu hỏi chia đôi màn hình Split-Passage Reader, cuộn độc lập và tự động đối chiếu dẫn chứng Auto-Highlight.',
       badge: '20 Đề Thi • 4.000 Câu',
       badgeVariant: 'warning',
       cta: 'Chọn Đề Luyện Thi',
       href: '/toeic/tests',
       stats: 'ETS 2024 & ETS 2026',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
@@ -84,48 +83,34 @@ export default function ToeicHubPage() {
     {
       id: 'dictation',
       title: 'Phòng Nghe Chép Chính Tả (Dictation)',
-      desc: '540 tracks luyện nghe chép từ ETS 2026 với ô điền từ cloze, kiểm tra tức thì phím Space/Enter và sóng âm thanh.',
+      desc: '540 tracks luyện nghe chép từ ETS 2026 với ô điền cloze, kiểm tra tức thì phím Space/Enter và Spaced Repetition.',
       badge: '540 Tracks • ETS 2026',
       badgeVariant: 'primary',
       cta: 'Vào Phòng Nghe',
       href: '/toeic/dictation',
       stats: 'Sóng âm • 0.8x - 1.2x',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
           <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
           <line x1="12" y1="19" x2="12" y2="23" />
           <line x1="8" y1="23" x2="16" y2="23" />
         </svg>
       )
-    },
-    {
-      id: 'srs',
-      title: 'Sổ Tay Câu Sai & Từ Vựng (SRS)',
-      desc: 'Ôn tập câu làm sai và từ vựng trọng tâm theo chu kỳ ngắt quãng SM-2 (1 - 3 - 7 - 14 ngày) với thẻ lật 3D.',
-      badge: 'Spaced Repetition • SM-2',
-      badgeVariant: 'danger',
-      cta: 'Mở Sổ Tay Ôn Tập',
-      href: '/toeic/mistakes-srs',
-      stats: '15 Mẫu lỗi tư duy',
-      icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="23 4 23 10 17 10" />
-          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-        </svg>
-      )
     }
   ];
 
-  // Group topics into 6 logical pedagogical categories
+  // 8 Canonical Pedagogical Groups in TOEIC Taxonomy
   const topicGroups = [
     { code: 'ALL', name: 'Tất cả (24 Chủ Điểm)' },
-    { code: 'RADAR_POS', name: '1. Từ Loại & Cụm Từ' },
-    { code: 'RADAR_VERB', name: '2. Động Từ & Thì' },
-    { code: 'RADAR_CLAUSE', name: '3. Mệnh Đề & Liên Từ' },
-    { code: 'RADAR_ADVANCED', name: '4. Cấu Trúc Nâng Cao' },
-    { code: 'RADAR_READING', name: '5. Đọc Hiểu Part 6 & 7' },
-    { code: 'RADAR_LISTENING', name: '6. Nghe Hiểu Part 1 - 4' }
+    { code: 'G1_POS', name: '1. Từ Loại & Vị Trí (4)' },
+    { code: 'G2_VERB', name: '2. Động Từ & Thì (5)' },
+    { code: 'G3_PRON', name: '3. Đại Từ & Quan Hệ (2)' },
+    { code: 'G4_CONN', name: '4. Giới Từ & Liên Từ (4)' },
+    { code: 'G5_MOD', name: '5. So Sánh & Đảo Ngữ (2)' },
+    { code: 'G6_VOC_COH', name: '6. Từ Vựng & Part 6 (3)' },
+    { code: 'G7_READING', name: '7. Đọc Hiểu Part 7 (2)' },
+    { code: 'G8_LISTENING', name: '8. Nghe Hiểu Part 1-4 (2)' }
   ];
 
   const filteredTopics = selectedGroup === 'ALL'
@@ -140,12 +125,9 @@ export default function ToeicHubPage() {
       </Head>
 
       <AppShell2026
-        activeView="study"
-        onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
-        }}
+        activeView="toeic"
+        toeicSubView="hub"
+        onSelectView={handleSelectView}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="TOEIC AI Test & Practice Hub"
@@ -153,7 +135,7 @@ export default function ToeicHubPage() {
         <div className="toeic-page-wrap">
           <div className="toeic-container">
 
-            {/* HERO BANNER (Milestone U2.1) */}
+            {/* HERO BANNER (Milestone U2.1) - Streamlined, Calm, Balanced */}
             <div className="toeic-card-hero" style={{ marginBottom: '2rem' }}>
               <div className="toeic-hero-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -197,14 +179,25 @@ export default function ToeicHubPage() {
                   </ToeicButton>
                 </Link>
 
-                <a href="#topics" style={{ textDecoration: 'none' }}>
+                <Link href="/toeic/tests" style={{ textDecoration: 'none' }}>
                   <ToeicButton size="lg" variant="secondary" icon={
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                  }>
+                    Kho 20 Đề Thi ETS
+                  </ToeicButton>
+                </Link>
+
+                <a href="#topics" style={{ textDecoration: 'none' }}>
+                  <ToeicButton size="lg" variant="ghost" icon={
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="3" />
                       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                     </svg>
                   }>
-                    Khám Phá 24 Chủ Điểm
+                    24 Chủ Điểm X-Ray
                   </ToeicButton>
                 </a>
               </div>
@@ -230,11 +223,11 @@ export default function ToeicHubPage() {
               </div>
             </div>
 
-            {/* BENTO FEATURE CARDS - ZONE 2 */}
+            {/* BENTO FEATURE CARDS - ZONE 2 (Clean 2x2 or 4-col Grid) */}
             <div style={{ marginBottom: '2.5rem' }}>
               <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
                 <div>
-                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.4rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
+                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.35rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
                     Các Phân Hệ Học &amp; Luyện Thi
                   </h2>
                   <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
@@ -243,12 +236,12 @@ export default function ToeicHubPage() {
                 </div>
               </div>
 
-              <div className="toeic-grid-3">
+              <div className="toeic-grid-2" style={{ gap: '1.25rem' }}>
                 {featureCards.map(fc => (
                   <Link key={fc.id} href={fc.href} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div className="toeic-card toeic-card-interactive" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div>
-                        <div className="toeic-flex-between" style={{ marginBottom: '1rem' }}>
+                        <div className="toeic-flex-between" style={{ marginBottom: '0.85rem' }}>
                           <span style={{ color: 'var(--ds-accent)' }}>{fc.icon}</span>
                           <ToeicBadge variant={fc.badgeVariant}>{fc.badge}</ToeicBadge>
                         </div>
@@ -278,7 +271,7 @@ export default function ToeicHubPage() {
             <div id="topics" style={{ marginBottom: '3rem' }}>
               <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
                 <div>
-                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.4rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
+                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.35rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
                     24 Chủ Điểm Ngữ Pháp &amp; Kỹ Năng Trọng Tâm
                   </h2>
                   <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>

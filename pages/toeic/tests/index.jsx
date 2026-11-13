@@ -10,6 +10,18 @@ export default function TestsCatalogPage() {
 
   const tests = Array.from({ length: 10 }, (_, i) => i + 1);
 
+  const handleSelectView = (v) => {
+    if (v === 'toeic') {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+        window.location.href = '/toeic';
+      }
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -18,13 +30,9 @@ export default function TestsCatalogPage() {
       </Head>
 
       <AppShell2026
-        activeView="quiz"
-        onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'study') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
-        }}
+        activeView="toeic"
+        toeicSubView="tests"
+        onSelectView={handleSelectView}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="20 Đề Thi Chuẩn ETS"

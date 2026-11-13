@@ -118,27 +118,40 @@ export default function BossGatePage() {
       </Head>
 
       <AppShell2026
-        activeView="quiz"
+        activeView="toeic"
+        toeicSubView="hub"
         onSelectView={(v) => {
-          if (v === 'dashboard') window.location.href = '/';
-          else if (v === 'study') window.location.href = '/';
-          else if (v === 'vip') window.location.href = '/';
-          else if (v === 'gamification') window.location.href = '/';
+          if (v === 'toeic') {
+            if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+              window.location.href = '/toeic';
+            }
+            return;
+          }
+          if (typeof window !== 'undefined') {
+            window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
+          }
         }}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="Boss Gate Checkpoint"
       >
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6" style={{ backgroundColor: 'var(--ds-background)' }}>
-          <div className="max-w-4xl mx-auto space-y-6">
+        <div className="toeic-page-wrap">
+          <div className="toeic-container" style={{ maxWidth: '860px' }}>
             {/* BACK TO HUB */}
-            <div className="flex items-center justify-between">
+            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
               <a
                 href="/toeic"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: 'var(--ds-primary)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: 'var(--ds-accent)',
+                  textDecoration: 'none'
+                }}
               >
-                <span>← Quay lại TOEIC Hub</span>
+                <span>&larr; Quay lại TOEIC Hub</span>
               </a>
 
               {/* COUNTDOWN TIMER */}
@@ -343,7 +356,7 @@ export default function BossGatePage() {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </AppShell2026>
     </>
   );
