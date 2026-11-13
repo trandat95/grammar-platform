@@ -105,37 +105,60 @@ export default function TopicPracticePage() {
 
             {/* PROGRESS BAR */}
             {questions.length > 0 && (
-              <div className="p-4 rounded-xl border flex items-center justify-between gap-4"
-                   style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm" style={{ color: 'var(--ds-text-primary)' }}>
+              <div
+                className="toeic-card"
+                style={{
+                  padding: '0.85rem 1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '1rem',
+                  marginBottom: '1rem'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--ds-text)' }}>
                     Câu {currentIndex + 1} / {questions.length}
                   </span>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded"
-                        style={{ backgroundColor: 'var(--ds-success-subtle)', color: 'var(--ds-success)' }}>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '0.35rem',
+                      backgroundColor: 'var(--ds-success-bg)',
+                      color: 'var(--ds-success)'
+                    }}
+                  >
                     Đúng: {correctCount} câu
                   </span>
                 </div>
 
                 {/* Progress Indicators */}
-                <div className="flex items-center gap-1">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', overflowX: 'auto' }}>
                   {questions.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => setCurrentIndex(i)}
-                      className={`w-6 h-6 rounded-md text-[11px] font-bold transition-all ${
-                        i === currentIndex ? 'ring-2 ring-[var(--ds-primary)]' : ''
-                      }`}
                       style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '0.35rem',
+                        fontSize: '0.7rem',
+                        fontWeight: 800,
+                        border: i === currentIndex ? '1.5px solid var(--ds-accent)' : '1px solid var(--ds-border)',
                         backgroundColor: i < currentIndex
-                          ? 'var(--ds-primary)'
+                          ? 'var(--ds-accent)'
                           : i === currentIndex
-                          ? 'var(--ds-primary-subtle)'
-                          : 'var(--ds-surface-secondary)',
+                          ? 'var(--ds-accent-bg)'
+                          : 'var(--ds-card)',
                         color: i < currentIndex
-                          ? 'var(--ds-surface)'
-                          : 'var(--ds-text-primary)'
+                          ? '#ffffff'
+                          : i === currentIndex
+                          ? 'var(--ds-accent)'
+                          : 'var(--ds-text)',
+                        cursor: 'pointer'
                       }}
                     >
                       {i + 1}
@@ -147,27 +170,24 @@ export default function TopicPracticePage() {
 
             {/* MAIN SENTENCE X-RAY CARD */}
             {isLoading ? (
-              <div className="min-h-[350px] flex flex-col items-center justify-center p-8 text-center space-y-3">
-                <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-                     style={{ borderColor: 'var(--ds-primary)', borderTopColor: 'transparent' }} />
-                <p className="text-sm font-semibold" style={{ color: 'var(--ds-text-muted)' }}>
+              <div style={{ minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', textAlign: 'center' }}>
+                <div style={{ width: '32px', height: '32px', border: '3px solid var(--ds-accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
                   Đang tải ngân hàng câu hỏi Sentence X-Ray...
                 </p>
               </div>
             ) : errorMsg ? (
-              <div className="rounded-2xl p-6 border text-center space-y-3"
-                   style={{ backgroundColor: 'var(--ds-danger-subtle)', borderColor: 'var(--ds-danger)' }}>
-                <p className="text-sm font-bold" style={{ color: 'var(--ds-danger)' }}>{errorMsg}</p>
+              <div className="toeic-card" style={{ textAlign: 'center', padding: '2rem', border: '1px solid var(--ds-danger-border)', backgroundColor: 'var(--ds-danger-bg)' }}>
+                <p style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ds-danger)', marginBottom: '1rem' }}>{errorMsg}</p>
                 <a
                   href="/toeic"
-                  className="inline-block px-4 py-2 rounded-xl text-xs font-bold"
-                  style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
+                  className="toeic-btn toeic-btn-primary"
                 >
                   Quay Lại Hub
                 </a>
               </div>
             ) : currentQ ? (
-              <div className="space-y-4">
+              <div>
                 <SentenceXRayCard
                   question={currentQ}
                   onAnswerSubmit={({ isCorrect }) => {
@@ -182,35 +202,31 @@ export default function TopicPracticePage() {
                 />
 
                 {/* BOTTOM NAVIGATION */}
-                <div className="flex items-center justify-between pt-2">
+                <div className="toeic-flex-between" style={{ marginTop: '1.25rem' }}>
                   <button
                     type="button"
                     disabled={currentIndex === 0}
                     onClick={() => setCurrentIndex(prev => prev - 1)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold border transition-all disabled:opacity-40"
-                    style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
+                    className="toeic-btn toeic-btn-secondary"
+                    style={{ opacity: currentIndex === 0 ? 0.4 : 1, cursor: currentIndex === 0 ? 'default' : 'pointer' }}
                   >
-                    ← Câu trước
+                    &larr; Câu trước
                   </button>
 
                   {currentIndex < questions.length - 1 ? (
                     <button
                       type="button"
                       onClick={() => setCurrentIndex(prev => prev + 1)}
-                      className="px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                      style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
+                      className="toeic-btn toeic-btn-primary"
                     >
-                      <span>Câu tiếp theo</span>
-                      <span>→</span>
+                      <span>Câu tiếp theo &rarr;</span>
                     </button>
                   ) : (
                     <a
                       href="/toeic"
-                      className="px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                      style={{ backgroundColor: 'var(--ds-success)', color: 'var(--ds-surface)' }}
+                      className="toeic-btn toeic-btn-success"
                     >
-                      <span>Hoàn Thành 15 Câu • Về Hub</span>
-                      <span>✓</span>
+                      <span>Hoàn Thành 15 Câu • Về Hub ✓</span>
                     </a>
                   )}
                 </div>

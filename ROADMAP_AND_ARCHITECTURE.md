@@ -2757,23 +2757,23 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Khôi phục trạng thái bài thi khi F5, cảnh báo rời trang ngẫu nhiên, bảo vệ chống nộp bài trùng lặp.
 
 #### 2.14-D: Milestone U4 - Sentence X-Ray – Advanced Grammar Visualization (P0)
-- [ ] **2.14.16 Four Interaction States Machine (AC-U4.1):**
+- [x] **2.14.16 Four Interaction States Machine (AC-U4.1):**
   * State 1 (Câu gốc & từ đích), State 2 (Bóc tách cấu trúc câu Subject, Verb, Object, Adverb), State 3 (Công thức ngữ pháp `.ge-formula-box`), State 4 (Thực hành & Twin Questions).
-- [ ] **2.14.17 Part-of-Speech Interactive Analysis (AC-U4.2):**
+- [x] **2.14.17 Part-of-Speech Interactive Analysis (AC-U4.2):**
   * Nhấn vào từng từ hoặc cụm từ để mở phân loại từ loại, vai trò ngữ pháp, nghĩa ngữ cảnh và từ họ liên quan.
-- [ ] **2.14.18 Formula Box Variants (AC-U4.3):**
+- [x] **2.14.18 Formula Box Variants (AC-U4.3):**
   * Thiết kế các biến thể `.ge-formula-box` cho Công thức chuẩn, Quy tắc quan trọng, Ngoại lệ, Bẫy thường gặp và Mẹo thi.
-- [ ] **2.14.19 Twin Questions Sliding Drawer (AC-U4.4):**
+- [x] **2.14.19 Twin Questions Sliding Drawer (AC-U4.4):**
   * Khay trượt chứa 2 câu hỏi sinh đôi (1 câu củng cố nền tảng, 1 câu nâng cao tư duy) xuất hiện ngay khi làm sai, kèm phản hồi tức thì.
 
 #### 2.14-E: Milestone U5 - Split Passage Reader – Advanced Reading Workspace (P0)
-- [ ] **2.14.20 Split-Screen Reading Workspace (AC-U5.1):**
+- [x] **2.14.20 Split-Screen Reading Workspace (AC-U5.1):**
   * Khung bài đọc bên trái và khung câu hỏi bên phải cuộn độc lập, đồng bộ điều hướng câu hỏi, responsive chia tỉ lệ.
-- [ ] **2.14.21 Synchronized Evidence Auto-Highlighting (AC-U5.2):**
+- [x] **2.14.21 Synchronized Evidence Auto-Highlighting (AC-U5.2):**
   * Tự động làm sáng đoạn dẫn chứng trong bài đọc và cuộn mượt (smooth scroll) đến đúng vị trí khi học viên xem câu hỏi hoặc giải thích.
-- [ ] **2.14.22 Multi-Passage Reading Support & Table Rendering (AC-U5.3):**
+- [x] **2.14.22 Multi-Passage Reading Support & Table Rendering (AC-U5.3):**
   * Hỗ trợ Single, Double, Triple passages với tab chuyển đổi, định dạng bảng biểu sắc nét cho hóa đơn, lịch trình, biểu giá.
-- [ ] **2.14.23 Twenty ETS Test Bento Cards (AC-U5.4):**
+- [x] **2.14.23 Twenty ETS Test Bento Cards (AC-U5.4):**
   * Danh mục 20 đề thi (ETS 2024 & ETS 2026 Test 01–10) dạng lưới thẻ Bento sinh động từ kho dữ liệu thực tế, hiển thị điểm số trước đó, thời gian thi và nút làm bài.
 
 #### 2.14-F: Milestone U6 - Dictation Studio – Listening & Vocabulary Learning Ecosystem (P0)

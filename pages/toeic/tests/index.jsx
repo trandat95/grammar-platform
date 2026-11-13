@@ -93,107 +93,121 @@ export default function TestsCatalogPage() {
               </div>
             </div>
 
-            {/* TESTS GRID (Milestone U5.4) */}
+            {/* TESTS BENTO GRID (Milestone U5.4 / AC-U5.4) */}
             <div className="toeic-grid-3">
-              {tests.map(num => (
-                <div key={num} className="toeic-card toeic-card-interactive" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
-                      <ToeicBadge variant="primary">
-                        {selectedSeries}
-                      </ToeicBadge>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-                        200 câu • 120 phút
-                      </span>
+              {tests.map(num => {
+                const isEven = num % 2 === 0;
+                const difficultyText = num <= 3 ? 'Độ khó: Tiêu chuẩn' : num <= 7 ? 'Độ khó: Nâng cao' : 'Độ khó: Chinh phục 850+';
+                const difficultyBadge = num <= 3 ? 'success' : num <= 7 ? 'primary' : 'warning';
+
+                return (
+                  <div key={num} className="toeic-card toeic-card-interactive" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
+                        <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                          <ToeicBadge variant="primary">
+                            {selectedSeries}
+                          </ToeicBadge>
+                          <ToeicBadge variant={difficultyBadge}>
+                            {difficultyText}
+                          </ToeicBadge>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
+                          200 câu • 120p
+                        </span>
+                      </div>
+
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
+                        Đề Thi Số {String(num).padStart(2, '0')}
+                      </h3>
+
+                      <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                        Listening (Part 1-4: 100 câu) &amp; Reading (Part 5-7: 100 câu) chia đôi màn hình Split-Passage Reader &amp; Auto-Highlight dẫn chứng.
+                      </p>
                     </div>
 
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
-                      Test {String(num).padStart(2, '0')}
-                    </h3>
+                    <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border-subtle)' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-text-muted)', marginBottom: '0.5rem' }}>
+                        Luyện theo từng phần:
+                      </div>
 
-                    <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                      Listening (Part 1-4: 100 câu) &amp; Reading (Part 5-7: 100 câu) đầy đủ đáp án &amp; giải thích AI chuyên sâu.
-                    </p>
-                  </div>
+                      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                        <Link
+                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
+                          style={{
+                            flex: 1,
+                            padding: '0.45rem',
+                            textAlign: 'center',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            borderRadius: '0.5rem',
+                            border: '1px solid var(--ds-border)',
+                            backgroundColor: 'var(--ds-card)',
+                            color: 'var(--ds-text)',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          Part 5 (30c)
+                        </Link>
 
-                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border-subtle)' }}>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                        <Link
+                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
+                          style={{
+                            flex: 1,
+                            padding: '0.45rem',
+                            textAlign: 'center',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            borderRadius: '0.5rem',
+                            border: '1px solid var(--ds-border)',
+                            backgroundColor: 'var(--ds-card)',
+                            color: 'var(--ds-text)',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          Part 6 (16c)
+                        </Link>
+
+                        <Link
+                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
+                          style={{
+                            flex: 1,
+                            padding: '0.45rem',
+                            textAlign: 'center',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            borderRadius: '0.5rem',
+                            border: '1px solid var(--ds-border)',
+                            backgroundColor: 'var(--ds-card)',
+                            color: 'var(--ds-text)',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          Part 7 (54c)
+                        </Link>
+                      </div>
+
                       <Link
-                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
-                        style={{
-                          flex: 1,
-                          padding: '0.45rem',
-                          textAlign: 'center',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: '0.5rem',
-                          border: '1px solid var(--ds-border)',
-                          backgroundColor: 'var(--ds-card)',
-                          color: 'var(--ds-text)',
-                          textDecoration: 'none'
-                        }}
+                        href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
+                        style={{ textDecoration: 'none', display: 'block' }}
                       >
-                        Part 5
-                      </Link>
-
-                      <Link
-                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
-                        style={{
-                          flex: 1,
-                          padding: '0.45rem',
-                          textAlign: 'center',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: '0.5rem',
-                          border: '1px solid var(--ds-border)',
-                          backgroundColor: 'var(--ds-card)',
-                          color: 'var(--ds-text)',
-                          textDecoration: 'none'
-                        }}
-                      >
-                        Part 6
-                      </Link>
-
-                      <Link
-                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
-                        style={{
-                          flex: 1,
-                          padding: '0.45rem',
-                          textAlign: 'center',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: '0.5rem',
-                          border: '1px solid var(--ds-border)',
-                          backgroundColor: 'var(--ds-card)',
-                          color: 'var(--ds-text)',
-                          textDecoration: 'none'
-                        }}
-                      >
-                        Part 7
+                        <ToeicButton
+                          variant="primary"
+                          style={{ width: '100%' }}
+                          icon={
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                          }
+                        >
+                          Luyện Full Đề 200 Câu
+                        </ToeicButton>
                       </Link>
                     </div>
-
-                    <Link
-                      href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
-                      style={{ textDecoration: 'none', display: 'block' }}
-                    >
-                      <ToeicButton
-                        variant="primary"
-                        style={{ width: '100%' }}
-                        icon={
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polygon points="5 3 19 12 5 21 5 3" />
-                          </svg>
-                        }
-                      >
-                        Luyện Full Đề Thi (120 Phút)
-                      </ToeicButton>
-                    </Link>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-
           </div>
         </div>
       </AppShell2026>

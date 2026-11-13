@@ -137,36 +137,32 @@ export default function TestSimulationPage() {
             </div>
 
             {isLoading ? (
-              <div className="min-h-[400px] flex flex-col items-center justify-center p-8 text-center space-y-3">
-                <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-                     style={{ borderColor: 'var(--ds-primary)', borderTopColor: 'transparent' }} />
-                <p className="text-sm font-semibold" style={{ color: 'var(--ds-text-muted)' }}>
+              <div style={{ minHeight: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', textAlign: 'center' }}>
+                <div style={{ width: '32px', height: '32px', border: '3px solid var(--ds-accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
                   Đang tải nội dung đề {series} Test {testNum}...
                 </p>
               </div>
             ) : errorMsg ? (
-              <div className="rounded-2xl p-6 border text-center space-y-3"
-                   style={{ backgroundColor: 'var(--ds-danger-subtle)', borderColor: 'var(--ds-danger)' }}>
-                <p className="text-sm font-bold" style={{ color: 'var(--ds-danger)' }}>{errorMsg}</p>
+              <div className="toeic-card" style={{ textAlign: 'center', padding: '2rem', border: '1px solid var(--ds-danger-border)', backgroundColor: 'var(--ds-danger-bg)' }}>
+                <p style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ds-danger)', marginBottom: '1rem' }}>{errorMsg}</p>
                 <a
                   href="/toeic/tests"
-                  className="inline-block px-4 py-2 rounded-xl text-xs font-bold"
-                  style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
+                  className="toeic-btn toeic-btn-primary"
                 >
                   Quay Lại
                 </a>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {/* PART 5 QUESTIONS (SENTENCE X-RAY) */}
                 {mode !== 'part6' && mode !== 'part7' && part5Questions.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-2 border-b"
-                         style={{ borderColor: 'var(--ds-border)' }}>
-                      <h2 className="text-lg font-bold" style={{ color: 'var(--ds-text-primary)' }}>
+                  <div>
+                    <div className="toeic-flex-between" style={{ paddingBottom: '0.5rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1rem' }}>
+                      <h2 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: 'var(--ds-text)' }}>
                         Part 5: Incomplete Sentences ({part5Questions.length} câu)
                       </h2>
-                      <span className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
                         Sentence X-Ray Mode
                       </span>
                     </div>
@@ -184,13 +180,12 @@ export default function TestSimulationPage() {
 
                 {/* PART 6 & PART 7 (SPLIT PASSAGE READER) */}
                 {readingComprehensionQuestions.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-2 border-b"
-                         style={{ borderColor: 'var(--ds-border)' }}>
-                      <h2 className="text-lg font-bold" style={{ color: 'var(--ds-text-primary)' }}>
-                        Part 6 & Part 7: Reading Comprehension & Passages
+                  <div>
+                    <div className="toeic-flex-between" style={{ paddingBottom: '0.5rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1rem' }}>
+                      <h2 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: 'var(--ds-text)' }}>
+                        Part 6 &amp; Part 7: Reading Comprehension &amp; Passages
                       </h2>
-                      <span className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
                         Split-Screen Reader Mode
                       </span>
                     </div>

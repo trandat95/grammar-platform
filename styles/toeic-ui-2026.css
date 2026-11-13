@@ -828,24 +828,55 @@
    8. SENTENCE X-RAY & FORMULA BOX
    ========================================================================== */
 .toeic-formula-box {
-  background-color: var(--ds-success-bg);
-  border: 1.5px solid var(--ds-success-border);
+  background-color: var(--ds-card);
+  border: 1.5px solid var(--ds-border);
   border-radius: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 1.15rem 1.25rem;
   margin: 1.25rem 0;
+  transition: all 0.2s ease;
+}
+
+.toeic-formula-box.standard {
+  background-color: var(--ds-accent-bg);
+  border-color: var(--ds-accent-border);
+}
+
+.toeic-formula-box.critical {
+  background-color: var(--ds-danger-bg);
+  border-color: var(--ds-danger-border);
+}
+
+.toeic-formula-box.trap {
+  background-color: var(--ds-warning-bg);
+  border-color: var(--ds-warning-border);
+}
+
+.toeic-formula-box.tip {
+  background-color: var(--ds-success-bg);
+  border-color: var(--ds-success-border);
+}
+
+.toeic-formula-box.exception {
+  background-color: var(--ds-bg-elevated);
+  border-color: var(--ds-border-strong);
 }
 
 .toeic-formula-title {
   font-size: 0.8rem;
   font-weight: 800;
-  color: var(--ds-success);
+  color: var(--ds-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.35rem;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
+
+.toeic-formula-box.standard .toeic-formula-title { color: var(--ds-accent); }
+.toeic-formula-box.critical .toeic-formula-title { color: var(--ds-danger); }
+.toeic-formula-box.trap .toeic-formula-title { color: var(--ds-warning); }
+.toeic-formula-box.tip .toeic-formula-title { color: var(--ds-success); }
 
 .toeic-formula-text {
   font-family: 'Google Sans', monospace, sans-serif;
@@ -856,20 +887,63 @@
 }
 
 .toeic-anchor-word {
-  background-color: #fef08a;
-  color: #713f12;
+  background-color: var(--ds-warning-bg);
+  color: var(--ds-warning);
+  border: 1px solid var(--ds-warning-border);
   padding: 0.15rem 0.4rem;
   border-radius: 0.35rem;
   font-weight: 700;
 }
 
-[data-theme="dark"] .toeic-anchor-word {
-  background-color: #713f12;
-  color: #fef08a;
+/* Interactive Part-of-Speech Tokens (AC-U4.2) */
+.toeic-pos-token {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  padding: 0.15rem 0.45rem;
+  margin: 0.15rem 0.2rem;
+  border-radius: 0.4rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.toeic-pos-token:hover {
+  background-color: var(--ds-accent-bg);
+  border-color: var(--ds-accent-border);
+  transform: translateY(-1px);
+}
+
+.toeic-pos-token.active {
+  background-color: var(--ds-accent-bg);
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 2px var(--ds-accent-border);
+}
+
+.toeic-pos-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.25rem;
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-accent);
+  border: 1px solid var(--ds-border-subtle);
+  line-height: 1;
+}
+
+.toeic-pos-popover {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-top: 0.75rem;
+  animation: toeicFadeIn 0.2s ease-out;
 }
 
 /* ==========================================================================
-   9. SPLIT-PASSAGE READER
+   9. SPLIT-PASSAGE READER (Milestone U5)
    ========================================================================== */
 .toeic-split-reader {
   display: grid;
@@ -880,7 +954,7 @@
 
 @media (min-width: 1024px) {
   .toeic-split-reader {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 1.5rem;
     align-items: start;
   }
@@ -894,16 +968,17 @@
 }
 
 .toeic-evidence-highlight {
-  background-color: rgba(254, 240, 138, 0.45);
-  border-left: 3px solid #eab308;
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.3s ease;
+  background-color: var(--ds-warning-bg);
+  border-left: 3px solid var(--ds-warning);
+  color: var(--ds-text);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.35rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
 }
 
-[data-theme="dark"] .toeic-evidence-highlight {
-  background-color: rgba(161, 98, 7, 0.4);
-  border-left-color: #facc15;
+.toeic-evidence-highlight.is-focused {
+  box-shadow: 0 0 0 2px var(--ds-warning);
 }
 
 /* ==========================================================================
