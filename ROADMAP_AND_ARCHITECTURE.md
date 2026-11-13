@@ -2852,6 +2852,14 @@ Milestone 2.11 được xem là hoàn thành khi:
 #### 2.15-D: UI/UX Bug Fixes & Layout Optimization (P0)
 - [x] **2.15.9 Khắc phục lỗi hiển thị 24 Chủ điểm rỗng:** Cấu hình chuẩn xác `group_code` trong bộ lọc và bổ sung Empty State thông minh khi lọc nhóm chủ điểm.
 - [x] **2.15.10 Khắc phục lỗi chồng lấn chân thẻ Bento Hub:** Tách biệt layout `fc.stats` và `fc.cta` với `margin-top: auto`, pill nền riêng biệt, `flex-wrap: wrap`, triệt tiêu hoàn toàn hiện tượng va chạm text.
+- [x] **2.15.11 Đồng bộ Định danh Người dùng, Modal Hồ sơ & Theo dõi Học tập Toàn diện (`hooks/useGlobalAuth.js`, `components/auth/UnifiedAuthModal.jsx`):**
+  * Tích hợp `useGlobalAuth` fallback trực tiếp vào `AppShell2026`: Nút tài khoản/đăng nhập hoạt động tức thì trên toàn bộ các trang TOEIC (`/toeic`, `/toeic/tests`, `/toeic/diagnostic`, v.v.).
+  * Tự động nhận diện phiên đăng nhập Supabase (`supabase.auth.getSession()` & `onAuthStateChange`), hiển thị tên học viên, cấp độ gói VIP, chuỗi ngày học (Streak), điểm kinh nghiệm (XP) và số câu đã làm thực tế.
+  * Khi người dùng là Khách (chưa đăng nhập), nút hiển thị `[ Đăng nhập ]` và mở form Đăng nhập / Đăng ký kết nối Supabase Auth; khi đã đăng nhập, mở `AccountProfileCard` cho phép quản trị tài khoản và đăng xuất.
+- [x] **2.15.12 Khắc phục triệt để hiển thị Part 5-6-7 Đề thi & Trải nghiệm Nút "Câu tiếp theo" Tiện dụng:**
+  * Sửa lỗi render Part 5 trong chế độ Full Đề thi (loại bỏ lọc đè `part === 5` khi đang làm trọn vẹn 100 câu Reading).
+  * Khắc phục khoảng trắng Part 6 & 7: Tự động gom nhóm các câu hỏi đọc hiểu theo cùng một `passage_id` hoặc trích đoạn văn bản chung để hiển thị song song bên cạnh câu hỏi.
+  * Bổ sung nút bấm `"Câu tiếp theo →"` nổi bật đặt ngay cạnh các phương án A/B/C/D sau khi chọn đáp án trong chế độ Luyện tập 24 chủ điểm, tối ưu tầm với ngón tay và thao tác chuyển câu siêu tốc.
 
 ---
 
