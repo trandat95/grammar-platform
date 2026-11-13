@@ -23,7 +23,8 @@ export default function SentenceXRayCard({
   question,
   onAnswerSubmit,
   onSaveToSrs,
-  onOpenAiTutor
+  onOpenAiTutor,
+  onNextQuestion
 }) {
   if (!question) return null;
 
@@ -108,7 +109,7 @@ export default function SentenceXRayCard({
     }
   };
 
-  // Keyboard Shortcuts (1-4 / A-D / H)
+  // Keyboard Shortcuts (1-4 / A-D / H / Enter for Next)
   useEffect(() => {
     function handleKeyDown(e) {
       const key = e.key.toUpperCase();
@@ -118,11 +119,16 @@ export default function SentenceXRayCard({
         else if (key === '3' || key === 'C') handleSelectOption('C');
         else if (key === '4' || key === 'D') handleSelectOption('D');
         else if (key === 'H') handleToggleHint();
+      } else if (onNextQuestion && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          onNextQuestion();
+        }
       }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [state, handleSelectOption, handleToggleHint]);
+  }, [state, handleSelectOption, handleToggleHint, onNextQuestion]);
 
   // Pacing Ratio
   const pacingRatio = timeSpentSec / recommendedTime;
@@ -505,6 +511,56 @@ export default function SentenceXRayCard({
           );
         })}
       </div>
+
+      {/* QUICK NEXT STRIP (Within Immediate Reach / Cùng Tầm Với) */}
+      {isSubmitted && onNextQuestion && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '0.75rem',
+            padding: '0.75rem 1rem',
+            borderRadius: 'var(--ds-radius-md)',
+            backgroundColor: 'var(--ds-bg-elevated)',
+            border: '1.5px solid var(--ds-accent)',
+            marginBottom: '1.25rem',
+            boxShadow: 'var(--ds-shadow-sm)',
+            flexWrap: 'wrap'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontSize: '1.1rem' }}>
+              {isCorrect ? '🎉' : '💡'}
+            </span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-text)' }}>
+              {isCorrect ? 'Chính xác!' : `Đáp án đúng là (${question.correct_answer}).`}
+              <span style={{ fontWeight: 500, color: 'var(--ds-text-secondary)', marginLeft: '0.35rem' }}>
+                Đã nắm vững? Bấm Next để làm câu tiếp theo ngay.
+              </span>
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={onNextQuestion}
+            className="toeic-btn toeic-btn-primary"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.55rem 1.15rem',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+              marginLeft: 'auto'
+            }}
+          >
+            <span>Câu Tiếp Theo &rarr;</span>
+            <kbd style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', borderRadius: '4px', backgroundColor: 'var(--ds-bg-elevated)', color: 'var(--ds-accent)' }}>Enter ↵</kbd>
+          </button>
+        </div>
+      )}
 
       {/* 6. POST-SUBMISSION 4-STATE PEDAGOGICAL WORKSPACE (Milestone U4) */}
       {isSubmitted && (

@@ -203,6 +203,12 @@ export default function TopicPracticePage() {
                     setAiTutorContext({ question: q, selectedOption: opt });
                     setIsAiTutorOpen(true);
                   }}
+                  onNextQuestion={() => {
+                    if (currentIndex < questions.length - 1) {
+                      setCurrentIndex(prev => prev + 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
                 />
 
                 {/* AI Tutor Drawer Component */}
