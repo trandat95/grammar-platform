@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../../components/ui-2026/AppShell2026';
+import { ToeicBadge, ToeicButton, ToeicChoiceCard } from '../../../../components/toeic/ui';
 
 export default function BossGatePage() {
   const router = useRouter();
@@ -138,7 +139,7 @@ export default function BossGatePage() {
         <div className="toeic-page-wrap">
           <div className="toeic-container" style={{ maxWidth: '860px' }}>
             {/* BACK TO HUB */}
-            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
+            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
               <a
                 href="/toeic"
                 style={{
@@ -157,15 +158,10 @@ export default function BossGatePage() {
               {/* COUNTDOWN TIMER */}
               {!isFinished && !isLoading && (
                 <div
-                  className="px-4 py-1.5 rounded-full border text-sm font-bold flex items-center gap-2"
-                  style={{
-                    backgroundColor: timeLeftSec < 60 ? 'var(--ds-danger-subtle)' : 'var(--ds-surface)',
-                    borderColor: timeLeftSec < 60 ? 'var(--ds-danger)' : 'var(--ds-border)',
-                    color: timeLeftSec < 60 ? 'var(--ds-danger)' : 'var(--ds-text-primary)'
-                  }}
+                  className={`toeic-pacing-pill ${timeLeftSec < 60 ? 'toeic-pacing-red' : 'toeic-pacing-green'}`}
                 >
                   <span>⏱️ Còn lại:</span>
-                  <span className="font-mono text-base">{timeFormatted}</span>
+                  <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 800 }}>{timeFormatted}</span>
                 </div>
               )}
             </div>
@@ -173,61 +169,61 @@ export default function BossGatePage() {
             {/* RESULTS VIEW */}
             {isFinished && result && (
               <div
-                className="rounded-3xl p-8 border text-center space-y-6 shadow-sm"
+                className="toeic-card"
                 style={{
-                  backgroundColor: 'var(--ds-surface)',
-                  borderColor: result.passed ? 'var(--ds-success)' : 'var(--ds-warning)'
+                  padding: '2.5rem',
+                  textAlign: 'center',
+                  borderColor: result.passed ? 'var(--ds-success)' : 'var(--ds-warning)',
+                  backgroundColor: 'var(--ds-card)'
                 }}
               >
-                <div className="text-4xl">
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
                   {result.passed ? '🏆' : '⚠️'}
                 </div>
 
-                <div className="space-y-2">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold" style={{ color: 'var(--ds-text-primary)' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
                     {result.passed
                       ? 'CHÚC MỪNG! BẠN ĐÃ VƯỢT TRẠM THÀNH CÔNG!'
                       : 'CHƯA ĐẠT CHUẨN VƯỢT TRẠM!'}
                   </h2>
-                  <p className="text-sm" style={{ color: 'var(--ds-text-secondary)' }}>
-                    Độ chính xác: <strong style={{ color: result.passed ? 'var(--ds-success)' : 'var(--ds-danger)' }}>{result.accuracy}%</strong> ({result.correct}/{result.total} câu) • Tiêu chuẩn: ≥ {result.minAcc}%
+                  <p style={{ fontSize: '0.95rem', color: 'var(--ds-text-secondary)', margin: 0 }}>
+                    Độ chính xác: <strong style={{ color: result.passed ? 'var(--ds-success)' : 'var(--ds-danger)' }}>{result.accuracy}%</strong> ({result.correct}/{result.total} câu) • Tiêu chuẩn: &ge; {result.minAcc}%
                   </p>
                 </div>
 
                 {result.passed ? (
-                  <div className="space-y-4 max-w-md mx-auto">
-                    <p className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
+                  <div style={{ maxWidth: '420px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
                       Trạm tiếp theo trong Lộ trình 7 Milestones đã được mở khóa tự động.
                     </p>
                     <a
                       href="/toeic"
-                      className="inline-block px-6 py-3 rounded-xl font-bold text-sm shadow-sm hover:opacity-90 active:scale-95"
-                      style={{ backgroundColor: 'var(--ds-success)', color: 'var(--ds-surface)' }}
+                      className="toeic-btn toeic-btn-success"
+                      style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem' }}
                     >
-                      Tiếp Tục Lộ Trình Vượt Trạm →
+                      Tiếp Tục Lộ Trình Vượt Trạm &rarr;
                     </a>
                   </div>
                 ) : (
-                  <div className="space-y-4 max-w-md mx-auto">
-                    <p className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
+                  <div style={{ maxWidth: '440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
                       Hệ thống đã tự động tạo gói <strong>10 câu Twin Questions</strong> để bạn củng cố các câu làm sai trước khi thi lại Boss Gate!
                     </p>
-                    <div className="flex items-center justify-center gap-3">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
                       <button
                         type="button"
                         onClick={() => window.location.reload()}
-                        className="px-5 py-2.5 rounded-xl font-bold text-xs border"
-                        style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
+                        className="toeic-btn toeic-btn-secondary"
                       >
                         Thi Lại Ngay
                       </button>
 
                       <a
                         href="/toeic/practice/GRM_POS_NOUN"
-                        className="px-5 py-2.5 rounded-xl font-bold text-xs"
-                        style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
+                        className="toeic-btn toeic-btn-primary"
                       >
-                        Luyện Gói Khắc Phục Lỗi →
+                        Luyện Gói Khắc Phục Lỗi &rarr;
                       </a>
                     </div>
                   </div>
@@ -237,10 +233,18 @@ export default function BossGatePage() {
 
             {/* TEST RUNNER */}
             {!isFinished && (
-              <div className="space-y-6">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {/* QUESTION PALETTE */}
-                <div className="p-3 rounded-xl border flex flex-wrap gap-1.5"
-                     style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)' }}>
+                <div
+                  className="toeic-card"
+                  style={{
+                    padding: '0.75rem 1rem',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.35rem',
+                    backgroundColor: 'var(--ds-bg-elevated)'
+                  }}
+                >
                   {questions.map((q, i) => {
                     const isAns = !!answers[q.id];
                     const isCurr = i === currentIndex;
@@ -249,13 +253,12 @@ export default function BossGatePage() {
                         key={q.id || i}
                         type="button"
                         onClick={() => setCurrentIndex(i)}
-                        className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
-                          isCurr ? 'ring-2 ring-[var(--ds-primary)]' : ''
-                        }`}
+                        className={`toeic-palette-btn ${isCurr ? 'current' : isAns ? 'answered' : ''}`}
                         style={{
-                          backgroundColor: isAns ? 'var(--ds-primary)' : 'var(--ds-surface)',
-                          color: isAns ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-                          borderColor: 'var(--ds-border)'
+                          width: '32px',
+                          height: '32px',
+                          fontSize: '0.75rem',
+                          fontWeight: 800
                         }}
                       >
                         {i + 1}
@@ -266,89 +269,68 @@ export default function BossGatePage() {
 
                 {/* CURRENT QUESTION CARD */}
                 {currentQ && (
-                  <div className="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-6"
-                       style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-                    <div className="flex items-center justify-between pb-3 border-b"
-                         style={{ borderColor: 'var(--ds-border)' }}>
-                      <span className="text-xs font-bold px-2.5 py-1 rounded"
-                            style={{ backgroundColor: 'var(--ds-surface-secondary)', color: 'var(--ds-text-primary)' }}>
+                  <div
+                    className="toeic-card"
+                    style={{ padding: '1.75rem' }}
+                  >
+                    <div className="toeic-flex-between" style={{ paddingBottom: '0.75rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem' }}>
+                      <ToeicBadge variant="primary">
                         Câu {currentIndex + 1} / {questions.length}
-                      </span>
-                      <span className="text-xs font-medium" style={{ color: 'var(--ds-text-muted)' }}>
+                      </ToeicBadge>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
                         {currentQ.ai_analysis?.primary_topic_name_vi || currentQ.primary_grammar_topic_id}
                       </span>
                     </div>
 
-                    <div className="text-base sm:text-lg font-medium leading-relaxed" style={{ color: 'var(--ds-text-primary)' }}>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--ds-text)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                       {currentQ.context_sentence || currentQ.stem}
                     </div>
 
                     {/* OPTIONS */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {(['A', 'B', 'C', 'D']).map(optKey => {
+                    <div className="toeic-choice-grid">
+                      {(['A', 'B', 'C', 'D']).map((optKey, idx) => {
                         const optText = currentQ.options?.[optKey];
                         if (!optText) return null;
                         const isSelected = answers[currentQ.id] === optKey;
 
                         return (
-                          <button
+                          <ToeicChoiceCard
                             key={optKey}
-                            type="button"
-                            onClick={() => handleSelectOption(optKey)}
-                            className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all ${
-                              isSelected ? 'ring-2 ring-[var(--ds-primary)] shadow-sm' : 'hover:border-[var(--ds-primary)]'
-                            }`}
-                            style={{
-                              backgroundColor: isSelected ? 'var(--ds-primary-subtle)' : 'var(--ds-surface)',
-                              borderColor: isSelected ? 'var(--ds-primary)' : 'var(--ds-border)'
-                            }}
-                          >
-                            <span className="w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs"
-                                  style={{
-                                    backgroundColor: isSelected ? 'var(--ds-primary)' : 'var(--ds-surface-secondary)',
-                                    color: isSelected ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-                                  }}>
-                              {optKey}
-                            </span>
-                            <span className="text-sm font-medium" style={{ color: 'var(--ds-text-primary)' }}>
-                              {optText}
-                            </span>
-                          </button>
+                            choiceKey={optKey}
+                            text={optText}
+                            selected={isSelected}
+                            onSelect={() => handleSelectOption(optKey)}
+                            shortcut={`Phím ${idx + 1}`}
+                          />
                         );
                       })}
                     </div>
 
                     {/* CONTROLS */}
-                    <div className="flex items-center justify-between pt-4 border-t"
-                         style={{ borderColor: 'var(--ds-border)' }}>
-                      <button
-                        type="button"
+                    <div className="toeic-flex-between" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border)' }}>
+                      <ToeicButton
+                        variant="secondary"
                         disabled={currentIndex === 0}
                         onClick={() => setCurrentIndex(prev => prev - 1)}
-                        className="px-4 py-2 rounded-xl text-xs font-bold border disabled:opacity-40"
-                        style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
+                        icon={<span>&larr;</span>}
                       >
-                        ← Câu trước
-                      </button>
+                        Câu trước
+                      </ToeicButton>
 
                       {currentIndex < questions.length - 1 ? (
-                        <button
-                          type="button"
+                        <ToeicButton
+                          variant="primary"
                           onClick={() => setCurrentIndex(prev => prev + 1)}
-                          className="px-5 py-2 rounded-xl text-xs font-bold"
-                          style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
                         >
-                          Câu tiếp theo →
-                        </button>
+                          Câu tiếp theo &rarr;
+                        </ToeicButton>
                       ) : (
-                        <button
-                          type="button"
+                        <ToeicButton
+                          variant="success"
                           onClick={handleFinishTest}
-                          className="px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm"
-                          style={{ backgroundColor: 'var(--ds-success)', color: 'var(--ds-surface)' }}
                         >
                           Nộp Bài Thi Boss Gate ✓
-                        </button>
+                        </ToeicButton>
                       )}
                     </div>
                   </div>

@@ -64,7 +64,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
-| **TOEIC UI/UX 2026** | **2.14 (U1–U7)** | **TOEIC 2026 – UI/UX Engineering Enhancement (Bento, X-Ray, Split Reader, Dictation, SRS)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — U1–U7 Live on Production) |
+| **TOEIC UI/UX 2026** | **2.14 (U1–U7 & Phase 6)** | **TOEIC 2026 – UI/UX Engineering & Full Closed Loop (Bento, X-Ray, Split Reader, Dictation, SRS, AI Tutor)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — Full Spec U1–U7 & Phase 6 Live on Production) |
 
 ---
 
@@ -123,8 +123,17 @@ grammar-platform/
 │   ├── monetization/                        # Milestone 2.12 Conversion & Behavioral UX UI (Live)
 │   │   ├── MonetizationHub.jsx              # 4 Gói VIP, Checkout VNPay/MoMo/Stripe, Coupon & Cancel 2 Chạm
 │   │   └── SmartPaywallModal.jsx            # Contextual Smart Paywall (6 Triggers, Anti-Dark-Pattern)
-│   └── sync/
-│       └── SyncStatusIndicator.jsx          # Huy hiệu trạng thái đồng bộ đa thiết bị & Telemetry (Live)
+│   ├── sync/
+│   │   └── SyncStatusIndicator.jsx          # Huy hiệu trạng thái đồng bộ đa thiết bị & Telemetry (Live)
+│   └── toeic/                               # Milestones 2.13 (E1-E6) & 2.14 (U1-U7) TOEIC AI Adaptive Suite (Live)
+│       ├── ui/                              # TOEIC Component Kit (ToeicCard, ToeicButton, ToeicBadge, ToeicChoiceCard, ToeicQuestionPalette)
+│       ├── ToeicDiagnosticSession.jsx       # 3-Stage IRT 3PL Adaptive Exam Workspace, Pacing Timer & Stepper
+│       ├── DiagnosticRadarDashboard.jsx     # Score Hero, 6-Axis Capability Radar, Top 3 Focus Cards (FPI) & 15 Error Patterns
+│       ├── MilestoneSkillTree.jsx           # 7-Milestone Station Timeline with Personal Weakness Injection & Boss Gate CTA
+│       ├── SentenceXRayCard.jsx             # 4-State Machine, POS Analysis, 5 Formula Boxes & Twin-Questions Remediation
+│       ├── SplitPassageReader.jsx           # Split-Screen Reading Workspace, Multi-Passage Tabs & Auto-Highlight Evidence
+│       ├── DictationStudio.jsx              # 540 Audio Tracks, SVG Waveform, Multi-Speed & Space/Enter Cloze Validation
+│       └── AITutorDrawer.jsx                # Grounded AI Pedagogical Tutor Slide-over Drawer (RAG Grounded)
 ├── lib/
 │   ├── admin/
 │   │   └── admin-guard.js                   # Server RBAC guard, Rate Limiter (30 req/min/IP) & Step-Up Check (Live)
@@ -2797,6 +2806,15 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Đồng bộ hoàn hảo chế độ sáng/tối qua semantic tokens, kiểm toán độ tương phản văn bản đạt $\ge 4.5:1$.
 - [x] **2.14.32 Automated Accessibility & Regression Testing (AC-U7.4):**
   * Tích hợp kiểm thử tự động, xác nhận hỗ trợ bàn phím, quản lý focus trong modal/drawer và đảm bảo toàn bộ hệ thống cũ hoạt động ổn định.
+
+#### 2.14-H: Phase 6 - End-to-End Pedagogical Closed Loop & System Hardening (P0)
+- [x] **2.14.33 End-to-End Pedagogical Closed Loop Integration (AC-E6.1 / AC-U8.1):**
+  * Vận hành khép kín chu trình học tập thích ứng 6 bước hoàn chỉnh: Chẩn đoán 3 chặng IRT 3PL (`/toeic/diagnostic`) ➔ Phân tích điểm yếu & FPI Top 3 Focus ➔ Cây lộ trình 7 Milestones thích ứng ➔ Luyện tập quang phổ Sentence X-Ray & Tương tác AI Gia Sư (`AITutorDrawer`) ➔ Khắc phục lỗi sai tức thì bằng Twin-Questions & Thi vượt trạm Boss Gate (`/toeic/milestones/[milestoneId]/boss-gate`) ➔ Ôn tập ngắt quãng SRS Flashcards 3D (`/toeic/mistakes-srs`) & Luyện nghe chép chính tả Dictation Studio 540 tracks (`/toeic/dictation`).
+- [x] **2.14.34 Core UI/UX Component Modernization & Zero Tailwind (AC-E6.2 / AC-U8.2):**
+  * Đồng bộ hoá 100% các component cốt lõi (`DiagnosticRadarDashboard.jsx`, `MilestoneSkillTree.jsx`, `AITutorDrawer.jsx`, `boss-gate.jsx`), loại bỏ triệt để mã tiện ích Tailwind CSS, chuyển sang Vanilla CSS Tokens (`--ds-*`) và Bento Design System 2026.
+- [x] **2.14.35 Automated Test Coverage & Zero-Defect Production Verification (AC-E6.3 / AC-U8.3):**
+  * Toàn bộ 6 test suite `scripts/validate-toeic-full.py` và `scripts/validate-design-tokens.py` đạt 100% PASS, 0 token violation, độ tương phản WCAG 2.2 AA $\ge 4.5:1$.
+  * Bảo tồn toàn vẹn 4.000 câu hỏi ETS, 540 audio tracks, 24 chủ điểm ngữ pháp, 15 mẫu lỗi nhận thức và 2.939 câu hỏi nền tảng Mai Lan Hương.
 
 ---
 
