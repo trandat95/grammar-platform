@@ -36,7 +36,8 @@ def main():
         'scripts/validate-toeic-milestone-e3.py',
         'scripts/validate-toeic-milestone-e4.py',
         'scripts/validate-toeic-milestone-e5.py',
-        'scripts/validate-toeic-milestone-e6.py'
+        'scripts/validate-toeic-milestone-e6.py',
+        'scripts/validate-toeic-milestone-e7.py'
     ]
 
     for s in scripts:
@@ -45,7 +46,7 @@ def main():
             sys.exit(1)
 
     print("\n=================================================================")
-    print("🎉 ALL 6 TOEIC MILESTONES (E1 - E6) VERIFIED SUCCESSFULLY [PASS]!")
+    print("🎉 ALL 7 TOEIC MILESTONES (E1 - E7) VERIFIED SUCCESSFULLY [PASS]!")
     print("=================================================================")
     sys.exit(0)
 

@@ -1,5 +1,6 @@
 import { checkApiRateLimit, sendSafeServerError, getCorrelationId } from '../../../../lib/api/security-guard';
 import ToeicRepository from '../../../../lib/toeic/toeic-repository';
+import { verifyAiTutorServerAccess } from '../../../../lib/toeic/subscription/server-gate';
 
 export default async function handler(req, res) {
   const correlationId = getCorrelationId(req);
@@ -11,6 +12,17 @@ export default async function handler(req, res) {
 
   if (!checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 40, tier: 'toeic_ai_tutor' })) {
     return;
+  }
+
+  // Server-side entitlement check for AI Tutor (Milestone E7.1)
+  const authGate = await verifyAiTutorServerAccess(req);
+  if (!authGate.allowed) {
+    return res.status(403).json({
+      success: false,
+      code: 'ERR_AI_TUTOR_LIMIT_REACHED',
+      error: authGate.reason,
+      upgradeRequired: true
+    });
   }
 
   try {

@@ -65,6 +65,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
 | **TOEIC UI/UX 2026** | **2.14 (U1–U7 & Phase 6)** | **TOEIC 2026 – UI/UX Engineering & Full Closed Loop (Bento, X-Ray, Split Reader, Dictation, SRS, AI Tutor)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — Full Spec U1–U7 & Phase 6 Live on Production) |
+| **TOEIC Premium & FOMO** | **2.15 (Milestone E7)** | **TOEIC Premium Experience, Ethical FOMO & Smart Paywall Engine (Locked Progression, Preview Teasers, 3-Tier Paywall)** | **P0 (Business & Monetization)** | ✅ Hoàn thành (100% — Full Spec E7 Live on Production) |
 
 ---
 
@@ -2815,6 +2816,42 @@ Milestone 2.11 được xem là hoàn thành khi:
 - [x] **2.14.35 Automated Test Coverage & Zero-Defect Production Verification (AC-E6.3 / AC-U8.3):**
   * Toàn bộ 6 test suite `scripts/validate-toeic-full.py` và `scripts/validate-design-tokens.py` đạt 100% PASS, 0 token violation, độ tương phản WCAG 2.2 AA $\ge 4.5:1$.
   * Bảo tồn toàn vẹn 4.000 câu hỏi ETS, 540 audio tracks, 24 chủ điểm ngữ pháp, 15 mẫu lỗi nhận thức và 2.939 câu hỏi nền tảng Mai Lan Hương.
+
+---
+
+### 🌟 2.15: TOEIC Milestone E7 – Premium Experience, Ethical FOMO & Conversion Engine (P0)
+
+#### 2.15-A: Premium Entitlement & Access Control Architecture (P0)
+- [x] **2.15.1 Centralized Entitlement Engine (`lib/toeic/subscription/toeic-entitlement.js`):**
+  * Định nghĩa tập trung `TOEIC_FEATURE_KEYS`, `TOEIC_TIERS` (FREE, VIP, ADMIN), `FREE_TIER_LIMITS` và `MILESTONE_ACCESS_MATRIX`.
+  * Hàm `getMilestoneAccessStatus(milestoneId, userRole, isMilestoneCompleted)` kiểm tra quyền truy cập chính xác, đảm bảo không bao giờ khóa lại các trạm người dùng Free đã hoàn thành.
+- [x] **2.15.2 Server-Side Authorization Guards (`lib/toeic/subscription/server-gate.js`):**
+  * Kiểm tra token Supabase Auth và phân quyền trực tiếp từ bảng `profiles` (role: VIP/ADMIN).
+  * Hàm `verifyMilestoneServerAccess` và `verifyAiTutorServerAccess` chặn bypass client-side.
+- [x] **2.15.3 Client Entitlement Hook (`hooks/useToeicEntitlement.js`):**
+  * Lắng nghe Supabase session, cung cấp cờ `isVip`, hàm `canAccessMilestone`, `checkFeature`, `openPaywall`, `closePaywall`.
+
+#### 2.15-B: Locked Progression & Non-invasive Curiosity Engine (P0)
+- [x] **2.15.4 Locked Progression trên Cây Lộ Trình (`components/toeic/MilestoneSkillTree.jsx`):**
+  * Trạm 1 & 2: Full Access cho người dùng Free. Trạm 3: Partial Access. Trạm 4 đến 7: Hiển thị trạng thái `🔒 VIP Premium` kèm nút `✨ Mở Khóa VIP Trạm Này`.
+  * Không khóa lại tiến độ đã đạt được của học viên Free (`isMilestoneCompleted` giữ quyền truy cập).
+- [x] **2.15.5 Curiosity & Preview Teaser Gate (`components/toeic/premium/ToeicFeatureGate.jsx`):**
+  * Bọc nội dung nâng cao với hiệu ứng mờ nhẹ (`blur(4px)`), hiển thị thẻ teaser nổi bật và nút CTA mở paywall rõ ràng, minh bạch.
+- [x] **2.15.6 Ethical FOMO & Zero Dark Patterns:**
+  * Không sử dụng đồng hồ đếm ngược giả, không giảm giá ảo ("sale sập sàn 90% còn 15 phút"), không khóa tính năng cơ bản đã học.
+  * Mọi thông báo dựa trên dữ liệu học tập thực tế của người dùng (mẫu lỗi sai nhận thức, số câu đã hoàn thành).
+
+#### 2.15-C: Smart Paywall Triggers & Bento Grid 2026 Paywall Modal (P0)
+- [x] **2.15.7 Smart Paywall Trigger Engine (`lib/toeic/subscription/paywall-trigger-manager.js`):**
+  * 7 điểm kích hoạt thông minh (`TRG_01_MILESTONE_LOCKED` đến `TRG_07_PROMOTION_BANNER`).
+  * Cơ chế bảo vệ trải nghiệm (Fatigue Protection): Tối đa 2 lần hiển thị / phiên, giãn cách tối thiểu 12 giờ cho cùng một trigger.
+- [x] **2.15.8 Bento Grid 2026 Paywall Modal (`components/toeic/premium/ToeicSmartPaywallModal.jsx`):**
+  * 3 gói nâng cấp rõ ràng: 1 Tháng (199.000đ), 1 Năm (990.000đ - Tiết kiệm 58%), Trọn Đời (1.890.000đ).
+  * Bảng so sánh tính năng Free vs VIP minh bạch, định tuyến trực tiếp về `/?view=vip`.
+
+#### 2.15-D: UI/UX Bug Fixes & Layout Optimization (P0)
+- [x] **2.15.9 Khắc phục lỗi hiển thị 24 Chủ điểm rỗng:** Cấu hình chuẩn xác `group_code` trong bộ lọc và bổ sung Empty State thông minh khi lọc nhóm chủ điểm.
+- [x] **2.15.10 Khắc phục lỗi chồng lấn chân thẻ Bento Hub:** Tách biệt layout `fc.stats` và `fc.cta` với `margin-top: auto`, pill nền riêng biệt, `flex-wrap: wrap`, triệt tiêu hoàn toàn hiện tượng va chạm text.
 
 ---
 

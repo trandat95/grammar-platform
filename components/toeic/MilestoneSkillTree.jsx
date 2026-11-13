@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ToeicBadge, ToeicButton } from './ui';
+import useToeicEntitlement from '../../hooks/useToeicEntitlement';
+import ToeicSmartPaywallModal from './premium/ToeicSmartPaywallModal';
 
 /**
- * MilestoneSkillTree Component (Milestone E3, Section 5.4 & U3.4)
+ * MilestoneSkillTree Component (Milestones E3 & E7)
  * Renders the 7-Milestone Skill Tree with personal weakness injection,
- * drill progress counters, and Boss Gate evaluation checkpoints.
+ * drill progress counters, Boss Gate evaluation checkpoints,
+ * and Locked Progression with Ethical FOMO for Free users.
  * Strict Design Token Discipline: var(--ds-*).
  */
 export default function MilestoneSkillTree({
@@ -12,6 +15,16 @@ export default function MilestoneSkillTree({
   onStartDrill,
   onStartBossGate
 }) {
+  const {
+    isVip,
+    canAccessMilestone,
+    isPaywallOpen,
+    paywallTrigger,
+    paywallContext,
+    openPaywall,
+    closePaywall
+  } = useToeicEntitlement();
+
   if (!milestones || milestones.length === 0) {
     return (
       <div className="toeic-card" style={{ textAlign: 'center', padding: '2.5rem' }}>
@@ -36,7 +49,7 @@ export default function MilestoneSkillTree({
         </div>
 
         {/* Legend */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.75rem', fontWeight: 700 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.75rem', fontWeight: 700, flexWrap: 'wrap' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-success)' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-success)' }} />
             Đã hoàn thành
@@ -44,6 +57,10 @@ export default function MilestoneSkillTree({
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-accent)' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-accent)' }} />
             Đang học
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-warning)' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-warning)' }} />
+            VIP Premium
           </span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'var(--ds-text-muted)' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--ds-border)' }} />
@@ -59,6 +76,10 @@ export default function MilestoneSkillTree({
           const isInProgress = ms.status === 'IN_PROGRESS';
           const isLocked = ms.status === 'LOCKED';
 
+          // Entitlement check: Can this user access this milestone?
+          const hasAccess = canAccessMilestone(ms.milestone_id, isCompleted);
+          const isVipLocked = !hasAccess;
+
           const injectedTopics = ms.injected_weak_topic_ids_json || [];
           const focusTopics = ms.focus_topic_ids || [];
           const progressPct = Math.min(100, Math.round(((ms.completed_drill_questions || 0) / (ms.required_drill_questions || 48)) * 100));
@@ -66,8 +87,17 @@ export default function MilestoneSkillTree({
           return (
             <div key={ms.milestone_id || index} style={{ position: 'relative' }}>
               {/* NODE ICON / BULLET */}
-              <div className={`toeic-timeline-node ${isCompleted ? 'completed' : isInProgress ? 'in-progress' : ''}`}>
-                {isCompleted ? '✓' : ms.milestone_order || index + 1}
+              <div
+                className={`toeic-timeline-node ${
+                  isCompleted ? 'completed' : isVipLocked ? 'vip-locked' : isInProgress ? 'in-progress' : ''
+                }`}
+                style={
+                  isVipLocked
+                    ? { borderColor: 'var(--ds-warning)', color: 'var(--ds-warning)' }
+                    : {}
+                }
+              >
+                {isCompleted ? '✓' : isVipLocked ? '🔒' : ms.milestone_order || index + 1}
               </div>
 
               {/* CARD CONTAINER */}
@@ -75,16 +105,41 @@ export default function MilestoneSkillTree({
                 className="toeic-card"
                 style={{
                   padding: '1.5rem',
-                  border: isInProgress ? '1.5px solid var(--ds-accent)' : '1px solid var(--ds-border)',
-                  boxShadow: isInProgress ? '0 4px 16px rgba(37,99,235,0.08)' : '0 1px 3px rgba(0,0,0,0.02)',
-                  opacity: isLocked ? 0.75 : 1.0
+                  border: isVipLocked
+                    ? '1.5px dashed var(--ds-warning)'
+                    : isInProgress
+                    ? '1.5px solid var(--ds-accent)'
+                    : '1px solid var(--ds-border)',
+                  boxShadow: isInProgress
+                    ? 'var(--ds-shadow-md)'
+                    : 'var(--ds-shadow-sm)',
+                  opacity: isLocked && !isVipLocked ? 0.75 : 1.0,
+                  backgroundColor: isVipLocked
+                    ? 'var(--ds-surface)'
+                    : 'var(--ds-card)'
                 }}
               >
                 <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                      <ToeicBadge variant={isCompleted ? 'success' : isInProgress ? 'primary' : 'muted'}>
-                        {isCompleted ? 'Trạm Đã Đạt' : isInProgress ? 'Trạm Hiện Tại' : 'Chưa Mở Khóa'}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
+                      <ToeicBadge
+                        variant={
+                          isCompleted
+                            ? 'success'
+                            : isVipLocked
+                            ? 'warning'
+                            : isInProgress
+                            ? 'primary'
+                            : 'muted'
+                        }
+                      >
+                        {isCompleted
+                          ? 'Trạm Đã Đạt'
+                          : isVipLocked
+                          ? '🔒 VIP Premium'
+                          : isInProgress
+                          ? 'Trạm Hiện Tại'
+                          : 'Chưa Mở Khóa'}
                       </ToeicBadge>
 
                       <span
@@ -92,9 +147,10 @@ export default function MilestoneSkillTree({
                           fontSize: '0.75rem',
                           fontWeight: 700,
                           padding: '0.15rem 0.5rem',
-                          borderRadius: '0.35rem',
+                          borderRadius: 'var(--ds-radius-sm)',
                           backgroundColor: 'var(--ds-bg-elevated)',
-                          color: 'var(--ds-text-secondary)'
+                          color: 'var(--ds-text-secondary)',
+                          border: '1px solid var(--ds-border-subtle)'
                         }}
                       >
                         Mục tiêu Band {ms.target_band_score}+
@@ -108,32 +164,56 @@ export default function MilestoneSkillTree({
 
                   {/* ACTION BUTTONS */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    {isInProgress && (
+                    {isVipLocked ? (
                       <button
                         type="button"
-                        onClick={() => onStartDrill && onStartDrill(ms)}
-                        className="toeic-btn toeic-btn-primary"
-                        style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
+                        onClick={() =>
+                          openPaywall('TRG_01_MILESTONE_LOCKED', {
+                            milestoneId: ms.milestone_id,
+                            title: ms.title_vi
+                          })
+                        }
+                        className="toeic-btn toeic-btn-warning"
+                        style={{
+                          padding: '0.45rem 1rem',
+                          fontSize: '0.8rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem'
+                        }}
                       >
-                        ⚡ Luyện Trạm Này
+                        <span>✨ Mở Khóa VIP Trạm Này</span>
                       </button>
-                    )}
+                    ) : (
+                      <>
+                        {isInProgress && (
+                          <button
+                            type="button"
+                            onClick={() => onStartDrill && onStartDrill(ms)}
+                            className="toeic-btn toeic-btn-primary"
+                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
+                          >
+                            ⚡ Luyện Trạm Này
+                          </button>
+                        )}
 
-                    {!isLocked && (
-                      <button
-                        type="button"
-                        onClick={() => onStartBossGate && onStartBossGate(ms)}
-                        className="toeic-btn toeic-btn-secondary"
-                        style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
-                      >
-                        <span>🏆 Thi Vượt Trạm Boss Gate</span>
-                      </button>
+                        {!isLocked && (
+                          <button
+                            type="button"
+                            onClick={() => onStartBossGate && onStartBossGate(ms)}
+                            className="toeic-btn toeic-btn-secondary"
+                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
+                          >
+                            <span>🏆 Thi Vượt Trạm Boss Gate</span>
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
 
                 {/* TOPICS & WEAKNESS INJECTION TAGS */}
-                <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--ds-border)' }}>
+                <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--ds-border-subtle)' }}>
                   <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', marginBottom: '0.5rem' }}>
                     Chủ điểm trọng tâm của trạm:
                   </div>
@@ -144,7 +224,7 @@ export default function MilestoneSkillTree({
                         style={{
                           fontSize: '0.75rem',
                           padding: '0.2rem 0.6rem',
-                          borderRadius: '0.35rem',
+                          borderRadius: 'var(--ds-radius-sm)',
                           border: '1px solid var(--ds-border)',
                           backgroundColor: 'var(--ds-bg-elevated)',
                           color: 'var(--ds-text)',
@@ -163,7 +243,7 @@ export default function MilestoneSkillTree({
                         style={{
                           fontSize: '0.75rem',
                           padding: '0.2rem 0.6rem',
-                          borderRadius: '0.35rem',
+                          borderRadius: 'var(--ds-radius-sm)',
                           border: '1px solid var(--ds-danger-border)',
                           backgroundColor: 'var(--ds-danger-bg)',
                           color: 'var(--ds-danger)',
@@ -183,7 +263,7 @@ export default function MilestoneSkillTree({
                   style={{
                     marginTop: '1rem',
                     paddingTop: '0.75rem',
-                    borderTop: '1px solid var(--ds-border)',
+                    borderTop: '1px solid var(--ds-border-subtle)',
                     fontSize: '0.8rem',
                     color: 'var(--ds-text-secondary)',
                     flexWrap: 'wrap',
@@ -192,13 +272,13 @@ export default function MilestoneSkillTree({
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <span>Tiến độ luyện tập:</span>
-                    <div style={{ width: '120px', height: '8px', borderRadius: '9999px', backgroundColor: 'var(--ds-bg-elevated)', overflow: 'hidden' }}>
+                    <div style={{ width: '120px', height: '8px', borderRadius: 'var(--ds-radius-full)', backgroundColor: 'var(--ds-bg-elevated)', overflow: 'hidden' }}>
                       <div
                         style={{
                           height: '100%',
-                          borderRadius: '9999px',
+                          borderRadius: 'var(--ds-radius-full)',
                           width: `${progressPct}%`,
-                          backgroundColor: isCompleted ? 'var(--ds-success)' : 'var(--ds-accent)',
+                          backgroundColor: isCompleted ? 'var(--ds-success)' : isVipLocked ? 'var(--ds-warning)' : 'var(--ds-accent)',
                           transition: 'width 0.6s ease'
                         }}
                       />
@@ -219,6 +299,14 @@ export default function MilestoneSkillTree({
           );
         })}
       </div>
+
+      {/* Mount Smart Paywall Modal */}
+      <ToeicSmartPaywallModal
+        isOpen={isPaywallOpen}
+        onClose={closePaywall}
+        triggerId={paywallTrigger}
+        context={paywallContext}
+      />
     </div>
   );
 }

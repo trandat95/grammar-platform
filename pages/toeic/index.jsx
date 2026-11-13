@@ -40,7 +40,7 @@ export default function ToeicHubPage() {
       badgeVariant: 'primary',
       cta: 'Bắt Đầu Kiểm Tra',
       href: '/toeic/diagnostic',
-      stats: '3 Chặng • IRT 3PL EAP',
+      stats: '3 Chặng • IRT 3PL',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
@@ -56,7 +56,7 @@ export default function ToeicHubPage() {
       badgeVariant: 'success',
       cta: 'Luyện X-Ray Ngay',
       href: '/toeic/practice/GRM_POS_NOUN',
-      stats: '24 Chủ Điểm • Lời giải 3 bước',
+      stats: '24 Chủ Điểm',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20M12 2v20" />
@@ -72,7 +72,7 @@ export default function ToeicHubPage() {
       badgeVariant: 'warning',
       cta: 'Chọn Đề Luyện Thi',
       href: '/toeic/tests',
-      stats: 'ETS 2024 & ETS 2026',
+      stats: 'ETS 2024 & 2026',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -88,7 +88,7 @@ export default function ToeicHubPage() {
       badgeVariant: 'primary',
       cta: 'Vào Phòng Nghe',
       href: '/toeic/dictation',
-      stats: 'Sóng âm • 0.8x - 1.2x',
+      stats: '540 Audio Tracks',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
@@ -102,12 +102,12 @@ export default function ToeicHubPage() {
 
   // 8 Canonical Pedagogical Groups in TOEIC Taxonomy
   const topicGroups = [
-    { code: 'ALL', name: 'Tất cả (24 Chủ Điểm)' },
-    { code: 'G1_POS', name: '1. Từ Loại & Vị Trí (4)' },
+    { code: 'ALL', name: `Tất cả (${topics.length || 24} Chủ Điểm)` },
+    { code: 'G1_POS', name: '1. Từ Loại & Cụm Từ (4)' },
     { code: 'G2_VERB', name: '2. Động Từ & Thì (5)' },
-    { code: 'G3_PRON', name: '3. Đại Từ & Quan Hệ (2)' },
+    { code: 'G3_PRON', name: '3. Đại Từ & Mệnh Đề (2)' },
     { code: 'G4_CONN', name: '4. Giới Từ & Liên Từ (4)' },
-    { code: 'G5_MOD', name: '5. So Sánh & Đảo Ngữ (2)' },
+    { code: 'G5_MOD', name: '5. Cấu Trúc Nâng Cao (2)' },
     { code: 'G6_VOC_COH', name: '6. Từ Vựng & Part 6 (3)' },
     { code: 'G7_READING', name: '7. Đọc Hiểu Part 7 (2)' },
     { code: 'G8_LISTENING', name: '8. Nghe Hiểu Part 1-4 (2)' }
@@ -115,7 +115,7 @@ export default function ToeicHubPage() {
 
   const filteredTopics = selectedGroup === 'ALL'
     ? topics
-    : topics.filter(t => t.group_code === selectedGroup);
+    : topics.filter(t => t.group_code === selectedGroup || t.category === selectedGroup);
 
   return (
     <>
@@ -253,11 +253,11 @@ export default function ToeicHubPage() {
                         </p>
                       </div>
 
-                      <div style={{ marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
+                      <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', backgroundColor: 'var(--ds-bg-elevated)', padding: '0.2rem 0.55rem', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-border-subtle)', whiteSpace: 'nowrap' }}>
                           {fc.stats}
                         </span>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-accent)', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', whiteSpace: 'nowrap', marginLeft: 'auto' }}>
                           {fc.cta} &rarr;
                         </span>
                       </div>
@@ -296,43 +296,62 @@ export default function ToeicHubPage() {
 
               {/* Topics Grid */}
               <div className="toeic-grid-3">
-                {filteredTopics.map((top, idx) => (
-                  <Link
-                    key={top.id || idx}
-                    href={`/toeic/practice/${top.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }}
-                  >
-                    <div className="toeic-topic-card">
-                      <div>
-                        <div className="toeic-flex-between" style={{ marginBottom: '0.5rem' }}>
-                          <ToeicBadge variant="muted">
-                            Target {top.target_score_band || '450+'}
-                          </ToeicBadge>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
-                            {top.recommended_time_sec || 15}s/câu
-                          </span>
-                        </div>
-                        <div className="toeic-topic-name">{top.name_vi}</div>
-                        <div className="toeic-topic-desc">{top.theory_summary_vi || top.name_en}</div>
-                      </div>
-
-                      <div>
-                        <div className="toeic-topic-meta">
-                          <span>Độ thông thạo (Mastery)</span>
-                          <span style={{ fontWeight: 700, color: 'var(--ds-accent)' }}>75%</span>
-                        </div>
-                        <div className="toeic-progress-bar">
-                          <div className="toeic-progress-fill" style={{ width: '75%' }} />
-                        </div>
-                        <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-accent)' }}>
-                            Luyện X-Ray &rarr;
-                          </span>
-                        </div>
-                      </div>
+                {filteredTopics.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '3rem 1rem', width: '100%', gridColumn: '1 / -1' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔍</div>
+                    <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--ds-text)' }}>
+                      Chưa có chủ điểm trong nhóm này
                     </div>
-                  </Link>
-                ))}
+                    <div style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', marginTop: '0.25rem', marginBottom: '1rem' }}>
+                      Hãy chọn nhóm chủ điểm khác hoặc xem toàn bộ 24 chủ điểm trọng tâm.
+                    </div>
+                    <button
+                      type="button"
+                      className="toeic-target-chip active"
+                      onClick={() => setSelectedGroup('ALL')}
+                    >
+                      Xem Tất Cả 24 Chủ Điểm
+                    </button>
+                  </div>
+                ) : (
+                  filteredTopics.map((top, idx) => (
+                    <Link
+                      key={top.id || idx}
+                      href={`/toeic/practice/${top.id}`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      <div className="toeic-topic-card">
+                        <div>
+                          <div className="toeic-flex-between" style={{ marginBottom: '0.5rem' }}>
+                            <ToeicBadge variant="muted">
+                              Target {top.target_score_band || '450+'}
+                            </ToeicBadge>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                              {top.recommended_time_sec || 15}s/câu
+                            </span>
+                          </div>
+                          <div className="toeic-topic-name">{top.name_vi}</div>
+                          <div className="toeic-topic-desc">{top.theory_summary_vi || top.name_en}</div>
+                        </div>
+
+                        <div>
+                          <div className="toeic-topic-meta">
+                            <span>Độ thông thạo (Mastery)</span>
+                            <span style={{ fontWeight: 700, color: 'var(--ds-accent)' }}>75%</span>
+                          </div>
+                          <div className="toeic-progress-bar">
+                            <div className="toeic-progress-fill" style={{ width: '75%' }} />
+                          </div>
+                          <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-accent)' }}>
+                              Luyện X-Ray &rarr;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                )}
               </div>
             </div>
 
