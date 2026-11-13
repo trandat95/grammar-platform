@@ -3,6 +3,20 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  outputFileTracingIncludes: {
+    "/api/**/*": [
+      "./data/toeic/**/*",
+      "./ETS_Corpus_Normalized_Enriched_Database/**/*",
+    ],
+  },
+  experimental: {
+    outputFileTracingIncludes: {
+      "/api/**/*": [
+        "./data/toeic/**/*",
+        "./ETS_Corpus_Normalized_Enriched_Database/**/*",
+      ],
+    },
+  },
   async headers() {
     const securityHeaders = [
       { key: "X-Content-Type-Options", value: "nosniff" },
