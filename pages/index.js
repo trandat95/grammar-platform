@@ -5468,6 +5468,7 @@ export default function Home() {
               <ToeicHeroBanner
                 initialTargetScore={750}
                 showStats={true}
+                isLight={isLight}
               />
 
               {/* Dashboard Zone A / Zone B Bento Switcher */}

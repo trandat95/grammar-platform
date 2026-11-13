@@ -6,9 +6,13 @@ import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
 import ToeicHeroBanner from '../../components/toeic/ToeicHeroBanner';
 import taxonomyData from '../../data/toeic/grammar_taxonomy.json';
 import useGlobalAuth from '../../hooks/useGlobalAuth';
+import useToeicEntitlement from '../../hooks/useToeicEntitlement';
+import ToeicSmartPaywallModal from '../../components/toeic/premium/ToeicSmartPaywallModal';
 
 export default function ToeicHubPage() {
   const globalAuth = useGlobalAuth();
+  const entitlement = useToeicEntitlement();
+  const isVip = entitlement.isVip;
   const [isLight, setIsLight] = useState(true);
   const [targetScore, setTargetScore] = useState(750);
   const [selectedGroup, setSelectedGroup] = useState('ALL');
@@ -176,6 +180,7 @@ export default function ToeicHubPage() {
               initialTargetScore={targetScore}
               onTargetChange={setTargetScore}
               showStats={true}
+              isLight={isLight}
             />
 
             {/* BENTO FEATURE CARDS - ZONE 2 (Clean 2x2 or 4-col Grid) */}
@@ -224,15 +229,38 @@ export default function ToeicHubPage() {
 
             {/* 24 TOPIC DISCOVERY - ZONE 3 (Milestone U2.3) */}
             <div id="topics" style={{ marginBottom: '3rem' }}>
-              <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
+              <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div>
                   <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.35rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
                     24 Chủ Điểm Ngữ Pháp &amp; Kỹ Năng Trọng Tâm
                   </h2>
                   <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
-                    Soi sáng cấu trúc ngữ pháp quang phổ Sentence X-Ray và bẫy tư duy
+                    {isVip
+                      ? 'Đặc quyền VIP: Đã mở toàn bộ 24 chủ điểm từ Target 450 đến 990+'
+                      : 'Tài khoản Miễn phí: Mở các chủ điểm nền tảng (Target dưới 550) • Nâng cấp VIP để mở toàn bộ 24 chủ điểm'}
                   </p>
                 </div>
+                {!isVip && (
+                  <button
+                    type="button"
+                    onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.4rem 0.85rem',
+                      borderRadius: '0.65rem',
+                      border: '1px solid var(--ds-warning)',
+                      backgroundColor: 'var(--ds-warning-bg, rgba(234, 88, 12, 0.08))',
+                      color: 'var(--ds-warning)',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <span>👑 Mở Khóa Trọn Bộ 24 Chủ Điểm VIP</span>
+                  </button>
+                )}
               </div>
 
               {/* Topic Category Filter Chips */}
@@ -269,18 +297,32 @@ export default function ToeicHubPage() {
                     </button>
                   </div>
                 ) : (
-                  filteredTopics.map((top, idx) => (
-                    <Link
-                      key={top.id || idx}
-                      href={`/toeic/practice/${top.id}`}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <div className="toeic-topic-card">
+                  filteredTopics.map((top, idx) => {
+                    const targetScoreBand = parseInt(top.target_score_band || 450, 10);
+                    const isTopicFree = targetScoreBand < 550;
+                    const canAccess = isVip || isTopicFree;
+
+                    const cardContent = (
+                      <div
+                        className="toeic-topic-card"
+                        style={{
+                          opacity: canAccess ? 1 : 0.94,
+                          cursor: 'pointer',
+                          borderColor: canAccess ? 'var(--ds-card-border)' : 'var(--ds-border)'
+                        }}
+                      >
                         <div>
                           <div className="toeic-flex-between" style={{ marginBottom: '0.5rem' }}>
-                            <ToeicBadge variant="muted">
-                              Target {top.target_score_band || '450+'}
-                            </ToeicBadge>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <ToeicBadge variant="muted">
+                                Target {top.target_score_band || '450+'}
+                              </ToeicBadge>
+                              {!canAccess && (
+                                <ToeicBadge variant="warning">
+                                  🔒 VIP
+                                </ToeicBadge>
+                              )}
+                            </div>
                             <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
                               {top.recommended_time_sec || 15}s/câu
                             </span>
@@ -292,26 +334,62 @@ export default function ToeicHubPage() {
                         <div>
                           <div className="toeic-topic-meta">
                             <span>Độ thông thạo (Mastery)</span>
-                            <span style={{ fontWeight: 700, color: 'var(--ds-accent)' }}>75%</span>
+                            <span style={{ fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
+                              {canAccess ? '75%' : 'Khóa VIP (Target 550+)'}
+                            </span>
                           </div>
                           <div className="toeic-progress-bar">
-                            <div className="toeic-progress-fill" style={{ width: '75%' }} />
+                            <div className="toeic-progress-fill" style={{ width: canAccess ? '75%' : '0%' }} />
                           </div>
                           <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-accent)' }}>
-                              Luyện X-Ray &rarr;
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
+                              {canAccess ? 'Luyện X-Ray \u2192' : 'Mở khóa VIP \uD83D\uDD12 \u2192'}
                             </span>
                           </div>
                         </div>
                       </div>
-                    </Link>
-                  ))
+                    );
+
+                    if (canAccess) {
+                      return (
+                        <Link
+                          key={top.id || idx}
+                          href={`/toeic/practice/${top.id}`}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          {cardContent}
+                        </Link>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={top.id || idx}
+                        onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550', {
+                          topicId: top.id,
+                          topicName: top.name_vi,
+                          targetBand: top.target_score_band
+                        })}
+                        style={{ color: 'inherit' }}
+                      >
+                        {cardContent}
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>
 
           </div>
         </div>
+
+        {/* PAYWALL TRIGGER MODAL */}
+        <ToeicSmartPaywallModal
+          isOpen={entitlement.isPaywallOpen}
+          onClose={entitlement.closePaywall}
+          triggerId={entitlement.activeTriggerId}
+          context={entitlement.paywallContext}
+        />
       </AppShell2026>
     </>
   );

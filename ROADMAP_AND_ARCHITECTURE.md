@@ -2873,6 +2873,11 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Tích hợp Hero Banner công nghệ cao trực tiếp trên Trang chủ Tổng quan (`/`) và Hub TOEIC (`/toeic`).
   * Trực quan sinh động với hình nền nghệ thuật EdTech 2026, quang phổ Sentence X-Ray, biểu tượng kính mắt ba chiều và hiệu ứng Scrim tối ưu độ tương phản văn bản WCAG 2.2 AA.
   * Cung cấp 3 nút truy cập nhanh: Làm bài Test Chẩn đoán 15 phút, Kho 20 Đề thi ETS, và 24 Chủ điểm X-Ray kèm thanh đo lường mục tiêu (Target 500+ đến 990+) và dải thống kê thực tế theo người dùng.
+- [x] **2.15.17 Đồng Bộ Bảng Giá VIP Thực Tế, Khóa Free Dictation (Test 01) & 24 Chủ Điểm (Target < 550) & Banner Đa Giao Diện (`components/toeic/premium/ToeicSmartPaywallModal.jsx`, `pages/toeic/dictation.jsx`, `pages/toeic/index.jsx`, `components/toeic/ToeicHeroBanner.jsx`):**
+  * Đồng bộ bảng giá Paywall TOEIC với 4 gói VIP thực tế của hệ thống (VIP Tháng 29k, VIP 3 Tháng 49k, VIP 1 Năm 79k, VIP Trọn Đời 109k), thay thế hoàn toàn các giá giả lập cũ (199k/990k/1.89m).
+  * Giới hạn phòng Nghe Chép Chính Tả (Dictation Studio) cho người dùng Free: chỉ được luyện duy nhất Test 01 (54 audio tracks). Các Test 02–10 bị khóa kèm nhãn `🔒 (VIP)` và kích hoạt Paywall Modal khi nhấp chọn.
+  * Giới hạn 24 Chủ điểm Ngữ pháp & Kỹ năng Trọng tâm: người dùng Free chỉ mở các chủ điểm có Target dưới 550 (Band 450 & 500). Toàn bộ các chủ điểm Target 550+ được khóa VIP cả ở giao diện danh sách và bộ lọc drill practice.
+  * Banner TOEIC thích ứng hoàn hảo chế độ Sáng / Tối (White/Dark Mode): lớp phủ Scrim tinh chỉnh độ trong suốt linh hoạt, typography và thẻ chỉ số thống kê tự động đồng điệu với theme chung của trang chủ.
 
 ---
 

@@ -64,12 +64,14 @@ def main():
     # 4. Check SmartPaywallModal component
     with open("components/toeic/premium/ToeicSmartPaywallModal.jsx", "r", encoding="utf-8") as f:
         content = f.read()
-        assert "MONTHLY" in content, "Monthly plan missing"
-        assert "ANNUAL" in content, "Annual plan missing"
-        assert "LIFETIME" in content, "Lifetime plan missing"
-        assert "199.000đ" in content, "199k missing"
-        assert "990.000đ" in content, "990k missing"
-        assert "1.890.000đ" in content, "1.89m missing"
+        assert "VIP_MONTHLY" in content, "VIP Monthly plan missing"
+        assert "VIP_QUARTERLY" in content, "VIP Quarterly plan missing"
+        assert "VIP_YEARLY" in content, "VIP Yearly plan missing"
+        assert "VIP_LIFETIME" in content, "VIP Lifetime plan missing"
+        assert "29.000đ" in content, "29k missing"
+        assert "49.000đ" in content, "49k missing"
+        assert "79.000đ" in content, "79k missing"
+        assert "109.000đ" in content, "109k missing"
     print("[PASS] components/toeic/premium/ToeicSmartPaywallModal.jsx verified!")
 
     print("=== MILESTONE E7 VERIFICATION: ALL CHECKS PASSED [SUCCESS] ===")

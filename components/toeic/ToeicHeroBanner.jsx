@@ -6,6 +6,7 @@ import useGlobalAuth from '../../hooks/useGlobalAuth';
 /**
  * ToeicHeroBanner Component
  * High-tech, inspirational TOEIC AI Adaptive Hero Banner with background illustration.
+ * Fully adapts to White/Light Mode and Dark Mode.
  * Supports quick navigation to Diagnostic, 20 ETS Tests, and 24 X-Ray Grammar Topics.
  * Strict Design Token Discipline: 100% var(--ds-*).
  */
@@ -13,7 +14,8 @@ export default function ToeicHeroBanner({
   initialTargetScore = 750,
   onTargetChange,
   showStats = true,
-  compact = false
+  compact = false,
+  isLight = true
 }) {
   const [targetScore, setTargetScore] = useState(initialTargetScore);
   const globalAuth = useGlobalAuth();
@@ -73,12 +75,12 @@ export default function ToeicHeroBanner({
         borderRadius: 'var(--ds-radius-xl, 1.25rem)',
         overflow: 'hidden',
         border: '1px solid var(--ds-border)',
-        boxShadow: 'var(--ds-shadow-md)',
+        boxShadow: isLight ? '0 4px 20px rgba(0, 0, 0, 0.05)' : 'var(--ds-shadow-md)',
         marginBottom: compact ? '1.5rem' : '2.25rem',
         backgroundColor: 'var(--ds-card)'
       }}
     >
-      {/* Background Illustration with High-Contrast Gradient Scrim */}
+      {/* Background Illustration */}
       <img
         src={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive-ai.jpg'}
         alt="TOEIC AI Adaptive Background"
@@ -91,11 +93,12 @@ export default function ToeicHeroBanner({
           height: '100%',
           objectFit: 'cover',
           objectPosition: 'right center',
-          zIndex: 0
+          zIndex: 0,
+          opacity: isLight ? 0.75 : 0.85
         }}
       />
 
-      {/* Dual Gradient Overlay to guarantee crystal clear WCAG 2.2 AA contrast on left/center text */}
+      {/* Dual Gradient Scrim Overlay - Adapts to White / Dark mode */}
       <div
         style={{
           position: 'absolute',
@@ -103,7 +106,9 @@ export default function ToeicHeroBanner({
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.94) 0%, rgba(15, 23, 42, 0.88) 55%, rgba(15, 23, 42, 0.45) 100%)',
+          background: isLight
+            ? 'linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.90) 58%, rgba(255, 255, 255, 0.35) 100%)'
+            : 'linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.88) 55%, rgba(15, 23, 42, 0.45) 100%)',
           zIndex: 1
         }}
       />
@@ -114,7 +119,7 @@ export default function ToeicHeroBanner({
           position: 'relative',
           zIndex: 2,
           padding: compact ? '1.5rem 1.75rem' : '2.25rem 2.25rem',
-          color: '#ffffff'
+          color: isLight ? 'var(--ds-text)' : '#ffffff'
         }}
       >
         {/* Top Feature Pill */}
@@ -126,9 +131,9 @@ export default function ToeicHeroBanner({
               gap: '0.4rem',
               padding: '0.35rem 0.85rem',
               borderRadius: '999px',
-              backgroundColor: 'rgba(56, 189, 248, 0.16)',
-              border: '1px solid rgba(56, 189, 248, 0.4)',
-              color: '#38bdf8',
+              backgroundColor: isLight ? 'rgba(37, 99, 235, 0.08)' : 'rgba(56, 189, 248, 0.16)',
+              border: isLight ? '1px solid rgba(37, 99, 235, 0.25)' : '1px solid rgba(56, 189, 248, 0.4)',
+              color: isLight ? 'var(--ds-accent)' : '#38bdf8',
               fontSize: '0.78rem',
               fontWeight: 800,
               textTransform: 'uppercase',
@@ -149,10 +154,10 @@ export default function ToeicHeroBanner({
             fontSize: compact ? '1.5rem' : '1.85rem',
             fontWeight: 800,
             lineHeight: 1.3,
-            color: '#ffffff',
+            color: isLight ? 'var(--ds-text)' : '#ffffff',
             margin: '0 0 0.85rem 0',
             maxWidth: '780px',
-            textShadow: '0 2px 10px rgba(0, 0, 0, 0.4)'
+            textShadow: isLight ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.4)'
           }}
         >
           Chinh Phục TOEIC Thông Minh – Học Đúng Điểm Yếu, Tiến Bộ Từng Ngày
@@ -163,13 +168,13 @@ export default function ToeicHeroBanner({
           style={{
             fontSize: '0.94rem',
             lineHeight: 1.65,
-            color: 'rgba(241, 245, 249, 0.92)',
+            color: isLight ? 'var(--ds-text-secondary)' : 'rgba(241, 245, 249, 0.92)',
             margin: '0 0 1rem 0',
             maxWidth: '750px',
-            textShadow: '0 1px 4px rgba(0, 0, 0, 0.4)'
+            textShadow: isLight ? 'none' : '0 1px 4px rgba(0, 0, 0, 0.4)'
           }}
         >
-          Không chỉ luyện hàng nghìn câu hỏi, mà còn hiểu vì sao bạn làm sai. Công nghệ <strong>Sentence X-Ray</strong> phân tích cấu trúc câu, hệ thống đánh giá năng lực <strong>IRT 3PL</strong> theo dõi trình độ và lộ trình học tập cá nhân hóa giúp bạn nhận diện 15 nhóm lỗi thường gặp, cải thiện điểm yếu và tiến gần hơn đến mục tiêu TOEIC.
+          Không chỉ luyện hàng nghìn câu hỏi, mà còn hiểu vì sao bạn làm sai. Công nghệ <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>Sentence X-Ray</strong> phân tích cấu trúc câu, hệ thống đánh giá năng lực <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>IRT 3PL</strong> theo dõi trình độ và lộ trình học tập cá nhân hóa giúp bạn nhận diện 15 nhóm lỗi thường gặp, cải thiện điểm yếu và tiến gần hơn đến mục tiêu TOEIC.
         </p>
 
         {/* Slogan Subtitle */}
@@ -177,7 +182,7 @@ export default function ToeicHeroBanner({
           style={{
             fontSize: '0.88rem',
             fontWeight: 700,
-            color: '#38bdf8',
+            color: isLight ? 'var(--ds-accent)' : '#38bdf8',
             margin: '0 0 1.25rem 0',
             letterSpacing: '0.01em'
           }}
@@ -187,7 +192,7 @@ export default function ToeicHeroBanner({
 
         {/* Target Band Selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'rgba(241, 245, 249, 0.8)' }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isLight ? 'var(--ds-text-muted)' : 'rgba(241, 245, 249, 0.8)' }}>
             Mục tiêu của bạn:
           </span>
           {[500, 650, 750, 850, 990].map(score => {
@@ -202,12 +207,18 @@ export default function ToeicHeroBanner({
                   borderRadius: '999px',
                   fontSize: '0.8rem',
                   fontWeight: isSelected ? 800 : 600,
-                  border: isSelected ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.2)',
-                  backgroundColor: isSelected ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
-                  color: '#ffffff',
+                  border: isSelected
+                    ? '1px solid var(--ds-accent)'
+                    : (isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.2)'),
+                  backgroundColor: isSelected
+                    ? 'var(--ds-accent)'
+                    : (isLight ? 'var(--ds-bg-elevated)' : 'rgba(255, 255, 255, 0.08)'),
+                  color: isSelected ? '#ffffff' : (isLight ? 'var(--ds-text)' : '#ffffff'),
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  boxShadow: isSelected ? '0 0 12px rgba(37, 99, 235, 0.5)' : 'none'
+                  boxShadow: isSelected
+                    ? (isLight ? '0 2px 8px rgba(37, 99, 235, 0.25)' : '0 0 12px rgba(37, 99, 235, 0.5)')
+                    : 'none'
                 }}
               >
                 Target {score}+
@@ -226,11 +237,11 @@ export default function ToeicHeroBanner({
                 gap: '0.5rem',
                 padding: '0.75rem 1.4rem',
                 borderRadius: '0.65rem',
-                backgroundColor: '#2563eb',
+                backgroundColor: 'var(--ds-accent)',
                 color: '#ffffff',
                 fontSize: '0.88rem',
                 fontWeight: 800,
-                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
+                boxShadow: isLight ? '0 4px 14px rgba(37, 99, 235, 0.25)' : '0 4px 14px rgba(37, 99, 235, 0.4)',
                 cursor: 'pointer',
                 transition: 'transform 0.15s ease'
               }}
@@ -250,12 +261,13 @@ export default function ToeicHeroBanner({
                 gap: '0.5rem',
                 padding: '0.75rem 1.25rem',
                 borderRadius: '0.65rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                color: '#ffffff',
+                backgroundColor: isLight ? 'var(--ds-card)' : 'rgba(255, 255, 255, 0.12)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.25)',
+                color: isLight ? 'var(--ds-text)' : '#ffffff',
                 fontSize: '0.88rem',
                 fontWeight: 700,
                 cursor: 'pointer',
+                boxShadow: isLight ? '0 1px 3px rgba(0, 0, 0, 0.05)' : 'none',
                 backdropFilter: 'blur(4px)',
                 transition: 'background-color 0.15s ease'
               }}
@@ -276,11 +288,12 @@ export default function ToeicHeroBanner({
                 gap: '0.5rem',
                 padding: '0.75rem 1.2rem',
                 borderRadius: '0.65rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#e2e8f0',
+                backgroundColor: isLight ? 'var(--ds-card)' : 'rgba(255, 255, 255, 0.08)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.15)',
+                color: isLight ? 'var(--ds-text)' : '#e2e8f0',
                 fontSize: '0.88rem',
                 fontWeight: 700,
+                boxShadow: isLight ? '0 1px 3px rgba(0, 0, 0, 0.05)' : 'none',
                 cursor: 'pointer'
               }}
             >
@@ -301,73 +314,73 @@ export default function ToeicHeroBanner({
               gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
               gap: '0.75rem',
               paddingTop: '1.25rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.15)'
+              borderTop: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.15)'
             }}
           >
             <div
               style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.45)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '0.65rem',
                 padding: '0.75rem 1rem',
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#38bdf8' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>
                 {userStats.estimatedScore}
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'rgba(241, 245, 249, 0.7)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                 Điểm Dự Đoán (IRT)
               </div>
             </div>
 
             <div
               style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.45)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '0.65rem',
                 padding: '0.75rem 1rem',
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#ffffff' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ds-text)' }}>
                 {targetScore}
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'rgba(241, 245, 249, 0.7)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                 Mục Tiêu Đặt Ra
               </div>
             </div>
 
             <div
               style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.45)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '0.65rem',
                 padding: '0.75rem 1rem',
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#4ade80' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ds-success)' }}>
                 {userStats.completedQuestions}
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'rgba(241, 245, 249, 0.7)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                 Câu Đã Làm ({userStats.accuracyRate}%)
               </div>
             </div>
 
             <div
               style={{
-                backgroundColor: 'rgba(15, 23, 42, 0.45)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)',
+                border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '0.65rem',
                 padding: '0.75rem 1rem',
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#fb923c' }}>
+              <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ds-warning)' }}>
                 🔥 {userStats.streakDays}d
               </div>
-              <div style={{ fontSize: '0.74rem', color: 'rgba(241, 245, 249, 0.7)', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                 Chuỗi Học Liên Tục
               </div>
             </div>
