@@ -117,3 +117,5 @@ export function useToeicEntitlement() {
     TOEIC_FEATURE_KEYS
   };
 }
+
+export default useToeicEntitlement;
