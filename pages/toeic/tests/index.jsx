@@ -3,10 +3,17 @@ import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../../components/toeic/ui';
+import useGlobalAuth from '../../../hooks/useGlobalAuth';
+import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
+import ToeicSmartPaywallModal from '../../../components/toeic/premium/ToeicSmartPaywallModal';
 
 export default function TestsCatalogPage() {
   const [isLight, setIsLight] = useState(true);
   const [selectedSeries, setSelectedSeries] = useState('ETS2024'); // 'ETS2024' | 'ETS2026'
+
+  const globalAuth = useGlobalAuth();
+  const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
+  const isVip = entitlement.isVip;
 
   const tests = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -93,24 +100,41 @@ export default function TestsCatalogPage() {
               </div>
             </div>
 
-            {/* TESTS BENTO GRID (Milestone U5.4 / AC-U5.4) */}
+            {/* TESTS BENTO GRID (Milestone U5.4 / AC-U5.4 & E7.2 Locked Progression) */}
             <div className="toeic-grid-3">
               {tests.map(num => {
-                const isEven = num % 2 === 0;
+                const isFreeTest = selectedSeries === 'ETS2024' && num <= 2;
+                const canAccess = isVip || isFreeTest;
                 const difficultyText = num <= 3 ? 'Độ khó: Tiêu chuẩn' : num <= 7 ? 'Độ khó: Nâng cao' : 'Độ khó: Chinh phục 850+';
                 const difficultyBadge = num <= 3 ? 'success' : num <= 7 ? 'primary' : 'warning';
 
                 return (
-                  <div key={num} className="toeic-card toeic-card-interactive" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div
+                    key={num}
+                    className="toeic-card toeic-card-interactive"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      position: 'relative',
+                      border: !canAccess ? '1px dashed var(--ds-warning)' : '1px solid var(--ds-border)'
+                    }}
+                  >
                     <div>
                       <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
                         <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                           <ToeicBadge variant="primary">
                             {selectedSeries}
                           </ToeicBadge>
-                          <ToeicBadge variant={difficultyBadge}>
-                            {difficultyText}
-                          </ToeicBadge>
+                          {canAccess ? (
+                            <ToeicBadge variant={isFreeTest && !isVip ? 'success' : difficultyBadge}>
+                              {isFreeTest && !isVip ? 'Miễn phí (Free)' : difficultyText}
+                            </ToeicBadge>
+                          ) : (
+                            <ToeicBadge variant="warning">
+                              🔒 VIP Premium
+                            </ToeicBadge>
+                          )}
                         </div>
                         <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                           200 câu • 120p
@@ -132,77 +156,126 @@ export default function TestsCatalogPage() {
                       </div>
 
                       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        <Link
-                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
-                          style={{
-                            flex: 1,
-                            padding: '0.45rem',
-                            textAlign: 'center',
-                            fontSize: '0.75rem',
-                            fontWeight: 700,
-                            borderRadius: '0.5rem',
-                            border: '1px solid var(--ds-border)',
-                            backgroundColor: 'var(--ds-card)',
-                            color: 'var(--ds-text)',
-                            textDecoration: 'none'
-                          }}
-                        >
-                          Part 5 (30c)
-                        </Link>
+                        {canAccess ? (
+                          <>
+                            <Link
+                              href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
+                              style={{
+                                flex: 1,
+                                padding: '0.45rem',
+                                textAlign: 'center',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                borderRadius: '0.5rem',
+                                border: '1px solid var(--ds-border)',
+                                backgroundColor: 'var(--ds-card)',
+                                color: 'var(--ds-text)',
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Part 5 (30c)
+                            </Link>
 
-                        <Link
-                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
-                          style={{
-                            flex: 1,
-                            padding: '0.45rem',
-                            textAlign: 'center',
-                            fontSize: '0.75rem',
-                            fontWeight: 700,
-                            borderRadius: '0.5rem',
-                            border: '1px solid var(--ds-border)',
-                            backgroundColor: 'var(--ds-card)',
-                            color: 'var(--ds-text)',
-                            textDecoration: 'none'
-                          }}
-                        >
-                          Part 6 (16c)
-                        </Link>
+                            <Link
+                              href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
+                              style={{
+                                flex: 1,
+                                padding: '0.45rem',
+                                textAlign: 'center',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                borderRadius: '0.5rem',
+                                border: '1px solid var(--ds-border)',
+                                backgroundColor: 'var(--ds-card)',
+                                color: 'var(--ds-text)',
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Part 6 (16c)
+                            </Link>
 
-                        <Link
-                          href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
-                          style={{
-                            flex: 1,
-                            padding: '0.45rem',
-                            textAlign: 'center',
-                            fontSize: '0.75rem',
-                            fontWeight: 700,
-                            borderRadius: '0.5rem',
-                            border: '1px solid var(--ds-border)',
-                            backgroundColor: 'var(--ds-card)',
-                            color: 'var(--ds-text)',
-                            textDecoration: 'none'
-                          }}
-                        >
-                          Part 7 (54c)
-                        </Link>
+                            <Link
+                              href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
+                              style={{
+                                flex: 1,
+                                padding: '0.45rem',
+                                textAlign: 'center',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                borderRadius: '0.5rem',
+                                border: '1px solid var(--ds-border)',
+                                backgroundColor: 'var(--ds-card)',
+                                color: 'var(--ds-text)',
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Part 7 (54c)
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            {['Part 5 (30c)', 'Part 6 (16c)', 'Part 7 (54c)'].map((pLabel, pIdx) => (
+                              <button
+                                key={pIdx}
+                                type="button"
+                                onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: num, series: selectedSeries, mode: `part${pIdx + 5}` })}
+                                style={{
+                                  flex: 1,
+                                  padding: '0.45rem',
+                                  textAlign: 'center',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  borderRadius: '0.5rem',
+                                  border: '1px solid var(--ds-border)',
+                                  backgroundColor: 'var(--ds-bg-elevated)',
+                                  color: 'var(--ds-text-muted)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                🔒 {pLabel}
+                              </button>
+                            ))}
+                          </>
+                        )}
                       </div>
 
-                      <Link
-                        href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
-                        style={{ textDecoration: 'none', display: 'block' }}
-                      >
+                      {canAccess ? (
+                        <Link
+                          href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
+                          style={{ textDecoration: 'none', display: 'block' }}
+                        >
+                          <ToeicButton
+                            variant="primary"
+                            style={{ width: '100%' }}
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                              </svg>
+                            }
+                          >
+                            Luyện Full Đề 200 Câu
+                          </ToeicButton>
+                        </Link>
+                      ) : (
                         <ToeicButton
-                          variant="primary"
-                          style={{ width: '100%' }}
+                          variant="secondary"
+                          onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: num, series: selectedSeries, mode: 'full' })}
+                          style={{
+                            width: '100%',
+                            border: '1px solid var(--ds-warning)',
+                            color: 'var(--ds-warning)',
+                            fontWeight: 800
+                          }}
                           icon={
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <polygon points="5 3 19 12 5 21 5 3" />
+                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                           }
                         >
-                          Luyện Full Đề 200 Câu
+                          🔒 Mở Khóa Đề VIP Này
                         </ToeicButton>
-                      </Link>
+                      )}
                     </div>
                   </div>
                 );
@@ -210,6 +283,14 @@ export default function TestsCatalogPage() {
             </div>
           </div>
         </div>
+
+        {/* TOEIC Smart Paywall Modal */}
+        <ToeicSmartPaywallModal
+          isOpen={entitlement.paywallState.isOpen}
+          onClose={entitlement.closePaywall}
+          triggerId={entitlement.paywallState.triggerId}
+          context={entitlement.paywallState.context}
+        />
       </AppShell2026>
     </>
   );

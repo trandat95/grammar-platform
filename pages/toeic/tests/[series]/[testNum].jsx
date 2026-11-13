@@ -4,7 +4,10 @@ import Head from 'next/head';
 import AppShell2026 from '../../../../components/ui-2026/AppShell2026';
 import SplitPassageReader from '../../../../components/toeic/SplitPassageReader';
 import SentenceXRayCard from '../../../../components/toeic/SentenceXRayCard';
-import { ToeicBadge } from '../../../../components/toeic/ui';
+import { ToeicBadge, ToeicButton } from '../../../../components/toeic/ui';
+import useGlobalAuth from '../../../../hooks/useGlobalAuth';
+import useToeicEntitlement from '../../../../hooks/useToeicEntitlement';
+import ToeicSmartPaywallModal from '../../../../components/toeic/premium/ToeicSmartPaywallModal';
 
 export default function TestSimulationPage() {
   const router = useRouter();
@@ -17,13 +20,27 @@ export default function TestSimulationPage() {
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isVipLocked, setIsVipLocked] = useState(false);
+
+  const globalAuth = useGlobalAuth();
+  const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
+  const isVip = entitlement.isVip;
 
   useEffect(() => {
     if (!series || !testNum) return;
     let isMounted = true;
     setIsLoading(true);
+    setIsVipLocked(false);
 
-    fetch(`/api/toeic/tests/${series}/${testNum}?mode=${mode}`)
+    const headers = {};
+    if (globalAuth.activeAuthToken) {
+      headers.Authorization = `Bearer ${globalAuth.activeAuthToken}`;
+    }
+    if (globalAuth.currentUser?.role) {
+      headers['x-user-role'] = globalAuth.currentUser.role;
+    }
+
+    fetch(`/api/toeic/tests/${series}/${testNum}?mode=${mode}`, { headers })
       .then(res => res.json())
       .then(data => {
         if (!isMounted) return;
@@ -32,6 +49,9 @@ export default function TestSimulationPage() {
           if (data.questions?.length > 0) {
             setActiveQuestionId(data.questions[0].id);
           }
+        } else if (data.isVipRequired || data.error === 'VIP_UPGRADE_REQUIRED') {
+          setIsVipLocked(true);
+          setErrorMsg(data.message || 'Đề thi này thuộc gói VIP Premium.');
         } else {
           setErrorMsg(data.error || 'Không thể tải đề thi');
         }
@@ -44,7 +64,7 @@ export default function TestSimulationPage() {
       });
 
     return () => { isMounted = false; };
-  }, [series, testNum, mode]);
+  }, [series, testNum, mode, globalAuth.activeAuthToken, globalAuth.currentUser?.role]);
 
   const questions = testData?.questions || [];
   const passages = testData?.passages || [];
@@ -220,6 +240,68 @@ export default function TestSimulationPage() {
                 <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
                   Đang tải nội dung đề {series} Test {testNum}...
                 </p>
+              </div>
+            ) : isVipLocked ? (
+              <div
+                className="toeic-card"
+                style={{
+                  textAlign: 'center',
+                  padding: '3rem 1.5rem',
+                  maxWidth: '680px',
+                  margin: '2rem auto',
+                  border: '1px dashed var(--ds-warning)',
+                  backgroundColor: 'var(--ds-bg-elevated)',
+                  borderRadius: 'var(--ds-radius-lg)'
+                }}
+              >
+                <div
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--ds-warning-bg, rgba(234, 179, 8, 0.12))',
+                    color: 'var(--ds-warning)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1.25rem auto'
+                  }}
+                >
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+
+                <div style={{ display: 'inline-flex', marginBottom: '0.75rem' }}>
+                  <ToeicBadge variant="warning">🔒 Phân Hệ VIP Premium</ToeicBadge>
+                </div>
+
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.75rem 0', color: 'var(--ds-text)' }}>
+                  Mở Khóa Đề Thi {series} Test {String(testNum).padStart(2, '0')}
+                </h2>
+
+                <p style={{ fontSize: '0.9rem', color: 'var(--ds-text-secondary)', lineHeight: 1.6, maxWidth: '520px', margin: '0 auto 1.5rem auto' }}>
+                  Toàn bộ 20 đề thi chuẩn hóa ETS 2024 &amp; ETS 2026 kèm tính năng tra cứu dẫn chứng tự động <strong>Auto-Highlight</strong> và bóc tách quang phổ <strong>Sentence X-Ray</strong> thuộc gói VIP.
+                </p>
+
+                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <ToeicButton
+                    variant="primary"
+                    onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
+                    style={{ padding: '0.75rem 1.75rem', fontWeight: 800 }}
+                  >
+                    Nâng Cấp Gói VIP Ngay ✨
+                  </ToeicButton>
+
+                  <a
+                    href="/toeic/tests"
+                    className="toeic-btn toeic-btn-secondary"
+                    style={{ padding: '0.75rem 1.25rem', fontWeight: 700 }}
+                  >
+                    &larr; Về Đề Thi Miễn Phí (Test 01 &amp; 02)
+                  </a>
+                </div>
               </div>
             ) : errorMsg ? (
               <div className="toeic-card" style={{ textAlign: 'center', padding: '2rem', border: '1px solid var(--ds-danger-border)', backgroundColor: 'var(--ds-danger-bg)' }}>
@@ -418,6 +500,14 @@ export default function TestSimulationPage() {
             )}
           </div>
         </div>
+
+        {/* TOEIC Smart Paywall Modal */}
+        <ToeicSmartPaywallModal
+          isOpen={entitlement.paywallState.isOpen}
+          onClose={entitlement.closePaywall}
+          triggerId={entitlement.paywallState.triggerId}
+          context={entitlement.paywallState.context}
+        />
       </AppShell2026>
     </>
   );

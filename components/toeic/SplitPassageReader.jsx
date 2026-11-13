@@ -244,8 +244,12 @@ export default function SplitPassageReader({
             type="button"
             disabled={activeSetIndex === 0}
             onClick={() => {
-              setActiveSetIndex(prev => Math.max(0, prev - 1));
+              const prevIdx = Math.max(0, activeSetIndex - 1);
+              setActiveSetIndex(prevIdx);
               setActiveDocTab(0);
+              if (passageSets[prevIdx]?.questions?.length > 0 && onQuestionClick) {
+                onQuestionClick(passageSets[prevIdx].questions[0].id);
+              }
             }}
             className="toeic-btn toeic-btn-secondary"
             style={{
@@ -266,8 +270,12 @@ export default function SplitPassageReader({
             type="button"
             disabled={activeSetIndex >= passageSets.length - 1}
             onClick={() => {
-              setActiveSetIndex(prev => Math.min(passageSets.length - 1, prev + 1));
+              const nextIdx = Math.min(passageSets.length - 1, activeSetIndex + 1);
+              setActiveSetIndex(nextIdx);
               setActiveDocTab(0);
+              if (passageSets[nextIdx]?.questions?.length > 0 && onQuestionClick) {
+                onQuestionClick(passageSets[nextIdx].questions[0].id);
+              }
             }}
             className="toeic-btn toeic-btn-secondary"
             style={{

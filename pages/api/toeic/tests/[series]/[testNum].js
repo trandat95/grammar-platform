@@ -1,5 +1,6 @@
 import { checkApiRateLimit, sendSafeServerError, getCorrelationId } from '../../../../../lib/api/security-guard';
 import ToeicRepository from '../../../../../lib/toeic/toeic-repository';
+import { verifyTestServerAccess } from '../../../../../lib/toeic/subscription/server-gate';
 
 export default async function handler(req, res) {
   const correlationId = getCorrelationId(req);
@@ -18,6 +19,18 @@ export default async function handler(req, res) {
 
     const s = String(series).toUpperCase();
     const tNum = parseInt(testNum, 10) || 1;
+
+    // Server-Side Entitlement Check (E7.1 / E7.8)
+    const gateCheck = await verifyTestServerAccess(req, s, tNum);
+    if (!gateCheck.allowed) {
+      return res.status(gateCheck.statusCode || 403).json({
+        success: false,
+        error: gateCheck.error,
+        message: gateCheck.message,
+        isVipRequired: true,
+        correlationId
+      });
+    }
 
     const testData = ToeicRepository.getTestQuestionsAndPassages(s, tNum, mode);
     if (!testData || (!testData.questions?.length && !testData.passages?.length)) {
