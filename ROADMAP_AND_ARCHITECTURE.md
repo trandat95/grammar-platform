@@ -2860,6 +2860,15 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Sửa lỗi render Part 5 trong chế độ Full Đề thi (loại bỏ lọc đè `part === 5` khi đang làm trọn vẹn 100 câu Reading).
   * Khắc phục khoảng trắng Part 6 & 7: Tự động gom nhóm các câu hỏi đọc hiểu theo cùng một `passage_id` hoặc trích đoạn văn bản chung để hiển thị song song bên cạnh câu hỏi.
   * Bổ sung nút bấm `"Câu tiếp theo →"` nổi bật đặt ngay cạnh các phương án A/B/C/D sau khi chọn đáp án trong chế độ Luyện tập 24 chủ điểm, tối ưu tầm với ngón tay và thao tác chuyển câu siêu tốc.
+- [x] **2.15.13 Hoàn thiện Cơ chế Đồng bộ Bộ Đoạn Văn & Nút "Đoạn tiếp →" (`components/toeic/SplitPassageReader.jsx`):**
+  * Đồng bộ chính xác `activeSetIndex` và `activeQuestionId`: Khi bấm `"Đoạn tiếp →"` hoặc `"← Đoạn trước"`, kích hoạt đồng thời `onQuestionClick` chuyển sang câu hỏi đầu tiên của đoạn văn kế tiếp, triệt tiêu hoàn toàn lỗi kẹt đoạn do `useEffect` đồng bộ ngược.
+- [x] **2.15.14 Áp dụng Phân Quyền Free vs VIP Toàn Diện Trên Ngân Hàng 20 Đề Thi ETS (`pages/toeic/tests/index.jsx`, `pages/toeic/tests/[series]/[testNum].jsx`, `server-gate.js`):**
+  * Học viên Free / Khách: Được làm Đề thi Số 01 & 02 của ETS 2024 (trải nghiệm toàn diện 200 câu).
+  * Đề thi Số 03 đến 10 (ETS 2024) và toàn bộ 10 đề ETS 2026: Gắn huy hiệu `🔒 VIP Premium`. Khi người dùng Free/Khách nhấp vào `Part 5`, `Part 6`, `Part 7` hoặc `Luyện Full Đề`, hệ thống kích hoạt `ToeicSmartPaywallModal` (`TRG_04_FULL_MOCK_TEST`) và chặn truy cập API ở cấp Server (HTTP 403).
+  * Giao diện khóa đề thi Bento VIP hiển thị rõ ràng bản xem trước, thông điệp giá trị và nút CTA nâng cấp VIP.
+- [x] **2.15.15 Khắc phục Lỗi Cấp Gói VIP Quản trị Viên (`admin_grant_user_vip_subscription`, Migration `017_fix_admin_vip_grant_rpc.sql`):**
+  * Cập nhật hàm `public.is_admin()` trong PostgreSQL 17 cho phép `service_role` và `supabase_admin` gọi RPC an toàn mà không bị chặn do thiếu `auth.uid()`.
+  * Bổ sung cột `metadata jsonb` cho bảng `user_subscriptions` và mở rộng ràng buộc `user_subscriptions_provider_check` cho phép nhà cung cấp `'admin_grant'`. Quản trị viên cấp gói VIP lập tức thành công 100% trên cả UI và DB.
 
 ---
 
