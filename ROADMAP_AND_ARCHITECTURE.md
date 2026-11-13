@@ -64,6 +64,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
+| **TOEIC UI/UX 2026** | **2.14 (U1–U7)** | **TOEIC 2026 – UI/UX Engineering Enhancement (Bento, X-Ray, Split Reader, Dictation)** | **P0 (Critical UI/UX)** | 🔄 Sẵn sàng triển khai (U1–U7 Spec Locked) |
 
 ---
 
@@ -2697,6 +2698,105 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Khung chat hỏi đáp sư phạm dựa trên `ai_tutor_rag_context` giải thích cặn kẽ mọi thắc mắc ngữ pháp của học viên.
 - [x] **2.13.22 Navigation Integration, Design Tokens & Full Validation Suite (AC-E6.4):**
   * Tích hợp tab Luyện đề TOEIC vào `AppShell2026`, tuân thủ 100% Design Tokens (`var(--ds-*)`), responsive mobile 0px overflow, và hoàn thành bộ kiểm thử `validate-toeic-full.py`.
+
+---
+
+### 🌟 2.14: TOEIC 2026 – UI/UX Engineering Enhancement Roadmap (Milestones U1–U7) (P0)
+
+> **Mục tiêu:** Tái thiết kế toàn diện UI/UX phân hệ TOEIC theo tiêu chuẩn EdTech 2026 thương mại cao cấp, khắc phục triệt để tình trạng giao diện văn bản thô do thiếu CSS. Tích hợp hoàn toàn với Design System 2026 hiện có, tối ưu hóa di động, đạt chuẩn WCAG 2.2 AA và đồng bộ dữ liệu chuẩn hóa từ ETS Corpus.
+> 
+> **Nguyên tắc kỹ thuật cốt lõi:**
+> - Tuyệt đối không dùng class tiện ích Tailwind CSS vì dự án chạy Vanilla CSS Design Tokens (`styles/design-system-2026.css`).
+> - Tạo stylesheet chuyên biệt `styles/toeic-ui-2026.css` kế thừa 100% token `--ds-*`.
+> - Không sửa đổi logic nghiệp vụ, thuật toán IRT 3PL hay dữ liệu học liệu 4.000 câu và 540 tracks.
+> - Hỗ trợ đầy đủ Light/Dark Theme, không gây lỗi tràn ngang trên màn hình $\le 375\text{px}$.
+
+#### 2.14-A: Milestone U1 - TOEIC Design System & Dedicated Styling Architecture (P0)
+- [ ] **2.14.1 Dedicated Stylesheet Architecture (AC-U1.1):**
+  * Khởi tạo `styles/toeic-ui-2026.css` và import vào `pages/_app.js`.
+  * Định nghĩa cấu trúc phân lớp: Scoped layout classes (`.toeic-container`, `.toeic-bento-grid`, `.toeic-flex-between`).
+  * Tuyệt đối không duplicate token màu toàn cục, không ghi đè selector ảnh hưởng các module khác.
+- [ ] **2.14.2 Design Token Integration (AC-U1.2):**
+  * Chuẩn hóa toàn bộ biến CSS sang tokens hiện có: `--ds-bg`, `--ds-card`, `--ds-border`, `--ds-accent`, `--ds-text`, `--ds-success`, `--ds-warning`, `--ds-danger`.
+  * Trực quan hóa trạng thái học tập (Correct, Incorrect, Unanswered, Flagged, Current, Completed) không chỉ qua màu sắc mà đi kèm biểu tượng và nhãn dễ tiếp cận.
+- [ ] **2.14.3 Shared Component Foundation (AC-U1.3):**
+  * Xây dựng bộ component dùng chung: `ToeicButton`, `ToeicCard`, `ToeicBadge`, `ToeicProgressBar`, `ToeicTooltip`, `ToeicModal`, `ToeicDrawer`, `ToeicTabs`, `ToeicSkeleton`, `ToeicEmptyState`.
+  * Hỗ trợ đầy đủ trạng thái: Default, Hover, Focus, Active, Disabled, Loading, Error.
+- [ ] **2.14.4 Motion & Micro-interaction System (AC-U1.4):**
+  * Chuẩn hóa chuyển động: Card hover elevation (+2px nhẹ), nút bấm press feedback, drawer slide-in, flashcard flip, thanh tiến độ. Hỗ trợ `prefers-reduced-motion`.
+- [ ] **2.14.5 CSS Quality & Token Validation (AC-U1.5):**
+  * Đảm bảo 100% component tiêu thụ tokens tập trung, zero CSS leakage, không có horizontal overflow và vượt qua `scripts/validate-design-tokens.py`.
+
+#### 2.14-B: Milestone U2 - TOEIC Hub – Premium Bento Dashboard (P0)
+- [ ] **2.14.6 Hero Banner – Personalized Learning Center (AC-U2.1):**
+  * Banner đồ họa chào hỏi cá nhân hóa, hiển thị điểm dự đoán hiện tại, mục tiêu điểm (550 / 750 / 850+), streak học tập, nút chính "Tiếp tục học" & "Làm bài kiểm tra chẩn đoán".
+- [ ] **2.14.7 Four-Zone Bento Grid Architecture (AC-U2.2):**
+  * Zone 1 (Tổng quan học tập): Thống kê câu hoàn thành, độ chính xác, chuỗi streak.
+  * Zone 2 (Lối tắt luyện tập nhanh): Listening, Reading, Grammar X-Ray, Vocabulary SRS, Dictation Studio.
+  * Zone 3 (Tiến độ học tập): Biểu đồ hoạt động tuần, so sánh Listening vs Reading, xu hướng điểm số.
+  * Zone 4 (Gợi ý học tập thông minh): Đề xuất hoạt động kế tiếp dựa trên lịch sử làm bài và điểm yếu thực tế.
+- [ ] **2.14.8 Visual Topic Discovery – 24 Categories (AC-U2.3):**
+  * Trình bày 24 chủ điểm thành 6 nhóm năng lực dạng thẻ Bento trực quan, hiển thị độ khó, số câu hỏi có sẵn, % hoàn thành và mức độ thông thạo (Mastery).
+- [ ] **2.14.9 Learning Journey & Gamification (AC-U2.4):**
+  * Mục tiêu học tập ngày, tuần, huy hiệu thành tích và cột mốc cá nhân hóa khuyến khích học tập thực chất.
+- [ ] **2.14.10 Responsive Bento Dashboard (AC-U2.5):**
+  * Bố cục tự co giãn theo Desktop (Bento đa cột), Tablet (2 cột) và Mobile (1 cột ưu tiên, thanh cuộn chủ điểm ngang).
+
+#### 2.14-C: Milestone U3 - Diagnostic Exam – Immersive TOEIC Examination Experience (P0)
+- [ ] **2.14.11 Exam Workspace Architecture (AC-U3.1):**
+  * Khu vực A (Exam Header): Tiêu đề đề thi, phần thi, số câu hiện tại, thời gian còn lại, nút nộp bài.
+  * Khu vực B (Question Workspace): Đề bài, bài đọc (nếu có), audio player (nếu có), thẻ lựa chọn A/B/C/D.
+  * Khu vực C (Question Palette): Lưới các số câu hỏi trực quan với các trạng thái Chưa xem, Đã xem chưa làm, Đã chọn, Đã cắm cờ (Flag), Đang làm.
+- [ ] **2.14.12 Timestamp-based Pacing Timer Engine (AC-U3.2):**
+  * Đồng hồ đếm ngược chính xác dựa trên timestamp (chống lệch giờ khi chuyển tab hoặc tải lại trang), cảnh báo sắp hết giờ và tự động nộp bài khi hết giờ.
+- [ ] **2.14.13 Answer Interaction & Keyboard Shortcuts (AC-U3.3):**
+  * Chọn đáp án một chạm, cắm cờ câu hỏi, phím tắt (1, 2, 3, 4 hoặc A, B, C, D), tự động lưu kết quả vào IndexedDB / local state.
+- [ ] **2.14.14 Diagnostic Score & SVG Radar Result Dashboard (AC-U3.4):**
+  * Tổng quan điểm số dự đoán 10–990, biểu đồ mạng nhện SVG 6 trục năng lực (Listening, Reading, Grammar, Vocab, Inference, Speed) và bảng review chi tiết câu sai kèm giải thích.
+- [ ] **2.14.15 Exam Recovery & Reliability Protection (AC-U3.5):**
+  * Khôi phục trạng thái bài thi khi F5, cảnh báo rời trang ngẫu nhiên, bảo vệ chống nộp bài trùng lặp.
+
+#### 2.14-D: Milestone U4 - Sentence X-Ray – Advanced Grammar Visualization (P0)
+- [ ] **2.14.16 Four Interaction States Machine (AC-U4.1):**
+  * State 1 (Câu gốc & từ đích), State 2 (Bóc tách cấu trúc câu Subject, Verb, Object, Adverb), State 3 (Công thức ngữ pháp `.ge-formula-box`), State 4 (Thực hành & Twin Questions).
+- [ ] **2.14.17 Part-of-Speech Interactive Analysis (AC-U4.2):**
+  * Nhấn vào từng từ hoặc cụm từ để mở phân loại từ loại, vai trò ngữ pháp, nghĩa ngữ cảnh và từ họ liên quan.
+- [ ] **2.14.18 Formula Box Variants (AC-U4.3):**
+  * Thiết kế các biến thể `.ge-formula-box` cho Công thức chuẩn, Quy tắc quan trọng, Ngoại lệ, Bẫy thường gặp và Mẹo thi.
+- [ ] **2.14.19 Twin Questions Sliding Drawer (AC-U4.4):**
+  * Khay trượt chứa 2 câu hỏi sinh đôi (1 câu củng cố nền tảng, 1 câu nâng cao tư duy) xuất hiện ngay khi làm sai, kèm phản hồi tức thì.
+
+#### 2.14-E: Milestone U5 - Split Passage Reader – Advanced Reading Workspace (P0)
+- [ ] **2.14.20 Split-Screen Reading Workspace (AC-U5.1):**
+  * Khung bài đọc bên trái và khung câu hỏi bên phải cuộn độc lập, đồng bộ điều hướng câu hỏi, responsive chia tỉ lệ.
+- [ ] **2.14.21 Synchronized Evidence Auto-Highlighting (AC-U5.2):**
+  * Tự động làm sáng đoạn dẫn chứng trong bài đọc và cuộn mượt (smooth scroll) đến đúng vị trí khi học viên xem câu hỏi hoặc giải thích.
+- [ ] **2.14.22 Multi-Passage Reading Support & Table Rendering (AC-U5.3):**
+  * Hỗ trợ Single, Double, Triple passages với tab chuyển đổi, định dạng bảng biểu sắc nét cho hóa đơn, lịch trình, biểu giá.
+- [ ] **2.14.23 Twenty ETS Test Bento Cards (AC-U5.4):**
+  * Danh mục 20 đề thi (ETS 2024 & ETS 2026 Test 01–10) dạng lưới thẻ Bento sinh động từ kho dữ liệu thực tế, hiển thị điểm số trước đó, thời gian thi và nút làm bài.
+
+#### 2.14-F: Milestone U6 - Dictation Studio – Listening & Vocabulary Learning Ecosystem (P0)
+- [ ] **2.14.24 Dictation Studio Dashboard (AC-U6.1):**
+  * Bảng điều khiển 540 tracks audio nạp động từ ETS 2026, lọc theo Test, Part và trạng thái hoàn thành.
+- [ ] **2.14.25 Advanced Audio Player & Waveform Visualizer (AC-U6.2):**
+  * Trình phát audio chuyên nghiệp: Tốc độ phát (0.75x, 1.0x, 1.25x, 1.5x), sóng âm thanh SVG trực quan, bấm vào sóng để tua, tua lùi 5s.
+- [ ] **2.14.26 Interactive Cloze Dictation Modes (AC-U6.3):**
+  * Hỗ trợ các chế độ chép chính tả (Điền từ khuyết, Chép trọn câu, Chép cụm từ), kiểm tra tức thì phím Space/Enter, tự động nhảy con trỏ sang ô tiếp theo.
+- [ ] **2.14.27 3D Flip SRS Flashcard System (AC-U6.4):**
+  * Thẻ flashcard từ vựng lật 3D hai mặt (Mặt trước: từ, phiên âm IPA, audio; Mặt sau: nghĩa tiếng Việt, câu ví dụ, họ từ), 4 nút đánh giá chuẩn SM-2 (Again, Hard, Good, Easy).
+- [ ] **2.14.28 Grounded AI Tutor Drawer (AC-U6.5):**
+  * Cố vấn AI trả lời theo ngữ cảnh câu hỏi từ `ai_tutor_rag_context`, giải thích cặn kẽ bẫy nghe, phát âm và đề xuất câu hỏi gợi ý.
+
+#### 2.14-G: Milestone U7 - Mobile Experience, Responsive Engineering & Accessibility (P0)
+- [ ] **2.14.29 Responsive Breakpoints & Zero Overflow (AC-U7.1):**
+  * Hỗ trợ 6 dải màn hình (320px–1440px+), kiểm tra thực tế tại các độ phân giải 320, 360, 375, 390, 414, 768, 1024, 1440px, triệt tiêu 100% hiện tượng tràn ngang.
+- [ ] **2.14.30 Touch Interaction Targets (AC-U7.2):**
+  * Đảm bảo mọi nút bấm, ô chọn đáp án, thanh audio và câu hỏi palette đạt kích thước chạm tối thiểu $44 \times 44\text{px}$.
+- [ ] **2.14.31 Semantic Dark Mode & WCAG 2.2 AA Contrast (AC-U7.3):**
+  * Đồng bộ hoàn hảo chế độ sáng/tối qua semantic tokens, kiểm toán độ tương phản văn bản đạt $\ge 4.5:1$.
+- [ ] **2.14.32 Automated Accessibility & Regression Testing (AC-U7.4):**
+  * Tích hợp kiểm thử tự động, xác nhận hỗ trợ bàn phím, quản lý focus trong modal/drawer và đảm bảo toàn bộ hệ thống cũ hoạt động ổn định.
 
 ---
 
