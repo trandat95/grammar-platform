@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
 import taxonomyData from '../../data/toeic/grammar_taxonomy.json';
+import useGlobalAuth from '../../hooks/useGlobalAuth';
 
 export default function ToeicHubPage() {
+  const globalAuth = useGlobalAuth();
   const [isLight, setIsLight] = useState(true);
   const [targetScore, setTargetScore] = useState(750);
   const [selectedGroup, setSelectedGroup] = useState('ALL');
@@ -13,9 +15,42 @@ export default function ToeicHubPage() {
     estimatedScore: 625,
     completedQuestions: 142,
     accuracyRate: 78.5,
-    streakDays: 5,
+    streakDays: 0,
     dictationCompleted: 18
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const uid = globalAuth.currentUser?.id || 'guest';
+    const streak = globalAuth.userTracker?.streak || 0;
+
+    // Check saved TOEIC diagnostic score
+    const savedDiagnostic = localStorage.getItem(`toeic_diagnostic_${uid}`);
+    let score = 625;
+    if (savedDiagnostic) {
+      try {
+        const d = JSON.parse(savedDiagnostic);
+        if (d.predictedScore) score = d.predictedScore;
+      } catch (e) {}
+    }
+
+    // Check answered count
+    const savedResponses = localStorage.getItem(`toeic_responses_${uid}`);
+    let completedCount = 0;
+    if (savedResponses) {
+      try {
+        completedCount = Object.keys(JSON.parse(savedResponses)).length;
+      } catch (e) {}
+    }
+
+    setUserStats({
+      estimatedScore: score,
+      completedQuestions: completedCount > 0 ? completedCount : 142,
+      accuracyRate: 78.5,
+      streakDays: streak,
+      dictationCompleted: 18
+    });
+  }, [globalAuth.currentUser?.id, globalAuth.userTracker?.streak]);
 
   const topics = taxonomyData?.topics || [];
 

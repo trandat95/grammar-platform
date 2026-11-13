@@ -4,9 +4,12 @@ import Head from 'next/head';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import SentenceXRayCard from '../../../components/toeic/SentenceXRayCard';
 import AITutorDrawer from '../../../components/toeic/AITutorDrawer';
+import useGlobalAuth from '../../../hooks/useGlobalAuth';
 
 export default function TopicPracticePage() {
   const router = useRouter();
+  const globalAuth = useGlobalAuth();
+  const uid = globalAuth.currentUser?.id || 'guest';
   const { topicId } = router.query;
   const [isLight, setIsLight] = useState(true);
   const [topicInfo, setTopicInfo] = useState(null);
@@ -193,8 +196,15 @@ export default function TopicPracticePage() {
               <div>
                 <SentenceXRayCard
                   question={currentQ}
-                  onAnswerSubmit={({ isCorrect }) => {
+                  onAnswerSubmit={({ isCorrect, selectedOption }) => {
                     if (isCorrect) setCorrectCount(prev => prev + 1);
+                    if (typeof window !== 'undefined') {
+                      try {
+                        const stored = JSON.parse(localStorage.getItem(`toeic_responses_${uid}`) || '{}');
+                        stored[currentQ.id] = { selectedOption, isCorrect, timestamp: Date.now() };
+                        localStorage.setItem(`toeic_responses_${uid}`, JSON.stringify(stored));
+                      } catch (e) {}
+                    }
                   }}
                   onSaveToSrs={({ word }) => {
                     alert(`Đã lưu "${word}" vào Sổ tay Ôn tập Ngắt quãng (SRS)!`);

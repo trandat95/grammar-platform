@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import ToeicDiagnosticSession from '../../components/toeic/ToeicDiagnosticSession';
+import useGlobalAuth from '../../hooks/useGlobalAuth';
 
 export default function ToeicDiagnosticPage() {
+  const globalAuth = useGlobalAuth();
   const [isLight, setIsLight] = useState(true);
 
   const handleSelectView = (v) => {
@@ -17,6 +19,8 @@ export default function ToeicDiagnosticPage() {
       window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
     }
   };
+
+  const uid = globalAuth.currentUser?.id || 'guest';
 
   return (
     <>
@@ -54,10 +58,14 @@ export default function ToeicDiagnosticPage() {
             </div>
 
             <ToeicDiagnosticSession
-              userId="student_user"
+              userId={uid}
               targetScore={650}
               onFinish={(res) => {
-                console.log('Diagnostic finished:', res);
+                if (typeof window !== 'undefined') {
+                  try {
+                    localStorage.setItem(`toeic_diagnostic_${uid}`, JSON.stringify(res));
+                  } catch (e) {}
+                }
               }}
             />
           </div>

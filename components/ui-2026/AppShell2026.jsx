@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import KitIcon from "./KitIcon";
 import SyncStatusIndicator from "../sync/SyncStatusIndicator";
+import useGlobalAuth from "../../hooks/useGlobalAuth";
+import UnifiedAuthModal from "../auth/UnifiedAuthModal";
 
 /**
  * 5 Cognitive Navigation Hubs consolidating the previous 7-8 header tabs:
@@ -66,6 +68,15 @@ export default function AppShell2026({
   children,
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const globalAuth = useGlobalAuth();
+
+  // Resolved user state (supports both parent-injected and global auto-detected auth)
+  const effectiveUser = currentUser !== undefined ? currentUser : globalAuth.currentUser;
+  const effectiveTracker = userTracker !== undefined ? userTracker : globalAuth.userTracker;
+  const effectiveSavedMistakes = savedMistakesCount !== undefined && savedMistakesCount > 0 ? savedMistakesCount : globalAuth.savedMistakesCount;
+  const effectiveSavedVocab = savedVocabCount !== undefined && savedVocabCount > 0 ? savedVocabCount : globalAuth.savedVocabCount;
+  const effectiveSyncState = syncState !== undefined ? syncState : globalAuth.syncState;
+  const effectiveOpenAuth = onOpenAuthModal || globalAuth.openAuthModal;
 
   // Automatically close slide-over mobile drawer when switching away from study view
   useEffect(() => {
@@ -89,7 +100,7 @@ export default function AppShell2026({
     }
   };
 
-  const isAdmin = !currentUser?.isGuest && currentUser?.role === "ADMIN";
+  const isAdmin = !effectiveUser?.isGuest && effectiveUser?.role === "ADMIN";
   const inStudyOrDiagnostic = (activeView === "study" || activeView === "diagnostic") && activeView !== "toeic";
   const inQuizOrMistakes = (activeView === "quiz" || activeView === "mistakes") && activeView !== "toeic";
   const inToeic = activeView === "toeic";
@@ -173,7 +184,7 @@ export default function AppShell2026({
             const isActive =
               activeView === hub.id || (hub.subViews && hub.subViews.includes(activeView));
             const labelText =
-              hub.isVip && currentUser?.role === "VIP" ? "⭐ VIP" : hub.label;
+              hub.isVip && effectiveUser?.role === "VIP" ? "⭐ VIP" : hub.label;
             return (
               <button
                 key={hub.id}
@@ -223,7 +234,7 @@ export default function AppShell2026({
         <div className="ge-header-actions">
           <div className="ge-hide-mobile">
             <SyncStatusIndicator
-              syncState={syncState}
+              syncState={effectiveSyncState}
               isLight={isLight}
               onTriggerSync={onTriggerSync}
               onPullRemote={onPullRemote}
@@ -357,7 +368,7 @@ export default function AppShell2026({
             }}
           >
             <span className="ge-streak-flame-live" aria-hidden="true">🔥</span>
-            <span>{userTracker?.streak || 0}d</span>
+            <span>{effectiveTracker?.streak || 0}d</span>
           </button>
 
           <button
@@ -380,7 +391,7 @@ export default function AppShell2026({
               whiteSpace: "nowrap",
             }}
           >
-            <span>{Number(userTracker?.xp || 0).toLocaleString()} XP</span>
+            <span>{Number(effectiveTracker?.xp || 0).toLocaleString()} XP</span>
           </button>
 
           {/* Admin Quick Shortcut on Mobile */}
@@ -407,7 +418,7 @@ export default function AppShell2026({
           {/* Account / Login Pill */}
           <button
             type="button"
-            onClick={onOpenAuthModal}
+            onClick={effectiveOpenAuth}
             className="ds-btn ds-focusable ge-auth-pill"
             style={{
               display: "inline-flex",
@@ -416,9 +427,9 @@ export default function AppShell2026({
               gap: "6px",
               padding: "5px 11px",
               borderRadius: "999px",
-              backgroundColor: currentUser?.isGuest ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
-              color: currentUser?.isGuest ? "#ffffff" : "var(--ds-text)",
-              border: currentUser?.isGuest ? "1px solid var(--ds-btn-primary)" : "1px solid var(--ds-border)",
+              backgroundColor: effectiveUser?.isGuest ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
+              color: effectiveUser?.isGuest ? "var(--ds-btn-primary-text)" : "var(--ds-text)",
+              border: effectiveUser?.isGuest ? "1px solid var(--ds-btn-primary)" : "1px solid var(--ds-border)",
               fontSize: "0.76rem",
               fontWeight: 700,
               cursor: "pointer",
@@ -427,7 +438,7 @@ export default function AppShell2026({
             }}
           >
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {currentUser?.isGuest ? "Đăng nhập" : currentUser?.name || "Tài khoản"}
+              {effectiveUser?.isGuest ? "Đăng nhập" : effectiveUser?.name || "Tài khoản"}
             </span>
           </button>
         </div>
@@ -680,6 +691,23 @@ export default function AppShell2026({
           );
         })}
       </nav>
+
+      {/* Fallback Unified Auth & Account Profile Modal when parent doesn't provide onOpenAuthModal */}
+      {!onOpenAuthModal && (
+        <UnifiedAuthModal
+          isOpen={globalAuth.isAuthModalOpen}
+          onClose={globalAuth.closeAuthModal}
+          currentUser={globalAuth.currentUser}
+          activeAuthToken={globalAuth.activeAuthToken}
+          userTracker={globalAuth.userTracker}
+          savedMistakesCount={globalAuth.savedMistakesCount}
+          savedVocabCount={globalAuth.savedVocabCount}
+          onLogin={globalAuth.handleLogin}
+          onSignUp={globalAuth.handleSignUp}
+          onLogout={globalAuth.handleLogout}
+          onRefreshUser={globalAuth.refreshUser}
+        />
+      )}
     </div>
   );
 }
