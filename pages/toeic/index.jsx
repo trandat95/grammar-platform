@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
+import ToeicHeroBanner from '../../components/toeic/ToeicHeroBanner';
 import taxonomyData from '../../data/toeic/grammar_taxonomy.json';
 import useGlobalAuth from '../../hooks/useGlobalAuth';
 
@@ -170,93 +171,12 @@ export default function ToeicHubPage() {
         <div className="toeic-page-wrap">
           <div className="toeic-container">
 
-            {/* HERO BANNER (Milestone U2.1) - Streamlined, Calm, Balanced */}
-            <div className="toeic-card-hero" style={{ marginBottom: '2rem' }}>
-              <div className="toeic-hero-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-                <span>Hệ Thống Luyện Thi TOEIC Thích Ứng Bằng AI • V3.0</span>
-              </div>
-
-              <h1 className="toeic-hero-title">
-                Chinh Phục TOEIC Với Trí Tuệ Nhân Tạo &amp; Sentence X-Ray
-              </h1>
-
-              <p className="toeic-hero-desc">
-                4.000 câu hỏi thực tế được giải mã cấu trúc quang phổ Sentence X-Ray, thuật toán <strong>IRT 3PL</strong> ước lượng chính xác năng lực, và lộ trình <strong>7 Milestones</strong> tự động khắc phục 15 mẫu lỗi tư duy nhận thức.
-              </p>
-
-              {/* Target Band Selector */}
-              <div className="toeic-target-wrap">
-                <span className="toeic-target-label">Mục tiêu của bạn:</span>
-                {[500, 650, 750, 850, 990].map(score => (
-                  <button
-                    key={score}
-                    type="button"
-                    className={`toeic-target-chip ${targetScore === score ? 'active' : ''}`}
-                    onClick={() => setTargetScore(score)}
-                  >
-                    Target {score}+
-                  </button>
-                ))}
-              </div>
-
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                <Link href="/toeic/diagnostic" style={{ textDecoration: 'none' }}>
-                  <ToeicButton size="lg" variant="primary" icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  }>
-                    Làm Bài Test Chẩn Đoán (15 Phút)
-                  </ToeicButton>
-                </Link>
-
-                <Link href="/toeic/tests" style={{ textDecoration: 'none' }}>
-                  <ToeicButton size="lg" variant="secondary" icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                    </svg>
-                  }>
-                    Kho 20 Đề Thi ETS
-                  </ToeicButton>
-                </Link>
-
-                <a href="#topics" style={{ textDecoration: 'none' }}>
-                  <ToeicButton size="lg" variant="ghost" icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                  }>
-                    24 Chủ Điểm X-Ray
-                  </ToeicButton>
-                </a>
-              </div>
-
-              {/* Learning Stats Strip (Zone 1) */}
-              <div className="toeic-stat-row">
-                <div className="toeic-stat-card">
-                  <div className="toeic-stat-val">{userStats.estimatedScore}</div>
-                  <div className="toeic-stat-lbl">Điểm Dự Đoán (IRT)</div>
-                </div>
-                <div className="toeic-stat-card">
-                  <div className="toeic-stat-val">{targetScore}</div>
-                  <div className="toeic-stat-lbl">Mục Tiêu Đặt Ra</div>
-                </div>
-                <div className="toeic-stat-card">
-                  <div className="toeic-stat-val">{userStats.completedQuestions}</div>
-                  <div className="toeic-stat-lbl">Câu Đã Làm ({userStats.accuracyRate}%)</div>
-                </div>
-                <div className="toeic-stat-card">
-                  <div className="toeic-stat-val">🔥 {userStats.streakDays}d</div>
-                  <div className="toeic-stat-lbl">Chuỗi Học Liên Tục</div>
-                </div>
-              </div>
-            </div>
+            {/* TOEIC AI HERO BANNER (With Artistic Background & Quick Access) */}
+            <ToeicHeroBanner
+              initialTargetScore={targetScore}
+              onTargetChange={setTargetScore}
+              showStats={true}
+            />
 
             {/* BENTO FEATURE CARDS - ZONE 2 (Clean 2x2 or 4-col Grid) */}
             <div style={{ marginBottom: '2.5rem' }}>

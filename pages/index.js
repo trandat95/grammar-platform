@@ -36,6 +36,7 @@ const AdminOverviewPanel = dynamic(() => import("../components/admin/AdminOvervi
 const AdminMonetizationPanel = dynamic(() => import("../components/admin/AdminMonetizationPanel"), { ssr: false });
 const PedagogicalQualityDashboard = dynamic(() => import("../components/admin/PedagogicalQualityDashboard"), { ssr: false });
 const StepUpConfirmModal = dynamic(() => import("../components/admin/StepUpConfirmModal"), { ssr: false, loading: () => null });
+const ToeicHeroBanner = dynamic(() => import("../components/toeic/ToeicHeroBanner"), { ssr: false });
 import {
   supabase,
   getProfile,
@@ -5462,6 +5463,12 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* TOEIC AI Adaptive Fast-Access Hero Banner */}
+              <ToeicHeroBanner
+                initialTargetScore={750}
+                showStats={true}
+              />
 
               {/* Dashboard Zone A / Zone B Bento Switcher */}
               <div className="ge-bento-zone-tabs">

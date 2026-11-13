@@ -7,6 +7,7 @@ export const BANNER_PATHS = {
   diagnostic: "/assets/banners/02-diagnostic-roadmap-ai.jpg",
   gamification: "/assets/banners/03-gamification-streak-community.jpg",
   vip: "/assets/banners/04-vip-ai-study-coach.jpg",
+  toeic: "/assets/banners/05-toeic-adaptive-ai.jpg",
 };
 
 export const VIP_SHOWCASE_PATHS = {
