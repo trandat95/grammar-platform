@@ -33,6 +33,7 @@
   font-family: 'Google Sans Text', system-ui, -apple-system, sans-serif;
   padding: 1.5rem 1rem 4rem 1rem;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 @media (min-width: 640px) {
@@ -1112,4 +1113,124 @@
 .relative { position: relative; }
 .overflow-hidden { overflow: hidden; }
 .transition-all { transition: all 0.18s ease; }
+
+/* ==========================================================================
+   12. 3D FLASHCARD SYSTEM & ANIMATIONS (AC-U6.4)
+   ========================================================================== */
+.toeic-flashcard-perspective {
+  perspective: 1200px;
+  width: 100%;
+}
+
+.toeic-flashcard-inner {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.toeic-flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.toeic-flashcard-front,
+.toeic-flashcard-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--ds-card);
+  border: 1.5px solid var(--ds-card-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.toeic-flashcard-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, var(--ds-card) 0%, var(--ds-bg-elevated) 100%);
+  border-color: var(--ds-accent-border);
+}
+
+/* ==========================================================================
+   13. AUDIO WAVEFORM VISUALIZER & PLAYBACK (AC-U6.2)
+   ========================================================================== */
+.toeic-waveform-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 38px;
+  padding: 0 0.75rem;
+  background-color: var(--ds-bg-elevated);
+  border-radius: 0.75rem;
+  border: 1px solid var(--ds-border);
+  overflow: hidden;
+}
+
+.toeic-waveform-bar {
+  width: 3px;
+  border-radius: 9999px;
+  background-color: var(--ds-accent);
+  transition: height 0.15s ease;
+}
+
+.toeic-waveform-bar.is-playing {
+  animation: toeicWaveformDance 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes toeicWaveformDance {
+  0% { height: 6px; }
+  50% { height: 30px; }
+  100% { height: 12px; }
+}
+
+.toeic-audio-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 1rem;
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-border);
+  flex-wrap: wrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+/* ==========================================================================
+   14. MOBILE RESPONSIVENESS & TOUCH TARGETS (AC-U7.1 - AC-U7.3)
+   ========================================================================== */
+@media (max-width: 639px) {
+  .toeic-btn {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+  }
+
+  .toeic-target-chip {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toeic-flashcard-inner {
+    min-height: 320px;
+  }
+
+  .toeic-flashcard-front,
+  .toeic-flashcard-back {
+    padding: 1.5rem 1rem;
+  }
+}
+
 

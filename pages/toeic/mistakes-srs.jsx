@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
+import { ToeicBadge, ToeicButton } from '../../components/toeic/ui';
 
 export default function MistakesSrsPage() {
   const [isLight, setIsLight] = useState(true);
@@ -26,6 +27,7 @@ export default function MistakesSrsPage() {
       id: 'srs_02',
       card_type: 'VOCABULARY',
       word: 'reimbursement',
+      ipa: '/ˌriːɪmˈbɜːsmənt/',
       pos: 'noun',
       meaning_vi: 'Sự hoàn tiền, bồi hoàn chi phí công tác',
       example_sentence: 'Please submit your receipts for travel expense reimbursement.',
@@ -37,11 +39,24 @@ export default function MistakesSrsPage() {
       id: 'srs_03',
       card_type: 'VOCABULARY',
       word: 'consecutive',
+      ipa: '/kənˈsekjətɪv/',
       pos: 'adjective',
       meaning_vi: 'Liên tiếp, liên tục (thời gian)',
       example_sentence: 'The team achieved sales targets for three consecutive quarters.',
       ease_factor: 2.4,
       interval_days: 7,
+      next_review_at: 'Hôm nay'
+    },
+    {
+      id: 'srs_04',
+      card_type: 'VOCABULARY',
+      word: 'subsequently',
+      ipa: '/ˈsʌbsɪkwəntli/',
+      pos: 'adverb',
+      meaning_vi: 'Sau đó, tiếp theo sau (thời gian)',
+      example_sentence: 'He resigned and subsequently moved abroad.',
+      ease_factor: 2.5,
+      interval_days: 1,
       next_review_at: 'Hôm nay'
     }
   ]);
@@ -58,39 +73,71 @@ export default function MistakesSrsPage() {
     if (currentIndex < filteredCards.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      alert('🎉 Bạn đã hoàn thành toàn bộ lượt ôn tập SRS hôm nay!');
+      alert('🎉 Chúc mừng! Bạn đã hoàn thành toàn bộ lượt ôn tập SRS theo chu kỳ hôm nay!');
       setCurrentIndex(0);
+    }
+  };
+
+  // TTS Pronunciation
+  const handleSpeakWord = (e, text) => {
+    e.stopPropagation();
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Keyboard Shortcuts (Space to flip, 1-4 for SM-2 ratings)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        setIsFlipped(prev => !prev);
+      } else if (isFlipped) {
+        if (e.key === '1') handleRateCard(1);
+        else if (e.key === '2') handleRateCard(2);
+        else if (e.key === '3') handleRateCard(3);
+        else if (e.key === '4') handleRateCard(4);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFlipped, currentIndex, filteredCards]);
+
+  const handleSelectView = (v) => {
+    if (v === 'toeic') {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
+        window.location.href = '/toeic';
+      }
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
     }
   };
 
   return (
     <>
       <Head>
-        <title>Sổ Tay Câu Sai & Từ Vựng (SRS Spaced Repetition) | Grammar Engine</title>
-        <meta name="description" content="Ôn tập câu làm sai và từ vựng TOEIC theo chu kỳ ngắt quãng SM-2." />
+        <title>Sổ Tay Câu Sai &amp; Từ Vựng (SRS Spaced Repetition 3D) | Grammar Engine</title>
+        <meta name="description" content="Ôn tập câu làm sai và từ vựng TOEIC theo thuật toán ngắt quãng SM-2 với thẻ lật 3D hai mặt." />
       </Head>
 
       <AppShell2026
         activeView="toeic"
         toeicSubView="srs"
-        onSelectView={(v) => {
-          if (v === 'toeic') {
-            if (typeof window !== 'undefined' && window.location.pathname !== '/toeic') {
-              window.location.href = '/toeic';
-            }
-            return;
-          }
-          if (typeof window !== 'undefined') {
-            window.location.href = v === 'dashboard' ? '/' : `/?view=${v}`;
-          }
-        }}
+        onSelectView={handleSelectView}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="Sổ Tay Câu Sai & Từ Vựng (SRS)"
       >
         <div className="toeic-page-wrap">
           <div className="toeic-container" style={{ maxWidth: '780px' }}>
-            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
+            {/* BACK LINK & CATEGORY FILTER */}
+            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
               <a
                 href="/toeic"
                 style={{
@@ -137,162 +184,226 @@ export default function MistakesSrsPage() {
 
             {/* SRS FLASHCARD CONTAINER */}
             {currentCard ? (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between text-xs font-semibold"
-                     style={{ color: 'var(--ds-text-secondary)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {/* Meta Indicator */}
+                <div className="toeic-flex-between" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--ds-text-secondary)' }}>
                   <span>Thẻ {currentIndex + 1} / {filteredCards.length}</span>
-                  <span>Đến hạn ôn: {currentCard.next_review_at} • Khoảng cách: {currentCard.interval_days} ngày</span>
+                  <span>Đến hạn ôn: <strong>{currentCard.next_review_at}</strong> • Khoảng cách: <strong>{currentCard.interval_days} ngày</strong></span>
                 </div>
 
-                <div
-                  onClick={() => setIsFlipped(prev => !prev)}
-                  className="rounded-3xl p-8 sm:p-12 border shadow-sm cursor-pointer min-h-[320px] flex flex-col justify-between transition-all hover:shadow-md"
-                  style={{
-                    backgroundColor: 'var(--ds-surface)',
-                    borderColor: isFlipped ? 'var(--ds-primary)' : 'var(--ds-border)'
-                  }}
-                >
-                  {/* CARD TYPE BADGE */}
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="text-xs px-2.5 py-0.5 rounded-full font-bold uppercase"
-                      style={{
-                        backgroundColor: currentCard.card_type === 'VOCABULARY' ? 'var(--ds-success-subtle)' : 'var(--ds-danger-subtle)',
-                        color: currentCard.card_type === 'VOCABULARY' ? 'var(--ds-success)' : 'var(--ds-danger)'
-                      }}
-                    >
-                      {currentCard.card_type === 'VOCABULARY' ? '📖 Flashcard Từ Vựng' : '❌ Câu Hỏi Từng Làm Sai'}
-                    </span>
-                    <span className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
-                      {isFlipped ? 'Mặt sau (Giải thích)' : 'Nhấp thẻ để lật mặt sau ↻'}
-                    </span>
-                  </div>
+                {/* 3D FLIP CARD (AC-U6.4) */}
+                <div className="toeic-flashcard-perspective">
+                  <div
+                    onClick={() => setIsFlipped(prev => !prev)}
+                    className={`toeic-flashcard-inner ${isFlipped ? 'is-flipped' : ''}`}
+                  >
+                    {/* FRONT OF CARD */}
+                    <div className="toeic-flashcard-front">
+                      <div className="toeic-flex-between">
+                        <ToeicBadge variant={currentCard.card_type === 'VOCABULARY' ? 'success' : 'danger'}>
+                          {currentCard.card_type === 'VOCABULARY' ? '📖 Flashcard Từ Vựng' : '❌ Câu Hỏi Từng Làm Sai'}
+                        </ToeicBadge>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                          Nhấp thẻ hoặc phím Space để lật ↻
+                        </span>
+                      </div>
 
-                  {/* CARD BODY */}
-                  <div className="my-auto py-6 text-center space-y-4">
-                    {!isFlipped ? (
-                      // FRONT OF CARD
-                      currentCard.card_type === 'VOCABULARY' ? (
-                        <div className="space-y-2">
-                          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: 'var(--ds-text-primary)' }}>
-                            {currentCard.word}
-                          </h2>
-                          <div className="text-sm italic" style={{ color: 'var(--ds-text-muted)' }}>
-                            ({currentCard.pos})
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-4 text-left max-w-xl mx-auto">
-                          <p className="text-base sm:text-lg font-medium leading-relaxed" style={{ color: 'var(--ds-text-primary)' }}>
-                            {currentCard.stem}
-                          </p>
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            {Object.entries(currentCard.options || {}).map(([k, v]) => (
-                              <div key={k} className="p-2.5 rounded-lg border"
-                                   style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)' }}>
-                                <span className="font-bold">({k})</span> {v}
+                      <div style={{ margin: 'auto 0', padding: '1.5rem 0' }}>
+                        {currentCard.card_type === 'VOCABULARY' ? (
+                          <div>
+                            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)', letterSpacing: '-0.02em' }}>
+                              {currentCard.word}
+                            </h2>
+                            {currentCard.ipa && (
+                              <div style={{ fontSize: '1.1rem', color: 'var(--ds-accent)', fontFamily: 'monospace', marginBottom: '0.5rem' }}>
+                                {currentCard.ipa}
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    ) : (
-                      // BACK OF CARD (REVEALED)
-                      currentCard.card_type === 'VOCABULARY' ? (
-                        <div className="space-y-3 max-w-md mx-auto">
-                          <div className="text-2xl font-bold" style={{ color: 'var(--ds-primary)' }}>
-                            {currentCard.meaning_vi}
-                          </div>
-                          {currentCard.example_sentence && (
-                            <div className="text-xs sm:text-sm italic p-3 rounded-xl border leading-relaxed"
-                                 style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)', color: 'var(--ds-text-secondary)' }}>
-                              "{currentCard.example_sentence}"
+                            )}
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', alignItems: 'center' }}>
+                              <span style={{ fontStyle: 'italic', color: 'var(--ds-text-muted)', fontSize: '0.9rem' }}>
+                                ({currentCard.pos})
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => handleSpeakWord(e, currentCard.word)}
+                                style={{
+                                  padding: '0.25rem 0.6rem',
+                                  borderRadius: '0.5rem',
+                                  border: '1px solid var(--ds-border)',
+                                  backgroundColor: 'var(--ds-bg-elevated)',
+                                  color: 'var(--ds-accent)',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 700,
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                🔊 Phát âm
+                              </button>
                             </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="space-y-3 text-left max-w-xl mx-auto">
-                          <div className="text-sm font-bold" style={{ color: 'var(--ds-success)' }}>
-                            ✓ Đáp án đúng: ({currentCard.correct_answer})
                           </div>
-                          <p className="text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--ds-text-primary)' }}>
-                            {currentCard.explanation_vi}
-                          </p>
-                        </div>
-                      )
-                    )}
-                  </div>
+                        ) : (
+                          <div style={{ textAlign: 'left', maxWidth: '580px', margin: '0 auto' }}>
+                            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--ds-text)', lineHeight: 1.6, marginBottom: '1rem' }}>
+                              {currentCard.stem}
+                            </p>
+                            <div className="toeic-grid-2" style={{ gap: '0.5rem' }}>
+                              {Object.entries(currentCard.options || {}).map(([k, v]) => (
+                                <div
+                                  key={k}
+                                  style={{
+                                    padding: '0.65rem 0.85rem',
+                                    borderRadius: '0.5rem',
+                                    border: '1px solid var(--ds-border)',
+                                    backgroundColor: 'var(--ds-bg-elevated)',
+                                    fontSize: '0.85rem'
+                                  }}
+                                >
+                                  <strong>({k})</strong> {v}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
-                  <div className="text-center text-[11px]" style={{ color: 'var(--ds-text-muted)' }}>
-                    Ease Factor: {currentCard.ease_factor}
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                        Độ dễ (Ease Factor): {currentCard.ease_factor}
+                      </div>
+                    </div>
+
+                    {/* BACK OF CARD (REVEALED) */}
+                    <div className="toeic-flashcard-back">
+                      <div className="toeic-flex-between">
+                        <ToeicBadge variant="primary">
+                          ✓ Mặt Sau: Nghĩa &amp; Giải Thích
+                        </ToeicBadge>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                          Chọn mức độ nhớ bên dưới ⇣
+                        </span>
+                      </div>
+
+                      <div style={{ margin: 'auto 0', padding: '1.5rem 0' }}>
+                        {currentCard.card_type === 'VOCABULARY' ? (
+                          <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+                            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--ds-accent)', marginBottom: '1rem' }}>
+                              {currentCard.meaning_vi}
+                            </div>
+                            {currentCard.example_sentence && (
+                              <div
+                                style={{
+                                  fontSize: '0.95rem',
+                                  fontStyle: 'italic',
+                                  padding: '1rem',
+                                  borderRadius: '0.75rem',
+                                  border: '1px solid var(--ds-border)',
+                                  backgroundColor: 'var(--ds-card)',
+                                  color: 'var(--ds-text)',
+                                  lineHeight: 1.6
+                                }}
+                              >
+                                "{currentCard.example_sentence}"
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div style={{ textAlign: 'left', maxWidth: '580px', margin: '0 auto' }}>
+                            <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--ds-success)', marginBottom: '0.75rem' }}>
+                              ✓ Đáp án đúng: ({currentCard.correct_answer})
+                            </div>
+                            <p style={{ fontSize: '0.9rem', color: 'var(--ds-text)', lineHeight: 1.6 }}>
+                              {currentCard.explanation_vi}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                        SM-2 Interval: {currentCard.interval_days} ngày
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* SM-2 DIFFICULTY RATING BUTTONS */}
+                {/* 4 SM-2 DIFFICULTY RATING BUTTONS */}
                 {isFlipped && (
-                  <div className="grid grid-cols-4 gap-2 pt-2 animate-fadeIn">
+                  <div className="toeic-grid-4" style={{ gap: '0.5rem', animation: 'toeicFadeIn 0.2s ease-out' }}>
                     <button
                       type="button"
                       onClick={() => handleRateCard(1)}
-                      className="py-3 rounded-xl border text-xs font-bold text-center transition-all hover:opacity-90 active:scale-95"
                       style={{
-                        backgroundColor: 'var(--ds-danger-subtle)',
-                        borderColor: 'var(--ds-danger)',
-                        color: 'var(--ds-danger)'
+                        padding: '0.75rem 0.5rem',
+                        borderRadius: '0.75rem',
+                        border: '1px solid var(--ds-danger-border)',
+                        backgroundColor: 'var(--ds-danger-bg)',
+                        color: 'var(--ds-danger)',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'center'
                       }}
                     >
-                      <div>Chưa nhớ</div>
-                      <div className="text-[10px] font-normal mt-0.5">1 ngày</div>
+                      <div style={{ fontSize: '0.85rem' }}>Chưa nhớ (1)</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 500, marginTop: '0.15rem' }}>1 ngày</div>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleRateCard(2)}
-                      className="py-3 rounded-xl border text-xs font-bold text-center transition-all hover:opacity-90 active:scale-95"
                       style={{
-                        backgroundColor: 'var(--ds-warning-subtle)',
-                        borderColor: 'var(--ds-warning)',
-                        color: 'var(--ds-warning)'
+                        padding: '0.75rem 0.5rem',
+                        borderRadius: '0.75rem',
+                        border: '1px solid var(--ds-warning-border)',
+                        backgroundColor: 'var(--ds-warning-bg)',
+                        color: 'var(--ds-warning)',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'center'
                       }}
                     >
-                      <div>Hơi khó</div>
-                      <div className="text-[10px] font-normal mt-0.5">3 ngày</div>
+                      <div style={{ fontSize: '0.85rem' }}>Hơi khó (2)</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 500, marginTop: '0.15rem' }}>3 ngày</div>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleRateCard(3)}
-                      className="py-3 rounded-xl border text-xs font-bold text-center transition-all hover:opacity-90 active:scale-95"
                       style={{
-                        backgroundColor: 'var(--ds-primary-subtle)',
-                        borderColor: 'var(--ds-primary)',
-                        color: 'var(--ds-primary)'
+                        padding: '0.75rem 0.5rem',
+                        borderRadius: '0.75rem',
+                        border: '1px solid var(--ds-accent-border)',
+                        backgroundColor: 'var(--ds-accent-bg)',
+                        color: 'var(--ds-accent)',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'center'
                       }}
                     >
-                      <div>Nhớ tốt</div>
-                      <div className="text-[10px] font-normal mt-0.5">7 ngày</div>
+                      <div style={{ fontSize: '0.85rem' }}>Nhớ tốt (3)</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 500, marginTop: '0.15rem' }}>7 ngày</div>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleRateCard(4)}
-                      className="py-3 rounded-xl border text-xs font-bold text-center transition-all hover:opacity-90 active:scale-95"
                       style={{
-                        backgroundColor: 'var(--ds-success-subtle)',
-                        borderColor: 'var(--ds-success)',
-                        color: 'var(--ds-success)'
+                        padding: '0.75rem 0.5rem',
+                        borderRadius: '0.75rem',
+                        border: '1px solid var(--ds-success-border)',
+                        backgroundColor: 'var(--ds-success-bg)',
+                        color: 'var(--ds-success)',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textAlign: 'center'
                       }}
                     >
-                      <div>Rất dễ</div>
-                      <div className="text-[10px] font-normal mt-0.5">14 ngày</div>
+                      <div style={{ fontSize: '0.85rem' }}>Rất dễ (4)</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 500, marginTop: '0.15rem' }}>14 ngày</div>
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="rounded-2xl p-8 border text-center space-y-3"
-                   style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-                <p className="text-sm font-semibold" style={{ color: 'var(--ds-text-primary)' }}>
+              <div className="toeic-card" style={{ textAlign: 'center', padding: '2.5rem' }}>
+                <p style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ds-text)' }}>
                   Không có thẻ nào thuộc danh mục này!
                 </p>
               </div>

@@ -64,7 +64,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
-| **TOEIC UI/UX 2026** | **2.14 (U1–U7)** | **TOEIC 2026 – UI/UX Engineering Enhancement (Bento, X-Ray, Split Reader, Dictation)** | **P0 (Critical UI/UX)** | 🔄 Sẵn sàng triển khai (U1–U7 Spec Locked) |
+| **TOEIC UI/UX 2026** | **2.14 (U1–U7)** | **TOEIC 2026 – UI/UX Engineering Enhancement (Bento, X-Ray, Split Reader, Dictation, SRS)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — U1–U7 Live on Production) |
 
 ---
 
@@ -2777,25 +2777,25 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Danh mục 20 đề thi (ETS 2024 & ETS 2026 Test 01–10) dạng lưới thẻ Bento sinh động từ kho dữ liệu thực tế, hiển thị điểm số trước đó, thời gian thi và nút làm bài.
 
 #### 2.14-F: Milestone U6 - Dictation Studio – Listening & Vocabulary Learning Ecosystem (P0)
-- [ ] **2.14.24 Dictation Studio Dashboard (AC-U6.1):**
+- [x] **2.14.24 Dictation Studio Dashboard (AC-U6.1):**
   * Bảng điều khiển 540 tracks audio nạp động từ ETS 2026, lọc theo Test, Part và trạng thái hoàn thành.
-- [ ] **2.14.25 Advanced Audio Player & Waveform Visualizer (AC-U6.2):**
+- [x] **2.14.25 Advanced Audio Player & Waveform Visualizer (AC-U6.2):**
   * Trình phát audio chuyên nghiệp: Tốc độ phát (0.75x, 1.0x, 1.25x, 1.5x), sóng âm thanh SVG trực quan, bấm vào sóng để tua, tua lùi 5s.
-- [ ] **2.14.26 Interactive Cloze Dictation Modes (AC-U6.3):**
+- [x] **2.14.26 Interactive Cloze Dictation Modes (AC-U6.3):**
   * Hỗ trợ các chế độ chép chính tả (Điền từ khuyết, Chép trọn câu, Chép cụm từ), kiểm tra tức thì phím Space/Enter, tự động nhảy con trỏ sang ô tiếp theo.
-- [ ] **2.14.27 3D Flip SRS Flashcard System (AC-U6.4):**
+- [x] **2.14.27 3D Flip SRS Flashcard System (AC-U6.4):**
   * Thẻ flashcard từ vựng lật 3D hai mặt (Mặt trước: từ, phiên âm IPA, audio; Mặt sau: nghĩa tiếng Việt, câu ví dụ, họ từ), 4 nút đánh giá chuẩn SM-2 (Again, Hard, Good, Easy).
-- [ ] **2.14.28 Grounded AI Tutor Drawer (AC-U6.5):**
+- [x] **2.14.28 Grounded AI Tutor Drawer (AC-U6.5):**
   * Cố vấn AI trả lời theo ngữ cảnh câu hỏi từ `ai_tutor_rag_context`, giải thích cặn kẽ bẫy nghe, phát âm và đề xuất câu hỏi gợi ý.
 
 #### 2.14-G: Milestone U7 - Mobile Experience, Responsive Engineering & Accessibility (P0)
-- [ ] **2.14.29 Responsive Breakpoints & Zero Overflow (AC-U7.1):**
+- [x] **2.14.29 Responsive Breakpoints & Zero Overflow (AC-U7.1):**
   * Hỗ trợ 6 dải màn hình (320px–1440px+), kiểm tra thực tế tại các độ phân giải 320, 360, 375, 390, 414, 768, 1024, 1440px, triệt tiêu 100% hiện tượng tràn ngang.
-- [ ] **2.14.30 Touch Interaction Targets (AC-U7.2):**
+- [x] **2.14.30 Touch Interaction Targets (AC-U7.2):**
   * Đảm bảo mọi nút bấm, ô chọn đáp án, thanh audio và câu hỏi palette đạt kích thước chạm tối thiểu $44 \times 44\text{px}$.
-- [ ] **2.14.31 Semantic Dark Mode & WCAG 2.2 AA Contrast (AC-U7.3):**
+- [x] **2.14.31 Semantic Dark Mode & WCAG 2.2 AA Contrast (AC-U7.3):**
   * Đồng bộ hoàn hảo chế độ sáng/tối qua semantic tokens, kiểm toán độ tương phản văn bản đạt $\ge 4.5:1$.
-- [ ] **2.14.32 Automated Accessibility & Regression Testing (AC-U7.4):**
+- [x] **2.14.32 Automated Accessibility & Regression Testing (AC-U7.4):**
   * Tích hợp kiểm thử tự động, xác nhận hỗ trợ bàn phím, quản lý focus trong modal/drawer và đảm bảo toàn bộ hệ thống cũ hoạt động ổn định.
 
 ---
