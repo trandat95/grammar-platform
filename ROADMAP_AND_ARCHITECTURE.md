@@ -63,6 +63,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ✅ Hoàn thành (100% — Live on Prod) |
 | **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
+| **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
 
 ---
 
@@ -2631,6 +2632,71 @@ Milestone 2.11 được xem là hoàn thành khi:
     * `MON-011 -> MON-015`: Sửa LocalStorage không tăng quyền, Direct VIP API auth check, Abandoned checkout tracking, Duplicate callback, Gia hạn entitlement.
   * Kiểm thử bảo vệ người dùng: công khai giá/điều khoản hủy/hoàn tiền và bảo toàn 100% dữ liệu học tập khi nâng cấp hoặc hủy VIP.
   * **Tiêu chuẩn Nghiệm thu (AC-2.12.15):** Đạt 15/15 test cases E2E pass; 0 lỗ hổng vượt quyền VIP hoặc cộng trùng giao dịch.
+
+---
+
+### 🔹 Milestone 2.13: TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine (P0)
+
+> **Mục tiêu:** Tích hợp trọn bộ 4.000 câu hỏi ETS 2024 & ETS 2026 chuẩn hóa V3.0, 540 tracks Dictation, thuật toán AI Adaptive IRT 3PL, Focus Priority Index (FPI), 3-Stage Diagnostic Test, 7 Lộ trình Milestones cá nhân hóa, Thẻ phân tích quang phổ câu `<SentenceXRayCard />`, Twin-Questions Remediation, `<SplitPassageReader />` Part 6 & 7 với Auto-Highlight Evidence, và `<DictationStudio />`.
+
+#### 📦 Phase 2.13-A: Milestone E1 - Database V3.0, Schema & Repositories (P0)
+- [x] **2.13.1 Database V3.0 Verification & Content Integrity (AC-E1.1):**
+  * Kiểm toán 100% 4.000 câu hỏi TOEIC có đầy đủ `ai_analysis`, 540 tracks Dictation, 24 chủ điểm Ngữ pháp `grammar_topics`, 15 mã lỗi nhận thức `error_patterns` và 7 mẫu `milestone_templates`.
+  * Chuẩn hóa đường dẫn dữ liệu `ETS_Corpus_Normalized_Enriched_Database/` và `data/toeic/`.
+- [x] **2.13.2 TypeScript Type-Safety Definitions (AC-E1.2):**
+  * Khởi tạo `types/toeic.ts` định nghĩa nguyên văn 100% interfaces: `TOEICQuestion`, `SentenceXRay`, `OptionDeepAnalysisItem`, `WordFamilyItem`, `LinkedVocabItem`, `IRT3PLParams`, `QuestionAIAnalysis`, `RadarGroupCode`.
+- [x] **2.13.3 User State Tables & Supabase Migration (AC-E1.3):**
+  * Triển khai 6 bảng trạng thái người dùng trên SQLite và Supabase PostgreSQL 17: `users`, `user_question_responses`, `user_skill_mastery`, `user_error_pattern_logs`, `user_milestones`, `user_srs_cards` kèm Foreign Keys, Indexes và RLS.
+- [x] **2.13.4 High-Performance TOEIC Repository Layer (AC-E1.4):**
+  * Xây dựng `lib/toeic/toeic-repository.js` với O(1) in-memory index phục vụ truy vấn câu hỏi theo ID, chủ điểm, độ khó, twin questions và bài đọc Part 6 & 7 trong < 1ms.
+
+#### 🧠 Phase 2.13-B: Milestone E2 - AI Adaptive Engine & Backend API Contracts (P0)
+- [x] **2.13.5 IRT 3PL Ability Estimation & Scoring Engine (AC-E2.1):**
+  * Triển khai `lib/ai-engine/scoring-engine.js` sử dụng mô hình EAP 101 điểm từ -2.5 đến +2.5 tính `theta` và quy đổi điểm TOEIC dự đoán (10 -> 990, bội số của 5).
+  * Tính điểm Mastery Score, phân loại Speed Status (`FAST_ACCURATE`, `SLOW_ACCURATE`, `FAST_GUESSING`, `WEAK`) và chỉ số ưu tiên Focus Priority Index (FPI).
+- [x] **2.13.6 3-Stage Adaptive Diagnostic Selector (AC-E2.2):**
+  * Triển khai `lib/ai-engine/diagnostic-selector.js`: Chặng 1 (10 câu Baseline Probe level 2), Chặng 2 (Phân nhánh thích ứng A/B/C theo kết quả Chặng 1), Chặng 3 (Xác thực điểm yếu qua Twin Questions + Đo tốc độ đọc Part 7).
+- [x] **2.13.7 Personalized 7-Milestone Roadmap Generator (AC-E2.3):**
+  * Triển khai `lib/ai-engine/roadmap-generator.js`: Fast-track miễn học trạm vững, mở khóa trạm kế tiếp, tiêm 2 chủ điểm yếu cá nhân có FPI cao nhất (`injected_weak_topic_ids_json`), đánh giá Boss Gate checkpoint.
+- [x] **2.13.8 8 Core REST API Endpoints with Security Guard (AC-E2.4):**
+  * Xây dựng đầy đủ 8 API endpoints: `/api/toeic/diagnostic/start`, `/api/toeic/diagnostic/stage`, `/api/toeic/diagnostic/submit`, `/api/toeic/roadmap/[userId]`, `/api/toeic/practice/drill`, `/api/toeic/practice/check-answer`, `/api/toeic/tests/[series]/[testNum]`, `/api/toeic/ai-tutor/ask`.
+
+#### 📊 Phase 2.13-C: Milestone E3 - Adaptive Diagnostic UI & Radar Dashboard (P0)
+- [x] **2.13.9 3-Stage Diagnostic Testing Experience (AC-E3.1):**
+  * Giao diện làm bài kiểm tra đầu vào 30 câu chia 3 chặng, PacingTimer thời gian thực, bảng palette trạng thái câu hỏi, chuyển chặng thích ứng mượt mà.
+- [x] **2.13.10 Diagnostic Capability Radar & Top Focus Dashboard (AC-E3.2):**
+  * Thẻ điểm Score Hero Banner, Biểu đồ Radar 6 trục ngữ pháp & đọc hiểu (`G1_POS` -> `G6_VOC_COH`), Top 3 Thẻ Focus ưu tiên cao nhất theo FPI kèm nút vào luyện tập ngay.
+- [x] **2.13.11 Cognitive Error Patterns Diagnostic Panel (AC-E3.3):**
+  * Bảng phân tích 15 mã lỗi tư duy nhận thức (`ERR_*`) học viên mắc phải kèm hướng dẫn khắc phục tự động.
+- [x] **2.13.12 Personalized Milestone Skill Tree (AC-E3.4):**
+  * Hiển thị lộ trình 7 trạm từ Foundation đến Mastery Speed Drill với trạng thái `COMPLETED`, `IN_PROGRESS`, `LOCKED`, tiến độ bài tập và nút thi vượt trạm Boss Gate.
+
+#### 🔬 Phase 2.13-D: Milestone E4 - `<SentenceXRayCard />` & Twin-Questions Remediation (P0)
+- [x] **2.13.13 4-State Sentence X-Ray Card Machine (AC-E4.1):**
+  * Triển khai component `SentenceXRayCard.jsx` theo đúng 4 trạng thái: `STATE_SOLVING`, `STATE_HINT_ACTIVE`, `STATE_SUBMITTED_XRAY`, `STATE_TWIN_REMEDIATION`.
+  * Hỗ trợ phím tắt 1-4 / A-D, gợi ý X-Ray tô sáng neo ngữ pháp `left/right_anchor_words`, thanh sơ đồ cấu trúc `xray_pattern_display`, 3 bước giải nhanh, ma trận họ từ loại `word_family_matrix`, cụm `collocation_highlights`, và từ vựng `linked_vocabulary`.
+- [x] **2.13.14 Instant Twin-Questions Remediation Loop (AC-E4.2):**
+  * Khay bài tập trượt mượt mà (slide-down) kích hoạt ngay khi chọn sai, rút câu hỏi tương đương từ `similar_question_ids` giúp gỡ điểm và củng cố kiến thức lập tức.
+- [x] **2.13.15 Topic Guided Drill Practice Mode (AC-E4.3):**
+  * Giao diện luyện tập chuyên sâu 24 chủ điểm ngữ pháp và luyện tập theo từng Milestone trạm học.
+
+#### 📖 Phase 2.13-E: Milestone E5 - `<SplitPassageReader />` (Part 6 & 7) & Boss Gate (P0)
+- [x] **2.13.16 Multi-Passage Split Reader & Table Support (AC-E5.1):**
+  * Giao diện chia đôi màn hình đọc hiểu Part 6 & Part 7, hỗ trợ bài đọc đôi/ba (`doc_order = 1, 2, 3`), chế độ Tabs và Stacked Cards, render bảng biểu ETS chuẩn.
+- [x] **2.13.17 Synchronized Evidence Auto-Highlight (AC-E5.2):**
+  * Khi xem giải thích, nhấp vào câu hỏi tự động cuộn và tô sáng đoạn văn dẫn chứng `evidence_sentence_en` ở cột bài đọc.
+- [x] **2.13.18 Boss Gate Checkpoint & Unlock Mechanism (AC-E5.3):**
+  * Giao diện thi vượt trạm tính giờ nghiêm ngặt theo `boss_gate_criteria`. Đạt chuẩn mở khóa Milestone tiếp theo; chưa đạt tự động tạo Remediation Drill 10 câu Twin Questions.
+
+#### 🎧 Phase 2.13-F: Milestone E6 - Dictation Studio, SRS Flashcards & AI Tutor (P0)
+- [x] **2.13.19 Dictation Studio 540 Tracks ETS 2026 (AC-E6.1):**
+  * Phòng nghe chép chính tả 540 tracks tách `cloze_text` thành các ô input nối tiếp, kiểm tra tức thì khi gõ Space/Enter, tự động chuyển ô và khóa từ đúng.
+- [x] **2.13.20 Spaced Repetition (SRS) Flashcards for Mistakes & Vocab (AC-E6.2):**
+  * Sổ tay câu sai và từ vựng ôn tập ngắt quãng theo lịch SM-2 (1 - 3 - 7 - 14 ngày).
+- [x] **2.13.21 Grounded AI Tutor Drawer Chatbot (AC-E6.3):**
+  * Khung chat hỏi đáp sư phạm dựa trên `ai_tutor_rag_context` giải thích cặn kẽ mọi thắc mắc ngữ pháp của học viên.
+- [x] **2.13.22 Navigation Integration, Design Tokens & Full Validation Suite (AC-E6.4):**
+  * Tích hợp tab Luyện đề TOEIC vào `AppShell2026`, tuân thủ 100% Design Tokens (`var(--ds-*)`), responsive mobile 0px overflow, và hoàn thành bộ kiểm thử `validate-toeic-full.py`.
 
 ---
 

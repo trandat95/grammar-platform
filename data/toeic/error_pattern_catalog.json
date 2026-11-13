@@ -1,0 +1,95 @@
+{
+  "version": "2.0",
+  "error_patterns": [
+    {
+      "code": "ERR_POS_NOUN_FOR_ADJ",
+      "name_vi": "Nhầm Danh từ vào vị trí của Tính từ bổ nghĩa",
+      "ai_diagnosis_vi": "Người học chưa nhận diện được danh từ chính đã đứng ngay sau chỗ trống, dẫn đến chọn nhầm một danh từ khác thay vì tính từ bổ nghĩa.",
+      "remediation_action": "Ôn tập quy tắc cụm danh từ: [Mạo từ/Sở hữu] + [Tính từ] + [Danh từ chính] thuộc Milestone 1."
+    },
+    {
+      "code": "ERR_POS_ADJ_FOR_ADV",
+      "name_vi": "Nhầm Tính từ vào vị trí của Trạng từ (đuôi -ly)",
+      "ai_diagnosis_vi": "Người học chọn Tính từ để bổ nghĩa cho Động từ thường, Phân từ (V-ing/V-ed) hoặc một Tính từ khác, thay vì phải dùng Trạng từ (-ly).",
+      "remediation_action": "Luyện bài tập phân biệt vị trí Tính từ (sau Linking Verb / trước Noun) và Trạng từ (bổ nghĩa cho Verb / Adj / Participle)."
+    },
+    {
+      "code": "ERR_POS_ADV_FOR_ADJ",
+      "name_vi": "Nhầm Trạng từ vào vị trí của Tính từ (trước Danh từ hoặc sau Linking Verb)",
+      "ai_diagnosis_vi": "Người học thấy đuôi -ly quen thuộc nên chọn vào vị trí đứng ngay trước Danh từ hoặc đứng sau các động từ nối (be, become, remain, seem, stay, keep/find + O + Adj).",
+      "remediation_action": "Ôn lại danh sách Linking Verbs và cấu trúc keep/make/find + Object + Adjective."
+    },
+    {
+      "code": "ERR_POS_NONFINITE_FOR_MAIN_VERB",
+      "name_vi": "Chọn V-ing / To-V hoặc Danh từ vào vị trí Động từ chính của mệnh đề",
+      "ai_diagnosis_vi": "Người học chưa kiểm tra xem mệnh đề đã có Động từ chia thì (Finite Verb) hay chưa, dẫn đến chọn V-ing, To-V hoặc Danh từ làm câu bị cụt động từ chính.",
+      "remediation_action": "Rèn kỹ năng X-Ray tìm trục Chủ ngữ (S) - Động từ chính (V) trước khi xét chỗ trống."
+    },
+    {
+      "code": "ERR_POS_MAIN_VERB_IN_NP",
+      "name_vi": "Chọn Động từ chia thì vào vị trí Danh từ / Tính từ khi câu đã đủ Động từ chính",
+      "ai_diagnosis_vi": "Mệnh đề đã có sẵn động từ chính chia thì nhưng người học vẫn chọn thêm một động từ chia thì nữa mà không có liên từ nối.",
+      "remediation_action": "Nhớ nguyên tắc: 1 mệnh đề đơn chỉ có duy nhất 1 động từ chia thì; các động từ khác phải chuyển về dạng rút gọn (V-ing, V3/ed, To-V) hoặc Danh từ."
+    },
+    {
+      "code": "ERR_PRON_CASE_MISMATCH",
+      "name_vi": "Sai chức năng ngữ pháp của Đại từ (Chủ ngữ / Tân ngữ / Sở hữu / Phản thân)",
+      "ai_diagnosis_vi": "Người học nhầm lẫn giữa Tính từ sở hữu (phải có Danh từ theo sau: his/their) với Đại từ nhân xưng (he/him/they/them) hoặc Đại từ sở hữu đứng độc lập (his/theirs).",
+      "remediation_action": "Kiểm tra từ đứng ngay sau chỗ trống: nếu là Danh từ -> bắt buộc chọn Tính từ sở hữu."
+    },
+    {
+      "code": "ERR_REL_PRONOUN_MISMATCH",
+      "name_vi": "Chọn sai Đại từ quan hệ (who / whom / whose / which / what)",
+      "ai_diagnosis_vi": "Người học chưa xét kỹ danh từ tiền ngữ (người hay vật) hoặc bỏ qua danh từ không mạo từ đứng ngay sau chỗ trống (dấu hiệu của 'whose + Noun').",
+      "remediation_action": "Ôn tập bảng quy chiếu Mệnh đề quan hệ ở Milestone 4."
+    },
+    {
+      "code": "ERR_PREP_VS_CONJ_STRUCTURE",
+      "name_vi": "Nhầm lẫn cấu trúc Giới từ (+ Cụm danh từ/V-ing) và Liên từ (+ Mệnh đề S + V)",
+      "ai_diagnosis_vi": "Người học dịch nghĩa tiếng Việt thấy hợp lý (ví dụ 'mặc dù' hoặc 'bởi vì') nhưng không kiểm tra phía sau chỗ trống là Cụm danh từ hay Mệnh đề có Động từ chia thì.",
+      "remediation_action": "Thực hành 20 câu phân biệt cặp đối lập: Although/Though vs. Despite/In spite of; Because/Since vs. Because of/Due to; While vs. During."
+    },
+    {
+      "code": "ERR_VERB_SVA_TRAP",
+      "name_vi": "Mắc bẫy Hòa hợp Chủ ngữ - Động từ do cụm giới từ chen giữa",
+      "ai_diagnosis_vi": "Người học chia động từ theo danh từ đứng sát trước chỗ trống (nằm trong cụm giới từ of/in/for/with...) thay vì chia theo Danh từ chính đứng đầu cụm.",
+      "remediation_action": "Gạch bỏ các cụm giới từ (Prepositional Phrases) đứng giữa Chủ ngữ và Động từ trước khi chia số ít/số nhiều."
+    },
+    {
+      "code": "ERR_VERB_VOICE_DIRECTION",
+      "name_vi": "Nhầm lẫn giữa Thể Chủ động (Active) và Thể Bị động (Passive)",
+      "ai_diagnosis_vi": "Người học chọn động từ chủ động cho một ngoại động từ khi phía sau không có tân ngữ (mà gặp ngay giới từ by/in/at/to hoặc dấu chấm), hoặc ngược lại.",
+      "remediation_action": "Kiểm tra Tân ngữ ngay sau ngoại động từ: Có Tân ngữ -> Chủ động (V/V-ing); Không có Tân ngữ -> Bị động (be + V3/ed)."
+    },
+    {
+      "code": "ERR_VERB_TENSE_MARKER",
+      "name_vi": "Chọn sai Thì của động từ so với mốc thời gian trong câu",
+      "ai_diagnosis_vi": "Người học bỏ sót trạng từ chỉ thời gian (since, for, over the past, by next month, previously, next week) hoặc quy tắc phối hợp thì.",
+      "remediation_action": "Khoanh tròn trạng từ thời gian trong câu trước khi nhìn 4 đáp án A, B, C, D."
+    },
+    {
+      "code": "ERR_VERB_PARTICIPLE_DIRECTION",
+      "name_vi": "Nhầm lẫn giữa Phân từ hiện tại (V-ing) và Phân từ quá khứ (V-ed/V3)",
+      "ai_diagnosis_vi": "Người học chưa phân biệt được tính chất chủ động/gây ra (V-ing) và trạng thái bị tác động/hoàn tất (V-ed) khi làm tính từ hoặc rút gọn mệnh đề.",
+      "remediation_action": "Ôn tập chuyên đề Phân từ & Rút gọn mệnh đề quan hệ ở Milestone 5."
+    },
+    {
+      "code": "ERR_VOCAB_COLLOCATION_MISMATCH",
+      "name_vi": "Chọn từ vựng không khớp ngữ cảnh hoặc sai cụm Collocation thương mại",
+      "ai_diagnosis_vi": "Người học dịch nghĩa từng từ rời rạc mà chưa nắm được cụm từ cố định (Collocation) đi kèm với danh từ/động từ/giới từ trong câu.",
+      "remediation_action": "Học từ vựng theo cụm Collocation và câu ví dụ ngữ cảnh thực tế từ bộ Vocabulary ETS."
+    },
+    {
+      "code": "ERR_COHERENCE_DISCOURSE_FLOW",
+      "name_vi": "Đứt gãy mạch liên kết câu / đoạn văn (Part 6 Discourse Coherence)",
+      "ai_diagnosis_vi": "Người học chỉ đọc câu chứa chỗ trống mà không đọc câu đứng ngay trước và ngay sau để bắt các từ quy chiếu (this, these, they, however, therefore).",
+      "remediation_action": "Áp dụng quy tắc đọc 2 câu liền kề và gạch chân đại từ chỉ định khi làm Part 6."
+    },
+    {
+      "code": "ERR_COMPREHENSION_TRAP",
+      "name_vi": "Mắc bẫy lặp từ nguyên văn (Word Repetition) hoặc suy diễn sai chi tiết (Part 3, 4, 7)",
+      "ai_diagnosis_vi": "Người học chọn phương án có từ vựng lặp lại giống bài đọc/nghe nhưng sai ngữ cảnh, thay vì chọn phương án diễn đạt lại bằng từ đồng nghĩa (Paraphrasing).",
+      "remediation_action": "Luyện kỹ năng đối chiếu Paraphrasing giữa câu hỏi và câu dẫn chứng."
+    }
+  ]
+}

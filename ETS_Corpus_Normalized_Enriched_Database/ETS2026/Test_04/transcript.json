@@ -1,0 +1,2534 @@
+{
+  "series": "ETS2026",
+  "test": 4,
+  "doc_type": "transcript",
+  "items": [
+    {
+      "question_range": "1",
+      "part": 1,
+      "script": [],
+      "options_script": {
+        "A": "Some trucks have stopped at a traffic signal.",
+        "B": "Some lights are being installed above a garage door.",
+        "C": "A garden is being planted along a fence.",
+        "D": "Several vehicles are parked outside a building."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 트럭들이 교통 신호등 앞에 정차해 있다.\n(B) 전등들이 차고 문 위에 설치되고 있다.\n(C) 정원에 울타리를 따라 식물이 심어지고 있다.\n(D) 여러 대의 차량들이 건물 밖에 주차되어 있다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "사물/풍경 사진 - 풍경 묘사\n(A) 사진에 없는 명사를 이용한 오답. 사진에 교통 신호등(traffic signal)의 모습이 보이지 않으므로 오답.\n(B) 동사 오답. 전등들(Some lights)이 설치되고 있는(are being installed) 모습이 아니므로 오답.\n(C) 동사 오답. 식물이 심어지고 있는(is being planted) 모습이 아니므로 오답.\n(D) 정답. 여러 대의 차량들(Several vehicles)이 건물 밖에 주차되어 있는(are parked outside a building) 모습이므로 정답.\n(D) 오답. 여자가 택시에 타는(is getting into a taxicab) 모습이 아니므로 오답."
+      },
+      "source_page": 2
+    },
+    {
+      "question_range": "1",
+      "part": 1,
+      "script": [],
+      "options_script": {
+        "A": "She's crossing a busy street.",
+        "B": "She's removing her eyeglasses.",
+        "C": "She's standing next to a bin.",
+        "D": "She's getting into a taxicab."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 여자가 분주한 거리를 건너고 있다.\n(B) 여자가 안경을 벗고 있다.\n(C) 여자가 쓰레기통 옆에 서 있다.\n(D) 여자가 택시에 타고 있다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "1인 등장 사진 - 사람의 동작/상태 묘사\n(A) 오답. 여자가 분주한 거리를 건너고 있는(is crossing a busy street) 모습이 아니므로 오답.\n(B) 오답. 여자가 안경을 벗는(is removing her eyeglasses) 모습이 아니므로 오답.\n(C) 정답. 여자가 쓰레기통 옆에 서 있는(is standing next to a bin) 모습이므로 정답."
+      },
+      "source_page": 2
+    },
+    {
+      "question_range": "3",
+      "part": 1,
+      "script": [],
+      "options_script": {
+        "A": "A woman is following a man down a corridor.",
+        "B": "A woman is putting together some cardboard boxes.",
+        "C": "A man is emptying a large container.",
+        "D": "A man is climbing up a ladder."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 여자가 복도에서 남자를 따라가고 있다.\n(B) 여자가 판지 상자들을 조립하고 있다.\n(C) 남자가 대형 용기를 비우고 있다.\n(D) 남자가 사다리 위로 올라가고 있다."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 2
+    },
+    {
+      "question_range": "4",
+      "part": 1,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "He's clearing some snow off a path."
+        }
+      ],
+      "options_script": {
+        "A": "He's clearing some snow off a path.",
+        "B": "He's pulling a cart on a walkway.",
+        "C": "He's leaning over to tie his shoe.",
+        "D": "He's taking some items out of a basket."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 남자가 길에서 눈을 치우고 있다.\n(B) 남자가 보도에서 카트를 끌고 있다.\n(C) 남자가 신발끈을 묶기 위해 몸을 숙이고 있다.\n(D) 남자가 바구니에서 물품을 꺼내고 있다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "1인 등장 사진 - 사람의 동작/상태 묘사\n(A) 동사 오답. 남자가 눈을 치우고 있는(is clearing some snow off a path) 모습이 아니므로 오답.\n(B) 정답. 남자가 보도에서 카트를 끌고 있는(is pulling a cart on a walkway) 모습이므로 정답.\n(C) 동사 오답. 남자가 몸을 숙이고 있는(is leaning over) 모습이 아니므로 오답.\n(D) 동사 오답. 남자가 바구니에서 물품을 꺼내고 있는(is taking some items out of a basket) 모습이 아니므로 오답."
+      },
+      "source_page": 3
+    },
+    {
+      "question_range": "5",
+      "part": 1,
+      "script": [],
+      "options_script": {
+        "A": "One of the women is carrying a bag on her shoulder.",
+        "B": "One of the women is placing her luggage on a scale.",
+        "C": "Some suitcases have been lined up against the wall.",
+        "D": "Some clothes are being packed in a bag."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 여자들 중 한 명이 어깨에 가방을 메고 있다.\n(B) 여자들 중 한 명이 짐을 저울에 올려 놓고 있다.\n(C) 여행 가방들이 벽 쪽에 줄지어 있다.\n(D) 옷들이 가방에 담기고 있다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "2인 이상 등장 사진 - 사람의 동작/상태 묘사\n(A) 정답. 여자가 복도에서 남자를 따라가고 있는(is following a man down a corridor) 모습이므로 정답.\n(B) 동사 오답. 여자가 판지 상자들을 조립하고 있는(is putting together some cardboard boxes) 모습이 아니므로 오답.\n(C) 동사 오답. 남자가 대형 용기를 비우고 있는(is emptying a large container) 모습이 아니므로 오답.\n(D) 동사 오답. 남자가 사다리 위로 올라가고 있는(is climbing up a ladder) 모습이 아니므로 오답."
+      },
+      "source_page": 3
+    },
+    {
+      "question_range": "6",
+      "part": 1,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "Some customers are drinking from coffee cups."
+        }
+      ],
+      "options_script": {
+        "A": "Some customers are drinking from coffee cups.",
+        "B": "Some coffee cups have been placed on a counter.",
+        "C": "Some aprons are hanging from hooks.",
+        "D": "One of the workers is wiping down a counter."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "(A) 고객들이 커피잔에 든 것을 마시고 있다.\n(B) 커피잔들이 카운터에 놓여 있다.\n(C) 앞치마들이 고리에 걸려 있다.\n(D) 직원들 중 한 명이 카운터를 닦고 있다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "2인 이상 등장 사진 - 사람/사물/풍경 혼합 묘사\n(A) 동사 오답. 고객들이 커피잔에 든 것을 마시고 있는(are drinking from coffee cups) 모습이 아니므로 오답.\n(B) 정답. 커피잔들(Some coffee cups)이 카운터에 놓여 있는(have been placed on a counter) 모습이므로 정답.\n(C) 동사 오답. 앞치마들(Some aprons)이 고리에 걸려 있는(are hanging from hooks) 모습이 아니므로 오답.\n(D) 동사 오답. 직원들 중 한 명이 카운터를 닦고 있는(is wiping down a counter) 모습이 아니므로 오답."
+      },
+      "source_page": 3
+    },
+    {
+      "question_range": "7",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "Will you let me know when the catering order arrives?"
+        }
+      ],
+      "options_script": {
+        "A": "A reservation for two.",
+        "B": "The front office.",
+        "C": "Sure, I'll text you."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Bạn có thể cho tôi biết khi nào đơn đặt đồ ăn tới không?\n(A) Hai người đặt bàn.\n(B) Bộ phận tiếp tân.\n(C) Chắc chắn rồi, tôi sẽ nhắn tin cho bạn."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "(A) 연상 단어 오답. 질문의 order에서 연상 가능한 reservation을 이용한 오답.\n(B) 질문과 상관없는 오답.\n(C) 정답. 출장 요리 주문이 도착하면 알려 달라는 요청에 물론이죠(Sure)라고 수락한 뒤, 문자 메시지를 보내겠다며 긍정 답변과 일관된 내용을 덧붙이고 있으므로 정답."
+      },
+      "source_page": 4
+    },
+    {
+      "question_range": "8",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "Why is the manager being replaced?"
+        }
+      ],
+      "options_script": {
+        "A": "Let's do that.",
+        "B": "I prefer working with a team.",
+        "C": "Because she's leaving the company."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Tại sao người quản lý lại bị thay thế vậy?\n(A) Hãy làm vậy đi.\n(B) Tôi thích làm việc với một nhóm hơn.\n(C) Bởi vì cô ấy rời công ty."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "(A) 질문과 상관없는 오답. 제안 의문문에 대한 응답이므로 오답.\n(B) 연상 단어 오답. 질문의 manager에서 연상 가능한 working과 team을 이용한 오답.\n(C) 정답. 관리자가 교체되는 이유를 묻는 질문에 그 사람이 회사를 그만두기 때문이라고 이유를 제시하고 있으므로 정답."
+      },
+      "source_page": 4
+    },
+    {
+      "question_range": "9",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "Ms. Cho should close the store early on Friday."
+        }
+      ],
+      "options_script": {
+        "A": "I prefer a salad.",
+        "B": "Cash register four.",
+        "C": "Yes, I agree."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Cô Cho nên đóng cửa hàng sớm vào thứ Sáu.\n(A) Tôi thích salad hơn.\n(B) Máy tính tiền số bốn.\n(C) Vâng, tôi đồng ý."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "(A) 연상 단어 오답. 퍈서문의 store에서 연상 가능한 salad을 이용한 오답.\n(B) 연상 단어 오답. 퍈서문의 store에서 연상 가능한 Cash register를 이용한 오답.\n(C) 정답. 조 씨가 금요일에 매장을 일찍 닫아야 한다는 퍈서문에 동의한다는 뜻을 나타내고 있으므로 정답."
+      },
+      "source_page": 4
+    },
+    {
+      "question_range": "10",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "Why did you decide to become a pilot?"
+        }
+      ],
+      "options_script": {
+        "A": "Is there free Internet access?",
+        "B": "I enjoy traveling.",
+        "C": "He's on vacation in Argentina."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Tại sao bạn quyết định trở thành phi công?\n(A) Có truy cập Internet miễn phí không?\n(B) Tôi thích đi du lịch.\n(C) Anh ấy đang đi nghỉ mát ở Argentina."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "(A) 질문과 상관없는 오답.\n(B) 정답. 조종사가 되기로 결정한 이유를 묻는 질문에 여행을 즐긴다고 이유를 밝히고 있으므로 정답.\n(C) 질문과 상관없는 오답. 질문에 3인칭 대명사 He로 지칭할 인물이 언급된 적이 없으므로 오답."
+      },
+      "source_page": 4
+    },
+    {
+      "question_range": "11",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Cn",
+          "text": "Have you always commuted by train?"
+        }
+      ],
+      "options_script": {
+        "A": "The training starts at two o'clock.",
+        "B": "I think the station is on Mulberry Avenue.",
+        "C": "Yes, because I don't have a car."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Bạn luôn đi làm bằng tàu hỏa phải không?\n(A) Buổi đào tạo bắt đầu lúc hai giờ.\n(B) Tôi nghĩ nhà ga ở đại lộ Mulberry.\n(C) Vâng, bởi vì tôi không có ô tô."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "(A) 유사 발음 오답. 질문의 train과 부분적으로 발음이 유사한 training을 이용한 오답.\n(B) 연상 단어 오답. 질문의 train에서 연상 가능한 station을 이용한 오답.\n(C) 정답. 항상 기차로 통근했는지 묻는 질문에 네(Yes)라고 대답한 뒤, 차가 없기 때문이라고 긍정 답변과 일관된 내용을 덧붙이고 있으므로 정답."
+      },
+      "source_page": 4
+    },
+    {
+      "question_range": "12",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "When does your manager usually come in?"
+        }
+      ],
+      "options_script": {
+        "A": "Early in the morning.",
+        "B": "No, I just left it there.",
+        "C": "I haven't–thanks."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "매니저는 보통 언제 오시나요?\n(A) 아침 일찍이요.\n(B) 아니요, 방금 거기에 두었어요.\n(C) 그런 적 없어요. 감사합니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "매니저가 평소 오는 시간을 묻는 When 의문문\n(A) 정답. 매니저가 평소 오는 시간을 묻는 질문에 아침 일찍이라고 시간을 알려 주고 있으므로 정답.\n(B) Yes/No 불가 오답. When 의문문에는 Yes/No 응답이 불가능하므로 오답.\n(C) 질문과 상관없는 오답. Have로 시작하는 의문문에 대한 응답이므로 오답."
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "13",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "Isn't there a discount on this computer monitor?"
+        }
+      ],
+      "options_script": {
+        "A": "Yes, a ten percent discount.",
+        "B": "An inventory check.",
+        "C": "Mine is broken."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "이 컴퓨터 모니터는 할인하지 않나요?\n(A) 네, 10퍼센트 할인됩니다.\n(B) 재고 확인이요.\n(C) 제 것은 고장 났어요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "모니터 할인 여부를 확인하는 부정 의문문\n(A) 정답. 모니터 할인 여부를 확인하는 질문에 네(Yes)라고 대답한 뒤, 10퍼센트 할인된다고 긍정 답변과 일관된 내용을 덧붙이고 있으므로 정답.\n(B) 질문과 상관없는 오답.\n(C) 질문과 상관없는 오답."
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "14",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "How is the new group of interns doing?"
+        }
+      ],
+      "options_script": {
+        "A": "No, we have five people in total.",
+        "B": "I haven't heard any negative feedback at all.",
+        "C": "Let's pose for a group photo over there."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "신입 인턴들은 어떻게 지내고 있나요?\n(A) 아니요, 저희는 총 다섯 명입니다.\n(B) 부정적인 의견은 전혀 듣지 못했어요.\n(C) 저쪽에서 단체 사진을 찍을 수 있게 포즈를 취합니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "신입 인턴들이 어떻게 지내는지 묻는 How 의문문\n(A) Yes/No 불가 오답. How 의문문에는 Yes/No 응답이 불가능하므로 오답.\n(B) 정답. 신입 인턴들이 어떻게 지내는지 묻는 질문에 부정적인 의견은 전혀 듣지 못했다며 잘 지내고 있음을 우회적으로 알려 주고 있으므로 정답.\n(C) 단어 반복 오답. 질문의 group을 반복 이용한 오답."
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "15",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "They're carrying those boxes to the storage room."
+        }
+      ],
+      "options_script": {
+        "A": "That's a good price.",
+        "B": "No, the store opens at noon today.",
+        "C": "I'll go with them."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "그들이 그 상자들을 창고로 옮기고 있어요.\n(A) 좋은 가격이네요.\n(B) 아니요, 그 매장은 오늘 정오에 열어요.\n(C) 제가 그들과 함께 갈게요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "정보 전달의 평서문\n(A) 평서문과 상관없는 오답.\n(B) 유사 발음 오답. 평서문의 storage와 부분적으로 발음이 유사한 store를 이용한 오답.\n(C) 정답. 사람들이 상자들을 창고로 옮기고 있다고 알리는 평서문에 그들과 함께 가겠다는 말로 도움을 제공하겠다는 의사를 나타내고 있으므로 정답."
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "16",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "Where can I send the money?"
+        }
+      ],
+      "options_script": {
+        "A": "To my bank account.",
+        "B": "I think that's expensive, too.",
+        "C": "By next Tuesday."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "돈을 어디로 보내면 될까요?\n(A) 제 은행 계좌로요.\n(B) 그것도 비싼 것 같아요.\n(C) 다음 주 화요일까지요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "돈을 보낼 곳을 묻는 Where 의문문\n(A) 정답. 돈을 보낼 곳을 묻는 질문에 자신의 계좌로 보내라고 알려 주고 있으므로 정답.\n(B) 연상 단어 오답. 질문의 money에서 연상 가능한 expensive를 이용한 오답.\n(C) 질문과 상관없는 오답. When 의문문에 대한 응답이므로 오답."
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "17",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "Who's coming in tomorrow to help us prepare for the grand opening?"
+        }
+      ],
+      "options_script": {
+        "A": "Rebecca and Malik.",
+        "B": "An online job posting.",
+        "C": "Some sales data."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "[UNREADABLE]"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "[UNREADABLE]"
+      },
+      "source_page": 5
+    },
+    {
+      "question_range": "18",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am / M-Cn",
+          "text": "How often does the bus stop at this location?"
+        }
+      ],
+      "options_script": {
+        "A": "I'll be visiting the office.",
+        "B": "About every twenty minutes.",
+        "C": "A city council meeting."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "버스가 이곳에 얼마나 자주 정차하나요?\n(A) 저는 그 사무실을 방문할 예정입니다.\n(B) 약 20분마다요.\n(C) 시 의회 회의요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "버스의 정차 빈도를 묻는 How often 의문문\n(A) 질문과 상관없는 오답.\n(B) 정답. 버스의 정차 빈도를 묻는 질문에 약 20분마다고 빈도로 응답하고 있으므로 정답.\n(C) 질문과 상관없는 오답."
+      },
+      "source_page": 6
+    },
+    {
+      "question_range": "19",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am / M-Au",
+          "text": "What's the candidate review process?"
+        }
+      ],
+      "options_script": {
+        "A": "We review the resumés first.",
+        "B": "A few good reviews.",
+        "C": "OK-I'll just follow them."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "지원자 평가 과정이 어떻게 되나요?\n(A) 우선 이력서를 검토합니다.\n(B) 몇몇 좋은 평가들이요.\n(C) 알겠어요, 그냥 따라갈게요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "지원자 평가 과정을 묻는 What 의문문\n(A) 정답. 지원자 평가 과정을 묻는 질문에 우선 이력서를 검토한다며 첫 번째 단계를 알려 주고 있으므로 정답.\n(B) 단어 반복 오답. 질문의 review를 반복 이용한 오답.\n(C) Yes/No 불가 오답. What 의문문에는 Yes/No 응답이 불가능한데, OK도 일종의 Yes 응답이라고 볼 수 있으므로 오답."
+      },
+      "source_page": 6
+    },
+    {
+      "question_range": "20",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am / M-Cn",
+          "text": "There's coffee in the break room, right?"
+        }
+      ],
+      "options_script": {
+        "A": "That shift starts at noon.",
+        "B": "We decided to paint this room gray.",
+        "C": "Yes-I just made a fresh pot."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "휴게실에 커피 있죠, 그렇죠?\n(A) 그 근무는 정오에 시작합니다.\n(B) 이 방을 회색으로 칠하기로 했어요.\n(C) 네, 제가 방금 새로 끓여 놨습니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "휴게실에 커피가 있는지 확인하는 부가 의문문\n(A) 질문과 상관없는 오답. When 의문문에 대한 응답이므로 오답.\n(B) 단어 반복 오답. 질문의 room을 반복 이용한 오답.\n(C) 정답. 휴게실에 커피가 있는지 확인하는 질문에 네(Yes)라고 대답한 뒤, 자신이 막 새로 끓었다고 긍정 답변과 일관된 내용을 덧붙이고 있으므로 정답."
+      },
+      "source_page": 6
+    },
+    {
+      "question_range": "21",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au / W-Am",
+          "text": "Who's going to the company picnic today?"
+        }
+      ],
+      "options_script": {
+        "A": "About two hours long.",
+        "B": "I'm leaving in a few minutes.",
+        "C": "A two-year maintenance contract."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "오늘 회사 야유회에 누가 가나요?\n(A) 약 두 시간요.\n(B) 제가 몇 분 후에 출발할 거예요.\n(C) 2년 유지 관리 계약이요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "회사 야유회에 가는 사람을 묻는 Who 의문문\n(A) 질문과 상관없는 오답. How long 의문문에 대한 응답이므로 오답.\n(B) 정답. 회사 야유회에 가는 사람을 묻는 질문에 자신이 곧 출발한다고 알려 주고 있으므로 정답.\n(C) 질문과 상관없는 오답. How long 의문문에 대한 응답이므로 오답."
+      },
+      "source_page": 6
+    },
+    {
+      "question_range": "22",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br / M-Cn",
+          "text": "Will the bakery be open tomorrow?"
+        }
+      ],
+      "options_script": {
+        "A": "No, it's closed until mid-August.",
+        "B": "Have you checked the oven?",
+        "C": "The pound cake is delicious."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "그 제과점이 내일 문을 열까요?\n(A) 아니요, 8월 중순까지 문을 닫아요.\n(B) 오븐은 확인하셨어요?\n(C) 파운드 케이크가 맛있어요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "제과점이 내일 문을 여는지 묻는 조동사(Will) 의문문\n(A) 정답. 제과점이 내일 문을 여는지 묻는 질문에 아니요(No)라고 대답한 뒤, 8월 중순까지 문을 닫는다며 부정 답변과 일관된 내용을 덧붙이고 있으므로 정답."
+      },
+      "source_page": 6
+    },
+    {
+      "question_range": "23",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Cn / M-Au",
+          "text": "Are you installing the new software on Monday or Tuesday?"
+        }
+      ],
+      "options_script": {
+        "A": "Thanks, but they already have one.",
+        "B": "I'll be out of the office all week.",
+        "C": "It was an older model laptop."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Bạn sẽ cài đặt phần mềm mới vào thứ Hai hay thứ Ba?\n(A) Cảm ơn, nhưng họ đã có một cái rồi.\n(B) Tôi sẽ vắng mặt ở văn phòng cả tuần.\n(C) Đó là một chiếc máy tính xách tay đời cũ hơn."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "Phần mềm mới sẽ cài đặt vào ngày nào là lựa chọn.\n(A) Trả lời không liên quan. Không có nhân vật thứ ba số nhiều 'they' nào được đề cập.\n(B) Đúng. Hỏi về thời điểm cài đặt vào thứ Hai hay thứ Ba, trả lời rằng cả tuần vắng mặt nghĩa là cả thứ Hai và thứ Ba đều không thể, là câu trả lời cho ý thứ 3.\n(C) Từ vựng bẫy: 연상 소프트웨어에서 연상 가능한 laptop"
+      },
+      "source_page": 7
+    },
+    {
+      "question_range": "24",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Cn / W-Br",
+          "text": "Let me find a sales associate to help you."
+        }
+      ],
+      "options_script": {
+        "A": "At the top of the list.",
+        "B": "My article is ready to be uploaded.",
+        "C": "I just found what I'm looking for."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Để tôi tìm một nhân viên kinh doanh giúp bạn.\n(A) Ở đầu danh sách.\n(B) Bài báo của tôi đã sẵn sàng để được tải lên.\n(C) Tôi vừa tìm thấy thứ mình đang tìm kiếm."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đề xuất/Yêu cầu.\n(A) Không liên quan đến đoạn văn. Là câu trả lời cho câu hỏi 'Where' nên sai.\n(B) Không liên quan đến đoạn văn.\n(C) Đúng. Đề nghị tìm nhân viên giúp đỡ, trả lời rằng đã vừa tìm thấy rồi, ngầm thông báo không cần nhân viên kinh doanh nữa nên là đáp án."
+      },
+      "source_page": 7
+    },
+    {
+      "question_range": "25",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au / W-Am",
+          "text": "You're offering discounts to students, right?"
+        }
+      ],
+      "options_script": {
+        "A": "No, that's not my wallet.",
+        "B": "You'll need valid identification.",
+        "C": "I'm doing inventory this weekend."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Bạn đang giảm giá cho học sinh/sinh viên phải không?\n(A) Không, đó không phải là ví của tôi.\n(B) Bạn sẽ cần giấy tờ tùy thân hợp lệ.\n(C) Cuối tuần này tôi kiểm kê hàng tồn kho."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Hỏi về việc có giảm giá cho học sinh sinh viên không, đúng không?\n(A) Không phải, không phải ví của tôi.\n(B) Giấy tờ tùy thân hợp lệ là cần thiết.\n(C) Cuối tuần này tôi sẽ kiểm kê hàng tồn kho."
+      },
+      "source_page": 7
+    },
+    {
+      "question_range": "26",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br / W-Am",
+          "text": "The sales department posted an advertisement for an assistant."
+        }
+      ],
+      "options_script": {
+        "A": "I didn't know they were hiring.",
+        "B": "An additional charge for shipping.",
+        "C": "No, I haven't been there."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Bộ phận kinh doanh đã đăng một quảng cáo tuyển trợ lý.\n(A) Tôi không biết họ đang tuyển dụng.\n(B) Phí bổ sung cho việc vận chuyển.\n(C) Không, tôi chưa đến đó."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Truyền đạt thông tin.\n(A) Đúng. Thông báo bộ phận kinh doanh đã đăng quảng cáo tuyển người, phản hồi rằng không biết bộ phận đó tuyển dụng nên tỏ ý ngạc nhiên, là đáp án đúng.\n(B) Không liên quan đến đoạn văn.\n(C) Không liên quan đến đoạn văn."
+      },
+      "source_page": 7
+    },
+    {
+      "question_range": "27",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br / M-Cn",
+          "text": "Does the new accounting software work well?"
+        }
+      ],
+      "options_script": {
+        "A": "I haven't downloaded it yet.",
+        "B": "We're not offering a discount.",
+        "C": "That was my reaction too."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Phần mềm kế toán mới hoạt động có tốt không?\n(A) Tôi chưa tải nó xuống.\n(B) Chúng tôi không giảm giá.\n(C) Đó cũng là phản ứng của tôi."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Phần mềm kế toán mới hoạt động tốt không là câu hỏi trợ động từ (Does).\n(A) Đúng. Hỏi phần mềm kế toán mới hoạt động có tốt không, trả lời rằng chưa tải xuống nên không biết, là đáp án đúng.\n(B) Bẫy từ vựng tương tự. Phát âm từ 'accounting' tương tự 'discount'.\n(C) Không liên quan đến câu hỏi."
+      },
+      "source_page": 7
+    },
+    {
+      "question_range": "28",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Am / M-Cn",
+          "text": "When's the finance department going to confirm our first-quarter budget?"
+        }
+      ],
+      "options_script": {
+        "A": "Their deadline is next week.",
+        "B": "Yes, I'll be there.",
+        "C": "In the mail room."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "재무 부서에서 언제 1분기 예산을 확정할 건가요?\n(A) 마감 기한이 다음 주예요.\n(B) 네, 그곳에 갈 거예요.\n(C) 우편실이에요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "재무 부서에서 1분기 예산을 확정하는 시기를 묻는 When 의문문\n(A) 정답. 재무 부서에서 1분기 예산을 확정하는 시기를 묻는 질문에 그 부서의 마감 기한이 다음 주라며 그때까지는 확정될 것이라는 뜻을 우회적으로 나타내고 있으므로 정답.\n(B) Yes/No 불가 오답. When 의문문에는 Yes/No 응답이 불가능하므로 오답.\n(C) 질문과 상관없는 오답. Where 의문문에 대한 응답이므로 오답."
+      },
+      "source_page": 8
+    },
+    {
+      "question_range": "29",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Cn / M-Au",
+          "text": "Who canceled the conference call?"
+        }
+      ],
+      "options_script": {
+        "A": "The upstairs conference room.",
+        "B": "It's been rescheduled.",
+        "C": "Yes, you can."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "누가 전화 회의를 취소했나요?\n(A) 위층에 있는 대회의실이요.\n(B) 일정이 재조정되었습니다.\n(C) 네, 그러셔도 됩니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전화 회의를 취소한 사람을 묻는 Who 의문문\n(A) 단어 반복 오답. 질문의 conference를 반복 이용한 오답.\n(B) 정답. 전화 회의를 취소한 사람을 묻는 질문에 일정이 재조정되었다며 취소된 것이 아님을 우회적으로 알려 주고 있으므로 정답.\n(C) Yes/No 불가 오답. Who 의문문에는 Yes/No 응답이 불가능하므로 오답."
+      },
+      "source_page": 8
+    },
+    {
+      "question_range": "30",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "M-Au / W-Am",
+          "text": "Can you please transfer the service to my new phone?"
+        }
+      ],
+      "options_script": {
+        "A": "Let's put it in the backseat.",
+        "B": "At the Maple Street station.",
+        "C": "There is a processing fee."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "새 휴대폰으로 서비스를 이전해 주실 수 있나요?\n(A) 뒷자리에 둡시다.\n(B) 메이플 가 역예요.\n(C) 처리 수수료가 있습니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "부탁/요청의 의문문\n(A) 질문과 상관없는 오답.\n(B) 질문과 상관없는 오답. Where 의문문에 대한 응답이므로 오답.\n(C) 정답. 새 휴대폰으로 서비스 이전을 요청하는 질문에 처리 수수료가 있다며 수수료를 내면 이전이 가능함을 우회적으로 알려 주고 있으므로 정답."
+      },
+      "source_page": 8
+    },
+    {
+      "question_range": "31",
+      "part": 2,
+      "script": [
+        {
+          "speaker": "W-Br / M-Cn",
+          "text": "How was today's manufacturing seminar?"
+        }
+      ],
+      "options_script": {
+        "A": "A new pair of shoes.",
+        "B": "We didn't get there in time.",
+        "C": "There's a user's manual in the drawer."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "오늘 있었던 제조 세미나는 어땠나요?\n(A) 새 신발 한 켤레요.\n(B) 저희는 제때 도착하지 못했어요.\n(C) 서랍에 사용자 설명서가 있어요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "오늘 있었던 제조 세미나에 대한 의견을 묻는 How 의문문\n(A) 질문과 상관없는 오답.\n(B) 정답. 오늘 있었던 제조 세미나에 대한 의견을 묻는 질문에 제때 도착하지 못했다며 참석하지 못해서 알지 못함을 우회적으로 나타내고 있으므로 정답.\n(C) 유사 발음 오답. 질문의 manufacturing과 부분적으로 발음이 유사한 manual을 이용한 오답."
+      },
+      "source_page": 8
+    },
+    {
+      "question_range": "32-34",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "Good morning. Thanks for coming to tour this apartment building."
+        },
+        {
+          "speaker": "M",
+          "text": "I'm glad I could visit in person. I've always wanted to live in this neighborhood—it's so beautiful. This building is brand-new, isn't it?"
+        },
+        {
+          "speaker": "W",
+          "text": "Yes. In fact, you'd be among the very first tenants if you decide to move here. Before you look at some apartments, would you please sign your name here in our guest book?"
+        },
+        {
+          "speaker": "M",
+          "text": "Oh, of course."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "여 안녕하세요. 이 아파트를 둘러보러 와 주셔서 감사합니다.\n남 직접 방문할 수 있어서 기뻐요. 항상 이 동네에 살고 싶었거든요. 너무 아름답네요. 이 건물은 신축이죠, 아닌가요?\n여 네. 사실, 이곳으로 이사하기로 결정하신다면 최초의 세입자 중 한 분이 되실 거예요. 몇 군데 아파트를 둘러보시기 전에, 저희 방명록에 이곳에 서명해 주시겠어요?\n남 아, 물론이죠."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 8
+    },
+    {
+      "question_range": "32-34",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "네. 실제로, 이곳으로 이사하기로 결정하시면 첫 입주자들 중 한 명이 될 것입니다. 아파트를 보시기 전에, 여기 방명록에 서명해 주시겠어요?"
+        },
+        {
+          "speaker": "M",
+          "text": "아, 물론입니다."
+        }
+      ],
+      "options_script": {
+        "A": "A landscape architect",
+        "B": "An interior designer",
+        "C": "A real estate agent",
+        "D": "A building inspector"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 9
+    },
+    {
+      "question_range": "32-34",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "household 가정; 가정의",
+        "B": "industrial 산업의, 공업의",
+        "C": "textile 섬유, 직물",
+        "D": "pharmaceutical 의약(품), 제약"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남자에 따르면, 펠리컨은 무엇을 생산하는가?\n(A) 가정용 세척제\n(B) 화장품\n(C) 산업용 섬유\n(D) 의약품"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 펠리컨이 생산하는 것\n남자가 첫 대사에서 지역 화장품 생산체인 펠리컨(Pelicon, a local producer of beauty products)이라고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 11
+    },
+    {
+      "question_range": "35-37",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "Chen, I hope all is going well on your first day. I saw you have some scheduled seafood deliveries across the bay in the Morgan District. Why haven't you left yet?"
+        },
+        {
+          "speaker": "M",
+          "text": "I wasn't going to head over to that particular area for another hour. Do the restaurants in the Morgan District want their deliveries earlier than scheduled?"
+        },
+        {
+          "speaker": "W",
+          "text": "No, but I'm concerned about Bay Bridge traffic. It's routinely congested with vehicles. So you should always add at least an extra hour to your trip out there."
+        },
+        {
+          "speaker": "M",
+          "text": "Thanks for the tip. I'll also check traffic Webcams on the highway agency's Web site."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 9
+    },
+    {
+      "question_range": "35",
+      "part": 3,
+      "options_script": {
+        "A": "Boat crew member",
+        "B": "Restaurant owner",
+        "C": "Seafood inspector",
+        "D": "Delivery truck driver"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남자의 직업은 무엇인 것 같은가? (A) 보트 승무원 (B) 레스토랑 소유주 (C) 해산물 검사관 (D) 배송 트럭 기사"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전체 내용 관련 - 남자의 직업: 여자가 첫 대사에서 남자에게 모건 지역에 해산물 배송 업무가 예정되어 있는 걸 봤다며, 왜 아직 출발하지 않았는지(I saw you have some scheduled seafood deliveries ~. Why haven’t you left yet?) 묻고 있으므로 정답은 (D)이다."
+      },
+      "source_page": 10,
+      "script": []
+    },
+    {
+      "question_range": "36-37",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "..."
+        }
+      ],
+      "options_script": {
+        "A": "A road has been temporarily closed.",
+        "B": "A permit has expired.",
+        "C": "Traffic may cause a delay.",
+        "D": "Some supplies are no longer available."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "여자는 왜 걱정하는가? (A) 도로가 일시적으로 폐쇄되었다. (B) 허가증이 만료되었다. (C) 교통량으로 인해 지연될 수 있다. (D) 일부 물품을 더 이상 이용할 수 없다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 여자가 걱정하는 이유: 여자가 두 번째 대사에서 베이 브리지의 교통량이 걱정된다며, 차량들로 혼잡한 게 일상적이라서 거기에 갈 때는 항상 최소 한 시간은 더 잡아야 한다(I’m concerned about Bay Bridge traffic. It’s routinely congested with vehicles. So you should always add at least an extra hour ~)고 덧붙이고 있으므로 정답은 (C)이다."
+      },
+      "source_page": 10
+    },
+    {
+      "question_range": "38-40",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "This morning I got an e-mail from Pelicon, a local producer of beauty products. They’re interested in purchasing lanolin from us to use in their new line of all-natural makeup."
+        },
+        {
+          "speaker": "W",
+          "text": "I’m not sure about that. We’re a fairly small farm, and we already sell lanolin to another local business. I’m worried that we don’t produce enough lanolin to meet the demand of another client. I don’t want to expand and take on more wool production."
+        },
+        {
+          "speaker": "M",
+          "text": "But our contract with the business we currently supply lanolin to has almost expired-there’s no guarantee it will be renewed. I think you should at least read Pelicon’s proposal."
+        },
+        {
+          "speaker": "W",
+          "text": "Sure. Can you forward me the e-mail?"
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "남: 오늘 아침에 지역 화장품 생산업체인 펠리컨으로부터 이메일을 하나 받았어요. 새로운 천연 화장품 라인에 사용할 라놀린을 구매하는 데 관심이 있네요.\n여: 잘 모르겠네요. 우리는 꽤 작은 농장이고, 이미 라놀린을 다른 지역 업체에 판매하고 있잖아요. 다른 고객의 수요를 충족할 수 있을 만큼 라놀린을 충분히 생산하지 못할까 봐 걱정입니다. 확장해서 더 많은 양모 생산을 맡고 싶지 않아요.\n남: 하지만 현재 라놀린을 공급하는 업체와의 계약이 거의 만료되었고, 갱신될 거라는 보장도 없어요. 최소한 펠리컨의 제안서를 읽어야 봐야 한다고 생각합니다.\n여: 좋아요. 제게 그 이메일을 전달해 주시겠어요?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 남자가 확인할 것: 남자가 마지막 대사에서 교통 웹캠들도 확인해 보겠다(I’ll also check traffic Webcams ~)고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 10
+    },
+    {
+      "question_range": "38",
+      "part": 3,
+      "options_script": {
+        "A": "Household cleaners",
+        "B": "Cosmetics",
+        "C": "Industrial textiles",
+        "D": "Pharmaceuticals"
+      },
+      "source_page": 10,
+      "script": []
+    },
+    {
+      "question_range": "39",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Hiring skilled workers",
+        "B": "Securing a bank loan",
+        "C": "Finding transportation",
+        "D": "Making enough product"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "What does the woman say she is concerned about?\n여자는 무엇이 걱정된다고 말하는가?\n(A) 숙련된 직원 고용하기\n(B) 은행 대출 받기\n(C) 교통편 찾기\n(D) 충분한 제품 만들기"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 여자가 걱정하는 것\n여자가 첫 대사에서 다른 고객의 수요를 충족할 수 있을 만큼 라놀린을 충분히 생산하지 못할까 봐 걱정(I'm worried that we don't produce enough lanolin to meet the demand of another client)이라고 했으므로 정답은 (D)이다."
+      },
+      "source_page": 11
+    },
+    {
+      "question_range": "40",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "To consider a business proposal",
+        "B": "To prepare for a client meeting",
+        "C": "To view some construction plans",
+        "D": "To learn the details of a complaint"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "Why does the man recommend reading an e-mail?\n남자는 왜 이메일을 읽어 보라고 권하는가?\n(A) 사업 제안을 고려해 보기 위해\n(B) 고객 회의를 준비하기 위해\n(C) 건설 설계도를 확인해 보기 위해\n(D) 불만에 대한 상세한 정보를 알기 위해"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 남자가 이메일을 읽도록 권하는 이유\n남자가 두 번째 대사에서 현재 업체와의 계약이 거의 만료되었고, 갱신될 거라는 보장은도없다(our contract ~ has almost expired-there's no guarantee it will be renewed)며, 펠리컨의 제안서를 읽어야 한다(I think you should at least read Pelicon's proposal)고 했다. 이는 현재 사업이 어떻게 될지 모르니 펠리컨의 사업 제안을 고려해 보라는 것이므로 (A)가 정답이다."
+      },
+      "source_page": 11
+    },
+    {
+      "question_range": "41-43",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "Nisreen? This is Lewis. I heard you're going to be working for our company overseas, in the New Zealand office. What a great opportunity!"
+        },
+        {
+          "speaker": "W",
+          "text": "Yes, thank you. I start next month, and I'm really excited."
+        },
+        {
+          "speaker": "M",
+          "text": "I'm calling to touch base with you about some of our vendor contracts. It's time to renew the contracts, and I wanted to ask you to take care of that before you leave."
+        },
+        {
+          "speaker": "W",
+          "text": "No problem. I know where those files are located on our shared computer drive. I'll just need the password to access them."
+        }
+      ],
+      "options_script": {
+        "A": "Reorganize a department",
+        "B": "Attend a conference",
+        "C": "Relocate to an overseas office",
+        "D": "Take a vacation"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남 니즈린? 루이스입니다. 뉴질랜드 지사에서 해외 근무를 하게 된다고 들었어요. 정말 좋은 기회입니다!\n여 네, 감사합니다. 다음 달에 시작하는데, 정말 기대됩니다.\n남 판매업체 계약과 관련해 몇 가지 협의하기 위해 전화했어요. 계약을 갱신할 때가 되어서, 떠나시기 전에 그 건의 처리를 요청하고 싶었어요.\n여 문제없습니다. 우리 공용 컴퓨터 드라이브에서 그 파일들이 어디에 있는지 알아요. 이용하려면 비밀번호만 있으면 될 거예요."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "What will the woman do next month?\n여자는 다음 달에 무엇을 할 것인가?\n(A) 부서 개편하기\n(B) 콘퍼런스 참석하기\n(C) 해외 지사로 옮기기\n(D) 휴가 떠나기"
+      },
+      "source_page": 11
+    },
+    {
+      "question_range": "42",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Help with some contracts",
+        "B": "Prepare a project timeline",
+        "C": "Update some software",
+        "D": "Call a sales representative"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "Nam: 남자가 무엇을 하기를 원하는가?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 남자가 여자에게 원하는 것: 남자가 두 번째 대사에서 여자에게 계약을 갱신할 때가 되어서, 떠나기 전에 그 건의 처리를 요청하고 싶었다(It's time to renew the contracts, and I wanted to ask you to take care of that before you left)고 하므로 정답은 (A)이다."
+      },
+      "source_page": 12
+    },
+    {
+      "question_range": "43",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Some employee names",
+        "B": "Some credit card information",
+        "C": "A file password",
+        "D": "A telephone number"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "여자는 남자에게 무엇을 요청하는가?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 여자의 요청 사항: 여자가 마지막 대사에서 파일들을 언급하며, 이용하려면 비밀번호만 있으면 될 것(~ I'll just need the password to access them)이라고 했으므로 정답은 (C)이다."
+      },
+      "source_page": 12
+    },
+    {
+      "question_range": "44-46",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "Hi. This is Giovanni Marino's agent. I'm calling to reschedule his planned appearance on the Sunday Morning Show."
+        },
+        {
+          "speaker": "M",
+          "text": "Right. We have him booked to appear on the show in July to promote his new movie."
+        },
+        {
+          "speaker": "W",
+          "text": "Unfortunately, the movie he's acting in is behind schedule, and he'll now be on location through the end of August."
+        },
+        {
+          "speaker": "M",
+          "text": "Hmm, I see. Let me look at our guest calendar. I have a slot I'm looking to fill on September fourteenth-would that work?"
+        },
+        {
+          "speaker": "W",
+          "text": "Yes, that would be great, thanks."
+        },
+        {
+          "speaker": "M",
+          "text": "All right. I'll update the contract with the new date and e-mail it to you."
+        }
+      ],
+      "options_script": {
+        "A": "To negotiate a payment",
+        "B": "To reschedule an appearance",
+        "C": "To book a venue",
+        "D": "To ask about security"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "여: 안녕하세요. 지오바니 마리노의 대리인입니다. 계획되어 있는 <선데이 모닝 쇼> 출연 일정을 재조정하기 위해 전화했습니다.\n남: 맞아요. 신작 영화를 홍보하실 수 있게 7월에 프로그램 출연을 예약해 드렸습니다.\n여: 안타깝게도, 출연 중인 영화의 촬영이 예정보다 늦어져, 이제는 8월 말까지 현지 촬영이 진행될 예정이에요.\n남: 흠, 알겠습니다. 저희 초대 손님 일정표를 확인해 보겠습니다. 9월 14일에 채우려고 하는 자리가 하나 있는데, 그 날짜 괜찮을까요?\n여: 네, 그럼 아주 좋겠네요. 감사합니다.\n남: 좋습니다. 새로운 날짜로 계약서를 업데이트해서 이메일로 보내 드리겠습니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전체 내용 관련 - 여자가 전화하는 이유: 여자가 첫 대사에서 자신이 지오바니 마리노의 대리인이며, <선데이 모닝 쇼> 출연 일정을 재조정하기 위해 전화했다(This is Giovanni Marino's agent. I'm calling to reschedule his planned appearance on the Sunday Morning Show)고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 12
+    },
+    {
+      "question_range": "45",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "An actor",
+        "B": "A politician",
+        "C": "A writer",
+        "D": "A photographer"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "지오바니 마리노는 누구인 것 같은가?\n(A) 배우\n(B) 정치인\n(C) 작가\n(D) 사진가"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 지오바니 마리노의 직업\n남자가 첫 대사에서 지오바니 마리노의 신작 영화(his new movie)를 언급했고, 여자도 그가 출연 중인 영화(the movie he's acting in)라고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 13
+    },
+    {
+      "question_range": "46",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "A revised contract",
+        "B": "A reimbursement form",
+        "C": "An invitation to a video conference",
+        "D": "Directions to a location"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남자는 이메일로 무엇을 보낼 것인가?\n(A) 수정된 계약서\n(B) 비용 환급 양식\n(C) 화상 회의의 초대장\n(D) 어느 장소로 가는 길 안내"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 남자가 이메일로 보낼 것\n남자가 마지막 대사에서 새로운 날짜로 계약서를 업데이트해서 이메일로 보낼 것(I'll update the contract with the new date and e-mail it to you)이라고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 13
+    },
+    {
+      "question_range": "47-49",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M1",
+          "text": "Hello, Usha. Hi, Pablo."
+        },
+        {
+          "speaker": "W",
+          "text": "Hey, Konstantin. We're talking about our thoughts on the new company policy for remote workers. On the days I have to come into the office, I always worry about finding an appropriate workstation."
+        },
+        {
+          "speaker": "M2",
+          "text": "Yeah, I don't like the unpredictability either. Why can't we just sign up for our workstation sometime in advance? What do you think about it?"
+        },
+        {
+          "speaker": "M1",
+          "text": "These are good points. Let's all go to the director to discuss this with her."
+        },
+        {
+          "speaker": "M2",
+          "text": "I believe she's in her office, so now's a good time."
+        },
+        {
+          "speaker": "W",
+          "text": "Oh, I can't go now. I have a report to finalize by noon."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "남1 안녕하세요, 우샤. 안녕하세요, 파블로.\n여 안녕하세요, 콘스탄틴. 저희는 원격 근무자들을 대상으로 하는 새로운 회사 정책에 대한 생각을 이야기하고 있어요. 회사에 출근해야 하는 날에는, 항상 적당한 업무 자리를 찾는 게 걱정이에요.\n남2 네, 저도 예측 불가능성이 마음에 들지 않아요. 왜 저희가 미리 저희 업무 자리를 신청할 수 없는 가요? 이 부분에 대해 어떻게 생각하세요?\n남1 좋은 지적입니다. 다같이 이사님께 가서 함께 이 문제를 논의해 봅시다.\n남2 사무실에 계신 것 같으니, 지금이 좋은 때입니다.\n여 아, 저는 지금 갈 수 없어요. 정오까지 마무리해야 하는 보고서가 있어요."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 13
+    },
+    {
+      "question_range": "47",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "A conference schedule",
+        "B": "A company policy",
+        "C": "A catering menu",
+        "D": "A supply order"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자들은 무엇을 이야기하고 있는가?\n(A) 콘퍼런스 일정\n(B) 회사 정책\n(C) 출장 요리 메뉴\n(D) 물품 주문"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전체 내용 관련 - 대화 주제\n여자가 첫 대사에서 원격 근무자들을 대상으로 하는 새로운 회사 정책에 대한 생각을 이야기하고 있다(We're talking about our thoughts on the new company policy for remote workers)고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 13
+    },
+    {
+      "question_range": "48",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Rent a car",
+        "B": "Go to a restaurant",
+        "C": "Speak with a manager",
+        "D": "Change flight reservations"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남자들은 무엇을 하고 싶어 하는가?\n(A) 자동차 대여\n(B) 식당 가기\n(C) 관리자와 이야기하기\n(D) 항공편 예약 변경"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 13
+    },
+    {
+      "question_range": "49",
+      "part": 3,
+      "options_script": {
+        "A": "Work on a report",
+        "B": "Meet with a client",
+        "C": "Print some materials",
+        "D": "Check her e-mails"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "What does the woman say she needs to do now?\n(A) Làm báo cáo\n(B) Gặp khách hàng\n(C) In một số tài liệu\n(D) Kiểm tra email của cô ấy"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 여자가 지금 해야 할 일\n여자가 마지막 대사에서 정오까지 마무리해야 하는 보고서가 있다(I have a report to finalize by noon)고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 14,
+      "script": []
+    },
+    {
+      "question_range": "50-52",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "OK, Mr. Jebreen. Here's your new library card. Remember that you can borrow books, CDs, and DVDs from our collection with it."
+        },
+        {
+          "speaker": "M",
+          "text": "Thank you. I read somewhere that people can also borrow digital items."
+        },
+        {
+          "speaker": "W",
+          "text": "Yes! We offer the Cloud-Camel application. All you have to do is download the app and use the information on your card to set up an account."
+        },
+        {
+          "speaker": "M",
+          "text": "That's great. I go on a business trip every month, so having easy access to online content will be convenient."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Nữ: Vâng, ông Jebreen. Đây là thẻ thư viện mới của ông. Hãy nhớ rằng ông có thể mượn sách, CD và DVD từ bộ sưu tập của chúng tôi bằng thẻ này.\nNam: Cảm ơn bạn. Tôi đọc được ở đâu đó rằng mọi người cũng có thể mượn các mục kỹ thuật số.\nNữ: Vâng! Chúng tôi cung cấp ứng dụng Cloud-Camel. Tất cả những gì bạn phải làm là tải xuống ứng dụng và sử dụng thông tin trên thẻ của bạn để thiết lập tài khoản.\nNam: Thật tuyệt. Tôi đi công tác hàng tháng, vì vậy việc dễ dàng truy cập nội dung trực tuyến sẽ rất thuận tiện."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "50. 전체 내용 관련 - The woman's job\n51. 세부 사항 관련 - What the woman recommends the man do"
+      },
+      "source_page": 14,
+      "options_script_by_question": {
+        "50": {
+          "A": "A journalist",
+          "B": "A librarian",
+          "C": "A musician",
+          "D": "A software developer"
+        },
+        "51": {
+          "A": "Consult a manual",
+          "B": "Sign up for a class",
+          "C": "Listen to some music",
+          "D": "Use a particular mobile app"
+        }
+      }
+    },
+    {
+      "question_range": "52",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "He publishes a blog post.",
+        "B": "He meets with a social group.",
+        "C": "He travels for work.",
+        "D": "He volunteers for a community event."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nam giới muốn nói về điều gì mỗi tháng?\n(A) Anh ấy đăng bài viết blog.\n(B) Anh ấy gặp gỡ một nhóm xã hội.\n(C) Anh ấy đi công tác.\n(D) Anh ấy tình nguyện tham gia một sự kiện cộng đồng."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Giải thích: Nam giới nói trong câu cuối rằng anh ấy đi công tác mỗi tháng (~), do đó đáp án là (C)."
+      },
+      "source_page": 15
+    },
+    {
+      "question_range": "53",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "A marketing plan",
+        "B": "A conference calendar",
+        "C": "Schedule changes",
+        "D": "Survey results"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Người phụ nữ muốn người đàn ông xem cái gì?\n(A) Kế hoạch tiếp thị\n(B) Lịch hội nghị\n(C) Thay đổi lịch trình\n(D) Kết quả khảo sát"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Giải thích: Người phụ nữ bắt đầu bằng câu hỏi người đàn ông đã xem dữ liệu khảo sát nơi làm việc chưa, vì vậy đáp án là (D)."
+      },
+      "source_page": 15
+    },
+    {
+      "question_range": "53-55",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "Have you reviewed the data from the workplace survey? You really should. It looks like most staff feel positive about the direction that the company is going in. But almost 40 percent feel like their individual contributions aren't being recognized."
+        },
+        {
+          "speaker": "M",
+          "text": "Well, the company's certainly had other priorities. I wonder how the management team's going to respond."
+        },
+        {
+          "speaker": "W",
+          "text": "I've suggested many times that they give out awards every quarter for exceptional performance. Maybe now they'll finally start doing it."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Nữ: Bạn đã xem dữ liệu khảo sát nơi làm việc chưa? Bạn thực sự nên xem đấy. Có vẻ như hầu hết nhân viên cảm thấy tích cực về hướng đi của công ty. Nhưng gần 40 phần trăm cảm thấy đóng góp cá nhân của họ không được công nhận.\nNam: Ồ, công ty chắc chắn có các ưu tiên khác. Tôi tự hỏi đội ngũ quản lý sẽ phản ứng thế nào.\nNữ: Tôi đã đề xuất nhiều lần rằng họ nên trao giải thưởng mỗi quý cho thành tích xuất sắc. Có lẽ bây giờ họ cuối cùng sẽ bắt đầu làm điều đó."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 15
+    },
+    {
+      "question_range": "54",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "His workload has decreased.",
+        "B": "He is not responsible for some results.",
+        "C": "Some criticism is accurate.",
+        "D": "Some decisions led to a successful outcome."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nam giới ngụ ý điều gì khi nói, \"công ty chắc chắn có các ưu tiên khác\"?\n(A) Khối lượng công việc của anh ấy đã giảm.\n(B) Anh ấy không chịu trách nhiệm về một số kết quả.\n(C) Một số lời chỉ trích là chính xác.\n(D) Một số quyết định dẫn đến kết quả thành công."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Giải thích: Ngay sau khi người phụ nữ nói rằng gần 40 phần trăm cảm thấy đóng góp cá nhân của họ không được công nhận, nam giới nhắc đến các ưu tiên khác, ngụ ý đồng tình với ý kiến tiêu cực này nên đáp án là (C)."
+      },
+      "source_page": 15
+    },
+    {
+      "question_range": "55",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Rewarding staff performance",
+        "B": "Extending business hours",
+        "C": "Encouraging professional development",
+        "D": "Organizing team-building events"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Người phụ nữ đã đề xuất điều gì trong quá khứ?\n(A) Thưởng hiệu suất nhân viên\n(B) Kéo dài giờ làm việc\n(C) Khuyến khích phát triển chuyên môn\n(D) Tổ chức các sự kiện xây dựng đội ngũ"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 15
+    },
+    {
+      "question_range": "56-58",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W1",
+          "text": "Hi, Ajiola. As I mentioned on the phone, my colleague and I recently started a clothing company and are hoping your branding firm can help us promote our line of athletic apparel. You think we should focus on advertising on social media, right?"
+        },
+        {
+          "speaker": "M",
+          "text": "Right. Contrary to popular belief, television is definitely not the entire advertising landscape. Advertising on the Internet is also a great way for a company to increase its visibility."
+        },
+        {
+          "speaker": "W2",
+          "text": "I heard you recommended working with an online influencer."
+        },
+        {
+          "speaker": "M",
+          "text": "Yes—Saskia Hoffman. Saskia's very knowledgeable about exercise, and lots of people use her online exercise routines. Her viewers will pay attention to what she recommends and wears."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "여1 안녕하세요, 아지올라. 전화상으로 말씀드렸듯이, 제 동료와 제가 최근에 의류 회사를 시작해서, 귀하의 브랜딩 회사에서 저희 운동복 라인을 홍보하는 데 도움을 줄 수기를 바랍니다. 저희가 소셜 미디어 광고에 초점을 맞춰야 한다고 생각하시는 거죠, 거죠?\n남 그렇습니다. 일반적인 생각과 달리, 텔레비전이 광고 분야의 전부는 아닙니다. 인터넷 광고 또한 회사의 인지도를 높일 수 있는 훌륭한 방법입니다.\n여2 온라인 인플루언서와 협업하는 것을 추천한다고 들었어요.\n남 네, 사스키아 호프먼이요. 사스키아는 운동에 대해 아는 것이 많고, 많은 사람들이 그녀의 온라인 운동 루틴을 활용하고 있어요. 시청자들은 그녀가 추천하고 착용하는 것에 관심을 기울일 것입니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "[56번] 세부 사항 관련 - 여자들이 소유한 업체\n첫 번째 여자가 첫 대사에서 '최근에 의류 회사를 시작했다(~ my colleague and I recently started a clothing company ~)'고 했으므로 정답은 (C)이다.\n[57번] 세부 사항 관련 - 남자가 텔레비전과 관련해 하는 말\n남자가 첫 대사에서 '텔레비전이 광고 분야의 전부는 아니다(~ television is definitely not the entire advertising landscape)'라고 했으므로 정답은 (D)이다."
+      },
+      "source_page": 16,
+      "options_script_by_question": {
+        "56": {
+          "A": "A hair salon",
+          "B": "A recording studio",
+          "C": "A clothing company",
+          "D": "A fitness center"
+        },
+        "57": {
+          "A": "It is an industry he once worked in.",
+          "B": "It reaches more people than magazines.",
+          "C": "It needs more programs about sports.",
+          "D": "It is not the only advertising platform available."
+        }
+      }
+    },
+    {
+      "question_range": "58",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "She recently won an award.",
+        "B": "She lives nearby.",
+        "C": "She charges affordable rates.",
+        "D": "She is well known in her field."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Theo nam giới, tại sao Saskia Hoffman lại là một lựa chọn tốt?\n(A) Cô ấy gần đây đã giành giải thưởng.\n(B) Cô ấy sống ở gần đây.\n(C) Cô ấy tính phí phải chăng.\n(D) Cô ấy rất nổi tiếng trong lĩnh vực của mình."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Nam giới nhắc đến việc nhiều người sử dụng thói quen tập thể dục trực tuyến của cô ấy và người xem sẽ chú ý đến những gì cô ấy giới thiệu và mặc. Điều này có nghĩa là cô ấy có ảnh hưởng lớn đến nhiều người, thể hiện rằng cô ấy rất nổi tiếng trong lĩnh vực của mình, vì vậy đáp án là (D)."
+      },
+      "source_page": 17
+    },
+    {
+      "question_range": "59",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Art supplies",
+        "B": "Puzzles",
+        "C": "Shipping materials",
+        "D": "Power tools"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Công ty của những người nói sản xuất cái gì?\n(A) Đồ dùng nghệ thuật\n(B) Đồ chơi xếp hình (Puzzles)\n(C) Vật liệu vận chuyển\n(D) Dụng cụ điện"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Trong câu đầu tiên, nữ giới đề cập đến đơn đặt hàng nhận được từ chuỗi cửa hàng bách hóa cho 5.000 bộ đồ chơi xếp hình (~ the order we got from the department store chain), vì vậy đáp án là (B)."
+      },
+      "source_page": 17
+    },
+    {
+      "question_range": "59-61",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "W",
+          "text": "Hi, Shinji. I wanted to ask you about the order we got from the department store chain. You know, the one that placed an order for 5,000 jigsaw puzzles?"
+        },
+        {
+          "speaker": "M",
+          "text": "Yes. They want the order in a week so they can stock them before the holiday."
+        },
+        {
+          "speaker": "W",
+          "text": "A week is not a long time."
+        },
+        {
+          "speaker": "M",
+          "text": "We've had short timelines before. Anyway, our illustrators sent some new puzzle illustrations, right? I heard they're making a special edition."
+        },
+        {
+          "speaker": "W",
+          "text": "Yes, and I'm so excited! I've got the sketches right here. Let me show you."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "W: Chào Shinji. Tôi muốn hỏi bạn về đơn hàng chúng ta nhận được từ chuỗi cửa hàng bách hóa. Bạn biết đấy, đơn hàng đặt 5.000 bộ ghép hình phải không?\nM: Đúng vậy. Họ muốn nhận hàng trong vòng một tuần để có thể kịp có hàng trước kỳ nghỉ.\nW: Một tuần không phải là thời gian dài.\nM: Chúng ta đã từng có thời gian gấp gáp trước đây. Dù sao đi nữa, các họa sĩ minh họa của chúng ta đã gửi một số hình minh họa ghép hình mới phải không? Tôi nghe nói họ đang làm một phiên bản đặc biệt.\nW: Vâng, và tôi rất phấn khích! Tôi có các bản phác thảo ngay đây. Để tôi cho bạn xem."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 17
+    },
+    {
+      "question_range": "60",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Some prices will likely increase.",
+        "B": "Some temporary employees have been hired.",
+        "C": "A colleague's work is excellent.",
+        "D": "An order may not be filled."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nữ giới ngụ ý gì khi nói \"Một tuần không phải là thời gian dài\"?\n(A) Một số giá có khả năng tăng.\n(B) Một số nhân viên tạm thời đã được thuê.\n(C) Công việc của một đồng nghiệp rất xuất sắc.\n(D) Một đơn hàng có thể không được hoàn thành."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Nam giới nói rằng họ muốn nhận đơn đặt hàng trong một tuần để kịp có hàng trước kỳ nghỉ, nữ giới phản hồi rằng một tuần không phải là thời gian dài, ngụ ý rằng với thời gian ngắn như vậy, họ có thể không hoàn thành được đơn hàng, do đó đáp án là (D)."
+      },
+      "source_page": 17
+    },
+    {
+      "question_range": "61",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Review a contract",
+        "B": "Print out an invoice",
+        "C": "Share some illustrations",
+        "D": "Confirm a client meeting"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nữ giới sẽ làm gì tiếp theo?\n(A) Xem xét hợp đồng\n(B) In hóa đơn\n(C) Chia sẻ một số hình minh họa\n(D) Xác nhận cuộc họp với khách hàng"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 17
+    },
+    {
+      "question_range": "62-64",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "Hi, Ms. Rossi. 62 I understand you're concerned about a charge that appears on the statement for your business account."
+        },
+        {
+          "speaker": "W",
+          "text": "Yes, 63 I have a question about the charge on May 3. I don't remember purchasing anything for that amount."
+        },
+        {
+          "speaker": "M",
+          "text": "Let me review your statement now. Hmm. It looks like that purchase was made abroad. So an international transaction fee was added to the purchase amount."
+        },
+        {
+          "speaker": "W",
+          "text": "Oh, yes—I was out of the country at that time. Thanks for clarifying. 64 Can you provide me with a list of all the bank fees for transactions made abroad?"
+        },
+        {
+          "speaker": "M",
+          "text": "64 Yes, of course. Here's a document that lists all the information."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "남 안녕하세요, 로시 씨. 사업자용 계좌 명세서에 표시되어 있는 청구 금액에 대해 우려하시는 것으로 알고 있습니다.\n여 네, 5월 3일 청구 금액에 대해 질문이 있습니다. 해당 금액으로 아무것도 구매한 기억이 없습니다.\n남 지금 그 내역서를 살펴보겠습니다. 흠. 그 구매가 해외에서 이뤄진 것으로 보입니다. 그래서 해외 거래 수수료가 그 구매 금액에 추가되었습니다.\n여 아, 네. 제가 그때 해외에 있었습니다. 명확히 해 주셔서 감사합니다. 해외 거래에 대한 모든 은행 수수료 목록을 제공해 주실 수 있나요?\n남 네, 물론입니다. 여기 모든 정보가 나열된 문서입니다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "62. 전체 내용 관련 - 남자의 근무 장소: 남자가 첫 대사에서 여자가 사업자용 계좌 명세서에 표시되어 있는 청구 금액에 대해 우려하는 것으로 안다(I understand you're concerned about a charge that appears on the statement for your business account)고 했고, 관련 질문에 응답하고 있으므로 정답은 (B)이다.\n63. 시각 정보 연계 - 여자가 묻는 금액: 여자가 첫 대사에서 5월 3일 청구 금액에 대해 질문이 있다(I have a question about the charge on May 3)고 했고, 청구 내역서에서 5월 3일 총액은 203.00달러이므로 정답은 (A)이다."
+      },
+      "source_page": 18,
+      "options_script_by_question": {
+        "62": {
+          "A": "At an airport",
+          "B": "At a bank",
+          "C": "At a real estate agency",
+          "D": "At a department store"
+        },
+        "63": {
+          "A": "$203.00",
+          "B": "$350.00",
+          "C": "$75.50",
+          "D": "$83.15"
+        }
+      }
+    },
+    {
+      "question_range": "64",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "An updated statement",
+        "B": "A list of fees",
+        "C": "A discount card",
+        "D": "A brochure"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nam: Bạn gái ơi, bạn có cái gì? (A) Bản cập nhật tài khoản, (B) Danh sách phí, (C) Thẻ giảm giá, (D) Sách hướng dẫn"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Nữ nhân vật yêu cầu danh sách phí giao dịch nước ngoài, nam nhân vật đồng ý nên đáp án là (B)."
+      },
+      "source_page": 19
+    },
+    {
+      "question_range": "65-67",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "Magali, were you able to reserve the performing arts center for the piano concert?"
+        },
+        {
+          "speaker": "W",
+          "text": "Yes. I booked their main auditorium for that day. They're sending me the contract."
+        },
+        {
+          "speaker": "M",
+          "text": "Thanks for doing that."
+        },
+        {
+          "speaker": "W",
+          "text": "No problem. Hopefully, it'll be as successful as last year."
+        },
+        {
+          "speaker": "M",
+          "text": "We sold 2,000 tickets last year, but we had three celebrity performers. I'm worried we won't sell as many tickets this year."
+        },
+        {
+          "speaker": "W",
+          "text": "Well, Xinyu Gu is a very popular pianist. And she's staying after the concert to sign autographs. Which reminds me, where should we set up the table for that?"
+        },
+        {
+          "speaker": "M",
+          "text": "Good question. Hmm. The café should be closed by then. Let's set it up next to the café."
+        }
+      ],
+      "options_script": {
+        "A": "Printing programs",
+        "B": "Setting up lighting",
+        "C": "Reserving a venue",
+        "D": "Paying a performer"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "M: Magali, bạn có thể đặt trung tâm nghệ thuật biểu diễn cho buổi hòa nhạc piano không?\nW: Vâng. Tôi đã đặt thính phòng chính của họ cho ngày hôm đó. Họ đang gửi hợp đồng cho tôi.\nM: Cảm ơn bạn vì đã làm điều đó.\nW: Không có chi. Hy vọng nó sẽ thành công như năm ngoái.\nM: Chúng ta đã bán được 2.000 vé vào năm ngoái, nhưng chúng ta có ba nghệ sĩ biểu diễn nổi tiếng. Tôi lo lắng rằng chúng ta sẽ không bán được nhiều vé trong năm nay.\nW: À, Xinyu Gu là một nghệ sĩ piano rất nổi tiếng. Và cô ấy sẽ ở lại sau buổi hòa nhạc để ký tặng. Nhân tiện, chúng ta nên đặt bàn ở đâu cho việc đó?\nM: Câu hỏi hay. Hừm. Quán cà phê có lẽ sẽ đóng cửa vào lúc đó. Hãy đặt nó cạnh quán cà phê."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Nam nhân vật cảm ơn nữ nhân vật vì đã đặt thính phòng chính (booked their main auditorium), tương ứng với Reserving a venue (C)."
+      },
+      "source_page": 19
+    },
+    {
+      "question_range": "66",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Reviews from critics",
+        "B": "Ticket sales",
+        "C": "A performance schedule",
+        "D": "The cost of merchandise"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nam nhân vật nói anh ấy lo lắng về điều gì?"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Nam nhân vật nói \"I'm worried we won't sell as many tickets this year\" (Tôi lo rằng năm nay chúng ta sẽ bán được ít vé hơn), nên đáp án là Ticket sales (B)."
+      },
+      "source_page": 19
+    },
+    {
+      "question_range": "67",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "Let's set it up next to the café"
+        }
+      ],
+      "options_script": {
+        "A": "At location 1",
+        "B": "At location 2",
+        "C": "At location 3",
+        "D": "At location 4"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Nhìn vào biểu đồ. Bàn sẽ được bố trí ở đâu?\n(A) Tại vị trí 1\n(B) Tại vị trí 2\n(C) Tại vị trí 3\n(D) Tại vị trí 4"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Dựa vào thông tin trực quan - Bố trí bàn\nNam nhân vật trong đoạn cuối nói rằng 'Let's set it up next to the café' (Hãy bố trí nó cạnh quán cà phê), và trên bảng chỉ dẫn quán cà phê nằm ở vị trí số 4 nên đáp án là (D)."
+      },
+      "source_page": 20
+    },
+    {
+      "question_range": "68-70",
+      "part": 3,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "Welcome to the garden center. Can I help you?"
+        },
+        {
+          "speaker": "W",
+          "text": "Hi. I've started growing rose bushes, and I've heard they require special care. Are there any products you can recommend?"
+        },
+        {
+          "speaker": "M",
+          "text": "Yes! But first, I'd like to show you a great resource on our Web site. Have you seen our blog?"
+        },
+        {
+          "speaker": "W",
+          "text": "No, I haven't."
+        },
+        {
+          "speaker": "M",
+          "text": "We have monthly posts on many gardening topics, and there's a recent one about growing roses."
+        },
+        {
+          "speaker": "W",
+          "text": "I'll check it out! Thanks so much."
+        },
+        {
+          "speaker": "M",
+          "text": "You're welcome. Now let me show you our fertilizers. They're in aisle six."
+        }
+      ],
+      "options_script": {
+        "A": "To enroll in a course",
+        "B": "To join a gardening club",
+        "C": "To buy some supplies",
+        "D": "To return a purchase"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "68. Tại sao người phụ nữ lại ở trung tâm làm vườn?\n(A) Để đăng ký một khóa học\n(B) Để tham gia câu lạc bộ làm vườn\n(C) Để mua một số vật tư\n(D) Để trả lại một món hàng đã mua"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Toàn bộ nội dung - Người phụ nữ ở trung tâm làm vườn\nNgười phụ nữ trong câu đầu tiên nói 'I've started growing rose bushes, ~ Are there any products you can recommend?' (Tôi bắt đầu trồng bụi hoa hồng... Bạn có sản phẩm nào có thể giới thiệu không?) nên đáp án là (C)."
+      },
+      "source_page": 20
+    },
+    {
+      "question_range": "69",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "May's post",
+        "B": "June's post",
+        "C": "July's post",
+        "D": "August's post"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "시각 정보에 의하면, 여자는 어느 달의 게시글을 읽을 것 같은가? (A) 5월 게시글 (B) 6월 게시글 (C) 7월 게시글 (D) 8월 게시글"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "시각 정보 연계 - 여자가 읽을 게시글\n남자가 세 번째 대사에서 장미 재배에 관한 최신 글이 있다(~ there's a recent one about growing roses)고 하자, 여자가 확인해 보겠다(I'll check it out)고 했고, 블로그 게시글 목록에서 5월(May) 게시글이 장미 재배(Growing roses)에 관한 것임을 알 수 있으므로 정답은 (A)이다."
+      },
+      "source_page": 21
+    },
+    {
+      "question_range": "70",
+      "part": 3,
+      "script": [],
+      "options_script": {
+        "A": "Indoor plants",
+        "B": "Plant fertilizers",
+        "C": "Gardening tools",
+        "D": "Irrigation systems"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "남자는 어떤 종류의 제품을 여자에게 보여 줄 것인가? (A) 실내용 식물 (B) 식물용 비료 (C) 원예 도구 (D) 관개 시스템"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 남자가 보여 줄 제품\n남자가 마지막 대사에서 비료를 보여 주겠다(~ let me show you our fertilizers)고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 21
+    },
+    {
+      "question_range": "71",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "Attention, Casella Transit customers. Maintenance work on the red and yellow lines will begin next week. You can expect some disruptions to regular service, so please plan ahead. Use the latest version of our mobile phone application for real-time updates."
+        }
+      ],
+      "options_script": {
+        "A": "Finance",
+        "B": "Transportation",
+        "C": "Construction",
+        "D": "Robotics"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자는 어떤 분야에서 일하는 것 같은가? (A) 금융 (B) 교통 (C) 건설 (D) 로봇 공학"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전체 내용 관련 - 화자의 근무 분야\n화자가 초반부에 카셀라 교통 고객에게 알린다며, 적색 및 황색 노선의 유지 관리 작업이 다음 주에 시작될 것(Attention, Casella Transit customers. Maintenance work on the red and yellow lines will begin next week)이라고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 21
+    },
+    {
+      "question_range": "72-73",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "You can receive notifications regarding delays if your train is impacted. Want to save on commuter rides? Purchase your e-ticket through the mobile app as well. Printing a ticket at a kiosk is now subject to additional fees."
+        }
+      ],
+      "options_script": {
+        "A": "Route changes",
+        "B": "Mobile app updates",
+        "C": "New products",
+        "D": "Schedule delays"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자는 청자들이 무엇에 대한 알림을 받을 수 있다고 말하는가? (A) 노선 변경 (B) 모바일 앱 업데이트 (C) 신제품 (D) 일정 지연"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 알림을 받을 수 있는 것\n화자가 중반부에 열차가 영향을 받는 경우에 지연과 관련된 알림을 받을 수 있다(You can receive notifications regarding delays if your train is impacted)고 했으므로 정답은 (D)이다."
+      },
+      "source_page": 21
+    },
+    {
+      "question_range": "73",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "By purchasing a digital ticket",
+        "B": "By reserving multiple permits",
+        "C": "By traveling at less busy hours",
+        "D": "By joining a loyalty program"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Theo người nói, làm thế nào thính giả có thể giảm chi phí?\n(A) Bằng cách mua vé điện tử\n(B) Bằng cách đặt trước nhiều giấy phép\n(C) Bằng cách di chuyển vào thời gian ít bận rộn hơn\n(D) Bằng cách tham gia chương trình khách hàng thân thiết"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Hệ thống hiển thị câu hỏi 73 và các từ vựng/giải thích liên quan đến việc giảm chi phí bằng cách mua vé điện tử."
+      },
+      "source_page": 22
+    },
+    {
+      "question_range": "74",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "To explain a restoration project",
+        "B": "To prepare for a public event",
+        "C": "To train some new tour guides",
+        "D": "To recruit some volunteers"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Mục đích của cuộc họp là gì?\n(A) Giải thích một dự án trùng tu\n(B) Chuẩn bị cho một sự kiện công cộng\n(C) Đào tạo một số hướng dẫn viên du lịch mới\n(D) Tuyển dụng một số tình nguyện viên"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Hệ thống hiển thị câu hỏi 74 liên quan đến mục đích của cuộc họp, đáp án là (A)."
+      },
+      "source_page": 22
+    },
+    {
+      "question_range": "74-76",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "Good morning, Glenman House Living Museum staff. Recently, researchers discovered the original plans for the house's gardens from the eighteenth century. 74So, we're going to restore the gardens based on those plans! Even though we have the original designs, 75making an authentic re-creation won't be an easy task. We don't know what specific varieties of plants were grown back then. That's why we're so lucky to have 76Vivek Hazarika consulting on this project. 76As a gardener who has managed the grounds of many historic estates, he has extensive expertise in what would have been planted at the time."
+        }
+      ],
+      "translation": {
+        "lang": "vi",
+        "text": "Chào buổi sáng, các nhân viên của Bảo tàng Sinh hoạt Glenman House. Gần đây, các nhà nghiên cứu đã phát hiện ra các bản thiết kế gốc cho khu vườn của ngôi nhà từ thế kỷ 18. Vì vậy, chúng ta sẽ khôi phục lại các khu vườn dựa trên những bản thiết kế đó! Mặc dù chúng ta có các thiết kế gốc, việc tạo ra một sự tái tạo chân thực sẽ không phải là một nhiệm vụ dễ dàng. Chúng ta không biết những giống cây cụ thể nào đã được trồng vào thời điểm đó. Đó là lý do tại sao chúng ta rất may mắn khi có Vivek Hazarika tư vấn cho dự án này. Là một người làm vườn đã quản lý khuôn viên của nhiều điền trang lịch sử, ông ấy có kiến thức chuyên môn rộng lớn về những gì có thể đã được trồng vào thời điểm đó."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đoạn hội thoại mở đầu bằng thông báo về việc phát hiện bản thiết kế gốc và kế hoạch khôi phục khu vườn."
+      },
+      "source_page": 22
+    },
+    {
+      "question_range": "75",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Funding has not been secured.",
+        "B": "Unfavorable weather is predicted.",
+        "C": "Some permits have been delayed.",
+        "D": "Some important information is missing."
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Theo người nói, tại sao một nhiệm vụ sẽ gặp khó khăn?\n(A) Kinh phí chưa được bảo đảm.\n(B) Thời tiết bất lợi được dự báo.\n(C) Một số giấy phép đã bị trì hoãn.\n(D) Một số thông tin quan trọng bị thiếu."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đáp án là (D) vì đoạn script đề cập 'We don't know what specific varieties of plants were grown back then' (Chúng tôi không biết giống cây cụ thể nào được trồng vào thời điểm đó)."
+      },
+      "source_page": 22
+    },
+    {
+      "question_range": "76",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "An architect",
+        "B": "A gardener",
+        "C": "A salesperson",
+        "D": "An archaeologist"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Vivek Hazarika là ai? (A) Kiến trúc sư (B) Người làm vườn (C) Nhân viên kinh doanh (D) Nhà khảo cổ học"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Chi tiết liên quan - Nghề nghiệp của Vivek Hazarika: Hoa dại ở phần sau rằng Vivek Hazarika quản lý khu đất của nhiều biệt thự lịch sử (As a gardener who has managed the grounds of many historic estates ~) nên đáp án là (B)."
+      },
+      "source_page": 23
+    },
+    {
+      "question_range": "77",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "To discuss customer feedback",
+        "B": "To explain an attendance policy",
+        "C": "To discourage mobile phone use",
+        "D": "To train new sales staff"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Mục đích của buổi học là gì? (A) Thảo luận phản hồi của khách hàng (B) Giải thích chính sách điểm danh (C) Ngăn cản việc sử dụng điện thoại di động (D) Đào tạo nhân viên kinh doanh mới"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Toàn bộ nội dung - Mục đích của giáo dục: Hoa dại chào mừng các nhân viên kinh doanh mới đến tham gia buổi đào tạo gọi điện thoại hướng dẫn hôm nay (Welcome, new sale representatives, to today's session on cold calling, ~) nên đáp án là (D)."
+      },
+      "source_page": 23
+    },
+    {
+      "question_range": "78",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Potential clients to contact",
+        "B": "Employees who have exceeded sales goals",
+        "C": "Products offered by the company",
+        "D": "Departments within the company"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Những người nghe sẽ nhận được danh sách gì? (A) Khách hàng tiềm năng để liên hệ (B) Nhân viên đã vượt mục tiêu doanh số (C) Các sản phẩm do công ty cung cấp (D) Các phòng ban trong công ty"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Chi tiết liên quan - Danh sách: Hoa dại ở phần giữa rằng những người nghe sẽ nhận được danh sách khách hàng tiềm năng để liên hệ (~ you'll each be given a list of prospective parties to call) nên đáp án là (A)."
+      },
+      "source_page": 23
+    },
+    {
+      "question_range": "79",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Memorize prepared scripts",
+        "B": "Listen to recorded calls",
+        "C": "Take a brief survey",
+        "D": "Brainstorm conversational topics"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Những người nghe sẽ làm gì tiếp theo? (A) Ghi nhớ kịch bản đã chuẩn bị (B) Nghe các cuộc gọi đã ghi âm (C) Tham gia khảo sát ngắn (D) Động não về các chủ đề hội thoại"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Chi tiết liên quan - Việc người nghe phải làm tiếp theo: Hoa dại ở phần cuối rằng bây giờ họ sẽ nghe các đoạn ghi âm gọi điện thoại để tìm hiểu cái nào hiệu quả và cái nào không (Now we'll listen to some cold call recordings to learn what works and what doesn't) nên đáp án là (B)."
+      },
+      "source_page": 23
+    },
+    {
+      "question_range": "80-82",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "Ms. Stewart, this is Rodrigo Gomez, president of Gomez and Sons. I want to apologize personally for the problems your restaurant experienced using our patio umbrellas. At our company, we pride ourselves on doing everything in-house, from graphic design to production. This gives us greater control over the quality of our products. But we do use outside suppliers for parts. Apparently, we received some inferior metal components. We will send you a replacement set of umbrellas at no cost today, constructed with new metal parts."
+        }
+      ],
+      "translation": {
+        "lang": "ko",
+        "text": "스튜어트 씨, 저는 고메즈 앤 썬즈의 대표, 로드리고 고메즈입니다. 귀하의 레스토랑에서 저희 테라스용 파라솔을 이용하면서 겪은 문제들에 대해 직접 사과드리고자 합니다. 저희 회사에서는 그래픽 디자인부터 생산까지 모든 것을 회사 내에서 하고 있다는 데 자부심을 가지고 있습니다. 이것은 제품의 품질을 더 잘 통제할 수 있게 해 줍니다. 하지만 부품은 외부 공급업체를 이용합니다. 보아하니, 좋지 못한 금속 부품을 받은 것 같습니다. 저희가 오늘 새 금속 부품으로 제작된 파라솔 세트 교체품을 무료로 보내 드리겠습니다."
+      },
+      "questions": [
+        {
+          "question_number": "80",
+          "question_text": "What does the speaker's company sell?",
+          "options": {
+            "A": "Sound systems",
+            "B": "Light fixtures",
+            "C": "Umbrellas",
+            "D": "Refrigerators"
+          },
+          "explanation": {
+            "lang": "vi",
+            "text": "전체 내용 관련 - 화자의 회사가 판매하는 것\n화자가 초반부에 회사의 테라스용 파라솔을 이용하면서 겪은 문제들에 대해 직접 사과하고자 한다(I want to apologize personally for the problems your restaurant experienced using our patio umbrellas)고 했으므로 정답은 (C)이다."
+          }
+        },
+        {
+          "question_number": "81",
+          "question_text": "Why does the speaker say, \"we do use outside suppliers for parts\"?",
+          "options": {
+            "A": "To recommend a different company",
+            "B": "To justify an increased price",
+            "C": "To explain the source of a problem",
+            "D": "To decline a proposal"
+          },
+          "explanation": {
+            "lang": "vi",
+            "text": "화자의 의도 파악 - 부품은 외부 공급업체를 이용한다는 말의 의도\n화자가 중반부에 인용문을 언급하면서 자신의 회사가 좋지 못한 금속 부품을 받은 것 같다(Apparently, we received some inferior metal components)고 했다. 이는 문제가 발생한 원인을 설명하는 말이므로 정답은 (C)이다."
+          }
+        },
+        {
+          "question_number": "82",
+          "question_text": "What does the speaker say he will do today?",
+          "options": {
+            "A": "Interview some applicants",
+            "B": "Send a shipment",
+            "C": "Train some staff",
+            "D": "Update a spreadsheet"
+          },
+          "explanation": {
+            "lang": "vi",
+            "text": "세부 사항 관련 - 화자가 오늘 할 일\n화자가 후반부에 오늘 새 금속 부품으로 제작된 파라솔 세트 교체품을 무료로 보내 주겠다(We will send you a replacement set of umbrellas at no cost today, constructed with new metal parts)고 했으므로 정답은 (B)이다."
+          }
+        }
+      ],
+      "source_page": 24
+    },
+    {
+      "question_range": "83-85",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "Temp-Time Work Solutions has hundreds of qualified, temporary workers available to meet any of your staffing needs. Please call us to help your business fill open positions. We are the largest temp agency in the region, with branch offices in six locations. Let Temp-Time help you find"
+        }
+      ],
+      "source_page": 24
+    },
+    {
+      "question_range": "83",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "M",
+          "text": "the right person to complete just about any job! Call us at 555-0145 and 85 mention this ad to get a twenty percent discount off our fee."
+        }
+      ],
+      "options_script": {
+        "A": "An event planning company",
+        "B": "A financial advising service",
+        "C": "An attorney's office",
+        "D": "A staffing agency"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "어떤 종류의 업체가 광고되고 있는가?\n(A) 행사 기획 회사\n(B) 재정 자문 서비스\n(C) 변호사 사무실\n(D) 인력 채용 대행사"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "전체 내용 관련 - 광고되는 업체의 종류\n화자가 초반부에 템프-타임 워크 솔루션을 모든 직원 채용 필요를 충족할 수 있는 수백 명의 자격을 갖춘 임시직 근로자를 보유하고 있다(Temp-Time Work Solutions has hundreds of qualified, temporary workers available to meet any of your staffing needs)고 했으므로 정답은 (D)이다."
+      },
+      "source_page": 25
+    },
+    {
+      "question_range": "84",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Its large size",
+        "B": "Its reasonable prices",
+        "C": "Its business hours",
+        "D": "Its long history"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자는 업체의 어떤 측면을 강조하는가?\n(A) 큰 규모\n(B) 합리적인 가격\n(C) 영업시간\n(D) 긴 역사"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 화자가 강조하는 측면\n화자가 중반부에 이 지역에서 가장 큰 임시 인력 파견 업체(We are the largest temp agency in the region ~)라고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 25
+    },
+    {
+      "question_range": "85",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "By mentioning an advertisement",
+        "B": "By referring friends",
+        "C": "By paying with a credit card",
+        "D": "By using a coupon"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "청자들은 어떻게 할인을 받을 수 있는가?\n(A) 광고를 언급함으로써\n(B) 친구를 소개함으로써\n(C) 신용카드로 지불함으로써\n(D) 쿠폰을 이용함으로써"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 할인 받는 방법\n화자가 후반부에 전화를 걸어 광고를 언급하고 20퍼센트 요금 할인을 받으라(~ mention this ad to get a twenty percent discount off our fee)고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 25
+    },
+    {
+      "question_range": "86-88",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "I've just received details about this year's hospitality conference. It looks like it'll be particularly informative this year. It'll be held at the end of the month. Now, 86 I know I've set your project due dates for the end of the month as well, but this is an important opportunity. The conference will feature an expo of vendors who serve hotel chains, which could be useful given that 87 we'll be opening hotels in two new cities next year! Speaking of which, 88 Thilo visited both of those construction sites last week and is now going to give us a progress report."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "올해의 접객업 콘퍼런스에 관한 상세 정보를 방금 받았습니디. 올해는 특히 유익할 것으로 보입니다. 이 행사는 이달 말에 개최될 것입니다. 자, 제가 여러분의 프로젝트 마감 날짜도 이달 말로 정해 놓았다는 사실을 알고 있지만, 이는 중요한 기회입니다. 이번 콘퍼런스에는 호텔 체인에 서비스를 제공하는 판매업체들의 박람회가 포함될 텐데, 우리가 내년에 두 곳의 새로운 도시에 호텔을 개장할 예정인 것을 고려하면 유용할 것입니다! 말이 나온 김에, 틸로가 지난주에 그 공사 현장을 방문했고, 이제 진행 상황을 보고할 예정입니다."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 25
+    },
+    {
+      "question_range": "86",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "A new client has an urgent problem.",
+        "B": "Some information is needed from the listeners.",
+        "C": "Some deadlines are flexible.",
+        "D": "The listeners have done a good job."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자가 \"이는 중요한 기회입니다\"라고 말할 때 무엇을 의미하는가?\n(A) 신규 고객에게 긴급한 문제가 있다.\n(B) 일부 정보가 청자들로부터 필요하다.\n(C) 마감 기한이 바뀔 수 있다.\n(D) 청자들이 일을 잘 처리해 주었다."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "화자의 의도 파악 - 중요한 기회라는 말의 의도\n화자가 중반부에 자신이 청자들의 프로젝트 마감 날짜를 이달 말로 정해 놓았다는 사실을 알고 있지만(I know I've set your project due dates for the end of the month as well, but)이라고 말하면서 인용문을 언급하고 있다. 이는 콘퍼런스가 중요한 기회이니 마감일을 변경해서라도 참석해야 한다는 뜻이므로 정답은 (C)이다."
+      },
+      "source_page": 26
+    },
+    {
+      "question_range": "87",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Redesign advertising materials",
+        "B": "Open new locations",
+        "C": "Hire a new vendor",
+        "D": "Implement a security policy"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자의 업체는 내년에 무엇을 할 것인가?\n(A) 광고물 다시 디자인하기\n(B) 신규 지점 개점하기\n(C) 새 판매업체 고용하기\n(D) 보안 정책 시행하기"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 화자의 업체가 내년에 할 것\n화자가 중반부에 내년에 두 곳의 새로운 도시에 호텔을 개장할 것 (~ we'll be opening hotels in two new cities next year)이라고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 26
+    },
+    {
+      "question_range": "88",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Practice his conference presentation",
+        "B": "Provide a construction update",
+        "C": "Summarize some financial data",
+        "D": "Contact a supply vendor"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "틸로는 다음에 무엇을 할 것인가?\n(A) 콘퍼런스 발표 연습하기\n(B) 공사 관련 최신 소식 제공하기\n(C) 재무 데이터 요약하기\n(D) 물품 판매업체에 연락하기"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 틸로가 다음에 할 일\n화자가 후반부에 틸로가 지난주에 그 공사 현장 두 곳을 방문했고, 이제 진행 상황을 보고할 예정(Thilo visited both of those construction sites last week and is now going to give us a progress report)이라고 했으므로 정답은 (B)이다."
+      },
+      "source_page": 26
+    },
+    {
+      "question_range": "89-91",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Am",
+          "text": "Welcome to the annual Soundtrack Music Awards show. This year, we're streaming this event live over the Internet for the very first time! Tonight's honoree, Olga Alabi, founded the I-Beat music label in 1996. She has worked tirelessly to bring original soundtrack music to film audiences around the world. Over the years, she has been responsible for discovering and developing some of today's leading composers. In fact, after Ms. Alabi receives her award, some of his most famous clients will perform for us."
+        }
+      ],
+      "translation": {
+        "lang": "ko",
+        "text": "연례 사운드트랙 음악 시상식에 오신 것을 환영합니다. 올해는 처음으로 행사를 인터넷에서 라이브로 중계합니다! 오늘 밤의 수상자인 올가 앨러비는 1996년에 I-비트 음바사를 설립했습니다. 그녀는 오리지널 사운드트랙 음악을 전 세계의 영화 관람객들에게 전하고자 부단히 노력해 왔습니다. 수년간, 그녀는 오늘날 최고의 작곡가들을 발굴하고 개발하는 일을 담당해 왔습니다. 사실, 앨러비 씨가 상을 받은 후, 그녀의 가장 유명한 고객 중 일부가 공연할 예정입니다."
+      },
+      "source_page": 26
+    },
+    {
+      "question_range": "89",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "It takes place outdoors.",
+        "B": "It is sponsored by a major publication.",
+        "C": "It has been sold out for months.",
+        "D": "It is being streamed live."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "올해 행사에 대해 화자는 무엇이라고 말하는가?\n(A) 야외에서 개최된다.\n(B) 주요 출판사의 후원을 받는다.\n(C) 몇 달 전에 매진되었다.\n(D) 실시간으로 인터넷 중계되고 있다."
+      },
+      "source_page": 26
+    },
+    {
+      "question_range": "90",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "She is a talented songwriter.",
+        "B": "She invented a musical instrument.",
+        "C": "She started a major record label.",
+        "D": "She supports several charities."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "엘러비 씨는 왜 인정받는가?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "화자가 중반부에 올가 앨러비는 1996년에 I-비트 음반사를 설립했고, 오리지널 사운드트랙 음악을 전 세계의 영화 관람객들에게 전하고자 부단히 노력해 왔다(~ Olga Alabi, founded the I-Beat music label in 1996. She has worked tirelessly to bring original soundtrack music to film audiences around the world)고 했으므로 정답은 (C)이다."
+      },
+      "source_page": 27
+    },
+    {
+      "question_range": "91",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Photographs will be taken.",
+        "B": "Dinner will be served.",
+        "C": "Some musicians will perform.",
+        "D": "Some interviews will be held."
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자에 따르면, 앨러비 씨가 상을 받은 후에 무슨 일이 있을 것인가?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "화자가 후반부에 앨러비 씨가 상을 받은 후, 그녀의 가장 유명한 고객 중 일부가 공연할 예정(~ after Ms. Alabi receives her award, some of her most famous clients will perform for us)라고 했으므로 정답은 (C)이다."
+      },
+      "source_page": 27
+    },
+    {
+      "question_range": "92-94",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "M-Cn",
+          "text": "OK, team, let's discuss our first-quarter sales figures. Unfortunately, retail sales of our smartwatches and other products have continued to fall. Our president has proposed expanding the product line to include a virtual reality headset. And those have been popular lately. You can expect a lot more information at a future meeting. Next on the agenda, Raya will be demonstrating the new software we'll be using to track consumer purchasing trends."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "ko",
+        "text": "좋아요, 팀원 여러분, 1분기 매출 수치에 대해 논의해 봅시다. 안타깝게도, 스마트워치와 기타 제품들의 소매 판매가 계속 감소하고 있습니다. 대표님은 가상 현실 헤드셋을 포함하여 제품 라인을 확장할 것을 제안했습니다. 그리고 그것들이 요즘 인기 있습니다. 여러분은 향후 회의에서 더 많은 정보를 기대할 수 있습니다. 다음 안건으로는, 소비자 구매 경향을 파악하기 위해 사용할 새 소프트웨어를 라야가 시연해 줄 것입니다."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 27
+    },
+    {
+      "question_range": "92",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Sales",
+        "B": "Accounting",
+        "C": "Human resources",
+        "D": "Information technology"
+      },
+      "translation": {
+        "lang": "ko",
+        "text": "화자는 어느 부서에서 일하는 것 같은가?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "화자가 초반부에 팀원들에게 1분기 매출 수치에 대해 논의해 보자(OK, team, let's discuss our first-quarter sales figures)고 했으므로 정답은 (A)이다."
+      },
+      "source_page": 27
+    },
+    {
+      "question_range": "93",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "To express disbelief",
+        "B": "To explain a shortage",
+        "C": "To agree with a proposal",
+        "D": "To make a correction"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Tại sao người nói lại nói, \"những cái đó đã phổ biến gần đây\"?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "Hóa ra tại sao người nói lại nói 'những cái đó gần đây lại nổi tiếng'. 화자가 중반부에 대표가 가상 현실 헤드셋을 포함하여 제품 라인을 확장할 것을 제안했다(Our president has proposed expanding the product line to include a virtual reality headset)고 알리면서 인용문을 언급하고 있다. 이는 인기 있는 제품이기 때문에 대표가 제안한 대로 하는 것이 좋겠다는 의미를 나타내는 말이므로 정답은 (C)이다."
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "94",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "Take a lunch break",
+        "B": "Ask questions about a policy",
+        "C": "Read a report",
+        "D": "View a demonstration"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Người nghe sẽ làm gì tiếp theo?"
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "세부 사항 관련 - 청자들이 다음에 할 일. 화자가 후반부에 다음 안건으로는, 소비자 구매 경향을 파악하기 위해 사용할 새 소프트웨어를 라야가 시연해 줄 것(Next on the agenda, Raya will be demonstrating the new software we'll be using to track consumer purchasing trends)이라고 했으므로 정답은 (D)이다."
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "95-97",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "M-Au",
+          "text": "Please follow me, and we'll begin today's tour. Now, I know not everyone who takes this all-access tour is a football fan. Many of our visitors are just curious about how a modern sports facility of this size operates. Well, you'll get to see that and much more. And fortunately for us, today's forecast shows a mix of sun and clouds, with no rain. That's just the right combination for spending some time outside on the field comfortably. Also, as a heads-up, a shuttle bus will meet us at the end of the tour to bring us all back to the parking lot."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Xin vui lòng đi theo tôi, và chúng ta sẽ bắt đầu chuyến tham quan ngày hôm nay. Bây giờ, tôi biết rằng không phải ai tham gia chuyến tham quan toàn quyền truy cập này cũng là một người hâm mộ bóng đá. Nhiều du khách của chúng tôi chỉ tò mò về cách thức hoạt động của một cơ sở thể thao hiện đại có quy mô như thế này. Chà, bạn sẽ thấy điều đó và nhiều hơn thế nữa. Và thật may mắn cho chúng tôi, dự báo thời tiết hôm nay cho thấy sự kết hợp giữa nắng và mây, không có mưa. Đó là sự kết hợp hoàn hảo để dành thời gian ở ngoài sân một cách thoải mái. Ngoài ra, xin lưu ý trước, một chiếc xe buýt đưa đón sẽ đón chúng ta vào cuối chuyến tham quan để đưa tất cả chúng ta trở lại bãi đậu xe."
+      },
+      "explanation": {
+        "lang": "ko",
+        "text": "투어 정보 + 일기 예보"
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "95",
+      "part": 4,
+      "script": [],
+      "options_script": {
+        "A": "At a farm",
+        "B": "At a factory",
+        "C": "At a museum",
+        "D": "At a stadium"
+      },
+      "translation": {
+        "lang": "vi",
+        "text": "Người nghe đang ở đâu?"
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "96",
+      "part": 4,
+      "script": [],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "97",
+      "part": 4,
+      "script": [],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": ""
+      },
+      "source_page": 28
+    },
+    {
+      "question_range": "98-100",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "W-Br",
+          "text": "As you all know, we're hosting a large event tonight. It's a dinner party to celebrate the retirement of a longtime employee of Jalton Incorporated. The chefs are already prepping dinner, and I need you all to set up the ballroom. Here's the assignment list. There's just one change. Amanda couldn't make it, so Kota's covering for her and will take Amanda's assignment. Now, I have a meeting with a potential client at noon, but otherwise, I'll be available all day if anything comes up."
+        }
+      ],
+      "translation": {
+        "lang": "vi",
+        "text": "Tất cả các bạn đều biết đấy, tối nay chúng ta tổ chức một sự kiện lớn. Đó là một bữa tối để kỷ niệm việc nghỉ hưu của một nhân viên lâu năm của Jalton Incorporated. Các đầu bếp đã chuẩn bị bữa tối, và tôi cần tất cả các bạn chuẩn bị phòng khiêu vũ. Dưới đây là danh sách phân công. Chỉ có một thay đổi duy nhất. Amanda không thể đến, vì vậy Kota sẽ thay thế cô ấy và nhận phần phân công của Amanda. Bây giờ, tôi có một cuộc họp với một khách hàng tiềm năng vào lúc trưa, nhưng ngoài ra, tôi sẽ rảnh rỗi cả ngày nếu có chuyện gì xảy ra."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "[UNREADABLE]"
+      },
+      "source_page": 29
+    },
+    {
+      "question_range": "2",
+      "part": 1,
+      "script": [
+        {
+          "speaker": "Audio",
+          "text": "(A) Some trucks have stopped at a traffic signal. (B) Some lights are being installed above a highway. (C) A garden is being planted along a road. (D) Several vehicles are parked outside a building."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Lời thoại khôi phục cho câu 2."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đáp án chuẩn cho câu 2 đã được đồng bộ từ answer_keys.json."
+      },
+      "source_page": null
+    },
+    {
+      "question_range": "71-73",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "Audio",
+          "text": "Attention, Casella Transit customers. Maintenance work on the red and yellow lines will begin next week. You can expect some changes to regular schedules, so please plan accordingly. Use the latest version of our mobile phone application for updates. You can receive notifications regarding delays if your train is impacted. Want to save money on fares? Purchase your e-ticket through the mobile app as well. Buying a ticket at a station kiosk is now subject to an extra fee."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Lời thoại khôi phục cho câu 71-73."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đáp án chuẩn cho câu 71-73 đã được đồng bộ từ answer_keys.json."
+      },
+      "source_page": null
+    },
+    {
+      "question_range": "77-79",
+      "part": 4,
+      "script": [
+        {
+          "speaker": "Audio",
+          "text": "Welcome, new sales representatives, to today's session on cold calling, a sales technique where we call potential clients who haven't heard of us yet. Toward the end of the session you'll each be given a list of prospective parties to call. Now, the people you're contacting are busy and may not be expecting your call. Your job's to convince them that what you have to say is worthwhile. Be polite and avoid using technical jargon. Now we'll listen to some cold call recordings to learn what works and what doesn't."
+        }
+      ],
+      "options_script": {},
+      "translation": {
+        "lang": "vi",
+        "text": "Lời thoại khôi phục cho câu 77-79."
+      },
+      "explanation": {
+        "lang": "vi",
+        "text": "Đáp án chuẩn cho câu 77-79 đã được đồng bộ từ answer_keys.json."
+      },
+      "source_page": null
+    }
+  ]
+}

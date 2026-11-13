@@ -27,6 +27,12 @@ export const HUB_ITEMS = [
     icon: "hub-practice",
     subViews: ["quiz", "mistakes"],
   },
+  {
+    id: "toeic",
+    label: "TOEIC AI",
+    mobileLabel: "TOEIC",
+    icon: "tool-diag",
+  },
   { id: "gamification", label: "Thành tích", mobileLabel: "Thành tích", icon: "hub-achievements" },
   { id: "vip", label: "Gói VIP", mobileLabel: "VIP", icon: "hub-vip", isVip: true },
 ];
@@ -66,6 +72,12 @@ export default function AppShell2026({
   }, [activeView]);
 
   const handleSelectHub = (hubId) => {
+    if (hubId === "toeic") {
+      if (typeof window !== "undefined") {
+        window.location.href = "/toeic";
+      }
+      return;
+    }
     if (hubId === "quiz" && onStartQuizIfEmpty) {
       onStartQuizIfEmpty();
     }

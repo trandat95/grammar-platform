@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" fill="none">
+  <rect width="1200" height="680" rx="16" fill="#09090B"/>
+  <text x="36" y="42" font-family="Geist, Inter, sans-serif" font-size="20" font-weight="800" fill="#FAFAFA">KIẾN TRÚC APP SHELL 2026 — GIẢI QUYẾT TRIỆT ĐỂ LỖI P0 OVERFLOW TRÊN 4 BREAKPOINTS</text>
+  <text x="36" y="66" font-family="Geist, Inter, sans-serif" font-size="13" fill="#A1A1AA">Gộp 16 phần tử trên Header cũ thành 5 Hub điều hướng chuẩn nhận thức + Cụm Quick Tools gọn + Bottom Tab Bar trên Mobile 375px</text>
+
+  <!-- Desktop 1440px -->
+  <rect x="36" y="92" width="740" height="260" rx="12" fill="#121215" stroke="#272733" stroke-width="1.5"/>
+  <text x="52" y="118" font-family="Geist Mono, monospace" font-size="12" font-weight="700" fill="#38BDF8">1. DESKTOP WIDE (1440×900px) &amp; LAPTOP (1280×800px) — 5-HUB STICKY HEADER (56px)</text>
+  <!-- Header bar -->
+  <rect x="52" y="132" width="708" height="42" rx="8" fill="#18181B" stroke="#27272A"/>
+  <rect x="62" y="141" width="24" height="24" rx="6" fill="#2563EB"/>
+  <text x="74" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="12" font-weight="800" fill="#FFFFFF">G</text>
+  <text x="94" y="157" font-family="Geist, sans-serif" font-size="12" font-weight="700" fill="#FAFAFA">Grammar Engine</text>
+  <!-- 5 Hubs -->
+  <rect x="200" y="139" width="68" height="28" rx="6" fill="#2563EB"/>
+  <text x="234" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF">Tổng quan</text>
+  <text x="315" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="600" fill="#D4D4D8">Học &amp; Chẩn đoán</text>
+  <text x="412" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="600" fill="#D4D4D8">Luyện tập (50/30/20)</text>
+  <text x="502" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="600" fill="#D4D4D8">Thành tích</text>
+  <rect x="544" y="139" width="48" height="28" rx="6" fill="#0C4A6E"/>
+  <text x="568" y="157" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="700" fill="#38BDF8">VIP</text>
+  <!-- Right cluster -->
+  <rect x="604" y="141" width="54" height="24" rx="12" fill="#064E3B"/>
+  <text x="631" y="156" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9.5" font-weight="700" fill="#34D399">SYNCED</text>
+  <rect x="664" y="141" width="42" height="24" rx="12" fill="#451A03"/>
+  <text x="685" y="156" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9.5" font-weight="700" fill="#FBBF24">14d</text>
+  <circle cx="728" cy="153" r="12" fill="#2563EB"/>
+
+  <!-- Body Split: Collapsible Sidebar 280px + Focus Content 820px -->
+  <rect x="52" y="186" width="175" height="150" rx="8" fill="#18181B" stroke="#27272A"/>
+  <text x="64" y="208" font-family="Geist Mono, monospace" font-size="10.5" font-weight="700" fill="#38BDF8">SIDEBAR (280px Collapsible)</text>
+  <text x="64" y="228" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">• Tìm kiếm nhanh [⌘K]</text>
+  <text x="64" y="246" font-family="Geist, sans-serif" font-size="10" fill="#FAFAFA">01. Các thì (13 bài) [Expanded]</text>
+  <text x="64" y="264" font-family="Geist, sans-serif" font-size="10" fill="#34D399">  ├─ 1.1 Present Simple ✓</text>
+  <text x="64" y="282" font-family="Geist, sans-serif" font-size="10" fill="#38BDF8">  ├─ 1.2 Present Continuous ●</text>
+  <text x="64" y="300" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">02. Sự phối hợp các thì (2 bài)</text>
+  <text x="64" y="318" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">03. Mệnh đề &amp; Cụm từ (9 bài)</text>
+
+  <rect x="239" y="186" width="521" height="150" rx="8" fill="#18181B" stroke="#27272A"/>
+  <text x="255" y="208" font-family="Geist Mono, monospace" font-size="10.5" font-weight="700" fill="#34D399">MAIN READING &amp; VISUALIZATION CANVAS (Max 820px–980px)</text>
+  <rect x="255" y="220" width="235" height="100" rx="8" fill="#111115" stroke="#272733"/>
+  <text x="268" y="242" font-family="Geist, sans-serif" font-size="11" font-weight="700" fill="#FAFAFA">Cheat-Sheet (+)/(-)/(?) &amp; Công thức</text>
+  <text x="268" y="262" font-family="Geist Mono, monospace" font-size="10" fill="#38BDF8">S + am/is/are + V-ing (Max 165 chars)</text>
+  <text x="268" y="282" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">Tự động cuộn ngang mềm khi công thức dài</text>
+  <rect x="504" y="220" width="240" height="100" rx="8" fill="#111115" stroke="#272733"/>
+  <text x="518" y="242" font-family="Geist, sans-serif" font-size="11" font-weight="700" fill="#FAFAFA">8 Mô hình Trực quan Hóa Tương tác</text>
+  <text x="518" y="262" font-family="Geist, sans-serif" font-size="10" fill="#34D399">Timeline 13 Thì • Cây Điều Kiện • Bị Động</text>
+  <text x="518" y="282" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">100% Semantic CSS Tokens (0 Hardcoded HEX)</text>
+
+  <!-- Mobile 375px Artboard -->
+  <rect x="804" y="92" width="360" height="552" rx="24" fill="#121215" stroke="#38BDF8" stroke-width="2"/>
+  <text x="828" y="122" font-family="Geist Mono, monospace" font-size="12" font-weight="700" fill="#38BDF8">2. MOBILE STANDARD (375×812px)</text>
+  <!-- Mobile Top Bar -->
+  <rect x="824" y="136" width="320" height="40" rx="8" fill="#18181B" stroke="#27272A"/>
+  <text x="838" y="160" font-family="Geist, sans-serif" font-size="11.5" font-weight="800" fill="#FAFAFA">☰  Grammar PRO</text>
+  <rect x="990" y="144" width="48" height="24" rx="12" fill="#451A03"/>
+  <text x="1014" y="159" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9.5" font-weight="700" fill="#FBBF24">🔥 14</text>
+  <rect x="1044" y="144" width="58" height="24" rx="12" fill="#0C4A6E"/>
+  <text x="1073" y="159" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9.5" font-weight="700" fill="#38BDF8">2,450 XP</text>
+  <circle cx="1122" cy="156" r="11" fill="#2563EB"/>
+
+  <!-- Mobile Chapter Sticky Selector (Thay thế Sidebar 320px cứng) -->
+  <rect x="824" y="186" width="320" height="36" rx="8" fill="#0C4A6E" fill-opacity="0.35" stroke="#0284C7"/>
+  <text x="838" y="208" font-family="Geist, sans-serif" font-size="11" font-weight="700" fill="#38BDF8">Chương 01: Các thì (1.2 Present Cont.) ▾</text>
+
+  <!-- Mobile Hero Card -->
+  <rect x="824" y="232" width="320" height="110" rx="12" fill="#18181B" stroke="#27272A"/>
+  <text x="840" y="256" font-family="Geist, sans-serif" font-size="12" font-weight="700" fill="#FAFAFA">Hành động Hôm nay (Above-the-Fold)</text>
+  <text x="840" y="276" font-family="Geist, sans-serif" font-size="10.5" fill="#34D399">• 8 thẻ SM-2 đến hạn ôn tập (Knowledge Graph)</text>
+  <text x="840" y="294" font-family="Geist, sans-serif" font-size="10.5" fill="#A1A1AA">• Mục tiêu ngày: 12/20 câu (60%)</text>
+  <rect x="840" y="306" width="288" height="24" rx="6" fill="#2563EB"/>
+  <text x="984" y="322" text-anchor="middle" font-family="Geist, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF">Ôn tập SM-2 ngay (8 thẻ) ➔</text>
+
+  <!-- Mobile Question Card Preview -->
+  <rect x="824" y="352" width="320" height="214" rx="12" fill="#18181B" stroke="#27272A"/>
+  <text x="840" y="376" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="#38BDF8">CÂU 04/10 • SENTENCE TRANSFORMATION</text>
+  <text x="840" y="398" font-family="Geist, sans-serif" font-size="11" fill="#FAFAFA">Although it rained heavily, they went out.</text>
+  <rect x="840" y="410" width="288" height="26" rx="6" fill="#451A03" stroke="#B45309"/>
+  <text x="850" y="427" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="#FBBF24">BẮT ĐẦU VỚI: In spite of...</text>
+  <rect x="840" y="446" width="288" height="36" rx="6" fill="#111115" stroke="#38BDF8"/>
+  <text x="852" y="468" font-family="Geist, sans-serif" font-size="11" fill="#FAFAFA">In spite of the heavy rain, they went out.</text>
+  <text x="840" y="504" font-family="Geist, sans-serif" font-size="10" font-weight="700" fill="#34D399">✓ Chính xác (+15 XP) • Xem Lời giải 5 Bước ▾</text>
+  <text x="840" y="524" font-family="Geist, sans-serif" font-size="10" fill="#A1A1AA">Click bất kỳ từ nào để mở #dict-popup (Bottom Sheet)</text>
+
+  <!-- Mobile Bottom Navigation Bar (5 Tabs, Touch Target >= 44x44px) -->
+  <rect x="824" y="578" width="320" height="52" rx="12" fill="#18181B" stroke="#272733"/>
+  <text x="856" y="608" text-anchor="middle" font-family="Geist, sans-serif" font-size="9.5" font-weight="700" fill="#38BDF8">Tổng quan</text>
+  <text x="920" y="608" text-anchor="middle" font-family="Geist, sans-serif" font-size="9.5" fill="#A1A1AA">12 Chuyên đề</text>
+  <text x="984" y="608" text-anchor="middle" font-family="Geist, sans-serif" font-size="9.5" fill="#A1A1AA">Luyện Quiz</text>
+  <text x="1048" y="608" text-anchor="middle" font-family="Geist, sans-serif" font-size="9.5" fill="#A1A1AA">Thành tích</text>
+  <text x="1112" y="608" text-anchor="middle" font-family="Geist, sans-serif" font-size="9.5" fill="#FBBF24">VIP</text>
+
+  <!-- Tablet 768px & Key Metrics Box -->
+  <rect x="36" y="368" width="740" height="276" rx="12" fill="#121215" stroke="#272733" stroke-width="1.5"/>
+  <text x="52" y="396" font-family="Geist Mono, monospace" font-size="12" font-weight="700" fill="#34D399">3. BẢNG ĐỐI CHIẾU GIẢI PHÁP TÁI CẤU TRÚC (SOLVING AUDIT P0 / P1 / P2)</text>
+  <text x="52" y="424" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P0] Responsive 4 Breakpoints: Bổ sung đầy đủ @media (max-width: 1280px / 1024px / 768px / 480px) trong design-system-2026.css.</text>
+  <text x="52" y="448" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P0] Header 16 phần tử: Gộp thành 5 Hub chính + Command Palette [⌘K] + Quick Tools Popover; Mobile dùng Bottom Nav 5 nút (44×44px).</text>
+  <text x="52" y="472" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P0] Sidebar 320px cứng: Chuyển thành Collapsible Sidebar 280px (Desktop) và Slide-over Drawer + Sticky Pill Bar (Tablet/Mobile).</text>
+  <text x="52" y="496" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P1] 2,205 mã HEX cứng: Chuẩn hóa sang biến CSS var(--ds-*) cho cả 8 sơ đồ GrammarVisualization, Diagnostic &amp; StructuredExplanation.</text>
+  <text x="52" y="520" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P1] Legacy Modals (#auth-modal, #vocab-modal, #dict-popup): Bọc trong FocusTrapModal có quản lý Esc, aria-modal và Bottom Sheet Mobile.</text>
+  <text x="52" y="544" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P1] Quá tải dọc Dashboard: Tách thành 2 Sub-view Bento (Zone A: Hành động hôm nay &amp; SM-2 Above-the-fold | Zone B: Radar 12 trục &amp; 12 Chương).</text>
+  <text x="52" y="568" font-family="Geist, sans-serif" font-size="11.5" fill="#FAFAFA">• [P2] Đồng bộ Icon &amp; Input: Thay toàn bộ Emoji OS bằng 42 SVG Icons chuẩn 24×24px; hỗ trợ đầy đủ cả Text Input (2,939 câu) &amp; MCQ Card.</text>
+  <rect x="52" y="586" width="708" height="40" rx="8" fill="#064E3B" fill-opacity="0.35" stroke="#047857"/>
+  <text x="406" y="611" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11.5" font-weight="700" fill="#34D399">WCAG 2.2 AA VERIFIED (28/28 PAIRS &gt;= 4.5:1) • FTC ANTI-DARK-PATTERN COMPLIANT • ZERO CLS SKELETON</text>
+</svg>

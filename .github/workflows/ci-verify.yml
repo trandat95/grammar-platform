@@ -36,6 +36,7 @@ jobs:
           python scripts/validate-gamification-engine.py
           python scripts/validate-monetization-engine.py
           python scripts/validate-milestone-211.py
+          python scripts/validate-toeic-full.py
 
       - name: Install dependencies (Next.js / Prisma)
         run: npm install --no-audit --no-fund

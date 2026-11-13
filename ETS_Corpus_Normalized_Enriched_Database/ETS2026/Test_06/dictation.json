@@ -1,0 +1,1082 @@
+{
+  "series": "ETS2026",
+  "test": 6,
+  "doc_type": "dictation",
+  "tracks": [
+    {
+      "part": 1,
+      "track": "E26-T06-01",
+      "question_range": "1",
+      "cloze_text": "[Câu 1: (C)] (A) A restaurant _____ is _____ with food. (B) Cups are _____ in a _____ . (C) A _____ is empty. (D) Some _____ have been _____ .",
+      "full_text": "(A) A restaurant buffet is filled with food. (B) Cups are sitting in a sink. (C) A dining area is empty. (D) Some candles have been lit.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-01.mp3",
+      "blank_answers": [
+        "buffet",
+        "filled",
+        "sitting",
+        "sink",
+        "dining area",
+        "candles",
+        "lit"
+      ],
+      "blank_count": 7
+    },
+    {
+      "part": 1,
+      "track": "E26-T06-02",
+      "question_range": "2",
+      "cloze_text": "[Câu 2: (A)] (A) He's _____ a machine. (B) He's _____ up a machine. (C) He's _____ down a machine. (D) He's _____ a machine with a _____ .",
+      "full_text": "(A) He's operating a machine. (B) He's setting up a machine. (C) He's shutting down a machine. (D) He's wiping a machine with a cloth.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-02.mp3",
+      "blank_answers": [
+        "operating",
+        "setting",
+        "shutting",
+        "wiping",
+        "cloth"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 1,
+      "track": "E26-T06-03",
+      "question_range": "3",
+      "cloze_text": "[Câu 3: (D)] (A) A man is _____ his _____ . (B) A woman is _____ her purse. (C) They're _____ a bus. (D) They're _____ past a _____ .",
+      "full_text": "(A) A man is tying his shoe. (B) A woman is looking through her purse. (C) They're boarding a bus. (D) They're walking past a bench.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-03.mp3",
+      "blank_answers": [
+        "tying",
+        "shoe",
+        "looking through",
+        "boarding",
+        "walking",
+        "bench"
+      ],
+      "blank_count": 6
+    },
+    {
+      "part": 1,
+      "track": "E26-T06-04",
+      "question_range": "4",
+      "cloze_text": "[Câu 4: (B)] (A) She's _____ a _____ . (B) She's _____ a water _____ . (C) She's _____ a book from a _____ . (D) She's _____ for a pen.",
+      "full_text": "(A) She's organizing a workstation. (B) She's holding a water bottle. (C) She's removing a book from a shelf. (D) She's reaching for a pen.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-04.mp3",
+      "blank_answers": [
+        "organizing",
+        "workstation",
+        "holding",
+        "bottle",
+        "removing",
+        "shelf",
+        "reaching"
+      ],
+      "blank_count": 7
+    },
+    {
+      "part": 1,
+      "track": "E26-T06-05",
+      "question_range": "5",
+      "cloze_text": "[Câu 5: (D)] (A) A woman is _____ a _____ onto a counter. (B) A woman is _____ on a _____ of paper. (C) A woman is _____ against a _____ door. (D) A woman is _____ to a _____ at a desk.",
+      "full_text": "(A) A woman is lifting a suitcase onto a counter. (B) A woman is writing on a piece of paper. (C) A woman is leaning against a glass door. (D) A woman is talking to a worker at a desk.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-05.mp3",
+      "blank_answers": [
+        "lifting",
+        "suitcase",
+        "writing",
+        "piece",
+        "leaning",
+        "glass",
+        "talking",
+        "worker"
+      ],
+      "blank_count": 8
+    },
+    {
+      "part": 1,
+      "track": "E26-T06-06",
+      "question_range": "6",
+      "cloze_text": "[Câu 6: (C)] (A) Some _____ have been _____ above a sofa. (B) Some _____ are stacked in a corner. (C) There are _____ some seating areas. (D) There are _____ a doorway.",
+      "full_text": "(A) Some paintings have been hung above a sofa. (B) Some wooden chairs are stacked in a corner. (C) There are lamps lighting some seating areas. (D) There are curtains framing a doorway.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_1/E26-T06-06.mp3",
+      "blank_answers": [
+        "paintings",
+        "hung",
+        "wooden chairs",
+        "lamps lighting",
+        "curtains framing"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-07",
+      "question_range": "7",
+      "cloze_text": "[Câu 7: (A)] How long will the _____ take? (A) About a _____ . (B) _____ the roof. (C) I _____ that book.",
+      "full_text": "How long will the renovations take? (A) About a month. (B) Mostly the roof. (C) I finished that book.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-07.mp3",
+      "blank_answers": [
+        "renovations",
+        "month",
+        "Mostly",
+        "finished"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-08",
+      "question_range": "8",
+      "cloze_text": "[Câu 8: (A)] What is the factory's _____ like? (A) It's _____ thorough. (B) I didn't _____ any. (C) He likes _____ nights.",
+      "full_text": "What is the factory's inspection process like? (A) It's quite thorough. (B) I didn't bring any. (C) He likes working nights.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-08.mp3",
+      "blank_answers": [
+        "inspection process",
+        "quite",
+        "bring",
+        "working"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-09",
+      "question_range": "9",
+      "cloze_text": "[Câu 9: (C)] Hasn't our _____ arrived yet? (A) _____ clothing. (B) I can _____ you there. (C) No, it was just _____ yesterday.",
+      "full_text": "Hasn't our merchandise arrived yet? (A) Handmade clothing. (B) I can drive you there. (C) No, it was just shipped yesterday.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-09.mp3",
+      "blank_answers": [
+        "merchandise",
+        "Handmade",
+        "drive",
+        "shipped"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-10",
+      "question_range": "10",
+      "cloze_text": "[Câu 10: (C)] Who's _____ for the retreat? (A) At the _____ . (B) I _____ the car by the tree. (C) Carlos and I are.",
+      "full_text": "Who's buying beverages for the retreat? (A) At the caf. (B) I parked the car by the tree. (C) Carlos and I are.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-10.mp3",
+      "blank_answers": [
+        "buying beverages",
+        "caf",
+        "parked"
+      ],
+      "blank_count": 3
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-11",
+      "question_range": "11",
+      "cloze_text": "[Câu 11: (B)] Why is the _____ at a _____ ? (A) Sure, let's go _____ the guests. (B) Because the _____ wasn't big enough. (C) Yes, I can _____ you very well-thank you.",
+      "full_text": "Why is the reception at a different location? (A) Sure, let's go greet the guests. (B) Because the conference room wasn't big enough. (C) Yes, I can hear you very well-thank you.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-11.mp3",
+      "blank_answers": [
+        "reception",
+        "different location",
+        "greet",
+        "conference room",
+        "hear"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-12",
+      "question_range": "12",
+      "cloze_text": "[Câu 12: (C)] Would you like me to _____ your _____ ? (A) I didn't _____ that. (B) A much larger _____ . (C) Yes, if you _____ time.",
+      "full_text": "Would you like me to process your travel voucher? (A) I didn't know that. (B) A much larger convention center. (C) Yes, if you have time.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-12.mp3",
+      "blank_answers": [
+        "process",
+        "travel voucher",
+        "know",
+        "convention center",
+        "have"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-13",
+      "question_range": "13",
+      "cloze_text": "[Câu 13: (B)] How far away is Azuma's _____ ? (A) No, not _____ I've seen it. (B) Oh, it's only a few _____ from here. (C) Five dollars per _____ .",
+      "full_text": "How far away is Azuma's Dry Cleaning Company? (A) No, not until I've seen it. (B) Oh, it's only a few minutes' walk from here. (C) Five dollars per shirt.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-13.mp3",
+      "blank_answers": [
+        "Dry Cleaning Company",
+        "until",
+        "minutes' walk",
+        "shirt"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-14",
+      "question_range": "14",
+      "cloze_text": "[Câu 14: (B)] Do we have the _____ ready for the students? (A) The manager's _____ . (B) Yes, I _____ them. (C) We _____ uniforms.",
+      "full_text": "Do we have the registration forms ready for the students? (A) The manager's signature. (B) Yes, I printed them. (C) We require uniforms.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-14.mp3",
+      "blank_answers": [
+        "registration forms",
+        "signature",
+        "printed",
+        "require"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-15",
+      "question_range": "15",
+      "cloze_text": "[Câu 15: (A)] I could _____ you with a _____ of the _____ . (A) Great-I _____ it for my records. (B) At least another _____ . (C) Why don't we _____ a _____ ?",
+      "full_text": "I could provide you with a copy of the lease. (A) Great-I Great I need it for my records. (B) At least another week. (C) Why don't we offer a discount?",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-15.mp3",
+      "blank_answers": [
+        "provide",
+        "copy",
+        "lease",
+        "Great I need",
+        "week",
+        "offer",
+        "discount"
+      ],
+      "blank_count": 7
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-16",
+      "question_range": "16",
+      "cloze_text": "[Câu 16: (B)] How many _____ are scheduled for this afternoon? (A) A few _____ pieces. (B) Right now, there are _____ . (C) Can you _____ the channel?",
+      "full_text": "How many oil changes are scheduled for this afternoon? (A) A few replacement pieces. (B) Right now, there are five. (C) Can you change the channel?",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-16.mp3",
+      "blank_answers": [
+        "oil changes",
+        "replacement",
+        "five",
+        "change"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-17",
+      "question_range": "17",
+      "cloze_text": "[Câu 17: (A)] When was the last time you _____ for _____ ? (A) About three years ago. (B) It's the black _____ . (C) I have some _____ .",
+      "full_text": "When was the last time you traveled for business? (A) About three years ago. (B) It's the black briefcase. (C) I have some stamps.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-17.mp3",
+      "blank_answers": [
+        "traveled",
+        "business",
+        "briefcase",
+        "stamps"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-18",
+      "question_range": "18",
+      "cloze_text": "[Câu 18: (C)] Should I order the _____ or over the phone? (A) Just _____ -thank you. (B) No, I've _____ been there. (C) By _____ is best.",
+      "full_text": "Should I order the parts online or over the phone? (A) Just half -thank you. (B) No, I've never been there. (C) By phone is best.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-18.mp3",
+      "blank_answers": [
+        "parts online",
+        "half",
+        "never",
+        "phone"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-19",
+      "question_range": "19",
+      "cloze_text": "[Câu 19: (C)] Where should I _____ up my _____ ? (A) We _____ the lease. (B) About 10,000 _____ per week. (C) There are three _____ in the lobby.",
+      "full_text": "Where should I pick up my conference badge? (A) We signed the lease. (B) About 10,000 units per week. (C) There are three tables in the lobby.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-19.mp3",
+      "blank_answers": [
+        "pick",
+        "conference badge",
+        "signed",
+        "units",
+        "tables"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-20",
+      "question_range": "20",
+      "cloze_text": "[Câu 20: (C)] Isn't the _____ running a bit slow? (A) To an _____ service. (B) Actually, I _____ to walk. (C) A _____ on the way.",
+      "full_text": "Isn't the computer network running a bit slow? (A) To an upgraded service. (B) Actually, I prefer to walk. (C) A technician's on the way.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-20.mp3",
+      "blank_answers": [
+        "computer network",
+        "upgraded",
+        "prefer",
+        "technician's"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-21",
+      "question_range": "21",
+      "cloze_text": "[Câu 21: (B)] How do you like this _____ ? (A) An _____ . (B) I'd rather have a _____ . (C) On page five of the _____ .",
+      "full_text": "How do you like this office space? (A) An afternoon appointment. (B) I'd rather have a window. (C) On page five of the contract.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-21.mp3",
+      "blank_answers": [
+        "office space",
+        "afternoon appointment",
+        "window",
+        "contract"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-22",
+      "question_range": "22",
+      "cloze_text": "[Câu 22: (A)] You can use the _____ to make your deliveries. (A) OK, I'll go get the _____ . (B) A clothing _____ . (C) It's on _____ .",
+      "full_text": "You can use the company van to make your deliveries. (A) OK, I'll go get the key. (B) A clothing manufacturer. (C) It's on Market Street.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-22.mp3",
+      "blank_answers": [
+        "company van",
+        "key",
+        "manufacturer",
+        "Market Street"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-23",
+      "question_range": "23",
+      "cloze_text": "[Câu 23: (C)] Isn't the _____ meeting tonight? (A) Thanks-that would be _____ . (B) He's the recently _____ . (C) Did you check their _____ ?",
+      "full_text": "Isn't the city council meeting tonight? (A) Thanks-that would be great. (B) He's the recently elected mayor. (C) Did you check their Web site?",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-23.mp3",
+      "blank_answers": [
+        "city council",
+        "great",
+        "elected mayor",
+        "Web site"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-24",
+      "question_range": "24",
+      "cloze_text": "[Câu 24: (C)] Could you _____ at the _____ tomorrow? (A) A color _____ . (B) The _____ was tied. (C) I have _____ now.",
+      "full_text": "Could you look at the revised logo tomorrow? (A) A color printer. (B) The score was tied. (C) I have time now.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-24.mp3",
+      "blank_answers": [
+        "look",
+        "revised logo",
+        "printer",
+        "score",
+        "time"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-25",
+      "question_range": "25",
+      "cloze_text": "[Câu 25: (B)] Is the _____ or national? (A) At the _____ nearby. (B) We have _____ in every province. (C) The _____ in two hours.",
+      "full_text": "Is the business local or national? (A) At the community center nearby. (B) We have stores in every province. (C) The flight's in two hours.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-25.mp3",
+      "blank_answers": [
+        "business local",
+        "community center",
+        "stores",
+        "flight's"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-26",
+      "question_range": "26",
+      "cloze_text": "[Câu 26: (B)] How do you _____ sure your products will _____ well? (A) No, I _____ it last month. (B) I _____ . (C) OK, I'll _____ it.",
+      "full_text": "How do you make sure your products will sell well? (A) No, I bought it last month. (B) I conduct market research. (C) OK, I'll bring it.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-26.mp3",
+      "blank_answers": [
+        "make",
+        "sell",
+        "bought",
+        "conduct market research",
+        "bring"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-27",
+      "question_range": "27",
+      "cloze_text": "[Câu 27: (A)] Who will _____ the _____ manager position? (A) _____ will take place next week. (B) I'd like a _____ on my coffee, please. (C) The _____ should be in the corner.",
+      "full_text": "Who will fill the open manager position? (A) Interviews will take place next week. (B) I'd like a refill on my coffee, please. (C) The desk should be in the corner.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-27.mp3",
+      "blank_answers": [
+        "fill",
+        "open",
+        "Interviews",
+        "refill",
+        "desk"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-28",
+      "question_range": "28",
+      "cloze_text": "[Câu 28: (C)] Where do you want to _____ the _____ ? (A) The _____ for new products. (B) I think that's _____ . (C) There are _____ left.",
+      "full_text": "Where do you want to store the extra brochures? (A) The price lists for new products. (B) I think that's right. (C) There are none left.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-28.mp3",
+      "blank_answers": [
+        "store",
+        "extra brochures",
+        "price lists",
+        "right",
+        "none"
+      ],
+      "blank_count": 5
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-29",
+      "question_range": "29",
+      "cloze_text": "[Câu 29: (C)] The new _____ been installed, hasn't it? (A) We'll have two _____ , please. (B) No, I didn't _____ here. (C) We're _____ this afternoon.",
+      "full_text": "The new bottling machine's been installed, hasn't it? (A) We'll have two packs, please. (B) No, I didn't drive here. (C) We're expecting delivery this afternoon.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-29.mp3",
+      "blank_answers": [
+        "bottling machine's",
+        "packs",
+        "drive",
+        "expecting delivery"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-30",
+      "question_range": "30",
+      "cloze_text": "[Câu 30: (B)] Shouldn't we _____ our _____ ? (A) About an _____ . (B) We have a _____ in place. (C) No, it wasn't.",
+      "full_text": "Shouldn't we update our security protocol? (A) About an hour. (B) We have a good plan in place. (C) No, it wasn't.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-30.mp3",
+      "blank_answers": [
+        "update",
+        "security protocol",
+        "hour",
+        "good plan"
+      ],
+      "blank_count": 4
+    },
+    {
+      "part": 2,
+      "track": "E26-T06-31",
+      "question_range": "31",
+      "cloze_text": "[Câu 31: (B)] The _____ would like to meet sometime today. (A) Yes, Mr. Tamura is from Kyoto. (B) Before or after the _____ ? (C) That was a long _____ .",
+      "full_text": "The engineering team would like to meet sometime today. (A) Yes, Mr. Tamura is from Kyoto. (B) Before or after the company-wide meeting? (C) That was a long baseball game.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_2/E26-T06-31.mp3",
+      "blank_answers": [
+        "engineering team",
+        "company-wide meeting",
+        "baseball game"
+      ],
+      "blank_count": 3
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-32-34",
+      "question_range": "32-34",
+      "cloze_text": "[Câu 32: (C), Câu 33: (D), Câu 34: (C)] W: I saw one of the new _____ about our business on television last week. I guess the _____ has already _____ . M: This _____ coming out at a great time for us. It's our _____ -people are starting to _____ our tours for their vacations. W: There's still some _____ in the _____ . We should use it to _____ our most recent _____ -a guided exploration of the _____ , including tickets to a performance. M: That's a good idea. Let me check how much it would cost to _____ that information to our _____ .",
+      "full_text": "W: I saw one of the new commercials about our business on television last week. I guess the advertising campaign has already launched. M: This ad campaign's coming out at a great time for us. It's our busy season -people are starting to book our tours for their vacations. W: There's still some money in the budget. We should use it to advertise our most recent package -a guided exploration of the theater district, including tickets to a performance. M: That's a good idea. Let me check how much it would cost to add that information to our current commercials.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-32-34.mp3",
+      "blank_answers": [
+        "commercials",
+        "advertising campaign",
+        "launched",
+        "ad campaign's",
+        "busy season",
+        "book",
+        "money",
+        "budget",
+        "advertise",
+        "package",
+        "theater district",
+        "add",
+        "current commercials"
+      ],
+      "blank_count": 13
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-35-37",
+      "question_range": "35-37",
+      "cloze_text": "[Câu 35: (A), Câu 36: (B), Câu 37: (C)] W: Marcel, we've been getting some _____ from our guests when they _____ . Some people think the _____ is included in the room reservation. They don't know they have to _____ when they exit. M: Oh. Well, it's _____ on the _____ they receive. But I'll start _____ our guests at check-in as well. W: Great, thank you. Also, remember the _____ is coming by next week to plant some _____ by the entrance of the lobby. It's starting to feel a bit _____ outside.",
+      "full_text": "W: Marcel, we've been getting some complaints from our guests when they check out. Some people think the parking garage fee is included in the room reservation. They don't know they have to pay when they exit. M: Oh. Well, it's written on the confirmation they receive. But I'll start reminding our guests at check-in as well. W: Great, thank you. Also, remember the landscaping crew is coming by next week to plant some spring flowers by the entrance of the lobby. It's starting to feel a bit warmer outside.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-35-37.mp3",
+      "blank_answers": [
+        "complaints",
+        "check out",
+        "parking garage fee",
+        "pay",
+        "written",
+        "confirmation",
+        "reminding",
+        "landscaping crew",
+        "spring flowers",
+        "warmer"
+      ],
+      "blank_count": 10
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-38-40",
+      "question_range": "38-40",
+      "cloze_text": "[Câu 38: (D), Câu 39: (A), Câu 40: (B)] M: Polina, congratulations on being _____ for our hospital. You really _____ the honor! W: Thanks! I'm a little _____ by all the attention, though. M: Well, you shouldn't be. After all, your _____ and _____ all felt you should be _____ for your outstanding efforts. Actually, I'm hoping you'll help me _____ the _____ for new nurses. W: I'd be _____ to help! And by the way, will you be at the _____ next week? All the hospital's winners will be _____ . M: Of course! I'm _____ to it.",
+      "full_text": "M: Polina, congratulations on being voted Nurse of the for our hospital. You really deserve the honor! W: Thanks! I'm a little embarrassed by all the attention, though. M: Well, you shouldn't be. After all, your patients and colleagues all felt you should be recognized for your outstanding efforts. Actually, I'm hoping you'll help me update the training materials for new nurses. W: I'd be happy to help! And by the way, will you be at the awards ceremony next week? All the hospital's winners will be celebrated. M: Of course! I'm looking forward to it.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-38-40.mp3",
+      "blank_answers": [
+        "voted Nurse of the",
+        "deserve",
+        "embarrassed",
+        "patients",
+        "colleagues",
+        "recognized",
+        "update",
+        "training materials",
+        "happy",
+        "awards ceremony",
+        "celebrated",
+        "looking forward"
+      ],
+      "blank_count": 12
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-41-43",
+      "question_range": "41-43",
+      "cloze_text": "[Câu 41: (C), Câu 42: (B), Câu 43: (B)] M1: Hello. I'm looking for a book that's _____ in your library's _____ , but I can't find it on the _____ . Could you help me? W: Sorry, I'm helping another _____ on the phone right now. Let me get one of my _____ for you. M2: Hi. How can I _____ you? M1: I'm looking for a book about _____ art called Night Canvases. M2: Oh! We just _____ several _____ of that, but they're still _____ in the box. If you come back tomorrow, they'll be _____ to borrow.",
+      "full_text": "M1: Hello. I'm looking for a book that's listed in your library's catalog, but I can't find it on the shelves. Could you help me? W: Sorry, I'm helping another patron on the phone right now. Let me get one of my coworkers for you. M2: Hi. How can I help you? M1: I'm looking for a book about abstract art called Night Canvases. M2: Oh! We just received several copies of that, but they're still packed in the box. If you come back tomorrow, they'll be ready to borrow.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-41-43.mp3",
+      "blank_answers": [
+        "listed",
+        "catalog",
+        "shelves",
+        "patron",
+        "coworkers",
+        "help",
+        "abstract",
+        "received",
+        "copies",
+        "packed",
+        "ready"
+      ],
+      "blank_count": 11
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-44-46",
+      "question_range": "44-46",
+      "cloze_text": "[Câu 44: (B), Câu 45: (A), Câu 46: (C)] M: Silvia, I just heard the _____ will hold a _____ this afternoon. Can you _____ it? I'll be at the opening of the new _____ . W: OK, I'll get a _____ together right away. I hope the mayor will _____ about the _____ to build an _____ wind farm. M: Yes, that's what I heard he'll _____ . There's a lot of _____ in _____ energy, so this will likely be the _____ on tonight's news. W: Perfect. I'm going to _____ the mayor about _____ for the project. The city _____ will want to know where the _____ will come from.",
+      "full_text": "M: Silvia, I just heard the city mayor will hold a press conference this afternoon. Can you cover it? I'll be at the opening of the new train station. W: OK, I'll get a camera crew together right away. I hope the mayor will provide details about the proposal to build an offshore wind farm. M: Yes, that's what I heard he'll discuss. There's a lot of interest in wind energy, so this will likely be the lead story on tonight's news. W: Perfect. I'm going to ask the mayor about funding for the project. The city residents will want to know where the finances will come from.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-44-46.mp3",
+      "blank_answers": [
+        "city mayor",
+        "press conference",
+        "cover",
+        "train station",
+        "camera crew",
+        "provide details",
+        "proposal",
+        "offshore",
+        "discuss",
+        "interest",
+        "wind",
+        "lead story",
+        "ask",
+        "funding",
+        "residents",
+        "finances"
+      ],
+      "blank_count": 16
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-47-49",
+      "question_range": "47-49",
+      "cloze_text": "[Câu 47: (B), Câu 48: (A), Câu 49: (C)] W: Koji, you weren't at the _____ this morning. Is everything OK? M: I had to take my car to the _____ for _____ . What did I miss? W: Well, we received some _____ . Our _____ is planning to _____ more accountants! M: That's great! We've been _____ than ever since we started working with True Valley Industries. W: Yes. By the way, there's an _____ on our Web site about the _____ of True Valley. I'd _____ reading it. M: I'll be sure to _____ it _____ .",
+      "full_text": "W: Koji, you weren't at the team meeting this morning. Is everything OK? M: I had to take my car to the mechanic for repairs. What did I miss? W: Well, we received some good news. Our firm is planning to hire more accountants! M: That's great! We've been busier than ever since we started working with True Valley Industries. W: Yes. By the way, there's an article on our Web site about the founder of True Valley. I'd suggest reading it. M: I'll be sure to check it out.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-47-49.mp3",
+      "blank_answers": [
+        "team meeting",
+        "mechanic",
+        "repairs",
+        "good news",
+        "firm",
+        "hire",
+        "busier",
+        "article",
+        "founder",
+        "suggest",
+        "check",
+        "out"
+      ],
+      "blank_count": 12
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-50-52",
+      "question_range": "50-52",
+      "cloze_text": "[Câu 50: (A), Câu 51: (D), Câu 52: (C)] W1: Let's discuss the upcoming _____ for the _____ at our firm. How's the _____ going, Hongtai and Raya? M: Well, the Evans Nature Reserve said they can _____ a two-day _____ for us. W2: Yes, they're even _____ a _____ workshop on the second day. I'm _____ about that. W1: Oh, that is exciting! Do you know if we'll be able to _____ in the reserve _____ ? M: Yes, that's an _____ . But I don't know if all our staff have _____ and camping _____ . I'm sure we can _____ enough for everybody, though. Let me _____ it.",
+      "full_text": "W1: Let's discuss the upcoming retreat for the architects at our firm. How's the planning going, Hongtai and Raya? M: Well, the Evans Nature Reserve said they can organize a two-day expedition for us. W2: Yes, they're even offering a wildlife photography workshop on the second day. I'm excited about that. W1: Oh, that is exciting! Do you know if we'll be able to camp in the reserve overnight? M: Yes, that's an option. But I don't know if all our staff have tents and camping equipment. I'm sure we can rent enough for everybody, though. Let me look into it.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-50-52.mp3",
+      "blank_answers": [
+        "retreat",
+        "architects",
+        "planning",
+        "organize",
+        "expedition",
+        "offering",
+        "wildlife photography",
+        "excited",
+        "camp",
+        "overnight",
+        "option",
+        "tents",
+        "equipment",
+        "rent",
+        "look into"
+      ],
+      "blank_count": 15
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-53-55",
+      "question_range": "53-55",
+      "cloze_text": "[Câu 53: (A), Câu 54: (B), Câu 55: (B)] M: Hi, Ms. Espinoza. This is Malik calling from ACC _____ . I'm here at your _____ at 88 Glassbury Avenue to _____ your Internet. W: Oh! I'm sorry, but I'm still on my _____ from work. There's a lot of _____ right now. M: I see. Well, my next client's house isn't too _____ . I could be _____ in about an hour. Does that _____ OK? W: Yes, that'd be _____ . Thank you so much.",
+      "full_text": "M: Hi, Ms. Espinoza. This is Malik calling from ACC Internet Providers. I'm here at your residence at 88 Glassbury Avenue to set up your Internet. W: Oh! I'm sorry, but I'm still on my way home from work. There's a lot of traffic right now. M: I see. Well, my next client's house isn't too far away. I could be back in about an hour. Does that sound OK? W: Yes, that'd be great. Thank you so much.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-53-55.mp3",
+      "blank_answers": [
+        "Internet Providers",
+        "residence",
+        "set up",
+        "way home",
+        "traffic",
+        "far away",
+        "back",
+        "sound",
+        "great"
+      ],
+      "blank_count": 9
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-56-58",
+      "question_range": "56-58",
+      "cloze_text": "[Câu 56: (C), Câu 57: (B), Câu 58: (C)] W: Klaus, you were on the _____ that went to the Arctic last month, right? For the new project? M: Yes. I'll be going _____ month. Are you joining? W: Yeah-Sabine can't _____ it, so the _____ asked me to take her _____ . M: Great, but _____ for the _____ ! I'd recommend getting a _____ . The one I have is battery-operated, and there are _____ inside the fabric. I'll send you a link to the _____ . The jacket didn't _____ too much.",
+      "full_text": "W: Klaus, you were on the research team that went to the Arctic last month, right? For the new project? M: Yes. I'll be going again next month. Are you joining? W: Yeah-Sabine can't make it, so the project coordinator asked me to take her place. M: Great, but prepare for the freezing temperatures! I'd recommend getting a heated jacket. The one I have is battery-operated, and there are heating elements inside the fabric. I'll send you a link to the online store. The jacket didn't cost too much.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-56-58.mp3",
+      "blank_answers": [
+        "research team",
+        "again next",
+        "make",
+        "project coordinator",
+        "place",
+        "prepare",
+        "freezing temperatures",
+        "heated jacket",
+        "heating elements",
+        "online store",
+        "cost"
+      ],
+      "blank_count": 11
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-59-61",
+      "question_range": "59-61",
+      "cloze_text": "[Câu 59: (A), Câu 60: (D), Câu 61: (C)] W: We just got a _____ from Great Fitness. They need T-shirts with their _____ and _____ printed on the front-1,000, to be _____ . M: That's an _____ order. W: We're definitely going to need some _____ to _____ on it. M: Hmm, I don't know how _____ that’s going to be. It's the _____ , and a lot of employees were _____ to _____ off. W: Well, OK. We could _____ them an _____ off next month. M: I'm still _____ about the three other _____ we need to _____ this week. W: I know, but Great Fitness _____ from us all the time.",
+      "full_text": "W: We just got a request from Great Fitness. They need T-shirts with their business name and logo printed on the front-1,000, to be exact. M: That's an unusually large order. W: We're definitely going to need some employees to work overtime on it. M: Hmm, I don't know how easy that's that’s going to be. It's the holiday season, and a lot of employees were hoping to take time off. W: Well, OK. We could offer them an extra vacation day off next month. M: I'm still worried about the three other orders we need to complete this week. W: I know, but Great Fitness orders from us all the time.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-59-61.mp3",
+      "blank_answers": [
+        "request",
+        "business name",
+        "logo",
+        "exact",
+        "unusually large",
+        "employees",
+        "work overtime",
+        "easy that's",
+        "holiday season",
+        "hoping",
+        "take time",
+        "offer",
+        "extra vacation day",
+        "worried",
+        "orders",
+        "complete",
+        "orders"
+      ],
+      "blank_count": 17
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-62-64",
+      "question_range": "62-64",
+      "cloze_text": "[Câu 62: (B), Câu 63: (D), Câu 64: (B)] M: I'm _____ to our _____ , Shreya. It's hard to believe we've been in _____ for ten years! W: I know. I was _____ old company photos last night. I found some from when we had just _____ and were a team of only three people. M: Wow. Those would be _____ to _____ for our _____ during the welcome speech. W: I agree. And by the way, _____ l'll be getting up a few times to _____ , I'd like to sit at the table _____ to the stage. M: I'll make sure to _____ a _____ for you there.",
+      "full_text": "M: I'm looking forward to our anniversary banquet, Shreya. It's hard to believe we've been in business for ten years! W: I know. I was looking through old company photos last night. I found some from when we had just started and were a team of only three people. M: Wow. Those would be great to use for our slideshow during the welcome speech. W: I agree. And by the way, since I'll l'll be getting up a few times to make announcements, I'd like to sit at the table closest to the stage. M: I'll make sure to reserve a seat for you there.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-62-64.mp3",
+      "blank_answers": [
+        "looking forward",
+        "anniversary banquet",
+        "business",
+        "looking through",
+        "started",
+        "great",
+        "use",
+        "slideshow",
+        "since I'll",
+        "make announcements",
+        "closest",
+        "reserve",
+        "seat"
+      ],
+      "blank_count": 13
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-65-67",
+      "question_range": "65-67",
+      "cloze_text": "[Câu 65: (A), Câu 66: (C), Câu 67: (D)] W: Thank you for _____ . This is Bianca. How can I help you? M: Hi. I have a _____ for the bus to Springdale this morning, but my _____ have changed and I need to _____ my _____ . W: Sure. I can _____ you with that. M: Thanks very much. I need the bus to Centerton _____ . W: No problem. If you _____ your bus ticket _____ , I just need your _____ . M: OK, let me just _____ the e-mail that _____ it.",
+      "full_text": "W: Thank you for holding. This is Bianca. How can I help you? M: Hi. I have a ticket for the bus to Springdale this morning, but my plans have changed and I need to switch my destination. W: Sure. I can help you with that. M: Thanks very much. I need the bus to Centerton instead. W: No problem. If you purchased your bus ticket electronically, I just need your confirmation number. M: OK, let me just find the e-mail that has it.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-65-67.mp3",
+      "blank_answers": [
+        "holding",
+        "ticket",
+        "plans",
+        "switch",
+        "destination",
+        "help",
+        "instead",
+        "purchased",
+        "electronically",
+        "confirmation number",
+        "find",
+        "has"
+      ],
+      "blank_count": 12
+    },
+    {
+      "part": 3,
+      "track": "E26-T06-68-70",
+      "question_range": "68-70",
+      "cloze_text": "[Câu 68: (D), Câu 69: (C), Câu 70: (A)] M: Henderson's _____ . How can I help you? W: Hello. I'm calling because I _____ a _____ a few days ago. But I have a problem. I'm not _____ if my home's _____ can _____ it. M: Well, let's see. Could you _____ a _____ at your _____ ? There should be a _____ of _____ on it. W: Sure. _____ . OK. I'm looking at it. M: OK. Do you see any _____ where _____ could be _____ ? W: Just one. M: I see. Well, a clothes dryer _____ two _____ . So _____ , we'd need to _____ something called a _____ . The good news is that you'd only need a 60-amp _____ to _____ the problem.",
+      "full_text": "M: Henderson's Electricians. How can I help you? W: Hello. I'm calling because I purchased a clothes dryer a few days ago. But I have a problem. I'm not sure if my home's electric system can support it. M: Well, let's see. Could you take a look at your electric panel? There should be a series of switches on it. W: Sure. Hold on. OK. I'm looking at it. M: OK. Do you see any unused spaces where additional switches could be installed? W: Just one. M: I see. Well, a clothes dryer requires two spaces. So most likely, we'd need to install something called a subpanel. The good news is that you'd only need a 60-amp amp electrical switch to fix the problem.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_3/E26-T06-68-70.mp3",
+      "blank_answers": [
+        "Electricians",
+        "purchased",
+        "clothes dryer",
+        "sure",
+        "electric system",
+        "support",
+        "take",
+        "look",
+        "electric panel",
+        "series",
+        "switches",
+        "Hold on",
+        "unused spaces",
+        "additional switches",
+        "installed",
+        "requires",
+        "spaces",
+        "most likely",
+        "install",
+        "subpanel",
+        "amp electrical switch",
+        "fix"
+      ],
+      "blank_count": 22
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-71-73",
+      "question_range": "71-73",
+      "cloze_text": "[Câu 71: (B), Câu 72: (B), Câu 73: (C)] Good morning, and welcome to the _____ . Please note that in order to _____ the _____ of guests who _____ for the _____ , that event has been _____ to _____ B. That's on the _____ , to the left of the elevators. And will the person who _____ a _____ at the _____ please return to the desk to _____ your item? It's a silver Rugged Hiker model with a blue strap.",
+      "full_text": "Good morning, and welcome to the Third Annual Robotics Trade. Please note that in order to accommodate the large number of guests who signed up for the afternoon panel discussion, that event has been moved to Exhibit Hall B. That's on the lower level, to the left of the elevators. And will the person who left a backpack at the information desk please return to the desk to claim your item? It's a silver Rugged Hiker model with a blue strap.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-71-73.mp3",
+      "blank_answers": [
+        "Third Annual Robotics Trade",
+        "accommodate",
+        "large number",
+        "signed up",
+        "afternoon panel discussion",
+        "moved",
+        "Exhibit Hall",
+        "lower level",
+        "left",
+        "backpack",
+        "information desk",
+        "claim"
+      ],
+      "blank_count": 12
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-74-76",
+      "question_range": "74-76",
+      "cloze_text": "[Câu 74: (A), Câu 75: (A), Câu 76: (C)] Welcome to this _____ about _____ . I'm Jin-Ah Jeong. Unfortunately, the _____ , Mr. Ramirez, is _____ today, so I'll be _____ . Although I've never _____ this course before, I've been a _____ for seven years. Now, to begin, let's _____ over some _____ that are _____ used in the field of computer programming. I'll _____ them on the _____ -if you know any of their _____ , please raise your hand and I'll _____ on you.",
+      "full_text": "Welcome to this course about computer programming. I'm Jin-Ah Jeong. Unfortunately, the regular instructor, Mr. Ramirez, is sick today, so I'll be filling in. Although I've never taught this course before, I've been a computer programmer for seven years. Now, to begin, let's go over some terms that are often used in the field of computer programming. I'll write them on the board -if you know any of their meanings, please raise your hand and I'll call on you.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-74-76.mp3",
+      "blank_answers": [
+        "course",
+        "computer programming",
+        "regular instructor",
+        "sick",
+        "filling in",
+        "taught",
+        "computer programmer",
+        "go",
+        "terms",
+        "often",
+        "write",
+        "board",
+        "meanings",
+        "call"
+      ],
+      "blank_count": 14
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-77-79",
+      "question_range": "77-79",
+      "cloze_text": "[Câu 77: (D), Câu 78: (A), Câu 79: (B)] Hi, Min-Jee. This is Anil Gupta from Jeremy's _____ calling about the _____ you sent in. I was very _____ with your _____ and your _____ of the _____ when you worked at Harry's Bistros. I understand the program _____ training in using _____ . That would be _____ in our company. Also, your _____ at Harry's spoke very _____ of your _____ as a manager. So, I hope you haven't _____ any _____ yet! Please call me at your _____ at 555-0187.",
+      "full_text": "Hi, Min-Jee. This is Anil Gupta from Jeremy's Family Restaurants calling about the application you sent in. I was very impressed with your r sum and your successful completion of the managerial training program when you worked at Harry's Bistros. I understand the program included training in using bookkeeping software. That would be useful in our company. Also, your supervisor at Harry's spoke very highly of your performance as a manager. So, I hope you haven't accepted any offers yet! Please call me at your earliest convenience at 555-0187.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-77-79.mp3",
+      "blank_answers": [
+        "Family Restaurants",
+        "application",
+        "impressed",
+        "r sum",
+        "successful completion",
+        "managerial training program",
+        "included",
+        "bookkeeping software",
+        "useful",
+        "supervisor",
+        "highly",
+        "performance",
+        "accepted",
+        "offers",
+        "earliest convenience"
+      ],
+      "blank_count": 15
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-80-82",
+      "question_range": "80-82",
+      "cloze_text": "[Câu 80: (B), Câu 81: (A), Câu 82: (C)] Welcome to another _____ of Belmack City _____ . Belmack City has one of the _____ in the country. The _____ and _____ thousands of _____ full of _____ each day. Goods from the ships are usually _____ throughout the _____ by train or by truck. However, sometimes the goods _____ to wait for days before they are _____ , which can _____ due to _____ of _____ . After the break, we'll _____ from Pablo Alvarez, owner of Alva Shipping, about this _____ . So stay tuned!",
+      "full_text": "Welcome to another segment of Belmack City Business News. Belmack City has one of the biggest seaports in the country. The port receives and distributes thousands of containers full of cargo each day. Goods from the ships are usually distributed throughout the region by train or by truck. However, sometimes the goods need to wait for days before they are transported, which can cause problems due to lack of affordable storage space Unfortunately. After the break, we'll hear from Pablo Alvarez, owner of Alva Shipping, about this issue. So stay tuned!",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-80-82.mp3",
+      "blank_answers": [
+        "segment",
+        "Business News",
+        "biggest seaports",
+        "port receives",
+        "distributes",
+        "containers",
+        "cargo",
+        "distributed",
+        "region",
+        "need",
+        "transported",
+        "cause problems",
+        "lack",
+        "affordable storage space Unfortunately",
+        "hear",
+        "issue"
+      ],
+      "blank_count": 16
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-83-85",
+      "question_range": "83-85",
+      "cloze_text": "[Câu 83: (C), Câu 84: (D), Câu 85: (B)] Welcome. I'm _____ to be leading another _____ here in the _____ . The paintings that _____ produced last time were _____ -there's nothing like being _____ by flowers to _____ . Now, remember that your _____ does _____ a light lunch. I see you've all found _____ to _____ your _____ and you all have your own _____ and _____ . That's _____ , since we don't _____ . Before we get started, let's take a _____ to have everyone tell us their names and why they _____ .",
+      "full_text": "Welcome. I'm delighted to be leading another outdoor workshop here in the botanical gardens. The paintings that participants produced last time were extraordinary -there's nothing like being surrounded by flowers to inspire creativity. Now, remember that your participation fee does include a light lunch. I see you've all found spots to set up your easels and you all have your own canvas and paints. That's perfect, since we don't provide painting supplies. Before we get started, let's take a moment to have everyone tell us their names and why they signed up.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-83-85.mp3",
+      "blank_answers": [
+        "delighted",
+        "outdoor workshop",
+        "botanical gardens",
+        "participants",
+        "extraordinary",
+        "surrounded",
+        "inspire creativity",
+        "participation fee",
+        "include",
+        "spots",
+        "set up",
+        "easels",
+        "canvas",
+        "paints",
+        "perfect",
+        "provide painting supplies",
+        "moment",
+        "signed up"
+      ],
+      "blank_count": 18
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-86-88",
+      "question_range": "86-88",
+      "cloze_text": "[Câu 86: (C), Câu 87: (A), Câu 88: (C)] Currently, you're all working on our _____ for Takahashi Systems. They _____ the _____ you've made so far, such as how to _____ their _____ to make it more _____ . That's _____ because they have _____ . They mentioned they'll be in the _____ this Friday and _____ in visiting our office, so l've _____ them. But as I was _____ by the _____ . I noticed a lot of _____ . Please remember that _____ a _____ is important.",
+      "full_text": "Currently, you're all working on our design project for Takahashi Systems. They like the suggestions you've made so far, such as how to update their logo to make it more modern. That's welcome news because they have high standards. They mentioned they'll be in the area this Friday and expressed interest in visiting our office, so l've I've invited them. But as I was walking by the workstation area. I noticed a lot of clutter. Please remember that making a good impression is important.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-86-88.mp3",
+      "blank_answers": [
+        "design project",
+        "like",
+        "suggestions",
+        "update",
+        "logo",
+        "modern",
+        "welcome news",
+        "high standards",
+        "area",
+        "expressed interest",
+        "I've invited",
+        "walking",
+        "workstation area",
+        "clutter",
+        "making",
+        "good impression"
+      ],
+      "blank_count": 16
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-89-91",
+      "question_range": "89-91",
+      "cloze_text": "[Câu 89: (B), Câu 90: (D), Câu 91: (C)] Good morning, everyone. I _____ you all getting here _____ before your _____ starts. I have a _____ to make. Remember our new _____ was _____ yesterday? A _____ came at the end of the day, and it _____ the _____ is turning itself off _____ . A part _____ to be _____ , but that won't happen until _____ week. In the meantime, please _____ our _____ only, which, as you know, is not as _____ as the new one. I'll need you to _____ as soon as possible.",
+      "full_text": "Good morning, everyone. I appreciate you all getting here early before your assembly-line shift starts. I have a major announcement to make. Remember our new injection mold machine was acting up yesterday? A technician came at the end of the day, and it turns out the hydraulic safety switch is turning itself off randomly. A part needs to be replaced, but that won't happen until later this week. In the meantime, please use our older machine only, which, as you know, is not as fast as the new one. I'll need you to start working as soon as possible.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-89-91.mp3",
+      "blank_answers": [
+        "appreciate",
+        "early",
+        "assembly-line shift",
+        "major announcement",
+        "injection mold machine",
+        "acting up",
+        "technician",
+        "turns out",
+        "hydraulic safety switch",
+        "randomly",
+        "needs",
+        "replaced",
+        "later this",
+        "use",
+        "older machine",
+        "fast",
+        "start working"
+      ],
+      "blank_count": 17
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-92-94",
+      "question_range": "92-94",
+      "cloze_text": "[Câu 92: (B), Câu 93: (A), Câu 94: (B)] Hi, Mr. Rossi. I work at Cullom Studios, and I'm a _____ for a new _____ that'll be _____ in _____ France. I'm calling because we'd like to _____ you as a _____ for our film. I recently _____ the book you wrote on the _____ of French _____ and found it _____ . Since you're an _____ on French clothing and _____ of that time, your _____ would be _____ as we _____ and set _____ . We'd be _____ to work with you, and we're _____ a _____ . I can send you the _____ -l'll use the e-mail address that you have on your Web site.",
+      "full_text": "Hi, Mr. Rossi. I work at Cullom Studios, and I'm a production assistant for a new film that'll be set in seventeenth-century France. I'm calling because we'd like to hire you as a consultant for our film. I recently came across the book you wrote on the history of French fashion and found it fascinating. Since you're an expert on French clothing and lifestyle trends of that time, your knowledge would be valuable as we develop costume and set designs. We'd be thrilled to work with you, and we're offering a generous compensation package. I can send you the details I'll -l'll use the e-mail address that you have on your Web site.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-92-94.mp3",
+      "blank_answers": [
+        "production assistant",
+        "film",
+        "set",
+        "seventeenth-century",
+        "hire",
+        "consultant",
+        "came across",
+        "history",
+        "fashion",
+        "fascinating",
+        "expert",
+        "lifestyle trends",
+        "knowledge",
+        "valuable",
+        "develop costume",
+        "designs",
+        "thrilled",
+        "offering",
+        "generous compensation package",
+        "details I'll"
+      ],
+      "blank_count": 20
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-95-97",
+      "question_range": "95-97",
+      "cloze_text": "[Câu 95: (B), Câu 96: (D), Câu 97: (B)] Are you looking for a _____ to get around the city? The city of Lakepoint _____ in several of our _____ . Just _____ the Lakepoint City _____ onto your mobile phone. Once you _____ an _____ on the app, a _____ will _____ within fifteen minutes. This _____ will take you to any _____ within the _____ , like your doctor's office or the library! And we've recently _____ to Westbrook, so residents can take the _____ to the _____ .",
+      "full_text": "Are you looking for a convenient way to get around the city? The city of Lakepoint offers on-demand transportation in several of our neighborhoods. Just download the Lakepoint City application onto your mobile phone. Once you make an appointment on the app, a shuttle will arrive within fifteen minutes. This easy-to-use service will take you to any destination within the service area, like your doctor's office or the library! And we've recently expanded service to Westbrook, so residents can take the shuttle to the soccer stadium.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-95-97.mp3",
+      "blank_answers": [
+        "convenient way",
+        "offers on-demand transportation",
+        "neighborhoods",
+        "download",
+        "application",
+        "make",
+        "appointment",
+        "shuttle",
+        "arrive",
+        "easy-to-use service",
+        "destination",
+        "service area",
+        "expanded service",
+        "shuttle",
+        "soccer stadium"
+      ],
+      "blank_count": 15
+    },
+    {
+      "part": 4,
+      "track": "E26-T06-98-100",
+      "question_range": "98-100",
+      "cloze_text": "[Câu 98: (A), Câu 99: (C), Câu 100: (B)] And our last _____ today is the Greenchester _____ taking place this weekend. Greenchester is _____ to some _____ prehistoric _____ . If you've ever _____ what goes into _____ a _____ , here's your _____ to find out. There'll be a _____ where you can get _____ practicing _____ . The workshop will be _____ on the _____ in front of the _____ building. As for getting here, I _____ that you simply _____ over-many streets will be _____ for the festival, and it will take _____ to drive.",
+      "full_text": "And our last news item today is the Greenchester Archaeological Festival taking place this weekend. Greenchester is home to some rich prehistoric findings. If you've ever wondered what goes into excavating a site, here's your chance to find out. There'll be a special workshop where you can get hands-on experience practicing excavation skills. The workshop will be held on the grounds in front of the historical society building. As for getting here, I recommend that you simply walk over-many streets will be blocked off for the festival, and it will take longer to drive.",
+      "audio_ref": "ETS2026/Test_06/Listening/audio/Part_4/E26-T06-98-100.mp3",
+      "blank_answers": [
+        "news item",
+        "Archaeological Festival",
+        "home",
+        "rich",
+        "findings",
+        "wondered",
+        "excavating",
+        "site",
+        "chance",
+        "special workshop",
+        "hands-on experience",
+        "excavation skills",
+        "held",
+        "grounds",
+        "historical society",
+        "recommend",
+        "walk",
+        "blocked off",
+        "longer"
+      ],
+      "blank_count": 19
+    }
+  ]
+}
