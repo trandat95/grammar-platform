@@ -2869,6 +2869,10 @@ Milestone 2.11 được xem là hoàn thành khi:
 - [x] **2.15.15 Khắc phục Lỗi Cấp Gói VIP Quản trị Viên (`admin_grant_user_vip_subscription`, Migration `017_fix_admin_vip_grant_rpc.sql`):**
   * Cập nhật hàm `public.is_admin()` trong PostgreSQL 17 cho phép `service_role` và `supabase_admin` gọi RPC an toàn mà không bị chặn do thiếu `auth.uid()`.
   * Bổ sung cột `metadata jsonb` cho bảng `user_subscriptions` và mở rộng ràng buộc `user_subscriptions_provider_check` cho phép nhà cung cấp `'admin_grant'`. Quản trị viên cấp gói VIP lập tức thành công 100% trên cả UI và DB.
+- [x] **2.15.16 Banner Chinh Phục TOEIC Thông Minh Trên Trang Chủ Tổng Quan (`components/toeic/ToeicHeroBanner.jsx`, `public/assets/banners/05-toeic-adaptive-ai.jpg`):**
+  * Tích hợp Hero Banner công nghệ cao trực tiếp trên Trang chủ Tổng quan (`/`) và Hub TOEIC (`/toeic`).
+  * Trực quan sinh động với hình nền nghệ thuật EdTech 2026, quang phổ Sentence X-Ray, biểu tượng kính mắt ba chiều và hiệu ứng Scrim tối ưu độ tương phản văn bản WCAG 2.2 AA.
+  * Cung cấp 3 nút truy cập nhanh: Làm bài Test Chẩn đoán 15 phút, Kho 20 Đề thi ETS, và 24 Chủ điểm X-Ray kèm thanh đo lường mục tiêu (Target 500+ đến 990+) và dải thống kê thực tế theo người dùng.
 
 ---
 
