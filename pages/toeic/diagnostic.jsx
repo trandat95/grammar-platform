@@ -25,16 +25,23 @@ export default function ToeicDiagnosticPage() {
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="TOEIC AI Diagnostic Test"
       >
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8" style={{ backgroundColor: 'var(--ds-background)' }}>
-          <div className="max-w-5xl mx-auto">
+        <div className="toeic-page-wrap">
+          <div className="toeic-container">
             {/* BACK LINK */}
-            <div className="mb-4">
+            <div style={{ marginBottom: '1rem' }}>
               <a
                 href="/toeic"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: 'var(--ds-primary)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: 'var(--ds-accent)',
+                  textDecoration: 'none'
+                }}
               >
-                <span>← Quay lại TOEIC Hub</span>
+                <span>&larr; Quay lại TOEIC Hub</span>
               </a>
             </div>
 
@@ -46,7 +53,7 @@ export default function ToeicDiagnosticPage() {
               }}
             />
           </div>
-        </main>
+        </div>
       </AppShell2026>
     </>
   );

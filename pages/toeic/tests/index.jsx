@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
+import { ToeicCard, ToeicButton, ToeicBadge } from '../../../components/toeic/ui';
 
 export default function TestsCatalogPage() {
   const [isLight, setIsLight] = useState(true);
@@ -11,8 +13,8 @@ export default function TestsCatalogPage() {
   return (
     <>
       <Head>
-        <title>Ngân Hàng 20 Đề Thi Chuẩn ETS 2024 & 2026 | Grammar Engine</title>
-        <meta name="description" content="Luyện trọn vẹn 20 đề thi TOEIC chuẩn hóa V3.0 (4.000 câu hỏi)." />
+        <title>Ngân Hàng 20 Đề Thi Chuẩn ETS 2024 &amp; 2026 | Grammar Engine</title>
+        <meta name="description" content="Luyện trọn vẹn 20 đề thi TOEIC chuẩn hóa V3.0 (4.000 câu hỏi) kèm chia đôi màn hình Split-Passage Reader." />
       </Head>
 
       <AppShell2026
@@ -27,129 +29,165 @@ export default function TestsCatalogPage() {
         onToggleTheme={() => setIsLight(prev => !prev)}
         currentChapterTitle="20 Đề Thi Chuẩn ETS"
       >
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6" style={{ backgroundColor: 'var(--ds-background)' }}>
-          <div className="max-w-5xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
-              <a
+        <div className="toeic-page-wrap">
+          <div className="toeic-container">
+            {/* BACK LINK */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <Link
                 href="/toeic"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold hover:underline"
-                style={{ color: 'var(--ds-primary)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: 'var(--ds-accent)',
+                  textDecoration: 'none'
+                }}
               >
-                <span>← Quay lại TOEIC Hub</span>
-              </a>
+                <span>&larr; Quay lại TOEIC Hub</span>
+              </Link>
             </div>
 
-            {/* HEADER */}
-            <div className="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-3"
-                 style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-              <span className="text-xs font-bold px-3 py-1 rounded-full inline-block"
-                    style={{ backgroundColor: 'var(--ds-primary-subtle)', color: 'var(--ds-primary)' }}>
-                📚 Ngân Hàng Đề Thi Chuẩn Hóa V3.0 (4.000 Câu)
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--ds-text-primary)' }}>
-                Luyện Đề ETS 2024 & ETS 2026
+            {/* HEADER HERO */}
+            <div className="toeic-card-hero" style={{ marginBottom: '2rem' }}>
+              <div className="toeic-hero-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                <span>Ngân Hàng 20 Đề Thi Chuẩn Hóa V3.0 (4.000 Câu)</span>
+              </div>
+
+              <h1 className="toeic-hero-title">
+                Luyện Đề Chuẩn ETS 2024 &amp; ETS 2026
               </h1>
-              <p className="text-sm" style={{ color: 'var(--ds-text-secondary)' }}>
-                Tích hợp giao diện chia đôi màn hình <strong>Split-Passage Reader</strong>, tự động dò tìm dẫn chứng <strong>Auto-Highlight Evidence</strong> và phân tích quang phổ <strong>Sentence X-Ray</strong>.
+
+              <p className="toeic-hero-desc">
+                Trải nghiệm giao diện chia đôi màn hình <strong>Split-Passage Reader</strong>, tự động dò tìm dẫn chứng <strong>Auto-Highlight Evidence</strong> và phân tích quang phổ ngữ pháp <strong>Sentence X-Ray</strong>.
               </p>
 
-              {/* SERIES SWITCHER */}
-              <div className="pt-2 flex items-center gap-3">
-                <button
-                  type="button"
+              {/* SERIES SWITCHER TABS */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem' }}>
+                <ToeicButton
+                  variant={selectedSeries === 'ETS2024' ? 'primary' : 'secondary'}
                   onClick={() => setSelectedSeries('ETS2024')}
-                  className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
-                    selectedSeries === 'ETS2024' ? 'shadow-sm ring-2 ring-[var(--ds-primary)]' : 'border'
-                  }`}
-                  style={{
-                    backgroundColor: selectedSeries === 'ETS2024' ? 'var(--ds-primary)' : 'var(--ds-surface)',
-                    color: selectedSeries === 'ETS2024' ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-                    borderColor: 'var(--ds-border)'
-                  }}
                 >
-                  ETS 2024 (10 Đề • Test 01 - 10)
-                </button>
+                  📘 ETS 2024 (10 Đề • Test 01 - 10)
+                </ToeicButton>
 
-                <button
-                  type="button"
+                <ToeicButton
+                  variant={selectedSeries === 'ETS2026' ? 'primary' : 'secondary'}
                   onClick={() => setSelectedSeries('ETS2026')}
-                  className={`px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all ${
-                    selectedSeries === 'ETS2026' ? 'shadow-sm ring-2 ring-[var(--ds-primary)]' : 'border'
-                  }`}
-                  style={{
-                    backgroundColor: selectedSeries === 'ETS2026' ? 'var(--ds-primary)' : 'var(--ds-surface)',
-                    color: selectedSeries === 'ETS2026' ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-                    borderColor: 'var(--ds-border)'
-                  }}
                 >
-                  ETS 2026 (10 Đề • Kèm Dictation)
-                </button>
+                  🎧 ETS 2026 (10 Đề • Kèm 540 Tracks Dictation)
+                </ToeicButton>
               </div>
             </div>
 
-            {/* TESTS GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* TESTS GRID (Milestone U5.4) */}
+            <div className="toeic-grid-3">
               {tests.map(num => (
-                <div
-                  key={num}
-                  className="rounded-2xl p-5 border shadow-sm space-y-3 transition-all hover:shadow-md hover:border-[var(--ds-primary)]"
-                  style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded"
-                          style={{ backgroundColor: 'var(--ds-surface-secondary)', color: 'var(--ds-text-primary)' }}>
-                      {selectedSeries}
-                    </span>
-                    <span className="text-xs font-semibold" style={{ color: 'var(--ds-text-muted)' }}>
-                      200 câu • 120 phút
-                    </span>
+                <div key={num} className="toeic-card toeic-card-interactive" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
+                      <ToeicBadge variant="primary">
+                        {selectedSeries}
+                      </ToeicBadge>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
+                        200 câu • 120 phút
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
+                      Test {String(num).padStart(2, '0')}
+                    </h3>
+
+                    <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                      Listening (Part 1-4: 100 câu) &amp; Reading (Part 5-7: 100 câu) đầy đủ đáp án &amp; giải thích AI chuyên sâu.
+                    </p>
                   </div>
 
-                  <h3 className="font-bold text-lg" style={{ color: 'var(--ds-text-primary)' }}>
-                    Test {String(num).padStart(2, '0')}
-                  </h3>
+                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border-subtle)' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                      <Link
+                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
+                        style={{
+                          flex: 1,
+                          padding: '0.45rem',
+                          textAlign: 'center',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          borderRadius: '0.5rem',
+                          border: '1px solid var(--ds-border)',
+                          backgroundColor: 'var(--ds-card)',
+                          color: 'var(--ds-text)',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        Part 5
+                      </Link>
 
-                  <p className="text-xs leading-relaxed" style={{ color: 'var(--ds-text-secondary)' }}>
-                    Listening (Part 1-4: 100 câu) & Reading (Part 5-7: 100 câu) đầy đủ đáp án & giải thích AI.
-                  </p>
+                      <Link
+                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
+                        style={{
+                          flex: 1,
+                          padding: '0.45rem',
+                          textAlign: 'center',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          borderRadius: '0.5rem',
+                          border: '1px solid var(--ds-border)',
+                          backgroundColor: 'var(--ds-card)',
+                          color: 'var(--ds-text)',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        Part 6
+                      </Link>
 
-                  <div className="pt-2 flex flex-wrap items-center gap-2">
-                    <a
-                      href={`/toeic/tests/${selectedSeries}/${num}?mode=part5`}
-                      className="flex-1 py-2 rounded-lg text-center font-bold text-xs border hover:bg-[var(--ds-surface-secondary)]"
-                      style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
+                      <Link
+                        href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
+                        style={{
+                          flex: 1,
+                          padding: '0.45rem',
+                          textAlign: 'center',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          borderRadius: '0.5rem',
+                          border: '1px solid var(--ds-border)',
+                          backgroundColor: 'var(--ds-card)',
+                          color: 'var(--ds-text)',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        Part 7
+                      </Link>
+                    </div>
+
+                    <Link
+                      href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
+                      style={{ textDecoration: 'none', display: 'block' }}
                     >
-                      Part 5
-                    </a>
-                    <a
-                      href={`/toeic/tests/${selectedSeries}/${num}?mode=part6`}
-                      className="flex-1 py-2 rounded-lg text-center font-bold text-xs border hover:bg-[var(--ds-surface-secondary)]"
-                      style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
-                    >
-                      Part 6
-                    </a>
-                    <a
-                      href={`/toeic/tests/${selectedSeries}/${num}?mode=part7`}
-                      className="flex-1 py-2 rounded-lg text-center font-bold text-xs border hover:bg-[var(--ds-surface-secondary)]"
-                      style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
-                    >
-                      Part 7
-                    </a>
+                      <ToeicButton
+                        variant="primary"
+                        style={{ width: '100%' }}
+                        icon={
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                          </svg>
+                        }
+                      >
+                        Luyện Full Đề Thi (120 Phút)
+                      </ToeicButton>
+                    </Link>
                   </div>
-
-                  <a
-                    href={`/toeic/tests/${selectedSeries}/${num}?mode=full`}
-                    className="w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all hover:opacity-90 active:scale-95"
-                    style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
-                  >
-                    <span>Luyện Full Đề Thi</span>
-                    <span>→</span>
-                  </a>
                 </div>
               ))}
             </div>
+
           </div>
-        </main>
+        </div>
       </AppShell2026>
     </>
   );

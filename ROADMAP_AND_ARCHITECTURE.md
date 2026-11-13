@@ -2712,48 +2712,48 @@ Milestone 2.11 được xem là hoàn thành khi:
 > - Hỗ trợ đầy đủ Light/Dark Theme, không gây lỗi tràn ngang trên màn hình $\le 375\text{px}$.
 
 #### 2.14-A: Milestone U1 - TOEIC Design System & Dedicated Styling Architecture (P0)
-- [ ] **2.14.1 Dedicated Stylesheet Architecture (AC-U1.1):**
+- [x] **2.14.1 Dedicated Stylesheet Architecture (AC-U1.1):**
   * Khởi tạo `styles/toeic-ui-2026.css` và import vào `pages/_app.js`.
   * Định nghĩa cấu trúc phân lớp: Scoped layout classes (`.toeic-container`, `.toeic-bento-grid`, `.toeic-flex-between`).
   * Tuyệt đối không duplicate token màu toàn cục, không ghi đè selector ảnh hưởng các module khác.
-- [ ] **2.14.2 Design Token Integration (AC-U1.2):**
+- [x] **2.14.2 Design Token Integration (AC-U1.2):**
   * Chuẩn hóa toàn bộ biến CSS sang tokens hiện có: `--ds-bg`, `--ds-card`, `--ds-border`, `--ds-accent`, `--ds-text`, `--ds-success`, `--ds-warning`, `--ds-danger`.
   * Trực quan hóa trạng thái học tập (Correct, Incorrect, Unanswered, Flagged, Current, Completed) không chỉ qua màu sắc mà đi kèm biểu tượng và nhãn dễ tiếp cận.
-- [ ] **2.14.3 Shared Component Foundation (AC-U1.3):**
+- [x] **2.14.3 Shared Component Foundation (AC-U1.3):**
   * Xây dựng bộ component dùng chung: `ToeicButton`, `ToeicCard`, `ToeicBadge`, `ToeicProgressBar`, `ToeicTooltip`, `ToeicModal`, `ToeicDrawer`, `ToeicTabs`, `ToeicSkeleton`, `ToeicEmptyState`.
   * Hỗ trợ đầy đủ trạng thái: Default, Hover, Focus, Active, Disabled, Loading, Error.
-- [ ] **2.14.4 Motion & Micro-interaction System (AC-U1.4):**
+- [x] **2.14.4 Motion & Micro-interaction System (AC-U1.4):**
   * Chuẩn hóa chuyển động: Card hover elevation (+2px nhẹ), nút bấm press feedback, drawer slide-in, flashcard flip, thanh tiến độ. Hỗ trợ `prefers-reduced-motion`.
-- [ ] **2.14.5 CSS Quality & Token Validation (AC-U1.5):**
+- [x] **2.14.5 CSS Quality & Token Validation (AC-U1.5):**
   * Đảm bảo 100% component tiêu thụ tokens tập trung, zero CSS leakage, không có horizontal overflow và vượt qua `scripts/validate-design-tokens.py`.
 
 #### 2.14-B: Milestone U2 - TOEIC Hub – Premium Bento Dashboard (P0)
-- [ ] **2.14.6 Hero Banner – Personalized Learning Center (AC-U2.1):**
+- [x] **2.14.6 Hero Banner – Personalized Learning Center (AC-U2.1):**
   * Banner đồ họa chào hỏi cá nhân hóa, hiển thị điểm dự đoán hiện tại, mục tiêu điểm (550 / 750 / 850+), streak học tập, nút chính "Tiếp tục học" & "Làm bài kiểm tra chẩn đoán".
-- [ ] **2.14.7 Four-Zone Bento Grid Architecture (AC-U2.2):**
+- [x] **2.14.7 Four-Zone Bento Grid Architecture (AC-U2.2):**
   * Zone 1 (Tổng quan học tập): Thống kê câu hoàn thành, độ chính xác, chuỗi streak.
   * Zone 2 (Lối tắt luyện tập nhanh): Listening, Reading, Grammar X-Ray, Vocabulary SRS, Dictation Studio.
   * Zone 3 (Tiến độ học tập): Biểu đồ hoạt động tuần, so sánh Listening vs Reading, xu hướng điểm số.
   * Zone 4 (Gợi ý học tập thông minh): Đề xuất hoạt động kế tiếp dựa trên lịch sử làm bài và điểm yếu thực tế.
-- [ ] **2.14.8 Visual Topic Discovery – 24 Categories (AC-U2.3):**
+- [x] **2.14.8 Visual Topic Discovery – 24 Categories (AC-U2.3):**
   * Trình bày 24 chủ điểm thành 6 nhóm năng lực dạng thẻ Bento trực quan, hiển thị độ khó, số câu hỏi có sẵn, % hoàn thành và mức độ thông thạo (Mastery).
-- [ ] **2.14.9 Learning Journey & Gamification (AC-U2.4):**
+- [x] **2.14.9 Learning Journey & Gamification (AC-U2.4):**
   * Mục tiêu học tập ngày, tuần, huy hiệu thành tích và cột mốc cá nhân hóa khuyến khích học tập thực chất.
-- [ ] **2.14.10 Responsive Bento Dashboard (AC-U2.5):**
+- [x] **2.14.10 Responsive Bento Dashboard (AC-U2.5):**
   * Bố cục tự co giãn theo Desktop (Bento đa cột), Tablet (2 cột) và Mobile (1 cột ưu tiên, thanh cuộn chủ điểm ngang).
 
 #### 2.14-C: Milestone U3 - Diagnostic Exam – Immersive TOEIC Examination Experience (P0)
-- [ ] **2.14.11 Exam Workspace Architecture (AC-U3.1):**
+- [x] **2.14.11 Exam Workspace Architecture (AC-U3.1):**
   * Khu vực A (Exam Header): Tiêu đề đề thi, phần thi, số câu hiện tại, thời gian còn lại, nút nộp bài.
   * Khu vực B (Question Workspace): Đề bài, bài đọc (nếu có), audio player (nếu có), thẻ lựa chọn A/B/C/D.
   * Khu vực C (Question Palette): Lưới các số câu hỏi trực quan với các trạng thái Chưa xem, Đã xem chưa làm, Đã chọn, Đã cắm cờ (Flag), Đang làm.
-- [ ] **2.14.12 Timestamp-based Pacing Timer Engine (AC-U3.2):**
+- [x] **2.14.12 Timestamp-based Pacing Timer Engine (AC-U3.2):**
   * Đồng hồ đếm ngược chính xác dựa trên timestamp (chống lệch giờ khi chuyển tab hoặc tải lại trang), cảnh báo sắp hết giờ và tự động nộp bài khi hết giờ.
-- [ ] **2.14.13 Answer Interaction & Keyboard Shortcuts (AC-U3.3):**
+- [x] **2.14.13 Answer Interaction & Keyboard Shortcuts (AC-U3.3):**
   * Chọn đáp án một chạm, cắm cờ câu hỏi, phím tắt (1, 2, 3, 4 hoặc A, B, C, D), tự động lưu kết quả vào IndexedDB / local state.
-- [ ] **2.14.14 Diagnostic Score & SVG Radar Result Dashboard (AC-U3.4):**
+- [x] **2.14.14 Diagnostic Score & SVG Radar Result Dashboard (AC-U3.4):**
   * Tổng quan điểm số dự đoán 10–990, biểu đồ mạng nhện SVG 6 trục năng lực (Listening, Reading, Grammar, Vocab, Inference, Speed) và bảng review chi tiết câu sai kèm giải thích.
-- [ ] **2.14.15 Exam Recovery & Reliability Protection (AC-U3.5):**
+- [x] **2.14.15 Exam Recovery & Reliability Protection (AC-U3.5):**
   * Khôi phục trạng thái bài thi khi F5, cảnh báo rời trang ngẫu nhiên, bảo vệ chống nộp bài trùng lặp.
 
 #### 2.14-D: Milestone U4 - Sentence X-Ray – Advanced Grammar Visualization (P0)

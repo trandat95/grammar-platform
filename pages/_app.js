@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import "../styles/design-system.css";
 import "../styles/design-system-2026.css";
+import "../styles/toeic-ui-2026.css";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {

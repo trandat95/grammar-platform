@@ -1,0 +1,1040 @@
+/**
+ * TOEIC 2026 UI/UX DESIGN SYSTEM STYLESHEET
+ * Scoped, token-driven, WCAG 2.2 AA compliant styles for TOEIC AI Adaptive & Practice Hub
+ * Built on Grammar Engine 2026 Design Tokens (styles/design-system-2026.css)
+ */
+
+/* ==========================================================================
+   0. TOKEN ALIAS BRIDGE
+   Maps any legacy or utility tokens to the platform's Design System 2026 tokens
+   ========================================================================== */
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --ds-primary: var(--ds-accent);
+  --ds-primary-subtle: var(--ds-accent-bg);
+  --ds-surface: var(--ds-card);
+  --ds-surface-secondary: var(--ds-bg-elevated);
+  --ds-background: var(--ds-bg);
+  --ds-text-primary: var(--ds-text);
+  --ds-danger-subtle: var(--ds-danger-bg);
+  --ds-success-subtle: var(--ds-success-bg);
+  --ds-warning-subtle: var(--ds-warning-bg);
+}
+
+/* ==========================================================================
+   1. LAYOUT & CONTAINERS
+   ========================================================================== */
+.toeic-page-wrap {
+  width: 100%;
+  min-height: calc(100vh - var(--ds-header-h, 56px));
+  background-color: var(--ds-bg);
+  color: var(--ds-text);
+  font-family: 'Google Sans Text', system-ui, -apple-system, sans-serif;
+  padding: 1.5rem 1rem 4rem 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .toeic-page-wrap {
+    padding: 2rem 1.5rem 5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .toeic-page-wrap {
+    padding: 2.5rem 2rem 6rem 2rem;
+  }
+}
+
+.toeic-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.toeic-container-narrow {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.toeic-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .toeic-bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .toeic-bento-grid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.toeic-col-12 { grid-column: 1 / -1; }
+@media (min-width: 1100px) {
+  .toeic-col-8 { grid-column: span 8; }
+  .toeic-col-7 { grid-column: span 7; }
+  .toeic-col-6 { grid-column: span 6; }
+  .toeic-col-5 { grid-column: span 5; }
+  .toeic-col-4 { grid-column: span 4; }
+}
+
+.toeic-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .toeic-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.toeic-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .toeic-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .toeic-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.toeic-grid-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .toeic-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .toeic-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.toeic-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.toeic-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.toeic-flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toeic-flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   2. CARD PRIMITIVES & ELEVATION
+   ========================================================================== */
+.toeic-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .toeic-card {
+    padding: 1.5rem;
+  }
+}
+
+.toeic-card-interactive {
+  cursor: pointer;
+}
+.toeic-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: var(--ds-accent-border, var(--ds-border-strong));
+}
+
+.toeic-card-hero {
+  background: linear-gradient(135deg, var(--ds-card) 0%, var(--ds-bg-elevated) 100%);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1.5rem;
+  padding: 1.75rem 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .toeic-card-hero {
+    padding: 2.25rem 2rem;
+  }
+}
+
+.toeic-card-subtle {
+  background-color: var(--ds-card-subtle);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+/* ==========================================================================
+   3. HERO BANNER & STATS
+   ========================================================================== */
+.toeic-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  background-color: var(--ds-accent-bg);
+  border: 1px solid var(--ds-accent-border);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ds-accent);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.toeic-hero-title {
+  font-family: 'Google Sans', system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--ds-text-heading, var(--ds-text));
+  margin: 0 0 0.5rem 0;
+}
+
+@media (min-width: 640px) {
+  .toeic-hero-title {
+    font-size: 2.25rem;
+  }
+}
+
+.toeic-hero-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+  max-width: 680px;
+  margin: 0 0 1.5rem 0;
+}
+
+.toeic-target-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.toeic-target-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ds-text-muted);
+}
+
+.toeic-target-chip {
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--ds-border);
+  background-color: var(--ds-card);
+  color: var(--ds-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.toeic-target-chip:hover {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.toeic-target-chip.active {
+  background-color: var(--ds-accent);
+  border-color: var(--ds-accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.toeic-stat-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .toeic-stat-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+.toeic-stat-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  text-align: center;
+}
+
+.toeic-stat-val {
+  font-family: 'Google Sans', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ds-accent);
+  margin-bottom: 0.2rem;
+}
+
+.toeic-stat-lbl {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ds-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   4. BUTTONS & ACTIONS
+   ========================================================================== */
+.toeic-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.toeic-btn-primary {
+  background-color: var(--ds-accent);
+  color: #ffffff;
+  border-color: var(--ds-accent);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+.toeic-btn-primary:hover {
+  background-color: var(--ds-accent-hover, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+.toeic-btn-secondary {
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-text);
+  border-color: var(--ds-border);
+}
+.toeic-btn-secondary:hover {
+  background-color: var(--ds-card-hover);
+  border-color: var(--ds-border-strong);
+}
+
+.toeic-btn-outline {
+  background-color: transparent;
+  color: var(--ds-accent);
+  border-color: var(--ds-accent);
+}
+.toeic-btn-outline:hover {
+  background-color: var(--ds-accent-bg);
+}
+
+.toeic-btn-ghost {
+  background-color: transparent;
+  color: var(--ds-text-secondary);
+}
+.toeic-btn-ghost:hover {
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-text);
+}
+
+.toeic-btn-success {
+  background-color: var(--ds-success);
+  color: #ffffff;
+  border-color: var(--ds-success);
+}
+.toeic-btn-success:hover {
+  filter: brightness(1.1);
+}
+
+.toeic-btn-danger {
+  background-color: var(--ds-danger);
+  color: #ffffff;
+  border-color: var(--ds-danger);
+}
+
+.toeic-btn-lg {
+  padding: 0.85rem 1.65rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+}
+
+.toeic-btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  min-height: 34px;
+}
+
+/* ==========================================================================
+   5. BADGES & PILLS
+   ========================================================================== */
+.toeic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.toeic-badge-primary {
+  background-color: var(--ds-accent-bg);
+  color: var(--ds-accent);
+  border: 1px solid var(--ds-accent-border);
+}
+
+.toeic-badge-success {
+  background-color: var(--ds-success-bg);
+  color: var(--ds-success);
+  border: 1px solid var(--ds-success-border);
+}
+
+.toeic-badge-warning {
+  background-color: var(--ds-warning-bg);
+  color: var(--ds-warning);
+  border: 1px solid var(--ds-warning-border);
+}
+
+.toeic-badge-danger {
+  background-color: var(--ds-danger-bg);
+  color: var(--ds-danger);
+  border: 1px solid var(--ds-danger-border);
+}
+
+.toeic-badge-muted {
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-text-muted);
+  border: 1px solid var(--ds-border-subtle);
+}
+
+/* ==========================================================================
+   6. 24 TOPIC DISCOVERY & MASTERY CARDS
+   ========================================================================== */
+.toeic-topic-group-title {
+  font-family: 'Google Sans', system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--ds-text-heading, var(--ds-text));
+  margin: 1.75rem 0 0.85rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toeic-topic-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1rem;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.18s ease;
+}
+
+.toeic-topic-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ds-accent-border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.toeic-topic-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ds-text);
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
+}
+
+.toeic-topic-desc {
+  font-size: 0.8rem;
+  color: var(--ds-text-secondary);
+  line-height: 1.45;
+}
+
+.toeic-topic-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--ds-text-muted);
+  margin-top: 0.4rem;
+}
+
+.toeic-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--ds-bg-elevated);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.toeic-progress-fill {
+  height: 100%;
+  background-color: var(--ds-accent);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================================================
+   7. EXAMINATION WORKSPACE & QUESTION CARDS
+   ========================================================================== */
+.toeic-exam-topbar {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1.25rem;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.toeic-pacing-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  font-family: 'Google Sans', monospace, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  min-height: 38px;
+}
+
+.toeic-pacing-green {
+  background-color: var(--ds-success-bg);
+  color: var(--ds-success);
+  border: 1px solid var(--ds-success-border);
+}
+
+.toeic-pacing-yellow {
+  background-color: var(--ds-warning-bg);
+  color: var(--ds-warning);
+  border: 1px solid var(--ds-warning-border);
+}
+
+.toeic-pacing-red {
+  background-color: var(--ds-danger-bg);
+  color: var(--ds-danger);
+  border: 1px solid var(--ds-danger-border);
+  animation: toeicPulse 1s infinite alternate;
+}
+
+@keyframes toeicPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.04); }
+}
+
+.toeic-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toeic-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+}
+
+.toeic-step-item.active {
+  color: var(--ds-accent);
+}
+
+.toeic-step-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-text-muted);
+}
+
+.toeic-step-item.active .toeic-step-dot {
+  background-color: var(--ds-accent);
+  color: #ffffff;
+}
+
+.toeic-q-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+@media (min-width: 640px) {
+  .toeic-q-card {
+    padding: 2rem;
+  }
+}
+
+.toeic-q-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--ds-border-subtle);
+}
+
+.toeic-q-stem {
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--ds-text);
+  margin-bottom: 1.75rem;
+}
+
+.toeic-q-blank {
+  display: inline-block;
+  min-width: 80px;
+  border-bottom: 2px solid var(--ds-accent);
+  margin: 0 0.35rem;
+  padding: 0 0.35rem;
+  color: var(--ds-accent);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Choice Selection Cards */
+.toeic-choice-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toeic-choice-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.15rem;
+  border-radius: 1rem;
+  background-color: var(--ds-card);
+  border: 1.5px solid var(--ds-border);
+  color: var(--ds-text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.toeic-choice-card:hover:not(.disabled) {
+  border-color: var(--ds-accent);
+  background-color: var(--ds-accent-bg);
+}
+
+.toeic-choice-card.selected {
+  border-color: var(--ds-accent);
+  background-color: var(--ds-accent-bg);
+  box-shadow: 0 0 0 2px var(--ds-accent-border);
+}
+
+.toeic-choice-card.correct {
+  border-color: var(--ds-success);
+  background-color: var(--ds-success-bg);
+  color: var(--ds-success);
+}
+
+.toeic-choice-card.wrong {
+  border-color: var(--ds-danger);
+  background-color: var(--ds-danger-bg);
+  color: var(--ds-danger);
+}
+
+.toeic-choice-card.disabled {
+  cursor: default;
+}
+
+.toeic-choice-key {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+  color: var(--ds-text-secondary);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.toeic-choice-card.selected .toeic-choice-key {
+  background-color: var(--ds-accent);
+  color: #ffffff;
+  border-color: var(--ds-accent);
+}
+
+.toeic-choice-card.correct .toeic-choice-key {
+  background-color: var(--ds-success);
+  color: #ffffff;
+  border-color: var(--ds-success);
+}
+
+.toeic-choice-card.wrong .toeic-choice-key {
+  background-color: var(--ds-danger);
+  color: #ffffff;
+  border-color: var(--ds-danger);
+}
+
+.toeic-choice-text {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Question Palette */
+.toeic-palette-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.toeic-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.toeic-palette-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid var(--ds-border);
+  background-color: var(--ds-card);
+  color: var(--ds-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  min-height: 38px;
+}
+
+.toeic-palette-btn:hover {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.toeic-palette-btn.current {
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 2px var(--ds-accent);
+  font-weight: 800;
+}
+
+.toeic-palette-btn.answered {
+  background-color: var(--ds-accent);
+  border-color: var(--ds-accent);
+  color: #ffffff;
+}
+
+.toeic-palette-btn.flagged::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--ds-warning);
+}
+
+/* Sticky Action Bar */
+.toeic-exam-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   8. SENTENCE X-RAY & FORMULA BOX
+   ========================================================================== */
+.toeic-formula-box {
+  background-color: var(--ds-success-bg);
+  border: 1.5px solid var(--ds-success-border);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.toeic-formula-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--ds-success);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toeic-formula-text {
+  font-family: 'Google Sans', monospace, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ds-text-heading, var(--ds-text));
+  line-height: 1.5;
+}
+
+.toeic-anchor-word {
+  background-color: #fef08a;
+  color: #713f12;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.35rem;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .toeic-anchor-word {
+  background-color: #713f12;
+  color: #fef08a;
+}
+
+/* ==========================================================================
+   9. SPLIT-PASSAGE READER
+   ========================================================================== */
+.toeic-split-reader {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .toeic-split-reader {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .toeic-passage-pane {
+    position: sticky;
+    top: calc(var(--ds-header-h, 56px) + 1.5rem);
+    max-height: calc(100vh - var(--ds-header-h, 56px) - 3rem);
+    overflow-y: auto;
+  }
+}
+
+.toeic-evidence-highlight {
+  background-color: rgba(254, 240, 138, 0.45);
+  border-left: 3px solid #eab308;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .toeic-evidence-highlight {
+  background-color: rgba(161, 98, 7, 0.4);
+  border-left-color: #facc15;
+}
+
+/* ==========================================================================
+   10. DICTATION CLOZE INPUTS
+   ========================================================================== */
+.toeic-cloze-input {
+  display: inline-block;
+  min-width: 70px;
+  max-width: 160px;
+  padding: 0.25rem 0.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1.5px solid var(--ds-border-strong);
+  border-radius: 0.4rem;
+  background-color: var(--ds-card);
+  color: var(--ds-text);
+  outline: none;
+  transition: all 0.15s ease;
+  margin: 0 0.25rem;
+}
+
+.toeic-cloze-input:focus {
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 2px var(--ds-accent-border);
+}
+
+.toeic-cloze-input.correct {
+  border-color: var(--ds-success);
+  background-color: var(--ds-success-bg);
+  color: var(--ds-success);
+}
+
+.toeic-cloze-input.wrong {
+  border-color: var(--ds-danger);
+  background-color: var(--ds-danger-bg);
+  color: var(--ds-danger);
+}
+
+/* ==========================================================================
+   11. ESSENTIAL COMPATIBILITY UTILITIES (FLEX, GRID, SPACING & RADIUS)
+   Guarantees zero unstyled HTML across all TOEIC components
+   ========================================================================== */
+.w-full { width: 100%; }
+.max-w-5xl { max-width: 1024px; }
+.max-w-4xl { max-width: 896px; }
+.max-w-md { max-width: 448px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: 1fr; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (min-width: 1024px) {
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, 1fr); }
+  .lg\:col-span-5 { grid-column: span 5; }
+  .lg\:col-span-7 { grid-column: span 7; }
+  .lg\:col-span-8 { grid-column: span 8; }
+  .lg\:col-span-4 { grid-column: span 4; }
+  .lg\:col-span-6 { grid-column: span 6; }
+}
+
+.gap-1 { gap: 0.25rem; }
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+.space-y-1 > * + * { margin-top: 0.25rem; }
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+.space-y-8 > * + * { margin-top: 2rem; }
+
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 0.75rem; }
+.p-4 { padding: 1rem; }
+.p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; }
+.rounded-full { border-radius: 9999px; }
+
+.border { border: 1px solid var(--ds-border); }
+.border-t { border-top: 1px solid var(--ds-border); }
+.border-b { border-bottom: 1px solid var(--ds-border); }
+.shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.shadow-md { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.text-center { text-align: center; }
+.relative { position: relative; }
+.overflow-hidden { overflow: hidden; }
+.transition-all { transition: all 0.18s ease; }
+

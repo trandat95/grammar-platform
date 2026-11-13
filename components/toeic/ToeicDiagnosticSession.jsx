@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import DiagnosticRadarDashboard from './DiagnosticRadarDashboard';
 import MilestoneSkillTree from './MilestoneSkillTree';
+import { ToeicCard, ToeicButton, ToeicBadge, ToeicChoiceCard, ToeicQuestionPalette } from './ui';
 
-/**
- * ToeicDiagnosticSession Component (Milestone E3 & Section 3.2)
- * Orchestrates the full 30-question, 3-stage adaptive diagnostic testing experience.
- * Strict Design Token Discipline: var(--ds-*).
- */
 export default function ToeicDiagnosticSession({
   userId = 'guest_user',
   targetScore = 650,
@@ -17,7 +13,7 @@ export default function ToeicDiagnosticSession({
   const [questions, setQuestions] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState({}); // { [questionId]: { selectedOption, timeSpentSec, usedHint } }
+  const [answers, setAnswers] = useState({}); // { [questionId]: { selectedOption, timeSpentSec } }
   const [flags, setFlags] = useState({}); // { [questionId]: boolean }
   const [stageAnswers, setStageAnswers] = useState({ 1: [], 2: [], 3: [] });
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +22,7 @@ export default function ToeicDiagnosticSession({
   const [diagnosticResult, setDiagnosticResult] = useState(null);
   const [activeTab, setActiveTab] = useState('radar'); // 'radar' | 'tree'
 
-  // Per-question timer
+  // Per-question timer (seconds)
   const [questionTimerSec, setQuestionTimerSec] = useState(0);
   const timerRef = useRef(null);
 
@@ -61,58 +57,59 @@ export default function ToeicDiagnosticSession({
     return () => { isMounted = false; };
   }, [userId, targetScore]);
 
-  // Question Timer Interval
+  // Track per-question timer
   useEffect(() => {
     setQuestionTimerSec(0);
-    clearInterval(timerRef.current);
+    if (timerRef.current) clearInterval(timerRef.current);
+
     timerRef.current = setInterval(() => {
       setQuestionTimerSec(prev => prev + 1);
     }, 1000);
 
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [currentIndex, currentStage]);
 
-  const currentQ = questions[currentIndex] || null;
+  const currentQ = questions[currentIndex];
 
-  // Handle Option Select
+  // Select Option handler
   const handleSelectOption = useCallback((optionKey) => {
     if (!currentQ) return;
     setAnswers(prev => ({
       ...prev,
       [currentQ.id]: {
-        questionId: currentQ.id,
         selectedOption: optionKey,
-        timeSpentSec: (prev[currentQ.id]?.timeSpentSec || 0) + questionTimerSec,
-        usedHint: false
+        timeSpentSec: (prev[currentQ.id]?.timeSpentSec || 0) + questionTimerSec
       }
     }));
   }, [currentQ, questionTimerSec]);
 
-  // Toggle Flag
-  const handleToggleFlag = useCallback(() => {
-    if (!currentQ) return;
-    setFlags(prev => ({
-      ...prev,
-      [currentQ.id]: !prev[currentQ.id]
-    }));
-  }, [currentQ]);
-
-  // Keyboard Shortcuts (1-4 / A-D)
+  // Keyboard shortcuts (1, 2, 3, 4 or A, B, C, D)
   useEffect(() => {
     function handleKeyDown(e) {
-      if (diagnosticResult || isLoading || isSubmitting) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       const key = e.key.toUpperCase();
       if (key === '1' || key === 'A') handleSelectOption('A');
       else if (key === '2' || key === 'B') handleSelectOption('B');
       else if (key === '3' || key === 'C') handleSelectOption('C');
       else if (key === '4' || key === 'D') handleSelectOption('D');
-      else if (key === 'F') handleToggleFlag();
+      else if (e.key === 'ArrowRight' && currentIndex < questions.length - 1) {
+        setCurrentIndex(prev => prev + 1);
+      } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+        setCurrentIndex(prev => prev - 1);
+      }
     }
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleSelectOption, handleToggleFlag, diagnosticResult, isLoading, isSubmitting]);
+  }, [handleSelectOption, currentIndex, questions.length]);
 
-  // Navigation handlers
+  const toggleFlag = () => {
+    if (!currentQ) return;
+    setFlags(prev => ({ ...prev, [currentQ.id]: !prev[currentQ.id] }));
+  };
+
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
@@ -127,7 +124,6 @@ export default function ToeicDiagnosticSession({
 
   // Submit Stage or Final Test
   const handleSubmitStage = async () => {
-    // Collect answers for current stage
     const currentStageResponses = questions.map(q => {
       const ans = answers[q.id];
       return {
@@ -138,7 +134,6 @@ export default function ToeicDiagnosticSession({
     });
 
     if (currentStage === 1) {
-      // Transition to Stage 2
       setIsLoading(true);
       try {
         const res = await fetch('/api/toeic/diagnostic/stage', {
@@ -166,7 +161,6 @@ export default function ToeicDiagnosticSession({
         setIsLoading(false);
       }
     } else if (currentStage === 2) {
-      // Transition to Stage 3
       setIsLoading(true);
       try {
         const allPrevIds = [...stageAnswers[1].map(r => r.questionId), ...questions.map(q => q.id)];
@@ -196,10 +190,9 @@ export default function ToeicDiagnosticSession({
         setIsLoading(false);
       }
     } else if (currentStage === 3) {
-      // Final Submit: aggregate all 30 responses
       setIsSubmitting(true);
       try {
-        const allResponses = [
+        const all30Responses = [
           ...stageAnswers[1],
           ...stageAnswers[2],
           ...currentStageResponses
@@ -211,8 +204,7 @@ export default function ToeicDiagnosticSession({
           body: JSON.stringify({
             sessionId,
             userId,
-            targetScore,
-            responses: allResponses
+            responses: all30Responses
           })
         });
         const data = await res.json();
@@ -220,55 +212,35 @@ export default function ToeicDiagnosticSession({
           setDiagnosticResult(data);
           if (onFinish) onFinish(data);
         } else {
-          setErrorMsg(data.error || 'Lỗi chấm điểm bài kiểm tra');
+          setErrorMsg(data.error || 'Lỗi nộp bài kiểm tra');
         }
       } catch (e) {
-        setErrorMsg('Lỗi kết nối khi nộp bài');
+        setErrorMsg('Lỗi kết nối máy chủ khi nộp bài');
       } finally {
         setIsSubmitting(false);
       }
     }
   };
 
-  // Render Result View when test completed
+  // 1. RESULT VIEW (When test is finished)
   if (diagnosticResult) {
     return (
-      <div className="w-full space-y-6 py-6">
-        {/* VIEW TABS */}
-        <div className="flex items-center justify-center gap-3">
-          <button
-            type="button"
+      <div className="toeic-container" style={{ padding: '1rem 0' }}>
+        {/* Result Tab Switcher */}
+        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+          <ToeicButton
+            variant={activeTab === 'radar' ? 'primary' : 'secondary'}
             onClick={() => setActiveTab('radar')}
-            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
-              activeTab === 'radar'
-                ? 'shadow-sm'
-                : 'border hover:bg-[var(--ds-surface-secondary)]'
-            }`}
-            style={{
-              backgroundColor: activeTab === 'radar' ? 'var(--ds-primary)' : 'var(--ds-surface)',
-              color: activeTab === 'radar' ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-              borderColor: 'var(--ds-border)'
-            }}
           >
-            📊 Bản Đồ Năng Lực & Mục Tiêu Focus
-          </button>
+            📊 Bản Đồ Năng Lực &amp; Mục Tiêu Focus
+          </ToeicButton>
 
-          <button
-            type="button"
+          <ToeicButton
+            variant={activeTab === 'tree' ? 'primary' : 'secondary'}
             onClick={() => setActiveTab('tree')}
-            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
-              activeTab === 'tree'
-                ? 'shadow-sm'
-                : 'border hover:bg-[var(--ds-surface-secondary)]'
-            }`}
-            style={{
-              backgroundColor: activeTab === 'tree' ? 'var(--ds-primary)' : 'var(--ds-surface)',
-              color: activeTab === 'tree' ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-              borderColor: 'var(--ds-border)'
-            }}
           >
             🏆 Lộ Trình 7 Milestones Vượt Trạm
-          </button>
+          </ToeicButton>
         </div>
 
         {activeTab === 'radar' ? (
@@ -297,33 +269,41 @@ export default function ToeicDiagnosticSession({
     );
   }
 
+  // 2. LOADING STATE
   if (isLoading) {
     return (
-      <div className="min-h-[400px] flex flex-col items-center justify-center p-8 text-center space-y-3">
-        <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin"
-             style={{ borderColor: 'var(--ds-primary)', borderTopColor: 'transparent' }} />
-        <p className="text-sm font-semibold" style={{ color: 'var(--ds-text-primary)' }}>
+      <div className="toeic-container-narrow" style={{ textAlign: 'center', padding: '4rem 1rem' }}>
+        <div style={{
+          width: '42px',
+          height: '42px',
+          border: '4px solid var(--ds-accent)',
+          borderTopColor: 'transparent',
+          borderRadius: '50%',
+          animation: 'toeicPulse 0.8s infinite alternate',
+          margin: '0 auto 1.25rem auto'
+        }} />
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 0.5rem 0' }}>
           {currentStage === 1
-            ? 'Đang chuẩn bị đề kiểm tra chẩn đoán 3 chặng...'
-            : `Đang phân tích kết quả Chặng ${currentStage - 1} & cá nhân hóa Chặng ${currentStage}...`}
+            ? 'Đang nạp bộ câu hỏi chẩn đoán 3 chặng...'
+            : `Đang phân tích Chặng ${currentStage - 1} & chuẩn bị câu hỏi thích ứng Chặng ${currentStage}...`}
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)' }}>
+          Hệ thống AI ước lượng năng lực IRT 3PL theo thời gian thực
         </p>
       </div>
     );
   }
 
+  // 3. ERROR STATE
   if (errorMsg) {
     return (
-      <div className="rounded-2xl p-6 border text-center space-y-3 max-w-md mx-auto my-12"
-           style={{ backgroundColor: 'var(--ds-danger-subtle)', borderColor: 'var(--ds-danger)' }}>
-        <p className="text-sm font-bold" style={{ color: 'var(--ds-danger)' }}>{errorMsg}</p>
-        <button
-          type="button"
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 rounded-xl text-xs font-bold"
-          style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
-        >
-          Thử Lại
-        </button>
+      <div className="toeic-container-narrow" style={{ padding: '3rem 1rem', textAlign: 'center' }}>
+        <ToeicCard style={{ borderColor: 'var(--ds-danger)', backgroundColor: 'var(--ds-danger-bg)' }}>
+          <h3 style={{ color: 'var(--ds-danger)', margin: '0 0 0.5rem 0' }}>{errorMsg}</h3>
+          <ToeicButton variant="primary" onClick={() => window.location.reload()}>
+            Tải Lại Bài Thi
+          </ToeicButton>
+        </ToeicCard>
       </div>
     );
   }
@@ -333,51 +313,64 @@ export default function ToeicDiagnosticSession({
   const isFlagged = currentQ ? !!flags[currentQ.id] : false;
   const recommendedTime = currentQ?.recommended_time_sec || 12;
 
-  // Pacing Color Status
-  let pacingColor = 'var(--ds-success)';
-  if (questionTimerSec > recommendedTime) {
-    pacingColor = 'var(--ds-warning)';
-  }
+  // Render question text with stylized blank
+  const renderQuestionStem = () => {
+    if (!currentQ) return null;
+    const text = currentQ.stem || currentQ.context_sentence || currentQ.question_text || '';
+    if (text.includes('_______')) {
+      const parts = text.split('_______');
+      return (
+        <div className="toeic-q-stem">
+          {parts[0]}
+          <span className="toeic-q-blank">
+            {currentAnswer || '______'}
+          </span>
+          {parts[1]}
+        </div>
+      );
+    }
+    return <div className="toeic-q-stem">{text}</div>;
+  };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 py-4">
-      {/* 1. STAGE PROGRESS HEADER */}
-      <div className="rounded-2xl p-4 sm:p-5 border shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-           style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm"
-               style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}>
+    <div className="toeic-container">
+      {/* 1. EXAM HEADER & STEPPER (Milestone U3.1) */}
+      <div className="toeic-exam-topbar">
+        <div className="toeic-flex-row">
+          <div style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--ds-accent)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 800,
+            fontSize: '0.95rem'
+          }}>
             {currentStage}
           </div>
           <div>
-            <h3 className="font-bold text-sm" style={{ color: 'var(--ds-text-primary)' }}>
+            <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--ds-text)' }}>
               {currentStage === 1 && 'Chặng 1: Thăm Dò Nền Tảng (Baseline Probe)'}
               {currentStage === 2 && 'Chặng 2: Thích Ứng Phân Hóa Độ Khó (Adaptive Branching)'}
-              {currentStage === 3 && 'Chặng 3: Xác Thực Điểm Yếu & Tốc Độ Đọc (Verification)'}
-            </h3>
-            <p className="text-xs" style={{ color: 'var(--ds-text-muted)' }}>
-              Câu {currentIndex + 1} / {questions.length} • Tổng đã chọn: {answeredCount} / 30 câu
-            </p>
+              {currentStage === 3 && 'Chặng 3: Xác Thực Điểm Yếu & Tốc Độ (Verification)'}
+            </div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--ds-text-muted)' }}>
+              Câu {currentIndex + 1} / {questions.length} • Đã làm: {answeredCount}/30
+            </div>
           </div>
         </div>
 
-        {/* STAGE STEP PILLS */}
-        <div className="flex items-center gap-2 text-xs">
+        {/* Stepper pills */}
+        <div className="toeic-stepper">
           {[1, 2, 3].map(st => (
-            <div
-              key={st}
-              className="px-3 py-1 rounded-full font-bold flex items-center gap-1.5 transition-all"
-              style={{
-                backgroundColor: currentStage === st
-                  ? 'var(--ds-primary)'
-                  : currentStage > st
-                  ? 'var(--ds-success)'
-                  : 'var(--ds-surface-secondary)',
-                color: (currentStage === st || currentStage > st) ? 'var(--ds-surface)' : 'var(--ds-text-muted)'
-              }}
-            >
-              <span>{currentStage > st ? '✓' : st}</span>
-              <span className="hidden sm:inline">
+            <div key={st} className={`toeic-step-item ${currentStage >= st ? 'active' : ''}`}>
+              <div className="toeic-step-dot">
+                {currentStage > st ? '✓' : st}
+              </div>
+              <span style={{ display: 'none' }} className="sm-inline">
                 {st === 1 ? 'Nền tảng' : st === 2 ? 'Thích ứng' : 'Xác thực'}
               </span>
             </div>
@@ -385,182 +378,134 @@ export default function ToeicDiagnosticSession({
         </div>
       </div>
 
-      {/* 2. QUESTION PALETTE */}
-      <div className="p-3 rounded-xl border flex flex-wrap items-center gap-1.5"
-           style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)' }}>
-        {questions.map((q, idx) => {
-          const isAns = !!answers[q.id]?.selectedOption;
-          const isFl = !!flags[q.id];
-          const isCurr = idx === currentIndex;
-
-          return (
-            <button
-              key={q.id || idx}
-              type="button"
-              onClick={() => setCurrentIndex(idx)}
-              className={`w-7 h-7 rounded-lg text-xs font-bold transition-all flex items-center justify-center relative ${
-                isCurr ? 'ring-2 ring-[var(--ds-primary)]' : ''
-              }`}
-              style={{
-                backgroundColor: isAns
-                  ? 'var(--ds-primary)'
-                  : 'var(--ds-surface)',
-                color: isAns ? 'var(--ds-surface)' : 'var(--ds-text-primary)',
-                borderColor: 'var(--ds-border)'
-              }}
-            >
-              {idx + 1}
-              {isFl && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-                      style={{ backgroundColor: 'var(--ds-warning)' }} />
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 3. QUESTION CARD */}
-      {currentQ && (
-        <div className="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-6"
-             style={{ backgroundColor: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }}>
-          {/* TOP INFO & PACING TIMER */}
-          <div className="flex items-center justify-between pb-4 border-b"
-               style={{ borderColor: 'var(--ds-border)' }}>
-            <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-1 rounded-full font-bold"
-                    style={{ backgroundColor: 'var(--ds-surface-secondary)', color: 'var(--ds-text-primary)' }}>
-                Part {currentQ.part} • #{currentQ.number || currentIndex + 1}
-              </span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded"
-                    style={{ backgroundColor: 'var(--ds-primary-subtle)', color: 'var(--ds-primary)' }}>
-                {currentQ.ai_analysis?.primary_topic_name_vi || currentQ.primary_grammar_topic_id}
-              </span>
-            </div>
-
-            {/* Pacing Timer */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border"
-                   style={{ borderColor: pacingColor, color: pacingColor }}>
-                <span>⏱️ {questionTimerSec}s</span>
-                <span className="text-[10px] font-normal" style={{ color: 'var(--ds-text-muted)' }}>
-                  / mục tiêu {recommendedTime}s
-                </span>
+      {/* 2. MAIN WORKSPACE (Bento Grid: Question Area 8 cols, Palette 4 cols) */}
+      <div className="toeic-bento-grid">
+        {/* LEFT / CENTER: Question Area */}
+        <div className="toeic-col-8">
+          <div className="toeic-q-card">
+            {/* Question Card Header */}
+            <div className="toeic-q-header">
+              <div className="toeic-flex-row">
+                <ToeicBadge variant="primary">
+                  {currentQ?.skill_category || 'Part 5'} • #{currentQ?.number || currentIndex + 1}
+                </ToeicBadge>
+                {currentQ?.target_score_band && (
+                  <ToeicBadge variant="muted">
+                    Target {currentQ.target_score_band}
+                  </ToeicBadge>
+                )}
               </div>
 
-              <button
-                type="button"
-                onClick={handleToggleFlag}
-                className="text-xs px-2.5 py-1 rounded-lg border flex items-center gap-1 font-medium transition-all"
-                style={{
-                  backgroundColor: isFlagged ? 'var(--ds-warning-subtle)' : 'transparent',
-                  borderColor: isFlagged ? 'var(--ds-warning)' : 'var(--ds-border)',
-                  color: isFlagged ? 'var(--ds-warning)' : 'var(--ds-text-muted)'
-                }}
-              >
-                <span>{isFlagged ? '🚩 Đã gắn cờ' : '🏳️ Đặt cờ'}</span>
-              </button>
-            </div>
-          </div>
+              {/* Timer & Flag Button */}
+              <div className="toeic-flex-row">
+                <div className={`toeic-pacing-pill ${questionTimerSec > recommendedTime ? 'toeic-pacing-yellow' : 'toeic-pacing-green'}`}>
+                  ⏱️ {questionTimerSec}s / mục tiêu {recommendedTime}s
+                </div>
 
-          {/* PASSAGE (If Part 7 or Part 6 context) */}
-          {currentPassage && currentPassage.text && currentQ.part === 7 && (
-            <div className="p-4 rounded-xl border max-h-60 overflow-y-auto text-sm leading-relaxed"
-                 style={{ backgroundColor: 'var(--ds-surface-secondary)', borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}>
-              <div className="font-bold text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--ds-text-muted)' }}>
-                Đoạn văn đọc hiểu (Part 7):
-              </div>
-              <div className="whitespace-pre-line font-serif">
-                {currentPassage.text}
-              </div>
-            </div>
-          )}
-
-          {/* QUESTION STEM */}
-          <div className="text-base sm:text-lg font-medium leading-relaxed" style={{ color: 'var(--ds-text-primary)' }}>
-            {currentQ.context_sentence || currentQ.stem}
-          </div>
-
-          {/* 4 OPTIONS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            {(['A', 'B', 'C', 'D']).map(optKey => {
-              const optText = currentQ.options?.[optKey];
-              if (!optText) return null;
-              const isSelected = currentAnswer === optKey;
-
-              return (
-                <button
-                  key={optKey}
-                  type="button"
-                  onClick={() => handleSelectOption(optKey)}
-                  className={`w-full p-4 rounded-xl border text-left flex items-center gap-3 transition-all hover:border-[var(--ds-primary)] active:scale-[0.99] ${
-                    isSelected ? 'shadow-sm ring-2 ring-[var(--ds-primary)]' : ''
-                  }`}
-                  style={{
-                    backgroundColor: isSelected ? 'var(--ds-primary-subtle)' : 'var(--ds-surface)',
-                    borderColor: isSelected ? 'var(--ds-primary)' : 'var(--ds-border)'
-                  }}
+                <ToeicButton
+                  variant={isFlagged ? 'warning' : 'ghost'}
+                  size="sm"
+                  onClick={toggleFlag}
+                  icon={<span>{isFlagged ? '🚩' : '🏳️'}</span>}
                 >
-                  <span
-                    className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-all"
-                    style={{
-                      backgroundColor: isSelected ? 'var(--ds-primary)' : 'var(--ds-surface-secondary)',
-                      color: isSelected ? 'var(--ds-surface)' : 'var(--ds-text-primary)'
-                    }}
-                  >
-                    {optKey}
-                  </span>
-                  <span className="text-sm sm:text-base font-medium" style={{ color: 'var(--ds-text-primary)' }}>
-                    {optText}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                  {isFlagged ? 'Đã cắm cờ' : 'Cắm cờ'}
+                </ToeicButton>
+              </div>
+            </div>
 
-          {/* BOTTOM CONTROLS */}
-          <div className="flex items-center justify-between pt-6 border-t"
-               style={{ borderColor: 'var(--ds-border)' }}>
-            <button
-              type="button"
-              disabled={currentIndex === 0}
-              onClick={handlePrev}
-              className="px-4 py-2 rounded-xl text-xs font-bold border transition-all disabled:opacity-40"
-              style={{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)' }}
-            >
-              ← Câu trước
-            </button>
-
-            {currentIndex < questions.length - 1 ? (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                style={{ backgroundColor: 'var(--ds-primary)', color: 'var(--ds-surface)' }}
-              >
-                <span>Câu tiếp theo</span>
-                <span>→</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                disabled={isSubmitting}
-                onClick={handleSubmitStage}
-                className="px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                style={{
-                  backgroundColor: currentStage === 3 ? 'var(--ds-success)' : 'var(--ds-primary)',
-                  color: 'var(--ds-surface)'
-                }}
-              >
-                {isSubmitting
-                  ? 'Đang chấm điểm...'
-                  : currentStage === 3
-                  ? '🏁 Hoàn Thành & Xem Kết Quả'
-                  : `Chuyển Sang Chặng ${currentStage + 1} →`}
-              </button>
+            {/* Reading Passage if available (Stage 3 Part 7) */}
+            {currentPassage && (
+              <div style={{
+                backgroundColor: 'var(--ds-bg-elevated)',
+                border: '1px solid var(--ds-border)',
+                borderRadius: '0.85rem',
+                padding: '1rem',
+                marginBottom: '1.5rem',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                maxHeight: '220px',
+                overflowY: 'auto'
+              }}>
+                <div style={{ fontWeight: 800, marginBottom: '0.5rem', color: 'var(--ds-accent)' }}>
+                  📄 {currentPassage.title || 'Đoạn văn đọc hiểu:'}
+                </div>
+                <div style={{ whiteSpace: 'pre-line' }}>
+                  {currentPassage.content_en || currentPassage.text}
+                </div>
+              </div>
             )}
+
+            {/* Question Stem */}
+            {renderQuestionStem()}
+
+            {/* Choices Grid (A, B, C, D) */}
+            <div className="toeic-choice-grid">
+              {['A', 'B', 'C', 'D'].map((optKey, idx) => {
+                const optText = currentQ?.options?.[optKey] || '';
+                const isSelected = currentAnswer === optKey;
+
+                return (
+                  <ToeicChoiceCard
+                    key={optKey}
+                    choiceKey={optKey}
+                    text={optText}
+                    selected={isSelected}
+                    onSelect={() => handleSelectOption(optKey)}
+                    shortcut={`Phím ${idx + 1}`}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="toeic-exam-footer">
+              <ToeicButton
+                variant="secondary"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                icon={<span>&larr;</span>}
+              >
+                Câu trước
+              </ToeicButton>
+
+              <div className="toeic-flex-row">
+                {currentIndex < questions.length - 1 ? (
+                  <ToeicButton
+                    variant="primary"
+                    onClick={handleNext}
+                  >
+                    Câu tiếp theo &rarr;
+                  </ToeicButton>
+                ) : (
+                  <ToeicButton
+                    variant="success"
+                    onClick={handleSubmitStage}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? 'Đang tính điểm IRT...'
+                      : currentStage === 3
+                      ? 'Hoàn thành & Xem kết quả'
+                      : `Nộp Chặng ${currentStage} & Chuyển Chặng ${currentStage + 1}`}
+                  </ToeicButton>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* RIGHT: Question Palette (4 cols) */}
+        <div className="toeic-col-4">
+          <ToeicQuestionPalette
+            questions={questions}
+            currentIndex={currentIndex}
+            answers={answers}
+            flagged={flags}
+            onSelectIndex={(idx) => setCurrentIndex(idx)}
+            title={`Chặng ${currentStage} (10 câu)`}
+          />
+        </div>
+      </div>
     </div>
   );
 }
