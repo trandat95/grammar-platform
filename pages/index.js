@@ -5464,11 +5464,81 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* TOEIC AI Adaptive Fast-Access Hero Banner */}
+              {/* 1. PRIORITY #1: GRAMMAR DIAGNOSTIC ASSESSMENT & PERSONALIZED ROADMAP */}
+              <div
+                style={{
+                  backgroundColor: "var(--ds-accent-bg)",
+                  border: "1px solid var(--ds-accent-border)",
+                  borderRadius: "12px",
+                  padding: "1.2rem 1.5rem",
+                  marginBottom: "1.25rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1rem",
+                  boxShadow: "var(--ds-shadow-sm)",
+                }}
+              >
+                <div style={{ flex: "1 1 480px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem", flexWrap: "wrap" }}>
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        padding: "0.2rem 0.6rem",
+                        borderRadius: "9999px",
+                        backgroundColor: "var(--ds-indigo-bg)",
+                        color: "var(--ds-indigo)",
+                        border: "1px solid var(--ds-indigo-border)",
+                      }}
+                    >
+                      🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
+                    </span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
+                      30 câu trắc nghiệm • 15-20 phút
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.3rem 0" }}>
+                    Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
+                  </h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
+                    Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setCurrentView("diagnostic")}
+                  className="ds-focusable"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "0.6rem",
+                    backgroundColor: "var(--ds-btn-primary)",
+                    color: "#ffffff",
+                    fontSize: "0.9rem",
+                    fontWeight: 700,
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "var(--ds-shadow-sm)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span>Khám phá trình độ ngay</span>
+                  <span>➔</span>
+                </button>
+              </div>
+
+              {/* TOEIC AI Adaptive Fast-Access Hero Banner (Compact & Balanced) */}
               <ToeicHeroBanner
                 initialTargetScore={750}
                 showStats={true}
                 isLight={isLight}
+                compact={true}
               />
 
               {/* Dashboard Zone A / Zone B Bento Switcher */}
@@ -5510,76 +5580,7 @@ export default function Home() {
               {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone !== "analytics" && (
                 <div>
-                  {/* 1. PRIORITY #1: DIAGNOSTIC PLACEMENT ASSESSMENT & PERSONALIZED ROADMAP */}
-                  <div
-                    style={{
-                      backgroundColor: "var(--ds-accent-bg)",
-                      border: "1px solid var(--ds-accent-border)",
-                      borderRadius: "12px",
-                      padding: "1.35rem 1.65rem",
-                      marginBottom: "1.35rem",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                      gap: "1.15rem",
-                      boxShadow: "var(--ds-shadow-sm)",
-                    }}
-                  >
-                    <div style={{ flex: "1 1 480px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem", flexWrap: "wrap" }}>
-                        <span
-                          style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            padding: "0.2rem 0.6rem",
-                            borderRadius: "9999px",
-                            backgroundColor: "var(--ds-indigo-bg)",
-                            color: "var(--ds-indigo)",
-                            border: "1px solid var(--ds-indigo-border)",
-                          }}
-                        >
-                          🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
-                        </span>
-                        <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
-                          30 câu trắc nghiệm • 15-20 phút
-                        </span>
-                      </div>
-                      <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.3rem 0" }}>
-                        Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
-                      </h3>
-                      <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
-                        Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setCurrentView("diagnostic")}
-                      className="ds-focusable"
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        padding: "0.75rem 1.5rem",
-                        borderRadius: "0.6rem",
-                        backgroundColor: "var(--ds-btn-primary)",
-                        color: "#ffffff",
-                        fontSize: "0.9rem",
-                        fontWeight: 700,
-                        border: "none",
-                        cursor: "pointer",
-                        boxShadow: "var(--ds-shadow-sm)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <span>Khám phá trình độ ngay</span>
-                      <span>➔</span>
-                    </button>
-                  </div>
-
-                  {/* 2. 4 ANALYTICS METRICS SNAPSHOT GRID */}
+                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID */}
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
