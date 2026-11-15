@@ -14,7 +14,7 @@ Always refer to and read **`ROADMAP_AND_ARCHITECTURE.md`** at the repository roo
    - Never overwrite or discard this grammar data without explicit instruction.
 
 3. **Current Active Direction: Phase 2 (Supabase Cloud Enhancement):**
-   - Active Supabase Project: `wtvlbbcyvtqqygtojxay` (`https://wtvlbbcyvtqqygtojxay.supabase.co`).
+   - Active Supabase Project: `bhlhmhvzqcwqenlhioxr` (`https://bhlhmhvzqcwqenlhioxr.supabase.co`).
    - Priority: Transitioning user profiles, learning trackers (streaks/XP), mistake notebooks, and saved vocabularies from `LocalStorage` to Supabase PostgreSQL 17 with Row-Level Security (RLS) while keeping local-first resilience.
 
 4. **Production Verification:**

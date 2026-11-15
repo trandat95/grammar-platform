@@ -44,4 +44,8 @@ __pycache__/
 
 scratch/
 
+# Agent & MCP Secrets
+.agents/
+*mcp_config.json
+
 ETS_Audio_All/
