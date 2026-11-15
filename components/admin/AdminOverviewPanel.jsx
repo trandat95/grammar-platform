@@ -5,13 +5,23 @@ import { getThemeTokens } from "../../lib/tokens/design-tokens";
  * Milestone 2.4.5: Real-Time Operational Health Overview Panel
  * Queries /api/admin/overview with Zero-Trust Admin Bearer auth.
  */
-export default function AdminOverviewPanel({ authHeaders = {}, isLight = false, onNavigateTab }) {
+export default function AdminOverviewPanel({
+  authHeaders = {},
+  isLight = false,
+  onNavigateTab,
+  onTriggerAdminLogin,
+}) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const T = getThemeTokens(isLight);
 
   const loadOverview = useCallback(async () => {
+    if (!authHeaders?.Authorization) {
+      setError("NO_AUTH_TOKEN");
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -81,17 +91,47 @@ export default function AdminOverviewPanel({ authHeaders = {}, isLight = false, 
         <div
           role="alert"
           style={{
-            backgroundColor: T.dangerBg,
-            border: `1px solid ${T.dangerBorder}`,
-            color: T.danger,
+            backgroundColor: error === "NO_AUTH_TOKEN" ? T.warningBg : T.dangerBg,
+            border: `1px solid ${error === "NO_AUTH_TOKEN" ? T.warningBorder : T.dangerBorder}`,
             borderRadius: "10px",
-            padding: "0.85rem 1rem",
-            fontSize: "0.82rem",
-            fontWeight: "600",
+            padding: "0.95rem 1.15rem",
             marginBottom: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.75rem",
           }}
         >
-          {error}
+          <div>
+            <div style={{ fontSize: "0.88rem", fontWeight: "700", color: error === "NO_AUTH_TOKEN" ? T.warning : T.danger }}>
+              {error === "NO_AUTH_TOKEN" ? "⚠️ Yêu cầu chữ ký Quản trị viên từ Supabase Auth" : error}
+            </div>
+            <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem" }}>
+              {error === "NO_AUTH_TOKEN"
+                ? "Hệ thống áp dụng chính sách bảo mật Zero-Trust. Vui lòng xác thực phiên Admin để kích hoạt kết nối thời gian thực."
+                : "Phiên làm việc chưa có token hợp lệ."}{" "}
+              Tài khoản mặc định: <b>admin@grammarpro.com</b> (mật khẩu: <code>admin123</code>).
+            </div>
+          </div>
+          {onTriggerAdminLogin && (
+            <button
+              type="button"
+              onClick={onTriggerAdminLogin}
+              style={{
+                backgroundColor: T.accent,
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "8px",
+                padding: "0.5rem 0.95rem",
+                fontSize: "0.82rem",
+                fontWeight: "700",
+                cursor: "pointer",
+              }}
+            >
+              🔑 Đăng nhập nhanh Quản trị viên
+            </button>
+          )}
         </div>
       )}
 
