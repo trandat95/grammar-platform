@@ -620,7 +620,7 @@ export default function AppShell2026({
           <GrammarProLogo variant="footer" />
 
           <div className="ge-brand-footer-meta">
-            <div className="ge-brand-footer-links">
+            <div className="ge-brand-footer-links ge-mobile-hide">
               <button type="button" onClick={() => handleSelectHub("dashboard")} className="ge-brand-footer-link">
                 Trang chủ
               </button>
@@ -638,8 +638,8 @@ export default function AppShell2026({
               </button>
             </div>
             <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-              <span>12 Chuyên đề • 2.939 câu Ngữ pháp • 20 Đề TOEIC New Format 2026 • 4.000 câu AI</span>
-              <span>•</span>
+              <span className="ge-mobile-hide">12 Chuyên đề • 2.939 câu Ngữ pháp • 20 Đề TOEIC New Format 2026 • 4.000 câu AI</span>
+              <span className="ge-mobile-hide">•</span>
               <span style={{ fontWeight: 700, color: "var(--ds-accent)" }}>© {new Date().getFullYear()} grammarpro.io.vn</span>
             </div>
           </div>

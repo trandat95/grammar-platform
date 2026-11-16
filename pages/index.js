@@ -137,6 +137,7 @@ export default function Home() {
   const [authUnconfirmedEmail, setAuthUnconfirmedEmail] = useState("");
   const [authSubmitting, setAuthSubmitting] = useState(false);
   const [showSwitchAuthForm, setShowSwitchAuthForm] = useState(false);
+  const [showMobileExtraShowcase, setShowMobileExtraShowcase] = useState(false);
 
   // Admin Panel states
   const [adminPolicyForm, setAdminPolicyForm] = useState(DEFAULT_ACCESS_POLICY);
@@ -5480,7 +5481,7 @@ export default function Home() {
                   }}
                 >
                   <div>
-                    <div style={{ marginBottom: "0.55rem" }}>
+                    <div className="ge-mobile-hide" style={{ marginBottom: "0.55rem" }}>
                       <span className="ge-domain-pill" style={{ fontSize: "0.7rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
                         🌐 GRAMMARPRO.IO.VN • ADAPTIVE AI LEARNING
                       </span>
@@ -5493,7 +5494,7 @@ export default function Home() {
                         Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
                       </h1>
                     </div>
-                    <p style={{ fontSize: "0.9rem", color: "var(--ds-text-muted)", margin: "0 0 1rem 0", maxWidth: "560px" }}>
+                    <p className="ge-mobile-hide" style={{ fontSize: "0.9rem", color: "var(--ds-text-muted)", margin: "0 0 1rem 0", maxWidth: "560px" }}>
                       Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
                     </p>
 
@@ -5512,7 +5513,7 @@ export default function Home() {
                         {userRank.badge} • Cấp {userRank.level} ({userRank.title})
                       </span>
 
-                      <span style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                      <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
                         Mục tiêu cấp tiếp theo: <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
                       </span>
 
@@ -5620,16 +5621,16 @@ export default function Home() {
                         border: "1px solid var(--ds-indigo-border)",
                       }}
                     >
-                      🎯 Đánh Giá Đầu Vào &amp; Cá Nhân Hóa Lộ Trình
+                      🎯 Kiểm Tra Trình Độ (30 câu)
                     </span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
-                      30 câu trắc nghiệm • 15-20 phút
+                    <span className="ge-mobile-hide" style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
+                      15-20 phút • Cá nhân hóa lộ trình
                     </span>
                   </div>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.3rem 0" }}>
+                  <h3 style={{ fontSize: "1.08rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.25rem 0" }}>
                     Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
                   </h3>
-                  <p style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
+                  <p className="ge-mobile-hide" style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
                     Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
                   </p>
                 </div>
@@ -5659,21 +5660,34 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* TOEIC AI Adaptive Fast-Access Hero Banner (Compact & Balanced) */}
-              <ToeicHeroBanner
-                initialTargetScore={750}
-                showStats={true}
-                isLight={isLight}
-                compact={true}
-              />
+              {/* Mobile-Only Progressive Disclosure Toggle for TOEIC & AI Showcase (Desktop always open) */}
+              <button
+                type="button"
+                className="ge-mobile-only-toggle ds-focusable"
+                aria-expanded={showMobileExtraShowcase}
+                onClick={() => setShowMobileExtraShowcase((prev) => !prev)}
+              >
+                <span>✨ Khám phá TOEIC AI &amp; Công nghệ Sentence X-Ray</span>
+                <span>{showMobileExtraShowcase ? "Thu gọn ▴" : "Mở xem ▾"}</span>
+              </button>
 
-              {/* Interactive Expert-Marketing AI Power Showcase (Sentence X-Ray, Error DNA & Twin Loop) */}
-              <AiPowerShowcase2026
-                compact={true}
-                onNavigateStudy={() => setCurrentView("study")}
-                onNavigateDiagnostic={() => setCurrentView("diagnostic")}
-                onNavigateVip={() => setCurrentView("vip")}
-              />
+              <div className={showMobileExtraShowcase ? "ge-mobile-collapsible is-open" : "ge-mobile-collapsible"}>
+                {/* TOEIC AI Adaptive Fast-Access Hero Banner (Compact & Balanced) */}
+                <ToeicHeroBanner
+                  initialTargetScore={750}
+                  showStats={true}
+                  isLight={isLight}
+                  compact={true}
+                />
+
+                {/* Interactive Expert-Marketing AI Power Showcase (Sentence X-Ray, Error DNA & Twin Loop) */}
+                <AiPowerShowcase2026
+                  compact={true}
+                  onNavigateStudy={() => setCurrentView("study")}
+                  onNavigateDiagnostic={() => setCurrentView("diagnostic")}
+                  onNavigateVip={() => setCurrentView("vip")}
+                />
+              </div>
 
               {/* Dashboard Zone A / Zone B Bento Switcher */}
               <div className="ge-bento-zone-tabs">
@@ -5714,58 +5728,58 @@ export default function Home() {
               {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone !== "analytics" && (
                 <div>
-                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID */}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
+                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile) */}
+                  <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Bài học đã hoàn thành
+                        Bài học đã xong
                       </div>
-                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
                         {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalLessonsCount}</span>
                       </div>
-                      <div style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600" }}>
+                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600" }}>
                         {overallLessonsProgress}% toàn bộ khóa học
                       </div>
                     </div>
 
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Câu hỏi đã giải đúng
+                        Câu đã giải đúng
                       </div>
-                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
                         {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalQuestionsCount}</span>
                       </div>
-                      <div style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
+                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
                         Tích lũy từ bài tập &amp; Quiz
                       </div>
                     </div>
 
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Tổng điểm kinh nghiệm
+                        Điểm kinh nghiệm
                       </div>
-                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
                         {userTracker.xp} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>XP</span>
                       </div>
-                      <div style={{ fontSize: "0.78rem", color: "var(--ds-warning)", fontWeight: "600" }}>
+                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-warning)", fontWeight: "600" }}>
                         {userRank.title}
                       </div>
                     </div>
 
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Sổ tay câu sai cần ôn
+                        Sổ tay câu sai
                       </div>
-                      <div style={{ fontSize: "1.65rem", fontWeight: "800", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.35rem 0" }}>
+                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.35rem 0" }}>
                         {savedMistakes.length} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>câu</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => setCurrentView("mistakes")}
                         className="ds-focusable"
-                        style={{ fontSize: "0.78rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0, fontWeight: "600" }}
+                        style={{ fontSize: "0.75rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0, fontWeight: "600" }}
                       >
-                        Xem và luyện lại ngay →
+                        Luyện lại →
                       </button>
                     </div>
                   </div>

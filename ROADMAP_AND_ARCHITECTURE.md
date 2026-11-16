@@ -2922,6 +2922,10 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Auto-Confirm Registration API (`/api/auth/register`):** Sử dụng `supabaseServer.auth.admin.createUser({ email_confirm: true })` (kèm Rate Limit 15 req/phút và fallback an toàn về `signUp`) để tạo tài khoản đã xác thực sẵn và tự động đăng nhập ngay lập tức, không cần mở email bấm link xác nhận.
 - [x] **2.15.28 Sửa Lỗi Tạo Đơn Thanh Toán VietQR Khi Đã Đăng Nhập (`lib/supabase/server.js`, `pages/api/monetization/checkout.js`):**
   * **User-Scoped Supabase Client (`getUserScopedClient(req)`):** Khắc phục lỗi `auth.uid()` bị `NULL` bên trong RPC `create_sepay_checkout_order` khi server có cấu hình `SUPABASE_SERVICE_ROLE_KEY`, giúp người dùng đã đăng nhập tạo đơn hàng SePay VietQR thành công 100%.
+- [x] **2.15.29 Tinh Giản Nội Dung & Progressive Disclosure Riêng Cho Mobile (`styles/design-system-2026.css`, `pages/index.js`, `AppShell2026.jsx`):**
+  * **Chuẩn UI/UX Mobile Web (`shadcn/ui`, `ant-design-mobile`, `ionic-framework`, `vaul`):** Chỉ áp dụng tại `@media (max-width: 767px)`, giữ nguyên 100% bố cục Desktop.
+  * **Thu Gọn Dashboard Mobile:** Ẩn mô tả dài, badge phụ và ảnh nền thừa trên Hero Banner; gom 4 thẻ KPI từ 4 hàng dọc thành **Lưới 2×2 tinh gọn (`.ge-kpi-grid`)**; đưa `ToeicHeroBanner` + `AiPowerShowcase2026` vào ngăn kéo thu gọn mặc định (`.ge-mobile-collapsible` + `.ge-mobile-only-toggle`) để người học chạm ngay **Mục tiêu hôm nay**.
+  * **Footer Siêu Gọn:** Thu gọn `.ge-brand-footer` trên mobile thành 1 dòng bản quyền `grammarpro.io.vn`.
 
 ---
 
