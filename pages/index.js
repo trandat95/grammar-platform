@@ -206,9 +206,10 @@ export default function Home() {
       if (saved === "light" || saved === "dark") {
         setThemeMode(saved);
         document.documentElement.setAttribute("data-theme", saved);
-      } else {
-        setThemeMode("light");
-        document.documentElement.setAttribute("data-theme", "light");
+      } else if (typeof window !== "undefined" && window.matchMedia) {
+        const osTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        setThemeMode(osTheme);
+        document.documentElement.setAttribute("data-theme", osTheme);
       }
     } catch (e) {}
   }, []);
@@ -3102,32 +3103,6 @@ export default function Home() {
           );
         })}
       </div>
-
-      <div className="ge-hide-desktop-toggle" style={{ padding: "0.75rem 0.9rem", borderTop: `1px solid ${T.border}`, backgroundColor: "var(--ds-bg-sub)" }}>
-        <button
-          type="button"
-          onClick={() => setSidebarCollapsed((p) => !p)}
-          className="ds-focusable"
-          style={{
-            width: "100%",
-            padding: "0.5rem 0.75rem",
-            borderRadius: "8px",
-            border: `1px solid ${T.border}`,
-            backgroundColor: "var(--ds-card)",
-            color: T.textSecondary,
-            fontSize: "0.78rem",
-            fontWeight: "600",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "0.45rem",
-          }}
-        >
-          <span aria-hidden="true">◧</span>
-          <span>{sidebarCollapsed ? "Mở rộng mục lục" : "Thu gọn mục lục"}</span>
-        </button>
-      </div>
     </>
   );
 
@@ -5573,8 +5548,8 @@ export default function Home() {
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
         {/* ============================================================== */}
         {currentView === "dashboard" && (
-          <div style={{ flex: 1, backgroundColor: T.bg, padding: "1.75rem 1.5rem" }}>
-            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+            <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
               {/* 1. COMPACT WELCOME STRIP (Streak, Level & 7-Day Calendar) */}
               <div
@@ -5867,12 +5842,12 @@ export default function Home() {
                 </div>
               )}
 
-              {/* ZONE A: 2026 SAAS BENTO 2-COLUMN COMMAND CENTER */}
+              {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone === "today" && (
                 <div>
                   {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile) */}
-                  <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.25rem" }}>
-                    <div className="ge-bento-card" style={{ padding: "1rem 1.2rem" }}>
+                  <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Bài học đã xong
                       </div>
@@ -5884,7 +5859,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="ge-bento-card" style={{ padding: "1rem 1.2rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Câu đã giải đúng
                       </div>
@@ -5896,7 +5871,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="ge-bento-card" style={{ padding: "1rem 1.2rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Điểm kinh nghiệm
                       </div>
@@ -5908,7 +5883,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="ge-bento-card" style={{ padding: "1rem 1.2rem" }}>
+                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Sổ tay câu sai
                       </div>
@@ -5926,10 +5901,16 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* BENTO 2-COLUMN GRID: LEFT (TODAY ACTION QUEUE & SM-2) | RIGHT (RADAR & 12 CHAPTERS) */}
-                  <div className="ge-bento-home-grid">
-                    {/* LEFT COLUMN: TODAY'S ACTION QUEUE + DAILY GOAL + SM-2 */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1.15rem" }}>
+                  {/* 3. TWO-COLUMN STUDY FOCUS: DAILY LESSON + SPACED REPETITION */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+                      gap: "1.15rem",
+                      alignItems: "stretch",
+                      marginBottom: "1.35rem",
+                    }}
+                  >
                     {/* SMART DAILY RECOMMENDATION CARD */}
                     <div
                       style={{
@@ -6026,103 +6007,6 @@ export default function Home() {
                       isLight={isLight}
                       onOpenLessonByCode={openLessonByCode}
                     />
-                    </div>
-
-                    {/* RIGHT COLUMN: 12-TOPIC RADAR INTELLIGENCE + 12 CHAPTER PROGRESS BARS */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1.15rem" }}>
-                      <div className="ge-bento-card">
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
-                          <div>
-                            <h3 style={{ fontSize: "1.02rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
-                              Phân tích &amp; Tiến trình 12 Chuyên đề
-                            </h3>
-                            <p style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", margin: "0.15rem 0 0 0" }}>
-                              Theo dõi độ thành thạo từng chuyên đề và bấm vào chương để học tiếp ngay
-                            </p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setDashboardZone("analytics")}
-                            className="ds-focusable"
-                            style={{
-                              fontSize: "0.75rem",
-                              fontWeight: "700",
-                              color: "var(--ds-accent)",
-                              backgroundColor: "var(--ds-accent-bg)",
-                              border: "1px solid var(--ds-accent-border)",
-                              borderRadius: "999px",
-                              padding: "0.28rem 0.7rem",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Xem chi tiết Radar →
-                          </button>
-                        </div>
-
-                        <div className="ge-chapter-mini-grid">
-                          {previewData.chapters.map((ch) => {
-                            const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
-                            const pct = Math.round((doneLessons / ch.lessons.length) * 100);
-                            return (
-                              <button
-                                key={ch.id}
-                                type="button"
-                                onClick={() => {
-                                  handleSelectChapter(ch);
-                                  setCurrentView("study");
-                                }}
-                                className="ds-focusable"
-                                style={{
-                                  textAlign: "left",
-                                  padding: "0.65rem 0.75rem",
-                                  borderRadius: "10px",
-                                  border: "1px solid var(--ds-border-subtle)",
-                                  backgroundColor: "var(--ds-bg-sub)",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.35rem" }}>
-                                  <span style={{ fontSize: "0.75rem", fontWeight: "700", color: "var(--ds-text-heading)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                    Ch.{ch.number}: {ch.title_vi}
-                                  </span>
-                                  <span
-                                    style={{
-                                      fontSize: "0.68rem",
-                                      fontWeight: "700",
-                                      padding: "0.1rem 0.4rem",
-                                      borderRadius: "999px",
-                                      flexShrink: 0,
-                                      backgroundColor: pct === 100 ? "var(--ds-success-bg)" : pct > 0 ? "var(--ds-accent-bg)" : "var(--ds-bg-elevated)",
-                                      color: pct === 100 ? "var(--ds-success)" : pct > 0 ? "var(--ds-accent)" : "var(--ds-text-muted)",
-                                    }}
-                                  >
-                                    {pct}%
-                                  </span>
-                                </div>
-                                <div style={{ width: "100%", height: "5px", backgroundColor: "var(--ds-bg-elevated)", borderRadius: "999px", overflow: "hidden" }}>
-                                  <div
-                                    style={{
-                                      width: `${pct}%`,
-                                      height: "100%",
-                                      backgroundColor: pct === 100 ? "var(--ds-btn-success)" : "var(--ds-btn-primary)",
-                                      borderRadius: "999px",
-                                    }}
-                                  />
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      <MasteryIntelligenceDashboard
-                        userId={!currentUser?.isGuest ? currentUser?.id : null}
-                        authToken={activeAuthToken}
-                        userTracker={userTracker}
-                        isLight={isLight}
-                        onStartAdaptivePractice={startAdaptivePractice}
-                      />
-                    </div>
                   </div>
 
                   {/* 4. HOME LEADERBOARD SHOWCASE (LIVE RANKING & ENERGY) */}
