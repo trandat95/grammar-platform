@@ -20,6 +20,7 @@ export default function SplitPassageReader({
   examMode = 'practice',
   isReviewMode = false,
   isVip = false,
+  crowdStats = null,
   onRequireVip = null,
   userAnswers = {},
   onSelectOption,
@@ -665,6 +666,10 @@ export default function SplitPassageReader({
                 {/* Explanation & Evidence Box (Basic for Free Exam Review, Deep AI for VIP & Practice) */}
                 {showFeedback && (() => {
                   const canSeeDeepAi = isVip || examMode === 'practice';
+                  const qCrowd = crowdStats?.[q.id];
+                  const crowdWrongPct = qCrowd?.attemptCount > 0 && userAns && qCrowd?.optionSelectionCounts?.[userAns]
+                    ? Math.round((qCrowd.optionSelectionCounts[userAns] / qCrowd.attemptCount) * 100)
+                    : null;
                   return (
                     <div
                       style={{
@@ -681,14 +686,27 @@ export default function SplitPassageReader({
                         color: 'var(--ds-text-secondary)'
                       }}
                     >
-                      <div className="toeic-flex-between" style={{ gap: '0.5rem' }}>
+                      <div className="toeic-flex-between" style={{ gap: '0.5rem', flexWrap: 'wrap' }}>
                         <span style={{ fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
                           💡 {canSeeDeepAi ? 'Giải thích AI & Dẫn chứng' : 'Đáp án & Giải thích cơ bản'} (Câu #{q.number})
                         </span>
-                        {!canSeeDeepAi && (
-                          <ToeicBadge variant="warning">VIP AI Locked</ToeicBadge>
-                        )}
+                        <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                          {qCrowd && qCrowd.correctRate !== null && (
+                            <ToeicBadge variant="muted">
+                              📊 {qCrowd.correctRate}% làm đúng ({qCrowd.attemptCount} lượt)
+                            </ToeicBadge>
+                          )}
+                          {!canSeeDeepAi && (
+                            <ToeicBadge variant="warning">VIP AI Locked</ToeicBadge>
+                          )}
+                        </div>
                       </div>
+
+                      {!isCorrectAnswer && crowdWrongPct !== null && crowdWrongPct > 0 && (
+                        <div style={{ fontSize: '0.76rem', color: 'var(--ds-warning)', fontWeight: 700 }}>
+                          ⚠️ Bẫy phổ biến: {crowdWrongPct}% học viên cũng chọn nhầm đáp án ({userAns}) ở câu này.
+                        </div>
+                      )}
 
                       {(q.explanation_vi || correctAnalysis?.ai_feedback_vi) && (
                         <div style={{ color: 'var(--ds-text)' }}>

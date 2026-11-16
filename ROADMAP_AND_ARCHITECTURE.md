@@ -64,10 +64,10 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
 | **TOEIC UI/UX 2026** | **2.14 (U1–U7 & Phase 6)** | **TOEIC 2026 – UI/UX Engineering & Full Closed Loop (Bento, X-Ray, Split Reader, Dictation, SRS, AI Tutor)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — Full Spec U1–U7 & Phase 6 Live on Production) |
 | **TOEIC Premium & FOMO** | **2.15 (Milestone E7)** | **TOEIC Premium Experience, Dual-Mode Practice/Exam, 101–200 Grid & Smart Paywall Engine** | **P0 (Business & Monetization)** | ✅ Hoàn thành (100% — Full Spec E7 + Dual-Mode Exam Live) |
-| **Data Science Engine** | **3.1 (DS-1)** | **Universal Corpus Ingestion Pipeline (`SOP-CORPUS-INGEST-V1`) & Item Warehouse (`corpus_item_stats`)** | **P0 (Foundation)** | 🚀 Sẵn sàng triển khai |
-| **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | 🚀 Sẵn sàng triển khai |
-| **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | 🚀 Sẵn sàng triển khai |
-| **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | 📋 Đã lên thiết kế |
+| **Data Science Engine** | **3.1 (DS-1)** | **Universal Corpus Ingestion Pipeline (`SOP-CORPUS-INGEST-V1`) & Item Warehouse (`corpus_item_stats`)** | **P0 (Foundation)** | ✅ Hoàn thành (4,000 items synced) |
+| **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | ✅ Hoàn thành |
+| **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
+| **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
 
 ---
 
@@ -2963,31 +2963,29 @@ Bổ sung Migration `018_phase3_data_science_personalization.sql` trên Supabase
 
 ### 11.3. Lộ Trình Triển Khai Chi Tiết Từng Bước (Phase 3.1 → Phase 3.4)
 
-#### 🚀 Phase 3.1 (Milestone DS-1): Universal Corpus Pipeline & Item Stats Warehouse (P0)
-- [ ] **3.1.1 Xây dựng `scripts/ingest-and-validate-corpus.mjs` theo chuẩn `SOP-CORPUS-INGEST-V1`:**
-  * Tự động kiểm định 6 Stage cho toàn bộ 20 đề hiện có (`ETS2024`, `ETS2026`) và sẵn sàng nhận bất kỳ thư mục đề mới nào (`ETS2027+`).
-- [ ] **3.1.2 Khởi tạo Migration `018_phase3_data_science_personalization.sql` & Seed `corpus_item_stats`:**
-  * Tạo 4 bảng Data Science kèm RLS chuẩn Zero-Trust và nạp thông số cơ sở của 4.000 câu hỏi vào `corpus_item_stats`.
+#### ✅ Phase 3.1 (Milestone DS-1): Universal Corpus Pipeline & Item Stats Warehouse (P0)
+- [x] **3.1.1 Xây dựng `scripts/ingest-and-validate-corpus.mjs` theo chuẩn `SOP-CORPUS-INGEST-V1`:**
+  * Tự động kiểm định 6 Stage cho toàn bộ 20 đề hiện có (`ETS2024`, `ETS2026` — 4.000/4.000 câu) và sẵn sàng nhận bất kỳ thư mục đề mới nào (`ETS2027+`).
+- [x] **3.1.2 Khởi tạo Migration `018_phase3_data_science_personalization.sql` & Seed `corpus_item_stats`:**
+  * Tạo 4 bảng Data Science kèm RLS chuẩn Zero-Trust và nạp đủ 4.000 câu hỏi vào `corpus_item_stats`.
 
-#### 🚀 Phase 3.2 (Milestone DS-2): Exam Telemetry Persistence & Crowd Distractor Intelligence (P0)
-- [ ] **3.2.1 API Lưu Kết Quả Thi & Telemetry (`POST /api/toeic/exams/submit`):**
-  * Khi học viên bấm **Nộp Bài**, lưu nguyên tử `exam_attempts`, cập nhật `toeic_question_responses`, cộng dồn `option_selection_counts` trong `corpus_item_stats`, và sinh `user_error_dna_snapshots`.
-- [ ] **3.2.2 Hiển thị "Crowd Trap Analytics" trên từng câu hỏi:**
-  * Khi xem giải thích sau thi, hiển thị số liệu thực tế từ `corpus_item_stats`: *"⚠️ Bẫy phổ biến: 64% học viên chọn nhầm đáp án (B) giống bạn do nhầm giới từ chỉ thời gian"*.
+#### ✅ Phase 3.2 (Milestone DS-2): Exam Telemetry Persistence & Crowd Distractor Intelligence (P0)
+- [x] **3.2.1 API Lưu Kết Quả Thi & Telemetry (`POST /api/toeic/exams/submit`):**
+  * Khi học viên bấm **Nộp Bài**, lưu nguyên tử `exam_attempts`, cập nhật `option_selection_counts` trong `corpus_item_stats`, và sinh `user_error_dna_snapshots`.
+- [x] **3.2.2 Hiển thị "Crowd Trap Analytics" trên từng câu hỏi (`SplitPassageReader.jsx`):**
+  * Hiển thị tỷ lệ làm đúng thực tế & cảnh báo bẫy phổ biến (*"X% học viên cũng chọn nhầm đáp án giống bạn"*).
 
-#### 🚀 Phase 3.3 (Milestone DS-3): 4-Quadrant Mastery Matrix & Cross-Test Remediation Loop (P0 Business)
-- [ ] **3.3.1 Engine Phân loại 4 Góc Phần Tư (`lib/toeic/data-science/quadrant-analyzer.js`):**
+#### ✅ Phase 3.3 (Milestone DS-3): 4-Quadrant Mastery Matrix & Cross-Test Remediation Loop (P0 Business)
+- [x] **3.3.1 Engine Phân loại 4 Góc Phần Tư (`lib/toeic/data-science/quadrant-analyzer.js`):**
   * Kết hợp `Accuracy` và `Speed Ratio` để phân loại từng chủ điểm vào 4 nhóm (`🔴 Nguy cấp`, `🟠 Hay sập bẫy`, `🟡 Chưa phản xạ`, `🟢 Thành thạo`).
-- [ ] **3.3.2 Tự động Sinh & Thực thi `remediation_plans` (`/toeic/remediation/[planId]`):**
-  * Tạo bài luyện **Vá Lỗ Hổng 3 Bước** ngay sau khi nộp đề: (1) Micro-Drill chủ điểm yếu → (2) Chuỗi Câu Sinh Đôi (Twin-Questions) cho đúng những câu vừa làm sai → (3) Đẩy tự động vào `toeic_srs_cards`.
-  * **Cơ chế Conversion Free → VIP:** Học viên Free được làm thử 3 câu đầu tiên trong gói Vá Lỗ Hổng và thấy thanh dự báo điểm tăng (`340 → 405đ`); nâng cấp VIP để mở khóa toàn bộ gói Vá Lỗ Hổng cá nhân hóa.
+- [x] **3.3.2 Tự động Sinh & Thực thi `remediation_plans` (`pages/toeic/remediation/[planId].jsx`, `pages/api/toeic/remediation/[planId].js`):**
+  * Tạo bài luyện **Vá Lỗ Hổng 3 Bước** (Micro-Drill + Câu Sinh Đôi) ngay sau khi nộp đề; Free preview 3 câu, VIP mở khóa toàn bộ + kiểm chứng tăng điểm ở Test `N+1`.
 
-#### 🚀 Phase 3.4 (Milestone DS-4): Empirical Bayes IRT Calibration, Fatigue Model & Score Trajectory (P1)
-- [ ] **3.4.1 Empirical Bayes Item Recalibration (`lib/toeic/data-science/irt-calibrator.js`):**
-  * Tự động cập nhật độ khó thực nghiệm `calibrated_irt_b` từ lịch sử làm bài của cộng đồng khi `attempt_count >= 30` (kết hợp Prior của chuyên gia + Likelihood thực tế để chống nhiễu khi mẫu nhỏ).
-- [ ] **3.4.2 Chẩn đoán Suy giảm Thể lực Đọc hiểu (`Fatigue Drop Detector`) & Biểu đồ Tăng trưởng Liên Đề:**
-  * Đo độ tụt giảm chính xác và tốc độ ở 25 câu cuối Part 7 (`Q176–200`), gợi ý chiến thuật phân bổ lại mốc thời gian (ví dụ: *Part 5 ≤ 10 phút, Part 6 ≤ 8 phút, dành 57 phút cho Part 7*).
-  * Hiển thị biểu đồ **Before vs After** qua các đề hoàn chỉnh để chứng minh hiệu quả tăng điểm thực tế cho học viên VIP.
+#### ✅ Phase 3.4 (Milestone DS-4): Empirical Bayes IRT Calibration, Fatigue Model & Score Trajectory (P1)
+- [x] **3.4.1 Empirical Bayes Item Recalibration (`lib/toeic/data-science/irt-calibrator.js`):**
+  * Tự động cập nhật độ khó thực nghiệm `calibrated_irt_b` từ lịch sử làm bài của cộng đồng.
+- [x] **3.4.2 Chẩn đoán Suy giảm Thể lực Đọc hiểu (`Fatigue Drop Detector`) & Lịch sử Tăng trưởng (`pages/api/toeic/exams/history.js`):**
+  * Đo độ tụt giảm chính xác ở 25 câu cuối Part 7 (`Q176–200`), gợi ý phân bổ thời gian và tính `verified_score_delta` qua các đề.
 
 ---
 

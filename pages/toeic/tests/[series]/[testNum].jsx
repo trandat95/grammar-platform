@@ -30,6 +30,9 @@ export default function TestSimulationPage() {
   const [showUnansweredDrawer, setShowUnansweredDrawer] = useState(false);
   const [showQuestionGrid, setShowQuestionGrid] = useState(true);
   const [gridFilter, setGridFilter] = useState('all'); // 'all' | 'unanswered' | 'wrong'
+  const [questionTimings, setQuestionTimings] = useState({});
+  const [serverDsResult, setServerDsResult] = useState(null);
+  const [isSubmittingExam, setIsSubmittingExam] = useState(false);
 
   const globalAuth = useGlobalAuth();
   const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
@@ -86,23 +89,31 @@ export default function TestSimulationPage() {
     [part5Questions, part6Questions, part7Questions]
   );
 
-  // Countdown Timer for Mock Exam Mode (75 mins = 4500s)
+  // Countdown Timer & Per-Question Telemetry Timing for Mock Exam Mode (75 mins = 4500s)
   useEffect(() => {
     if (examSessionMode !== 'exam' || examSubmitted || isLoading || isVipLocked || errorMsg) return;
     const interval = setInterval(() => {
       setExamElapsedSec(prev => prev + 1);
+      if (activeQuestionId) {
+        setQuestionTimings(prev => ({ ...prev, [activeQuestionId]: (prev[activeQuestionId] || 0) + 1 }));
+      }
       setExamTimeLeftSec(prev => {
         if (prev <= 1) {
           clearInterval(interval);
-          setExamSubmitted(true);
-          setIsReviewMode(true);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [examSessionMode, examSubmitted, isLoading, isVipLocked, errorMsg]);
+  }, [examSessionMode, examSubmitted, isLoading, isVipLocked, errorMsg, activeQuestionId]);
+
+  // Auto-submit when timer hits 0
+  useEffect(() => {
+    if (examSessionMode === 'exam' && examTimeLeftSec === 0 && !examSubmitted) {
+      finalizeExamSubmission();
+    }
+  }, [examTimeLeftSec, examSessionMode, examSubmitted]);
 
   const formatTimer = (totalSec) => {
     const m = Math.floor(totalSec / 60);
@@ -113,6 +124,8 @@ export default function TestSimulationPage() {
   const handleStartMode = (selectedMode) => {
     setExamSessionMode(selectedMode);
     setUserAnswers({});
+    setQuestionTimings({});
+    setServerDsResult(null);
     setExamSubmitted(false);
     setIsReviewMode(false);
     setExamTimeLeftSec(75 * 60);
@@ -120,6 +133,42 @@ export default function TestSimulationPage() {
     setShowUnansweredDrawer(false);
     setActivePart(5);
     if (part5Questions[0]) setActiveQuestionId(part5Questions[0].id);
+  };
+
+  const finalizeExamSubmission = async () => {
+    setExamSubmitted(true);
+    setIsReviewMode(true);
+    setShowUnansweredDrawer(false);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    setIsSubmittingExam(true);
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (globalAuth.activeAuthToken) {
+        headers.Authorization = `Bearer ${globalAuth.activeAuthToken}`;
+      }
+      const res = await fetch('/api/toeic/exams/submit', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          series,
+          testNum,
+          sessionMode: examSessionMode || 'exam',
+          elapsedSec: examElapsedSec,
+          userAnswers,
+          questionTimings,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setServerDsResult(data);
+      }
+    } catch (err) {
+      console.warn('Exam DS submit notice:', err?.message || err);
+    } finally {
+      setIsSubmittingExam(false);
+    }
   };
 
   const handleSubmitExam = () => {
@@ -131,12 +180,7 @@ export default function TestSimulationPage() {
     ) {
       return;
     }
-    setExamSubmitted(true);
-    setIsReviewMode(true);
-    setShowUnansweredDrawer(false);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    finalizeExamSubmission();
   };
 
   const unansweredQuestions = useMemo(
@@ -790,7 +834,36 @@ export default function TestSimulationPage() {
                   </div>
                 )}
 
+                {/* 3. DATA SCIENCE TELEMETRY: IRT THETA, FATIGUE DROP & REMEDIATION PLAN LINK */}
+                {serverDsResult?.analysis && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem', padding: '0.85rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)' }}>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
+                      <span>📐 <strong>IRT 3PL Ability (θ):</strong> {serverDsResult.analysis.thetaEstimate}</span>
+                      <span>⚡ <strong>Suy giảm thể lực Part 7:</strong> {serverDsResult.analysis.fatigue?.fatigueDropRate || 0}%</span>
+                      {typeof serverDsResult.verifiedDelta === 'number' && (
+                        <span style={{ color: serverDsResult.verifiedDelta >= 0 ? 'var(--ds-success)' : 'var(--ds-danger)', fontWeight: 800 }}>
+                          📈 Chênh lệch từ Lộ trình trước: {serverDsResult.verifiedDelta >= 0 ? `+${serverDsResult.verifiedDelta}` : serverDsResult.verifiedDelta} điểm
+                        </span>
+                      )}
+                    </div>
+                    {serverDsResult.analysis.fatigue?.hasFatigueWarning && serverDsResult.analysis.fatigue?.coachingTip && (
+                      <div style={{ fontSize: '0.78rem', color: 'var(--ds-warning)', fontWeight: 600 }}>
+                        ⚠️ {serverDsResult.analysis.fatigue.coachingTip}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  {serverDsResult?.remediationPlanId && (
+                    <a
+                      href={`/toeic/remediation/${serverDsResult.remediationPlanId}`}
+                      className="toeic-btn toeic-btn-primary"
+                      style={{ fontSize: '0.82rem', fontWeight: 800, textDecoration: 'none' }}
+                    >
+                      🚀 Bắt Đầu Lộ Trình Vá Lỗ Hổng ({(serverDsResult.analysis?.prescribedDrillQuestionIds?.length || 0) + (serverDsResult.analysis?.prescribedTwinQuestionIds?.length || 0)} câu đặc trị) &rarr;
+                    </a>
+                  )}
                   <button
                     type="button"
                     onClick={() => handleStartMode('exam')}
@@ -802,7 +875,7 @@ export default function TestSimulationPage() {
                   <button
                     type="button"
                     onClick={() => handleStartMode('practice')}
-                    className="toeic-btn toeic-btn-primary"
+                    className="toeic-btn toeic-btn-secondary"
                     style={{ fontSize: '0.82rem', fontWeight: 700 }}
                   >
                     🎯 Chuyển Sang Luyện Tập Tự Do
@@ -1193,6 +1266,7 @@ export default function TestSimulationPage() {
                       examMode={examSessionMode || 'practice'}
                       isReviewMode={isReviewMode || examSubmitted}
                       isVip={isVip}
+                      crowdStats={serverDsResult?.crowdStats || null}
                       onRequireVip={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
                       userAnswers={userAnswers}
                       onSelectOption={handleSelectOption}
@@ -1223,6 +1297,7 @@ export default function TestSimulationPage() {
                       examMode={examSessionMode || 'practice'}
                       isReviewMode={isReviewMode || examSubmitted}
                       isVip={isVip}
+                      crowdStats={serverDsResult?.crowdStats || null}
                       onRequireVip={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
                       userAnswers={userAnswers}
                       onSelectOption={handleSelectOption}
