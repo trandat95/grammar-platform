@@ -77,9 +77,9 @@ export default function ToeicHubPage() {
   const featureCards = [
     {
       id: 'diagnostic',
-      title: 'Kiểm Tra Trình Độ AI (3 Chặng)',
-      desc: '30 câu chẩn đoán điểm TOEIC & phát hiện 15 mẫu lỗi tư duy.',
-      badge: '12-15p • IRT 3PL',
+      title: 'Kiểm Tra Trình Độ (3 Chặng)',
+      desc: '30 câu đo đúng trình độ TOEIC hiện tại và chỉ ra các dạng lỗi bạn hay vướng.',
+      badge: '12-15p • Thích ứng',
       badgeVariant: 'primary',
       cta: 'Kiểm Tra Ngay',
       href: '/toeic/diagnostic',
@@ -93,13 +93,13 @@ export default function ToeicHubPage() {
     },
     {
       id: 'practice',
-      title: 'Luyện 24 Chủ Điểm (Sentence X-Ray)',
-      desc: 'Tô sáng neo ngữ pháp & luyện câu sinh đôi theo từng điểm yếu.',
+      title: 'Luyện 24 Dạng Bài (Soi Câu X-Ray)',
+      desc: 'Đánh dấu từ khóa trước/sau chỗ trống để chọn nhanh và luyện lại câu cùng dạng.',
       badge: '920 câu • Part 5-6',
       badgeVariant: 'success',
-      cta: 'Luyện X-Ray',
+      cta: 'Luyện Ngay',
       href: '/toeic/practice/GRM_POS_NOUN',
-      stats: '24 Chủ Điểm',
+      stats: '24 Dạng Bài',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20M12 2v20" />
@@ -110,7 +110,7 @@ export default function ToeicHubPage() {
     {
       id: 'tests',
       title: 'Kho 20 Đề TOEIC New Format 2026',
-      desc: '4.000 câu chia đôi màn hình & tự động bôi vàng dẫn chứng.',
+      desc: '4.000 câu chia đôi màn hình bài đọc, tự động bôi vàng câu chứa đáp án.',
       badge: '20 Đề • 4.000 Câu',
       badgeVariant: 'warning',
       cta: 'Chọn Đề Thi',
@@ -125,9 +125,9 @@ export default function ToeicHubPage() {
     },
     {
       id: 'dictation',
-      title: 'Phòng Nghe Chép Chính Tả (Dictation)',
-      desc: '540 tracks nghe chép cloze phản xạ tức thì & ôn lặp lại SRS.',
-      badge: '540 Tracks Audio',
+      title: 'Phòng Nghe Chép Chính Tả',
+      desc: '540 đoạn nghe ngắn giúp luyện phản xạ tai và nhắc ôn đúng lúc sắp quên.',
+      badge: '540 Đoạn Nghe',
       badgeVariant: 'primary',
       cta: 'Vào Phòng Nghe',
       href: '/toeic/dictation',
@@ -205,7 +205,7 @@ export default function ToeicHubPage() {
                 onClick={() => setHubTab('topics')}
                 className={`toeic-hub-tab-btn ${hubTab === 'topics' ? 'is-active' : ''}`}
               >
-                🎯 24 Chủ Điểm X-Ray
+                🎯 24 Dạng Bài Hay Thi
               </button>
               <button
                 type="button"
@@ -266,10 +266,10 @@ export default function ToeicHubPage() {
                 >
                   <div>
                     <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                      🎯 Luyện nhanh theo 24 Chủ Điểm Ngữ Pháp TOEIC
+                      🎯 Luyện nhanh theo 24 Dạng Bài Hay Ra Thi
                     </div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
-                      Làm thử miễn phí 4 câu cho mỗi chủ điểm — vá đúng lỗ hổng kiến thức.
+                      Làm thử miễn phí 4 câu cho mỗi dạng bài — tập trung đúng chỗ bạn hay mất điểm.
                     </div>
                   </div>
                   <button
@@ -278,7 +278,7 @@ export default function ToeicHubPage() {
                     onClick={() => setHubTab('topics')}
                     style={{ fontSize: '0.82rem', padding: '0.5rem 1rem' }}
                   >
-                    Xem 24 Chủ Điểm &rarr;
+                    Xem 24 Dạng Bài &rarr;
                   </button>
                 </div>
               </div>

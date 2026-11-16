@@ -2937,6 +2937,8 @@ Milestone 2.11 được xem là hoàn thành khi:
 - [x] **2.15.32 Tái Thiết Kế Trang TOEIC Hub Theo Chuẩn UX/UI Tinh Gọn (User-Focused Segmented Tabs — Cả Mobile & Desktop):**
   * **3 Tab Tập Trung (`pages/toeic/index.jsx`, `styles/toeic-ui-2026.css`):** Gom Hero compact + Segmented Tabs (`⚡ Lộ Trình & Luyện Ngay`, `🎯 24 Chủ Điểm X-Ray`, `✨ Công Nghệ AI`) giúp giảm > 70% chiều dài cuộn trang trên cả Desktop và Mobile mà vẫn giữ nguyên 100% tính năng.
   * **Topic Cards Tinh Gọn & Thu Gọn Mặc Định:** Thanh lọc nhóm chuyên đề cuộn ngang 1 dòng trên mobile (`.toeic-chip-scroll`), mặc định hiển thị 6 chủ điểm kèm nút mở rộng toàn bộ 24 chủ điểm, loại bỏ đoạn mô tả dài và progress bar giả.
+- [x] **2.15.33 Chuẩn Hóa Hành Văn Tiếng Việt Tự Nhiên & Outcome-First UX Copywriting (`AiPowerShowcase2026.jsx`, `ToeicHeroBanner.jsx`, `pages/toeic/index.jsx`, `pages/index.js`):**
+  * **Áp dụng nguyên tắc từ `vietnamese-ux-writing`, `vietnamese-language-skill`, `viet-nhu-nguoi`:** Loại bỏ các thuật ngữ hàn lâm/dịch máy (*"quang phổ"*, *"mô hình IRT 3PL"*, *"tư duy nhận thức"*, *"Error Trap DNA"*, *"đo ni đóng giày"*), chuyển sang câu chữ người thật ngắn gọn, tập trung vào lợi ích thực tế (*"Soi cấu trúc câu 3 giây"*, *"24 dạng bài hay ra thi"*, *"Làm lại câu tương tự để hết sai lần 2"*).
 
 ---
 

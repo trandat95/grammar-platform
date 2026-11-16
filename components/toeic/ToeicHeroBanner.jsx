@@ -176,11 +176,11 @@ export default function ToeicHeroBanner({
         >
           {compact ? (
             <>
-              Công nghệ <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>Sentence X-Ray</strong> phân tích quang phổ cấu trúc câu, mô hình <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>IRT 3PL</strong> theo dõi trình độ và lộ trình cá nhân hóa giúp bạn nhận diện 15 nhóm bẫy đề thi và tối ưu hóa điểm số.
+              Soi nhanh cấu trúc câu ngay trên đề, đo trình độ chuẩn xác từng câu và chỉ ra đúng dạng bài bạn hay mất điểm nhất.
             </>
           ) : (
             <>
-              Không chỉ luyện hàng nghìn câu hỏi, mà còn hiểu vì sao bạn làm sai. Công nghệ <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>Sentence X-Ray</strong> phân tích cấu trúc câu, hệ thống đánh giá năng lực <strong style={{ color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>IRT 3PL</strong> theo dõi trình độ và lộ trình học tập cá nhân hóa giúp bạn nhận diện 15 nhóm lỗi thường gặp, cải thiện điểm yếu và tiến gần hơn đến mục tiêu TOEIC.
+              Không chỉ làm đề xong rồi thôi — hệ thống chỉ rõ vì sao bạn sai, bạn hay vướng bẫy nào và gợi ý đúng dạng bài cần ôn để tăng điểm nhanh nhất.
             </>
           )}
         </p>

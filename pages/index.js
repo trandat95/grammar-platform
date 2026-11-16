@@ -5635,7 +5635,7 @@ export default function Home() {
                     Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
                   </h3>
                   <p className="ge-mobile-hide" style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
-                    Làm bài kiểm tra chẩn đoán để hệ thống xác định chính xác năng lực, phát hiện các điểm yếu chí mạng và xây dựng lộ trình học tập đo ni đóng giày cho riêng bạn.
+                    Làm bài kiểm tra ngắn để biết ngay trình độ hiện tại, chỗ nào hay mất điểm và nên học bài nào trước.
                   </p>
                 </div>
 
@@ -5671,7 +5671,7 @@ export default function Home() {
                 aria-expanded={showMobileExtraShowcase}
                 onClick={() => setShowMobileExtraShowcase((prev) => !prev)}
               >
-                <span>✨ Khám phá TOEIC AI &amp; Công nghệ Sentence X-Ray</span>
+                <span>✨ Xem cách AI giúp bạn hết sai lặp lại</span>
                 <span>{showMobileExtraShowcase ? "Thu gọn ▴" : "Mở xem ▾"}</span>
               </button>
 

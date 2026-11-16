@@ -43,47 +43,47 @@ export default function AiPowerShowcase2026({
   const tabs = [
     {
       id: "xray",
-      label: "🔬 1. Quang Phổ Sentence X-Ray™",
-      shortLabel: "🔬 1. Sentence X-Ray™",
+      label: "🔬 1. Soi Cấu Trúc Câu (X-Ray)",
+      shortLabel: "🔬 1. Soi Câu X-Ray",
       tag: "Giải trong 3s",
     },
     {
       id: "dna",
-      label: "🧬 2. Hồ Sơ Error Trap DNA™",
-      shortLabel: "🧬 2. Error Trap DNA™",
-      tag: "Bắt 15 bẫy tư duy",
+      label: "🩺 2. Bắt Bệnh Lỗi Hay Sai",
+      shortLabel: "🩺 2. Lỗi Hay Sai",
+      tag: "Tránh mất điểm oan",
     },
     {
       id: "loop",
-      label: "🔄 3. Vòng Lặp Câu Sinh Đôi™",
-      shortLabel: "🔄 3. Twin-Question Loop™",
-      tag: "Tăng điểm có kiểm chứng",
+      label: "🔄 3. Luyện Lại Câu Tương Tự",
+      shortLabel: "🔄 3. Luyện Câu Tương Tự",
+      tag: "Hết sai lần 2",
     },
   ];
 
   const pillars = [
     {
       icon: "🔬",
-      title: "X-Ray Ngữ Pháp 12 Chuyên Đề",
-      desc: "Tách cấu trúc Chủ-Vị, cụm giới từ gây nhiễu & từ loại ngay trên câu hỏi thay vì bắt bạn học vẹt.",
-      stat: "2.939 câu + 215 quy tắc",
+      title: "Nhìn Thấu Cấu Trúc Câu",
+      desc: "Gạch chân Chủ–Vị, bỏ qua cụm từ gây nhiễu để chọn đúng trong 3 giây thay vì học vẹt.",
+      stat: "2.939 câu + 215 mẹo giải",
       color: "var(--ds-accent)",
       bg: "var(--ds-accent-bg)",
       border: "var(--ds-accent-border)",
     },
     {
       icon: "📐",
-      title: "Ma Trận 4 Góc Phần Tư",
-      desc: "Đo đồng thời Độ chính xác × Tốc độ phản xạ để tách biệt 'hổng kiến thức gốc' với 'sập bẫy vội vàng'.",
-      stat: "IRT 2PL Bayesian AI",
+      title: "Biết Rõ Mình Yếu Ở Đâu",
+      desc: "Đo cả độ đúng lẫn tốc độ làm bài để tách biệt 'chưa hiểu bài' với 'chọn nhầm vì vội'.",
+      stat: "Chấm điểm theo độ khó",
       color: "var(--ds-indigo)",
       bg: "var(--ds-indigo-bg)",
       border: "var(--ds-indigo-border)",
     },
     {
       icon: "🧑‍🏫",
-      title: "Gia Sư AI Giải Thích 4 Cấp Độ",
-      desc: "Tự động điều chỉnh độ sâu giải thích từ Mất gốc (Beginner) đến Cao cấp 850+ chỉ với 1 lần chạm.",
+      title: "Giải Thích Dễ Hiểu Theo Trình Độ",
+      desc: "Dù đang mất gốc hay ôn mục tiêu 850+, lời giải luôn đi thẳng vào trọng tâm dễ nhớ.",
       stat: "4.000 câu TOEIC 2026",
       color: "var(--ds-purple)",
       bg: "var(--ds-purple-bg)",
@@ -91,9 +91,9 @@ export default function AiPowerShowcase2026({
     },
     {
       icon: "🚀",
-      title: "Lộ Trình Vá Lỗ Hổng Khép Kín",
-      desc: "Tự động trích xuất Câu Sinh Đôi (Twin Questions) cho đúng các bẫy bạn vừa sai và đo điểm tăng ở đề sau.",
-      stat: "Kiểm chứng Verified Delta",
+      title: "Sai Đâu Luyện Lại Đúng Chỗ Đó",
+      desc: "Sai bẫy nào hệ thống đưa ngay câu cùng dạng để bạn làm lại tới khi chắc tay và thấy điểm tăng.",
+      stat: "Kiểm chứng qua từng đề",
       color: "var(--ds-success)",
       bg: "var(--ds-success-bg)",
       border: "var(--ds-success-border)",
@@ -139,15 +139,15 @@ export default function AiPowerShowcase2026({
               textTransform: "uppercase",
             }}
           >
-            ✨ CÔNG NGHỆ ĐỘC QUYỀN TẠI GRAMMARPRO.IO.VN • AI DATA SCIENCE ENGINE
+            ✨ CÁCH HỌC THÔNG MINH TẠI GRAMMARPRO.IO.VN
           </span>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap", fontSize: "0.74rem", fontWeight: 700, color: "var(--ds-text-muted)" }}>
             <span style={{ padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-success-bg)", color: "var(--ds-success)", border: "1px solid var(--ds-success-border)" }}>
-              ⚡ X3 Tốc Độ Hiểu Bản Chất
+              ⚡ Hiểu bản chất trong 3 giây
             </span>
             <span style={{ padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-bg-elevated)", border: "1px solid var(--ds-border)" }}>
-              📊 6.939+ Dữ Liệu Phân Tích Sâu
+              📊 6.939+ câu hỏi có giải thích chi tiết
             </span>
           </div>
         </div>
@@ -163,7 +163,7 @@ export default function AiPowerShowcase2026({
             letterSpacing: "-0.02em",
           }}
         >
-          Tại Sao Học Ngữ Pháp &amp; Luyện Đề Cùng AI Giúp Bạn Tăng Điểm Nhanh Gấp 3 Lần Cách Học Truyền Thống?
+          Vì Sao Luyện Ngữ Pháp Với AI Giúp Bạn Hết Sai Lặp Lại?
         </h2>
 
         <p
@@ -175,9 +175,8 @@ export default function AiPowerShowcase2026({
             maxWidth: "860px",
           }}
         >
-          Thay vì học vẹt hàng trăm quy tắc rời rạc hay làm đề xong chỉ thấy con số <em>Đúng / Sai</em> vô hồn,{" "}
-          <strong style={{ color: "var(--ds-accent)" }}>GrammarPro.io.vn AI</strong> hoạt động như một{" "}
-          <strong>Nhà Khoa Học Dữ Liệu &amp; Bác Sĩ Ngữ Pháp 24/7</strong>: soi chiếu từng lỗi tư duy dưới kính hiển vi, bóc tách công thức câu và thiết kế bài tập đặc trị cho đến khi điểm số của bạn thực sự tăng lên.
+          Thay vì làm bài xong chỉ thấy <em>Đúng / Sai</em> rồi quên ngay,{" "}
+          <strong style={{ color: "var(--ds-accent)" }}>GrammarPro.io.vn</strong> chỉ thẳng chỗ trống cần điền từ loại gì, bạn hay vướng bẫy nào và đưa ngay bài tương tự để sửa dứt điểm từng lỗi sai.
         </p>
       </div>
 
@@ -390,39 +389,39 @@ export default function AiPowerShowcase2026({
         {activeTab === "dna" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
             <div style={{ fontSize: "0.83rem", color: "var(--ds-text-secondary)", lineHeight: 1.55 }}>
-              Hệ thống không chỉ chấm bạn <strong>Đúng hay Sai</strong> — AI đo <strong>từng giây làm bài</strong> và <strong>đáp án nhiễu bạn vừa bấm</strong> để vẽ ra Bản Đồ 4 Góc Phần Tư &amp; chỉ mặt đặt tên đúng <strong>15 bẫy tư duy</strong>:
+              Hệ thống không chỉ chấm <strong>Đúng hay Sai</strong> — AI ghi nhận <strong>thời gian suy nghĩ</strong> và <strong>đáp án bạn chọn nhầm</strong> để chia rõ 4 nhóm nguyên nhân mất điểm:
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.75rem" }}>
               {[
                 {
-                  badge: "🔴 NGUY CẤP (Sai + >20s)",
-                  title: "Lỗ Hổng Kiến Thức Gốc",
-                  action: "AI tự mở lại công thức nền tảng & 215 quy tắc ngữ pháp liên kết trực tiếp.",
+                  badge: "🔴 CẦN ÔN GẤP (Sai + >20s)",
+                  title: "Chưa Nắm Chắc Kiến Thức",
+                  action: "Hệ thống mở lại ngay công thức & mẹo nhận biết ngắn gọn để bạn nắm lại từ gốc.",
                   color: "var(--ds-danger)",
                   bg: "var(--ds-danger-bg)",
                   border: "var(--ds-danger-border)",
                 },
                 {
-                  badge: "🟠 BÁO ĐỘNG (Sai + <8s)",
-                  title: "Phản Xạ Sập Bẫy Nhanh",
-                  action: "Bạn hiểu nhầm bản chất! AI bắt trúng mã bẫy (VD: ERR_SVA_INTERVENING) và chặn lặp lại.",
+                  badge: "🟠 HAY MẮC BẪY (Sai + <8s)",
+                  title: "Làm Nhanh Nhưng Sập Bẫy",
+                  action: "Chỉ rõ bạn vừa vướng bẫy gì (như nhầm danh từ số nhiều đứng xen giữa) để lần sau không dính lại.",
                   color: "var(--ds-warning)",
                   bg: "var(--ds-warning-bg)",
                   border: "var(--ds-warning-border)",
                 },
                 {
-                  badge: "🟡 CẦN RÈN (Đúng + >18s)",
-                  title: "Đúng Nhưng Còn Chậm",
-                  action: "Biết làm nhưng tốn thời gian đọc dịch — AI đẩy Speed Drill ép phản xạ xuống dưới 10s.",
+                  badge: "🟡 CẦN TĂNG TỐC (Đúng + >18s)",
+                  title: "Làm Đúng Nhưng Còn Chậm",
+                  action: "Bạn hiểu bài nhưng còn dịch lâu — hệ thống đưa bài luyện tốc độ xuống dưới 10 giây.",
                   color: "var(--ds-accent)",
                   bg: "var(--ds-accent-bg)",
                   border: "var(--ds-accent-border)",
                 },
                 {
-                  badge: "🟢 BẢN NĂNG (Đúng + <10s)",
-                  title: "Thành Thạo Tuyệt Đối",
-                  action: "AI giảm tần suất lặp lại để bạn dồn 100% thời gian vào các chủ điểm kéo điểm cao nhất.",
+                  badge: "🟢 ĐÃ CHẮC TAY (Đúng + <10s)",
+                  title: "Phản Xạ Tự Nhiên",
+                  action: "Giảm bớt câu đã quen để bạn dồn thời gian ôn những phần kéo điểm nhiều nhất.",
                   color: "var(--ds-success)",
                   bg: "var(--ds-success-bg)",
                   border: "var(--ds-success-border)",
@@ -457,26 +456,26 @@ export default function AiPowerShowcase2026({
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.85rem" }}>
             {[
               {
-                step: "BƯỚC 01 • CHẨN ĐOÁN",
-                title: "Thi Thử & Chấm Điểm IRT 2PL",
-                desc: "Làm xong Đề N (hoặc Test Chẩn Đoán 15p), AI tính chính xác năng lực θ và xếp hạng Top 4 chủ điểm đang làm bạn mất nhiều điểm nhất (VD: -65đ).",
-                metric: "Phát hiện chính xác lỗ hổng",
+                step: "BƯỚC 01 • KIỂM TRA",
+                title: "Làm Đề & Đo Trình Độ Thực Tế",
+                desc: "Làm xong bài kiểm tra ngắn, hệ thống tính điểm chuẩn theo độ khó từng câu và chỉ ra 4 dạng bài làm bạn mất điểm nhiều nhất.",
+                metric: "Biết rõ mình đang mất điểm ở đâu",
                 color: "var(--ds-accent)",
                 bg: "var(--ds-accent-bg)",
               },
               {
-                step: "BƯỚC 02 • ĐẶC TRỊ",
-                title: "Khớp Câu Sinh Đôi (Twin Questions)",
-                desc: "Sai 1 câu bẫy Part 5/6/7? AI tự động rút ra bộ câu hỏi 'anh em sinh đôi' có cùng cấu trúc bẫy nhưng thay từ vựng để bạn làm lại cho tới khi thông thạo.",
-                metric: "Phá vỡ hoàn toàn lỗi lặp",
+                step: "BƯỚC 02 • SỬA SAI",
+                title: "Làm Ngay Câu Tương Tự",
+                desc: "Vừa sai 1 câu bẫy Part 5/6/7? Hệ thống đưa ngay bộ câu hỏi cùng cấu trúc bẫy nhưng đổi từ vựng để bạn làm lại cho quen tay.",
+                metric: "Không còn sai lặp lại cùng một lỗi",
                 color: "var(--ds-warning)",
                 bg: "var(--ds-warning-bg)",
               },
               {
                 step: "BƯỚC 03 • KIỂM CHỨNG",
-                title: "Đo Điểm Tăng Thực Tế Tại Đề N+1",
-                desc: "Khi sang Đề N+1, hệ thống tự động đối chiếu chênh lệch điểm Reading (Verified Score Delta) và xác nhận lỗ hổng cũ đã chuyển sang màu xanh 🟢.",
-                metric: "Thấy rõ điểm số đi lên",
+                title: "Thấy Điểm Tăng Ở Đề Tiếp Theo",
+                desc: "Khi làm sang đề tiếp theo, hệ thống tự so sánh điểm phần Đọc với đề trước để bạn thấy rõ từng phần yếu đã chuyển sang màu xanh 🟢.",
+                metric: "Điểm số tăng thật qua từng đề",
                 color: "var(--ds-success)",
                 bg: "var(--ds-success-bg)",
               },
