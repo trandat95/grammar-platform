@@ -10,15 +10,21 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  if (!checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 60, tier: 'toeic_test_get' })) {
-    return;
-  }
+  const rate = checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 60, tier: 'toeic_test_get', correlationId });
+  if (!rate.allowed) return;
 
   try {
     const { series = 'ETS2024', testNum = '1', mode = 'full' } = req.query;
 
-    const s = String(series).toUpperCase();
-    const tNum = parseInt(testNum, 10) || 1;
+    const s = String(series || '').trim().toUpperCase();
+    const tNum = Number.parseInt(String(testNum), 10);
+    if (!['ETS2024', 'ETS2026'].includes(s) || !Number.isInteger(tNum) || tNum < 1 || tNum > 10) {
+      return res.status(400).json({
+        success: false,
+        error: 'Tham số bộ đề hoặc số thứ tự đề không hợp lệ.',
+        correlationId
+      });
+    }
 
     // Server-Side Entitlement Check (E7.1 / E7.8)
     const gateCheck = await verifyTestServerAccess(req, s, tNum);

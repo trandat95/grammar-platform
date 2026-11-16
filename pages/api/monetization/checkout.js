@@ -1,11 +1,6 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
-import {
-  calculateServerOrderPricing,
-  computeSubscriptionEndDate,
-  createWebhookSignature,
-  normalizePaymentProviderAdapter,
-} from "../../../lib/monetization/payment-provider-adapter";
+import { computeSubscriptionEndDate } from "../../../lib/monetization/payment-provider-adapter";
 import { resolveUserEntitlement } from "../../../lib/monetization/entitlement-engine";
 import {
   attachCorrelationId,
@@ -60,11 +55,8 @@ export default async function handler(req, res) {
   const nowIso = now.toISOString();
 
   try {
-    // 0. Create Pending SePay VA VietQR Order (Activated strictly by SePay Webhook)
-    if (
-      action === "create_sepay_order" ||
-      ((action === "checkout" || action === "upgrade_switch") && String(provider || "").toLowerCase() === "sepay")
-    ) {
+    // 0. Create Pending SePay VA VietQR Order (Activated strictly by SePay Webhook regardless of requested provider)
+    if (action === "create_sepay_order" || action === "checkout" || action === "upgrade_switch") {
       if (!authUser) {
         return res.status(401).json({ success: false, error: "Vui lòng đăng nhập bằng tài khoản Supabase để thanh toán VietQR." });
       }
@@ -177,6 +169,9 @@ export default async function handler(req, res) {
 
     // 2. Start Transparent Free Trial (Day 0 -> Day 7)
     if (action === "start_trial") {
+      if (Number(plan.trial_days || 0) <= 0) {
+        return res.status(400).json({ success: false, error: "Gói đã chọn không áp dụng dùng thử miễn phí." });
+      }
       if (!process.env.SUPABASE_SERVICE_ROLE_KEY && authUser) {
         const { data: rpcTrial, error: rpcTrialErr } = await serverClient.rpc("start_vip_trial_order", {
           p_plan_code: plan_code,
@@ -195,9 +190,6 @@ export default async function handler(req, res) {
           entitlement,
           disclosure: `Bạn đang dùng thử miễn phí ${plan.trial_days} ngày. Sau ${new Date(rpcTrial.subscription.trial_ends_at).toLocaleDateString("vi-VN")}, giá niêm yết là ${Number(plan.price_vnd).toLocaleString()}đ/${plan.billing_cycle}. Bạn có thể hủy bất kỳ lúc nào.`,
         });
-      }
-      if (Number(plan.trial_days || 0) <= 0) {
-        return res.status(400).json({ success: false, error: "Gói đã chọn không áp dụng dùng thử miễn phí." });
       }
       const { data: priorTrial } = await serverClient
         .from("user_subscriptions")
@@ -254,174 +246,18 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3. Idempotent Paid Checkout / Upgrade Switch
-    const txIdemKey = String(idempotency_key || `chk_${resolvedUserId}_${plan.code}_${now.toISOString().slice(0, 16)}`);
-    const { data: existingTx } = await serverClient
-      .from("payment_transactions")
-      .select("*")
-      .eq("user_id", resolvedUserId)
-      .eq("idempotency_key", txIdemKey)
-      .maybeSingle();
-
-    if (existingTx) {
-      const ent = await resolveUserEntitlement({ serverClient, userId: resolvedUserId });
-      return res.status(200).json({
-        success: true,
-        deduped: true,
-        transaction: existingTx,
-        entitlement: ent,
-      });
-    }
-
-    // Validate Coupon strictly server-side if passed
-    let couponObj = null;
-    if (coupon_code) {
-      const { data: foundCoupon } = await serverClient
-        .from("discount_coupons")
-        .select("*")
-        .eq("code", String(coupon_code).trim().toUpperCase())
-        .maybeSingle();
-      if (!foundCoupon) {
-        return res.status(400).json({ success: false, error: "Mã giảm giá không tồn tại." });
-      }
-      const { data: alreadyUsed } = await serverClient
-        .from("user_coupons")
-        .select("id")
-        .eq("user_id", resolvedUserId)
-        .eq("coupon_id", foundCoupon.id)
-        .maybeSingle();
-      if (alreadyUsed) {
-        return res.status(400).json({ success: false, error: "Bạn đã sử dụng mã giảm giá này." });
-      }
-      couponObj = foundCoupon;
-    }
-
-    const pricing = calculateServerOrderPricing({ plan, coupon: couponObj, now });
-    if (pricing.couponError) {
-      return res.status(400).json({ success: false, error: pricing.couponError });
-    }
-
-    const adapter = normalizePaymentProviderAdapter(provider);
-    const isFailedSim = action === "simulate_failure";
-
-    const periodEnd = computeSubscriptionEndDate(plan.billing_cycle, now, false);
-    const externalTxId = `${adapter.key.toUpperCase()}_${Date.now()}_${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-
-    let activeSub = null;
-    if (!isFailedSim) {
-      // Cancel/supersede older active sub on upgrade switch
-      await serverClient
-        .from("user_subscriptions")
-        .update({ status: "canceled", updated_at: nowIso })
-        .eq("user_id", resolvedUserId)
-        .in("status", ["trialing", "active", "grace_period"]);
-
-      const { data: newSub, error: subInsErr } = await serverClient
-        .from("user_subscriptions")
-        .insert({
-          user_id: resolvedUserId,
-          plan_id: plan.id,
-          status: "active",
-          provider: adapter.key,
-          current_period_start: nowIso,
-          current_period_end: periodEnd.toISOString(),
-        })
-        .select()
-        .single();
-      if (subInsErr) throw subInsErr;
-      activeSub = newSub;
-    }
-
-    const { data: paymentTx, error: txErr } = await serverClient
-      .from("payment_transactions")
-      .insert({
-        user_id: resolvedUserId,
-        subscription_id: activeSub?.id || null,
-        plan_id: plan.id,
-        provider: adapter.key,
-        idempotency_key: txIdemKey,
-        amount_vnd: pricing.basePrice,
-        discount_vnd: pricing.discountVnd,
-        final_amount_vnd: pricing.finalPrice,
-        coupon_code: pricing.couponApplied,
-        status: isFailedSim ? "failed" : "succeeded",
-        provider_tx_id: externalTxId,
-        metadata: { adapter: adapter.label, billingCycle: plan.billing_cycle },
-      })
-      .select()
-      .single();
-    if (txErr) throw txErr;
-
-    if (isFailedSim) {
+    // 3. Payment Failure Simulation (Safe non-privileged test signal, never activates VIP)
+    if (action === "simulate_failure") {
       return res.status(402).json({
         success: false,
         paymentFailed: true,
-        transaction: paymentTx,
         error: "Thanh toán chưa hoàn tất (cổng thanh toán từ chối). Quyền tài khoản không thay đổi.",
       });
     }
 
-    if (couponObj) {
-      await Promise.all([
-        serverClient.from("user_coupons").insert({
-          user_id: resolvedUserId,
-          coupon_id: couponObj.id,
-          payment_tx_id: paymentTx.id,
-        }),
-        serverClient
-          .from("discount_coupons")
-          .update({ used_count: Number(couponObj.used_count || 0) + 1 })
-          .eq("id", couponObj.id),
-      ]);
-    }
-
-    // Record idempotent webhook audit trail + activate VIP role & funnel telemetry
-    const webhookPayload = { external_event_id: externalTxId, user_id: resolvedUserId, status: "succeeded", tx_id: paymentTx.id };
-    await Promise.all([
-      serverClient.from("profiles").update({ role: "VIP", updated_at: nowIso }).eq("id", resolvedUserId),
-      serverClient.from("subscription_events").insert({
-        subscription_id: activeSub.id,
-        user_id: resolvedUserId,
-        event_type: action === "upgrade_switch" ? "SUBSCRIPTION_UPGRADED" : "SUBSCRIPTION_ACTIVATED",
-        metadata: { planCode: plan.code, amountVnd: pricing.finalPrice, provider: adapter.key },
-      }),
-      serverClient.from("payment_webhook_events").upsert(
-        {
-          provider: adapter.key,
-          external_event_id: externalTxId,
-          signature_valid: true,
-          payload_hash: createWebhookSignature(webhookPayload).slice(0, 24),
-          payload: webhookPayload,
-          processing_status: "processed",
-          processed_at: nowIso,
-        },
-        { onConflict: "provider,external_event_id", ignoreDuplicates: true }
-      ),
-      serverClient.from("conversion_events").insert([
-        { user_id: resolvedUserId, funnel_stage: "PAYMENT", metadata: { planCode: plan.code, finalPrice: pricing.finalPrice } },
-        { user_id: resolvedUserId, funnel_stage: action === "upgrade_switch" ? "UPGRADE" : "SUBSCRIPTION_ACTIVE", metadata: { planCode: plan.code } },
-      ]),
-      serverClient.from("behavior_events").insert({
-        user_id: resolvedUserId,
-        event_category: "monetization",
-        event_name: "SUBSCRIPTION_PURCHASED",
-        metadata: { planCode: plan.code, provider: adapter.key, finalPrice: pricing.finalPrice },
-      }),
-      serverClient
-        .from("ab_assignments")
-        .update({ converted: true })
-        .eq("user_id", resolvedUserId)
-        .eq("experiment_key", "paywall_copy_value_v1"),
-    ]);
-
-    const entitlement = await resolveUserEntitlement({ serverClient, userId: resolvedUserId });
-
-    return res.status(200).json({
-      success: true,
-      deduped: false,
-      transaction: paymentTx,
-      subscription: activeSub,
-      entitlement,
+    return res.status(400).json({
+      success: false,
+      error: `Hành động '${action}' không được hỗ trợ hoặc yêu cầu xác thực qua SePay VietQR Webhook.`,
     });
   } catch (err) {
     return sendSafeServerError(res, {

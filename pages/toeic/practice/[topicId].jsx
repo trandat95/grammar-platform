@@ -27,20 +27,29 @@ export default function TopicPracticePage() {
   const [aiTutorContext, setAiTutorContext] = useState({ question: null, selectedOption: null });
 
   useEffect(() => {
-    if (!topicId) return;
+    if (!topicId || globalAuth.isLoading) return;
     let isMounted = true;
     setIsLoading(true);
     setErrorMsg(null);
 
-    fetch(`/api/toeic/practice/drill?topicId=${topicId}&limit=15`)
+    const headers = {};
+    if (globalAuth.activeAuthToken) {
+      headers.Authorization = `Bearer ${globalAuth.activeAuthToken}`;
+    }
+
+    fetch(`/api/toeic/practice/drill?topicId=${encodeURIComponent(topicId)}&limit=15`, { headers })
       .then(res => res.json())
       .then(data => {
         if (!isMounted) return;
-        if (data.success) {
+        if (data.topicInfo) {
           setTopicInfo(data.topicInfo);
+        }
+        if (data.success) {
           setQuestions(data.questions || []);
           setCurrentIndex(0);
           setCorrectCount(0);
+        } else if (data.locked || data.isVipRequired) {
+          setQuestions([]);
         } else {
           setErrorMsg(data.error || 'Không thể tải bài tập');
         }
@@ -53,7 +62,7 @@ export default function TopicPracticePage() {
       });
 
     return () => { isMounted = false; };
-  }, [topicId]);
+  }, [topicId, globalAuth.isLoading, globalAuth.activeAuthToken]);
 
   const currentQ = questions[currentIndex] || null;
   const isLockedForFree = topicInfo && parseInt(topicInfo.target_score_band || 450, 10) >= 550 && !isVip;

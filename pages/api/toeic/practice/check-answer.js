@@ -9,9 +9,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  if (!checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 60, tier: 'toeic_check_answer' })) {
-    return;
-  }
+  const rate = checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 60, tier: 'toeic_check_answer', correlationId });
+  if (!rate.allowed) return;
 
   try {
     const { questionId, selectedOption, timeSpentSec = 12, usedHint = false } = req.body || {};

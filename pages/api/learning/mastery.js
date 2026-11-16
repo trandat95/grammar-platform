@@ -47,7 +47,10 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "GET") {
-    const requestedUserId = authUser?.id || req.query?.user_id;
+    if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
+      return res.status(403).json({ success: false, error: "Forbidden: Cross-user mastery read denied." });
+    }
+    const requestedUserId = authUser?.id || null;
 
     if (!requestedUserId || !UUID_REGEX.test(requestedUserId)) {
       const guestConcepts = KNOWLEDGE_GRAPH.nodeList.map((n) => ({
@@ -234,6 +237,9 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    if (!authUser) {
+      return res.status(401).json({ success: false, error: "Unauthorized: Bearer session token required." });
+    }
     try {
       const {
         user_id,
@@ -247,13 +253,13 @@ export default async function handler(req, res) {
         device_id = null,
       } = req.body || {};
 
-      const resolvedUserId = authUser?.id || user_id;
+      if (user_id && authUser.id !== user_id) {
+        return res.status(403).json({ success: false, error: "Forbidden: Cross-user mastery mutation denied." });
+      }
+      const resolvedUserId = authUser.id;
 
       if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId)) {
         return res.status(400).json({ success: false, error: "Valid user_id UUID required." });
-      }
-      if (authUser && user_id && authUser.id !== user_id) {
-        return res.status(403).json({ success: false, error: "Forbidden: Cross-user mastery mutation denied." });
       }
       if (!question_id) {
         return res.status(400).json({ success: false, error: "Missing required 'question_id'." });

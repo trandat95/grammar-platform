@@ -75,26 +75,32 @@ export default async function handler(req, res) {
   try {
     if (event_type === "subscription.refunded" || event_type === "subscription.expired") {
       if (subscription_id) {
-        await serverClient
+        let subQuery = serverClient
           .from("user_subscriptions")
           .update({ status: "expired", updated_at: nowIso })
           .eq("id", subscription_id);
+        if (user_id) subQuery = subQuery.eq("user_id", user_id);
+        await subQuery;
       }
       if (payment_tx_id) {
-        await serverClient
+        let txQuery = serverClient
           .from("payment_transactions")
           .update({ status: "refunded" })
           .eq("id", payment_tx_id);
+        if (user_id) txQuery = txQuery.eq("user_id", user_id);
+        await txQuery;
       }
       if (user_id) {
         await serverClient.from("profiles").update({ role: "FREE", updated_at: nowIso }).eq("id", user_id);
       }
     } else if (event_type === "payment.failed" && subscription_id) {
       const graceEnd = new Date(now.getTime() + 3 * 86400000).toISOString();
-      await serverClient
+      let failQuery = serverClient
         .from("user_subscriptions")
         .update({ status: "grace_period", grace_period_ends_at: graceEnd, updated_at: nowIso })
         .eq("id", subscription_id);
+      if (user_id) failQuery = failQuery.eq("user_id", user_id);
+      await failQuery;
     }
 
     await serverClient.from("payment_webhook_events").upsert(

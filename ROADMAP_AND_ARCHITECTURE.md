@@ -2907,6 +2907,13 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Khách (Guest):** Chỉ được làm thử **20 câu cố định**, khóa tính năng `Trộn đề mới`, khóa chọn chuyên đề riêng và khóa `Đề Thích Ứng AI (50/30/20)` — nhấp vào sẽ mở ngay Modal Đăng nhập.
   * **Tài khoản Miễn phí (Free):** Giới hạn **20 câu/đề** và tối đa **3 lượt trộn đề** (tính chung cả `Trộn đề mới` và `Đề Thích Ứng AI`, lưu bền vững theo `userId` trong `localStorage`); dùng hết 3/3 lượt sẽ kích hoạt Smart Paywall Modal.
   * **Hiệu ứng FOMO & Tò mò VIP:** Sau mỗi câu trả lời hiển thị khung làm mờ **Bẫy Tư Duy & Mẹo Giải 3 Giây**; sau Câu 20 hiển thị **Bức Tường 30 Câu Bẫy Điểm 8.5–9+ (Câu 21 → 50)** kèm 3 câu xem trước thực tế bị làm mờ một phần để thúc đẩy nâng cấp VIP.
+- [x] **2.15.25 Kiểm Toán Bảo Mật Toàn Diện (OWASP Top 10 Pentest) & Vá Triệt Để 7 Lỗ Hổng API / IDOR / Privilege Escalation:**
+  * **Chặn Leo Thang Đặc Quyền Thanh Toán (`pages/api/monetization/checkout.js`):** Loại bỏ hoàn toàn nhánh kích hoạt VIP trực tiếp không qua xác thực giao dịch khi client truyền provider khác `"sepay"`; mọi luồng thanh toán đều bắt buộc khởi tạo đơn chờ SePay VietQR (`create_sepay_checkout_order`) và kiểm tra `trial_days > 0` ngay đầu nhánh `start_trial`.
+  * **Chặn Unauthenticated IDOR & Spoofing trên 5 API (`overview.js`, `learning/events.js`, `learning/mastery.js`, `learning/adaptive-mix.js`, `gamification/summary.js`):** Gỡ bỏ cơ chế fallback sang `req.query.user_id` / `req.body.user_id` khi thiếu Bearer token; bắt buộc JWT `authUser` (HTTP 401/403) cho toàn bộ thao tác ghi và đọc dữ liệu cá nhân.
+  * **Vá Rate-Limiter & Safe Error Handler (`lib/api/security-guard.js` & 9 API TOEIC):** Hỗ trợ alias `tier` và chữ ký positional `sendSafeServerError`, đồng thời sửa điều kiện `if (!rate.allowed) return;` tại cả 9 endpoint TOEIC để chặn HTTP 429 triệt để.
+  * **Chặn Path Traversal (`lib/toeic/toeic-repository.js`, `/api/toeic/tests/*`, `/api/toeic/dictation/*`):** Áp đặt allowlist nghiêm ngặt `series ∈ {'ETS2024', 'ETS2026'}` và `testNum ∈ [1..10]` trước khi ghép đường dẫn đọc file.
+  * **Gia cố Webhook HMAC & Cổng VIP Chuyên Đề 550+ (`payment-provider-adapter.js`, `webhook.js`, `/api/toeic/practice/drill.js`, `[topicId].jsx`, `boss-gate.jsx`):** Xóa fallback `SUPABASE_SERVICE_ROLE_KEY` làm HMAC secret, ràng buộc `.eq("user_id", user_id)` trong Webhook, và cưỡng chế kiểm tra quyền VIP phía máy chủ cho chuyên đề `target_score_band >= 550`.
+  * **Gia cố HTTP Security Headers (`next.config.js`):** Bổ sung `Content-Security-Policy` (`frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`), `Cross-Origin-Opener-Policy`, `X-XSS-Protection` và loại bỏ cấu hình `outputFileTracingIncludes` trùng lặp ở root.
 
 ---
 

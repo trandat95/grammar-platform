@@ -10,9 +10,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  if (!checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 40, tier: 'toeic_ai_tutor' })) {
-    return;
-  }
+  const rate = checkApiRateLimit(req, res, { windowMs: 60000, maxRequests: 40, tier: 'toeic_ai_tutor', correlationId });
+  if (!rate.allowed) return;
 
   // Server-side entitlement check for AI Tutor (Milestone E7.1)
   const authGate = await verifyAiTutorServerAccess(req);

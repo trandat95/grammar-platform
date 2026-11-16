@@ -57,7 +57,11 @@ export default async function handler(req, res) {
         return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
       }
 
-      const effectiveUserId = authUser?.id || requestedUserId;
+      if (authUser && requestedUserId && authUser.id !== requestedUserId) {
+        return res.status(403).json({ success: false, error: "Forbidden: Cross-user gamification read denied." });
+      }
+
+      const effectiveUserId = authUser?.id || null;
       const catalog = catalogData.achievements;
 
       if (!effectiveUserId || !UUID_REGEX.test(effectiveUserId)) {
@@ -88,10 +92,6 @@ export default async function handler(req, res) {
             reduced_motion: false,
           },
         });
-      }
-
-      if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
-        return res.status(403).json({ success: false, error: "Forbidden: Cross-user gamification read denied." });
       }
 
       const now = new Date();
@@ -151,19 +151,19 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const authUser = req.headers?.authorization ? await verifyServerSession(req) : null;
-    if (req.headers?.authorization && !authUser) {
-      return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
+    if (!authUser) {
+      return res.status(401).json({ success: false, error: "Unauthorized: Bearer session token required." });
     }
     const { action, user_id, leaderboard_visibility, reduced_motion, user_challenge_id, tzOffsetMinutes } =
       req.body || {};
-    const resolvedUserId = authUser?.id || user_id;
+    if (user_id && authUser.id !== user_id) {
+      return res.status(403).json({ success: false, error: "Forbidden: Cross-user mutation denied." });
+    }
+    const resolvedUserId = authUser.id;
     const tzOffset = Number(tzOffsetMinutes || DEFAULT_TZ_OFFSET_MINUTES);
 
     if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId)) {
       return res.status(400).json({ success: false, error: "Valid authenticated user_id UUID required." });
-    }
-    if (authUser && user_id && authUser.id !== user_id) {
-      return res.status(403).json({ success: false, error: "Forbidden: Cross-user mutation denied." });
     }
 
     try {

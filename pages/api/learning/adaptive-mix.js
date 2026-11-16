@@ -29,7 +29,11 @@ export default async function handler(req, res) {
   const mode = params.mode === "manual_review" ? "manual_review" : "adaptive";
   const targetTopicId = params.topicId || null;
   const completedQuestionIds = Array.isArray(params.completedQuestionIds) ? params.completedQuestionIds : [];
-  const requestedUserId = authUser?.id || params.user_id || null;
+
+  if (authUser && params.user_id && authUser.id !== params.user_id) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cross-user adaptive-mix read denied." });
+  }
+  const requestedUserId = authUser?.id || null;
 
   try {
     let twelveTopicMastery = [];

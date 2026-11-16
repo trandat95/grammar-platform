@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../../components/ui-2026/AppShell2026';
 import { ToeicBadge, ToeicButton, ToeicChoiceCard } from '../../../../components/toeic/ui';
+import useGlobalAuth from '../../../../hooks/useGlobalAuth';
 
 export default function BossGatePage() {
   const router = useRouter();
+  const globalAuth = useGlobalAuth();
   const { milestoneId } = router.query;
   const [isLight, setIsLight] = useState(true);
   const [milestone, setMilestone] = useState(null);
@@ -19,12 +21,17 @@ export default function BossGatePage() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    if (!milestoneId) return;
+    if (!milestoneId || globalAuth.isLoading) return;
     let isMounted = true;
     setIsLoading(true);
 
+    const headers = {};
+    if (globalAuth.activeAuthToken) {
+      headers.Authorization = `Bearer ${globalAuth.activeAuthToken}`;
+    }
+
     // Fetch milestone data and boss gate questions
-    fetch(`/api/toeic/roadmap/user_student`)
+    fetch(`/api/toeic/roadmap/${encodeURIComponent(globalAuth.currentUser?.id || 'guest')}`, { headers })
       .then(res => res.json())
       .then(data => {
         if (!isMounted) return;
@@ -37,7 +44,7 @@ export default function BossGatePage() {
         setTimeLeftSec(maxTime);
 
         // Fetch drill questions for this milestone
-        return fetch(`/api/toeic/practice/drill?topicId=${focusTopic}&limit=${qCount}`);
+        return fetch(`/api/toeic/practice/drill?topicId=${encodeURIComponent(focusTopic)}&limit=${qCount}`, { headers });
       })
       .then(res => res.json())
       .then(qData => {
@@ -50,7 +57,7 @@ export default function BossGatePage() {
       });
 
     return () => { isMounted = false; };
-  }, [milestoneId]);
+  }, [milestoneId, globalAuth.isLoading, globalAuth.activeAuthToken, globalAuth.currentUser?.id]);
 
   // Countdown Timer
   useEffect(() => {

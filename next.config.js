@@ -3,12 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  outputFileTracingIncludes: {
-    "/api/**/*": [
-      "./data/toeic/**/*",
-      "./ETS_Corpus_Normalized_Enriched_Database/**/*",
-    ],
-  },
   experimental: {
     outputFileTracingIncludes: {
       "/api/**/*": [
@@ -21,7 +15,9 @@ const nextConfig = {
     const securityHeaders = [
       { key: "X-Content-Type-Options", value: "nosniff" },
       { key: "X-Frame-Options", value: "DENY" },
+      { key: "X-XSS-Protection", value: "1; mode=block" },
       { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
       { key: "X-DNS-Prefetch-Control", value: "on" },
       {
         key: "Permissions-Policy",
@@ -30,6 +26,11 @@ const nextConfig = {
       {
         key: "Strict-Transport-Security",
         value: "max-age=63072000; includeSubDomains",
+      },
+      {
+        key: "Content-Security-Policy",
+        value:
+          "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' data: blob: https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';",
       },
     ];
 

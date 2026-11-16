@@ -20,13 +20,17 @@ export default async function handler(req, res) {
 
   const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
-  if (req.headers?.authorization && !authUser) {
-    return res.status(401).json({ success: false, error: "Invalid Bearer session token." });
+  if (!authUser) {
+    return res.status(401).json({ success: false, error: "Unauthorized: Bearer session token required." });
   }
 
   const { user_id, events, event_type, idempotency_key, question_id, concept_id, is_correct, response_time_ms, device_id, payload } =
     req.body || {};
-  const resolvedUserId = authUser?.id || user_id;
+
+  if (user_id && authUser.id !== user_id) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cross-user event write denied." });
+  }
+  const resolvedUserId = authUser.id;
 
   const eventList = Array.isArray(events)
     ? events
@@ -36,9 +40,6 @@ export default async function handler(req, res) {
 
   if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId) || !Array.isArray(eventList)) {
     return res.status(400).json({ success: false, error: "Valid user_id UUID and events array required." });
-  }
-  if (authUser && user_id && authUser.id !== user_id) {
-    return res.status(403).json({ success: false, error: "Forbidden: Cross-user event write denied." });
   }
 
   try {

@@ -89,10 +89,10 @@ export default async function handler(req, res) {
         return res.status(401).json({ success: false, error: "Invalid or expired Bearer session token." });
       }
 
-      const requestedUserId = authUser?.id || req.query?.user_id || null;
       if (authUser && req.query?.user_id && authUser.id !== req.query.user_id) {
         return res.status(403).json({ success: false, error: "Forbidden: Cross-user monetization read denied." });
       }
+      const requestedUserId = authUser?.id || null;
 
       const { plans, sepayGateway, features, ethicalCampaigns, paywallConfigs, mainExp } = catalog;
 
@@ -207,14 +207,14 @@ export default async function handler(req, res) {
     }
     const { action, user_id, event_name, session_id, metadata = {}, trigger_key, action_taken, plan_code, coupon_code, opt_out } =
       req.body || {};
-    const resolvedUserId = authUser?.id || user_id;
 
     if (authUser && user_id && authUser.id !== user_id) {
       return res.status(403).json({ success: false, error: "Forbidden: Cross-user mutation denied." });
     }
+    const resolvedUserId = authUser?.id || null;
 
     try {
-      // Coupon Validation (works cleanly for checkout UI preview)
+      // Coupon Validation (works cleanly for checkout UI preview; checks per-user usage only when authenticated)
       if (action === "validate_coupon") {
         if (!plan_code || !coupon_code) {
           return res.status(400).json({ success: false, error: "Cần chọn gói VIP và nhập mã giảm giá." });
@@ -245,6 +245,9 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, pricing });
       }
 
+      if (!authUser) {
+        return res.status(401).json({ success: false, error: "Unauthorized: Bearer session token required." });
+      }
       if (!resolvedUserId || !UUID_REGEX.test(resolvedUserId)) {
         return res.status(400).json({ success: false, error: "Valid user_id UUID required." });
       }
