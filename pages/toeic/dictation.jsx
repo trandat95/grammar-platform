@@ -25,8 +25,8 @@ export default function DictationPage() {
   return (
     <>
       <Head>
-        <title>Phòng Nghe Chép Chính Tả (Dictation Studio 540 Tracks) | Grammar Engine</title>
-        <meta name="description" content="Luyện nghe chép chính tả 540 tracks từ ETS 2026 với cloze inputs và kiểm tra tức thì." />
+        <title>Phòng Nghe Chép Chính Tả (Dictation Studio 540 Tracks) | GrammarPro.io.vn</title>
+        <meta name="description" content="Luyện nghe chép chính tả 540 tracks từ ETS 2026 với cloze inputs và kiểm tra tức thì trên grammarpro.io.vn." />
       </Head>
 
       <AppShell2026

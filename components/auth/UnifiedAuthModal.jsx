@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FocusTrapModal2026 from '../ui-2026/FocusTrapModal2026';
 import AccountProfileCard from './AccountProfileCard';
+import GrammarProLogo from '../ui-2026/GrammarProLogo';
 
 /**
  * UnifiedAuthModal Component
@@ -129,6 +130,7 @@ export default function UnifiedAuthModal({
         </div>
       ) : (
         <div>
+          <GrammarProLogo variant="auth" />
           {/* TAB SWITCHER */}
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', padding: '0.25rem', backgroundColor: 'var(--ds-bg-elevated)', borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-border)' }}>
             <button

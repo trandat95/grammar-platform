@@ -1,9 +1,23 @@
 {
-  "name": "Grammar Engine - Ngữ pháp Tiếng Anh Toàn diện",
-  "short_name": "Grammar Engine",
-  "description": "Nền tảng Tự học & Luyện thi Ngữ pháp Tiếng Anh Thông Minh",
+  "name": "GrammarPro.io.vn — Ngữ pháp Tiếng Anh & Luyện thi TOEIC AI",
+  "short_name": "GrammarPro",
+  "description": "Nền tảng Tự học Ngữ pháp Tiếng Anh Toàn diện & Luyện thi TOEIC Thích ứng AI tại grammarpro.io.vn",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090b",
-  "theme_color": "#2563eb"
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-grammarpro.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ]
 }

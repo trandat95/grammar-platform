@@ -94,7 +94,7 @@ export default function RemediationPlanPage() {
   return (
     <>
       <Head>
-        <title>Lộ Trình Vá Lỗ Hổng Cá Nhân Hóa | Grammar Engine</title>
+        <title>Lộ Trình Vá Lỗ Hổng Cá Nhân Hóa | GrammarPro.io.vn</title>
       </Head>
 
       <AppShell2026

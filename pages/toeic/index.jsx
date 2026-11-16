@@ -160,8 +160,8 @@ export default function ToeicHubPage() {
   return (
     <>
       <Head>
-        <title>TOEIC AI Adaptive & Practice Hub | Grammar Engine 2026</title>
-        <meta name="description" content="Nền tảng luyện thi TOEIC thích ứng với 4.000 câu hỏi chuẩn hóa, Sentence X-Ray và Dictation Studio 540 tracks." />
+        <title>TOEIC AI Adaptive &amp; Practice Hub | GrammarPro.io.vn</title>
+        <meta name="description" content="Nền tảng luyện thi TOEIC thích ứng với 4.000 câu hỏi chuẩn hóa, Sentence X-Ray và Dictation Studio 540 tracks tại grammarpro.io.vn." />
       </Head>
 
       <AppShell2026

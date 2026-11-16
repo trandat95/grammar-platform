@@ -18,6 +18,7 @@ import GamificationHub, { prefetchGamificationData } from "../components/gamific
 import LeaderboardPanel from "../components/gamification/LeaderboardPanel";
 import MonetizationHub, { prefetchMonetizationData, invalidateMonetizationClientCache } from "../components/monetization/MonetizationHub";
 import AppShell2026 from "../components/ui-2026/AppShell2026";
+import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
 import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
@@ -2874,7 +2875,8 @@ export default function Home() {
   return (
     <div data-theme={isLight ? "light" : "dark"} className={isLight ? "theme-light" : "theme-dark"}>
       <Head>
-        <title>Grammar Engine — Nền tảng Ngữ pháp Tiếng Anh Toàn diện</title>
+        <title>GrammarPro.io.vn — Nền tảng Ngữ pháp Tiếng Anh &amp; Luyện thi TOEIC AI</title>
+        <meta name="description" content="Học Ngữ pháp Tiếng Anh 12 Chuyên đề & Luyện thi TOEIC Thích ứng Data Science tại grammarpro.io.vn" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -3097,7 +3099,9 @@ export default function Home() {
         )}
 
         {(authTab === "login" || authTab === "register") && (
-          <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
+          <>
+            <GrammarProLogo variant="auth" />
+            <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", marginBottom: "1.25rem" }}>
             <button
               type="button"
               onClick={() => { setAuthTab("login"); setAuthError(""); setAuthSuccess(""); setAuthConfirmPassword(""); }}
@@ -3136,7 +3140,8 @@ export default function Home() {
             >
               Đăng ký mới
             </button>
-          </div>
+            </div>
+          </>
         )}
 
         {authTab === "forgot" ? (
@@ -5338,6 +5343,11 @@ export default function Home() {
                   }}
                 >
                   <div>
+                    <div style={{ marginBottom: "0.55rem" }}>
+                      <span className="ge-domain-pill" style={{ fontSize: "0.7rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                        🌐 GRAMMARPRO.IO.VN • ADAPTIVE AI LEARNING
+                      </span>
+                    </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                       <div className="ge-streak-orb" aria-hidden="true">
                         <span className="ge-streak-flame-live" style={{ fontSize: "1.55rem" }}>🔥</span>

@@ -143,7 +143,7 @@ export default function ToeicHeroBanner({
             <svg width={compact ? "11" : "13"} height={compact ? "11" : "13"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
-            Hệ Thống Luyện Thi TOEIC Thích Ứng Bằng AI • V3.0
+            GRAMMARPRO.IO.VN • TOEIC AI ADAPTIVE 2026
           </span>
         </div>
 

@@ -359,8 +359,8 @@ export default function TestSimulationPage() {
   return (
     <>
       <Head>
-        <title>{series} Test {String(testNum).padStart(2, '0')} | Grammar Engine</title>
-        <meta name="description" content="Thi thử và làm bài thi TOEIC trực tuyến chuẩn ETS." />
+        <title>{series} Test {String(testNum).padStart(2, '0')} | GrammarPro.io.vn</title>
+        <meta name="description" content="Thi thử và làm bài thi TOEIC trực tuyến chuẩn ETS trên grammarpro.io.vn." />
       </Head>
 
       <AppShell2026

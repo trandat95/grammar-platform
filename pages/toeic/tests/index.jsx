@@ -32,7 +32,7 @@ export default function TestsCatalogPage() {
   return (
     <>
       <Head>
-        <title>Ngân Hàng 20 Đề Thi Chuẩn ETS 2024 &amp; 2026 | Grammar Engine</title>
+        <title>Ngân Hàng 20 Đề Thi Chuẩn ETS 2024 &amp; 2026 | GrammarPro.io.vn</title>
         <meta name="description" content="Luyện trọn vẹn 20 đề thi TOEIC chuẩn hóa V3.0 (4.000 câu hỏi) kèm chia đôi màn hình Split-Passage Reader." />
       </Head>
 

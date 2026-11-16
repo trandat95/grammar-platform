@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import KitIcon from "./KitIcon";
+import GrammarProLogo from "./GrammarProLogo";
 import SyncStatusIndicator from "../sync/SyncStatusIndicator";
 import useGlobalAuth from "../../hooks/useGlobalAuth";
 import UnifiedAuthModal from "../auth/UnifiedAuthModal";
@@ -129,54 +130,12 @@ export default function AppShell2026({
     >
       {/* 1. Sticky Header (56px) */}
       <header className="ge-header-2026" role="banner">
-        {/* Left: Brand */}
-        <div className="ge-brand-wrap" style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 7,
-              backgroundColor: "var(--ds-btn-primary)",
-              color: "#ffffff",
-              display: "grid",
-              placeItems: "center",
-              fontWeight: 800,
-              fontSize: "0.85rem",
-              boxShadow: "var(--ds-shadow-sm)",
-              flexShrink: 0,
-            }}
-          >
-            G
-          </div>
-          <span
-            className="ge-brand-title"
-            style={{
-              fontWeight: 800,
-              fontSize: "0.92rem",
-              letterSpacing: "-0.02em",
-              color: "var(--ds-text-heading)",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            Grammar Engine
-          </span>
-          <span
-            className="ge-hide-laptop-compact"
-            style={{
-              fontSize: "0.66rem",
-              fontWeight: 700,
-              padding: "2px 6px",
-              borderRadius: "9999px",
-              backgroundColor: "var(--ds-bg-elevated)",
-              color: "var(--ds-text-muted)",
-              border: "1px solid var(--ds-card-border)",
-            }}
-          >
-            v1.4
-          </span>
-        </div>
+        {/* Left: Brand Logo & Domain Mark (grammarpro.io.vn) */}
+        <GrammarProLogo
+          variant="header"
+          size={30}
+          onClick={() => handleSelectHub("dashboard")}
+        />
 
         {/* Center: Desktop 5-Hub Segmented Navigation */}
         <nav className="ge-hub-nav" aria-label="Điều hướng chính">
@@ -655,7 +614,39 @@ export default function AppShell2026({
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>{children}</div>
       )}
 
-      {/* 5. Mobile Bottom Navigation Bar (5 Cognitive Hubs, Touch Target >= 44x44px) */}
+      {/* 4B. Global Brand Domain Signature Footer */}
+      <footer className="ge-brand-footer" data-no-dict="true">
+        <div className="ge-brand-footer-inner">
+          <GrammarProLogo variant="footer" />
+
+          <div className="ge-brand-footer-meta">
+            <div className="ge-brand-footer-links">
+              <button type="button" onClick={() => handleSelectHub("dashboard")} className="ge-brand-footer-link">
+                Trang chủ
+              </button>
+              <button type="button" onClick={() => handleSelectHub("study")} className="ge-brand-footer-link">
+                12 Chuyên đề
+              </button>
+              <button type="button" onClick={() => handleToeicNav("/toeic")} className="ge-brand-footer-link">
+                TOEIC AI Hub
+              </button>
+              <button type="button" onClick={() => handleToeicNav("/toeic/tests")} className="ge-brand-footer-link">
+                20 Đề ETS
+              </button>
+              <button type="button" onClick={() => handleSelectHub("vip")} className="ge-brand-footer-link" style={{ color: "var(--ds-warning)" }}>
+                ⭐ Nâng cấp VIP
+              </button>
+            </div>
+            <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+              <span>12 Chuyên đề • 2.939 câu Ngữ pháp • 20 Đề ETS • 4.000 câu TOEIC AI</span>
+              <span>•</span>
+              <span style={{ fontWeight: 700, color: "var(--ds-accent)" }}>© {new Date().getFullYear()} grammarpro.io.vn</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* 5. Mobile Bottom Navigation Bar (6 Cognitive Hubs, Touch Target >= 44x44px) */}
       <nav className="ge-mobile-bottom-nav" aria-label="Điều hướng di động" data-no-dict="true">
         {HUB_ITEMS.map((hub) => {
           const isActive =

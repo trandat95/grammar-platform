@@ -972,6 +972,117 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
+/* ============================================================
+   GRAMMARPRO.IO.VN — Brand Logo, Domain Badge & Footer Identity
+   ============================================================ */
+.ge-brand-logo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 3px 6px 3px 2px;
+  margin-left: -2px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  text-align: left;
+}
+
+.ge-brand-logo-btn:hover {
+  background-color: var(--ds-bg-elevated);
+  border-color: var(--ds-card-border);
+}
+
+.ge-brand-pro-accent {
+  background: linear-gradient(135deg, var(--ds-accent) 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ge-domain-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: var(--ds-accent-bg);
+  color: var(--ds-accent);
+  border: 1px solid var(--ds-accent-border);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ge-brand-footer {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--ds-bg-sub);
+  border-top: 1px solid var(--ds-card-border);
+  padding: 1.5rem 20px;
+  margin-top: auto;
+}
+
+.ge-brand-footer-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.ge-brand-footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.ge-brand-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.ge-brand-footer-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.ge-brand-footer-link:hover {
+  color: var(--ds-accent);
+  background-color: var(--ds-bg-elevated);
+}
+
+@media (max-width: 767px) {
+  .ge-brand-footer {
+    padding: 1.15rem 12px 1.25rem;
+  }
+  .ge-brand-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+  .ge-brand-footer-meta {
+    align-items: flex-start;
+  }
+}
+
 /* WCAG 2.3.3 Tôn trọng Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
