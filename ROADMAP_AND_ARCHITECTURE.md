@@ -2903,6 +2903,10 @@ Milestone 2.11 được xem là hoàn thành khi:
 - [x] **2.15.23 Thiết Kế Khu Vực Trình Diễn Công Nghệ AI & Phễu Chuyển Đổi Marketing Chuyên Sâu (`components/ui-2026/AiPowerShowcase2026.jsx`):**
   * **Interactive 3-Tab Live Demo:** Minh họa trực quan cơ chế **Quang Phổ Sentence X-Ray™** (bật/tắt tia X-Ray tách Chủ-Vị, loại bỏ bẫy giới từ nhiễu & khóa neo thời gian trong 0.2s), **Hồ Sơ Error Trap DNA™** (Ma trận 4 Góc Phần Tư Độ Chính Xác × Tốc Độ bắt 15 bẫy tư duy), và **Vòng Lặp Câu Sinh Đôi — Twin-Question Loop™** (kiểm chứng tăng điểm liên đề bằng IRT 2PL).
   * **4 Trụ Cột Sư Phạm AI & CTA Chuyển Đổi:** Nhúng trực tiếp tại Trang chủ Tổng quan (`pages/index.js`) và TOEIC Hub (`pages/toeic/index.jsx`), tương thích hoàn chỉnh Light/Dark Mode & Mobile Horizontal Tabs.
+- [x] **2.15.24 Cơ Chế Giới Hạn Quiz Theo Cấp Độ (Khách 20 Câu Cố Định, Free 3 Lượt Trộn Đề) & Bức Tường FOMO Kích Thích Chuyển Đổi VIP (`pages/index.js`):**
+  * **Khách (Guest):** Chỉ được làm thử **20 câu cố định**, khóa tính năng `Trộn đề mới`, khóa chọn chuyên đề riêng và khóa `Đề Thích Ứng AI (50/30/20)` — nhấp vào sẽ mở ngay Modal Đăng nhập.
+  * **Tài khoản Miễn phí (Free):** Giới hạn **20 câu/đề** và tối đa **3 lượt trộn đề** (tính chung cả `Trộn đề mới` và `Đề Thích Ứng AI`, lưu bền vững theo `userId` trong `localStorage`); dùng hết 3/3 lượt sẽ kích hoạt Smart Paywall Modal.
+  * **Hiệu ứng FOMO & Tò mò VIP:** Sau mỗi câu trả lời hiển thị khung làm mờ **Bẫy Tư Duy & Mẹo Giải 3 Giây**; sau Câu 20 hiển thị **Bức Tường 30 Câu Bẫy Điểm 8.5–9+ (Câu 21 → 50)** kèm 3 câu xem trước thực tế bị làm mờ một phần để thúc đẩy nâng cấp VIP.
 
 ---
 

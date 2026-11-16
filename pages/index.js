@@ -290,8 +290,10 @@ export default function Home() {
   const [showAnswers, setShowAnswers] = useState({});
 
   // Quiz State
+  const FREE_MAX_QUIZ_SHUFFLES = 3;
   const [selectedQuizTopic, setSelectedQuizTopic] = useState("ALL");
   const [activeQuizQuestions, setActiveQuizQuestions] = useState([]);
+  const [lockedQuizTeaserQuestions, setLockedQuizTeaserQuestions] = useState([]);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
@@ -299,7 +301,28 @@ export default function Home() {
   const [quizShowAnswers, setQuizShowAnswers] = useState({});
   const [adaptiveQuizMeta, setAdaptiveQuizMeta] = useState(null);
   const [adaptiveLoading, setAdaptiveLoading] = useState(false);
+  const [freeQuizShufflesUsed, setFreeQuizShufflesUsed] = useState(0);
+  const [quizGateBanner, setQuizGateBanner] = useState(null);
   const questionFocusTimestampsRef = useRef({});
+
+  // Load persisted Free shuffle quota per user & refresh quiz scope when user auth/role changes
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!currentUser || currentUser.isGuest || currentUser.id === "guest") {
+      setFreeQuizShufflesUsed(0);
+    } else {
+      try {
+        const stored = parseInt(localStorage.getItem(`grammar_free_quiz_shuffles_${currentUser.id}`) || "0", 10);
+        setFreeQuizShufflesUsed(Number.isFinite(stored) ? Math.max(0, stored) : 0);
+      } catch {
+        setFreeQuizShufflesUsed(0);
+      }
+    }
+    setQuizGateBanner(null);
+    if (activeQuizQuestions.length > 0) {
+      startNewQuiz(selectedQuizTopic, { isInitialLoad: true });
+    }
+  }, [currentUser?.id, currentUser?.role, currentUser?.isGuest]);
 
   // Per-User Duolingo-style Learning Tracker State
   const [userTracker, setUserTracker] = useState({
@@ -2247,12 +2270,63 @@ export default function Home() {
     return (userTracker.quizzesCompletedToday || 0) >= accessPolicy.freeDailyQuizLimit;
   }, [currentUser.role, userTracker.quizzesCompletedToday, accessPolicy.freeDailyQuizLimit]);
 
-  const startNewQuiz = (topicId = selectedQuizTopic) => {
-    if (isQuizLimitReached) {
-      alert(
-        `Bạn đã hoàn thành giới hạn ${accessPolicy.freeDailyQuizLimit} lượt Quiz hôm nay của gói Miễn phí. Hãy nâng cấp lên VIP để làm bài không giới hạn!`
-      );
-      return;
+  const startNewQuiz = (topicId = selectedQuizTopic, { isInitialLoad = false } = {}) => {
+    const isVipOrAdmin = currentUser?.role === "VIP" || currentUser?.role === "ADMIN";
+    const isGuestUser = Boolean(!currentUser || currentUser.isGuest || currentUser.id === "guest");
+
+    if (!isInitialLoad) {
+      if (isQuizLimitReached) {
+        openContextualSmartPaywall("milestone_100_q", {
+          title: "Bạn đã dùng hết lượt Quiz miễn phí hôm nay!",
+          description: `Tài khoản Miễn phí giới hạn ${accessPolicy.freeDailyQuizLimit} lượt Quiz/ngày. Nâng cấp VIP ngay để làm trọn bộ 50 câu/đề không giới hạn!`,
+        });
+        return;
+      }
+
+      if (isGuestUser) {
+        setQuizGateBanner({
+          type: "guest_login_required",
+          message:
+            "Khách chỉ được làm thử 20 câu cố định và chưa được trộn đề mới. Đăng nhập miễn phí để nhận ngay 3 lượt Trộn đề & mở Đề Thích Ứng AI!",
+        });
+        setShowSwitchAuthForm(false);
+        setAuthError("");
+        setAuthSuccess("🔑 Đăng nhập tài khoản miễn phí để nhận 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI (50/30/20)!");
+        setAuthTab("login");
+        setAuthModalOpen(true);
+        return;
+      }
+
+      if (!isVipOrAdmin) {
+        if (freeQuizShufflesUsed >= FREE_MAX_QUIZ_SHUFFLES) {
+          setQuizGateBanner({
+            type: "free_limit_reached",
+            message:
+              "Bạn đã dùng hết 3/3 lượt trộn đề của tài khoản Miễn phí! 30 câu bẫy phân loại điểm 8–9+ (Câu 21 → 50) & Trộn đề AI không giới hạn đang bị khóa.",
+          });
+          openContextualSmartPaywall("milestone_100_q", {
+            title: "Đã Hết 3/3 Lượt Trộn Đề Miễn Phí!",
+            description:
+              "Nâng cấp VIP để mở khóa trọn vẹn 50 câu mỗi đề (thay vì 20 câu), xem giải thích bẫy tư duy 3 giây và Trộn đề mới / Đề Thích Ứng AI 50/30/20 không giới hạn!",
+          });
+          return;
+        }
+        const nextUsed = freeQuizShufflesUsed + 1;
+        setFreeQuizShufflesUsed(nextUsed);
+        try {
+          if (typeof window !== "undefined") {
+            localStorage.setItem(`grammar_free_quiz_shuffles_${currentUser.id}`, String(nextUsed));
+          }
+        } catch {}
+        const remain = Math.max(0, FREE_MAX_QUIZ_SHUFFLES - nextUsed);
+        setQuizGateBanner({
+          type: remain === 0 ? "free_last_shuffle" : "free_shuffle_used",
+          message:
+            remain === 0
+              ? "⚡ Đây là lượt trộn đề miễn phí cuối cùng (3/3) của bạn! Muốn trộn thêm hoặc mở khóa Câu 21 → 50, hãy nâng cấp VIP."
+              : `✅ Đã trộn bộ 20 câu mới! Tài khoản Miễn phí của bạn còn ${remain}/3 lượt trộn đề.`,
+        });
+      }
     }
 
     let pool = [];
@@ -2268,11 +2342,18 @@ export default function Home() {
       return;
     }
 
-    const shuffled = [...pool].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 50);
+    // Guest always receives fixed 20 trial questions; Free gets 20 (shuffled only on explicit action); VIP/Admin gets full 50 shuffled
+    const orderedPool = isGuestUser || (isInitialLoad && !isVipOrAdmin)
+      ? [...pool]
+      : [...pool].sort(() => 0.5 - Math.random());
+
+    const limitCount = isVipOrAdmin ? 50 : 20;
+    const selected = orderedPool.slice(0, limitCount);
+    const teaserSlice = isVipOrAdmin ? [] : orderedPool.slice(limitCount, limitCount + 3);
 
     setAdaptiveQuizMeta(null);
     setActiveQuizQuestions(selected);
+    setLockedQuizTeaserQuestions(teaserSlice);
     setQuizAnswers({});
     setQuizResults(null);
     setQuizSubmitted(false);
@@ -2281,12 +2362,65 @@ export default function Home() {
   };
 
   const startAdaptivePractice = async ({ mode = "adaptive", topicId = null, count = 20 } = {}) => {
+    const isVipOrAdmin = currentUser?.role === "VIP" || currentUser?.role === "ADMIN";
+    const isGuestUser = Boolean(!currentUser || currentUser.isGuest || currentUser.id === "guest");
+
     if (isQuizLimitReached) {
-      alert(
-        `Bạn đã hoàn thành giới hạn ${accessPolicy.freeDailyQuizLimit} lượt Quiz hôm nay của gói Miễn phí. Hãy nâng cấp lên VIP để làm bài không giới hạn!`
-      );
+      openContextualSmartPaywall("milestone_100_q", {
+        title: "Bạn đã dùng hết lượt Quiz miễn phí hôm nay!",
+        description: `Tài khoản Miễn phí giới hạn ${accessPolicy.freeDailyQuizLimit} lượt/ngày. Nâng cấp VIP để luyện tập không giới hạn!`,
+      });
       return;
     }
+
+    if (isGuestUser) {
+      setQuizGateBanner({
+        type: "guest_login_required",
+        message:
+          "🎯 Đề Thích Ứng AI (50/30/20) yêu cầu đăng nhập tài khoản để AI phân tích hồ sơ lỗi sai của riêng bạn và mở 3 lượt trộn miễn phí!",
+      });
+      setShowSwitchAuthForm(false);
+      setAuthError("");
+      setAuthSuccess("🔑 Đăng nhập tài khoản để mở khóa Đề Thích Ứng AI (50/30/20) & nhận 3 lượt trộn đề miễn phí!");
+      setAuthTab("login");
+      setAuthModalOpen(true);
+      return;
+    }
+
+    if (!isVipOrAdmin) {
+      if (freeQuizShufflesUsed >= FREE_MAX_QUIZ_SHUFFLES) {
+        setQuizGateBanner({
+          type: "free_limit_reached",
+          message:
+            "Bạn đã hết 3/3 lượt trộn đề miễn phí! Mở khóa VIP để tạo Đề Thích Ứng AI (50/30/20) trọn bộ 50 câu không giới hạn.",
+        });
+        openContextualSmartPaywall("milestone_100_q", {
+          title: "Đã Hết 3/3 Lượt Trộn Đề Thích Ứng AI!",
+          description:
+            "Gói Miễn phí chỉ cho phép trộn tối đa 3 lần (20 câu/đề). Nâng cấp VIP để AI trộn Đề Thích Ứng 50/30/20 không giới hạn dựa trên điểm yếu thật của bạn!",
+        });
+        return;
+      }
+
+      const nextUsed = freeQuizShufflesUsed + 1;
+      setFreeQuizShufflesUsed(nextUsed);
+      try {
+        if (typeof window !== "undefined") {
+          localStorage.setItem(`grammar_free_quiz_shuffles_${currentUser.id}`, String(nextUsed));
+        }
+      } catch {}
+      const remain = Math.max(0, FREE_MAX_QUIZ_SHUFFLES - nextUsed);
+      setQuizGateBanner({
+        type: remain === 0 ? "free_last_shuffle" : "free_shuffle_used",
+        message:
+          remain === 0
+            ? "⚡ Bạn vừa dùng lượt trộn Đề Thích Ứng cuối cùng (3/3) của gói Miễn phí! Bản dùng thử chỉ hiển thị 20/50 câu."
+            : `🧠 Đã tạo Đề Thích Ứng 20 câu! Bạn còn ${remain}/3 lượt trộn đề miễn phí.`,
+      });
+    }
+
+    const effectiveCount = isVipOrAdmin ? Math.max(count, 50) : 20;
+    const teaserPool = isVipOrAdmin ? [] : (quizData.topics.flatMap((t) => t.questions).slice(20, 23));
 
     setAdaptiveLoading(true);
     try {
@@ -2301,7 +2435,7 @@ export default function Home() {
           user_id: !currentUser?.isGuest ? currentUser?.id : null,
           mode,
           topicId,
-          count,
+          count: effectiveCount,
           completedQuestionIds: userTracker?.completedQuestions || [],
         }),
       });
@@ -2310,7 +2444,7 @@ export default function Home() {
       let meta = json;
       if (!res.ok || !Array.isArray(resultQuestions) || resultQuestions.length === 0) {
         meta = buildAdaptiveQuestionSet({
-          count,
+          count: effectiveCount,
           targetTopicId: topicId,
           mode,
           completedQuestionIds: userTracker?.completedQuestions || [],
@@ -2318,7 +2452,8 @@ export default function Home() {
         resultQuestions = meta.questions;
       }
 
-      setActiveQuizQuestions(resultQuestions || []);
+      setActiveQuizQuestions((resultQuestions || []).slice(0, effectiveCount));
+      setLockedQuizTeaserQuestions(teaserPool);
       setAdaptiveQuizMeta({
         mode: meta.mode || mode,
         topicId,
@@ -2336,12 +2471,13 @@ export default function Home() {
       }
     } catch {
       const fallback = buildAdaptiveQuestionSet({
-        count,
+        count: effectiveCount,
         targetTopicId: topicId,
         mode,
         completedQuestionIds: userTracker?.completedQuestions || [],
       });
-      setActiveQuizQuestions(fallback.questions || []);
+      setActiveQuizQuestions((fallback.questions || []).slice(0, effectiveCount));
+      setLockedQuizTeaserQuestions(teaserPool);
       setAdaptiveQuizMeta({
         mode: fallback.mode || mode,
         topicId,
@@ -3986,7 +4122,7 @@ export default function Home() {
           if (hubId === "vip") prefetchMonetizationData({ userId: uid, authToken: activeAuthToken });
         }}
         onStartQuizIfEmpty={() => {
-          if (activeQuizQuestions.length === 0) startNewQuiz("ALL");
+          if (activeQuizQuestions.length === 0) startNewQuiz("ALL", { isInitialLoad: true });
         }}
         currentChapterTitle={`Chương ${String(selectedChapter?.number || 1).padStart(2, "0")}: ${selectedChapter?.title_vi || ""}`}
         sidebarCollapsed={sidebarCollapsed}
@@ -6866,150 +7002,309 @@ export default function Home() {
               )}
 
               {/* Quiz Control Card */}
-              <div
-                style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "8px",
-                  padding: "1.5rem",
-                  marginBottom: "1.75rem",
-                  boxShadow: T.shadow,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                  <div>
-                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
-                      Bộ đề Quiz 50 câu ngẫu nhiên
-                    </h1>
-                    <p style={{ fontSize: "0.85rem", color: T.textMuted, marginTop: "0.35rem", lineHeight: "1.5" }}>
-                      Hệ thống tự động rút trích 50 câu hỏi từ ngân hàng 2,900+ bài tập. Các câu trả lời sai sẽ được ghi nhận vào Sổ tay của {currentUser.name}.
-                    </p>
-                  </div>
+              {(() => {
+                const isVipOrAdmin = currentUser.role === "VIP" || currentUser.role === "ADMIN";
+                const isGuestUser = Boolean(currentUser.isGuest || currentUser.id === "guest");
+                const shufflesLeft = Math.max(0, FREE_MAX_QUIZ_SHUFFLES - freeQuizShufflesUsed);
+                const freeExhausted = !isVipOrAdmin && !isGuestUser && shufflesLeft === 0;
 
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                    <button
-                      disabled={isQuizLimitReached || adaptiveLoading}
-                      onClick={() => startAdaptivePractice({ mode: "adaptive", count: 20 })}
-                      style={{
-                        padding: "0.5rem 1rem",
-                        backgroundColor: isQuizLimitReached ? T.border : T.accent,
-                        border: `1px solid ${T.accent}`,
-                        borderRadius: "6px",
-                        color: isQuizLimitReached ? T.textMuted : "#ffffff",
-                        fontSize: "0.825rem",
-                        fontWeight: "700",
-                        cursor: isQuizLimitReached || adaptiveLoading ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {adaptiveLoading ? "Đang trộn đề..." : "🎯 Đề Thích Ứng (50/30/20)"}
-                    </button>
-
-                    <button
-                      disabled={isQuizLimitReached}
-                      onClick={() => startNewQuiz(selectedQuizTopic)}
-                      style={{
-                        padding: "0.5rem 1rem",
-                        backgroundColor: isQuizLimitReached ? "var(--ds-bg-active)" : "var(--ds-btn-primary)",
-                        border: "1px solid var(--ds-border-strong)",
-                        borderRadius: "6px",
-                        color: isQuizLimitReached ? "var(--ds-text-muted)" : "#ffffff",
-                        fontSize: "0.825rem",
-                        fontWeight: "600",
-                        cursor: isQuizLimitReached ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      Trộn đề mới (50 câu)
-                    </button>
-
-                    {!quizSubmitted && activeQuizQuestions.length > 0 && (
-                      <button
-                        onClick={submitQuiz}
-                        style={{
-                          padding: "0.5rem 1.25rem",
-                          backgroundColor: "var(--ds-btn-success)",
-                          border: "none",
-                          borderRadius: "6px",
-                          color: "#ffffff",
-                          fontSize: "0.825rem",
-                          fontWeight: "700",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Nộp bài chấm điểm
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {adaptiveQuizMeta && (
+                return (
                   <div
                     style={{
-                      marginTop: "1rem",
-                      padding: "0.75rem 1rem",
-                      borderRadius: "8px",
-                      backgroundColor: T.bgElevated,
-                      border: `1px solid ${T.borderSubtle}`,
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                      gap: "0.6rem",
-                      fontSize: "0.8rem",
+                      backgroundColor: T.card,
+                      border: `1px solid ${freeExhausted ? "var(--ds-warning)" : T.border}`,
+                      borderRadius: "10px",
+                      padding: "1.5rem",
+                      marginBottom: "1.75rem",
+                      boxShadow: T.shadow,
                     }}
                   >
-                    <span style={{ color: T.textHeading, fontWeight: "700" }}>
-                      {adaptiveQuizMeta.mode === "manual_review"
-                        ? `🎯 Chế độ Ôn tập Chuyên đề #${adaptiveQuizMeta.topicId}`
-                        : `🧠 Đề Thích Ứng 50/30/20 (${adaptiveQuizMeta.preferredDifficulty || "Adaptive"})`}
-                    </span>
-                    <span style={{ color: T.textMuted }}>
-                      Weak: <strong style={{ color: T.warning }}>{adaptiveQuizMeta.breakdown?.weakCount ?? 0}</strong> • SR Review:{" "}
-                      <strong style={{ color: T.accent }}>{adaptiveQuizMeta.breakdown?.reviewCount ?? 0}</strong> • Challenge:{" "}
-                      <strong style={{ color: T.success }}>{adaptiveQuizMeta.breakdown?.challengeCount ?? 0}</strong>
-                    </span>
-                  </div>
-                )}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                      <div style={{ flex: "1 1 320px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.35rem" }}>
+                          <span
+                            style={{
+                              fontSize: "0.7rem",
+                              fontWeight: 800,
+                              padding: "0.18rem 0.55rem",
+                              borderRadius: "9999px",
+                              backgroundColor: isVipOrAdmin ? "var(--ds-success-bg)" : freeExhausted ? "var(--ds-danger-bg)" : "var(--ds-warning-bg)",
+                              color: isVipOrAdmin ? "var(--ds-success)" : freeExhausted ? "var(--ds-danger)" : "var(--ds-warning)",
+                              border: `1px solid ${isVipOrAdmin ? "var(--ds-success-border)" : freeExhausted ? "var(--ds-danger-border)" : "var(--ds-warning-border)"}`,
+                            }}
+                          >
+                            {isVipOrAdmin
+                              ? "⭐ VIP UNLIMITED • 50 CÂU / ĐỀ"
+                              : isGuestUser
+                              ? "🔒 KHÁCH DÙNG THỬ • 20 / 50 CÂU (KHÔNG TRỘN ĐỀ)"
+                              : `⚡ FREE ACCOUNT • 20 / 50 CÂU • CÒN ${shufflesLeft}/3 LƯỢT TRỘN`}
+                          </span>
+                        </div>
+                        <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em", margin: 0 }}>
+                          {isVipOrAdmin
+                            ? "Bộ đề Quiz 50 câu ngẫu nhiên & Đề Thích Ứng AI"
+                            : isGuestUser
+                            ? "Bộ đề Quiz Dùng Thử (Giới hạn 20 câu cố định)"
+                            : `Bộ đề Quiz Ngẫu Nhiên (Còn ${shufflesLeft}/3 lượt trộn đề)`}
+                        </h1>
+                        <p style={{ fontSize: "0.85rem", color: T.textMuted, marginTop: "0.35rem", lineHeight: "1.5" }}>
+                          {isVipOrAdmin
+                            ? `Hệ thống rút trích trọn vẹn 50 câu từ kho 2.939+ bài tập kèm phân tích bẫy AI không giới hạn cho ${currentUser.name}.`
+                            : isGuestUser
+                            ? "Khách chưa đăng nhập chỉ làm được 20 câu mặc định và bị khóa Trộn đề mới / Đề Thích Ứng AI. Đăng nhập để mở khóa 3 lượt trộn đề!"
+                            : "Tài khoản Miễn phí chỉ mở 20 câu/đề và tối đa 3 lượt trộn đề. 30 câu bẫy điểm 8.5–9+ (Câu 21 → 50) & Mẹo giải 3 giây đang bị khóa VIP."}
+                        </p>
+                      </div>
 
-                {/* Topic Selector & Progress Bar */}
-                <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid var(--ds-border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Chủ đề kiểm tra:</label>
-                    <select
-                      disabled={isQuizLimitReached}
-                      value={selectedQuizTopic}
-                      onChange={(e) => {
-                        setSelectedQuizTopic(e.target.value);
-                        startNewQuiz(e.target.value);
-                      }}
-                      style={{
-                        backgroundColor: "var(--ds-card)",
-                        border: `1px solid ${T.border}`,
-                        borderRadius: "6px",
-                        padding: "0.45rem 0.75rem",
-                        color: T.text,
-                        fontSize: "0.825rem",
-                        outline: "none",
-                        cursor: isQuizLimitReached ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      <option value="ALL">Toàn bộ 12 Chương (Tổng hợp)</option>
-                      {quizData.topics.map((t) => (
-                        <option key={t.id} value={t.id}>
-                          Chương {t.number}: {t.title_vi} ({t.question_count} câu)
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                        <button
+                          type="button"
+                          disabled={isQuizLimitReached || adaptiveLoading}
+                          onClick={() => startAdaptivePractice({ mode: "adaptive", count: isVipOrAdmin ? 50 : 20 })}
+                          style={{
+                            padding: "0.5rem 0.95rem",
+                            backgroundColor: isQuizLimitReached
+                              ? T.border
+                              : isGuestUser || freeExhausted
+                              ? "var(--ds-warning-bg)"
+                              : T.accent,
+                            border: `1px solid ${isGuestUser || freeExhausted ? "var(--ds-warning)" : T.accent}`,
+                            borderRadius: "6px",
+                            color: isQuizLimitReached
+                              ? T.textMuted
+                              : isGuestUser || freeExhausted
+                              ? "var(--ds-warning)"
+                              : "#ffffff",
+                            fontSize: "0.82rem",
+                            fontWeight: "700",
+                            cursor: isQuizLimitReached || adaptiveLoading ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          {adaptiveLoading
+                            ? "Đang trộn đề..."
+                            : isGuestUser
+                            ? "🔒 Đề Thích Ứng AI (Cần Login)"
+                            : freeExhausted
+                            ? "🔒 Mở Khóa Đề Thích Ứng VIP"
+                            : isVipOrAdmin
+                            ? "🎯 Đề Thích Ứng (50/30/20)"
+                            : `🎯 Đề Thích Ứng (${shufflesLeft}/3)`}
+                        </button>
 
-                  {activeQuizQuestions.length > 0 && (
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
-                        Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
-                      </span>
+                        <button
+                          type="button"
+                          disabled={isQuizLimitReached}
+                          onClick={() => startNewQuiz(selectedQuizTopic)}
+                          style={{
+                            padding: "0.5rem 0.95rem",
+                            backgroundColor: isQuizLimitReached
+                              ? "var(--ds-bg-active)"
+                              : isGuestUser || freeExhausted
+                              ? "var(--ds-bg-elevated)"
+                              : "var(--ds-btn-primary)",
+                            border: `1px solid ${isGuestUser || freeExhausted ? "var(--ds-danger)" : "var(--ds-border-strong)"}`,
+                            borderRadius: "6px",
+                            color: isQuizLimitReached
+                              ? "var(--ds-text-muted)"
+                              : isGuestUser || freeExhausted
+                              ? "var(--ds-danger)"
+                              : "#ffffff",
+                            fontSize: "0.82rem",
+                            fontWeight: "700",
+                            cursor: isQuizLimitReached ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          {isGuestUser
+                            ? "🔒 Trộn đề mới (Cần Login)"
+                            : freeExhausted
+                            ? "🔒 Hết 3/3 lượt — Mở VIP"
+                            : isVipOrAdmin
+                            ? "Trộn đề mới (50 câu)"
+                            : `🎲 Trộn đề mới (${shufflesLeft}/3)`}
+                        </button>
+
+                        {!quizSubmitted && activeQuizQuestions.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={submitQuiz}
+                            style={{
+                              padding: "0.5rem 1.25rem",
+                              backgroundColor: "var(--ds-btn-success)",
+                              border: "none",
+                              borderRadius: "6px",
+                              color: "#ffffff",
+                              fontSize: "0.825rem",
+                              fontWeight: "700",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Nộp bài chấm điểm
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
+
+                    {/* Dynamic Gate / FOMO Alert Banner */}
+                    {!isVipOrAdmin && (quizGateBanner || isGuestUser || freeExhausted) && (
+                      <div
+                        style={{
+                          marginTop: "1rem",
+                          padding: "0.85rem 1rem",
+                          borderRadius: "8px",
+                          backgroundColor: isGuestUser || freeExhausted ? "var(--ds-warning-bg)" : "var(--ds-accent-bg)",
+                          border: `1px solid ${isGuestUser || freeExhausted ? "var(--ds-warning-border)" : "var(--ds-accent-border)"}`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          flexWrap: "wrap",
+                          gap: "0.75rem",
+                        }}
+                      >
+                        <div style={{ fontSize: "0.81rem", color: "var(--ds-text)", lineHeight: 1.5, flex: "1 1 300px" }}>
+                          <strong>
+                            {isGuestUser
+                              ? "⚠️ Bạn đang ở Chế độ Khách (20 câu cố định): "
+                              : freeExhausted
+                              ? "🔥 Đã dùng hết 3/3 lượt trộn đề Miễn phí: "
+                              : "💡 Mẹo mở khóa toàn bộ đề: "}
+                          </strong>
+                          {quizGateBanner?.message ||
+                            (isGuestUser
+                              ? "Khách không thể trộn đề mới, chọn chuyên đề riêng hay dùng Đề Thích Ứng AI. Đăng nhập miễn phí để mở 3 lượt trộn hoặc nâng cấp VIP xem trọn 50 câu!"
+                              : "Tài khoản Free đang bị ẩn 30 câu bẫy nâng cao (Câu 21 → 50) & khóa Trộn đề. Mở VIP để xem ngay 30 câu đang ẩn + Mẹo giải 3 giây!")}
+                        </div>
+                        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                          {isGuestUser && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowSwitchAuthForm(false);
+                                setAuthError("");
+                                setAuthSuccess("🔑 Đăng nhập để nhận ngay 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI!");
+                                setAuthTab("login");
+                                setAuthModalOpen(true);
+                              }}
+                              style={{
+                                padding: "0.42rem 0.85rem",
+                                borderRadius: "6px",
+                                border: "none",
+                                backgroundColor: "var(--ds-btn-primary)",
+                                color: "#ffffff",
+                                fontSize: "0.78rem",
+                                fontWeight: 700,
+                                cursor: "pointer",
+                              }}
+                            >
+                              🔑 Đăng nhập mở 3 lượt trộn
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              openContextualSmartPaywall("milestone_100_q", {
+                                title: "Mở Khóa Trọn Bộ 50 Câu Bẫy & Trộn Đề AI Không Giới Hạn",
+                                description:
+                                  "Xem ngay 30 câu phân loại điểm 8.5–9+ (Câu 21 → 50), phân tích bẫy tư duy 3 giây và trộn Đề Thích Ứng AI 50/30/20 không giới hạn!",
+                              })
+                            }
+                            style={{
+                              padding: "0.42rem 0.9rem",
+                              borderRadius: "6px",
+                              border: "none",
+                              backgroundColor: "var(--ds-btn-warning)",
+                              color: "#ffffff",
+                              fontSize: "0.78rem",
+                              fontWeight: 800,
+                              cursor: "pointer",
+                            }}
+                          >
+                            💎 Mở khóa VIP (Chỉ 29k) →
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {adaptiveQuizMeta && (
+                      <div
+                        style={{
+                          marginTop: "1rem",
+                          padding: "0.75rem 1rem",
+                          borderRadius: "8px",
+                          backgroundColor: T.bgElevated,
+                          border: `1px solid ${T.borderSubtle}`,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "0.6rem",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        <span style={{ color: T.textHeading, fontWeight: "700" }}>
+                          {adaptiveQuizMeta.mode === "manual_review"
+                            ? `🎯 Chế độ Ôn tập Chuyên đề #${adaptiveQuizMeta.topicId}`
+                            : `🧠 Đề Thích Ứng 50/30/20 (${adaptiveQuizMeta.preferredDifficulty || "Adaptive"})`}
+                        </span>
+                        <span style={{ color: T.textMuted }}>
+                          Weak: <strong style={{ color: T.warning }}>{adaptiveQuizMeta.breakdown?.weakCount ?? 0}</strong> • SR Review:{" "}
+                          <strong style={{ color: T.accent }}>{adaptiveQuizMeta.breakdown?.reviewCount ?? 0}</strong> • Challenge:{" "}
+                          <strong style={{ color: T.success }}>{adaptiveQuizMeta.breakdown?.challengeCount ?? 0}</strong>
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Topic Selector & Progress Bar */}
+                    <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid var(--ds-border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                        <label style={{ fontSize: "0.8rem", color: T.textSecondary, fontWeight: "600" }}>Chủ đề kiểm tra:</label>
+                        <select
+                          disabled={isQuizLimitReached}
+                          value={selectedQuizTopic}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (isGuestUser) {
+                              startNewQuiz(val);
+                              return;
+                            }
+                            if (!isVipOrAdmin && freeQuizShufflesUsed >= FREE_MAX_QUIZ_SHUFFLES) {
+                              startNewQuiz(val);
+                              return;
+                            }
+                            setSelectedQuizTopic(val);
+                            startNewQuiz(val);
+                          }}
+                          style={{
+                            backgroundColor: "var(--ds-card)",
+                            border: `1px solid ${T.border}`,
+                            borderRadius: "6px",
+                            padding: "0.45rem 0.75rem",
+                            color: T.text,
+                            fontSize: "0.825rem",
+                            outline: "none",
+                            cursor: isQuizLimitReached ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          <option value="ALL">Toàn bộ 12 Chương (Tổng hợp)</option>
+                          {quizData.topics.map((t) => (
+                            <option key={t.id} value={t.id}>
+                              {isGuestUser ? "🔒 " : ""}Chương {t.number}: {t.title_vi} ({t.question_count} câu)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {activeQuizQuestions.length > 0 && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                          <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
+                            Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
+                            {!isVipOrAdmin && <span style={{ color: "var(--ds-warning)", fontWeight: 700 }}> (Khóa 30 câu nâng cao)</span>}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Score Banner when Submitted */}
               {quizSubmitted && quizResults && (
@@ -7261,6 +7556,54 @@ export default function Home() {
                             {q.answers.join("  /  ")}
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
+                          {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && (
+                            <div
+                              style={{
+                                marginTop: "0.75rem",
+                                padding: "0.75rem 0.9rem",
+                                borderRadius: "8px",
+                                border: "1px dashed var(--ds-warning)",
+                                backgroundColor: "var(--ds-warning-bg)",
+                                position: "relative",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
+                                🔒 PHÂN TÍCH BẪY TƯ DUY &amp; MẸO GIẢI 3 GIÂY (CHỈ DÀNH CHO VIP)
+                              </div>
+                              <div style={{ fontSize: "0.76rem", color: "var(--ds-text-secondary)", marginBottom: "0.45rem" }}>
+                                ⚠️ 82% thí sinh mất điểm ở câu <strong>&ldquo;{q.topic_name}&rdquo;</strong> vì dịch nghĩa từng từ mà bỏ qua dấu hiệu neo ngữ pháp:
+                              </div>
+                              <div style={{ position: "relative", padding: "0.5rem 0.65rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)" }}>
+                                <div style={{ filter: "blur(4.2px)", userSelect: "none", fontSize: "0.78rem", color: "var(--ds-text)", lineHeight: 1.5 }}>
+                                  Mẹo nhận diện siêu tốc: Khóa cụm danh từ đứng sau giới từ và đối chiếu thì ở mệnh đề chính theo công thức [S + Aux + V-pp]...
+                                </div>
+                                <div style={{ marginTop: "0.45rem", textAlign: "right" }}>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      openContextualSmartPaywall("milestone_100_q", {
+                                        title: "Mở Khóa Mẹo Giải 3 Giây & Bẫy Tư Duy AI",
+                                        description: "Xem ngay phân tích bẫy chi tiết của toàn bộ 2.939 câu ngữ pháp & công thức giải nhanh 3 giây.",
+                                      })
+                                    }
+                                    style={{
+                                      padding: "0.35rem 0.75rem",
+                                      borderRadius: "6px",
+                                      border: "none",
+                                      backgroundColor: "var(--ds-btn-warning)",
+                                      color: "#ffffff",
+                                      fontSize: "0.74rem",
+                                      fontWeight: 800,
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    🔓 Mở khóa VIP xem mẹo giải 3s &rarr;
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
 
@@ -7282,6 +7625,45 @@ export default function Home() {
                             Đáp án chuẩn: <strong style={{ color: T.text }}>{q.answers.join(" / ")}</strong>
                           </div>
                           {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
+                          {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && (
+                            <div
+                              style={{
+                                marginTop: "0.75rem",
+                                padding: "0.75rem 0.9rem",
+                                borderRadius: "8px",
+                                border: "1px dashed var(--ds-warning)",
+                                backgroundColor: "var(--ds-warning-bg)",
+                              }}
+                            >
+                              <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
+                                🔒 BẪY TƯ DUY AI &amp; CÔNG THỨC TRÁNH LẶP LỖI NÀY (VIP)
+                              </div>
+                              <div style={{ filter: "blur(4px)", userSelect: "none", fontSize: "0.76rem", color: "var(--ds-text)", marginBottom: "0.45rem" }}>
+                                Chú ý bẫy đảo ngữ &amp; cụm từ loại dễ nhầm: Đối chiếu ngay cặp câu Sinh Đôi tương ứng trong chuyên đề...
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  openContextualSmartPaywall("milestone_100_q", {
+                                    title: "Mở Khóa Phân Tích Bẫy AI & Luyện Lỗi Sai VIP",
+                                    description: "Xem ngay nguyên nhân gốc rễ khiến bạn sai câu này và mở khóa bộ Câu Sinh Đôi đặc trị lỗi sai.",
+                                  })
+                                }
+                                style={{
+                                  padding: "0.35rem 0.75rem",
+                                  borderRadius: "6px",
+                                  border: "none",
+                                  backgroundColor: "var(--ds-btn-warning)",
+                                  color: "#ffffff",
+                                  fontSize: "0.74rem",
+                                  fontWeight: 800,
+                                  cursor: "pointer",
+                                }}
+                              >
+                                🔓 Mở khóa VIP phân tích lỗi này &rarr;
+                              </button>
+                            </div>
+                          )}
                           {!detail.isCorrect && activeRemedialMap[q.id] && (
                             <RemedialRecommendationCard
                               recommendation={activeRemedialMap[q.id]}
@@ -7296,6 +7678,142 @@ export default function Home() {
                   );
                 })}
               </div>
+
+              {/* QUESTION 21 -> 50 CLIFFHANGER FOMO WALL (GUEST & FREE USERS) */}
+              {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && activeQuizQuestions.length > 0 && (
+                <div
+                  style={{
+                    marginTop: "1.75rem",
+                    position: "relative",
+                    borderRadius: "14px",
+                    border: "1.5px dashed var(--ds-warning)",
+                    backgroundColor: T.card,
+                    padding: "1.35rem",
+                    overflow: "hidden",
+                    boxShadow: T.shadowMd || T.shadow,
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
+                    <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "var(--ds-danger)", backgroundColor: "var(--ds-danger-bg)", border: "1px solid var(--ds-danger-border)", padding: "0.24rem 0.65rem", borderRadius: "9999px" }}>
+                      🔥 CÂU 21 / 50 → 50 / 50 ĐANG BỊ KHÓA (30 CÂU BẪY PHÂN LOẠI ĐIỂM 8.5–9+)
+                    </span>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--ds-text-muted)" }}>
+                      Bạn mới làm 20/50 câu của bộ đề này
+                    </span>
+                  </div>
+
+                  {/* Blurred Previews of Real Next Questions (Q21, Q22, Q23) */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                    {(lockedQuizTeaserQuestions.length > 0 ? lockedQuizTeaserQuestions : activeQuizQuestions.slice(0, 3)).map((tq, tIdx) => {
+                      const rawStem = typeof tq.stem === "string" ? tq.stem.replace(/\\_/g, "_") : "";
+                      const splitIdx = Math.max(24, Math.floor(rawStem.length * 0.42));
+                      const visibleHead = rawStem.slice(0, splitIdx);
+                      const blurredTail = rawStem.slice(splitIdx) || " ... [câu hỏi phân loại điểm 8.5+ đang bị khóa]";
+
+                      return (
+                        <div
+                          key={tq.id || tIdx}
+                          style={{
+                            padding: "1rem 1.15rem",
+                            borderRadius: "8px",
+                            border: "1px solid var(--ds-border)",
+                            backgroundColor: "var(--ds-bg-elevated)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.4rem", marginBottom: "0.5rem" }}>
+                            <span style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-text-muted)" }}>
+                              🔒 CÂU {21 + tIdx} / 50 • {tq.topic_name || "Ngữ pháp nâng cao"}
+                            </span>
+                            <span style={{ fontSize: "0.68rem", fontWeight: 800, padding: "0.15rem 0.5rem", borderRadius: "999px", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", border: "1px solid var(--ds-warning-border)" }}>
+                              ⚠️ 86% học viên làm sai câu này
+                            </span>
+                          </div>
+                          <div style={{ fontSize: "0.92rem", color: T.text, fontWeight: 500, lineHeight: 1.55 }}>
+                            <span>{visibleHead}</span>
+                            <span style={{ filter: "blur(5px)", userSelect: "none", opacity: 0.7 }}>
+                              {" "}{blurredTail}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Conversion Overlay Panel */}
+                  <div
+                    style={{
+                      marginTop: "1.15rem",
+                      padding: "1.35rem",
+                      borderRadius: "12px",
+                      background: "linear-gradient(135deg, var(--ds-accent-bg) 0%, var(--ds-warning-bg) 100%)",
+                      border: "1.5px solid var(--ds-warning)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ fontSize: "1.15rem", fontWeight: 900, color: T.textHeading, marginBottom: "0.45rem" }}>
+                      {currentUser.isGuest
+                        ? "🔐 Đừng Dừng Lại Ở Câu 20! Xem Ngay 30 Câu Bẫy & Thuật Toán Đề Thích Ứng AI"
+                        : "💎 Đừng Bỏ Lỡ 30 Câu Bẫy Phân Loại Điểm 8–9+ (Câu 21 → 50)!"}
+                    </div>
+                    <p style={{ fontSize: "0.84rem", color: T.textSecondary, maxWidth: "620px", margin: "0 auto 1rem auto", lineHeight: 1.55 }}>
+                      {currentUser.isGuest
+                        ? "Khách chỉ được làm thử 20 câu cố định. Đăng nhập miễn phí ngay để nhận 3 lượt Trộn Đề mới, chọn từng chuyên đề trong 12 chương và mở Đề Thích Ứng AI (50/30/20)!"
+                        : `Tài khoản Miễn phí bị khóa từ Câu 21 → 50 và giới hạn 3 lượt trộn đề (Bạn đã dùng ${freeQuizShufflesUsed}/3). Nâng cấp VIP để mở khóa trọn 50 câu, Mẹo giải 3 giây AI & Trộn đề không giới hạn!`}
+                    </p>
+
+                    <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0.75rem" }}>
+                      {currentUser.isGuest && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowSwitchAuthForm(false);
+                            setAuthError("");
+                            setAuthSuccess("🔑 Đăng nhập ngay để nhận 3 lượt Trộn đề mới & mở Đề Thích Ứng AI!");
+                            setAuthTab("login");
+                            setAuthModalOpen(true);
+                          }}
+                          style={{
+                            padding: "0.65rem 1.35rem",
+                            borderRadius: "8px",
+                            border: "none",
+                            backgroundColor: "var(--ds-btn-primary)",
+                            color: "#ffffff",
+                            fontSize: "0.88rem",
+                            fontWeight: 800,
+                            cursor: "pointer",
+                            boxShadow: T.shadowSm,
+                          }}
+                        >
+                          🔑 Đăng nhập mở 3 lượt trộn đề (Miễn phí)
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openContextualSmartPaywall("milestone_100_q", {
+                            title: "Mở Khóa Trọn Bộ 50 Câu & Trộn Đề AI Không Giới Hạn",
+                            description:
+                              "Xem trọn vẹn Câu 21 → 50 đầy ắp câu bẫy điểm 8.5+, mở khóa Mẹo Giải 3 Giây từng câu và Trộn Đề Thích Ứng AI 50/30/20 không giới hạn!",
+                          })
+                        }
+                        style={{
+                          padding: "0.65rem 1.45rem",
+                          borderRadius: "8px",
+                          border: "none",
+                          backgroundColor: "var(--ds-btn-warning)",
+                          color: "#ffffff",
+                          fontSize: "0.88rem",
+                          fontWeight: 900,
+                          cursor: "pointer",
+                          boxShadow: T.shadowSm,
+                        }}
+                      >
+                        💎 Mở Khóa VIP Xem Trọn 50 Câu Ngay &rarr;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Bottom Submit Action */}
               {!quizSubmitted && activeQuizQuestions.length > 0 && (
@@ -7416,7 +7934,7 @@ export default function Home() {
                   <button
                     onClick={() => {
                       setCurrentView("quiz");
-                      if (activeQuizQuestions.length === 0) startNewQuiz("ALL");
+                      if (activeQuizQuestions.length === 0) startNewQuiz("ALL", { isInitialLoad: true });
                     }}
                     style={{
                       padding: "0.55rem 1.25rem",
