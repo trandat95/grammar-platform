@@ -522,7 +522,7 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic/tests")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "tests" ? "is-active" : ""}`}
             >
-              📚 20 Đề Thi ETS
+              📚 20 Đề TOEIC New Format 2026
             </button>
             <button
               type="button"
@@ -631,14 +631,14 @@ export default function AppShell2026({
                 TOEIC AI Hub
               </button>
               <button type="button" onClick={() => handleToeicNav("/toeic/tests")} className="ge-brand-footer-link">
-                20 Đề ETS
+                20 Đề New Format 2026
               </button>
               <button type="button" onClick={() => handleSelectHub("vip")} className="ge-brand-footer-link" style={{ color: "var(--ds-warning)" }}>
                 ⭐ Nâng cấp VIP
               </button>
             </div>
             <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-              <span>12 Chuyên đề • 2.939 câu Ngữ pháp • 20 Đề ETS • 4.000 câu TOEIC AI</span>
+              <span>12 Chuyên đề • 2.939 câu Ngữ pháp • 20 Đề TOEIC New Format 2026 • 4.000 câu AI</span>
               <span>•</span>
               <span style={{ fontWeight: 700, color: "var(--ds-accent)" }}>© {new Date().getFullYear()} grammarpro.io.vn</span>
             </div>

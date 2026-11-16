@@ -54,7 +54,7 @@ export default function ToeicSmartPaywallModal({
       name: 'Trọn Đời',
       price: '109.000đ',
       period: 'thanh toán 1 lần',
-      subtext: 'Sở hữu vĩnh viễn kho ETS 2026+',
+      subtext: 'Sở hữu vĩnh viễn kho TOEIC New Format 2026',
       isPopular: false
     }
   ];
@@ -196,8 +196,8 @@ export default function ToeicSmartPaywallModal({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontSize: '0.8rem' }}>
             {[
               { feat: '24 Chủ Điểm Ngữ Pháp & Kỹ Năng', free: 'Target dưới 550', vip: 'Mở trọn 24 Chủ Điểm (Band 450 - 990+)' },
-              { feat: 'Phòng Nghe Chép Chính Tả ETS', free: '1 Test (Test 01)', vip: 'Trọn bộ 10 Tests (540 tracks Part 1-4)' },
-              { feat: 'Kho 20 Đề Thi Chuẩn ETS 2024 & 2026', free: '2 Đề (ETS 2024 Test 01 & 02)', vip: 'Full 20 Đề (4.000 câu Part 5, 6, 7)' },
+              { feat: 'Phòng Nghe Chép Chính Tả TOEIC 2026', free: '1 Test (Test 01)', vip: 'Trọn bộ 10 Tests (540 tracks Part 1-4)' },
+              { feat: 'Kho 20 Đề Thi TOEIC New Format 2026', free: '2 Đề (Bộ 01 Test 01 & 02)', vip: 'Full 20 Đề (4.000 câu Part 5, 6, 7)' },
               { feat: 'Cây Lộ Trình 7 Milestones Cá Nhân Hóa', free: '2 Trạm đầu', vip: 'Mở trọn 7 Trạm' },
               { feat: 'Hỏi Đáp AI Gia Sư Sư Phạm (RAG)', free: '3 câu / ngày', vip: 'Không giới hạn 24/7' },
               { feat: 'Phân Tích Bẫy Đề & Twin Remediation', free: '1 câu tương đương', vip: 'Không giới hạn' }

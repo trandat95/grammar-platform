@@ -90,6 +90,7 @@ export default function RemediationPlanPage() {
   const questions = planData?.questions || [];
   const currentQuestion = questions[activeIdx] || null;
   const quadrants = dna?.skill_quadrant_matrix || {};
+  const formatSeries = (s) => (s === 'ETS2026' ? 'TOEIC New Format 2026 (Bộ 02)' : 'TOEIC New Format 2026 (Bộ 01)');
 
   return (
     <>
@@ -142,7 +143,7 @@ export default function RemediationPlanPage() {
                 <div className="toeic-card" style={{ padding: '1.5rem', border: '1.5px solid var(--ds-accent)' }}>
                   <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                     <div>
-                      <ToeicBadge variant="primary">🗺️ Cross-Test Remediation Loop • {plan.series} Test {String(plan.source_test_number).padStart(2, '0')} &rarr; Test {String(plan.target_next_test_number).padStart(2, '0')}</ToeicBadge>
+                      <ToeicBadge variant="primary">🗺️ Cross-Test Remediation Loop • {formatSeries(plan.series)} Test {String(plan.source_test_number).padStart(2, '0')} &rarr; Test {String(plan.target_next_test_number).padStart(2, '0')}</ToeicBadge>
                       <h1 style={{ fontSize: '1.35rem', fontWeight: 900, margin: '0.5rem 0 0.25rem 0', color: 'var(--ds-text)' }}>
                         Quy Trình Vá Lỗ Hổng &amp; Nâng Điểm Cá Nhân Hóa
                       </h1>
@@ -241,7 +242,7 @@ export default function RemediationPlanPage() {
                 <div className="toeic-card" style={{ padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundColor: 'var(--ds-bg-elevated)' }}>
                   <div>
                     <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                      🏁 Bước Cuối: Kiểm chứng điểm số tại {plan.series} Test {String(plan.target_next_test_number).padStart(2, '0')}
+                      🏁 Bước Cuối: Kiểm chứng điểm số tại {formatSeries(plan.series)} Test {String(plan.target_next_test_number).padStart(2, '0')}
                     </div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)', marginTop: '0.2rem' }}>
                       Hệ thống sẽ tự động đo chênh lệch điểm (Verified Score Delta) ngay khi bạn nộp Test {String(plan.target_next_test_number).padStart(2, '0')}.

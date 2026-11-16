@@ -173,7 +173,7 @@ export default function DiagnosticRadarDashboard({
                 Bản Đồ Năng Lực 6 Trục
               </h3>
               <p style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', margin: 0 }}>
-                Đánh giá theo % thông thạo &amp; trọng số xuất hiện trong đề thi ETS
+                Đánh giá theo % thông thạo &amp; trọng số xuất hiện trong đề thi TOEIC New Format 2026
               </p>
             </div>
 

@@ -26,7 +26,7 @@ export default function DictationPage() {
     <>
       <Head>
         <title>Phòng Nghe Chép Chính Tả (Dictation Studio 540 Tracks) | GrammarPro.io.vn</title>
-        <meta name="description" content="Luyện nghe chép chính tả 540 tracks từ ETS 2026 với cloze inputs và kiểm tra tức thì trên grammarpro.io.vn." />
+        <meta name="description" content="Luyện nghe chép chính tả 540 tracks chuẩn TOEIC New Format 2026 với cloze inputs và kiểm tra tức thì trên grammarpro.io.vn." />
       </Head>
 
       <AppShell2026
@@ -45,7 +45,7 @@ export default function DictationPage() {
         }}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
-        currentChapterTitle="Dictation Studio ETS 2026"
+        currentChapterTitle="Dictation Studio — TOEIC New Format 2026"
       >
         <div className="toeic-page-wrap">
           <div className="toeic-container">
@@ -104,7 +104,7 @@ export default function DictationPage() {
                     const isLocked = !isVip && testNum > 1;
                     return (
                       <option key={testNum} value={testNum}>
-                        ETS 2026 Test {String(testNum).padStart(2, '0')}{isLocked ? ' 🔒 (VIP)' : (testNum === 1 && !isVip ? ' (Miễn phí)' : '')}
+                        TOEIC New Format 2026 — Test {String(testNum).padStart(2, '0')}{isLocked ? ' 🔒 (VIP)' : (testNum === 1 && !isVip ? ' (Miễn phí)' : '')}
                       </option>
                     );
                   })}

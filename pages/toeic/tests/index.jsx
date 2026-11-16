@@ -16,6 +16,9 @@ export default function TestsCatalogPage() {
   const isVip = entitlement.isVip;
 
   const tests = Array.from({ length: 10 }, (_, i) => i + 1);
+  const formatSeriesLabel = (s) => (
+    s === 'ETS2024' ? 'TOEIC New Format 2026 (Bộ 01)' : 'TOEIC New Format 2026 (Bộ 02)'
+  );
 
   const handleSelectView = (v) => {
     if (v === 'toeic') {
@@ -32,8 +35,8 @@ export default function TestsCatalogPage() {
   return (
     <>
       <Head>
-        <title>Ngân Hàng 20 Đề Thi Chuẩn ETS 2024 &amp; 2026 | GrammarPro.io.vn</title>
-        <meta name="description" content="Luyện trọn vẹn 20 đề thi TOEIC chuẩn hóa V3.0 (4.000 câu hỏi) kèm chia đôi màn hình Split-Passage Reader." />
+        <title>Ngân Hàng 20 Đề Thi TOEIC New Format 2026 | GrammarPro.io.vn</title>
+        <meta name="description" content="Luyện trọn vẹn 20 đề thi TOEIC New Format 2026 (4.000 câu hỏi) kèm chia đôi màn hình Split-Passage Reader." />
       </Head>
 
       <AppShell2026
@@ -42,7 +45,7 @@ export default function TestsCatalogPage() {
         onSelectView={handleSelectView}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
-        currentChapterTitle="20 Đề Thi Chuẩn ETS"
+        currentChapterTitle="20 Đề Thi TOEIC New Format 2026"
       >
         <div className="toeic-page-wrap">
           <div className="toeic-container">
@@ -75,7 +78,7 @@ export default function TestsCatalogPage() {
               </div>
 
               <h1 className="toeic-hero-title">
-                Luyện Đề Chuẩn ETS 2024 &amp; ETS 2026
+                Luyện Đề Chuẩn TOEIC New Format 2026
               </h1>
 
               <p className="toeic-hero-desc">
@@ -88,14 +91,14 @@ export default function TestsCatalogPage() {
                   variant={selectedSeries === 'ETS2024' ? 'primary' : 'secondary'}
                   onClick={() => setSelectedSeries('ETS2024')}
                 >
-                  📘 ETS 2024 (10 Đề • Test 01 - 10)
+                  📘 TOEIC New Format 2026 — Bộ 01 (10 Đề • Test 01 - 10)
                 </ToeicButton>
 
                 <ToeicButton
                   variant={selectedSeries === 'ETS2026' ? 'primary' : 'secondary'}
                   onClick={() => setSelectedSeries('ETS2026')}
                 >
-                  🎧 ETS 2026 (10 Đề • Kèm 540 Tracks Dictation)
+                  🎧 TOEIC New Format 2026 — Bộ 02 (10 Đề • Kèm 540 Tracks Dictation)
                 </ToeicButton>
               </div>
             </div>
@@ -124,7 +127,7 @@ export default function TestsCatalogPage() {
                       <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
                         <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                           <ToeicBadge variant="primary">
-                            {selectedSeries}
+                            {formatSeriesLabel(selectedSeries)}
                           </ToeicBadge>
                           {canAccess ? (
                             <ToeicBadge variant={isFreeTest && !isVip ? 'success' : difficultyBadge}>

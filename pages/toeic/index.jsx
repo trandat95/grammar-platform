@@ -106,13 +106,13 @@ export default function ToeicHubPage() {
     },
     {
       id: 'tests',
-      title: 'Kho 20 Đề Thi Chuẩn ETS 2024 & 2026',
+      title: 'Kho 20 Đề Thi TOEIC New Format 2026',
       desc: '4.000 câu hỏi chia đôi màn hình Split-Passage Reader, cuộn độc lập và tự động đối chiếu dẫn chứng Auto-Highlight.',
       badge: '20 Đề Thi • 4.000 Câu',
       badgeVariant: 'warning',
       cta: 'Chọn Đề Luyện Thi',
       href: '/toeic/tests',
-      stats: 'ETS 2024 & 2026',
+      stats: 'TOEIC New Format 2026',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -123,8 +123,8 @@ export default function ToeicHubPage() {
     {
       id: 'dictation',
       title: 'Phòng Nghe Chép Chính Tả (Dictation)',
-      desc: '540 tracks luyện nghe chép từ ETS 2026 với ô điền cloze, kiểm tra tức thì phím Space/Enter và Spaced Repetition.',
-      badge: '540 Tracks • ETS 2026',
+      desc: '540 tracks luyện nghe chép chuẩn TOEIC New Format 2026 với ô điền cloze, kiểm tra tức thì phím Space/Enter và Spaced Repetition.',
+      badge: '540 Tracks • New Format 2026',
       badgeVariant: 'primary',
       cta: 'Vào Phòng Nghe',
       href: '/toeic/dictation',
@@ -191,7 +191,7 @@ export default function ToeicHubPage() {
                     Các Phân Hệ Học &amp; Luyện Thi
                   </h2>
                   <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
-                    Được thiết kế đồng bộ theo chuẩn sư phạm ETS V3.0
+                    Được thiết kế đồng bộ theo chuẩn cấu trúc TOEIC New Format 2026
                   </p>
                 </div>
               </div>

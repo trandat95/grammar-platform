@@ -101,6 +101,7 @@ export default function DictationStudio({
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [audioProgressSec, setAudioProgressSec] = useState(0);
   const inputRefs = useRef([]);
+  const seriesLabel = series === 'ETS2024' ? 'TOEIC New Format 2026 (Bộ 01)' : 'TOEIC New Format 2026';
 
   // Load all 54 tracks for the selected test via API (with offline sample fallback)
   useEffect(() => {
@@ -131,7 +132,7 @@ export default function DictationStudio({
           setAudioProgressSec(0);
         } else if (data.isVipRequired || data.error === 'VIP_UPGRADE_REQUIRED') {
           setIsVipLocked(true);
-          setErrorMsg(data.message || `Đề ${series} Test ${String(testNum).padStart(2, '0')} yêu cầu quyền VIP.`);
+          setErrorMsg(data.message || `Đề ${seriesLabel} Test ${String(testNum).padStart(2, '0')} yêu cầu quyền VIP.`);
           if (onRequireVip) onRequireVip();
         } else {
           setErrorMsg(data.error || 'Không thể tải danh sách bài nghe.');
@@ -263,7 +264,7 @@ export default function DictationStudio({
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
             <ToeicBadge variant="primary">
-              🎧 Dictation Studio {series}
+              🎧 Dictation Studio • {seriesLabel}
             </ToeicBadge>
             <ToeicBadge variant="muted">
               Test {String(testNum).padStart(2, '0')} • Track {filteredTracks.length > 0 ? currentTrackIndex + 1 : 0}/{filteredTracks.length} ({currentTrack ? (String(currentTrack.question_range).startsWith('Q') ? currentTrack.question_range : 'Q' + (String(currentTrack.question_range).includes('-') ? currentTrack.question_range : String(currentTrack.question_range).padStart(2, '0'))) : ''})
@@ -440,7 +441,7 @@ export default function DictationStudio({
                 🔒 Nội dung thuộc gói VIP Premium
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--ds-text-secondary)', marginTop: '0.2rem' }}>
-                {errorMsg || `Đề ${series} Test ${String(testNum).padStart(2, '0')} yêu cầu tài khoản VIP. Học viên miễn phí mở trọn vẹn Test 01.`}
+                {errorMsg || `Đề ${seriesLabel} Test ${String(testNum).padStart(2, '0')} yêu cầu tài khoản VIP. Học viên miễn phí mở trọn vẹn Test 01.`}
               </div>
             </div>
             {onRequireVip && (

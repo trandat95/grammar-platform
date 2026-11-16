@@ -12,6 +12,9 @@ import ToeicSmartPaywallModal from '../../../../components/toeic/premium/ToeicSm
 export default function TestSimulationPage() {
   const router = useRouter();
   const { series = 'ETS2024', testNum = '1', mode = 'full' } = router.query;
+  const seriesLabel = String(series).toUpperCase() === 'ETS2026'
+    ? 'TOEIC New Format 2026 (Bộ 02)'
+    : 'TOEIC New Format 2026 (Bộ 01)';
   const [isLight, setIsLight] = useState(true);
   const [testData, setTestData] = useState(null);
   const [activePart, setActivePart] = useState(5); // 5 | 6 | 7 | 'all'
@@ -359,8 +362,8 @@ export default function TestSimulationPage() {
   return (
     <>
       <Head>
-        <title>{series} Test {String(testNum).padStart(2, '0')} | GrammarPro.io.vn</title>
-        <meta name="description" content="Thi thử và làm bài thi TOEIC trực tuyến chuẩn ETS trên grammarpro.io.vn." />
+        <title>{seriesLabel} Test {String(testNum).padStart(2, '0')} | GrammarPro.io.vn</title>
+        <meta name="description" content="Thi thử và làm bài thi TOEIC New Format 2026 trực tuyến trên grammarpro.io.vn." />
       </Head>
 
       <AppShell2026
@@ -379,7 +382,7 @@ export default function TestSimulationPage() {
         }}
         isLight={isLight}
         onToggleTheme={() => setIsLight(prev => !prev)}
-        currentChapterTitle={`${series} Test ${testNum}`}
+        currentChapterTitle={`${seriesLabel} Test ${testNum}`}
       >
         <div className="toeic-page-wrap">
           <div className="toeic-container">
@@ -690,7 +693,7 @@ export default function TestSimulationPage() {
                   <div>
                     <ToeicBadge variant="success">✓ Đã Nộp Bài • Bảng Chấm Điểm &amp; Phân Tích</ToeicBadge>
                     <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0.5rem 0 0.25rem 0', color: 'var(--ds-text)' }}>
-                      Kết Quả Thi Thử {series} Test {String(testNum).padStart(2, '0')}
+                      Kết Quả Thi Thử {seriesLabel} • Test {String(testNum).padStart(2, '0')}
                     </h2>
                     <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ds-text-secondary)' }}>
                       Thời gian: <strong>{formatTimer(examElapsedSec)}</strong> • Đúng <strong>{examSummary.correct}</strong> • Sai <strong>{examSummary.wrongCount}</strong> • Bỏ trống <strong>{examSummary.skippedCount}</strong>
@@ -994,7 +997,7 @@ export default function TestSimulationPage() {
               <div style={{ minHeight: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', textAlign: 'center' }}>
                 <div style={{ width: '32px', height: '32px', border: '3px solid var(--ds-accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                 <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
-                  Đang tải nội dung đề {series} Test {testNum}...
+                  Đang tải nội dung đề {seriesLabel} • Test {testNum}...
                 </p>
               </div>
             ) : isVipLocked ? (
@@ -1034,11 +1037,11 @@ export default function TestSimulationPage() {
                 </div>
 
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.75rem 0', color: 'var(--ds-text)' }}>
-                  Mở Khóa Đề Thi {series} Test {String(testNum).padStart(2, '0')}
+                  Mở Khóa Đề Thi {seriesLabel} • Test {String(testNum).padStart(2, '0')}
                 </h2>
 
                 <p style={{ fontSize: '0.9rem', color: 'var(--ds-text-secondary)', lineHeight: 1.6, maxWidth: '520px', margin: '0 auto 1.5rem auto' }}>
-                  Toàn bộ 20 đề thi chuẩn hóa ETS 2024 &amp; ETS 2026 kèm tính năng tra cứu dẫn chứng tự động <strong>Auto-Highlight</strong> và bóc tách quang phổ <strong>Sentence X-Ray</strong> thuộc gói VIP.
+                  Toàn bộ 20 đề thi chuẩn hóa TOEIC New Format 2026 kèm tính năng tra cứu dẫn chứng tự động <strong>Auto-Highlight</strong> và bóc tách quang phổ <strong>Sentence X-Ray</strong> thuộc gói VIP.
                 </p>
 
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1072,7 +1075,7 @@ export default function TestSimulationPage() {
             ) : !examSessionMode ? (
               <div style={{ maxWidth: '820px', margin: '1.5rem auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <div className="toeic-card" style={{ padding: '1.75rem', textAlign: 'center' }}>
-                  <ToeicBadge variant="primary">ETS Standard • {series} Test {String(testNum).padStart(2, '0')}</ToeicBadge>
+                  <ToeicBadge variant="primary">{seriesLabel} • Test {String(testNum).padStart(2, '0')}</ToeicBadge>
                   <h1 style={{ fontSize: '1.55rem', fontWeight: 900, margin: '0.65rem 0 0.4rem 0', color: 'var(--ds-text)' }}>
                     Chọn Chế Độ Làm Bài Thi TOEIC Reading ({readingQuestions.length} câu)
                   </h1>
