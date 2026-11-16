@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
+import AiPowerShowcase2026 from '../../components/ui-2026/AiPowerShowcase2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
 import ToeicHeroBanner from '../../components/toeic/ToeicHeroBanner';
 import taxonomyData from '../../data/toeic/grammar_taxonomy.json';
@@ -181,6 +182,12 @@ export default function ToeicHubPage() {
               onTargetChange={setTargetScore}
               showStats={true}
               isLight={isLight}
+            />
+
+            {/* INTERACTIVE AI MARKETING SHOWCASE */}
+            <AiPowerShowcase2026
+              compact={false}
+              onNavigateVip={() => entitlement.openPaywall('TRG_01_MILESTONE_LOCKED')}
             />
 
             {/* BENTO FEATURE CARDS - ZONE 2 (Clean 2x2 or 4-col Grid) */}

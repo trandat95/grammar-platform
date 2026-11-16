@@ -2900,6 +2900,9 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Vector Brand Assets & PWA (`public/favicon.svg`, `public/logo-grammarpro.svg`, `public/manifest.json`, `pages/_app.js`):** Thiết kế biểu tượng vector độc bản chữ **G** kết hợp dấu tick & tia sáng AI (gradient xanh hoàng gia `#1e3a8a` → `#2563eb` → `#06b6d4` + tia sáng vàng `#fbbf24`), tích hợp `<link rel="icon">` và Web Manifest `GrammarPro.io.vn`.
   * **Component Thương Hiệu Thống Nhất (`components/ui-2026/GrammarProLogo.jsx`, `styles/design-system-2026.css`):** Xây dựng 3 biến thể (`header`, `auth`, `footer`) kèm badge `.io.vn` đặc trưng.
   * **Phủ Dấu Ấn Tên Miền Toàn Hệ Thống (`AppShell2026.jsx`, `pages/index.js`, `UnifiedAuthModal.jsx`, `ToeicHeroBanner.jsx`, `pages/toeic/*`):** Tích hợp logo vào Sticky Header, Global Domain Footer (`.ge-brand-footer`), Modal Đăng nhập/Đăng ký, Hero Banners và `<Head><title>` các trang chính thức mang hậu tố **`GrammarPro.io.vn`**.
+- [x] **2.15.23 Thiết Kế Khu Vực Trình Diễn Công Nghệ AI & Phễu Chuyển Đổi Marketing Chuyên Sâu (`components/ui-2026/AiPowerShowcase2026.jsx`):**
+  * **Interactive 3-Tab Live Demo:** Minh họa trực quan cơ chế **Quang Phổ Sentence X-Ray™** (bật/tắt tia X-Ray tách Chủ-Vị, loại bỏ bẫy giới từ nhiễu & khóa neo thời gian trong 0.2s), **Hồ Sơ Error Trap DNA™** (Ma trận 4 Góc Phần Tư Độ Chính Xác × Tốc Độ bắt 15 bẫy tư duy), và **Vòng Lặp Câu Sinh Đôi — Twin-Question Loop™** (kiểm chứng tăng điểm liên đề bằng IRT 2PL).
+  * **4 Trụ Cột Sư Phạm AI & CTA Chuyển Đổi:** Nhúng trực tiếp tại Trang chủ Tổng quan (`pages/index.js`) và TOEIC Hub (`pages/toeic/index.jsx`), tương thích hoàn chỉnh Light/Dark Mode & Mobile Horizontal Tabs.
 
 ---
 

@@ -19,6 +19,7 @@ import LeaderboardPanel from "../components/gamification/LeaderboardPanel";
 import MonetizationHub, { prefetchMonetizationData, invalidateMonetizationClientCache } from "../components/monetization/MonetizationHub";
 import AppShell2026 from "../components/ui-2026/AppShell2026";
 import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
+import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
 import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
@@ -5528,6 +5529,14 @@ export default function Home() {
                 showStats={true}
                 isLight={isLight}
                 compact={true}
+              />
+
+              {/* Interactive Expert-Marketing AI Power Showcase (Sentence X-Ray, Error DNA & Twin Loop) */}
+              <AiPowerShowcase2026
+                compact={true}
+                onNavigateStudy={() => setCurrentView("study")}
+                onNavigateDiagnostic={() => setCurrentView("diagnostic")}
+                onNavigateVip={() => setCurrentView("vip")}
               />
 
               {/* Dashboard Zone A / Zone B Bento Switcher */}
