@@ -1,4 +1,4 @@
-import { getAdminClient } from "../../../lib/supabase/server";
+import { getAdminClient, getUserScopedClient } from "../../../lib/supabase/server";
 import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { computeSubscriptionEndDate } from "../../../lib/monetization/payment-provider-adapter";
 import { resolveUserEntitlement } from "../../../lib/monetization/entitlement-engine";
@@ -60,7 +60,8 @@ export default async function handler(req, res) {
       if (!authUser) {
         return res.status(401).json({ success: false, error: "Vui lòng đăng nhập bằng tài khoản Supabase để thanh toán VietQR." });
       }
-      const { data: rpcRes, error: rpcErr } = await serverClient.rpc("create_sepay_checkout_order", {
+      const userClient = getUserScopedClient(req);
+      const { data: rpcRes, error: rpcErr } = await userClient.rpc("create_sepay_checkout_order", {
         p_plan_code: plan_code,
         p_coupon_code: coupon_code || null,
         p_idempotency_key: idempotency_key || null,

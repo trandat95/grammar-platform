@@ -2920,6 +2920,8 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Thanh Điều Hướng Dính Cố Định Dưới Đáy Mobile (`.ge-mobile-exam-dock` trên `DiagnosticTestSession`, `ToeicDiagnosticSession`, `practice/[topicId]`, `boss-gate`):** Cố định ngay phía trên Bottom Nav với 1 chạm (`← Trước`, `Tiếp theo →`, `Nộp bài`) kèm tự động cuộn mượt lên đầu câu khi chuyển câu.
 - [x] **2.15.27 Bỏ Qua Bước Xác Thực Email Khi Tạo Tài Khoản Mới (`pages/api/auth/register.js`, `services/auth.service.js`):**
   * **Auto-Confirm Registration API (`/api/auth/register`):** Sử dụng `supabaseServer.auth.admin.createUser({ email_confirm: true })` (kèm Rate Limit 15 req/phút và fallback an toàn về `signUp`) để tạo tài khoản đã xác thực sẵn và tự động đăng nhập ngay lập tức, không cần mở email bấm link xác nhận.
+- [x] **2.15.28 Sửa Lỗi Tạo Đơn Thanh Toán VietQR Khi Đã Đăng Nhập (`lib/supabase/server.js`, `pages/api/monetization/checkout.js`):**
+  * **User-Scoped Supabase Client (`getUserScopedClient(req)`):** Khắc phục lỗi `auth.uid()` bị `NULL` bên trong RPC `create_sepay_checkout_order` khi server có cấu hình `SUPABASE_SERVICE_ROLE_KEY`, giúp người dùng đã đăng nhập tạo đơn hàng SePay VietQR thành công 100%.
 
 ---
 
