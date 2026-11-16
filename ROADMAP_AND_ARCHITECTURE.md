@@ -2914,6 +2914,10 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Chặn Path Traversal (`lib/toeic/toeic-repository.js`, `/api/toeic/tests/*`, `/api/toeic/dictation/*`):** Áp đặt allowlist nghiêm ngặt `series ∈ {'ETS2024', 'ETS2026'}` và `testNum ∈ [1..10]` trước khi ghép đường dẫn đọc file.
   * **Gia cố Webhook HMAC & Cổng VIP Chuyên Đề 550+ (`payment-provider-adapter.js`, `webhook.js`, `/api/toeic/practice/drill.js`, `[topicId].jsx`, `boss-gate.jsx`):** Xóa fallback `SUPABASE_SERVICE_ROLE_KEY` làm HMAC secret, ràng buộc `.eq("user_id", user_id)` trong Webhook, và cưỡng chế kiểm tra quyền VIP phía máy chủ cho chuyên đề `target_score_band >= 550`.
   * **Gia cố HTTP Security Headers (`next.config.js`):** Bổ sung `Content-Security-Policy` (`frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`), `Cross-Origin-Opener-Policy`, `X-XSS-Protection` và loại bỏ cấu hình `outputFileTracingIncludes` trùng lặp ở root.
+- [x] **2.15.26 Tối Ưu Trải Nghiệm Làm Bài Test & Bài Tập Không Cần Cuộn Lên Xuống Trên Mobile (Zero-Scroll Mobile Exam Dock):**
+  * **Thu Gọn Khung Câu Hỏi & Đáp Án (`styles/design-system-2026.css`, `DiagnosticTestSession.jsx`):** Trên màn hình `< 768px`, thanh tiến độ/đồng hồ dính (`position: sticky`), câu hỏi và 4 lựa chọn A/B/C/D hiển thị gọn trọn trong 1 khung màn hình.
+  * **Ẩn Bảng 30/15 Câu Khỏi Dòng Chính & Mở Dạng Sheet Nổi (`DiagnosticTestSession.jsx`, `ToeicDiagnosticSession.jsx`, `boss-gate.jsx`):** Bảng số câu không còn chen giữa đáp án D và nút `Câu tiếp theo →`; thay bằng nút `📋 X/Y` bật Drawer nổi ngay trên thanh thao tác.
+  * **Thanh Điều Hướng Dính Cố Định Dưới Đáy Mobile (`.ge-mobile-exam-dock` trên `DiagnosticTestSession`, `ToeicDiagnosticSession`, `practice/[topicId]`, `boss-gate`):** Cố định ngay phía trên Bottom Nav với 1 chạm (`← Trước`, `Tiếp theo →`, `Nộp bài`) kèm tự động cuộn mượt lên đầu câu khi chuyển câu.
 
 ---
 

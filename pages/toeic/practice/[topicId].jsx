@@ -294,11 +294,14 @@ export default function TopicPracticePage() {
                     />
 
                     {/* BOTTOM NAVIGATION */}
-                    <div className="toeic-flex-between" style={{ marginTop: '1.25rem' }}>
+                    <div className="toeic-flex-between ge-toeic-desktop-footer" style={{ marginTop: '1.25rem' }}>
                       <button
                         type="button"
                         disabled={currentIndex === 0}
-                        onClick={() => setCurrentIndex(prev => prev - 1)}
+                        onClick={() => {
+                          setCurrentIndex(prev => prev - 1);
+                          if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
                         className="toeic-btn toeic-btn-secondary"
                         style={{ opacity: currentIndex === 0 ? 0.4 : 1, cursor: currentIndex === 0 ? 'default' : 'pointer' }}
                       >
@@ -308,7 +311,10 @@ export default function TopicPracticePage() {
                       {currentIndex < questions.length - 1 ? (
                         <button
                           type="button"
-                          onClick={() => setCurrentIndex(prev => prev + 1)}
+                          onClick={() => {
+                            setCurrentIndex(prev => prev + 1);
+                            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
                           className="toeic-btn toeic-btn-primary"
                         >
                           <span>Câu tiếp theo &rarr;</span>
@@ -322,6 +328,57 @@ export default function TopicPracticePage() {
                         </a>
                       )}
                     </div>
+
+                    {/* STICKY MOBILE PRACTICE DOCK (Zero-Scroll Navigation) */}
+                    {questions.length > 0 && (
+                      <div className="ge-mobile-exam-dock" aria-label="Điều hướng luyện tập nhanh">
+                        <button
+                          type="button"
+                          className="ge-mobile-exam-dock-btn"
+                          disabled={currentIndex === 0}
+                          onClick={() => {
+                            setCurrentIndex(prev => prev - 1);
+                            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                        >
+                          ← Trước
+                        </button>
+
+                        <div
+                          style={{
+                            flex: 1,
+                            textAlign: 'center',
+                            fontSize: '0.76rem',
+                            fontWeight: 700,
+                            color: 'var(--ds-text-secondary)',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          Câu {currentIndex + 1}/{questions.length} • ✓{correctCount}
+                        </div>
+
+                        {currentIndex < questions.length - 1 ? (
+                          <button
+                            type="button"
+                            className="ge-mobile-exam-dock-btn primary"
+                            onClick={() => {
+                              setCurrentIndex(prev => prev + 1);
+                              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                          >
+                            Tiếp theo →
+                          </button>
+                        ) : (
+                          <a
+                            href="/toeic"
+                            className="ge-mobile-exam-dock-btn success"
+                            style={{ textDecoration: 'none', flex: 1 }}
+                          >
+                            Hoàn thành ✓
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ) : null}
               </>

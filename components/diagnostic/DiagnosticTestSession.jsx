@@ -17,6 +17,7 @@ export default function DiagnosticTestSession({
   const [flagged, setFlagged] = useState({}); // { [questionId]: true }
   const [secondsRemaining, setSecondsRemaining] = useState(test?.time_limit_seconds || 1200);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [showMobilePalette, setShowMobilePalette] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
   // Current active question
@@ -97,10 +98,18 @@ export default function DiagnosticTestSession({
     }));
   };
 
+  const scrollToQuestionTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const handleNext = () => {
     if (currentIndex < totalQuestions - 1) {
       recordQuestionTime();
       setCurrentIndex((prev) => prev + 1);
+      setShowMobilePalette(false);
+      scrollToQuestionTop();
     }
   };
 
@@ -108,12 +117,16 @@ export default function DiagnosticTestSession({
     if (currentIndex > 0) {
       recordQuestionTime();
       setCurrentIndex((prev) => prev - 1);
+      setShowMobilePalette(false);
+      scrollToQuestionTop();
     }
   };
 
   const handleJumpToQuestion = (idx) => {
     recordQuestionTime();
     setCurrentIndex(idx);
+    setShowMobilePalette(false);
+    scrollToQuestionTop();
   };
 
   // Stats
@@ -348,8 +361,9 @@ export default function DiagnosticTestSession({
         </div>
 
         {/* Question Prompt (Stem) */}
-        <div style={{ marginBottom: "2rem" }}>
+        <div className="ge-diag-stem-wrap" style={{ marginBottom: "2rem" }}>
           <p
+            className="ge-diag-stem"
             style={{
               fontSize: "1.25rem",
               fontWeight: 600,
@@ -363,12 +377,13 @@ export default function DiagnosticTestSession({
         </div>
 
         {/* 4 Radio Options (A, B, C, D) */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", marginBottom: "2rem" }}>
+        <div className="ge-diag-options" style={{ display: "flex", flexDirection: "column", gap: "0.85rem", marginBottom: "2rem" }}>
           {(currentQ.options || []).map((opt) => {
             const isSelected = currentAnswer === opt.key;
             return (
               <div
                 key={opt.key}
+                className="ge-diag-option"
                 onClick={() => handleSelectAnswer(opt.key)}
                 style={{
                   display: "flex",
@@ -389,6 +404,7 @@ export default function DiagnosticTestSession({
               >
                 {/* Circle Key */}
                 <div
+                  className="ge-diag-option-key"
                   style={{
                     width: "36px",
                     height: "36px",
@@ -409,6 +425,7 @@ export default function DiagnosticTestSession({
 
                 {/* Option Text */}
                 <span
+                  className="ge-diag-option-text"
                   style={{
                     fontSize: "1.05rem",
                     fontWeight: isSelected ? 700 : 500,
@@ -606,6 +623,123 @@ export default function DiagnosticTestSession({
             {isSubmitting ? "Đang chấm điểm..." : "Nộp bài kiểm tra ➔"}
           </button>
         </div>
+      </div>
+
+      {/* Mobile Collapsible Question Palette Sheet */}
+      {showMobilePalette && (
+        <div className="ge-mobile-palette-sheet" role="dialog" aria-label="Bảng danh sách câu hỏi">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+            <span style={{ fontWeight: 800, fontSize: "0.82rem", color: T.text }}>
+              Bảng câu hỏi • 🟢 {answeredCount} • 🚩 {flaggedCount} • ⚪ {unansweredCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowMobilePalette(false)}
+              style={{ border: "none", background: "transparent", fontSize: "0.85rem", fontWeight: 700, color: T.textMuted, cursor: "pointer" }}
+            >
+              Đóng ✕
+            </button>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "0.4rem",
+            }}
+          >
+            {questions.map((q, idx) => {
+              const isAns = !!answers[q.id]?.selected_answer;
+              const isFlag = !!flagged[q.id];
+              const isCurr = idx === currentIndex;
+
+              let bgColor = "var(--ds-card)";
+              let textColor = T.textMuted;
+              let borderColor = T.borderSubtle;
+
+              if (isAns) {
+                bgColor = "var(--ds-success-bg)";
+                textColor = "var(--ds-success)";
+                borderColor = "var(--ds-success-border)";
+              }
+              if (isFlag) {
+                bgColor = "var(--ds-warning-bg)";
+                textColor = "var(--ds-warning)";
+                borderColor = "var(--ds-warning-border)";
+              }
+              if (isCurr) {
+                borderColor = T.accent;
+              }
+
+              return (
+                <button
+                  key={q.id}
+                  type="button"
+                  onClick={() => handleJumpToQuestion(idx)}
+                  style={{
+                    height: "36px",
+                    borderRadius: "0.45rem",
+                    border: `2px solid ${isCurr ? T.accent : borderColor}`,
+                    backgroundColor: bgColor,
+                    color: textColor,
+                    fontWeight: isCurr ? 800 : 600,
+                    fontSize: "0.8rem",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}
+                >
+                  {idx + 1}
+                  {isFlag && (
+                    <span style={{ position: "absolute", top: "-4px", right: "-2px", fontSize: "0.58rem" }}>
+                      🚩
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Sticky Zero-Scroll Exam Dock */}
+      <div className="ge-mobile-exam-dock" aria-label="Thanh điều hướng nhanh bài kiểm tra">
+        <button
+          type="button"
+          className="ge-mobile-exam-dock-btn"
+          onClick={() => setShowMobilePalette((prev) => !prev)}
+        >
+          📋 {currentIndex + 1}/{totalQuestions}
+        </button>
+
+        <button
+          type="button"
+          className="ge-mobile-exam-dock-btn"
+          disabled={currentIndex === 0}
+          onClick={handlePrev}
+        >
+          ← Trước
+        </button>
+
+        {currentIndex < totalQuestions - 1 ? (
+          <button
+            type="button"
+            className="ge-mobile-exam-dock-btn primary"
+            onClick={handleNext}
+          >
+            Tiếp theo →
+          </button>
+        ) : null}
+
+        <button
+          type="button"
+          className="ge-mobile-exam-dock-btn success"
+          onClick={() => setShowSubmitModal(true)}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Đang nộp..." : "Nộp bài"}
+        </button>
       </div>
 
       {/* Confirmation Modal (WCAG FocusTrap) */}

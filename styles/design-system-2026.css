@@ -1083,6 +1083,138 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================================
+ * MOBILE ZERO-SCROLL EXAM & EXERCISE DOCK (Diagnostic / TOEIC / Practice)
+ * ============================================================================ */
+.ge-mobile-exam-dock {
+  display: none;
+}
+
+.ge-mobile-palette-sheet {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .ge-diag-wrap {
+    padding: 0.65rem 0.45rem 78px !important;
+    min-height: auto !important;
+  }
+  .ge-diag-topbar {
+    position: sticky;
+    top: 58px;
+    z-index: 45;
+    padding: 0.55rem 0.75rem !important;
+    margin-bottom: 0.65rem !important;
+    gap: 0.45rem !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .ge-diag-card {
+    padding: 0.95rem !important;
+    border-radius: 0.85rem !important;
+  }
+  .ge-diag-stem-wrap {
+    margin-bottom: 0.95rem !important;
+  }
+  .ge-diag-stem {
+    font-size: 1.02rem !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+  }
+  .ge-diag-options {
+    gap: 0.55rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .ge-diag-option {
+    padding: 0.7rem 0.85rem !important;
+    gap: 0.7rem !important;
+    border-radius: 0.65rem !important;
+  }
+  .ge-diag-option-key {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 0.85rem !important;
+  }
+  .ge-diag-option-text {
+    font-size: 0.95rem !important;
+    line-height: 1.35 !important;
+  }
+  .ge-diag-palette {
+    display: none;
+  }
+  .ge-diag-actions {
+    display: none !important;
+  }
+  .ge-toeic-desktop-footer {
+    display: none !important;
+  }
+  .ge-toeic-mobile-hide-palette {
+    display: none !important;
+  }
+  .ge-mobile-exam-dock {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding: 8px 10px;
+    background-color: var(--ds-header-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--ds-border);
+    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.1);
+    z-index: 65;
+  }
+  .ge-mobile-exam-dock-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 40px;
+    padding: 0 10px;
+    border-radius: 0.55rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid var(--ds-border);
+    background-color: var(--ds-card);
+    color: var(--ds-text);
+  }
+  .ge-mobile-exam-dock-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ge-mobile-exam-dock-btn.primary {
+    flex: 1;
+    background-color: var(--ds-btn-primary);
+    color: #ffffff;
+    border-color: transparent;
+  }
+  .ge-mobile-exam-dock-btn.success {
+    background-color: var(--ds-btn-success);
+    color: #ffffff;
+    border-color: transparent;
+  }
+  .ge-mobile-palette-sheet {
+    display: block;
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(122px + env(safe-area-inset-bottom, 0px));
+    max-height: 54vh;
+    overflow-y: auto;
+    padding: 0.85rem;
+    background-color: var(--ds-card);
+    border: 1px solid var(--ds-border);
+    border-radius: 0.9rem;
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.18);
+    z-index: 66;
+  }
+}
+
 /* WCAG 2.3.3 Tôn trọng Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,

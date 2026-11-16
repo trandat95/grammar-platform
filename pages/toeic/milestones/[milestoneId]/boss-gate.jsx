@@ -18,6 +18,7 @@ export default function BossGatePage() {
   const [isFinished, setIsFinished] = useState(false);
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showMobilePalette, setShowMobilePalette] = useState(false);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -240,10 +241,10 @@ export default function BossGatePage() {
 
             {/* TEST RUNNER */}
             {!isFinished && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {/* QUESTION PALETTE */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingBottom: '5rem' }}>
+                {/* QUESTION PALETTE (Desktop Inline) */}
                 <div
-                  className="toeic-card"
+                  className="toeic-card ge-toeic-mobile-hide-palette"
                   style={{
                     padding: '0.75rem 1rem',
                     display: 'flex',
@@ -277,10 +278,10 @@ export default function BossGatePage() {
                 {/* CURRENT QUESTION CARD */}
                 {currentQ && (
                   <div
-                    className="toeic-card"
+                    className="toeic-card ge-diag-card"
                     style={{ padding: '1.75rem' }}
                   >
-                    <div className="toeic-flex-between" style={{ paddingBottom: '0.75rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem' }}>
+                    <div className="toeic-flex-between" style={{ paddingBottom: '0.75rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1rem' }}>
                       <ToeicBadge variant="primary">
                         Câu {currentIndex + 1} / {questions.length}
                       </ToeicBadge>
@@ -289,7 +290,7 @@ export default function BossGatePage() {
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--ds-text)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                    <div className="ge-diag-stem" style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--ds-text)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
                       {currentQ.context_sentence || currentQ.stem}
                     </div>
 
@@ -314,7 +315,7 @@ export default function BossGatePage() {
                     </div>
 
                     {/* CONTROLS */}
-                    <div className="toeic-flex-between" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border)' }}>
+                    <div className="toeic-flex-between ge-toeic-desktop-footer" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--ds-border)' }}>
                       <ToeicButton
                         variant="secondary"
                         disabled={currentIndex === 0}
@@ -342,6 +343,89 @@ export default function BossGatePage() {
                     </div>
                   </div>
                 )}
+
+                {/* MOBILE COLLAPSIBLE PALETTE SHEET */}
+                {showMobilePalette && (
+                  <div className="ge-mobile-palette-sheet" role="dialog" aria-label="Danh sách câu hỏi Boss Gate">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--ds-text)' }}>
+                        Danh sách câu hỏi ({Object.keys(answers).length}/{questions.length} đã chọn)
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowMobilePalette(false)}
+                        style={{ border: 'none', background: 'transparent', fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-text-muted)', cursor: 'pointer' }}
+                      >
+                        Đóng ✕
+                      </button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.45rem' }}>
+                      {questions.map((q, i) => {
+                        const isAns = !!answers[q.id];
+                        const isCurr = i === currentIndex;
+                        return (
+                          <button
+                            key={q.id || i}
+                            type="button"
+                            onClick={() => {
+                              setCurrentIndex(i);
+                              setShowMobilePalette(false);
+                              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className={`toeic-palette-btn ${isCurr ? 'current' : isAns ? 'answered' : ''}`}
+                            style={{ height: '38px', fontSize: '0.82rem', fontWeight: 800 }}
+                          >
+                            {i + 1}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* MOBILE STICKY BOTTOM EXAM DOCK */}
+                <div className="ge-mobile-exam-dock" aria-label="Điều hướng nhanh Boss Gate">
+                  <button
+                    type="button"
+                    className="ge-mobile-exam-dock-btn"
+                    onClick={() => setShowMobilePalette(prev => !prev)}
+                  >
+                    📋 {currentIndex + 1}/{questions.length}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="ge-mobile-exam-dock-btn"
+                    disabled={currentIndex === 0}
+                    onClick={() => {
+                      setCurrentIndex(prev => prev - 1);
+                      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    ← Trước
+                  </button>
+
+                  {currentIndex < questions.length - 1 ? (
+                    <button
+                      type="button"
+                      className="ge-mobile-exam-dock-btn primary"
+                      onClick={() => {
+                        setCurrentIndex(prev => prev + 1);
+                        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
+                      Tiếp theo →
+                    </button>
+                  ) : null}
+
+                  <button
+                    type="button"
+                    className="ge-mobile-exam-dock-btn success"
+                    onClick={handleFinishTest}
+                  >
+                    Nộp bài ✓
+                  </button>
+                </div>
               </div>
             )}
           </div>

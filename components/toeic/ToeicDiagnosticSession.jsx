@@ -21,6 +21,7 @@ export default function ToeicDiagnosticSession({
   const [errorMsg, setErrorMsg] = useState(null);
   const [diagnosticResult, setDiagnosticResult] = useState(null);
   const [activeTab, setActiveTab] = useState('radar'); // 'radar' | 'tree'
+  const [showMobilePalette, setShowMobilePalette] = useState(false);
 
   // Per-question timer (seconds)
   const [questionTimerSec, setQuestionTimerSec] = useState(0);
@@ -458,7 +459,7 @@ export default function ToeicDiagnosticSession({
             </div>
 
             {/* Bottom Actions */}
-            <div className="toeic-exam-footer">
+            <div className="toeic-exam-footer ge-toeic-desktop-footer">
               <ToeicButton
                 variant="secondary"
                 onClick={handlePrev}
@@ -495,7 +496,7 @@ export default function ToeicDiagnosticSession({
         </div>
 
         {/* RIGHT: Question Palette (4 cols) */}
-        <div className="toeic-col-4">
+        <div className="toeic-col-4 ge-toeic-mobile-hide-palette">
           <ToeicQuestionPalette
             questions={questions}
             currentIndex={currentIndex}
@@ -505,6 +506,82 @@ export default function ToeicDiagnosticSession({
             title={`Chặng ${currentStage} (10 câu)`}
           />
         </div>
+      </div>
+
+      {/* Mobile Collapsible Palette Drawer */}
+      {showMobilePalette && (
+        <div className="ge-mobile-palette-sheet" role="dialog" aria-label="Bảng câu hỏi chẩn đoán TOEIC">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+            <span style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--ds-text)' }}>
+              Chặng {currentStage} • Câu {currentIndex + 1}/{questions.length}
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowMobilePalette(false)}
+              style={{ border: 'none', background: 'transparent', fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-text-muted)', cursor: 'pointer' }}
+            >
+              Đóng ✕
+            </button>
+          </div>
+          <ToeicQuestionPalette
+            questions={questions}
+            currentIndex={currentIndex}
+            answers={answers}
+            flagged={flags}
+            onSelectIndex={(idx) => {
+              setCurrentIndex(idx);
+              setShowMobilePalette(false);
+              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            title={`Chặng ${currentStage}`}
+          />
+        </div>
+      )}
+
+      {/* Mobile Sticky Bottom Exam Dock */}
+      <div className="ge-mobile-exam-dock" aria-label="Điều hướng bài chẩn đoán TOEIC">
+        <button
+          type="button"
+          className="ge-mobile-exam-dock-btn"
+          onClick={() => setShowMobilePalette(prev => !prev)}
+        >
+          📋 {currentIndex + 1}/{questions.length}
+        </button>
+
+        <button
+          type="button"
+          className="ge-mobile-exam-dock-btn"
+          disabled={currentIndex === 0}
+          onClick={() => {
+            handlePrev();
+            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
+          ← Trước
+        </button>
+
+        {currentIndex < questions.length - 1 ? (
+          <button
+            type="button"
+            className="ge-mobile-exam-dock-btn primary"
+            onClick={() => {
+              handleNext();
+              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
+            Tiếp theo →
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="ge-mobile-exam-dock-btn success"
+            style={{ flex: 1 }}
+            onClick={handleSubmitStage}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Đang chấm...' : currentStage === 3 ? 'Hoàn thành ✓' : `Nộp Chặng ${currentStage} →`}
+          </button>
+        )}
       </div>
     </div>
   );
