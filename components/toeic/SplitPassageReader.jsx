@@ -19,6 +19,8 @@ export default function SplitPassageReader({
   activeQuestionId = null,
   examMode = 'practice',
   isReviewMode = false,
+  isVip = false,
+  onRequireVip = null,
   userAnswers = {},
   onSelectOption,
   onQuestionClick
@@ -135,7 +137,8 @@ export default function SplitPassageReader({
   const setQuestions = currentSet.questions || [];
 
   const activeQuestion = setQuestions.find(q => q.id === activeQuestionId) || setQuestions[0] || null;
-  const evidenceSentence = activeQuestion?.ai_analysis?.evidence_sentence_en || null;
+  const canShowEvidence = isReviewMode || (examMode === 'practice' && Boolean(userAnswers[activeQuestion?.id]));
+  const evidenceSentence = canShowEvidence ? (activeQuestion?.ai_analysis?.evidence_sentence_en || null) : null;
 
   // Auto-scroll to evidence sentence in review mode or when clicking questions
   useEffect(() => {
@@ -659,74 +662,115 @@ export default function SplitPassageReader({
                   })}
                 </div>
 
-                {/* Explanation & Evidence Box (shown immediately on answer or in Review Mode) */}
-                {showFeedback && (
-                  <div
-                    style={{
-                      marginTop: '0.9rem',
-                      padding: '0.85rem 1rem',
-                      borderRadius: 'var(--ds-radius-md)',
-                      backgroundColor: 'var(--ds-bg-elevated)',
-                      border: '1px solid var(--ds-border)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.45rem',
-                      fontSize: '0.82rem',
-                      lineHeight: 1.55,
-                      color: 'var(--ds-text-secondary)'
-                    }}
-                  >
-                    <div style={{ fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
-                      💡 Giải thích chi tiết &amp; Dẫn chứng (Câu #{q.number})
+                {/* Explanation & Evidence Box (Basic for Free Exam Review, Deep AI for VIP & Practice) */}
+                {showFeedback && (() => {
+                  const canSeeDeepAi = isVip || examMode === 'practice';
+                  return (
+                    <div
+                      style={{
+                        marginTop: '0.9rem',
+                        padding: '0.85rem 1rem',
+                        borderRadius: 'var(--ds-radius-md)',
+                        backgroundColor: 'var(--ds-bg-elevated)',
+                        border: '1px solid var(--ds-border)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.45rem',
+                        fontSize: '0.82rem',
+                        lineHeight: 1.55,
+                        color: 'var(--ds-text-secondary)'
+                      }}
+                    >
+                      <div className="toeic-flex-between" style={{ gap: '0.5rem' }}>
+                        <span style={{ fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
+                          💡 {canSeeDeepAi ? 'Giải thích AI & Dẫn chứng' : 'Đáp án & Giải thích cơ bản'} (Câu #{q.number})
+                        </span>
+                        {!canSeeDeepAi && (
+                          <ToeicBadge variant="warning">VIP AI Locked</ToeicBadge>
+                        )}
+                      </div>
+
+                      {(q.explanation_vi || correctAnalysis?.ai_feedback_vi) && (
+                        <div style={{ color: 'var(--ds-text)' }}>
+                          • Đáp án đúng <strong>({q.correct_answer})</strong>: {q.explanation_vi || correctAnalysis?.ai_feedback_vi}
+                        </div>
+                      )}
+
+                      {(ai.evidence_sentence_en || q.key_clue) && (
+                        <div
+                          style={{
+                            padding: '0.45rem 0.65rem',
+                            borderRadius: 'var(--ds-radius-sm)',
+                            backgroundColor: 'var(--ds-warning-bg)',
+                            borderLeft: '3px solid var(--ds-warning)',
+                            color: 'var(--ds-text)',
+                            fontSize: '0.8rem'
+                          }}
+                        >
+                          <strong>📌 Dẫn chứng:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
+                        </div>
+                      )}
+
+                      {canSeeDeepAi ? (
+                        <>
+                          {selectedAnalysis && !isCorrectAnswer && selectedAnalysis.ai_feedback_vi && (
+                            <div style={{ color: 'var(--ds-danger)', fontWeight: 600 }}>
+                              • Bẫy lỗi ở ({userAns}): {selectedAnalysis.ai_feedback_vi}
+                            </div>
+                          )}
+
+                          {Array.isArray(ai.solving_steps_vi) && ai.solving_steps_vi.length > 0 && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginTop: '0.15rem' }}>
+                              {ai.solving_steps_vi.map((step, sIdx) => (
+                                <div key={sIdx} style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
+                                  {step}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {ai.micro_rule_formula_vi && (
+                            <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)', borderTop: '1px dashed var(--ds-border)', paddingTop: '0.4rem', marginTop: '0.15rem' }}>
+                              <strong>📐 Mẹo / Công thức:</strong> {ai.micro_rule_formula_vi}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div
+                          style={{
+                            marginTop: '0.25rem',
+                            padding: '0.65rem 0.85rem',
+                            borderRadius: 'var(--ds-radius-sm)',
+                            border: '1px dashed var(--ds-warning)',
+                            backgroundColor: 'var(--ds-card)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '0.5rem'
+                          }}
+                        >
+                          <span style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)' }}>
+                            🔒 <strong>Phân tích bẫy lỗi AI &amp; Công thức xử lý nhanh</strong> cho dạng câu <em>{ai.primary_topic_name_vi || 'Đọc hiểu'}</em>
+                          </span>
+                          {onRequireVip && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onRequireVip();
+                              }}
+                              className="toeic-btn toeic-btn-primary"
+                              style={{ fontSize: '0.74rem', padding: '0.3rem 0.7rem', fontWeight: 700 }}
+                            >
+                              Mở Khóa VIP ✨
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
-
-                    {selectedAnalysis && !isCorrectAnswer && selectedAnalysis.ai_feedback_vi && (
-                      <div style={{ color: 'var(--ds-danger)', fontWeight: 600 }}>
-                        • Phương án ({userAns}): {selectedAnalysis.ai_feedback_vi}
-                      </div>
-                    )}
-
-                    {(correctAnalysis?.ai_feedback_vi || q.explanation_vi) && (
-                      <div style={{ color: 'var(--ds-text)' }}>
-                        • Đáp án ({q.correct_answer}): {correctAnalysis?.ai_feedback_vi || q.explanation_vi}
-                        {correctAnalysis?.ai_feedback_vi && q.explanation_vi && q.explanation_vi !== correctAnalysis.ai_feedback_vi
-                          ? ` — ${q.explanation_vi}`
-                          : ''}
-                      </div>
-                    )}
-
-                    {(ai.evidence_sentence_en || q.key_clue) && (
-                      <div
-                        style={{
-                          padding: '0.45rem 0.65rem',
-                          borderRadius: 'var(--ds-radius-sm)',
-                          backgroundColor: 'var(--ds-warning-bg)',
-                          borderLeft: '3px solid var(--ds-warning)',
-                          color: 'var(--ds-text)',
-                          fontSize: '0.8rem'
-                        }}
-                      >
-                        <strong>📌 Dẫn chứng trong bài:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
-                      </div>
-                    )}
-
-                    {Array.isArray(ai.solving_steps_vi) && ai.solving_steps_vi.length > 0 && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginTop: '0.15rem' }}>
-                        {ai.solving_steps_vi.map((step, sIdx) => (
-                          <div key={sIdx} style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
-                            {step}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {ai.micro_rule_formula_vi && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)', borderTop: '1px dashed var(--ds-border)', paddingTop: '0.4rem', marginTop: '0.15rem' }}>
-                        <strong>📐 Mẹo / Công thức:</strong> {ai.micro_rule_formula_vi}
-                      </div>
-                    )}
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             );
           })}
