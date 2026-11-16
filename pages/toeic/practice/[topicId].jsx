@@ -22,6 +22,7 @@ export default function TopicPracticePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
   const [aiTutorContext, setAiTutorContext] = useState({ question: null, selectedOption: null });
@@ -46,10 +47,12 @@ export default function TopicPracticePage() {
         }
         if (data.success) {
           setQuestions(data.questions || []);
+          setIsPreviewMode(Boolean(data.isPreviewMode));
           setCurrentIndex(0);
           setCorrectCount(0);
         } else if (data.locked || data.isVipRequired) {
           setQuestions([]);
+          setIsPreviewMode(false);
         } else {
           setErrorMsg(data.error || 'Không thể tải bài tập');
         }
@@ -65,7 +68,7 @@ export default function TopicPracticePage() {
   }, [topicId, globalAuth.isLoading, globalAuth.activeAuthToken]);
 
   const currentQ = questions[currentIndex] || null;
-  const isLockedForFree = topicInfo && parseInt(topicInfo.target_score_band || 450, 10) >= 550 && !isVip;
+  const isLockedForFree = !isLoading && questions.length === 0 && topicInfo && parseInt(topicInfo.target_score_band || 450, 10) >= 550 && !isVip;
 
   return (
     <>
@@ -173,6 +176,48 @@ export default function TopicPracticePage() {
               </div>
             ) : (
               <>
+                {/* PREVIEW MODE BANNER FOR 550+ BAND (4 FREE PREVIEW QUESTIONS) */}
+                {isPreviewMode && !isVip && questions.length > 0 && (
+                  <div
+                    className="toeic-card"
+                    style={{
+                      padding: '0.75rem 1rem',
+                      marginBottom: '0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '0.6rem',
+                      border: '1px solid var(--ds-warning-border)',
+                      backgroundColor: 'var(--ds-warning-bg)',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--ds-warning)' }}>
+                      ⚡ Chế độ dùng thử: Làm miễn phí {questions.length} câu đầu của chuyên đề Band {topicInfo?.target_score_band || 550}+
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550', {
+                        topicId,
+                        topicName: topicInfo?.name_vi,
+                        targetBand: topicInfo?.target_score_band
+                      })}
+                      style={{
+                        border: 'none',
+                        borderRadius: '0.45rem',
+                        padding: '0.35rem 0.75rem',
+                        backgroundColor: 'var(--ds-btn-warning)',
+                        color: '#ffffff',
+                        fontSize: '0.76rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Mở khóa toàn bộ VIP →
+                    </button>
+                  </div>
+                )}
+
                 {/* PROGRESS BAR */}
                 {questions.length > 0 && (
                   <div

@@ -2931,6 +2931,9 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Sửa Lỗi Cắt Sub-nav Bên Trái (`"n AI"`):** Đổi `justify-content: flex-start` + `flex: 0 0 auto` cho `.ge-subnav-pills` / `.ge-subnav-btn` trên mobile.
   * **Sửa Vỡ Oval Đồng Hồ `⏱️ 20s / mục tiêu 10s` & `Cắm cờ`:** Thêm `white-space: nowrap`, `flex-wrap: wrap` trên `.toeic-q-header` và rút gọn nhãn mobile thành `⏱️ 20s`.
   * **Thu Gọn Card Câu Hỏi TOEIC & Ẩn Nhãn `Phím 1..4` Trên Mobile:** Giúp hiển thị trọn câu hỏi + cả 4 đáp án A, B, C, D ngay trên thanh `.ge-mobile-exam-dock` mà không bị che.
+- [x] **2.15.31 Mở Quyền Làm Thử 4 Câu Cho Mỗi Exercise / Chuyên Đề (`pages/index.js`, `pages/api/toeic/practice/drill.js`, `pages/toeic/index.jsx`, `pages/toeic/practice/[topicId].jsx`):**
+  * **Bài Tập Ngữ Pháp Theo Từng Exercise (`FREE_QUESTIONS_PER_EXERCISE = 4`):** Thay cơ chế đếm cộng dồn toàn chương (`questionGlobalIdx >= 10` làm khóa trắng toàn bộ Exercise 2, 3, 4...) bằng giới hạn **4 câu đầu cho MỖI Exercise** (`qIdx >= 4`), giúp người học trải nghiệm đều tất cả bài tập trước khi nâng cấp VIP.
+  * **Chuyên Đề TOEIC Band 550+:** Cho phép tài khoản Miễn phí/Khách làm thử **4 câu đầu** qua `/api/toeic/practice/drill` thay vì khóa 100% từ ngoài Hub.
 
 ---
 

@@ -25,30 +25,27 @@ export default async function handler(req, res) {
       return res.status(404).json({ success: false, error: `Không tìm thấy chủ điểm ${topicId}` });
     }
 
+    const excludeList = excludeIds ? String(excludeIds).split(',').filter(Boolean) : [];
+    const safeLimit = Math.min(50, Math.max(1, parseInt(limit, 10) || 15));
+
     const targetBand = Number(topic.target_score_band || topic.min_target_band || 450);
+    let isPreviewMode = false;
+    let effectiveLimit = safeLimit;
+
     if (targetBand >= 550) {
       const { isVip } = await resolveServerUserRole(req);
       if (!isVip) {
-        return res.status(403).json({
-          success: false,
-          locked: true,
-          isVipRequired: true,
-          triggerId: 'TRG_08_GRAMMAR_TARGET_550',
-          upgradeRequired: true,
-          topicInfo: topic,
-          questions: [],
-          error: 'Chuyên đề mục tiêu 550–900+ yêu cầu tài khoản VIP.',
-          correlationId
-        });
+        isPreviewMode = true;
+        effectiveLimit = Math.min(safeLimit, 4);
       }
     }
 
-    const excludeList = excludeIds ? String(excludeIds).split(',').filter(Boolean) : [];
-    const safeLimit = Math.min(50, Math.max(1, parseInt(limit, 10) || 15));
-    const questions = ToeicRepository.getQuestionsByTopic(topicId, safeLimit, excludeList);
+    const questions = ToeicRepository.getQuestionsByTopic(topicId, effectiveLimit, excludeList);
 
     return res.status(200).json({
       success: true,
+      isPreviewMode,
+      freePreviewLimit: isPreviewMode ? 4 : null,
       topicInfo: topic,
       questions
     });

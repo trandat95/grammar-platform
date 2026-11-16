@@ -107,6 +107,8 @@ const DEFAULT_USERS = [
   },
 ];
 
+const FREE_QUESTIONS_PER_EXERCISE = 4;
+
 const DEFAULT_ACCESS_POLICY = {
   policyVersion: 1,
   freeExerciseLimit: 10, // Max 10 questions per chapter for free users
@@ -2187,13 +2189,14 @@ export default function Home() {
     setUserInputs((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const checkSingleQuestion = (q, exerciseType = "", globalIdx = 0) => {
-    // Permission Limit Check for Free User
+  const checkSingleQuestion = (q, exerciseType = "", localIdx = 0) => {
+    // Permission Limit Check for Free User (4 questions per exercise)
     const isFreeUser = currentUser.role === "FREE";
-    if (isFreeUser && globalIdx >= accessPolicy.freeExerciseLimit) {
-      alert(
-        `Tài khoản Miễn phí giới hạn ${accessPolicy.freeExerciseLimit} câu bài tập/chương. Hãy nâng cấp VIP để làm không giới hạn!`
-      );
+    if (isFreeUser && localIdx >= FREE_QUESTIONS_PER_EXERCISE) {
+      openContextualSmartPaywall("vip_feature_click", {
+        title: "Mở khóa trọn bộ Bài tập Chuyên đề",
+        description: `Tài khoản Miễn phí được làm thử ${FREE_QUESTIONS_PER_EXERCISE} câu đầu mỗi bài tập (Exercise). Nâng cấp VIP để mở khóa không giới hạn 2,939 câu!`,
+      });
       return;
     }
 
@@ -2239,7 +2242,8 @@ export default function Home() {
 
   const checkAllQuestions = (exercise, startIdx = 0) => {
     exercise.questions.forEach((q, idx) => {
-      checkSingleQuestion(q, exercise.instruction_vi || exercise.title, startIdx + idx);
+      if (currentUser.role === "FREE" && idx >= FREE_QUESTIONS_PER_EXERCISE) return;
+      checkSingleQuestion(q, exercise.instruction_vi || exercise.title, idx);
     });
   };
 
@@ -6616,7 +6620,7 @@ export default function Home() {
                       <span style={{ fontSize: "0.85rem", color: T.text, fontWeight: 500 }}>
                         {currentUser.role === "VIP"
                           ? "Tài khoản VIP: Bạn có toàn quyền truy cập 100% tất cả 2,939 câu bài tập và lời giải chi tiết."
-                          : `Tài khoản Miễn phí: Được phép làm tối đa ${accessPolicy.freeExerciseLimit} câu bài tập đầu tiên mỗi chuyên đề.`}
+                          : `Tài khoản Miễn phí: Được phép làm thử ${FREE_QUESTIONS_PER_EXERCISE} câu đầu tiên cho MỖI bài tập (Exercise) trong chuyên đề.`}
                       </span>
                     </div>
 
@@ -6728,7 +6732,7 @@ export default function Home() {
                             <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: "1.25rem" }}>
                               {ex.questions?.map((q, qIdx) => {
                                 const questionGlobalIdx = exerciseStartIdx + qIdx;
-                                const isLockedForFree = currentUser.role === "FREE" && questionGlobalIdx >= accessPolicy.freeExerciseLimit;
+                                const isLockedForFree = currentUser.role === "FREE" && qIdx >= FREE_QUESTIONS_PER_EXERCISE;
 
                                 const res = results[q.id];
                                 const isAnswerOpen = showAnswers[q.id];
@@ -6736,6 +6740,10 @@ export default function Home() {
                                 const typeInfo = getQuestionTypeInfo(ex.type);
 
                                 if (isLockedForFree) {
+                                  if (qIdx > FREE_QUESTIONS_PER_EXERCISE) {
+                                    return null;
+                                  }
+                                  const remainingInExercise = Math.max(0, (ex.questions?.length || 0) - FREE_QUESTIONS_PER_EXERCISE);
                                   return (
                                     <div
                                       key={q.id || qIdx}
@@ -6748,13 +6756,13 @@ export default function Home() {
                                       }}
                                     >
                                       <div style={{ fontSize: "0.9rem", fontWeight: "700", color: T.warning, marginBottom: "0.3rem" }}>
-                                        🔒 Câu {questionGlobalIdx + 1}: Nội dung khóa dành riêng cho Thành viên VIP
+                                        🔒 Đã hoàn thành {FREE_QUESTIONS_PER_EXERCISE}/{FREE_QUESTIONS_PER_EXERCISE} câu dùng thử — Còn {remainingInExercise} câu dành riêng cho Thành viên VIP
                                       </div>
                                       <p style={{ fontSize: "0.8rem", color: T.textSecondary, maxWidth: "520px", margin: "0 auto 0.75rem auto", lineHeight: 1.5 }}>
-                                        Tài khoản Miễn phí được trải nghiệm tối đa {accessPolicy.freeExerciseLimit} câu đầu tiên. Hãy nâng cấp lên VIP để mở khóa toàn bộ câu hỏi và đáp án giải thích chi tiết!
+                                        Mỗi bài tập (Exercise) được làm thử {FREE_QUESTIONS_PER_EXERCISE} câu đầu tiên. Nâng cấp VIP để mở khóa toàn bộ {ex.questions?.length || 0} câu của bài này cùng đáp án giải thích chi tiết!
                                       </p>
                                       <button
-                                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: `Mở khóa Câu ${questionGlobalIdx + 1} & Toàn bộ Chuyên đề`, description: "Truy cập không giới hạn kho 2,939 câu kèm lời giải sư phạm 5 trường." })}
+                                        onClick={() => openContextualSmartPaywall("vip_feature_click", { title: `Mở khóa trọn bộ ${ex.title || "Bài tập"} & Toàn bộ Chuyên đề`, description: "Truy cập không giới hạn kho 2,939 câu kèm lời giải sư phạm 5 trường." })}
                                         style={{
                                           padding: "0.45rem 1rem",
                                           backgroundColor: T.accent,
@@ -6879,7 +6887,7 @@ export default function Home() {
                                       />
 
                                       <button
-                                        onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx)}
+                                        onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, qIdx)}
                                         style={{
                                           padding: "0.5rem 0.9rem",
                                           backgroundColor: "var(--ds-btn-primary)",

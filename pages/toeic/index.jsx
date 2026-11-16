@@ -342,45 +342,29 @@ export default function ToeicHubPage() {
                           <div className="toeic-topic-meta">
                             <span>Độ thông thạo (Mastery)</span>
                             <span style={{ fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
-                              {canAccess ? '75%' : 'Khóa VIP (Target 550+)'}
+                              {canAccess ? '75%' : 'Dùng thử 4 câu (Band 550+)'}
                             </span>
                           </div>
                           <div className="toeic-progress-bar">
-                            <div className="toeic-progress-fill" style={{ width: canAccess ? '75%' : '0%' }} />
+                            <div className="toeic-progress-fill" style={{ width: canAccess ? '75%' : '25%' }} />
                           </div>
                           <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
                             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
-                              {canAccess ? 'Luyện X-Ray \u2192' : 'Mở khóa VIP \uD83D\uDD12 \u2192'}
+                              {canAccess ? 'Luyện X-Ray \u2192' : 'Làm thử 4 câu \u2192'}
                             </span>
                           </div>
                         </div>
                       </div>
                     );
 
-                    if (canAccess) {
-                      return (
-                        <Link
-                          key={top.id || idx}
-                          href={`/toeic/practice/${top.id}`}
-                          style={{ textDecoration: 'none', color: 'inherit' }}
-                        >
-                          {cardContent}
-                        </Link>
-                      );
-                    }
-
                     return (
-                      <div
+                      <Link
                         key={top.id || idx}
-                        onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550', {
-                          topicId: top.id,
-                          topicName: top.name_vi,
-                          targetBand: top.target_score_band
-                        })}
-                        style={{ color: 'inherit' }}
+                        href={`/toeic/practice/${top.id}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
                       >
                         {cardContent}
-                      </div>
+                      </Link>
                     );
                   })
                 )}
