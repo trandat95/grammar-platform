@@ -25,7 +25,6 @@
   --ds-text-heading: #0f172a;
   --ds-text-secondary: #334155;
   --ds-text-muted: #475569;
-  --ds-text-on-accent: #ffffff;
   --ds-accent: #2563eb;
   --ds-accent-hover: #1d4ed8;
   --ds-accent-bg: #eff6ff;
@@ -87,7 +86,6 @@
   --ds-text-heading: #ffffff;
   --ds-text-secondary: #d4d4d8;
   --ds-text-muted: #a1a1aa;
-  --ds-text-on-accent: #ffffff;
   --ds-accent: #38bdf8;
   --ds-accent-hover: #7dd3fc;
   --ds-accent-bg: rgba(12, 74, 110, 0.30);
@@ -387,11 +385,6 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   padding: 28px 36px;
   box-sizing: border-box;
-  transition: max-width 200ms ease;
-}
-
-.ge-study-shell.is-collapsed .ge-study-main {
-  max-width: 780px;
 }
 
 .ge-lesson-title-clamp {

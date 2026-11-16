@@ -62,7 +62,9 @@ export default function PersonalizedRoadmapView({
       {/* Roadmap Header Card */}
       <div
         style={{
-          background: "linear-gradient(135deg, var(--ds-card) 0%, var(--ds-success-bg) 100%)",
+          background: isLight
+            ? "linear-gradient(135deg, #ffffff 0%, var(--ds-success-bg) 100%)"
+            : "linear-gradient(135deg, var(--ds-bg-elevated) 0%, var(--ds-success-bg) 100%)",
           borderRadius: "1.25rem",
           padding: "2.25rem",
           border: `1px solid ${"var(--ds-success-border)"}`,

@@ -2079,98 +2079,6 @@ export default function Home() {
     }
   };
 
-  /**
-   * Extracts clickable MCQ options from either explicit `q.choices` or a single
-   * inline `(opt1/opt2/...)` group in `q.stem` for MULTIPLE_CHOICE questions.
-   */
-  const extractMultipleChoiceOptions = (q, fallbackType) => {
-    if (!q) return [];
-    if (Array.isArray(q.choices) && q.choices.length >= 2) {
-      return q.choices.slice(0, 4).map((c, idx) => {
-        if (typeof c === "string") return { value: c, label: c };
-        const letter = ["A", "B", "C", "D"][idx] || String(idx + 1);
-        return { value: c.id || c.value || letter, label: c.text || c.label || String(c) };
-      });
-    }
-    const effectiveType = q.type || fallbackType;
-    if (effectiveType !== "MULTIPLE_CHOICE" || typeof q.stem !== "string") return [];
-    const matches = q.stem.match(/\(([^()]*\/[^()]*)\)/g);
-    if (!matches || matches.length !== 1) return [];
-    const inner = matches[0].slice(1, -1);
-    const parts = inner.split("/").map((s) => s.trim()).filter(Boolean);
-    if (parts.length < 2 || parts.length > 4) return [];
-    return parts.map((opt) => ({ value: opt, label: opt }));
-  };
-
-  /**
-   * Renders accessible Radio Cards (A/B/C/D, min-height 48px) for MULTIPLE_CHOICE items.
-   */
-  const renderChoiceRadioCards = ({ questionId, currentVal, options, onSelect, disabled = false }) => {
-    const cleanVal = normalizeText(currentVal || "");
-    return (
-      <div
-        role="radiogroup"
-        aria-label={`Lựa chọn cho câu ${questionId}`}
-        style={{
-          display: "grid",
-          gridTemplateColumns: options.length === 2 ? "repeat(auto-fit, minmax(200px, 1fr))" : "1fr",
-          gap: "0.55rem",
-          width: "100%",
-          marginBottom: "0.65rem",
-        }}
-      >
-        {options.map((opt, idx) => {
-          const letter = ["A", "B", "C", "D"][idx] || String(idx + 1);
-          const isSelected = cleanVal !== "" && (cleanVal === normalizeText(opt.value) || cleanVal === normalizeText(letter));
-          return (
-            <button
-              key={`${questionId}-${letter}`}
-              type="button"
-              role="radio"
-              aria-checked={isSelected}
-              disabled={disabled}
-              onClick={() => onSelect(opt.value)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                minHeight: "48px",
-                padding: "0.6rem 0.9rem",
-                borderRadius: "10px",
-                textAlign: "left",
-                cursor: disabled ? "default" : "pointer",
-                border: isSelected ? "2px solid var(--ds-accent)" : "1.5px solid var(--ds-card-border)",
-                backgroundColor: isSelected ? "var(--ds-accent-bg)" : "var(--ds-card)",
-                color: "var(--ds-text)",
-                fontSize: "0.9rem",
-                fontWeight: isSelected ? "600" : "500",
-                transition: "border-color 140ms ease, background-color 140ms ease",
-              }}
-            >
-              <span
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "9999px",
-                  flexShrink: 0,
-                  display: "grid",
-                  placeItems: "center",
-                  fontSize: "0.8rem",
-                  fontWeight: "700",
-                  backgroundColor: isSelected ? "var(--ds-accent)" : "var(--ds-bg-elevated)",
-                  color: isSelected ? "var(--ds-text-on-accent)" : "var(--ds-text-secondary)",
-                }}
-              >
-                {letter}
-              </span>
-              <span style={{ lineHeight: 1.4 }}>{opt.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    );
-  };
-
   // --- Pedagogical 3-Tier Explanation Renderer ---
   // Helper to format inline markdown (*italic*, **bold**, ~~strikethrough~~, [NOT ...]) and examples
   const renderFormattedText = (str) => {
@@ -6972,81 +6880,65 @@ export default function Home() {
                                       </div>
                                     )}
 
-                                    {/* Input Row (Dual-Mode: MCQ Radio Cards or Text Input) */}
-                                    {(() => {
-                                      const mcOptions = extractMultipleChoiceOptions(q, ex.type);
-                                      return (
-                                        <div style={{ display: "flex", flexDirection: mcOptions.length >= 2 ? "column" : "row", gap: "0.5rem", alignItems: mcOptions.length >= 2 ? "stretch" : "center", flexWrap: "wrap" }}>
-                                          {mcOptions.length >= 2 ? (
-                                            renderChoiceRadioCards({
-                                              questionId: q.id,
-                                              currentVal: inputVal,
-                                              options: mcOptions,
-                                              onSelect: (val) => handleInputChange(q.id, val),
-                                            })
-                                          ) : (
-                                            <input
-                                              type="text"
-                                              value={inputVal}
-                                              placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
-                                              onChange={(e) => handleInputChange(q.id, e.target.value)}
-                                              onKeyDown={(e) => {
-                                                if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx);
-                                              }}
-                                              style={{
-                                                flex: 1,
-                                                minWidth: "220px",
-                                                padding: "0.5rem 0.75rem",
-                                                backgroundColor: "var(--ds-card)",
-                                                border: res?.checked
-                                                  ? res.isCorrect
-                                                    ? "1px solid var(--ds-success)"
-                                                    : "1px solid var(--ds-danger)"
-                                                  : `1px solid ${T.border}`,
-                                                borderRadius: "5px",
-                                                color: T.text,
-                                                fontSize: "0.875rem",
-                                                outline: "none",
-                                              }}
-                                            />
-                                          )}
+                                    {/* Input Row */}
+                                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                                      <input
+                                        type="text"
+                                        value={inputVal}
+                                        placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
+                                        onChange={(e) => handleInputChange(q.id, e.target.value)}
+                                        onKeyDown={(e) => {
+                                          if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx);
+                                        }}
+                                        style={{
+                                          flex: 1,
+                                          minWidth: "220px",
+                                          padding: "0.5rem 0.75rem",
+                                          backgroundColor: "var(--ds-card)",
+                                          border: res?.checked
+                                            ? res.isCorrect
+                                              ? "1px solid var(--ds-success)"
+                                              : "1px solid var(--ds-danger)"
+                                            : `1px solid ${T.border}`,
+                                          borderRadius: "5px",
+                                          color: T.text,
+                                          fontSize: "0.875rem",
+                                          outline: "none",
+                                        }}
+                                      />
 
-                                          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-                                            <button
-                                              onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, qIdx)}
-                                              style={{
-                                                padding: "0.5rem 0.9rem",
-                                                backgroundColor: "var(--ds-btn-primary)",
-                                                border: "1px solid var(--ds-btn-primary)",
-                                                borderRadius: "5px",
-                                                color: "var(--ds-text-on-accent)",
-                                                fontSize: "0.8rem",
-                                                fontWeight: "600",
-                                                cursor: "pointer",
-                                              }}
-                                            >
-                                              Kiểm tra
-                                            </button>
+                                      <button
+                                        onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, qIdx)}
+                                        style={{
+                                          padding: "0.5rem 0.9rem",
+                                          backgroundColor: "var(--ds-btn-primary)",
+                                          border: "1px solid var(--ds-btn-primary)",
+                                          borderRadius: "5px",
+                                          color: "#ffffff",
+                                          fontSize: "0.8rem",
+                                          fontWeight: "600",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        Kiểm tra
+                                      </button>
 
-                                            <button
-                                              onClick={() => toggleShowAnswer(q.id)}
-                                              style={{
-                                                padding: "0.5rem 0.75rem",
-                                                backgroundColor: "var(--ds-card-subtle)",
-                                                border: `1px solid ${T.border}`,
-                                                borderRadius: "5px",
-                                                color: T.textSecondary,
-                                                fontSize: "0.8rem",
-                                                fontWeight: "500",
-                                                cursor: "pointer",
-                                              }}
-                                            >
-                                              {isAnswerOpen ? "Ẩn đáp án" : "Đáp án"}
-                                            </button>
-                                          </div>
-                                        </div>
-                                      );
-                                    })()}
+                                      <button
+                                        onClick={() => toggleShowAnswer(q.id)}
+                                        style={{
+                                          padding: "0.5rem 0.75rem",
+                                          backgroundColor: "var(--ds-card-subtle)",
+                                          border: `1px solid ${T.border}`,
+                                          borderRadius: "5px",
+                                          color: T.textSecondary,
+                                          fontSize: "0.8rem",
+                                          fontWeight: "500",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        {isAnswerOpen ? "Ẩn đáp án" : "Đáp án"}
+                                      </button>
+                                    </div>
 
                                     {/* Instant Result Message + Adaptive Remedial Recommendation */}
                                     {res?.checked && (
@@ -7611,84 +7503,69 @@ export default function Home() {
                         </div>
                       )}
 
-                      {/* Input & Action Buttons (Dual-Mode: MCQ Radio Cards or Text Input) */}
-                      {(() => {
-                        const mcOptions = extractMultipleChoiceOptions(q, q.type);
-                        return (
-                          <div style={{ display: "flex", flexDirection: mcOptions.length >= 2 ? "column" : "row", gap: "0.5rem", alignItems: mcOptions.length >= 2 ? "stretch" : "center", flexWrap: "wrap", marginTop: "0.85rem" }}>
-                            {mcOptions.length >= 2 ? (
-                              renderChoiceRadioCards({
-                                questionId: q.id,
-                                currentVal: userAns,
-                                options: mcOptions,
-                                disabled: quizSubmitted,
-                                onSelect: (val) => handleQuizAnswerChange(q.id, val),
-                              })
-                            ) : (
-                              <input
-                                type="text"
-                                disabled={quizSubmitted}
-                                value={userAns}
-                                placeholder={q.starter_prompt ? `Viết tiếp từ "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
-                                onChange={(e) => handleQuizAnswerChange(q.id, e.target.value)}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter" && !quizSubmitted) checkSingleQuizQuestion(q);
-                                }}
-                                style={{
-                                  flex: 1,
-                                  minWidth: "240px",
-                                  padding: "0.55rem 0.85rem",
-                                  borderRadius: "6px",
-                                  border: singleCheck?.checked
-                                    ? singleCheck.isCorrect
-                                      ? "1px solid var(--ds-success)"
-                                      : "1px solid var(--ds-danger)"
-                                    : `1px solid ${T.border}`,
-                                  fontSize: "0.875rem",
-                                  backgroundColor: "var(--ds-card)",
-                                  color: T.text,
-                                  outline: "none",
-                                }}
-                              />
-                            )}
+                      {/* Input & Action Buttons */}
+                      <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.85rem" }}>
+                        <input
+                          type="text"
+                          disabled={quizSubmitted}
+                          value={userAns}
+                          placeholder={q.starter_prompt ? `Viết tiếp từ "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
+                          onChange={(e) => handleQuizAnswerChange(q.id, e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !quizSubmitted) checkSingleQuizQuestion(q);
+                          }}
+                          style={{
+                            flex: 1,
+                            minWidth: "240px",
+                            padding: "0.55rem 0.85rem",
+                            borderRadius: "6px",
+                            border: singleCheck?.checked
+                              ? singleCheck.isCorrect
+                                ? "1px solid var(--ds-success)"
+                                : "1px solid var(--ds-danger)"
+                              : `1px solid ${T.border}`,
+                            fontSize: "0.875rem",
+                            backgroundColor: "var(--ds-card)",
+                            color: T.text,
+                            outline: "none",
+                          }}
+                        />
 
-                            {!quizSubmitted && (
-                              <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-                                <button
-                                  onClick={() => checkSingleQuizQuestion(q)}
-                                  style={{
-                                    backgroundColor: "var(--ds-bg-elevated)",
-                                    color: T.text,
-                                    border: `1px solid ${T.border}`,
-                                    padding: "0.55rem 1rem",
-                                    borderRadius: "6px",
-                                    fontSize: "0.8rem",
-                                    fontWeight: "600",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  Kiểm tra
-                                </button>
-                                <button
-                                  onClick={() => toggleQuizShowAnswer(q.id)}
-                                  style={{
-                                    backgroundColor: "var(--ds-card-subtle)",
-                                    color: T.textSecondary,
-                                    border: `1px solid ${T.border}`,
-                                    padding: "0.55rem 0.85rem",
-                                    borderRadius: "6px",
-                                    fontSize: "0.8rem",
-                                    fontWeight: "500",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {isAnswerShown ? "Ẩn đáp án" : "Xem đáp án"}
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })()}
+                        {!quizSubmitted && (
+                          <>
+                            <button
+                              onClick={() => checkSingleQuizQuestion(q)}
+                              style={{
+                                backgroundColor: "var(--ds-bg-elevated)",
+                                color: T.text,
+                                border: `1px solid ${T.border}`,
+                                padding: "0.55rem 1rem",
+                                borderRadius: "6px",
+                                fontSize: "0.8rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Kiểm tra
+                            </button>
+                            <button
+                              onClick={() => toggleQuizShowAnswer(q.id)}
+                              style={{
+                                backgroundColor: "var(--ds-card-subtle)",
+                                color: T.textSecondary,
+                                border: `1px solid ${T.border}`,
+                                padding: "0.55rem 0.85rem",
+                                borderRadius: "6px",
+                                fontSize: "0.8rem",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                              }}
+                            >
+                              {isAnswerShown ? "Ẩn đáp án" : "Xem đáp án"}
+                            </button>
+                          </>
+                        )}
+                      </div>
 
                       {/* Instant Single Check Feedback */}
                       {!quizSubmitted && singleCheck?.checked && (
