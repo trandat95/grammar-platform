@@ -2939,6 +2939,9 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Topic Cards Tinh Gọn & Thu Gọn Mặc Định:** Thanh lọc nhóm chuyên đề cuộn ngang 1 dòng trên mobile (`.toeic-chip-scroll`), mặc định hiển thị 6 chủ điểm kèm nút mở rộng toàn bộ 24 chủ điểm, loại bỏ đoạn mô tả dài và progress bar giả.
 - [x] **2.15.33 Chuẩn Hóa Hành Văn Tiếng Việt Tự Nhiên & Outcome-First UX Copywriting (`AiPowerShowcase2026.jsx`, `ToeicHeroBanner.jsx`, `pages/toeic/index.jsx`, `pages/index.js`):**
   * **Áp dụng nguyên tắc từ `vietnamese-ux-writing`, `vietnamese-language-skill`, `viet-nhu-nguoi`:** Loại bỏ các thuật ngữ hàn lâm/dịch máy (*"quang phổ"*, *"mô hình IRT 3PL"*, *"tư duy nhận thức"*, *"Error Trap DNA"*, *"đo ni đóng giày"*), chuyển sang câu chữ người thật ngắn gọn, tập trung vào lợi ích thực tế (*"Soi cấu trúc câu 3 giây"*, *"24 dạng bài hay ra thi"*, *"Làm lại câu tương tự để hết sai lần 2"*).
+- [x] **2.15.34 Tái Cấu Trúc Trang Chủ Thành Giao Diện Action-First & 3 Tab Gọn Sạch (`pages/index.js`):**
+  * **3 Lối Vào Cốt Lõi Ngay Màn Hình Đầu Tiên:** Đặt thẳng 3 thẻ hành động (*Học Tiếp Hôm Nay*, *Kiểm Tra Trình Độ 30 Câu*, *Luyện Thi TOEIC 2026*) ngay dưới thanh chào gọn, đưa người dùng vào việc học chỉ sau 1 chạm.
+  * **Chuyển Nội Dung Giới Thiệu AI & TOEIC Vào Tab Riêng (`✨ Khám phá AI & TOEIC`):** Trang chủ không còn bị che khuất bởi các banner dài hàng trăm pixel trên cả Desktop lẫn Mobile.
 
 ---
 

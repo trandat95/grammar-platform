@@ -5459,12 +5459,12 @@ export default function Home() {
           <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
-              {/* Hero Banner: Streak & Rank */}
+              {/* 1. COMPACT WELCOME STRIP (Streak, Level & 7-Day Calendar) */}
               <div
                 className="ge-hero-banner-card"
                 style={{
-                  padding: "1.65rem 1.85rem",
-                  marginBottom: "1.25rem",
+                  padding: "1.15rem 1.35rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <img
@@ -5481,35 +5481,27 @@ export default function Home() {
                     justifyContent: "space-between",
                     alignItems: "center",
                     flexWrap: "wrap",
-                    gap: "1.5rem",
+                    gap: "1rem",
                   }}
                 >
                   <div>
-                    <div className="ge-mobile-hide" style={{ marginBottom: "0.55rem" }}>
-                      <span className="ge-domain-pill" style={{ fontSize: "0.7rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                        🌐 GRAMMARPRO.IO.VN • ADAPTIVE AI LEARNING
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
                       <div className="ge-streak-orb" aria-hidden="true">
-                        <span className="ge-streak-flame-live" style={{ fontSize: "1.55rem" }}>🔥</span>
+                        <span className="ge-streak-flame-live" style={{ fontSize: "1.35rem" }}>🔥</span>
                       </div>
-                      <h1 style={{ fontSize: "1.45rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
-                        Chuỗi học tập {userTracker.streak} ngày liên tiếp của {currentUser.name}!
+                      <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
+                        Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
                       </h1>
                     </div>
-                    <p className="ge-mobile-hide" style={{ fontSize: "0.9rem", color: "var(--ds-text-muted)", margin: "0 0 1rem 0", maxWidth: "560px" }}>
-                      Duy trì thói quen học mỗi ngày để mở khóa huy hiệu và làm chủ toàn bộ 12 chuyên đề ngữ pháp.
-                    </p>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                       <span
                         style={{
                           backgroundColor: "var(--ds-bg-elevated)",
                           border: "1px solid var(--ds-border)",
                           color: "var(--ds-text)",
-                          fontSize: "0.78rem",
-                          padding: "0.25rem 0.65rem",
+                          fontSize: "0.76rem",
+                          padding: "0.22rem 0.6rem",
                           borderRadius: "6px",
                           fontWeight: "600",
                         }}
@@ -5517,8 +5509,8 @@ export default function Home() {
                         {userRank.badge} • Cấp {userRank.level} ({userRank.title})
                       </span>
 
-                      <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
-                        Mục tiêu cấp tiếp theo: <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
+                      <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)" }}>
+                        <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
                       </span>
 
                       {currentUser.role === "FREE" && (
@@ -5527,36 +5519,37 @@ export default function Home() {
                           onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
                           className="ds-focusable"
                           style={{
-                            fontSize: "0.75rem",
+                            fontSize: "0.74rem",
                             color: "var(--ds-warning)",
                             backgroundColor: "var(--ds-warning-bg)",
                             border: "1px solid var(--ds-warning-border)",
-                            padding: "0.24rem 0.55rem",
+                            padding: "0.22rem 0.55rem",
                             borderRadius: "6px",
                             cursor: "pointer",
                             fontWeight: "600",
                           }}
                         >
-                          ⚡ Nâng cấp VIP để mở khóa không giới hạn
+                          ⚡ Nâng cấp VIP
                         </button>
                       )}
                     </div>
                   </div>
 
-                  {/* 7-Day Mini Calendar */}
+                  {/* 7-Day Mini Calendar (Desktop only to keep mobile crisp) */}
                   <div
+                    className="ge-mobile-hide"
                     style={{
                       backgroundColor: "var(--ds-card)",
                       border: "1px solid var(--ds-border)",
-                      padding: "1rem 1.2rem",
+                      padding: "0.75rem 1rem",
                       borderRadius: "10px",
                       boxShadow: "var(--ds-shadow-sm)",
                     }}
                   >
-                    <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.75rem", textAlign: "center" }}>
-                      LỊCH HOẠT ĐỘNG 7 NGÀY
+                    <div style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.5rem", textAlign: "center" }}>
+                      7 NGÀY QUA
                     </div>
-                    <div style={{ display: "flex", gap: "0.55rem" }}>
+                    <div style={{ display: "flex", gap: "0.45rem" }}>
                       {last7Days.map((d, i) => (
                         <div
                           key={i}
@@ -5564,24 +5557,24 @@ export default function Home() {
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            gap: "0.35rem",
+                            gap: "0.25rem",
                           }}
                         >
-                          <span style={{ fontSize: "0.68rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
+                          <span style={{ fontSize: "0.66rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
                             {d.dayName}
                           </span>
                           <div
                             className={d.isActive ? "ge-streak-day-active" : undefined}
                             style={{
-                              width: "34px",
-                              height: "34px",
+                              width: "30px",
+                              height: "30px",
                               borderRadius: "50%",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                               backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-bg-elevated)",
                               color: d.isActive ? "#ffffff" : "var(--ds-text-muted)",
-                              fontSize: "0.88rem",
+                              fontSize: "0.8rem",
                               fontWeight: "700",
                               border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
                             }}
@@ -5595,105 +5588,115 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 1. PRIORITY #1: GRAMMAR DIAGNOSTIC ASSESSMENT & PERSONALIZED ROADMAP */}
+              {/* 2. ACTION-FIRST CORE HUB (3 Direct Actions Above the Fold) */}
               <div
                 style={{
-                  backgroundColor: "var(--ds-accent-bg)",
-                  border: "1px solid var(--ds-accent-border)",
-                  borderRadius: "12px",
-                  padding: "1.2rem 1.5rem",
-                  marginBottom: "1.25rem",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "1rem",
-                  boxShadow: "var(--ds-shadow-sm)",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                  gap: "0.85rem",
+                  marginBottom: "1.15rem",
                 }}
               >
-                <div style={{ flex: "1 1 480px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.35rem", flexWrap: "wrap" }}>
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        padding: "0.2rem 0.6rem",
-                        borderRadius: "9999px",
-                        backgroundColor: "var(--ds-indigo-bg)",
-                        color: "var(--ds-indigo)",
-                        border: "1px solid var(--ds-indigo-border)",
-                      }}
-                    >
-                      🎯 Kiểm Tra Trình Độ (30 câu)
-                    </span>
-                    <span className="ge-mobile-hide" style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>
-                      15-20 phút • Cá nhân hóa lộ trình
-                    </span>
+                {/* Core Action 1: Study Today's Lesson */}
+                <button
+                  type="button"
+                  onClick={startRecommendedLesson}
+                  className="ds-focusable"
+                  style={{
+                    textAlign: "left",
+                    padding: "1rem 1.15rem",
+                    borderRadius: "12px",
+                    backgroundColor: "var(--ds-card)",
+                    border: "1.5px solid var(--ds-accent-border)",
+                    boxShadow: "var(--ds-shadow-sm)",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "0.55rem",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                      📖 Học Tiếp Hôm Nay
+                    </div>
+                    <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
+                      Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
+                    </div>
                   </div>
-                  <h3 style={{ fontSize: "1.08rem", fontWeight: 800, color: "var(--ds-text-heading)", margin: "0 0 0.25rem 0" }}>
-                    Chưa biết xuất phát điểm ngữ pháp của bạn ở đâu?
-                  </h3>
-                  <p className="ge-mobile-hide" style={{ fontSize: "0.85rem", color: "var(--ds-text-secondary)", margin: 0, lineHeight: 1.45 }}>
-                    Làm bài kiểm tra ngắn để biết ngay trình độ hiện tại, chỗ nào hay mất điểm và nên học bài nào trước.
-                  </p>
-                </div>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-accent)" }}>
+                    Vào học ngay →
+                  </div>
+                </button>
 
+                {/* Core Action 2: 30-Question Diagnostic Test */}
                 <button
                   type="button"
                   onClick={() => setCurrentView("diagnostic")}
                   className="ds-focusable"
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    padding: "0.75rem 1.5rem",
-                    borderRadius: "0.6rem",
-                    backgroundColor: "var(--ds-btn-primary)",
-                    color: "#ffffff",
-                    fontSize: "0.9rem",
-                    fontWeight: 700,
-                    border: "none",
-                    cursor: "pointer",
+                    textAlign: "left",
+                    padding: "1rem 1.15rem",
+                    borderRadius: "12px",
+                    backgroundColor: "var(--ds-card)",
+                    border: "1px solid var(--ds-border)",
                     boxShadow: "var(--ds-shadow-sm)",
-                    whiteSpace: "nowrap",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "0.55rem",
                   }}
                 >
-                  <span>Khám phá trình độ ngay</span>
-                  <span>➔</span>
+                  <div>
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                      🎯 Kiểm Tra Trình Độ (30 Câu)
+                    </div>
+                    <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
+                      Đo nhanh lỗ hổng ngữ pháp &amp; gợi ý bài cần ôn
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-indigo)" }}>
+                    Làm bài test 15p →
+                  </div>
+                </button>
+
+                {/* Core Action 3: TOEIC 2026 Hub */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") window.location.href = "/toeic";
+                  }}
+                  className="ds-focusable"
+                  style={{
+                    textAlign: "left",
+                    padding: "1rem 1.15rem",
+                    borderRadius: "12px",
+                    backgroundColor: "var(--ds-card)",
+                    border: "1px solid var(--ds-border)",
+                    boxShadow: "var(--ds-shadow-sm)",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "0.55rem",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                      🏆 Luyện Thi TOEIC 2026
+                    </div>
+                    <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
+                      20 Đề thi thử, 24 dạng bài &amp; 540 đoạn nghe chép
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-success)" }}>
+                    Mở TOEIC Hub →
+                  </div>
                 </button>
               </div>
 
-              {/* Mobile-Only Progressive Disclosure Toggle for TOEIC & AI Showcase (Desktop always open) */}
-              <button
-                type="button"
-                className="ge-mobile-only-toggle ds-focusable"
-                aria-expanded={showMobileExtraShowcase}
-                onClick={() => setShowMobileExtraShowcase((prev) => !prev)}
-              >
-                <span>✨ Xem cách AI giúp bạn hết sai lặp lại</span>
-                <span>{showMobileExtraShowcase ? "Thu gọn ▴" : "Mở xem ▾"}</span>
-              </button>
-
-              <div className={showMobileExtraShowcase ? "ge-mobile-collapsible is-open" : "ge-mobile-collapsible"}>
-                {/* TOEIC AI Adaptive Fast-Access Hero Banner (Compact & Balanced) */}
-                <ToeicHeroBanner
-                  initialTargetScore={750}
-                  showStats={true}
-                  isLight={isLight}
-                  compact={true}
-                />
-
-                {/* Interactive Expert-Marketing AI Power Showcase (Sentence X-Ray, Error DNA & Twin Loop) */}
-                <AiPowerShowcase2026
-                  compact={true}
-                  onNavigateStudy={() => setCurrentView("study")}
-                  onNavigateDiagnostic={() => setCurrentView("diagnostic")}
-                  onNavigateVip={() => setCurrentView("vip")}
-                />
-              </div>
-
-              {/* Dashboard Zone A / Zone B Bento Switcher */}
+              {/* Dashboard 3-Tab Switcher (Focused Content Without Scrolling Clutter) */}
               <div className="ge-bento-zone-tabs">
                 <div className="ge-bento-zone-pills" role="tablist" aria-label="Phân vùng Tổng quan">
                   <button
@@ -5703,7 +5706,7 @@ export default function Home() {
                     onClick={() => setDashboardZone("today")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "today" ? "is-active" : ""}`}
                   >
-                    Hôm nay &amp; Mục tiêu
+                    ⚡ Hôm nay &amp; Mục tiêu
                   </button>
                   <button
                     type="button"
@@ -5712,25 +5715,43 @@ export default function Home() {
                     onClick={() => setDashboardZone("analytics")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "analytics" ? "is-active" : ""}`}
                   >
-                    Phân tích &amp; 12 Chuyên đề
+                    📊 Phân tích 12 Chuyên đề
                   </button>
                   <button
                     type="button"
                     role="tab"
-                    aria-selected={dashboardZone === "all"}
-                    onClick={() => setDashboardZone("all")}
-                    className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "all" ? "is-active" : ""}`}
+                    aria-selected={dashboardZone === "ai"}
+                    onClick={() => setDashboardZone("ai")}
+                    className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "ai" ? "is-active" : ""}`}
                   >
-                    Hiển thị tất cả
+                    ✨ Khám phá AI &amp; TOEIC
                   </button>
                 </div>
-                <span style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
                   {overallLessonsProgress}% hoàn thành • {totalLessonsCount} bài học
                 </span>
               </div>
 
+              {/* ZONE C: AI & TOEIC DISCOVERY (Moved into dedicated tab so Homepage stays ultra-focused) */}
+              {dashboardZone === "ai" && (
+                <div>
+                  <ToeicHeroBanner
+                    initialTargetScore={750}
+                    showStats={true}
+                    isLight={isLight}
+                    compact={true}
+                  />
+                  <AiPowerShowcase2026
+                    compact={true}
+                    onNavigateStudy={() => setCurrentView("study")}
+                    onNavigateDiagnostic={() => setCurrentView("diagnostic")}
+                    onNavigateVip={() => setCurrentView("vip")}
+                  />
+                </div>
+              )}
+
               {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
-              {dashboardZone !== "analytics" && (
+              {dashboardZone === "today" && (
                 <div>
                   {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile) */}
                   <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
@@ -5910,7 +5931,7 @@ export default function Home() {
               )}
 
               {/* ZONE B: ANALYTICS & 12-CHAPTER MASTERY MAP */}
-              {dashboardZone !== "today" && (
+              {dashboardZone === "analytics" && (
                 <div>
                   {/* MILESTONE 2.9: CONTINUOUS ADAPTIVE LEARNING & 12-TOPIC MASTERY INTELLIGENCE */}
                   <div style={{ marginBottom: "1.75rem" }}>
