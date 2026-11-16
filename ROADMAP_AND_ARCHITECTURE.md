@@ -1,9 +1,9 @@
 # 🗺️ BẢN ĐỒ PHÁT TRIỂN & KIẾN TRÚC HỆ THỐNG (LIVING ROADMAP & ENTERPRISE ARCHITECTURE GUIDE)
 > **Dự án:** Grammar Engine - Nền tảng Tự học & Luyện thi Ngữ pháp Tiếng Anh Toàn diện (Personalized English Grammar Learning Platform)  
 > **Nguồn học liệu:** Giáo trình *Ngữ pháp tiếng Anh* - Mai Lan Hương & Hà Thanh Uyên  
-> **Kiến trúc:** Enterprise EdTech (Next.js + Supabase PostgreSQL 17 + Offline Sync Engine + AI Diagnostic Roadmap + Monetization Engine)  
-> **Phiên bản hiện tại:** `v2.12-enterprise-roadmap-master`  
-> **Cập nhật gần nhất:** 11/11/2026  
+> **Kiến trúc:** Enterprise EdTech (Next.js + Supabase PostgreSQL 17 + Offline Sync Engine + AI Diagnostic Roadmap + Monetization Engine + Data Science Personalization)  
+> **Phiên bản hiện tại:** `v3.0-data-science-personalization-blueprint`  
+> **Cập nhật gần nhất:** 16/11/2026  
 > **Tài liệu điều hướng tối cao:** Mọi phiên làm việc / Prompt tiếp theo **BẮT BUỘC ĐỌC FILE NÀY ĐẦU TIÊN** để nắm bắt chính xác tiến độ, kiến trúc và bước đi tiếp theo.
 
 ---
@@ -11,13 +11,13 @@
 ## 📌 1. ĐỊNH VỊ GIAI ĐOẠN HIỆN TẠI (CURRENT PHASE STATUS)
 
 ```text
-[ Phase 1: MVP & Core Grammar ] ---> [ Phase 2 Core (2.1–2.8): Cloud, Diagnostic & Viz ] ---> [ Phase 2–3 Enhancements: 2.3–2.6, 2.8+ & 2.9–2.12 ]
-         ✅ HOÀN THÀNH                                ✅ CORE LIVE TRÊN PROD                         🚀 SẴN SÀNG TRIỂN KHAI TỪNG MILESTONE
+[ Phase 1: MVP & Core Grammar ] ---> [ Phase 2 (2.1–2.15): Cloud, TOEIC 2026 & Monetization ] ---> [ Phase 3 (3.1–3.4): Data Science Personalization & Corpus Pipeline ]
+         ✅ HOÀN THÀNH                                ✅ 100% LIVE TRÊN PROD                                   🚀 ĐANG TRIỂN KHAI (ACTIVE FOCUS)
 ```
 
-* **Trọng tâm hiện tại:** **HOÀN TẤT 100% NÂNG CẤP MILESTONE 2.3 – 2.10 & 2.12 (INTELLIGENT MONETIZATION & CONVERSION ENGINE) — MILESTONE 2.11 HARDENING & SECURITY VERIFICATION LIVE (CÒN CỔNG LIGHTHOUSE / K6 / PLAYWRIGHT TRÊN RUNNER)**.
-* **Hiện trạng Thực tế trên Production (`https://grammar-platform.vercel.app`):**
-  1. **Database PostgreSQL 17 Live (55 Bảng & 100% RLS):** Đã vận hành 12 bảng Core/Auth/Audit (+`user_achievements` upgraded) + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard + 18 bảng Monetization/Behavioral/A-B/Subscriptions trên Supabase (`wtvlbbcyvtqqygtojxay`).
+* **Trọng tâm hiện tại:** **HOÀN TẤT 100% PHASE 2 (2.1 – 2.15) & BẢO MẬT ZERO-TRUST DB/API — CHUYỂN TRỌNG TÂM SANG PHASE 3 (DATA SCIENCE PERSONALIZATION, CROSS-TEST REMEDIATION & UNIVERSAL CORPUS INGESTION PIPELINE)**.
+* **Hiện trạng Thực tế trên Production (`https://grammar-platform-inky.vercel.app` / `https://grammar-platform.vercel.app`):**
+  1. **Database PostgreSQL 17 Live (63 Bảng & 100% RLS):** Đã di trú và vận hành đầy đủ 63 bảng (12 bảng Core/Auth/Audit + 8 bảng Diagnostic/Roadmap/AI Coach + 10 bảng Pedagogical Intelligence/Knowledge Graph/Event Bus + 7 bảng Gamification/Leaderboard + 18 bảng Monetization/SePay/A-B/Subscriptions + 8 bảng TOEIC Adaptive) trên Supabase Project tích hợp Vercel (`bhlhmhvzqcwqenlhioxr`, khóa chặt `is_admin()`, `trg_protect_profile_role`, `trg_protect_tracker_xp`, `on_auth_user_created`, `trg_audit_logs_immutable`).
   2. **Layered Architecture Bảo mật:** Tách biệt hoàn toàn Browser Client (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) và Server Admin Client (`SUPABASE_SERVICE_ROLE_KEY`), Repositories (`7 files`), Services (`7 files`), Server Guard (`admin-guard.js`).
   3. **Các Phân hệ Enhanced Đã Hoàn Thành 100% Live:**
      - **Milestone 2.3 Enhanced:** Multi-Store IndexedDB v2, SyncEvent v1.0 + `idempotency_key`, Multi-Tab Web Locks/BroadcastChannel, Full Jitter Backoff, `/api/health`, `/api/sync/batch|pull|status`, `SyncStatusIndicator.jsx`, PWA Service Worker `sw.js`.
@@ -33,15 +33,13 @@
   4. **Phân hệ Kiểm định Cuối cùng Sẵn sàng Triển khai:** Pre-Prod Verification & Release Gate (`2.11`).
   *(Ghi chú Vận hành: Mọi thao tác ghi Server-Authoritative trên Production yêu cầu bổ sung `SUPABASE_SERVICE_ROLE_KEY` vào Vercel Environment Variables của project `grammar-platform`).*
 * **Thông tin Môi trường kết nối:**
-  - 🌐 **Production URL:** [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
+  - 🌐 **Production URL:** [https://grammar-platform-inky.vercel.app](https://grammar-platform-inky.vercel.app) / [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
   - 🐙 **GitHub Repository:** [trandat95/grammar-platform](https://github.com/trandat95/grammar-platform)
   - ⚡ **Vercel Project ID:** `prj_yfOLrVVbBV0b8O8G2ihrDhR5HLsa`
-  - 🐘 **Supabase Project:**
-    - Project ID / Ref: `wtvlbbcyvtqqygtojxay`
-    - Tên Project: `doanphuongtanthoihiep-crypto's Project`
-    - Region: `ap-northeast-2` (Seoul, độ trễ cực thấp về Việt Nam)
-    - URL Endpoint: `https://wtvlbbcyvtqqygtojxay.supabase.co`
-    - Trạng thái DB: `ACTIVE_HEALTHY` (PostgreSQL 17 • Next.js `14.2.15` • React `18.3.1` • Prisma `5.22.0`)
+  - 🐘 **Supabase Project (Active Vercel-Integrated):**
+    - Project ID / Ref: `bhlhmhvzqcwqenlhioxr` *(migrated from legacy `wtvlbbcyvtqqygtojxay`)*
+    - URL Endpoint: `https://bhlhmhvzqcwqenlhioxr.supabase.co`
+    - Trạng thái DB: `ACTIVE_HEALTHY` (PostgreSQL 17 • 63 Tables • 100% RLS + Server-Authoritative Triggers • Next.js `14.2.15` • React `18.3.1` • Prisma `5.22.0`)
 
 ---
 
@@ -61,11 +59,15 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Core EdTech** | **2.8** | **AI-Powered Grammar Diagnostic & Personalized Roadmap** | **P1 (Central Module)**| ✅ Hoàn thành (100% — Enhanced Spec Live) |
 | **Intelligence** | **2.9** | **Continuous Adaptive Learning & Intelligent Mastery Tracking**| **P2 (High)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **Gamification** | **2.10**| **Achievement, Level Progression & Intelligent Gamification** | **P2 (Medium)**| ✅ Hoàn thành (100% — Live on Prod) |
-| **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| 🔄 Hardening Live (9/14 Verified, 5 Runner Checks Pending) |
+| **Quality** | **2.11**| **Free-Tier Safe Performance, Security Hardening & Verification** | **P0 (Pre-Prod)**| ✅ Zero-Trust DB/API Hardening Live |
 | **Monetization** | **2.12**| **Intelligent Monetization, Behavioral Psychology & Conversion** | **P0 (Business)** | ✅ Hoàn thành (100% — Live on Prod) |
 | **TOEIC & AI Adaptive** | **2.13 (E1–E6)** | **TOEIC Test, Sentence X-Ray & AI Adaptive Grammar Engine** | **P0 (Strategic)** | ✅ Hoàn thành (100% — Full Spec E1–E6 Live) |
 | **TOEIC UI/UX 2026** | **2.14 (U1–U7 & Phase 6)** | **TOEIC 2026 – UI/UX Engineering & Full Closed Loop (Bento, X-Ray, Split Reader, Dictation, SRS, AI Tutor)** | **P0 (Critical UI/UX)** | ✅ Hoàn thành (100% — Full Spec U1–U7 & Phase 6 Live on Production) |
-| **TOEIC Premium & FOMO** | **2.15 (Milestone E7)** | **TOEIC Premium Experience, Ethical FOMO & Smart Paywall Engine (Locked Progression, Preview Teasers, 3-Tier Paywall)** | **P0 (Business & Monetization)** | ✅ Hoàn thành (100% — Full Spec E7 Live on Production) |
+| **TOEIC Premium & FOMO** | **2.15 (Milestone E7)** | **TOEIC Premium Experience, Dual-Mode Practice/Exam, 101–200 Grid & Smart Paywall Engine** | **P0 (Business & Monetization)** | ✅ Hoàn thành (100% — Full Spec E7 + Dual-Mode Exam Live) |
+| **Data Science Engine** | **3.1 (DS-1)** | **Universal Corpus Ingestion Pipeline (`SOP-CORPUS-INGEST-V1`) & Item Warehouse (`corpus_item_stats`)** | **P0 (Foundation)** | 🚀 Sẵn sàng triển khai |
+| **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | 🚀 Sẵn sàng triển khai |
+| **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | 🚀 Sẵn sàng triển khai |
+| **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | 📋 Đã lên thiết kế |
 
 ---
 
@@ -290,9 +292,9 @@ grammar-platform/
 
 ---
 
-## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (55 LIVE TABLES & RLS ARCHITECTURE)
+## 🐘 4. THIẾT KẾ CƠ SỞ DỮ LIỆU CHUẨN POSTGRESQL 17 (63 LIVE TABLES & RLS ARCHITECTURE)
 
-### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (55 Live Tables trên Supabase `wtvlbbcyvtqqygtojxay`)
+### 4.1. Sơ đồ Thực thể Dữ liệu Toàn diện (63 Live Tables trên Supabase `bhlhmhvzqcwqenlhioxr`)
 
 ```mermaid
 erDiagram
@@ -486,12 +488,13 @@ erDiagram
     }
 ```
 
-> **Danh sách Đầy đủ 55 Bảng Live trên Supabase (`public` schema — 55/55 RLS enabled):**  
-> • **Core / Auth / Audit (12):** `profiles`, `user_learning_trackers`, `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements` (+`tier`, `category`, `is_hidden`, `xp_bonus`, `UNIQUE(user_id, achievement_code)`), `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
+> **Danh sách Đầy đủ 63 Bảng Live trên Supabase `bhlhmhvzqcwqenlhioxr` (`public` schema — 63/63 RLS enabled):**  
+> • **Core / Auth / Audit (12):** `profiles` (khóa `role`/`status` bởi `trg_protect_profile_role`), `user_learning_trackers` (khóa `xp`/`streak` bởi `trg_protect_tracker_xp`), `user_mistakes` (+`updated_at`, `deleted_at`), `user_vocabularies` (+`updated_at`, `deleted_at`), `system_policies` (+`policy_version`, `diagnostic_cooldown_days`, `offline_sync_max_batch`), `system_policy_versions`, `sync_idempotency_logs`, `quiz_attempts`, `user_achievements` (+`tier`, `category`, `is_hidden`, `xp_bonus`, `UNIQUE(user_id, achievement_code)`), `user_daily_activities`, `user_activity_logs`, `audit_logs` (khóa bất biến bởi Trigger `trg_audit_logs_immutable`).  
 > • **Diagnostic, Adaptive Roadmap & AI Coach (8):** `diagnostic_tests`, `diagnostic_attempts`, `diagnostic_answers`, `diagnostic_skill_results`, `user_learning_roadmaps` (+`current_version`, `last_adjusted_at`), `roadmap_items`, `roadmap_versions`, `ai_advisor_logs`.  
 > • **Learning Events, Pedagogical Intelligence & Knowledge Graph (10):** `explanations`, `explanation_feedback`, `question_concepts`, `remedial_recommendations`, `user_concept_progress` (+`mastery_score`, `mastery_tier`, `consistency_score`, `retention_score`, `difficulty_weight`, `recency_score`, `topic_coverage_score`, `unique_questions_seen`, `last_reviewed_at`, `next_review_at`), `concepts`, `concept_dependencies`, `spaced_repetition_queue` (+`memory_state`, `response_time_ms`, `correct_history`, `difficulty_rating`, `stability_score`, `retrievability_score`), `error_taxonomy_registry`, `learning_event_logs` (`UNIQUE(user_id, idempotency_key)` — Section `8D.1`).
 > • **Intelligent Gamification & Competitive Learning (7):** `user_xp`, `xp_transactions` (`UNIQUE(user_id, idempotency_key)`), `achievements` (20 badges seeded), `daily_challenges` (Daily/Weekly templates), `user_challenges` (`UNIQUE(user_id, challenge_id, period_key)`), `user_streaks` (+`freeze_tokens`), `leaderboard_snapshots` (`5` boards indexed).
-> • **Intelligent Monetization, Behavioral Analytics & Conversion (18):** `subscription_plans`, `feature_entitlements`, `plan_entitlements`, `user_subscriptions`, `subscription_events`, `payment_transactions` (`UNIQUE(user_id, idempotency_key)`), `payment_webhook_events` (`UNIQUE(provider, external_event_id)`), `pricing_campaigns`, `discount_coupons`, `user_coupons`, `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
+> • **Intelligent Monetization, SePay VA & Conversion (20):** `subscription_plans`, `feature_entitlements`, `plan_entitlements`, `user_subscriptions`, `subscription_events`, `payment_transactions` (`UNIQUE(user_id, idempotency_key)`), `payment_webhook_events` (`UNIQUE(provider, external_event_id)`), `payment_gateway_configs`, `payment_gateway_secrets`, `pricing_campaigns`, `discount_coupons`, `user_coupons`, `behavior_events`, `user_segments`, `paywall_configs`, `paywall_impressions`, `conversion_events`, `ab_experiments`, `ab_assignments`, `notification_campaigns`.
+> • **TOEIC Adaptive Intelligence (6):** `toeic_users`, `toeic_question_responses`, `toeic_skill_mastery`, `toeic_error_pattern_logs`, `toeic_milestones`, `toeic_srs_cards`.
 
 ### 4.2. RLS Security Model (Chống Đệ quy & Phân quyền Độc lập)
 
@@ -2878,13 +2881,120 @@ Milestone 2.11 được xem là hoàn thành khi:
   * Giới hạn phòng Nghe Chép Chính Tả (Dictation Studio) cho người dùng Free: chỉ được luyện duy nhất Test 01 (54 audio tracks). Các Test 02–10 bị khóa kèm nhãn `🔒 (VIP)` và kích hoạt Paywall Modal khi nhấp chọn.
   * Giới hạn 24 Chủ điểm Ngữ pháp & Kỹ năng Trọng tâm: người dùng Free chỉ mở các chủ điểm có Target dưới 550 (Band 450 & 500). Toàn bộ các chủ điểm Target 550+ được khóa VIP cả ở giao diện danh sách và bộ lọc drill practice.
   * Banner TOEIC thích ứng hoàn hảo chế độ Sáng / Tối (White/Dark Mode): lớp phủ Scrim tinh chỉnh độ trong suốt linh hoạt, typography và thẻ chỉ số thống kê tự động đồng điệu với theme chung của trang chủ.
+- [x] **2.15.18 Kết Nối Toàn Bộ 540 Tracks Dictation Studio ETS 2026 (`pages/api/toeic/dictation/[series]/[testNum].js`, `components/toeic/DictationStudio.jsx`):**
+  * Xây dựng endpoint `/api/toeic/dictation/[series]/[testNum]` tích hợp `ToeicRepository.getDictationTracks()` và `verifyDictationServerAccess` (Test 01 miễn phí 54 tracks, Test 02–10 thuộc gói VIP).
+  * Hiển thị đầy đủ bộ đếm số lượng câu trên từng tab Part (`Part 1: 6`, `Part 2: 25`, `Part 3: 13`, `Part 4: 10`) và thanh chọn track cho toàn bộ 10 đề ETS 2026.
+- [x] **2.15.19 Zero-Trust Database & Server-Authoritative XP Hardening (Live trên `bhlhmhvzqcwqenlhioxr`):**
+  * Khắc phục lỗ hổng `current_user` trong hàm `SECURITY DEFINER` `public.is_admin()`, khôi phục và nâng cấp 4 trigger bảo mật cấp DB: `trg_protect_profile_role` (`BEFORE INSERT OR UPDATE` trên `profiles`), `trg_protect_tracker_xp` (`BEFORE INSERT OR UPDATE` trên `user_learning_trackers`), `on_auth_user_created` (`auth.users`), và `trg_audit_logs_immutable` (`audit_logs`).
+  * Xóa bỏ cơ chế tin cậy header `x-user-role` ở `server-gate.js`, xóa mật khẩu cứng ở `pages/index.js`, và siết chặt giới hạn XP trong `award_user_gamification_xp` RPC + `/api/sync/batch`.
+- [x] **2.15.20 Chế Độ Kép Luyện Tập vs Thi Thử (75 Phút), Bảng Ô Số 101–200 & Phễu Chấm Điểm AI VIP (`pages/toeic/tests/[series]/[testNum].jsx`, `SplitPassageReader.jsx`, `SentenceXRayCard.jsx`):**
+  * Cung cấp màn hình chọn 2 chế độ: **Chế độ Luyện Tập** (chấm đúng/sai & hiện giải thích chi tiết tức thì cho cả Part 5, 6, 7) và **Chế độ Thi Thử** (đếm ngược 75 phút, ẩn dẫn chứng/đáp án khi làm bài, tự do đổi phương án).
+  * Bổ sung **Bảng Câu Hỏi Toàn Đề (`101–200`)** dạng lưới ô số với bộ lọc `Tất cả` / `Chưa làm` / `Câu sai`.
+  * Xây dựng **Phễu Chấm Điểm Basic (Free) vs AI Cá Nhân Hóa (VIP)**: hiển thị điểm Reading ước tính (5–495), mở khóa miễn phí Chủ điểm yếu #1 làm mồi nhử (Teaser), và mở khóa trọn bộ Top 4 Chủ điểm yếu + Error Trap DNA + Quy trình 3 bước nâng điểm cho học viên VIP.
 
 ---
 
-## 📋 11. NGUYÊN TẮC VẬN HÀNH DÀNH CHO AGENT / DEVELOPER (OPERATIONAL PROTOCOL)
+## 🧠 11. PHASE 3: HỆ THỐNG ÔN LUYỆN CÁ NHÂN HÓA BẰNG DATA SCIENCE & QUY TRÌNH NHẬP ĐỀ CHUẨN HÓA (`SOP-CORPUS-INGEST-V1`)
+
+> **Mục tiêu Chiến lược Dài hạn:** Biến kho học liệu (4.000 câu TOEIC + 2.939 câu Ngữ pháp + các bộ đề mở rộng trong tương lai) thành một **Cỗ máy Chẩn đoán & Vá Lỗ Hổng bằng Data Science**. Mọi lần làm bài của học viên đều được thu thập tín hiệu đa chiều, phân tích bằng mô hình xác suất (IRT 3PL + Speed×Accuracy Quadrant + Error Trap DNA) để sinh ra **Lộ trình Nâng Điểm Khép Kín qua từng đề hoàn chỉnh (`Test N → Drill/Twin/SRS → Test N+1`)**.
+
+### 11.1. Quy Trình 6 Bước Chuẩn Hóa Khi Import Bộ Đề Mới (`SOP-CORPUS-INGEST-V1`)
+Bất kỳ khi nào import bộ đề mới (ví dụ: `ETS2027`, `ETS2028`, `Hacker TOEIC`, `YBM` hoặc đề tự biên soạn), Agent / Pipeline bắt buộc thực thi tuần tự **6 Stage nghiêm ngặt** sau đây:
+
+```mermaid
+flowchart LR
+    S1["Stage 1: Raw Parse & Schema Normalization"] --> S2["Stage 2: 24-Topic Taxonomy & Skill Vector Tagging"]
+    S2 --> S3["Stage 3: Distractor & 15 Error Trap Classification"]
+    S3 --> S4["Stage 4: Sentence X-Ray & Verbatim Evidence Extraction"]
+    S4 --> S5["Stage 5: Cold-Start IRT 3PL & Twin-Question Graph Linking"]
+    S5 --> S6["Stage 6: Automated QA Gate & DB Sync (corpus_item_stats)"]
+```
+
+1. **Stage 1 — Raw Parsing & Canonical Schema Normalization:**
+   - Chuẩn hóa đầu vào về cấu trúc thư mục `ETS_Corpus_Normalized_Enriched_Database/<SERIES>/Test_<XX>/{reading.json, listening.json, dictation.json}`.
+   - Định danh duy nhất: `id = "<SERIES>_T<XX>_Q<NNN>"` (ví dụ: `ETS2027_T01_Q101`), kiểm tra đủ 4 lựa chọn `A, B, C, D`, `correct_answer`, và gom nhóm đoạn văn `passage_group_id` + thứ tự đa văn bản `doc_order` (`1..3`).
+2. **Stage 2 — Taxonomy Mapping & Multi-Skill Weight Vector:**
+   - Gán `primary_grammar_topic_id` (thuộc 24 chủ điểm chuẩn trong `grammar_taxonomy.json`), `secondary_topic_ids`, `skill_category`, và vector trọng số kỹ năng `skill_weight_vector` (tổng trọng số $= 1.0$, ví dụ: `{"G1_POS": 0.75, "G6_VOC_COH": 0.25}`).
+3. **Stage 3 — Distractor Profiling & Cognitive Error Trap Tagging:**
+   - Phân tích từng phương án `A, B, C, D` trong `ai_analysis.option_deep_analysis`:
+     - Phương án đúng (`is_correct: true`): gán `pos_or_role` và `ai_feedback_vi` giải thích tại sao khớp cấu trúc/ngữ cảnh.
+     - 3 phương án nhiễu (`is_correct: false`): **bắt buộc** gán mã bẫy `error_pattern_code` chuẩn từ `error_pattern_catalog.json` (15 mã bẫy nhận thức: `ERR_POS_SUFFIX_CONFUSION`, `ERR_SVA_INTERVENING_PHRASE`, `ERR_PREP_VS_CONJ_CLAUSE`, `ERR_COHERENCE_DISCOURSE_FLOW`, `ERR_COMPREHENSION_TRAP`, v.v.) để phục vụ thống kê **Error Trap DNA**.
+4. **Stage 4 — Sentence X-Ray & Verbatim Evidence Extraction:**
+   - **Với Part 5 & Part 6 (Ngữ pháp/Từ loại):** Sinh `sentence_xray` (`left_context`, `blank_slot`, `right_context`, `left_anchor_words`, `right_anchor_words`, `required_grammatical_role`, `xray_pattern_display`) và `micro_rule_formula_vi`.
+   - **Với Part 6 & Part 7 (Đọc hiểu):** Trích xuất nguyên văn câu chứa đáp án vào `evidence_sentence_en` (**bắt buộc khớp chính xác chuỗi con `passage.text.includes(evidence_sentence_en)`** để tính năng Auto-Highlight hoạt động 100%) kèm 3 bước suy luận `solving_steps_vi`.
+5. **Stage 5 — Cold-Start IRT 3PL Initialization & Cross-Test Twin Linking:**
+   - Khởi tạo tham số IRT 3PL ban đầu (`irt_3pl: { discrimination_a, difficulty_b, guessing_c: 0.25 }`), `difficulty_level (1..4)`, `target_score_band (450..900)`, và `recommended_time_sec` dựa trên độ dài câu, độ phức tạp mệnh đề và loại suy luận (Single vs Cross-Passage).
+   - Truy vấn đồ thị tương đồng (`primary_grammar_topic_id` + `error_pattern_code` + `difficulty_level`) trên toàn bộ kho đề để điền mảng 5 câu hỏi sinh đôi `similar_question_ids`.
+6. **Stage 6 — Automated Quality Gate & Database Registration (`corpus_item_stats`):**
+   - Chạy script kiểm định tự động (`scripts/validate-corpus-ingest.mjs`): từ chối bản build nếu có bất kỳ câu nào thiếu `option_deep_analysis`, sai lệch `evidence_sentence_en`, hoặc đứt gãy `similar_question_ids`.
+   - Đồng bộ metadata câu hỏi vào bảng PostgreSQL `public.corpus_item_stats` để bắt đầu thu thập dữ liệu làm bài thực tế từ người dùng.
+
+---
+
+### 11.2. Kiến Trúc Database Mở Rộng Cho Phase 3 (4 Bảng Data Science Mới)
+
+Bổ sung Migration `018_phase3_data_science_personalization.sql` trên Supabase (`bhlhmhvzqcwqenlhioxr`), kết nối chặt chẽ với 6 bảng TOEIC hiện hữu:
+
+1. **`public.corpus_item_stats` (Kho thống kê câu hỏi thực nghiệm & hiệu chỉnh IRT):**
+   - `question_id text PRIMARY KEY`, `series text`, `test_number int`, `part int`, `primary_topic_id text`, `target_band int`, `recommended_time_sec int`
+   - `attempt_count int DEFAULT 0`, `correct_count int DEFAULT 0`, `avg_time_sec numeric(6,2) DEFAULT 0`
+   - `option_selection_counts jsonb DEFAULT '{"A":0,"B":0,"C":0,"D":0}'::jsonb` *(đo Distractor Attraction Rate — biết bao nhiêu % thí sinh bị lừa vào từng đáp án nhiễu)*
+   - `prior_irt_a numeric(4,2)`, `prior_irt_b numeric(4,2)`, `calibrated_irt_a numeric(4,2)`, `calibrated_irt_b numeric(4,2)`, `updated_at timestamptz`
+2. **`public.exam_attempts` (Lịch sử phiên thi & Telemetry cấp độ Đề thi):**
+   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`
+   - `series text`, `test_number int`, `session_mode text CHECK (session_mode IN ('practice', 'exam'))`
+   - `total_questions int`, `answered_count int`, `correct_count int`, `wrong_count int`, `skipped_count int`
+   - `est_reading_score int`, `theta_estimate numeric(5,3)`, `elapsed_sec int`, `fatigue_drop_rate numeric(5,2)` *(tỷ lệ sụt giảm độ chính xác ở 25 câu cuối Part 7)*
+   - `part_breakdown jsonb`, `user_answers jsonb`, `question_timings jsonb`, `created_at timestamptz DEFAULT now()`
+3. **`public.user_error_dna_snapshots` (Hồ sơ Chẩn đoán Lỗ hổng & Ma trận 4 Góc phần tư sau mỗi đề):**
+   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`, `exam_attempt_id uuid REFERENCES public.exam_attempts(id) ON DELETE CASCADE`
+   - `weak_topics_ranked jsonb` *(Top chủ điểm mất điểm nhiều nhất + `est_points_lost`)*
+   - `error_trap_dna jsonb` *(Top mã bẫy nhận thức lặp lại + tần suất)*
+   - `skill_quadrant_matrix jsonb` *(Phân loại 24 chủ điểm vào 4 góc phần tư: `CRITICAL_GAP` [Sai+Chậm], `TRAP_PRONE` [Sai+Nhanh], `SLOW_FLUENCY` [Đúng+Chậm], `MASTERED` [Đúng+Nhanh])*
+   - `potential_score_gain int`, `created_at timestamptz DEFAULT now()`
+4. **`public.remediation_plans` (Lộ trình Nâng cấp Điểm sai Liên Đề — Cross-Test Upgrade Loop):**
+   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`, `source_exam_attempt_id uuid REFERENCES public.exam_attempts(id) ON DELETE SET NULL`
+   - `target_topics jsonb`, `prescribed_drill_question_ids jsonb`, `prescribed_twin_question_ids jsonb`
+   - `completed_question_ids jsonb DEFAULT '[]'::jsonb`, `progress_percent int DEFAULT 0`
+   - `baseline_reading_score int`, `target_reading_score int`, `verification_exam_attempt_id uuid`, `verified_score_delta int`
+   - `status text CHECK (status IN ('active', 'completed', 'verified')) DEFAULT 'active'`, `created_at timestamptz DEFAULT now()`, `updated_at timestamptz DEFAULT now()`
+
+---
+
+### 11.3. Lộ Trình Triển Khai Chi Tiết Từng Bước (Phase 3.1 → Phase 3.4)
+
+#### 🚀 Phase 3.1 (Milestone DS-1): Universal Corpus Pipeline & Item Stats Warehouse (P0)
+- [ ] **3.1.1 Xây dựng `scripts/ingest-and-validate-corpus.mjs` theo chuẩn `SOP-CORPUS-INGEST-V1`:**
+  * Tự động kiểm định 6 Stage cho toàn bộ 20 đề hiện có (`ETS2024`, `ETS2026`) và sẵn sàng nhận bất kỳ thư mục đề mới nào (`ETS2027+`).
+- [ ] **3.1.2 Khởi tạo Migration `018_phase3_data_science_personalization.sql` & Seed `corpus_item_stats`:**
+  * Tạo 4 bảng Data Science kèm RLS chuẩn Zero-Trust và nạp thông số cơ sở của 4.000 câu hỏi vào `corpus_item_stats`.
+
+#### 🚀 Phase 3.2 (Milestone DS-2): Exam Telemetry Persistence & Crowd Distractor Intelligence (P0)
+- [ ] **3.2.1 API Lưu Kết Quả Thi & Telemetry (`POST /api/toeic/exams/submit`):**
+  * Khi học viên bấm **Nộp Bài**, lưu nguyên tử `exam_attempts`, cập nhật `toeic_question_responses`, cộng dồn `option_selection_counts` trong `corpus_item_stats`, và sinh `user_error_dna_snapshots`.
+- [ ] **3.2.2 Hiển thị "Crowd Trap Analytics" trên từng câu hỏi:**
+  * Khi xem giải thích sau thi, hiển thị số liệu thực tế từ `corpus_item_stats`: *"⚠️ Bẫy phổ biến: 64% học viên chọn nhầm đáp án (B) giống bạn do nhầm giới từ chỉ thời gian"*.
+
+#### 🚀 Phase 3.3 (Milestone DS-3): 4-Quadrant Mastery Matrix & Cross-Test Remediation Loop (P0 Business)
+- [ ] **3.3.1 Engine Phân loại 4 Góc Phần Tư (`lib/toeic/data-science/quadrant-analyzer.js`):**
+  * Kết hợp `Accuracy` và `Speed Ratio` để phân loại từng chủ điểm vào 4 nhóm (`🔴 Nguy cấp`, `🟠 Hay sập bẫy`, `🟡 Chưa phản xạ`, `🟢 Thành thạo`).
+- [ ] **3.3.2 Tự động Sinh & Thực thi `remediation_plans` (`/toeic/remediation/[planId]`):**
+  * Tạo bài luyện **Vá Lỗ Hổng 3 Bước** ngay sau khi nộp đề: (1) Micro-Drill chủ điểm yếu → (2) Chuỗi Câu Sinh Đôi (Twin-Questions) cho đúng những câu vừa làm sai → (3) Đẩy tự động vào `toeic_srs_cards`.
+  * **Cơ chế Conversion Free → VIP:** Học viên Free được làm thử 3 câu đầu tiên trong gói Vá Lỗ Hổng và thấy thanh dự báo điểm tăng (`340 → 405đ`); nâng cấp VIP để mở khóa toàn bộ gói Vá Lỗ Hổng cá nhân hóa.
+
+#### 🚀 Phase 3.4 (Milestone DS-4): Empirical Bayes IRT Calibration, Fatigue Model & Score Trajectory (P1)
+- [ ] **3.4.1 Empirical Bayes Item Recalibration (`lib/toeic/data-science/irt-calibrator.js`):**
+  * Tự động cập nhật độ khó thực nghiệm `calibrated_irt_b` từ lịch sử làm bài của cộng đồng khi `attempt_count >= 30` (kết hợp Prior của chuyên gia + Likelihood thực tế để chống nhiễu khi mẫu nhỏ).
+- [ ] **3.4.2 Chẩn đoán Suy giảm Thể lực Đọc hiểu (`Fatigue Drop Detector`) & Biểu đồ Tăng trưởng Liên Đề:**
+  * Đo độ tụt giảm chính xác và tốc độ ở 25 câu cuối Part 7 (`Q176–200`), gợi ý chiến thuật phân bổ lại mốc thời gian (ví dụ: *Part 5 ≤ 10 phút, Part 6 ≤ 8 phút, dành 57 phút cho Part 7*).
+  * Hiển thị biểu đồ **Before vs After** qua các đề hoàn chỉnh để chứng minh hiệu quả tăng điểm thực tế cho học viên VIP.
+
+---
+
+## 📋 12. NGUYÊN TẮC VẬN HÀNH DÀNH CHO AGENT / DEVELOPER (OPERATIONAL PROTOCOL)
 
 1. **Đọc tài liệu này đầu tiên:** Trong mọi lượt tương tác phát triển mới, agent phải đọc `ROADMAP_AND_ARCHITECTURE.md` để nắm đúng bối cảnh, kiến trúc và mục tiêu kế tiếp.
 2. **Tuân thủ Quality Gates:** Tuyệt đối không tự ý báo cáo hoàn thành một milestone nếu chưa cung cấp đầy đủ bằng chứng thực thi theo bảng Tiêu chuẩn Nghiệm thu tại Mục 9.
-3. **Bảo tồn tính toàn vẹn của học liệu:** Không làm mất mát hoặc xáo trộn 12 chuyên đề, 53 bài học lý thuyết và 2.939 câu hỏi thực hành đã được số hóa.
-4. **Cập nhật trạng thái liên tục:** Sau khi hoàn thành bất kỳ mục nào trong Milestone 2.x, agent phải đánh dấu `[x]` vào checklist của tài liệu này và commit lên git.
-5. **Kiểm thử trên Production:** Mọi code mới sau khi commit phải được push lên GitHub và xác nhận Vercel Deployment đạt trạng thái `READY` trước khi bàn giao cho người dùng.
+3. **Bảo tồn tính toàn vẹn của học liệu:** Không làm mất mát hoặc xáo trộn 12 chuyên đề, 53 bài học lý thuyết, 2.939 câu hỏi ngữ pháp Mai Lan Hương và 4.000 câu hỏi TOEIC + 540 tracks Dictation.
+4. **Cập nhật trạng thái liên tục:** Sau khi hoàn thành bất kỳ mục nào trong Milestone 2.x / 3.x, agent phải đánh dấu `[x]` vào checklist của tài liệu này và commit cục bộ lên git.
+5. **Chính sách Gom Commit & Batch-Push GitHub (Tránh Rate-Limit/Block):** Luôn `git commit` cục bộ sau mỗi bước hoàn chỉnh, nhưng **chỉ thực hiện `git push` gom 1 lần duy nhất** khi hoàn tất trọn vẹn một cụm tính năng hoặc khi người dùng yêu cầu (`"push đi"`), sau đó xác nhận Vercel Deployment đạt trạng thái `READY`.
