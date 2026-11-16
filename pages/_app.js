@@ -38,8 +38,7 @@ export default function MyApp({ Component, pageProps }) {
               (function() {
                 try {
                   var saved = localStorage.getItem('grammar_theme');
-                  var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-                  var isLight = saved ? saved === 'light' : prefersLight;
+                  var isLight = saved ? saved === 'light' : true;
                   document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
                   document.documentElement.style.backgroundColor = isLight ? '#f8fafc' : '#09090b';
                 } catch (e) {}

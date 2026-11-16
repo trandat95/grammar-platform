@@ -1321,3 +1321,47 @@ h1, h2, h3, h4, h5, h6 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================================
+ * 2026 CLEAN SAAS BENTO DASHBOARD MAKEOVER
+ * ============================================================================ */
+.ge-bento-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.15rem;
+  align-items: start;
+  margin-bottom: 1.35rem;
+}
+
+@media (min-width: 1024px) {
+  .ge-bento-home-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+    gap: 1.35rem;
+  }
+}
+
+.ge-bento-card {
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ge-chapter-mini-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.65rem;
+}
+
+@media (min-width: 640px) {
+  .ge-chapter-mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1120px) {
+  .ge-chapter-mini-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
