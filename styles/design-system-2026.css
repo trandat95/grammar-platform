@@ -492,9 +492,10 @@ h1, h2, h3, h4, h5, h6 {
   .ge-chapter-sidebar {
     position: fixed;
     left: 0;
-    top: var(--ds-header-h);
+    top: calc(var(--ds-header-h) + 48px);
     width: min(300px, 86vw);
-    height: calc(100vh - var(--ds-header-h));
+    height: calc(100vh - var(--ds-header-h) - 48px);
+    overflow-x: hidden;
     z-index: 220;
     transform: translateX(-105%);
     box-shadow: var(--ds-shadow-lg);
@@ -505,7 +506,7 @@ h1, h2, h3, h4, h5, h6 {
   .ge-drawer-backdrop {
     display: block;
     position: fixed;
-    inset: var(--ds-header-h) 0 0 0;
+    inset: calc(var(--ds-header-h) + 48px) 0 0 0;
     background: var(--ds-backdrop);
     z-index: 210;
   }
@@ -514,12 +515,13 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 10px 16px;
+    min-height: 48px;
+    padding: 8px 16px;
     background: var(--ds-accent-bg);
     border-bottom: 1px solid var(--ds-accent-border);
     position: sticky;
     top: var(--ds-header-h);
-    z-index: 35;
+    z-index: 225;
   }
   .ge-hide-desktop-toggle {
     display: none !important;
