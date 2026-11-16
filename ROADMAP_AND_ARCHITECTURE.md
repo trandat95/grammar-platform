@@ -2931,61 +2931,57 @@ flowchart LR
 
 ---
 
-### 11.2. Kiến Trúc Database Mở Rộng Cho Phase 3 (4 Bảng Data Science Mới)
+### 11.2. Kiến Trúc Database Mở Rộng Cho Phase 3 (6 Bảng Data Science Mới + Atomic RPC — `DS-001` → `DS-012`)
 
-Bổ sung Migration `018_phase3_data_science_personalization.sql` trên Supabase (`bhlhmhvzqcwqenlhioxr`), kết nối chặt chẽ với 6 bảng TOEIC hiện hữu:
+Bổ sung Migration `018` & `019_phase3_enhanced_ds_architecture.sql` trên Supabase (`bhlhmhvzqcwqenlhioxr` — nâng tổng số bảng lên **69 Live Tables**, 100% RLS Zero-Trust, không cho phép client tự `INSERT`/`UPDATE` trực tiếp):
 
-1. **`public.corpus_item_stats` (Kho thống kê câu hỏi thực nghiệm & hiệu chỉnh IRT):**
-   - `question_id text PRIMARY KEY`, `series text`, `test_number int`, `part int`, `primary_topic_id text`, `target_band int`, `recommended_time_sec int`
-   - `attempt_count int DEFAULT 0`, `correct_count int DEFAULT 0`, `avg_time_sec numeric(6,2) DEFAULT 0`
-   - `option_selection_counts jsonb DEFAULT '{"A":0,"B":0,"C":0,"D":0}'::jsonb` *(đo Distractor Attraction Rate — biết bao nhiêu % thí sinh bị lừa vào từng đáp án nhiễu)*
-   - `prior_irt_a numeric(4,2)`, `prior_irt_b numeric(4,2)`, `calibrated_irt_a numeric(4,2)`, `calibrated_irt_b numeric(4,2)`, `updated_at timestamptz`
-2. **`public.exam_attempts` (Lịch sử phiên thi & Telemetry cấp độ Đề thi):**
-   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`
-   - `series text`, `test_number int`, `session_mode text CHECK (session_mode IN ('practice', 'exam'))`
-   - `total_questions int`, `answered_count int`, `correct_count int`, `wrong_count int`, `skipped_count int`
-   - `est_reading_score int`, `theta_estimate numeric(5,3)`, `elapsed_sec int`, `fatigue_drop_rate numeric(5,2)` *(tỷ lệ sụt giảm độ chính xác ở 25 câu cuối Part 7)*
-   - `part_breakdown jsonb`, `user_answers jsonb`, `question_timings jsonb`, `created_at timestamptz DEFAULT now()`
-3. **`public.user_error_dna_snapshots` (Hồ sơ Chẩn đoán Lỗ hổng & Ma trận 4 Góc phần tư sau mỗi đề):**
-   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`, `exam_attempt_id uuid REFERENCES public.exam_attempts(id) ON DELETE CASCADE`
-   - `weak_topics_ranked jsonb` *(Top chủ điểm mất điểm nhiều nhất + `est_points_lost`)*
-   - `error_trap_dna jsonb` *(Top mã bẫy nhận thức lặp lại + tần suất)*
-   - `skill_quadrant_matrix jsonb` *(Phân loại 24 chủ điểm vào 4 góc phần tư: `CRITICAL_GAP` [Sai+Chậm], `TRAP_PRONE` [Sai+Nhanh], `SLOW_FLUENCY` [Đúng+Chậm], `MASTERED` [Đúng+Nhanh])*
-   - `potential_score_gain int`, `created_at timestamptz DEFAULT now()`
-4. **`public.remediation_plans` (Lộ trình Nâng cấp Điểm sai Liên Đề — Cross-Test Upgrade Loop):**
-   - `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE`, `source_exam_attempt_id uuid REFERENCES public.exam_attempts(id) ON DELETE SET NULL`
-   - `target_topics jsonb`, `prescribed_drill_question_ids jsonb`, `prescribed_twin_question_ids jsonb`
-   - `completed_question_ids jsonb DEFAULT '[]'::jsonb`, `progress_percent int DEFAULT 0`
-   - `baseline_reading_score int`, `target_reading_score int`, `verification_exam_attempt_id uuid`, `verified_score_delta int`
-   - `status text CHECK (status IN ('active', 'completed', 'verified')) DEFAULT 'active'`, `created_at timestamptz DEFAULT now()`, `updated_at timestamptz DEFAULT now()`
+1. **`public.corpus_item_stats` (Item Statistics Warehouse — `DS-005`, `DS-008`, `DS-009`):**
+   - `question_id text PRIMARY KEY`, `content_hash text`, `correct_option text`, `series text`, `test_number int`, `part int`, `primary_topic_id text`, `target_band int`, `recommended_time_sec int`
+   - Tách bạch trạng thái: `shown_count`, `answered_count`, `skipped_count`, `timed_attempt_count`, `total_time_sec`, `avg_time_sec`
+   - Tách bạch **Practice vs Exam (`DS-005`)**: `practice_attempt_count`, `practice_correct_count`, `exam_attempt_count`, `exam_correct_count` *(chỉ dùng Exam attempts để hiệu chỉnh IRT)*
+   - `option_selection_counts jsonb` + View an toàn `public.v_public_corpus_item_stats` (ẩn thống kê khi `answered_count < 20`, nhãn `preliminary` khi `20–49`, `verified` khi `>= 50`)
+   - Quản trị IRT (`DS-009`): `prior_irt_a`, `prior_irt_b`, `calibrated_irt_a`, `calibrated_irt_b`, `irt_sample_size`, `irt_standard_error`, `calibration_status ('prior_only' | 'monitoring' | 'experimental' | 'calibrated')`, `last_calibrated_at`
+2. **`public.exam_attempts` (Lịch sử phiên thi & Idempotency — `DS-003`):**
+   - `id uuid PRIMARY KEY`, `user_id uuid`, `client_attempt_id uuid NOT NULL` (`UNIQUE(user_id, client_attempt_id)` chống submit trùng)
+   - `status text CHECK (status IN ('in_progress', 'submitted', 'abandoned', 'expired'))`
+   - `total_questions`, `answered_count`, `correct_count`, `wrong_count`, `skipped_count`, `est_reading_score`, `theta_estimate`, `elapsed_sec`, `fatigue_drop_rate`, `part_breakdown`, `user_answers`, `question_timings`
+3. **`public.exam_attempt_items` (Telemetry Relational Cấp Câu Hỏi — `DS-001`):**
+   - `id uuid PRIMARY KEY`, `exam_attempt_id uuid REFERENCES public.exam_attempts(id) ON DELETE CASCADE`, `user_id uuid`, `question_id text` (`UNIQUE(exam_attempt_id, question_id)`)
+   - `part int`, `topic_id text`, `selected_option text`, `correct_option text`, `is_correct boolean`, `is_skipped boolean`, `time_spent_sec int`, `question_position int`, `error_pattern_code text`
+4. **`public.user_error_dna_snapshots` (Snapshot Chẩn đoán Lỗ hổng & Confidence Level — `DS-006`):**
+   - `weak_topics_ranked jsonb` *(kèm `evidence_count`, `confidence_level: LOW | MEDIUM | HIGH`, `confidence_score`, `est_points_lost`)*
+   - `error_trap_dna jsonb` *(kèm `error_category`, `error_code`, `frequency`, `recurrence_rate`)*
+   - `skill_quadrant_matrix jsonb` (`CRITICAL_GAP`, `TRAP_PRONE`, `SLOW_FLUENCY`, `MASTERED`)
+5. **`public.user_topic_mastery` (Hồ sơ Thành thạo Hiện tại & Lịch sử Chuyển trạng thái — `DS-002`):**
+   - `PRIMARY KEY (user_id, topic_id)`, `total_attempts`, `answered_attempts`, `correct_attempts`, `accuracy`, `total_time_sec`, `avg_time_sec`, `speed_ratio`, `mastery_score`, `confidence_score`, `confidence_level`
+   - `quadrant_state`, `previous_quadrant_state`, `state_history jsonb` *(lưu chuỗi chuyển đổi trạng thái qua các đề)*
+6. **`public.remediation_plans` (Lộ trình Nâng cấp Điểm sai Liên Đề — `Practice Completion ≠ Learning Mastery`):**
+   - `status CHECK (status IN ('draft', 'active', 'completed', 'verified', 'expired', 'cancelled'))`
+   - `baseline_mastery_score`, `current_mastery_score`, `total_prescribed_questions`, `completed_questions_count`, `verification_exam_attempt_id REFERENCES public.exam_attempts(id) ON DELETE SET NULL`, `verified_score_delta`, `verification_status ('pending' | 'improved' | 'stagnant' | 'regressed')`, `expires_at`
+7. **Atomic Transaction RPC `public.submit_toeic_exam_atomic` (`DS-004` & `DS-007`):**
+   - Thực thi nguyên tử toàn bộ 7 bước trong 1 transaction PostgreSQL duy nhất (kiểm tra idempotency `client_attempt_id`, ghi `exam_attempts`, ghi `exam_attempt_items`, cập nhật `corpus_item_stats` có giới hạn tối đa 2 lượt/user/câu để chống thao túng thống kê cộng đồng, ghi `user_error_dna_snapshots`, cập nhật `user_topic_mastery`, và đối chiếu/tạo mới `remediation_plans`).
 
 ---
 
-### 11.3. Lộ Trình Triển Khai Chi Tiết Từng Bước (Phase 3.1 → Phase 3.4)
+### 11.3. Kiến Trúc 6 Module Data Science (`lib/toeic/data-science/`) & Lộ Trình 3.1 → 3.7
 
-#### ✅ Phase 3.1 (Milestone DS-1): Universal Corpus Pipeline & Item Stats Warehouse (P0)
-- [x] **3.1.1 Xây dựng `scripts/ingest-and-validate-corpus.mjs` theo chuẩn `SOP-CORPUS-INGEST-V1`:**
-  * Tự động kiểm định 6 Stage cho toàn bộ 20 đề hiện có (`ETS2024`, `ETS2026` — 4.000/4.000 câu) và sẵn sàng nhận bất kỳ thư mục đề mới nào (`ETS2027+`).
-- [x] **3.1.2 Khởi tạo Migration `018_phase3_data_science_personalization.sql` & Seed `corpus_item_stats`:**
-  * Tạo 4 bảng Data Science kèm RLS chuẩn Zero-Trust và nạp đủ 4.000 câu hỏi vào `corpus_item_stats`.
+```text
+lib/toeic/data-science/
+├── threshold-config.js        # Ngưỡng cấu hình tập trung (Crowd sample, Quadrant, Confidence, IRT sample gates)
+├── accuracy-calculator.js     # Tách biệt Answered Accuracy vs Total Accuracy (xử lý câu bỏ trống)
+├── speed-analyzer.js          # Tính Speed Ratio = Actual Avg Time / Expected Time trên timed_attempt_count
+├── confidence-calculator.js   # Tính Confidence Score (0..100) & Level (LOW / MEDIUM / HIGH) theo evidence_count
+├── mastery-scorer.js          # Phân loại 4 Góc phần tư (CRITICAL_GAP, TRAP_PRONE, SLOW_FLUENCY, MASTERED)
+├── irt-calibrator.js          # Mô hình 2PL MAP (Bayesian N(0,1)) + Sample-gated Calibration (<50 prior_only .. >=300 calibrated)
+└── quadrant-analyzer.js       # Điều phối tổng hợp Telemetry, Error DNA, Topic Mastery & Remediation Generator
+```
 
-#### ✅ Phase 3.2 (Milestone DS-2): Exam Telemetry Persistence & Crowd Distractor Intelligence (P0)
-- [x] **3.2.1 API Lưu Kết Quả Thi & Telemetry (`POST /api/toeic/exams/submit`):**
-  * Khi học viên bấm **Nộp Bài**, lưu nguyên tử `exam_attempts`, cập nhật `option_selection_counts` trong `corpus_item_stats`, và sinh `user_error_dna_snapshots`.
-- [x] **3.2.2 Hiển thị "Crowd Trap Analytics" trên từng câu hỏi (`SplitPassageReader.jsx`):**
-  * Hiển thị tỷ lệ làm đúng thực tế & cảnh báo bẫy phổ biến (*"X% học viên cũng chọn nhầm đáp án giống bạn"*).
-
-#### ✅ Phase 3.3 (Milestone DS-3): 4-Quadrant Mastery Matrix & Cross-Test Remediation Loop (P0 Business)
-- [x] **3.3.1 Engine Phân loại 4 Góc Phần Tư (`lib/toeic/data-science/quadrant-analyzer.js`):**
-  * Kết hợp `Accuracy` và `Speed Ratio` để phân loại từng chủ điểm vào 4 nhóm (`🔴 Nguy cấp`, `🟠 Hay sập bẫy`, `🟡 Chưa phản xạ`, `🟢 Thành thạo`).
-- [x] **3.3.2 Tự động Sinh & Thực thi `remediation_plans` (`pages/toeic/remediation/[planId].jsx`, `pages/api/toeic/remediation/[planId].js`):**
-  * Tạo bài luyện **Vá Lỗ Hổng 3 Bước** (Micro-Drill + Câu Sinh Đôi) ngay sau khi nộp đề; Free preview 3 câu, VIP mở khóa toàn bộ + kiểm chứng tăng điểm ở Test `N+1`.
-
-#### ✅ Phase 3.4 (Milestone DS-4): Empirical Bayes IRT Calibration, Fatigue Model & Score Trajectory (P1)
-- [x] **3.4.1 Empirical Bayes Item Recalibration (`lib/toeic/data-science/irt-calibrator.js`):**
-  * Tự động cập nhật độ khó thực nghiệm `calibrated_irt_b` từ lịch sử làm bài của cộng đồng.
-- [x] **3.4.2 Chẩn đoán Suy giảm Thể lực Đọc hiểu (`Fatigue Drop Detector`) & Lịch sử Tăng trưởng (`pages/api/toeic/exams/history.js`):**
-  * Đo độ tụt giảm chính xác ở 25 câu cuối Part 7 (`Q176–200`), gợi ý phân bổ thời gian và tính `verified_score_delta` qua các đề.
+- [x] **Phase 3.1 (DS-1 — Corpus Pipeline & Item Warehouse):** Pipeline 9 bước `SOP-CORPUS-INGEST-V1` (`DISCOVER → PARSE → NORMALIZE → VALIDATE → DEDUPLICATE → DIFF DETECTION [SHA-256 content_hash] → UPSERT → RECONCILE → REPORT`) trong `scripts/ingest-and-validate-corpus.mjs` — chạy lại an toàn 100%, không bao giờ reset thống kê thực nghiệm.
+- [x] **Phase 3.2 (DS-2 — Exam Persistence & Atomic Telemetry):** Bảng `exam_attempts` + `exam_attempt_items` + RPC nguyên tử `submit_toeic_exam_atomic` + chống submit trùng bằng `client_attempt_id`.
+- [x] **Phase 3.3 (DS-3 — Error DNA & 4-Quadrant Mastery Matrix):** Bảng `user_error_dna_snapshots` + `user_topic_mastery` kèm `confidence_level` (`LOW/MEDIUM/HIGH`), `error_category`, `recurrence_rate`, và `state_history`.
+- [x] **Phase 3.4 (DS-4 — Remediation & Cross-Test Learning):** Bảng `remediation_plans` tách biệt `completed` (làm xong bài luyện) và `verified` (`verification_status: improved | stagnant | regressed` khi thi đề kế tiếp).
+- [x] **Phase 3.5 (DS-5 — 2PL IRT Calibration & Fatigue Model):** Ước lượng $\theta$ bằng 2PL MAP kèm Fisher Standard Error + cổng kích thước mẫu (`<50 prior_only`, `50–99 monitoring`, `100–299 experimental`, `>=300 calibrated` chỉ tính trên `exam_attempt_count`).
+- [x] **Phase 3.6 & 3.7 (DS-6 / DS-7 — Adaptive Recommendation, Trajectory & Free/VIP Boundary):** API `/api/toeic/exams/history` trả về chuỗi tiến bộ điểm số + `user_topic_mastery` và ranh giới giá trị Free (hiển thị vấn đề thật + điểm mất ước tính + 3 câu drill) vs VIP (mở khóa toàn bộ Error DNA, 4-Quadrant, Twin Questions & Cross-Test Verification).
 
 ---
 

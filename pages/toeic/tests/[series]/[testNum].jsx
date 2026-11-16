@@ -31,6 +31,7 @@ export default function TestSimulationPage() {
   const [showQuestionGrid, setShowQuestionGrid] = useState(true);
   const [gridFilter, setGridFilter] = useState('all'); // 'all' | 'unanswered' | 'wrong'
   const [questionTimings, setQuestionTimings] = useState({});
+  const [clientAttemptId, setClientAttemptId] = useState(null);
   const [serverDsResult, setServerDsResult] = useState(null);
   const [isSubmittingExam, setIsSubmittingExam] = useState(false);
 
@@ -121,8 +122,20 @@ export default function TestSimulationPage() {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
+  const generateClientUuid = () => {
+    if (typeof window !== 'undefined' && window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
   const handleStartMode = (selectedMode) => {
     setExamSessionMode(selectedMode);
+    setClientAttemptId(generateClientUuid());
     setUserAnswers({});
     setQuestionTimings({});
     setServerDsResult(null);
@@ -152,9 +165,11 @@ export default function TestSimulationPage() {
         method: 'POST',
         headers,
         body: JSON.stringify({
+          clientAttemptId: clientAttemptId || generateClientUuid(),
           series,
           testNum,
           sessionMode: examSessionMode || 'exam',
+          status: examTimeLeftSec === 0 ? 'expired' : 'submitted',
           elapsedSec: examElapsedSec,
           userAnswers,
           questionTimings,

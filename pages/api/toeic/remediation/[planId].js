@@ -113,6 +113,8 @@ export default async function handler(req, res) {
         .from('remediation_plans')
         .update({
           completed_question_ids: completedArr,
+          completed_questions_count: completedArr.length,
+          total_prescribed_questions: allPrescribed.length,
           progress_percent: progressPercent,
           status: nextStatus,
           updated_at: new Date().toISOString(),

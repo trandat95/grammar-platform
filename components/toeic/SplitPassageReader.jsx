@@ -667,7 +667,8 @@ export default function SplitPassageReader({
                 {showFeedback && (() => {
                   const canSeeDeepAi = isVip || examMode === 'practice';
                   const qCrowd = crowdStats?.[q.id];
-                  const crowdWrongPct = qCrowd?.attemptCount > 0 && userAns && qCrowd?.optionSelectionCounts?.[userAns]
+                  const showCrowd = Boolean(qCrowd && qCrowd.visible && qCrowd.attemptCount >= 20);
+                  const crowdWrongPct = showCrowd && userAns && qCrowd?.optionSelectionCounts?.[userAns]
                     ? Math.round((qCrowd.optionSelectionCounts[userAns] / qCrowd.attemptCount) * 100)
                     : null;
                   return (
@@ -691,9 +692,9 @@ export default function SplitPassageReader({
                           💡 {canSeeDeepAi ? 'Giải thích AI & Dẫn chứng' : 'Đáp án & Giải thích cơ bản'} (Câu #{q.number})
                         </span>
                         <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
-                          {qCrowd && qCrowd.correctRate !== null && (
+                          {showCrowd && qCrowd.correctRate !== null && (
                             <ToeicBadge variant="muted">
-                              📊 {qCrowd.correctRate}% làm đúng ({qCrowd.attemptCount} lượt)
+                              📊 {qCrowd.correctRate}% làm đúng ({qCrowd.attemptCount} lượt{qCrowd.sampleTier === 'preliminary' ? ' • Sơ bộ' : ''})
                             </ToeicBadge>
                           )}
                           {!canSeeDeepAi && (
@@ -704,7 +705,7 @@ export default function SplitPassageReader({
 
                       {!isCorrectAnswer && crowdWrongPct !== null && crowdWrongPct > 0 && (
                         <div style={{ fontSize: '0.76rem', color: 'var(--ds-warning)', fontWeight: 700 }}>
-                          ⚠️ Bẫy phổ biến: {crowdWrongPct}% học viên cũng chọn nhầm đáp án ({userAns}) ở câu này.
+                          ⚠️ Bẫy phổ biến: {crowdWrongPct}% học viên cũng chọn nhầm đáp án ({userAns}) ở câu này{qCrowd.sampleTier === 'preliminary' ? ' (dữ liệu sơ bộ)' : ''}.
                         </div>
                       )}
 
