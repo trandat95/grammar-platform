@@ -109,9 +109,8 @@ export default function AdminOverviewPanel({
             </div>
             <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem" }}>
               {error === "NO_AUTH_TOKEN"
-                ? "Hệ thống áp dụng chính sách bảo mật Zero-Trust. Vui lòng xác thực phiên Admin để kích hoạt kết nối thời gian thực."
-                : "Phiên làm việc chưa có token hợp lệ."}{" "}
-              Tài khoản mặc định: <b>admin@grammarpro.com</b> (mật khẩu: <code>admin123</code>).
+                ? "Hệ thống áp dụng chính sách bảo mật Zero-Trust. Vui lòng đăng nhập bằng tài khoản Quản trị viên Supabase Auth để kích hoạt kết nối thời gian thực."
+                : "Phiên làm việc chưa có token hợp lệ."}
             </div>
           </div>
           {onTriggerAdminLogin && (
@@ -129,7 +128,7 @@ export default function AdminOverviewPanel({
                 cursor: "pointer",
               }}
             >
-              🔑 Đăng nhập nhanh Quản trị viên
+              🔑 Đăng nhập Quản trị viên
             </button>
           )}
         </div>

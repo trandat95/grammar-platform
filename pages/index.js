@@ -77,13 +77,12 @@ const GUEST_USER = {
   isGuest: true,
 };
 
-// Default Pre-seeded User Database (Synchronized with Supabase Auth & PostgreSQL 17)
+// Default Pre-seeded User Directory (Public metadata only — no passwords stored client-side)
 const DEFAULT_USERS = [
   {
     id: "a0000000-0000-0000-0000-000000000001",
     name: "Quản trị viên Hệ thống",
     email: "admin@grammarpro.com",
-    password: "admin123",
     role: "ADMIN",
     status: "ACTIVE",
     createdAt: "2026-11-01",
@@ -92,7 +91,6 @@ const DEFAULT_USERS = [
     id: "a0000000-0000-0000-0000-000000000002",
     name: "Trần Minh Hoàng (Học viên VIP)",
     email: "vip@grammarpro.com",
-    password: "vipPassword123",
     role: "VIP",
     status: "ACTIVE",
     createdAt: "2026-11-05",
@@ -101,7 +99,6 @@ const DEFAULT_USERS = [
     id: "a0000000-0000-0000-0000-000000000003",
     name: "Nguyễn Văn Nam (Học viên Miễn phí)",
     email: "nam@grammarpro.com",
-    password: "freePassword123",
     role: "FREE",
     status: "ACTIVE",
     createdAt: "2026-11-10",
@@ -368,14 +365,8 @@ export default function Home() {
         localStorage.setItem("grammar_access_policy", JSON.stringify(DEFAULT_ACCESS_POLICY));
       }
 
-      const storedActiveUserId = localStorage.getItem("grammar_active_user_id");
-      if (storedActiveUserId && storedActiveUserId !== "guest") {
-        const uList = storedUsers ? JSON.parse(storedUsers) : DEFAULT_USERS;
-        const found = uList.find((u) => u.id === storedActiveUserId);
-        if (found) setCurrentUser(found);
-      } else {
-        setCurrentUser(GUEST_USER);
-      }
+      // Always start as GUEST_USER until Supabase GoTrue session is verified
+      setCurrentUser(GUEST_USER);
     } catch (e) {
       console.error("Failed to load initial local user DB", e);
     }
@@ -419,23 +410,10 @@ export default function Home() {
           localStorage.setItem("grammar_access_policy", JSON.stringify(pol));
         }
 
-        // Check active Supabase Auth session
-        let session = await getActiveSession();
+        // Check active Supabase Auth session (Zero-Trust: never auto-login or trust localStorage/user_metadata role)
+        const session = await getActiveSession();
         if (session?.access_token) {
           setActiveAuthToken(session.access_token);
-        } else {
-          const savedId = localStorage.getItem("grammar_active_user_id");
-          if (savedId === "a0000000-0000-0000-0000-000000000001") {
-            try {
-              const res = await signInWithSupabase("admin@grammarpro.com", "admin123");
-              if (res?.session) {
-                session = res.session;
-                setActiveAuthToken(res.session.access_token);
-              }
-            } catch (err) {
-              console.warn("Silent admin session recovery notice:", err?.message || err);
-            }
-          }
         }
         if (session?.user) {
           const profile = await getProfile(session.user.id);
@@ -443,18 +421,17 @@ export default function Home() {
             id: session.user.id,
             name: profile?.full_name || session.user.user_metadata?.full_name || session.user.email.split("@")[0],
             email: session.user.email,
-            role: profile?.role || session.user.user_metadata?.role || "FREE",
+            role: profile?.role || "FREE",
             status: profile?.status || "ACTIVE",
             createdAt: profile?.created_at ? profile.created_at.split("T")[0] : getTodayDateStr(),
           };
           setCurrentUser(activeUser);
           localStorage.setItem("grammar_active_user_id", activeUser.id);
         } else {
-          // If no active auth session on Supabase, ensure guest mode
-          const savedId = localStorage.getItem("grammar_active_user_id");
-          if (!savedId || savedId === "guest") {
-            setCurrentUser(GUEST_USER);
-          }
+          // No verified Supabase Auth session -> strictly reset to Guest mode
+          localStorage.removeItem("grammar_active_user_id");
+          setActiveAuthToken(null);
+          setCurrentUser(GUEST_USER);
         }
       } catch (err) {
         console.warn("Supabase initial cloud fetch warning:", err?.message || err);
@@ -1029,37 +1006,28 @@ export default function Home() {
     setAuthSuccess("");
     setAuthUnconfirmedEmail("");
     const email = authEmail.trim();
-    let password = authPassword;
+    const password = authPassword;
 
     if (!email || !password) {
       setAuthError("Vui lòng nhập đầy đủ email và mật khẩu!");
       return;
     }
 
-    // Auto-map shorthand passwords for seeded users (Supabase requires >= 6 chars)
-    if (email.toLowerCase() === "admin@grammarpro.com" && (password === "admin" || password === "admin123")) {
-      password = "admin123";
-    } else if (email.toLowerCase() === "vip@grammarpro.com" && (password === "vip" || password === "vipPassword123")) {
-      password = "vipPassword123";
-    } else if (email.toLowerCase() === "nam@grammarpro.com" && (password === "free" || password === "freePassword123")) {
-      password = "freePassword123";
-    }
-
     setAuthSubmitting(true);
     try {
-      // 1. Authenticate with Supabase Auth (GoTrue)
+      // 1. Authenticate strictly with Supabase Auth (GoTrue)
       const data = await signInWithSupabase(email, password);
       if (data?.session?.access_token) {
         setActiveAuthToken(data.session.access_token);
       }
       if (data?.user) {
-        // Fetch Live Profile from Postgres 17
+        // Fetch Authoritative Profile from Postgres 17 (never trust user_metadata.role)
         const profile = await getProfile(data.user.id);
         const loggedUser = {
           id: data.user.id,
           name: profile?.full_name || data.user.user_metadata?.full_name || email.split("@")[0],
           email: data.user.email,
-          role: profile?.role || data.user.user_metadata?.role || "FREE",
+          role: profile?.role || "FREE",
           status: profile?.status || "ACTIVE",
           createdAt: profile?.created_at ? profile.created_at.split("T")[0] : getTodayDateStr(),
         };
@@ -1091,59 +1059,18 @@ export default function Home() {
         return;
       }
 
-      // 2. Offline / Local Fallback
-      const localUser = usersList.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && (u.password === password || password === "admin" || password === "admin123" || password === "vip" || password === "free")
-      );
-
-      if (localUser) {
-        if (localUser.status === "LOCKED") {
-          setAuthError("Tài khoản này đã bị khóa bởi Quản trị viên!");
-          return;
-        }
-        setCurrentUser(localUser);
-        localStorage.setItem("grammar_active_user_id", localUser.id);
-        setAuthModalOpen(false);
-        setAuthEmail("");
-        setAuthPassword("");
-        triggerXpGain(10, `Chào mừng ${localUser.name}!`);
-        logActivity(localUser.id, localUser.email, "LOGIN", { name: localUser.name, role: localUser.role, offline: true });
-        return;
-      }
-
       setAuthError(authErr.message || "Email hoặc mật khẩu không chính xác!");
     } finally {
       setAuthSubmitting(false);
     }
   };
 
-  const handleQuickAdminLogin = async () => {
-    try {
-      setAuthSubmitting(true);
-      const data = await signInWithSupabase("admin@grammarpro.com", "admin123");
-      if (data?.session?.access_token) {
-        setActiveAuthToken(data.session.access_token);
-      }
-      if (data?.user) {
-        const profile = await getProfile(data.user.id);
-        const loggedUser = {
-          id: data.user.id,
-          name: profile?.full_name || "Quản trị viên Hệ thống",
-          email: data.user.email,
-          role: profile?.role || "ADMIN",
-          status: profile?.status || "ACTIVE",
-          createdAt: profile?.created_at ? profile.created_at.split("T")[0] : getTodayDateStr(),
-        };
-        setCurrentUser(loggedUser);
-        localStorage.setItem("grammar_active_user_id", loggedUser.id);
-        triggerXpGain(10, "Đã kích hoạt phiên làm việc Quản trị viên với Supabase Auth!");
-      }
-    } catch (err) {
-      console.warn("handleQuickAdminLogin warning:", err?.message || err);
-      alert("Đăng nhập Quản trị viên thất bại: " + (err?.message || "Lỗi xác thực"));
-    } finally {
-      setAuthSubmitting(false);
-    }
+  const handleQuickAdminLogin = () => {
+    setShowSwitchAuthForm(false);
+    setAuthTab("login");
+    setAuthError("");
+    setAuthSuccess("");
+    setAuthModalOpen(true);
   };
 
   const handleResendConfirmation = async () => {
