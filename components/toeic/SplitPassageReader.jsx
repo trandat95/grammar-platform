@@ -17,6 +17,7 @@ export default function SplitPassageReader({
   passages = [],
   questions = [],
   activeQuestionId = null,
+  examMode = 'practice',
   isReviewMode = false,
   userAnswers = {},
   onSelectOption,
@@ -210,7 +211,8 @@ export default function SplitPassageReader({
           <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', maxWidth: '100%', padding: '0.1rem 0' }}>
             {passageSets.map((s, idx) => {
               const isActive = idx === activeSetIndex;
-              const hasAllAnswered = s.questions.length > 0 && s.questions.every(q => userAnswers[q.id]);
+              const setAnsweredCount = s.questions.filter(q => Boolean(userAnswers[q.id])).length;
+              const hasAllAnswered = s.questions.length > 0 && setAnsweredCount === s.questions.length;
 
               return (
                 <button
@@ -232,6 +234,7 @@ export default function SplitPassageReader({
                   }}
                 >
                   {hasAllAnswered && !isActive ? '✓ ' : ''}{s.label}
+                  {!hasAllAnswered && s.questions.length > 0 ? ` (${setAnsweredCount}/${s.questions.length})` : ''}
                 </button>
               );
             })}
@@ -515,7 +518,12 @@ export default function SplitPassageReader({
           {setQuestions.map((q, qIdx) => {
             const isActive = q.id === activeQuestionId || q.id === activeQuestion?.id;
             const userAns = userAnswers[q.id];
+            const hasAnswered = Boolean(userAns);
+            const showFeedback = isReviewMode || (examMode === 'practice' && hasAnswered);
             const isCorrectAnswer = userAns === q.correct_answer;
+            const ai = q.ai_analysis || {};
+            const selectedAnalysis = userAns ? ai.option_deep_analysis?.[userAns] : null;
+            const correctAnalysis = q.correct_answer ? ai.option_deep_analysis?.[q.correct_answer] : null;
 
             return (
               <div
@@ -531,11 +539,18 @@ export default function SplitPassageReader({
               >
                 {/* Question Header */}
                 <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
-                  <ToeicBadge variant={isActive ? 'primary' : 'muted'}>
-                    Câu #{q.number || qIdx + 1}
-                  </ToeicBadge>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                    <ToeicBadge variant={isActive ? 'primary' : 'muted'}>
+                      Câu #{q.number || qIdx + 1}
+                    </ToeicBadge>
+                    {ai.primary_topic_name_vi && (
+                      <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
+                        {ai.primary_topic_name_vi}
+                      </span>
+                    )}
+                  </div>
 
-                  {isReviewMode && (
+                  {showFeedback && (
                     <span
                       style={{
                         fontSize: '0.75rem',
@@ -543,7 +558,8 @@ export default function SplitPassageReader({
                         padding: '0.2rem 0.5rem',
                         borderRadius: 'var(--ds-radius-sm)',
                         backgroundColor: isCorrectAnswer ? 'var(--ds-success-bg)' : 'var(--ds-danger-bg)',
-                        color: isCorrectAnswer ? 'var(--ds-success)' : 'var(--ds-danger)'
+                        color: isCorrectAnswer ? 'var(--ds-success)' : 'var(--ds-danger)',
+                        flexShrink: 0
                       }}
                     >
                       {isCorrectAnswer ? '✓ Đúng' : `✗ Sai (Đáp án: ${q.correct_answer})`}
@@ -567,17 +583,25 @@ export default function SplitPassageReader({
 
                     let optBg = 'var(--ds-card)';
                     let optBorder = 'var(--ds-border)';
-                    if (isReviewMode) {
+                    let badgeBg = 'var(--ds-bg-elevated)';
+                    let badgeColor = 'var(--ds-text)';
+                    if (showFeedback) {
                       if (isRight) {
                         optBg = 'var(--ds-success-bg)';
                         optBorder = 'var(--ds-success)';
+                        badgeBg = 'var(--ds-success)';
+                        badgeColor = '#ffffff';
                       } else if (isOptSelected && !isRight) {
                         optBg = 'var(--ds-danger-bg)';
                         optBorder = 'var(--ds-danger)';
+                        badgeBg = 'var(--ds-danger)';
+                        badgeColor = '#ffffff';
                       }
                     } else if (isOptSelected) {
                       optBg = 'var(--ds-accent-bg)';
                       optBorder = 'var(--ds-accent)';
+                      badgeBg = 'var(--ds-accent)';
+                      badgeColor = '#ffffff';
                     }
 
                     return (
@@ -592,6 +616,7 @@ export default function SplitPassageReader({
                         style={{
                           display: 'flex',
                           alignItems: 'center',
+                          justifyContent: 'space-between',
                           gap: '0.65rem',
                           padding: '0.65rem 0.85rem',
                           borderRadius: 'var(--ds-radius-md)',
@@ -602,30 +627,106 @@ export default function SplitPassageReader({
                           transition: 'all 0.15s ease'
                         }}
                       >
-                        <span
-                          style={{
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 800,
-                            fontSize: '0.75rem',
-                            backgroundColor: isOptSelected ? 'var(--ds-accent)' : 'var(--ds-bg-elevated)',
-                            color: isOptSelected ? '#ffffff' : 'var(--ds-text)',
-                            flexShrink: 0
-                          }}
-                        >
-                          {optKey}
-                        </span>
-                        <span style={{ fontSize: '0.88rem', color: 'var(--ds-text)', lineHeight: 1.4 }}>
-                          {optText}
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                          <span
+                            style={{
+                              width: '24px',
+                              height: '24px',
+                              borderRadius: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 800,
+                              fontSize: '0.75rem',
+                              backgroundColor: badgeBg,
+                              color: badgeColor,
+                              flexShrink: 0
+                            }}
+                          >
+                            {optKey}
+                          </span>
+                          <span style={{ fontSize: '0.88rem', color: 'var(--ds-text)', lineHeight: 1.4 }}>
+                            {optText}
+                          </span>
+                        </div>
+                        {showFeedback && isRight && (
+                          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--ds-success)', flexShrink: 0 }}>
+                            ✓ Đáp án đúng
+                          </span>
+                        )}
                       </button>
                     );
                   })}
                 </div>
+
+                {/* Explanation & Evidence Box (shown immediately on answer or in Review Mode) */}
+                {showFeedback && (
+                  <div
+                    style={{
+                      marginTop: '0.9rem',
+                      padding: '0.85rem 1rem',
+                      borderRadius: 'var(--ds-radius-md)',
+                      backgroundColor: 'var(--ds-bg-elevated)',
+                      border: '1px solid var(--ds-border)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.45rem',
+                      fontSize: '0.82rem',
+                      lineHeight: 1.55,
+                      color: 'var(--ds-text-secondary)'
+                    }}
+                  >
+                    <div style={{ fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
+                      💡 Giải thích chi tiết &amp; Dẫn chứng (Câu #{q.number})
+                    </div>
+
+                    {selectedAnalysis && !isCorrectAnswer && selectedAnalysis.ai_feedback_vi && (
+                      <div style={{ color: 'var(--ds-danger)', fontWeight: 600 }}>
+                        • Phương án ({userAns}): {selectedAnalysis.ai_feedback_vi}
+                      </div>
+                    )}
+
+                    {(correctAnalysis?.ai_feedback_vi || q.explanation_vi) && (
+                      <div style={{ color: 'var(--ds-text)' }}>
+                        • Đáp án ({q.correct_answer}): {correctAnalysis?.ai_feedback_vi || q.explanation_vi}
+                        {correctAnalysis?.ai_feedback_vi && q.explanation_vi && q.explanation_vi !== correctAnalysis.ai_feedback_vi
+                          ? ` — ${q.explanation_vi}`
+                          : ''}
+                      </div>
+                    )}
+
+                    {(ai.evidence_sentence_en || q.key_clue) && (
+                      <div
+                        style={{
+                          padding: '0.45rem 0.65rem',
+                          borderRadius: 'var(--ds-radius-sm)',
+                          backgroundColor: 'var(--ds-warning-bg)',
+                          borderLeft: '3px solid var(--ds-warning)',
+                          color: 'var(--ds-text)',
+                          fontSize: '0.8rem'
+                        }}
+                      >
+                        <strong>📌 Dẫn chứng trong bài:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
+                      </div>
+                    )}
+
+                    {Array.isArray(ai.solving_steps_vi) && ai.solving_steps_vi.length > 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginTop: '0.15rem' }}>
+                        {ai.solving_steps_vi.map((step, sIdx) => (
+                          <div key={sIdx} style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
+                            {step}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {ai.micro_rule_formula_vi && (
+                      <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)', borderTop: '1px dashed var(--ds-border)', paddingTop: '0.4rem', marginTop: '0.15rem' }}>
+                        <strong>📐 Mẹo / Công thức:</strong> {ai.micro_rule_formula_vi}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}

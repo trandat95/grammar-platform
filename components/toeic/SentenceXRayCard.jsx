@@ -21,6 +21,9 @@ export const XRAY_STATES = {
 
 export default function SentenceXRayCard({
   question,
+  examMode = 'practice', // 'practice' | 'exam'
+  initialSelectedOption = null,
+  forceReview = false,
   onAnswerSubmit,
   onSaveToSrs,
   onOpenAiTutor,
@@ -28,9 +31,13 @@ export default function SentenceXRayCard({
 }) {
   if (!question) return null;
 
-  const [state, setState] = useState(XRAY_STATES.SOLVING);
+  const [state, setState] = useState(
+    forceReview || (examMode === 'practice' && initialSelectedOption)
+      ? XRAY_STATES.SUBMITTED
+      : XRAY_STATES.SOLVING
+  );
   const [activeTab, setActiveTab] = useState('breakdown'); // 'breakdown' | 'formula' | 'twin'
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(initialSelectedOption || null);
   const [timeSpentSec, setTimeSpentSec] = useState(0);
   const [usedHint, setUsedHint] = useState(false);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -42,32 +49,47 @@ export default function SentenceXRayCard({
   const xray = aiAnalysis.sentence_xray || null;
   const recommendedTime = question.recommended_time_sec || 12;
 
-  // Reset state when question changes
+  // Reset / sync state when question or review mode changes
   useEffect(() => {
-    setState(XRAY_STATES.SOLVING);
+    setSelectedOption(initialSelectedOption || null);
+    if (forceReview || (examMode === 'practice' && initialSelectedOption)) {
+      setState(XRAY_STATES.SUBMITTED);
+    } else {
+      setState(XRAY_STATES.SOLVING);
+    }
     setActiveTab('breakdown');
-    setSelectedOption(null);
     setTimeSpentSec(0);
     setUsedHint(false);
     setSelectedToken(null);
     setTwinQuestion(null);
     setTwinAnswered(null);
-  }, [question.id]);
+  }, [question.id, forceReview, examMode]);
+
+  // Keep selectedOption synced when initialSelectedOption updates externally
+  useEffect(() => {
+    if (initialSelectedOption !== undefined) {
+      setSelectedOption(initialSelectedOption || null);
+    }
+  }, [initialSelectedOption]);
 
   // Pacing Timer in SOLVING state
   useEffect(() => {
-    if (state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE) return;
+    if (forceReview || (state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE)) return;
     const interval = setInterval(() => {
       setTimeSpentSec(prev => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [state]);
+  }, [state, forceReview]);
 
   // Handle Option Selection
   const handleSelectOption = useCallback((optionKey) => {
-    if (state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE) return;
+    if (forceReview) return;
+    if (examMode === 'practice' && state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE) return;
+
     setSelectedOption(optionKey);
-    setState(XRAY_STATES.SUBMITTED);
+    if (examMode === 'practice') {
+      setState(XRAY_STATES.SUBMITTED);
+    }
 
     const isCorrect = optionKey === question.correct_answer;
     if (onAnswerSubmit) {
@@ -79,7 +101,7 @@ export default function SentenceXRayCard({
         usedHint
       });
     }
-  }, [state, question, timeSpentSec, usedHint, onAnswerSubmit]);
+  }, [forceReview, examMode, state, question, timeSpentSec, usedHint, onAnswerSubmit]);
 
   // Trigger Hint
   const handleToggleHint = useCallback(() => {
@@ -136,7 +158,7 @@ export default function SentenceXRayCard({
   if (pacingRatio > 1.0) pacingColor = 'var(--ds-warning)';
   else if (pacingRatio > 0.7) pacingColor = 'var(--ds-accent)';
 
-  const isSubmitted = state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE;
+  const isSubmitted = forceReview || (state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE);
   const isCorrect = selectedOption === question.correct_answer;
   const selectedFeedback = selectedOption && aiAnalysis.option_deep_analysis?.[selectedOption];
 

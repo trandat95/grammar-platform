@@ -22,6 +22,13 @@ export default function TestSimulationPage() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [isVipLocked, setIsVipLocked] = useState(false);
 
+  // Mode Selection: null (choose mode) | 'practice' (instant feedback) | 'exam' (timed mock exam)
+  const [examSessionMode, setExamSessionMode] = useState(null);
+  const [examTimeLeftSec, setExamTimeLeftSec] = useState(75 * 60);
+  const [examElapsedSec, setExamElapsedSec] = useState(0);
+  const [examSubmitted, setExamSubmitted] = useState(false);
+  const [showUnansweredDrawer, setShowUnansweredDrawer] = useState(false);
+
   const globalAuth = useGlobalAuth();
   const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
   const isVip = entitlement.isVip;
@@ -72,6 +79,111 @@ export default function TestSimulationPage() {
   const part5Questions = useMemo(() => questions.filter(q => q.part === 5), [questions]);
   const part6Questions = useMemo(() => questions.filter(q => q.part === 6), [questions]);
   const part7Questions = useMemo(() => questions.filter(q => q.part === 7), [questions]);
+  const readingQuestions = useMemo(
+    () => [...part5Questions, ...part6Questions, ...part7Questions],
+    [part5Questions, part6Questions, part7Questions]
+  );
+
+  // Countdown Timer for Mock Exam Mode (75 mins = 4500s)
+  useEffect(() => {
+    if (examSessionMode !== 'exam' || examSubmitted || isLoading || isVipLocked || errorMsg) return;
+    const interval = setInterval(() => {
+      setExamElapsedSec(prev => prev + 1);
+      setExamTimeLeftSec(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setExamSubmitted(true);
+          setIsReviewMode(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [examSessionMode, examSubmitted, isLoading, isVipLocked, errorMsg]);
+
+  const formatTimer = (totalSec) => {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+
+  const handleStartMode = (selectedMode) => {
+    setExamSessionMode(selectedMode);
+    setUserAnswers({});
+    setExamSubmitted(false);
+    setIsReviewMode(false);
+    setExamTimeLeftSec(75 * 60);
+    setExamElapsedSec(0);
+    setShowUnansweredDrawer(false);
+    setActivePart(5);
+    if (part5Questions[0]) setActiveQuestionId(part5Questions[0].id);
+  };
+
+  const handleSubmitExam = () => {
+    const unanswered = readingQuestions.filter(q => !userAnswers[q.id]).length;
+    if (
+      unanswered > 0 &&
+      typeof window !== 'undefined' &&
+      !window.confirm(`Bạn còn ${unanswered} câu chưa làm. Bạn có chắc chắn muốn nộp bài và chấm điểm ngay không?`)
+    ) {
+      return;
+    }
+    setExamSubmitted(true);
+    setIsReviewMode(true);
+    setShowUnansweredDrawer(false);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const unansweredQuestions = useMemo(
+    () => readingQuestions.filter(q => !userAnswers[q.id]),
+    [readingQuestions, userAnswers]
+  );
+
+  const jumpToQuestion = (q) => {
+    if (!q) return;
+    if (q.part === 5 || q.part === 6 || q.part === 7) {
+      setActivePart(q.part);
+    }
+    setActiveQuestionId(q.id);
+    setShowUnansweredDrawer(false);
+  };
+
+  const handleJumpNextUnanswered = () => {
+    if (unansweredQuestions.length === 0) return;
+    const curIdx = readingQuestions.findIndex(q => q.id === activeQuestionId);
+    const afterCurrent = readingQuestions.slice(curIdx + 1).find(q => !userAnswers[q.id]);
+    const target = afterCurrent || unansweredQuestions[0];
+    jumpToQuestion(target);
+  };
+
+  const examSummary = useMemo(() => {
+    if (!examSubmitted) return null;
+    const scorePart = (list) => {
+      let correct = 0;
+      let answered = 0;
+      for (const q of list) {
+        const ans = userAnswers[q.id];
+        if (ans) {
+          answered += 1;
+          if (ans === q.correct_answer) correct += 1;
+        }
+      }
+      return { total: list.length, answered, correct };
+    };
+    const p5 = scorePart(part5Questions);
+    const p6 = scorePart(part6Questions);
+    const p7 = scorePart(part7Questions);
+    const total = p5.total + p6.total + p7.total;
+    const correct = p5.correct + p6.correct + p7.correct;
+    const answered = p5.answered + p6.answered + p7.answered;
+    const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+    // ETS Reading 5-495 scale approximation
+    const estReadingScore = total > 0 ? Math.min(495, Math.max(5, Math.round(5 + (correct / total) * 490 / 5) * 5)) : 5;
+    return { total, correct, answered, accuracy, estReadingScore, p5, p6, p7 };
+  }, [examSubmitted, userAnswers, part5Questions, part6Questions, part7Questions]);
 
   // Current active Part 5 question
   const currentPart5Index = useMemo(() => {
@@ -100,7 +212,7 @@ export default function TestSimulationPage() {
     }));
   };
 
-  const answeredCount = Object.keys(userAnswers).length;
+  const answeredCount = readingQuestions.filter(q => Boolean(userAnswers[q.id])).length;
 
   return (
     <>
@@ -146,44 +258,269 @@ export default function TestSimulationPage() {
                 <span>&larr; Danh sách 20 đề thi</span>
               </a>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-text-secondary)' }}>
-                  Tiến độ: <strong style={{ color: 'var(--ds-accent)' }}>{answeredCount}</strong> / {questions.length} câu
-                </span>
+              {examSessionMode && !isLoading && !isVipLocked && !errorMsg && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                  <ToeicBadge variant={examSessionMode === 'exam' ? 'warning' : 'primary'}>
+                    {examSessionMode === 'exam' ? '⏱️ Chế Độ Thi Thử' : '🎯 Chế Độ Luyện Tập'}
+                  </ToeicBadge>
 
-                <button
-                  type="button"
-                  onClick={() => setIsReviewMode(prev => !prev)}
-                  style={{
-                    padding: '0.45rem 0.9rem',
-                    borderRadius: 'var(--ds-radius-md)',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    border: '1px solid var(--ds-border)',
-                    backgroundColor: isReviewMode ? 'var(--ds-warning-bg)' : 'var(--ds-card)',
-                    color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {isReviewMode ? '✓ Đang Xem Giải Thích & Dẫn Chứng' : 'Chế Độ Xem Giải Thích'}
-                </button>
-              </div>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-text-secondary)' }}>
+                    Tiến độ: <strong style={{ color: 'var(--ds-accent)' }}>{answeredCount}</strong> / {readingQuestions.length} câu
+                  </span>
+
+                  {examSessionMode === 'exam' && (
+                    <>
+                      <span
+                        style={{
+                          padding: '0.35rem 0.7rem',
+                          borderRadius: 'var(--ds-radius-md)',
+                          fontSize: '0.82rem',
+                          fontWeight: 800,
+                          fontVariantNumeric: 'tabular-nums',
+                          border: `1px solid ${examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-border)'}`,
+                          backgroundColor: examTimeLeftSec <= 300 ? 'var(--ds-danger-bg)' : 'var(--ds-card)',
+                          color: examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-text)'
+                        }}
+                      >
+                        ⏱️ {formatTimer(examTimeLeftSec)}
+                      </span>
+
+                      {!examSubmitted && unansweredQuestions.length > 0 && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={handleJumpNextUnanswered}
+                            className="toeic-btn toeic-btn-secondary"
+                            style={{ fontSize: '0.78rem', padding: '0.4rem 0.75rem', fontWeight: 700 }}
+                            title="Chuyển nhanh tới câu chưa làm tiếp theo"
+                          >
+                            ⚡ Câu chưa làm ({unansweredQuestions.length})
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setShowUnansweredDrawer(prev => !prev)}
+                            style={{
+                              padding: '0.4rem 0.75rem',
+                              borderRadius: 'var(--ds-radius-md)',
+                              fontSize: '0.78rem',
+                              fontWeight: 700,
+                              border: '1px solid var(--ds-border)',
+                              backgroundColor: showUnansweredDrawer ? 'var(--ds-accent-bg)' : 'var(--ds-card)',
+                              color: showUnansweredDrawer ? 'var(--ds-accent)' : 'var(--ds-text)',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            📋 Danh sách chưa làm
+                          </button>
+                        </>
+                      )}
+
+                      {!examSubmitted && (
+                        <button
+                          type="button"
+                          onClick={handleSubmitExam}
+                          className="toeic-btn toeic-btn-primary"
+                          style={{ fontSize: '0.8rem', padding: '0.45rem 0.95rem', fontWeight: 800 }}
+                        >
+                          ✓ Nộp Bài &amp; Chấm Điểm
+                        </button>
+                      )}
+                    </>
+                  )}
+
+                  {examSessionMode === 'practice' && (
+                    <button
+                      type="button"
+                      onClick={() => setIsReviewMode(prev => !prev)}
+                      style={{
+                        padding: '0.45rem 0.9rem',
+                        borderRadius: 'var(--ds-radius-md)',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        border: '1px solid var(--ds-border)',
+                        backgroundColor: isReviewMode ? 'var(--ds-warning-bg)' : 'var(--ds-card)',
+                        color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text)',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {isReviewMode ? '✓ Hiện Toàn Bộ Đáp Án' : 'Xem Đáp Án Tất Cả'}
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (answeredCount > 0 && !examSubmitted && typeof window !== 'undefined') {
+                        if (!window.confirm('Đổi chế độ sẽ làm mới tiến độ hiện tại. Bạn có chắc không?')) return;
+                      }
+                      setExamSessionMode(null);
+                      setUserAnswers({});
+                      setExamSubmitted(false);
+                      setIsReviewMode(false);
+                    }}
+                    style={{
+                      padding: '0.4rem 0.7rem',
+                      borderRadius: 'var(--ds-radius-md)',
+                      fontSize: '0.76rem',
+                      fontWeight: 600,
+                      border: '1px solid var(--ds-border)',
+                      backgroundColor: 'transparent',
+                      color: 'var(--ds-text-muted)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Đổi chế độ
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* PART NAVIGATION SWITCHER (Fixed: Part 5 is always easily accessible!) */}
-            <div
-              className="toeic-card"
-              style={{
-                padding: '0.75rem 1rem',
-                marginBottom: '1.5rem',
-                display: 'flex',
-                gap: '0.5rem',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                backgroundColor: 'var(--ds-bg-elevated)',
-                border: '1px solid var(--ds-border)'
-              }}
-            >
+            {/* UNANSWERED QUESTIONS QUICK PICKER DRAWER (EXAM MODE) */}
+            {examSessionMode === 'exam' && !examSubmitted && showUnansweredDrawer && unansweredQuestions.length > 0 && (
+              <div
+                className="toeic-card"
+                style={{
+                  padding: '0.9rem 1rem',
+                  marginBottom: '1rem',
+                  border: '1px solid var(--ds-accent)',
+                  backgroundColor: 'var(--ds-bg-elevated)'
+                }}
+              >
+                <div className="toeic-flex-between" style={{ marginBottom: '0.6rem' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                    ⚡ Chọn nhanh câu chưa làm ({unansweredQuestions.length} câu):
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowUnansweredDrawer(false)}
+                    style={{ background: 'none', border: 'none', color: 'var(--ds-text-muted)', cursor: 'pointer', fontWeight: 700 }}
+                  >
+                    ✕ Đóng
+                  </button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', maxHeight: '150px', overflowY: 'auto' }}>
+                  {unansweredQuestions.map(q => (
+                    <button
+                      key={q.id}
+                      type="button"
+                      onClick={() => jumpToQuestion(q)}
+                      style={{
+                        padding: '0.25rem 0.55rem',
+                        borderRadius: 'var(--ds-radius-sm)',
+                        border: '1px solid var(--ds-border)',
+                        backgroundColor: q.id === activeQuestionId ? 'var(--ds-accent-bg)' : 'var(--ds-card)',
+                        color: q.id === activeQuestionId ? 'var(--ds-accent)' : 'var(--ds-text)',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      P{q.part} • #{q.number}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* EXAM SCORE SUMMARY CARD (AFTER SUBMISSION) */}
+            {examSessionMode === 'exam' && examSubmitted && examSummary && (
+              <div
+                className="toeic-card"
+                style={{
+                  padding: '1.5rem',
+                  marginBottom: '1.5rem',
+                  border: '1.5px solid var(--ds-accent)',
+                  backgroundColor: 'var(--ds-card)'
+                }}
+              >
+                <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
+                  <div>
+                    <ToeicBadge variant="success">✓ Đã Nộp Bài • Chế Độ Xem Lại Đáp Án &amp; Giải Thích</ToeicBadge>
+                    <h2 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0.5rem 0 0.25rem 0', color: 'var(--ds-text)' }}>
+                      Kết Quả Thi Thử {series} Test {String(testNum).padStart(2, '0')}
+                    </h2>
+                    <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ds-text-secondary)' }}>
+                      Thời gian làm bài: <strong>{formatTimer(examElapsedSec)}</strong> • Đã làm {examSummary.answered}/{examSummary.total} câu
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ textAlign: 'center', padding: '0.75rem 1.25rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-accent-bg)', border: '1px solid var(--ds-accent)' }}>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--ds-accent)', textTransform: 'uppercase' }}>Điểm Reading Ước Tính</div>
+                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--ds-accent)' }}>{examSummary.estReadingScore}/495</div>
+                    </div>
+
+                    <div style={{ textAlign: 'center', padding: '0.75rem 1.25rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-success-bg)', border: '1px solid var(--ds-success)' }}>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--ds-success)', textTransform: 'uppercase' }}>Số Câu Đúng</div>
+                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--ds-success)' }}>{examSummary.correct}/{examSummary.total} ({examSummary.accuracy}%)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginBottom: '1rem' }}>
+                  {[
+                    { label: 'Part 5 (Điền câu)', stat: examSummary.p5, part: 5 },
+                    { label: 'Part 6 (Điền đoạn văn)', stat: examSummary.p6, part: 6 },
+                    { label: 'Part 7 (Đọc hiểu)', stat: examSummary.p7, part: 7 },
+                  ].map(item => (
+                    <button
+                      key={item.part}
+                      type="button"
+                      onClick={() => setActivePart(item.part)}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        borderRadius: 'var(--ds-radius-md)',
+                        border: '1px solid var(--ds-border)',
+                        backgroundColor: 'var(--ds-bg-elevated)',
+                        textAlign: 'left',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <div style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--ds-text-muted)' }}>{item.label}</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--ds-text)', marginTop: '0.2rem' }}>
+                        {item.stat.correct} / {item.stat.total} đúng
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={() => handleStartMode('exam')}
+                    className="toeic-btn toeic-btn-secondary"
+                    style={{ fontSize: '0.82rem', fontWeight: 700 }}
+                  >
+                    ↻ Làm Lại Bài Thi Thử
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStartMode('practice')}
+                    className="toeic-btn toeic-btn-primary"
+                    style={{ fontSize: '0.82rem', fontWeight: 700 }}
+                  >
+                    🎯 Chuyển Sang Luyện Tập Tự Do
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* PART NAVIGATION SWITCHER */}
+            {examSessionMode && !isLoading && !isVipLocked && !errorMsg && (
+              <div
+                className="toeic-card"
+                style={{
+                  padding: '0.75rem 1rem',
+                  marginBottom: '1.5rem',
+                  display: 'flex',
+                  gap: '0.5rem',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  backgroundColor: 'var(--ds-bg-elevated)',
+                  border: '1px solid var(--ds-border)'
+                }}
+              >
               <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-text-secondary)', marginRight: '0.25rem' }}>
                 Chọn Phần Thi:
               </span>
@@ -232,7 +569,8 @@ export default function TestSimulationPage() {
               >
                 📋 Xem Toàn Đề
               </button>
-            </div>
+              </div>
+            )}
 
             {isLoading ? (
               <div style={{ minHeight: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', textAlign: 'center' }}>
@@ -313,6 +651,89 @@ export default function TestSimulationPage() {
                   Quay Lại
                 </a>
               </div>
+            ) : !examSessionMode ? (
+              <div style={{ maxWidth: '820px', margin: '1.5rem auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div className="toeic-card" style={{ padding: '1.75rem', textAlign: 'center' }}>
+                  <ToeicBadge variant="primary">ETS Standard • {series} Test {String(testNum).padStart(2, '0')}</ToeicBadge>
+                  <h1 style={{ fontSize: '1.55rem', fontWeight: 900, margin: '0.65rem 0 0.4rem 0', color: 'var(--ds-text)' }}>
+                    Chọn Chế Độ Làm Bài Thi TOEIC Reading ({readingQuestions.length} câu)
+                  </h1>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--ds-text-secondary)', margin: 0 }}>
+                    Part 5 ({part5Questions.length} câu) • Part 6 ({part6Questions.length} câu) • Part 7 ({part7Questions.length} câu)
+                  </p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.15rem' }}>
+                  {/* OPTION 1: PRACTICE MODE */}
+                  <div
+                    className="toeic-card"
+                    style={{
+                      padding: '1.5rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: '1rem',
+                      border: '1.5px solid var(--ds-accent)'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>🎯</div>
+                      <h2 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
+                        1. Chế Độ Luyện Tập (Practice)
+                      </h2>
+                      <p style={{ fontSize: '0.84rem', color: 'var(--ds-text-secondary)', lineHeight: 1.55, margin: 0 }}>
+                        Không giới hạn thời gian. Ngay khi chọn đáp án ở Part 5, 6, 7 sẽ <strong>hiển thị Đúng / Sai, Giải thích chi tiết &amp; Dẫn chứng tức thì</strong> để học sâu từng câu.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleStartMode('practice')}
+                      className="toeic-btn toeic-btn-primary"
+                      style={{ width: '100%', padding: '0.7rem 1rem', fontWeight: 800 }}
+                    >
+                      Bắt Đầu Luyện Tập Ngay &rarr;
+                    </button>
+                  </div>
+
+                  {/* OPTION 2: MOCK EXAM MODE */}
+                  <div
+                    className="toeic-card"
+                    style={{
+                      padding: '1.5rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: '1rem',
+                      border: '1.5px solid var(--ds-warning)'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>⏱️</div>
+                      <h2 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
+                        2. Chế Độ Thi Thử (Real Exam)
+                      </h2>
+                      <p style={{ fontSize: '0.84rem', color: 'var(--ds-text-secondary)', lineHeight: 1.55, margin: 0 }}>
+                        Đồng hồ đếm ngược <strong>75 phút</strong> chuẩn phòng thi, ẩn đáp án khi đang làm, có <strong>chọn nhanh các câu chưa làm</strong>, tự do đổi đáp án và <strong>Nộp bài chấm điểm tổng kết</strong>.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleStartMode('exam')}
+                      className="toeic-btn"
+                      style={{
+                        width: '100%',
+                        padding: '0.7rem 1rem',
+                        fontWeight: 800,
+                        backgroundColor: 'var(--ds-warning)',
+                        color: '#ffffff',
+                        border: 'none'
+                      }}
+                    >
+                      Bắt Đầu Thi Thử (75 Phút) &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
@@ -387,6 +808,9 @@ export default function TestSimulationPage() {
                         <SentenceXRayCard
                           key={activePart5Question.id}
                           question={activePart5Question}
+                          examMode={examSessionMode || 'practice'}
+                          initialSelectedOption={userAnswers[activePart5Question.id] || null}
+                          forceReview={isReviewMode || examSubmitted}
                           onAnswerSubmit={({ selectedOption }) => {
                             handleSelectOption(activePart5Question.id, selectedOption);
                           }}
@@ -461,7 +885,8 @@ export default function TestSimulationPage() {
                       passages={part6Passages}
                       questions={part6Questions}
                       activeQuestionId={activeQuestionId}
-                      isReviewMode={isReviewMode}
+                      examMode={examSessionMode || 'practice'}
+                      isReviewMode={isReviewMode || examSubmitted}
                       userAnswers={userAnswers}
                       onSelectOption={handleSelectOption}
                       onQuestionClick={(qId) => setActiveQuestionId(qId)}
@@ -488,7 +913,8 @@ export default function TestSimulationPage() {
                       passages={part7Passages}
                       questions={part7Questions}
                       activeQuestionId={activeQuestionId}
-                      isReviewMode={isReviewMode}
+                      examMode={examSessionMode || 'practice'}
+                      isReviewMode={isReviewMode || examSubmitted}
                       userAnswers={userAnswers}
                       onSelectOption={handleSelectOption}
                       onQuestionClick={(qId) => setActiveQuestionId(qId)}
