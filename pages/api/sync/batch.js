@@ -124,15 +124,12 @@ export default async function handler(req, res) {
       switch (type) {
         case "XP_EARNED":
         case "INCREMENT_XP":
-          xpDelta += Math.max(0, Number(payload.amount || 0));
+          xpDelta += Math.min(100, Math.max(0, Math.round(Number(payload.amount || 0))));
           break;
 
         case "SYNC_TRACKER":
           if (payload.tracker) {
-            const incomingXp = Number(payload.tracker.xp || 0);
-            if (incomingXp > (tracker.xp || 0) + xpDelta) {
-              xpDelta = incomingXp - (tracker.xp || 0);
-            }
+            // Never trust client-reported tracker.xp; only merge completedLessons
             const incomingLessons = payload.tracker.completedLessons || payload.tracker.completed_lessons;
             if (Array.isArray(incomingLessons)) {
               incomingLessons.forEach((lId) => lessonsToAdd.add(lId));
@@ -143,8 +140,10 @@ export default async function handler(req, res) {
         case "LESSON_COMPLETED":
         case "COMPLETE_LESSON":
           if (payload.lessonId) {
+            if (!lessonsToAdd.has(payload.lessonId)) {
+              xpDelta += 25;
+            }
             lessonsToAdd.add(payload.lessonId);
-            xpDelta += Number(payload.xpReward || 25);
           }
           break;
 
@@ -181,16 +180,18 @@ export default async function handler(req, res) {
         case "QUIZ_SUBMITTED":
         case "RECORD_QUIZ":
           if (payload.quiz) {
+            const safeTotal = Math.min(200, Math.max(1, Math.round(Number(payload.quiz.totalQuestions || 50))));
+            const safeScore = Math.min(safeTotal, Math.max(0, Math.round(Number(payload.quiz.score || 0))));
             quizAttemptsToInsert.push({
               user_id: userId,
               topic_code: payload.quiz.topicCode || "all",
-              score: Number(payload.quiz.score || 0),
-              total_questions: Number(payload.quiz.totalQuestions || 50),
-              time_spent_seconds: Number(payload.quiz.timeSpentSeconds || 0),
-              incorrect_question_ids: payload.quiz.incorrectQuestionIds || [],
+              score: safeScore,
+              total_questions: safeTotal,
+              time_spent_seconds: Math.max(0, Math.round(Number(payload.quiz.timeSpentSeconds || 0))),
+              incorrect_question_ids: Array.isArray(payload.quiz.incorrectQuestionIds) ? payload.quiz.incorrectQuestionIds : [],
               created_at: nowIso,
             });
-            xpDelta += Number(payload.quiz.score || 0) * 10;
+            xpDelta += Math.min(200, safeScore * 10);
           }
           break;
 
@@ -218,13 +219,16 @@ export default async function handler(req, res) {
           break;
 
         case "DIAGNOSTIC_COMPLETED":
-          xpDelta += Number(payload.xpReward || 50);
+          xpDelta += 50;
           break;
 
         default:
           break;
       }
     }
+
+    // Cap total XP delta per sync batch to prevent client abuse
+    const safeXpDelta = Math.min(500, Math.max(0, Math.round(xpDelta)));
 
     // 2. Server-side Streak Calculation (UTC)
     let newStreak = tracker.streak || 1;
@@ -242,7 +246,7 @@ export default async function handler(req, res) {
     const updatedTrackerPayload = {
       user_id: userId,
       streak: newStreak,
-      xp: (tracker.xp || 0) + xpDelta,
+      xp: (tracker.xp || 0) + safeXpDelta,
       last_active_date: today,
       active_days: Array.from(activeDaysSet),
       completed_lessons: Array.from(lessonsToAdd),

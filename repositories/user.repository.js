@@ -42,10 +42,9 @@ export const UserRepository = {
   },
 
   async upsertTracker(userId, trackerData) {
+    // Server-authoritative XP & Streak: never overwrite xp or streak directly from client
     const payload = {
       user_id: userId,
-      streak: trackerData.streak || 1,
-      xp: trackerData.xp || 0,
       last_active_date: trackerData.last_active_date || new Date().toISOString().split("T")[0],
       active_days: trackerData.active_days || [new Date().toISOString().split("T")[0]],
       daily_goal: trackerData.daily_goal || { targetQuestions: 10, targetLessons: 1 },
