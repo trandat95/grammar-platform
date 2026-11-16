@@ -84,7 +84,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           {/* Present (Now) Reference Node */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
             <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "800" }}>HIỆN TẠI (NOW)</span>
-            <div style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: "var(--ds-btn-success)", border: "2px solid #ffffff", marginTop: "2px", boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)" }} />
+            <div style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: "var(--ds-btn-success)", border: "2px solid var(--ds-card)", marginTop: "2px", boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)" }} />
           </div>
 
           {/* Future Reference Node */}
@@ -105,7 +105,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 height: "22px",
                 borderRadius: "50%",
                 backgroundColor: isPast ? "var(--ds-warning)" : isPresent ? "var(--ds-success)" : "var(--ds-accent)",
-                border: "3px solid #ffffff",
+                border: "3px solid var(--ds-card)",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
                 zIndex: 3,
                 display: "flex",
@@ -213,7 +213,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                     height: "8px",
                     borderRadius: "50%",
                     backgroundColor: "var(--ds-btn-success)",
-                    border: "1px solid #ffffff",
+                    border: "1px solid var(--ds-card)",
                   }}
                   title="Thói quen / Sự thật lặp đi lặp lại"
                 />
