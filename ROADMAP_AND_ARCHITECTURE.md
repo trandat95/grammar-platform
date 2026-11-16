@@ -2934,6 +2934,9 @@ Milestone 2.11 được xem là hoàn thành khi:
 - [x] **2.15.31 Mở Quyền Làm Thử 4 Câu Cho Mỗi Exercise / Chuyên Đề (`pages/index.js`, `pages/api/toeic/practice/drill.js`, `pages/toeic/index.jsx`, `pages/toeic/practice/[topicId].jsx`):**
   * **Bài Tập Ngữ Pháp Theo Từng Exercise (`FREE_QUESTIONS_PER_EXERCISE = 4`):** Thay cơ chế đếm cộng dồn toàn chương (`questionGlobalIdx >= 10` làm khóa trắng toàn bộ Exercise 2, 3, 4...) bằng giới hạn **4 câu đầu cho MỖI Exercise** (`qIdx >= 4`), giúp người học trải nghiệm đều tất cả bài tập trước khi nâng cấp VIP.
   * **Chuyên Đề TOEIC Band 550+:** Cho phép tài khoản Miễn phí/Khách làm thử **4 câu đầu** qua `/api/toeic/practice/drill` thay vì khóa 100% từ ngoài Hub.
+- [x] **2.15.32 Tái Thiết Kế Trang TOEIC Hub Theo Chuẩn UX/UI Tinh Gọn (User-Focused Segmented Tabs — Cả Mobile & Desktop):**
+  * **3 Tab Tập Trung (`pages/toeic/index.jsx`, `styles/toeic-ui-2026.css`):** Gom Hero compact + Segmented Tabs (`⚡ Lộ Trình & Luyện Ngay`, `🎯 24 Chủ Điểm X-Ray`, `✨ Công Nghệ AI`) giúp giảm > 70% chiều dài cuộn trang trên cả Desktop và Mobile mà vẫn giữ nguyên 100% tính năng.
+  * **Topic Cards Tinh Gọn & Thu Gọn Mặc Định:** Thanh lọc nhóm chuyên đề cuộn ngang 1 dòng trên mobile (`.toeic-chip-scroll`), mặc định hiển thị 6 chủ điểm kèm nút mở rộng toàn bộ 24 chủ điểm, loại bỏ đoạn mô tả dài và progress bar giả.
 
 ---
 

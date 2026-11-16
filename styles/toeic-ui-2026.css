@@ -1413,6 +1413,88 @@
   }
 }
 
+/* ============================================================================
+ * TOEIC HUB SEGMENTED TABS & HORIZONTAL FILTER STRIP (Milestone 2.15.32)
+ * ============================================================================ */
+.toeic-hub-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  border-radius: 0.85rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+  margin-bottom: 1.25rem;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.toeic-hub-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.toeic-hub-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 0.65rem;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-secondary);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  min-height: 38px;
+}
+
+.toeic-hub-tab-btn.is-active {
+  background-color: var(--ds-card);
+  color: var(--ds-accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.toeic-chip-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.15rem;
+}
+
+@media (max-width: 767px) {
+  .toeic-hub-tabs {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .toeic-hub-tab-btn {
+    flex: 0 0 auto;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .toeic-chip-scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+
+  .toeic-chip-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .toeic-chip-scroll .toeic-target-chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 639px) {
   .toeic-btn {
     min-height: 44px;

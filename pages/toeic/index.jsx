@@ -17,6 +17,8 @@ export default function ToeicHubPage() {
   const [isLight, setIsLight] = useState(true);
   const [targetScore, setTargetScore] = useState(750);
   const [selectedGroup, setSelectedGroup] = useState('ALL');
+  const [hubTab, setHubTab] = useState('modules'); // 'modules' | 'topics' | 'ai'
+  const [showAllTopics, setShowAllTopics] = useState(false);
   const [userStats, setUserStats] = useState({
     estimatedScore: 625,
     completedQuestions: 142,
@@ -75,15 +77,15 @@ export default function ToeicHubPage() {
   const featureCards = [
     {
       id: 'diagnostic',
-      title: 'Bài Kiểm Tra Thích Ứng (3 Chặng)',
-      desc: '30 câu chẩn đoán chính xác điểm TOEIC (IRT 3PL), vẽ biểu đồ Radar 6 trục và phát hiện 15 mẫu lỗi tư duy nhận thức.',
-      badge: '12-15 phút • AI Adaptive',
+      title: 'Kiểm Tra Trình Độ AI (3 Chặng)',
+      desc: '30 câu chẩn đoán điểm TOEIC & phát hiện 15 mẫu lỗi tư duy.',
+      badge: '12-15p • IRT 3PL',
       badgeVariant: 'primary',
-      cta: 'Bắt Đầu Kiểm Tra',
+      cta: 'Kiểm Tra Ngay',
       href: '/toeic/diagnostic',
-      stats: '3 Chặng • IRT 3PL',
+      stats: '3 Chặng',
       icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <polygon points="12 8 8 12 12 16 16 12 12 8" />
         </svg>
@@ -92,14 +94,14 @@ export default function ToeicHubPage() {
     {
       id: 'practice',
       title: 'Luyện 24 Chủ Điểm (Sentence X-Ray)',
-      desc: 'Tô sáng neo ngữ pháp trước/sau ô trống, phân tích họ từ loại, bẫy thường gặp và Twin-Questions tức thì.',
-      badge: '920 câu • Part 5 & 6',
+      desc: 'Tô sáng neo ngữ pháp & luyện câu sinh đôi theo từng điểm yếu.',
+      badge: '920 câu • Part 5-6',
       badgeVariant: 'success',
-      cta: 'Luyện X-Ray Ngay',
+      cta: 'Luyện X-Ray',
       href: '/toeic/practice/GRM_POS_NOUN',
       stats: '24 Chủ Điểm',
       icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20M12 2v20" />
           <circle cx="12" cy="12" r="4" />
         </svg>
@@ -107,15 +109,15 @@ export default function ToeicHubPage() {
     },
     {
       id: 'tests',
-      title: 'Kho 20 Đề Thi TOEIC New Format 2026',
-      desc: '4.000 câu hỏi chia đôi màn hình Split-Passage Reader, cuộn độc lập và tự động đối chiếu dẫn chứng Auto-Highlight.',
-      badge: '20 Đề Thi • 4.000 Câu',
+      title: 'Kho 20 Đề TOEIC New Format 2026',
+      desc: '4.000 câu chia đôi màn hình & tự động bôi vàng dẫn chứng.',
+      badge: '20 Đề • 4.000 Câu',
       badgeVariant: 'warning',
-      cta: 'Chọn Đề Luyện Thi',
+      cta: 'Chọn Đề Thi',
       href: '/toeic/tests',
-      stats: 'TOEIC New Format 2026',
+      stats: 'New Format 2026',
       icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
@@ -124,14 +126,14 @@ export default function ToeicHubPage() {
     {
       id: 'dictation',
       title: 'Phòng Nghe Chép Chính Tả (Dictation)',
-      desc: '540 tracks luyện nghe chép chuẩn TOEIC New Format 2026 với ô điền cloze, kiểm tra tức thì phím Space/Enter và Spaced Repetition.',
-      badge: '540 Tracks • New Format 2026',
+      desc: '540 tracks nghe chép cloze phản xạ tức thì & ôn lặp lại SRS.',
+      badge: '540 Tracks Audio',
       badgeVariant: 'primary',
       cta: 'Vào Phòng Nghe',
       href: '/toeic/dictation',
-      stats: '540 Audio Tracks',
+      stats: 'Part 1-4',
       icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
           <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
           <line x1="12" y1="19" x2="12" y2="23" />
@@ -176,186 +178,167 @@ export default function ToeicHubPage() {
         <div className="toeic-page-wrap">
           <div className="toeic-container">
 
-            {/* TOEIC AI HERO BANNER (With Artistic Background & Quick Access) */}
+            {/* COMPACT USER-FOCUSED HERO BANNER */}
             <ToeicHeroBanner
               initialTargetScore={targetScore}
               onTargetChange={setTargetScore}
               showStats={true}
+              compact={true}
               isLight={isLight}
             />
 
-            {/* INTERACTIVE AI MARKETING SHOWCASE */}
-            <AiPowerShowcase2026
-              compact={false}
-              onNavigateVip={() => entitlement.openPaywall('TRG_01_MILESTONE_LOCKED')}
-            />
-
-            {/* BENTO FEATURE CARDS - ZONE 2 (Clean 2x2 or 4-col Grid) */}
-            <div style={{ marginBottom: '2.5rem' }}>
-              <div className="toeic-flex-between" style={{ marginBottom: '1.25rem' }}>
-                <div>
-                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.35rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
-                    Các Phân Hệ Học &amp; Luyện Thi
-                  </h2>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
-                    Được thiết kế đồng bộ theo chuẩn cấu trúc TOEIC New Format 2026
-                  </p>
-                </div>
-              </div>
-
-              <div className="toeic-grid-2" style={{ gap: '1.25rem' }}>
-                {featureCards.map(fc => (
-                  <Link key={fc.id} href={fc.href} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <div className="toeic-card toeic-card-interactive" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <div>
-                        <div className="toeic-flex-between" style={{ marginBottom: '0.85rem' }}>
-                          <span style={{ color: 'var(--ds-accent)' }}>{fc.icon}</span>
-                          <ToeicBadge variant={fc.badgeVariant}>{fc.badge}</ToeicBadge>
-                        </div>
-                        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
-                          {fc.title}
-                        </h3>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                          {fc.desc}
-                        </p>
-                      </div>
-
-                      <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', backgroundColor: 'var(--ds-bg-elevated)', padding: '0.2rem 0.55rem', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-border-subtle)', whiteSpace: 'nowrap' }}>
-                          {fc.stats}
-                        </span>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-accent)', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', whiteSpace: 'nowrap', marginLeft: 'auto' }}>
-                          {fc.cta} &rarr;
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+            {/* USER-CENTERED 3-TAB HUB SWITCHER (shadcn/ui & ant-design-mobile CapsuleTabs pattern) */}
+            <div className="toeic-hub-tabs" role="tablist" aria-label="Phân khu TOEIC AI Hub">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={hubTab === 'modules'}
+                onClick={() => setHubTab('modules')}
+                className={`toeic-hub-tab-btn ${hubTab === 'modules' ? 'is-active' : ''}`}
+              >
+                ⚡ Lộ Trình &amp; Luyện Ngay
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={hubTab === 'topics'}
+                onClick={() => setHubTab('topics')}
+                className={`toeic-hub-tab-btn ${hubTab === 'topics' ? 'is-active' : ''}`}
+              >
+                🎯 24 Chủ Điểm X-Ray
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={hubTab === 'ai'}
+                onClick={() => setHubTab('ai')}
+                className={`toeic-hub-tab-btn ${hubTab === 'ai' ? 'is-active' : ''}`}
+              >
+                ✨ Công Nghệ AI
+              </button>
             </div>
 
-            {/* 24 TOPIC DISCOVERY - ZONE 3 (Milestone U2.3) */}
-            <div id="topics" style={{ marginBottom: '3rem' }}>
-              <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-                <div>
-                  <h2 style={{ fontFamily: 'Google Sans', fontSize: '1.35rem', fontWeight: 800, margin: '0 0 0.25rem 0' }}>
-                    24 Chủ Điểm Ngữ Pháp &amp; Kỹ Năng Trọng Tâm
-                  </h2>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)', margin: 0 }}>
-                    {isVip
-                      ? 'Đặc quyền VIP: Đã mở toàn bộ 24 chủ điểm từ Target 450 đến 990+'
-                      : 'Tài khoản Miễn phí: Mở các chủ điểm nền tảng (Target dưới 550) • Nâng cấp VIP để mở toàn bộ 24 chủ điểm'}
-                  </p>
+            {/* TAB 1: CORE LEARNING & EXAM MODULES (4 Focused Cards) */}
+            {hubTab === 'modules' && (
+              <div style={{ marginBottom: '2rem' }}>
+                <div className="toeic-grid-2" style={{ gap: '1rem' }}>
+                  {featureCards.map(fc => (
+                    <Link key={fc.id} href={fc.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <div className="toeic-card toeic-card-interactive" style={{ height: '100%', padding: '1.15rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.75rem' }}>
+                        <div>
+                          <div className="toeic-flex-between" style={{ marginBottom: '0.6rem' }}>
+                            <span style={{ color: 'var(--ds-accent)' }}>{fc.icon}</span>
+                            <ToeicBadge variant={fc.badgeVariant}>{fc.badge}</ToeicBadge>
+                          </div>
+                          <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 0.3rem 0', color: 'var(--ds-text)' }}>
+                            {fc.title}
+                          </h3>
+                          <p style={{ fontSize: '0.83rem', color: 'var(--ds-text-secondary)', lineHeight: 1.45, margin: 0 }}>
+                            {fc.desc}
+                          </p>
+                        </div>
+
+                        <div style={{ paddingTop: '0.65rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
+                            {fc.stats}
+                          </span>
+                          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-accent)', whiteSpace: 'nowrap' }}>
+                            {fc.cta} &rarr;
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-                {!isVip && (
+
+                {/* Quick Jump Strip to 24 Topics */}
+                <div
+                  className="toeic-card"
+                  style={{
+                    marginTop: '1rem',
+                    padding: '0.9rem 1.15rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                      🎯 Luyện nhanh theo 24 Chủ Điểm Ngữ Pháp TOEIC
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
+                      Làm thử miễn phí 4 câu cho mỗi chủ điểm — vá đúng lỗ hổng kiến thức.
+                    </div>
+                  </div>
                   <button
                     type="button"
-                    onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      padding: '0.4rem 0.85rem',
-                      borderRadius: '0.65rem',
-                      border: '1px solid var(--ds-warning)',
-                      backgroundColor: 'var(--ds-warning-bg, rgba(234, 88, 12, 0.08))',
-                      color: 'var(--ds-warning)',
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      cursor: 'pointer'
-                    }}
+                    className="toeic-btn toeic-btn-primary"
+                    onClick={() => setHubTab('topics')}
+                    style={{ fontSize: '0.82rem', padding: '0.5rem 1rem' }}
                   >
-                    <span>👑 Mở Khóa Trọn Bộ 24 Chủ Điểm VIP</span>
+                    Xem 24 Chủ Điểm &rarr;
                   </button>
-                )}
+                </div>
               </div>
+            )}
 
-              {/* Topic Category Filter Chips */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                {topicGroups.map(grp => (
-                  <button
-                    key={grp.code}
-                    type="button"
-                    className={`toeic-target-chip ${selectedGroup === grp.code ? 'active' : ''}`}
-                    onClick={() => setSelectedGroup(grp.code)}
-                  >
-                    {grp.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* Topics Grid */}
-              <div className="toeic-grid-3">
-                {filteredTopics.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '3rem 1rem', width: '100%', gridColumn: '1 / -1' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔍</div>
-                    <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--ds-text)' }}>
-                      Chưa có chủ điểm trong nhóm này
-                    </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--ds-text-secondary)', marginTop: '0.25rem', marginBottom: '1rem' }}>
-                      Hãy chọn nhóm chủ điểm khác hoặc xem toàn bộ 24 chủ điểm trọng tâm.
-                    </div>
+            {/* TAB 2: 24 TOPICS (Compact Progressive Disclosure) */}
+            {hubTab === 'topics' && (
+              <div id="topics" style={{ marginBottom: '2.5rem' }}>
+                <div className="toeic-flex-between" style={{ marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.6rem' }}>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
+                    {isVip
+                      ? '👑 VIP: Đã mở toàn bộ 24 chủ điểm (450–990+)'
+                      : '⚡ Tài khoản Miễn phí: Mở 4 câu dùng thử cho mỗi chủ điểm 550+'}
+                  </div>
+                  {!isVip && (
                     <button
                       type="button"
-                      className="toeic-target-chip active"
-                      onClick={() => setSelectedGroup('ALL')}
+                      onClick={() => entitlement.openPaywall('TRG_08_GRAMMAR_TARGET_550')}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '0.6rem',
+                        border: '1px solid var(--ds-warning)',
+                        backgroundColor: 'var(--ds-warning-bg, rgba(234, 88, 12, 0.08))',
+                        color: 'var(--ds-warning)',
+                        fontSize: '0.76rem',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
                     >
-                      Xem Tất Cả 24 Chủ Điểm
+                      👑 Mở Khóa VIP
                     </button>
-                  </div>
-                ) : (
-                  filteredTopics.map((top, idx) => {
+                  )}
+                </div>
+
+                {/* Horizontal Scrollable Category Chips */}
+                <div className="toeic-chip-scroll">
+                  {topicGroups.map(grp => (
+                    <button
+                      key={grp.code}
+                      type="button"
+                      className={`toeic-target-chip ${selectedGroup === grp.code ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedGroup(grp.code);
+                        if (grp.code !== 'ALL') setShowAllTopics(true);
+                      }}
+                    >
+                      {grp.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Compact Topics Grid (Default capped at 6 items when ALL is selected) */}
+                <div className="toeic-grid-3" style={{ gap: '0.85rem' }}>
+                  {(selectedGroup === 'ALL' && !showAllTopics ? filteredTopics.slice(0, 6) : filteredTopics).map((top, idx) => {
                     const targetScoreBand = parseInt(top.target_score_band || 450, 10);
                     const isTopicFree = targetScoreBand < 550;
                     const canAccess = isVip || isTopicFree;
-
-                    const cardContent = (
-                      <div
-                        className="toeic-topic-card"
-                        style={{
-                          opacity: canAccess ? 1 : 0.94,
-                          cursor: 'pointer',
-                          borderColor: canAccess ? 'var(--ds-card-border)' : 'var(--ds-border)'
-                        }}
-                      >
-                        <div>
-                          <div className="toeic-flex-between" style={{ marginBottom: '0.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                              <ToeicBadge variant="muted">
-                                Target {top.target_score_band || '450+'}
-                              </ToeicBadge>
-                              {!canAccess && (
-                                <ToeicBadge variant="warning">
-                                  🔒 VIP
-                                </ToeicBadge>
-                              )}
-                            </div>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
-                              {top.recommended_time_sec || 15}s/câu
-                            </span>
-                          </div>
-                          <div className="toeic-topic-name">{top.name_vi}</div>
-                          <div className="toeic-topic-desc">{top.theory_summary_vi || top.name_en}</div>
-                        </div>
-
-                        <div>
-                          <div className="toeic-topic-meta">
-                            <span>Độ thông thạo (Mastery)</span>
-                            <span style={{ fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
-                              {canAccess ? '75%' : 'Dùng thử 4 câu (Band 550+)'}
-                            </span>
-                          </div>
-                          <div className="toeic-progress-bar">
-                            <div className="toeic-progress-fill" style={{ width: canAccess ? '75%' : '25%' }} />
-                          </div>
-                          <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)' }}>
-                              {canAccess ? 'Luyện X-Ray \u2192' : 'Làm thử 4 câu \u2192'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
 
                     return (
                       <Link
@@ -363,13 +346,74 @@ export default function ToeicHubPage() {
                         href={`/toeic/practice/${top.id}`}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                       >
-                        {cardContent}
+                        <div
+                          className="toeic-topic-card"
+                          style={{
+                            padding: '0.95rem 1.05rem',
+                            minHeight: 'auto',
+                            gap: '0.6rem',
+                            cursor: 'pointer',
+                            borderColor: canAccess ? 'var(--ds-card-border)' : 'var(--ds-border)'
+                          }}
+                        >
+                          <div className="toeic-flex-between">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <ToeicBadge variant="muted">
+                                Band {top.target_score_band || '450+'}
+                              </ToeicBadge>
+                              {!canAccess && (
+                                <ToeicBadge variant="warning">
+                                  4 câu thử
+                                </ToeicBadge>
+                              )}
+                            </div>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--ds-text-muted)' }}>
+                              {top.recommended_time_sec || 15}s/câu
+                            </span>
+                          </div>
+
+                          <div className="toeic-topic-name" style={{ fontSize: '0.95rem', margin: 0 }}>
+                            {top.name_vi}
+                          </div>
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.4rem', borderTop: '1px solid var(--ds-border-subtle)' }}>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--ds-text-muted)' }}>
+                              {top.name_en}
+                            </span>
+                            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: canAccess ? 'var(--ds-accent)' : 'var(--ds-warning)', whiteSpace: 'nowrap' }}>
+                              {canAccess ? 'Luyện ngay →' : 'Thử 4 câu →'}
+                            </span>
+                          </div>
+                        </div>
                       </Link>
                     );
-                  })
+                  })}
+                </div>
+
+                {selectedGroup === 'ALL' && filteredTopics.length > 6 && (
+                  <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                    <button
+                      type="button"
+                      className="toeic-btn toeic-btn-secondary"
+                      onClick={() => setShowAllTopics(prev => !prev)}
+                      style={{ fontSize: '0.84rem', padding: '0.55rem 1.25rem' }}
+                    >
+                      {showAllTopics ? 'Thu gọn danh sách ▴' : `Xem tất cả ${filteredTopics.length} chủ điểm ▾`}
+                    </button>
+                  </div>
                 )}
               </div>
-            </div>
+            )}
+
+            {/* TAB 3: AI TECHNOLOGY SHOWCASE (On-Demand Progressive Disclosure) */}
+            {hubTab === 'ai' && (
+              <div style={{ marginBottom: '2rem' }}>
+                <AiPowerShowcase2026
+                  compact={true}
+                  onNavigateVip={() => entitlement.openPaywall('TRG_01_MILESTONE_LOCKED')}
+                />
+              </div>
+            )}
 
           </div>
         </div>
