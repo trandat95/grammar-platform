@@ -18,7 +18,7 @@ export const HUB_ITEMS = [
   {
     id: "study",
     label: "Học tập",
-    mobileLabel: "Học tập",
+    mobileLabel: "Ngữ pháp",
     icon: "hub-study",
     subViews: ["study", "diagnostic"],
   },
@@ -36,7 +36,7 @@ export const HUB_ITEMS = [
     icon: "tool-diag",
   },
   { id: "gamification", label: "Thành tích", mobileLabel: "Thành tích", icon: "hub-achievements" },
-  { id: "vip", label: "Gói VIP", mobileLabel: "VIP", icon: "hub-vip", isVip: true },
+  { id: "vip", label: "Gói VIP", mobileLabel: "Gói VIP", icon: "hub-vip", isVip: true },
 ];
 
 export default function AppShell2026({
@@ -400,9 +400,9 @@ export default function AppShell2026({
               type="button"
               onClick={() => onSelectView("admin")}
               aria-label="Mở Bảng điều khiển Admin"
-              className="ge-show-mobile-only ds-focusable"
+              title="Quản trị Admin"
+              className="ge-show-mobile-only ge-admin-mobile-btn ds-focusable"
               style={{
-                padding: "4px 7px",
                 borderRadius: "999px",
                 border: "1px solid var(--ds-danger-border)",
                 backgroundColor: "var(--ds-danger-bg)",
@@ -412,6 +412,7 @@ export default function AppShell2026({
               }}
             >
               <KitIcon name="hub-admin" size={14} />
+              <span className="ge-hide-mobile">Quản trị</span>
             </button>
           )}
 

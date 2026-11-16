@@ -537,10 +537,19 @@ h1, h2, h3, h4, h5, h6 {
   }
   .ge-brand-title {
     font-size: 0.84rem !important;
-    max-width: 124px;
+    max-width: 112px;
   }
   .ge-header-actions {
-    gap: 5px !important;
+    gap: 4px !important;
+    flex-shrink: 0;
+  }
+  .ge-admin-mobile-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    justify-content: center !important;
     flex-shrink: 0;
   }
   .ge-theme-btn {
@@ -579,16 +588,26 @@ h1, h2, h3, h4, h5, h6 {
   }
   .ge-subnav-pills {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+  .ge-subnav-pills::-webkit-scrollbar {
+    display: none;
   }
   .ge-subnav-btn {
+    flex: 1 0 auto;
     justify-content: center;
     font-size: 0.75rem;
-    padding: 6px 8px;
+    padding: 6px 10px;
     text-align: center;
-    white-space: normal;
+    white-space: nowrap;
     line-height: 1.25;
+    min-height: 38px;
   }
   .ge-study-main {
     padding: 14px 10px;
@@ -667,12 +686,12 @@ h1, h2, h3, h4, h5, h6 {
     box-sizing: border-box;
     z-index: 90;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     background: var(--ds-glass);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--ds-card-border);
-    padding: 4px 6px env(safe-area-inset-bottom, 0px);
+    padding: 4px 2px env(safe-area-inset-bottom, 0px);
   }
   .ge-mobile-nav-item {
     display: flex;
@@ -681,18 +700,25 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     gap: 2px;
     min-height: 44px;
-    font-size: 0.66rem;
+    min-width: 0 !important;
+    font-size: 0.61rem;
     font-weight: 600;
     color: var(--ds-text-muted);
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 2px;
+    padding: 2px 1px;
+  }
+  .ge-mobile-nav-item span {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .ge-mobile-nav-item.is-active {
     color: var(--ds-accent);
   }
-  /* #dict-popup biến thành Bottom Sheet trên màn hình 375px */
+  /* #dict-popup biến thành Bottom Sheet trên màn hình Mobile */
   #dict-popup {
     left: 8px !important;
     right: 8px !important;
@@ -707,6 +733,17 @@ h1, h2, h3, h4, h5, h6 {
   .ge-vip-matrix-row {
     grid-template-columns: 1fr !important;
     gap: 6px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .ge-brand-title {
+    max-width: 88px;
+    font-size: 0.78rem !important;
+  }
+  .ge-auth-pill {
+    max-width: 84px !important;
+    padding: 5px 8px !important;
   }
 }
 

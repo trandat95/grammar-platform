@@ -31,9 +31,9 @@
   background-color: var(--ds-bg);
   color: var(--ds-text);
   font-family: 'Google Sans Text', system-ui, -apple-system, sans-serif;
-  padding: 1.5rem 1rem 4rem 1rem;
+  padding: 1.25rem 0.75rem calc(5.5rem + env(safe-area-inset-bottom, 0px)) 0.75rem;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @media (min-width: 640px) {
@@ -174,7 +174,7 @@
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
 
 @media (min-width: 640px) {
@@ -1210,6 +1210,154 @@
 /* ==========================================================================
    14. MOBILE RESPONSIVENESS & TOUCH TARGETS (AC-U7.1 - AC-U7.3)
    ========================================================================== */
+.toeic-exam-sticky-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.65rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  background: var(--ds-card);
+  border: 1px solid var(--ds-card-border);
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.toeic-qgrid-backdrop {
+  display: none;
+}
+
+.toeic-h-scroll-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  max-width: 100%;
+  padding-bottom: 0.15rem;
+}
+.toeic-h-scroll-strip::-webkit-scrollbar {
+  display: none;
+}
+.toeic-h-scroll-strip > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.toeic-floating-mobile-switch,
+.toeic-mobile-tabs-bar,
+.toeic-mobile-only-inline {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .toeic-mobile-tabs-bar {
+    display: block;
+  }
+  .toeic-mobile-only-inline {
+    display: inline-flex;
+  }
+  .toeic-pane-hidden-mobile {
+    display: none !important;
+  }
+  .toeic-passage-pane.is-split-mobile {
+    max-height: 38vh;
+    overflow-y: auto;
+    border-bottom: 2px solid var(--ds-accent-border);
+  }
+  .toeic-floating-mobile-switch {
+    position: fixed;
+    right: 12px;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    z-index: 85;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.95rem;
+    border-radius: 9999px;
+    background: var(--ds-accent);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 767px) {
+  .toeic-exam-sticky-bar {
+    position: sticky;
+    top: var(--ds-header-h, 56px);
+    z-index: 32;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 0.5rem 0.75rem;
+    background: var(--ds-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .toeic-qgrid-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 94;
+    background: var(--ds-backdrop);
+    backdrop-filter: blur(2px);
+  }
+
+  .toeic-qgrid-drawer-panel {
+    position: fixed !important;
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 95 !important;
+    max-height: 64vh !important;
+    overflow-y: auto !important;
+    margin-bottom: 0 !important;
+    border-radius: 16px !important;
+    border: 1.5px solid var(--ds-accent) !important;
+    box-shadow: var(--ds-shadow-lg) !important;
+  }
+
+  .toeic-qgrid-btn {
+    min-width: 44px !important;
+    min-height: 38px !important;
+    font-size: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  .toeic-part5-palette-btn {
+    min-width: 38px !important;
+    min-height: 36px !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+  }
+
+  .toeic-audio-toolbar {
+    position: sticky;
+    top: var(--ds-header-h, 56px);
+    z-index: 30;
+    padding: 0.65rem 0.85rem;
+    background: var(--ds-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .toeic-cta-wrap {
+    width: 100%;
+    white-space: normal !important;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
 @media (max-width: 639px) {
   .toeic-btn {
     min-height: 44px;

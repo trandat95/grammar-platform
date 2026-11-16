@@ -40,6 +40,12 @@ export default function TestSimulationPage() {
   const isVip = entitlement.isVip;
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setShowQuestionGrid(false);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!series || !testNum) return;
     let isMounted = true;
     setIsLoading(true);
@@ -210,6 +216,9 @@ export default function TestSimulationPage() {
     }
     setActiveQuestionId(q.id);
     setShowUnansweredDrawer(false);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setShowQuestionGrid(false);
+    }
   };
 
   const handleJumpNextUnanswered = () => {
@@ -374,15 +383,15 @@ export default function TestSimulationPage() {
       >
         <div className="toeic-page-wrap">
           <div className="toeic-container">
-            {/* TOP BAR */}
-            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+            {/* TOP BREADCRUMB ROW */}
+            <div className="toeic-flex-between" style={{ marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <a
                 href="/toeic/tests"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.4rem',
-                  fontSize: '0.85rem',
+                  fontSize: '0.84rem',
                   fontWeight: 700,
                   color: 'var(--ds-accent)',
                   textDecoration: 'none'
@@ -392,113 +401,10 @@ export default function TestSimulationPage() {
               </a>
 
               {examSessionMode && !isLoading && !isVipLocked && !errorMsg && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <ToeicBadge variant={examSessionMode === 'exam' ? 'warning' : 'primary'}>
-                    {examSessionMode === 'exam' ? '⏱️ Chế Độ Thi Thử' : '🎯 Chế Độ Luyện Tập'}
+                    {examSessionMode === 'exam' ? '⏱️ Thi Thử' : '🎯 Luyện Tập'}
                   </ToeicBadge>
-
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-text-secondary)' }}>
-                    Tiến độ: <strong style={{ color: 'var(--ds-accent)' }}>{answeredCount}</strong> / {readingQuestions.length} câu
-                  </span>
-
-                  {examSessionMode === 'exam' && (
-                    <>
-                      <span
-                        style={{
-                          padding: '0.35rem 0.7rem',
-                          borderRadius: 'var(--ds-radius-md)',
-                          fontSize: '0.82rem',
-                          fontWeight: 800,
-                          fontVariantNumeric: 'tabular-nums',
-                          border: `1px solid ${examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-border)'}`,
-                          backgroundColor: examTimeLeftSec <= 300 ? 'var(--ds-danger-bg)' : 'var(--ds-card)',
-                          color: examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-text)'
-                        }}
-                      >
-                        ⏱️ {formatTimer(examTimeLeftSec)}
-                      </span>
-
-                      {!examSubmitted && unansweredQuestions.length > 0 && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={handleJumpNextUnanswered}
-                            className="toeic-btn toeic-btn-secondary"
-                            style={{ fontSize: '0.78rem', padding: '0.4rem 0.75rem', fontWeight: 700 }}
-                            title="Chuyển nhanh tới câu chưa làm tiếp theo"
-                          >
-                            ⚡ Câu chưa làm ({unansweredQuestions.length})
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => setShowQuestionGrid(prev => !prev)}
-                            style={{
-                              padding: '0.4rem 0.75rem',
-                              borderRadius: 'var(--ds-radius-md)',
-                              fontSize: '0.78rem',
-                              fontWeight: 700,
-                              border: '1px solid var(--ds-border)',
-                              backgroundColor: showQuestionGrid ? 'var(--ds-accent-bg)' : 'var(--ds-card)',
-                              color: showQuestionGrid ? 'var(--ds-accent)' : 'var(--ds-text)',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            🔢 Bảng Câu Hỏi (101–200)
-                          </button>
-                        </>
-                      )}
-
-                      {!examSubmitted && (
-                        <button
-                          type="button"
-                          onClick={handleSubmitExam}
-                          className="toeic-btn toeic-btn-primary"
-                          style={{ fontSize: '0.8rem', padding: '0.45rem 0.95rem', fontWeight: 800 }}
-                        >
-                          ✓ Nộp Bài &amp; Chấm Điểm
-                        </button>
-                      )}
-                    </>
-                  )}
-
-                  {examSessionMode === 'practice' && (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => setShowQuestionGrid(prev => !prev)}
-                        style={{
-                          padding: '0.4rem 0.75rem',
-                          borderRadius: 'var(--ds-radius-md)',
-                          fontSize: '0.78rem',
-                          fontWeight: 700,
-                          border: '1px solid var(--ds-border)',
-                          backgroundColor: showQuestionGrid ? 'var(--ds-accent-bg)' : 'var(--ds-card)',
-                          color: showQuestionGrid ? 'var(--ds-accent)' : 'var(--ds-text)',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        🔢 Bảng Câu Hỏi (101–200)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsReviewMode(prev => !prev)}
-                        style={{
-                          padding: '0.45rem 0.9rem',
-                          borderRadius: 'var(--ds-radius-md)',
-                          fontSize: '0.8rem',
-                          fontWeight: 700,
-                          border: '1px solid var(--ds-border)',
-                          backgroundColor: isReviewMode ? 'var(--ds-warning-bg)' : 'var(--ds-card)',
-                          color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text)',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {isReviewMode ? '✓ Hiện Toàn Bộ Đáp Án' : 'Xem Đáp Án Tất Cả'}
-                      </button>
-                    </>
-                  )}
-
                   <button
                     type="button"
                     onClick={() => {
@@ -511,9 +417,9 @@ export default function TestSimulationPage() {
                       setIsReviewMode(false);
                     }}
                     style={{
-                      padding: '0.4rem 0.7rem',
+                      padding: '0.32rem 0.65rem',
                       borderRadius: 'var(--ds-radius-md)',
-                      fontSize: '0.76rem',
+                      fontSize: '0.74rem',
                       fontWeight: 600,
                       border: '1px solid var(--ds-border)',
                       backgroundColor: 'transparent',
@@ -527,53 +433,168 @@ export default function TestSimulationPage() {
               )}
             </div>
 
+            {/* STICKY EXAM CONTROL BAR */}
+            {examSessionMode && !isLoading && !isVipLocked && !errorMsg && (
+              <div className="toeic-exam-sticky-bar">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-text-secondary)' }}>
+                    <span className="ge-hide-mobile">Tiến độ: </span>
+                    <strong style={{ color: 'var(--ds-accent)' }}>{answeredCount}</strong>/{readingQuestions.length}
+                  </span>
+
+                  {examSessionMode === 'exam' && (
+                    <span
+                      style={{
+                        padding: '0.28rem 0.6rem',
+                        borderRadius: 'var(--ds-radius-md)',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        fontVariantNumeric: 'tabular-nums',
+                        border: `1px solid ${examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-border)'}`,
+                        backgroundColor: examTimeLeftSec <= 300 ? 'var(--ds-danger-bg)' : 'var(--ds-card)',
+                        color: examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-text)'
+                      }}
+                    >
+                      ⏱️ {formatTimer(examTimeLeftSec)}
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                  {examSessionMode === 'exam' && !examSubmitted && unansweredQuestions.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleJumpNextUnanswered}
+                      className="toeic-btn toeic-btn-secondary"
+                      style={{ fontSize: '0.76rem', padding: '0.35rem 0.65rem', minHeight: '36px', fontWeight: 700 }}
+                      title="Chuyển nhanh tới câu chưa làm tiếp theo"
+                    >
+                      ⚡ <span className="ge-hide-mobile">Câu chưa làm </span>({unansweredQuestions.length})
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setShowQuestionGrid(prev => !prev)}
+                    style={{
+                      padding: '0.35rem 0.65rem',
+                      minHeight: '36px',
+                      borderRadius: 'var(--ds-radius-md)',
+                      fontSize: '0.76rem',
+                      fontWeight: 700,
+                      border: '1px solid var(--ds-border)',
+                      backgroundColor: showQuestionGrid ? 'var(--ds-accent-bg)' : 'var(--ds-card)',
+                      color: showQuestionGrid ? 'var(--ds-accent)' : 'var(--ds-text)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    🔢 Bảng <span className="ge-hide-mobile">Câu Hỏi </span>(101–200)
+                  </button>
+
+                  {examSessionMode === 'practice' && (
+                    <button
+                      type="button"
+                      onClick={() => setIsReviewMode(prev => !prev)}
+                      style={{
+                        padding: '0.35rem 0.7rem',
+                        minHeight: '36px',
+                        borderRadius: 'var(--ds-radius-md)',
+                        fontSize: '0.76rem',
+                        fontWeight: 700,
+                        border: '1px solid var(--ds-border)',
+                        backgroundColor: isReviewMode ? 'var(--ds-warning-bg)' : 'var(--ds-card)',
+                        color: isReviewMode ? 'var(--ds-warning)' : 'var(--ds-text)',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {isReviewMode ? '✓ Hiện Đáp Án' : 'Xem Tất Cả'}
+                    </button>
+                  )}
+
+                  {examSessionMode === 'exam' && !examSubmitted && (
+                    <button
+                      type="button"
+                      onClick={handleSubmitExam}
+                      className="toeic-btn toeic-btn-primary"
+                      style={{ fontSize: '0.78rem', padding: '0.35rem 0.75rem', minHeight: '36px', fontWeight: 800 }}
+                    >
+                      ✓ Nộp Bài<span className="ge-hide-mobile"> &amp; Chấm Điểm</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* UNIFIED FULL QUESTION NAVIGATOR GRID (101 - 200) */}
             {examSessionMode && showQuestionGrid && !isLoading && !isVipLocked && !errorMsg && readingQuestions.length > 0 && (
-              <div
-                className="toeic-card"
-                style={{
-                  padding: '0.9rem 1rem',
-                  marginBottom: '1rem',
-                  border: '1px solid var(--ds-border)',
-                  backgroundColor: 'var(--ds-card)'
-                }}
-              >
-                <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '0.6rem', marginBottom: '0.75rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                      🔢 Bảng Theo Dõi Toàn Đề (101–200)
-                    </span>
-                    <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', fontSize: '0.72rem', color: 'var(--ds-text-muted)' }}>
-                      <span>🟦 Đã làm ({answeredCount})</span>
-                      <span>⬜ Chưa làm ({unansweredQuestions.length})</span>
-                      <span>🔷 Đang làm</span>
-                      {(examSubmitted || examSessionMode === 'practice') && (
-                        <>
-                          <span style={{ color: 'var(--ds-success)', fontWeight: 700 }}>🟩 Đúng</span>
-                          <span style={{ color: 'var(--ds-danger)', fontWeight: 700 }}>🟥 Sai</span>
-                        </>
-                      )}
+              <>
+                <div
+                  className="toeic-qgrid-backdrop"
+                  onClick={() => setShowQuestionGrid(false)}
+                  aria-hidden="true"
+                />
+                <div
+                  className="toeic-card toeic-qgrid-drawer-panel"
+                  style={{
+                    padding: '0.9rem 1rem',
+                    marginBottom: '1rem',
+                    border: '1px solid var(--ds-border)',
+                    backgroundColor: 'var(--ds-card)'
+                  }}
+                >
+                  <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '0.6rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                        🔢 Bảng Theo Dõi Toàn Đề (101–200)
+                      </span>
+                      <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', fontSize: '0.72rem', color: 'var(--ds-text-muted)' }}>
+                        <span>🟦 Đã làm ({answeredCount})</span>
+                        <span>⬜ Chưa làm ({unansweredQuestions.length})</span>
+                        <span>🔷 Đang làm</span>
+                        {(examSubmitted || examSessionMode === 'practice') && (
+                          <>
+                            <span style={{ color: 'var(--ds-success)', fontWeight: 700 }}>🟩 Đúng</span>
+                            <span style={{ color: 'var(--ds-danger)', fontWeight: 700 }}>🟥 Sai</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      {[
+                        { id: 'all', label: `Tất cả (${readingQuestions.length})` },
+                        { id: 'unanswered', label: `Chưa làm (${unansweredQuestions.length})` },
+                        ...(examSubmitted && examSummary ? [{ id: 'wrong', label: `Câu sai (${examSummary.wrongCount})` }] : []),
+                      ].map(f => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => setGridFilter(f.id)}
+                          className={`toeic-target-chip ${gridFilter === f.id ? 'active' : ''}`}
+                          style={{ fontSize: '0.72rem', padding: '0.2rem 0.55rem' }}
+                        >
+                          {f.label}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => setShowQuestionGrid(false)}
+                        className="ge-show-mobile-only"
+                        style={{
+                          padding: '0.25rem 0.6rem',
+                          borderRadius: '8px',
+                          border: '1px solid var(--ds-border)',
+                          backgroundColor: 'var(--ds-bg-elevated)',
+                          color: 'var(--ds-text)',
+                          fontSize: '0.74rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Đóng ✕
+                      </button>
                     </div>
                   </div>
-
-                  <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                    {[
-                      { id: 'all', label: `Tất cả (${readingQuestions.length})` },
-                      { id: 'unanswered', label: `Chưa làm (${unansweredQuestions.length})` },
-                      ...(examSubmitted && examSummary ? [{ id: 'wrong', label: `Câu sai (${examSummary.wrongCount})` }] : []),
-                    ].map(f => (
-                      <button
-                        key={f.id}
-                        type="button"
-                        onClick={() => setGridFilter(f.id)}
-                        className={`toeic-target-chip ${gridFilter === f.id ? 'active' : ''}`}
-                        style={{ fontSize: '0.72rem', padding: '0.2rem 0.55rem' }}
-                      >
-                        {f.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
                   {[
@@ -625,6 +646,7 @@ export default function TestSimulationPage() {
                                 type="button"
                                 onClick={() => jumpToQuestion(q)}
                                 title={`Câu ${q.number}${ans ? ` • Đã chọn: ${ans}` : ' • Chưa làm'}`}
+                                className="toeic-qgrid-btn"
                                 style={{
                                   minWidth: '34px',
                                   height: '26px',
@@ -648,7 +670,8 @@ export default function TestSimulationPage() {
                     );
                   })}
                 </div>
-              </div>
+                </div>
+              </>
             )}
 
             {/* EXAM SCORE SUMMARY & AI CONVERSION FUNNEL (AFTER SUBMISSION) */}
@@ -674,15 +697,15 @@ export default function TestSimulationPage() {
                     </p>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <div style={{ textAlign: 'center', padding: '0.75rem 1.25rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-accent-bg)', border: '1px solid var(--ds-accent)' }}>
+                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', width: '100%', maxWidth: '460px' }}>
+                    <div style={{ flex: '1 1 140px', textAlign: 'center', padding: '0.75rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-accent-bg)', border: '1px solid var(--ds-accent)' }}>
                       <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--ds-accent)', textTransform: 'uppercase' }}>Điểm Reading Ước Tính</div>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--ds-accent)' }}>{examSummary.estReadingScore}/495</div>
+                      <div style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--ds-accent)' }}>{examSummary.estReadingScore}/495</div>
                     </div>
 
-                    <div style={{ textAlign: 'center', padding: '0.75rem 1.25rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-success-bg)', border: '1px solid var(--ds-success)' }}>
+                    <div style={{ flex: '1 1 140px', textAlign: 'center', padding: '0.75rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-success-bg)', border: '1px solid var(--ds-success)' }}>
                       <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--ds-success)', textTransform: 'uppercase' }}>Độ Chính Xác</div>
-                      <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--ds-success)' }}>{examSummary.correct}/{examSummary.total} ({examSummary.accuracy}%)</div>
+                      <div style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--ds-success)' }}>{examSummary.correct}/{examSummary.total} ({examSummary.accuracy}%)</div>
                     </div>
                   </div>
                 </div>
@@ -873,7 +896,7 @@ export default function TestSimulationPage() {
                   {serverDsResult?.remediationPlanId && (
                     <a
                       href={`/toeic/remediation/${serverDsResult.remediationPlanId}`}
-                      className="toeic-btn toeic-btn-primary"
+                      className="toeic-btn toeic-btn-primary toeic-cta-wrap"
                       style={{ fontSize: '0.82rem', fontWeight: 800, textDecoration: 'none' }}
                     >
                       🚀 Bắt Đầu Lộ Trình Vá Lỗ Hổng ({(serverDsResult.analysis?.prescribedDrillQuestionIds?.length || 0) + (serverDsResult.analysis?.prescribedTwinQuestionIds?.length || 0)} câu đặc trị) &rarr;
@@ -883,7 +906,7 @@ export default function TestSimulationPage() {
                     type="button"
                     onClick={() => handleStartMode('exam')}
                     className="toeic-btn toeic-btn-secondary"
-                    style={{ fontSize: '0.82rem', fontWeight: 700 }}
+                    style={{ fontSize: '0.82rem', fontWeight: 700, flex: '1 1 160px' }}
                   >
                     ↻ Làm Lại Bài Thi Thử
                   </button>
@@ -891,7 +914,7 @@ export default function TestSimulationPage() {
                     type="button"
                     onClick={() => handleStartMode('practice')}
                     className="toeic-btn toeic-btn-secondary"
-                    style={{ fontSize: '0.82rem', fontWeight: 700 }}
+                    style={{ fontSize: '0.82rem', fontWeight: 700, flex: '1 1 160px' }}
                   >
                     🎯 Chuyển Sang Luyện Tập Tự Do
                   </button>
@@ -904,8 +927,8 @@ export default function TestSimulationPage() {
               <div
                 className="toeic-card"
                 style={{
-                  padding: '0.75rem 1rem',
-                  marginBottom: '1.5rem',
+                  padding: '0.65rem 0.9rem',
+                  marginBottom: '1.25rem',
                   display: 'flex',
                   gap: '0.5rem',
                   flexWrap: 'wrap',
@@ -914,54 +937,56 @@ export default function TestSimulationPage() {
                   border: '1px solid var(--ds-border)'
                 }}
               >
-              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-text-secondary)', marginRight: '0.25rem' }}>
-                Chọn Phần Thi:
-              </span>
+                <span className="ge-hide-mobile" style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-text-secondary)', marginRight: '0.25rem' }}>
+                  Chọn Phần Thi:
+                </span>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setActivePart(5);
-                  if (part5Questions[0]) setActiveQuestionId(part5Questions[0].id);
-                }}
-                className={`toeic-target-chip ${activePart === 5 ? 'active' : ''}`}
-                style={{ fontSize: '0.82rem', padding: '0.4rem 0.85rem' }}
-              >
-                📝 Part 5: Điền Câu ({part5Questions.length} câu)
-              </button>
+                <div className="toeic-h-scroll-strip" style={{ flex: 1 }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActivePart(5);
+                      if (part5Questions[0]) setActiveQuestionId(part5Questions[0].id);
+                    }}
+                    className={`toeic-target-chip ${activePart === 5 ? 'active' : ''}`}
+                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                  >
+                    📝 Part 5 ({part5Questions.length})
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setActivePart(6);
-                  if (part6Questions[0]) setActiveQuestionId(part6Questions[0].id);
-                }}
-                className={`toeic-target-chip ${activePart === 6 ? 'active' : ''}`}
-                style={{ fontSize: '0.82rem', padding: '0.4rem 0.85rem' }}
-              >
-                📄 Part 6: Điền Đoạn Văn ({part6Questions.length} câu)
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActivePart(6);
+                      if (part6Questions[0]) setActiveQuestionId(part6Questions[0].id);
+                    }}
+                    className={`toeic-target-chip ${activePart === 6 ? 'active' : ''}`}
+                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                  >
+                    📄 Part 6 ({part6Questions.length})
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setActivePart(7);
-                  if (part7Questions[0]) setActiveQuestionId(part7Questions[0].id);
-                }}
-                className={`toeic-target-chip ${activePart === 7 ? 'active' : ''}`}
-                style={{ fontSize: '0.82rem', padding: '0.4rem 0.85rem' }}
-              >
-                📖 Part 7: Đọc Hiểu ({part7Questions.length} câu)
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActivePart(7);
+                      if (part7Questions[0]) setActiveQuestionId(part7Questions[0].id);
+                    }}
+                    className={`toeic-target-chip ${activePart === 7 ? 'active' : ''}`}
+                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                  >
+                    📖 Part 7 ({part7Questions.length})
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setActivePart('all')}
-                className={`toeic-target-chip ${activePart === 'all' ? 'active' : ''}`}
-                style={{ fontSize: '0.82rem', padding: '0.4rem 0.85rem', marginLeft: 'auto' }}
-              >
-                📋 Xem Toàn Đề
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setActivePart('all')}
+                    className={`toeic-target-chip ${activePart === 'all' ? 'active' : ''}`}
+                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem', marginLeft: 'auto' }}
+                  >
+                    📋 Xem Toàn Đề
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1169,6 +1194,7 @@ export default function TestSimulationPage() {
                             key={q.id}
                             type="button"
                             onClick={() => setActiveQuestionId(q.id)}
+                            className="toeic-part5-palette-btn"
                             style={{
                               width: '28px',
                               height: '28px',
@@ -1218,18 +1244,18 @@ export default function TestSimulationPage() {
                         />
 
                         {/* Part 5 Stepper Controls */}
-                        <div className="toeic-flex-between" style={{ marginTop: '1rem', padding: '0.75rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-card)', border: '1px solid var(--ds-border)' }}>
+                        <div className="toeic-flex-between" style={{ marginTop: '1rem', padding: '0.75rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-card)', border: '1px solid var(--ds-border)', flexWrap: 'wrap', gap: '0.6rem' }}>
                           <button
                             type="button"
                             disabled={currentPart5Index === 0}
                             onClick={() => setActiveQuestionId(part5Questions[currentPart5Index - 1].id)}
                             className="toeic-btn toeic-btn-secondary"
-                            style={{ opacity: currentPart5Index === 0 ? 0.4 : 1, cursor: currentPart5Index === 0 ? 'default' : 'pointer' }}
+                            style={{ opacity: currentPart5Index === 0 ? 0.4 : 1, cursor: currentPart5Index === 0 ? 'default' : 'pointer', flex: '1 1 130px' }}
                           >
                             &larr; Câu trước ({part5Questions[currentPart5Index - 1]?.number || 101})
                           </button>
 
-                          <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)', textAlign: 'center', flex: '0 1 auto' }}>
                             Câu #{activePart5Question.number} ({currentPart5Index + 1}/{part5Questions.length})
                           </span>
 
@@ -1238,6 +1264,7 @@ export default function TestSimulationPage() {
                               type="button"
                               onClick={() => setActiveQuestionId(part5Questions[currentPart5Index + 1].id)}
                               className="toeic-btn toeic-btn-primary"
+                              style={{ flex: '1 1 130px' }}
                             >
                               <span>Câu tiếp theo ({part5Questions[currentPart5Index + 1]?.number}) &rarr;</span>
                             </button>
@@ -1249,8 +1276,9 @@ export default function TestSimulationPage() {
                                 if (part6Questions[0]) setActiveQuestionId(part6Questions[0].id);
                               }}
                               className="toeic-btn toeic-btn-success"
+                              style={{ flex: '1 1 150px' }}
                             >
-                              <span>Xong Part 5 ➔ Sang Part 6 &rarr;</span>
+                              <span>Xong Part 5 ➔ Part 6 &rarr;</span>
                             </button>
                           )}
                         </div>

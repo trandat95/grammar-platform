@@ -257,7 +257,7 @@ export default function DictationStudio({
   const isAllDone = correctCount === totalBlanks;
 
   return (
-    <div className="toeic-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+    <div className="toeic-card" style={{ padding: '1.25rem', marginBottom: '1.5rem', overflow: 'visible' }}>
       {/* 1. TOP HEADER & SERIES INFO */}
       <div className="toeic-flex-between" style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <div>
@@ -505,11 +505,16 @@ export default function DictationStudio({
                         disabled={isLocked}
                         value={inputs[idx] || ''}
                         placeholder="..."
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        spellCheck={false}
+                        enterKeyHint="next"
                         onChange={(e) => handleInputChange(idx, e.target.value)}
                         onKeyDown={(e) => handleKeyDown(idx, e)}
                         className={`toeic-cloze-input ${isLocked ? 'correct' : ''}`}
                         style={{
-                          width: `${Math.max(75, (expectedVal.length + 3) * 11)}px`,
+                          width: `${Math.max(68, Math.min(180, (expectedVal.length + 3) * 11))}px`,
                           margin: '0 0.35rem'
                         }}
                       />
@@ -526,6 +531,10 @@ export default function DictationStudio({
                 onChange={(e) => setFullSentenceInput(e.target.value)}
                 placeholder="Nghe audio và gõ trọn vẹn câu thoại tiếng Anh vào đây..."
                 rows={4}
+                autoCapitalize="none"
+                autoCorrect="off"
+                autoComplete="off"
+                spellCheck={false}
                 style={{
                   width: '100%',
                   padding: '1rem',
@@ -566,7 +575,7 @@ export default function DictationStudio({
       )}
 
       {/* 5. BOTTOM NAVIGATION & PROGRESS */}
-      <div className="toeic-flex-between" style={{ paddingTop: '0.5rem' }}>
+      <div className="toeic-flex-between" style={{ paddingTop: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <button
           type="button"
           disabled={currentTrackIndex === 0}

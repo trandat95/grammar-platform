@@ -29,9 +29,10 @@ export default function SplitPassageReader({
   const [activeSetIndex, setActiveSetIndex] = useState(0);
   const [activeDocTab, setActiveDocTab] = useState(0);
   const [viewMode, setViewMode] = useState('tabs'); // 'tabs' | 'stacked'
-  const [mobileTab, setMobileTab] = useState('passage'); // 'passage' | 'questions'
+  const [mobileTab, setMobileTab] = useState('passage'); // 'passage' | 'questions' | 'split'
   const [fontSize, setFontSize] = useState(15); // px
   const passageContainerRef = useRef(null);
+  const setStripRef = useRef(null);
 
   // Group passages & questions into unified Passage Sets
   const passageSets = useMemo(() => {
@@ -148,7 +149,28 @@ export default function SplitPassageReader({
     if (markEl) {
       markEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [evidenceSentence, activeQuestionId, activeDocTab, viewMode, activeSetIndex]);
+  }, [evidenceSentence, activeQuestionId, activeDocTab, viewMode, activeSetIndex, mobileTab]);
+
+  // Auto-center active passage set chip inside horizontal scroll strip
+  useEffect(() => {
+    const activeChip = setStripRef.current?.querySelector('[data-active-set="true"]');
+    if (activeChip && typeof activeChip.scrollIntoView === 'function') {
+      activeChip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, [activeSetIndex]);
+
+  const handleJumpToEvidence = (questionId) => {
+    if (onQuestionClick) onQuestionClick(questionId);
+    if (mobileTab === 'questions') {
+      setMobileTab('passage');
+    }
+    setTimeout(() => {
+      const markEl = passageContainerRef.current?.querySelector('mark.toeic-evidence-highlight');
+      if (markEl) {
+        markEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 80);
+  };
 
   // Helper to render passage content with highlighted evidence
   const renderPassageContent = (text) => {
@@ -208,11 +230,11 @@ export default function SplitPassageReader({
           flexWrap: 'wrap'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--ds-text-secondary)', textTransform: 'uppercase' }}>
-            Bộ Đoạn Văn:
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '1 1 240px', minWidth: 0 }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--ds-text-secondary)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            Bộ Đoạn:
           </span>
-          <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', maxWidth: '100%', padding: '0.1rem 0' }}>
+          <div ref={setStripRef} className="toeic-h-scroll-strip" style={{ flex: 1 }}>
             {passageSets.map((s, idx) => {
               const isActive = idx === activeSetIndex;
               const setAnsweredCount = s.questions.filter(q => Boolean(userAnswers[q.id])).length;
@@ -222,6 +244,7 @@ export default function SplitPassageReader({
                 <button
                   key={s.setId || idx}
                   type="button"
+                  data-active-set={isActive ? 'true' : undefined}
                   onClick={() => {
                     setActiveSetIndex(idx);
                     setActiveDocTab(0);
@@ -297,40 +320,44 @@ export default function SplitPassageReader({
         </div>
       </div>
 
-      {/* MOBILE TAB TOGGLE (< 1024px) */}
-      <div className="ge-show-mobile-only" style={{ marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', padding: '0.25rem', backgroundColor: 'var(--ds-bg-elevated)', borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-border)' }}>
+      {/* MOBILE VIEW MODE TOGGLE (< 1024px) */}
+      <div className="toeic-mobile-tabs-bar" style={{ marginBottom: '0.85rem', width: '100%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.35rem', width: '100%', padding: '0.25rem', backgroundColor: 'var(--ds-bg-elevated)', borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-border)' }}>
           <button
             type="button"
             onClick={() => setMobileTab('passage')}
             className={`toeic-target-chip ${mobileTab === 'passage' ? 'active' : ''}`}
-            style={{ flex: 1, padding: '0.4rem', fontSize: '0.85rem' }}
+            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
           >
-            📄 Bài Đọc ({currentPassages.length} văn bản)
+            📄 Bài Đọc ({currentPassages.length})
           </button>
           <button
             type="button"
             onClick={() => setMobileTab('questions')}
             className={`toeic-target-chip ${mobileTab === 'questions' ? 'active' : ''}`}
-            style={{ flex: 1, padding: '0.4rem', fontSize: '0.85rem' }}
+            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
           >
-            ❓ Câu Hỏi ({setQuestions.length} câu)
+            ❓ Câu Hỏi ({setQuestions.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileTab('split')}
+            className={`toeic-target-chip ${mobileTab === 'split' ? 'active' : ''}`}
+            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
+          >
+            📱 Chia Đôi
           </button>
         </div>
       </div>
 
       {/* 2. SPLIT-SCREEN WORKSPACE */}
       <div className="toeic-split-reader">
-        {/* LEFT COLUMN: PASSAGES PANE (Sticky & Perfectly Aligned) */}
+        {/* LEFT COLUMN: PASSAGES PANE (Sticky only on Desktop >= 1024px via CSS) */}
         <div
           ref={passageContainerRef}
-          className={`toeic-card toeic-passage-pane ${mobileTab !== 'passage' ? 'ge-hide-mobile' : ''}`}
+          className={`toeic-card toeic-passage-pane ${mobileTab === 'questions' ? 'toeic-pane-hidden-mobile' : ''} ${mobileTab === 'split' ? 'is-split-mobile' : ''}`}
           style={{
-            padding: '1.25rem 1.5rem',
-            position: 'sticky',
-            top: '1rem',
-            maxHeight: 'calc(100vh - 120px)',
-            overflowY: 'auto'
+            padding: '1.15rem 1.25rem'
           }}
         >
           {/* Passage Toolbar */}
@@ -507,7 +534,7 @@ export default function SplitPassageReader({
 
         {/* RIGHT COLUMN: QUESTIONS PANE (Only matching questions for current set!) */}
         <div
-          className={`${mobileTab !== 'questions' ? 'ge-hide-mobile' : ''}`}
+          className={`${mobileTab === 'passage' ? 'toeic-pane-hidden-mobile' : ''}`}
           style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
           <div className="toeic-flex-between" style={{ paddingBottom: '0.5rem', borderBottom: '1px solid var(--ds-border)' }}>
@@ -723,10 +750,38 @@ export default function SplitPassageReader({
                             backgroundColor: 'var(--ds-warning-bg)',
                             borderLeft: '3px solid var(--ds-warning)',
                             color: 'var(--ds-text)',
-                            fontSize: '0.8rem'
+                            fontSize: '0.8rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.4rem'
                           }}
                         >
-                          <strong>📌 Dẫn chứng:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
+                          <div>
+                            <strong>📌 Dẫn chứng:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
+                          </div>
+                          {ai.evidence_sentence_en && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleJumpToEvidence(q.id);
+                              }}
+                              className="toeic-mobile-only-inline"
+                              style={{
+                                alignSelf: 'flex-start',
+                                padding: '0.25rem 0.6rem',
+                                borderRadius: '6px',
+                                border: '1px solid var(--ds-warning-border)',
+                                backgroundColor: 'var(--ds-card)',
+                                color: 'var(--ds-warning)',
+                                fontSize: '0.74rem',
+                                fontWeight: 700,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              🔍 Xem vị trí tô sáng trong bài đọc &rarr;
+                            </button>
+                          )}
                         </div>
                       )}
 
@@ -824,6 +879,20 @@ export default function SplitPassageReader({
           )}
         </div>
       </div>
+
+      {/* FLOATING QUICK-SWITCH PILL ON MOBILE/TABLET (< 1024px) */}
+      {mobileTab !== 'split' && (
+        <button
+          type="button"
+          onClick={() => setMobileTab(prev => (prev === 'passage' ? 'questions' : 'passage'))}
+          className="toeic-floating-mobile-switch"
+          aria-label={mobileTab === 'passage' ? 'Chuyển sang làm câu hỏi' : 'Quay lại đọc bài đọc'}
+        >
+          {mobileTab === 'passage'
+            ? `❓ Câu Hỏi (${setQuestions.filter(q => Boolean(userAnswers[q.id])).length}/${setQuestions.length})`
+            : '📄 Xem Bài Đọc'}
+        </button>
+      )}
     </div>
   );
 }

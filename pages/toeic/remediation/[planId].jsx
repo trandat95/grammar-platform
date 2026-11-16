@@ -249,7 +249,7 @@ export default function RemediationPlanPage() {
                   </div>
                   <a
                     href={`/toeic/tests/${plan.series}/${plan.target_next_test_number}`}
-                    className="toeic-btn toeic-btn-primary"
+                    className="toeic-btn toeic-btn-primary toeic-cta-wrap"
                     style={{ textDecoration: 'none', fontWeight: 800 }}
                   >
                     Thi Thử Test {String(plan.target_next_test_number).padStart(2, '0')} Ngay &rarr;

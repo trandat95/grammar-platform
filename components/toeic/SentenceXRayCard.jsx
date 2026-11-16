@@ -579,7 +579,7 @@ export default function SentenceXRayCard({
             }}
           >
             <span>Câu Tiếp Theo &rarr;</span>
-            <kbd style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', borderRadius: '4px', backgroundColor: 'var(--ds-bg-elevated)', color: 'var(--ds-accent)' }}>Enter ↵</kbd>
+            <kbd className="ge-hide-mobile" style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', borderRadius: '4px', backgroundColor: 'var(--ds-bg-elevated)', color: 'var(--ds-accent)' }}>Enter ↵</kbd>
           </button>
         </div>
       )}
@@ -588,27 +588,30 @@ export default function SentenceXRayCard({
       {isSubmitted && (
         <div style={{ borderTop: '1px solid var(--ds-border)', paddingTop: '1.25rem' }}>
           {/* Navigation Tabs for X-Ray Analysis */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+          <div className="toeic-h-scroll-strip" style={{ marginBottom: '1.15rem' }}>
             <button
               type="button"
               onClick={() => setActiveTab('breakdown')}
               className={`toeic-target-chip ${activeTab === 'breakdown' ? 'active' : ''}`}
+              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              📐 Bóc Tách Cấu Trúc (State 2)
+              📐 Bóc Tách Cấu Trúc <span className="ge-hide-mobile">(State 2)</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('formula')}
               className={`toeic-target-chip ${activeTab === 'formula' ? 'active' : ''}`}
+              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              📐 Hộp Quy Tắc &amp; Công Thức (State 3)
+              📐 Quy Tắc &amp; Công Thức <span className="ge-hide-mobile">(State 3)</span>
             </button>
             <button
               type="button"
               onClick={handleOpenTwinRemediation}
               className={`toeic-target-chip ${activeTab === 'twin' ? 'active' : ''}`}
+              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              🎯 Câu Sinh Đôi Twin-Questions (State 4)
+              🎯 Câu Sinh Đôi <span className="ge-hide-mobile">Twin-Questions (State 4)</span>
             </button>
           </div>
 
@@ -632,7 +635,7 @@ export default function SentenceXRayCard({
 
               {/* Structural Pattern Display */}
               {xray?.xray_pattern_display && (
-                <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--ds-accent)' }}>
+                <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--ds-accent)', wordBreak: 'break-word', overflowX: 'auto' }}>
                   <span style={{ fontWeight: 800 }}>📐 Cấu trúc câu: </span>
                   <span>{xray.xray_pattern_display}</span>
                 </div>
