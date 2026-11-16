@@ -39,6 +39,7 @@ export default function ToeicChoiceCard({
       </div>
       {shortcut && (
         <span
+          className="ge-mobile-hide"
           style={{
             fontSize: '0.75rem',
             color: 'var(--ds-text-muted)',

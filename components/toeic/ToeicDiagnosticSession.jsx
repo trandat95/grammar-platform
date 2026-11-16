@@ -398,15 +398,17 @@ export default function ToeicDiagnosticSession({
               </div>
 
               {/* Timer & Flag Button */}
-              <div className="toeic-flex-row">
+              <div className="toeic-flex-row" style={{ flexWrap: 'nowrap', gap: '0.4rem' }}>
                 <div className={`toeic-pacing-pill ${questionTimerSec > recommendedTime ? 'toeic-pacing-yellow' : 'toeic-pacing-green'}`}>
-                  ⏱️ {questionTimerSec}s / mục tiêu {recommendedTime}s
+                  <span>⏱️ {questionTimerSec}s</span>
+                  <span className="ge-mobile-hide">/ mục tiêu {recommendedTime}s</span>
                 </div>
 
                 <ToeicButton
                   variant={isFlagged ? 'warning' : 'ghost'}
                   size="sm"
                   onClick={toggleFlag}
+                  style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
                   icon={<span>{isFlagged ? '🚩' : '🏳️'}</span>}
                 >
                   {isFlagged ? 'Đã cắm cờ' : 'Cắm cờ'}

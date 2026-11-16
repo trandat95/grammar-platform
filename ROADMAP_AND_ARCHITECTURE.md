@@ -2926,6 +2926,11 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Chuẩn UI/UX Mobile Web (`shadcn/ui`, `ant-design-mobile`, `ionic-framework`, `vaul`):** Chỉ áp dụng tại `@media (max-width: 767px)`, giữ nguyên 100% bố cục Desktop.
   * **Thu Gọn Dashboard Mobile:** Ẩn mô tả dài, badge phụ và ảnh nền thừa trên Hero Banner; gom 4 thẻ KPI từ 4 hàng dọc thành **Lưới 2×2 tinh gọn (`.ge-kpi-grid`)**; đưa `ToeicHeroBanner` + `AiPowerShowcase2026` vào ngăn kéo thu gọn mặc định (`.ge-mobile-collapsible` + `.ge-mobile-only-toggle`) để người học chạm ngay **Mục tiêu hôm nay**.
   * **Footer Siêu Gọn:** Thu gọn `.ge-brand-footer` trên mobile thành 1 dòng bản quyền `grammarpro.io.vn`.
+- [x] **2.15.30 Sửa 4 Lỗi Hiển Thị Mobile Thực Tế Trên iPhone (`KitIcon.jsx`, `design-system-2026.css`, `toeic-ui-2026.css`, `ToeicDiagnosticSession.jsx`, `ToeicChoiceCard.jsx`):**
+  * **Khôi phục Icon TOEIC trên Bottom Nav (`KitIcon.jsx`):** Bổ sung `case "tool-diag"` để tab TOEIC có biểu tượng đồng bộ.
+  * **Sửa Lỗi Cắt Sub-nav Bên Trái (`"n AI"`):** Đổi `justify-content: flex-start` + `flex: 0 0 auto` cho `.ge-subnav-pills` / `.ge-subnav-btn` trên mobile.
+  * **Sửa Vỡ Oval Đồng Hồ `⏱️ 20s / mục tiêu 10s` & `Cắm cờ`:** Thêm `white-space: nowrap`, `flex-wrap: wrap` trên `.toeic-q-header` và rút gọn nhãn mobile thành `⏱️ 20s`.
+  * **Thu Gọn Card Câu Hỏi TOEIC & Ẩn Nhãn `Phím 1..4` Trên Mobile:** Giúp hiển thị trọn câu hỏi + cả 4 đáp án A, B, C, D ngay trên thanh `.ge-mobile-exam-dock` mà không bị che.
 
 ---
 

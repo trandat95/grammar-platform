@@ -119,6 +119,14 @@ export default function KitIcon({ name, size = 18, className = "", style = {} })
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="var(--ds-accent-bg)" stroke="var(--ds-accent)" />
         </svg>
       );
+    case "tool-diag":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" fill="var(--ds-accent-bg)" stroke="var(--ds-accent)" />
+          <circle cx="12" cy="12" r="4.5" stroke="var(--ds-accent)" />
+          <circle cx="12" cy="12" r="1.5" fill="var(--ds-accent)" stroke="var(--ds-accent)" />
+        </svg>
+      );
     default:
       return null;
   }
