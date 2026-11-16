@@ -3,12 +3,14 @@ import Head from 'next/head';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import DictationStudio from '../../components/toeic/DictationStudio';
 import useToeicEntitlement from '../../hooks/useToeicEntitlement';
+import useGlobalAuth from '../../hooks/useGlobalAuth';
 import ToeicSmartPaywallModal from '../../components/toeic/premium/ToeicSmartPaywallModal';
 
 export default function DictationPage() {
   const [isLight, setIsLight] = useState(true);
   const [selectedTestNum, setSelectedTestNum] = useState(1);
-  const entitlement = useToeicEntitlement();
+  const globalAuth = useGlobalAuth();
+  const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
   const isVip = entitlement.isVip;
 
   const handleTestChange = (e) => {
@@ -113,6 +115,9 @@ export default function DictationPage() {
             <DictationStudio
               series="ETS2026"
               testNum={selectedTestNum}
+              authToken={globalAuth.activeAuthToken}
+              userRole={globalAuth.currentUser?.role}
+              onRequireVip={() => entitlement.openPaywall('TRG_05_DICTATION_PART34', { requestedTest: selectedTestNum })}
             />
           </div>
         </div>
