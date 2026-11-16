@@ -2918,6 +2918,8 @@ Milestone 2.11 được xem là hoàn thành khi:
   * **Thu Gọn Khung Câu Hỏi & Đáp Án (`styles/design-system-2026.css`, `DiagnosticTestSession.jsx`):** Trên màn hình `< 768px`, thanh tiến độ/đồng hồ dính (`position: sticky`), câu hỏi và 4 lựa chọn A/B/C/D hiển thị gọn trọn trong 1 khung màn hình.
   * **Ẩn Bảng 30/15 Câu Khỏi Dòng Chính & Mở Dạng Sheet Nổi (`DiagnosticTestSession.jsx`, `ToeicDiagnosticSession.jsx`, `boss-gate.jsx`):** Bảng số câu không còn chen giữa đáp án D và nút `Câu tiếp theo →`; thay bằng nút `📋 X/Y` bật Drawer nổi ngay trên thanh thao tác.
   * **Thanh Điều Hướng Dính Cố Định Dưới Đáy Mobile (`.ge-mobile-exam-dock` trên `DiagnosticTestSession`, `ToeicDiagnosticSession`, `practice/[topicId]`, `boss-gate`):** Cố định ngay phía trên Bottom Nav với 1 chạm (`← Trước`, `Tiếp theo →`, `Nộp bài`) kèm tự động cuộn mượt lên đầu câu khi chuyển câu.
+- [x] **2.15.27 Bỏ Qua Bước Xác Thực Email Khi Tạo Tài Khoản Mới (`pages/api/auth/register.js`, `services/auth.service.js`):**
+  * **Auto-Confirm Registration API (`/api/auth/register`):** Sử dụng `supabaseServer.auth.admin.createUser({ email_confirm: true })` (kèm Rate Limit 15 req/phút và fallback an toàn về `signUp`) để tạo tài khoản đã xác thực sẵn và tự động đăng nhập ngay lập tức, không cần mở email bấm link xác nhận.
 
 ---
 

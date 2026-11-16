@@ -56,14 +56,48 @@ export const AuthService = {
     return data;
   },
 
-  async signUp(email, password, fullName) {
+  async signUp(email, password, fullNameOrMeta) {
+    const resolvedFullName =
+      typeof fullNameOrMeta === "object" && fullNameOrMeta !== null
+        ? String(fullNameOrMeta.full_name || fullNameOrMeta.name || "")
+        : String(fullNameOrMeta || "");
+
+    // Prefer instant server-side auto-confirmed registration (skips email verification)
+    if (typeof window !== "undefined") {
+      try {
+        const resp = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, fullName: resolvedFullName }),
+        });
+        const json = await resp.json().catch(() => ({}));
+
+        if (resp.ok && json?.success && json?.autoConfirmed) {
+          const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({
+            email: String(email || "").trim().toLowerCase(),
+            password,
+          });
+          if (signInErr) throw signInErr;
+          return signInData;
+        }
+
+        if (resp.status === 409 || resp.status === 422 || resp.status === 400 || resp.status === 429) {
+          throw new Error(json?.error || "Không thể đăng ký tài khoản.");
+        }
+      } catch (apiErr) {
+        if (apiErr?.message && /đã được đăng ký|không hợp lệ|ký tự|quá nhanh|Không thể đăng ký/i.test(apiErr.message)) {
+          throw apiErr;
+        }
+      }
+    }
+
     const { data, error } = await withAuthTimeout(() =>
       supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: resolvedFullName,
             role: "FREE",
           },
         },
