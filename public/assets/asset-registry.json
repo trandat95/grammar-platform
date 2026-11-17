@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0",
+  "assets": [
+    {
+      "assetId": "master-mascot",
+      "category": "mascot",
+      "purpose": "Master visual reference (Scholar Owl Cyan)",
+      "path": "/assets/mascot/master-mascot.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "self",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "eec0f7bf44daf8bce66956f9bd6e217c99e6b1d76f8272d1d26799400f717fa7",
+      "fileSize": 214519
+    },
+    {
+      "assetId": "apple-touch-icon",
+      "category": "brand",
+      "purpose": "iOS Home Screen icon (square canvas)",
+      "path": "/apple-touch-icon.png",
+      "dimensions": "180x180",
+      "format": "png",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/logo-grammarpro.svg",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "5a1f90f03e28f9a88dd3765ce82258dad4a43bac83f6bbae46606f83290ae858",
+      "fileSize": 11600
+    },
+    {
+      "assetId": "pwa-icon-192",
+      "category": "brand",
+      "purpose": "PWA Android icon 192",
+      "path": "/assets/brand/icon-192.png",
+      "dimensions": "192x192",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/logo-grammarpro.svg",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "ffe28b57de8be1c40face85ca3ee4c46e0ebd7374309ca47f75aa3e8fc671832",
+      "fileSize": 14189
+    },
+    {
+      "assetId": "pwa-icon-512",
+      "category": "brand",
+      "purpose": "PWA Android icon 512",
+      "path": "/assets/brand/icon-512.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/logo-grammarpro.svg",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "b5ea814fee9b64e06ad504d78003af7d1f96317006f6beb234db2ac26140d2df",
+      "fileSize": 96014
+    },
+    {
+      "assetId": "og-grammarpro",
+      "category": "brand",
+      "purpose": "Social link sharing preview (Zalo/FB)",
+      "path": "/og-grammarpro.png",
+      "dimensions": "1200x630",
+      "format": "png",
+      "background": "solid",
+      "themeSupport": [
+        "light"
+      ],
+      "visualReference": "public/logo-grammarpro.svg",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "d996f95403384746a001bbd16c8f2a67b85c9b3f583cfd1ecd13b0304c402f82",
+      "fileSize": 242635
+    }
+  ]
+}
