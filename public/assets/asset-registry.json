@@ -733,13 +733,11 @@
         "dark"
       ],
       "visualReference": "public/assets/mascot/mascot-welcome.png",
-      "version": "1.0.0-interim",
+      "version": "1.1.0",
       "status": "approved",
-      "assetGenerationMode": "interim_composite_option_b",
-      "quotaUpgradePending": true,
-      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
-      "sha256": "072949cd8bc869148bbefca49e2ac3d04c4040ee71ccfe4dd8bff4070aebe392",
-      "fileSize": 281871
+      "assetGenerationMode": "ai_multi_pose_raster",
+      "sha256": "64cab4642fc0c182927dbf33c6bbf7d62d5f39dbc32310d45f280d3317359ad6",
+      "fileSize": 237534
     },
     {
       "assetId": "mascot-encourage",
@@ -754,13 +752,11 @@
         "dark"
       ],
       "visualReference": "public/assets/mascot/mascot-welcome.png",
-      "version": "1.0.0-interim",
+      "version": "1.1.0",
       "status": "approved",
-      "assetGenerationMode": "interim_composite_option_b",
-      "quotaUpgradePending": true,
-      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
-      "sha256": "9bd858837a3daf2e3aebfa94cbf208dadd3e4e5300157427a8449af1b77a3bf0",
-      "fileSize": 252389
+      "assetGenerationMode": "ai_multi_pose_raster",
+      "sha256": "353d1fc0c90243a388c60cd7e309de86ce372f634f9c70b5e4c41c61763c2cbd",
+      "fileSize": 233402
     },
     {
       "assetId": "mascot-vip",
@@ -775,13 +771,11 @@
         "dark"
       ],
       "visualReference": "public/assets/mascot/master-mascot.png",
-      "version": "1.0.0-interim",
+      "version": "1.1.0",
       "status": "approved",
-      "assetGenerationMode": "interim_composite_option_b",
-      "quotaUpgradePending": true,
-      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
-      "sha256": "63127e0c1247185f2bc312f65e4a09a3ff511da7bfe40e524863d4b6746eb9b8",
-      "fileSize": 295410
+      "assetGenerationMode": "ai_multi_pose_raster",
+      "sha256": "f4027544c909ef1bb23d5490381eb6ddf5af4dab83b3033d95ef384a4db09dad",
+      "fileSize": 222656
     },
     {
       "assetId": "mascot-empty",

@@ -68,7 +68,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
-| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport QA Gate, Zero OS Emoji (`M4.6`) & FTC-Safe Conversion Analytics (`M4.7`)** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | ✅ **100% COMPLETE (`M4.0–M4.7`):** `M4.0–M4.5` (Gate B `7ee1b2e`) ✅ • `M4.6` (`dea4f1f` Live on Prod) ✅ • `M4.7` (FTC-Safe 8 KPIs, PII Sanitizer & Telemetry `14/14` tests PASS) ✅ |
+| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport QA Gate, Zero OS Emoji (`M4.6`) & FTC-Safe Conversion Analytics (`M4.7`)** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | ✅ **100% COMPLETE (`M4.0–M4.7`):** `M4.0–M4.5` (Gate B `7ee1b2e`) ✅ • `M4.6` (`dea4f1f` Live on Prod) ✅ • `M4.7` (FTC-Safe 8 KPIs, PII Sanitizer & Telemetry `14/14` tests PASS) ✅ • `M4.3` AI Multi-Pose Mascots: `3/5` upgraded (`celebrate`, `encourage`, `vip`), `2/5` pending quota reset (`empty`, `ai-coach`) ⏳ |
 
 ---
 

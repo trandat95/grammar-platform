@@ -54,9 +54,9 @@
   2. Alpha/Halo & Contrast check trên Light (`#FFF`) và Dark (`#09090B`) đạt 100%.
   3. Toàn bộ Banner đạt 55% safe-zone text contrast `>= 4.5:1`.
   4. Không chứa text giả / watermark / logo AI tự vẽ.
-- **Status & Post-Quota Upgrade Backlog (`2026-11-17` PO Sign-off — Option B):**
-  - **Approved (`45/45` trong `public/assets/asset-registry.json`):** `5` assets `M4.2` + `35` assets `M4.3` (`mascot-welcome.png`, `5` `.webp` banners, `xray-preview.svg`, `state-404.svg`, `free/vip-tier-showcase.svg`, `21` unified SVG badges, `4` unified SVG avatars) + `5` biến thể Mascot phương án B (`assetGenerationMode: "interim_composite_option_b"`, `quotaUpgradePending: true`).
-  - **TODO sau khi hồi quota `gemini-3.1-flash-image` (reset dự kiến sau `2026-11-17T08:41Z`):** Sinh lại **5** file AI raster đa tư thế riêng biệt kèm tách nền flood-fill alpha/halo QA cho `public/assets/mascot/{mascot-celebrate,mascot-encourage,mascot-vip,mascot-empty,mascot-ai-coach}.png` và cập nhật lại `sha256`/`version` (gỡ cờ `quotaUpgradePending`) trong `public/assets/asset-registry.json`.
+- **Status & Post-Quota Upgrade Backlog (`2026-11-17` PO Sign-off — Partial Upgrade `3/5` Completed):**
+  - **Approved (`45/45` trong `public/assets/asset-registry.json`):** `5` assets `M4.2` + `35` assets `M4.3` + **`3/5` AI Multi-Pose Mascots Upgraded (`version: "1.1.0"`, `assetGenerationMode: "ai_multi_pose_raster"`):** `mascot-celebrate.png`, `mascot-encourage.png`, `mascot-vip.png` (tách nền Chrome CDP canvas BFS flood-fill + anti-halo QA trên nền Light `#FFFFFF` & Dark `#09090B`) + `2` biến thể Mascot phương án B còn lại (`mascot-empty.png`, `mascot-ai-coach.png`, `assetGenerationMode: "interim_composite_option_b"`, `quotaUpgradePending: true`).
+  - **TODO sau khi hồi quota `gemini-3.1-flash-image` (reset dự kiến `2026-11-17T17:51:56Z`):** Sinh nốt **2** file AI raster đa tư thế (`public/assets/mascot/{mascot-empty,mascot-ai-coach}.png`) kèm tách nền flood-fill alpha/halo QA và cập nhật `sha256`/`version` (gỡ cờ `quotaUpgradePending`) trong `public/assets/asset-registry.json`.
 
 ---
 
