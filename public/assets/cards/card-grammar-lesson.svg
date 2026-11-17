@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 180" fill="none">
+  <defs>
+    <linearGradient id="bg-g" x1="0" y1="0" x2="480" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0b1224"/>
+      <stop offset="55%" stop-color="#0f1d3d"/>
+      <stop offset="100%" stop-color="#13294b"/>
+    </linearGradient>
+    <radialGradient id="glow-g" cx="0.72" cy="0.45" r="0.55">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#0b1224" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="book-g" x1="70" y1="28" x2="210" y2="152" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="180" rx="14" fill="url(#bg-g)"/>
+  <rect width="480" height="180" rx="14" fill="url(#glow-g)"/>
+  <!-- Subtle grid dots -->
+  <g fill="#60a5fa" fill-opacity="0.16">
+    <circle cx="32" cy="28" r="1.5"/><circle cx="64" cy="28" r="1.5"/><circle cx="96" cy="28" r="1.5"/>
+    <circle cx="384" cy="28" r="1.5"/><circle cx="416" cy="28" r="1.5"/><circle cx="448" cy="28" r="1.5"/>
+    <circle cx="384" cy="152" r="1.5"/><circle cx="416" cy="152" r="1.5"/><circle cx="448" cy="152" r="1.5"/>
+  </g>
+  <!-- Open Grammar Book (Left Focal) -->
+  <g transform="translate(36, 26)">
+    <rect x="6" y="8" width="128" height="114" rx="12" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+    <rect x="0" y="0" width="124" height="116" rx="12" fill="url(#book-g)" stroke="#60a5fa" stroke-width="1.5"/>
+    <rect x="14" y="16" width="96" height="84" rx="7" fill="#0f172a" fill-opacity="0.88" stroke="#38bdf8" stroke-opacity="0.3"/>
+    <!-- Bookmark Ribbon -->
+    <path d="M92 0h16v30l-8-6-8 6V0Z" fill="#f59e0b"/>
+    <!-- Book Lines -->
+    <rect x="24" y="28" width="52" height="7" rx="3.5" fill="#60a5fa"/>
+    <rect x="24" y="43" width="76" height="5" rx="2.5" fill="#475569"/>
+    <rect x="24" y="54" width="64" height="5" rx="2.5" fill="#475569"/>
+    <rect x="24" y="68" width="76" height="18" rx="5" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="1.2"/>
+    <text x="33" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#34d399">S + V / V-ing</text>
+  </g>
+  <!-- Interactive Tense Timeline Card (Right Focal) -->
+  <g transform="translate(194, 34)">
+    <rect x="0" y="0" width="252" height="114" rx="12" fill="#0f172a" fill-opacity="0.92" stroke="#334155" stroke-width="1.5"/>
+    <!-- Card header pill -->
+    <rect x="16" y="14" width="98" height="18" rx="9" fill="#1e3a8a" stroke="#3b82f6" stroke-opacity="0.6"/>
+    <text x="27" y="26" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#93c5fd">12 CHUYÊN ĐỀ</text>
+    <rect x="170" y="14" width="66" height="18" rx="9" fill="#064e3b" stroke="#10b981" stroke-opacity="0.7"/>
+    <text x="181" y="26" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#34d399">53 BÀI</text>
+    <!-- Timeline Axis & Wave -->
+    <line x1="22" y1="68" x2="230" y2="68" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+    <rect x="92" y="62" width="68" height="12" rx="6" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <circle cx="38" cy="68" r="6" fill="#f59e0b"/>
+    <circle cx="126" cy="68" r="8" fill="#10b981" stroke="#0f172a" stroke-width="2.5"/>
+    <circle cx="214" cy="68" r="6" fill="#3b82f6"/>
+    <!-- Labels -->
+    <text x="22" y="51" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#fbbf24">PAST</text>
+    <text x="106" y="51" font-family="system-ui, sans-serif" font-size="8.5" font-weight="800" fill="#34d399">NOW</text>
+    <text x="196" y="51" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#60a5fa">FUTURE</text>
+    <!-- Bottom Formula Pill -->
+    <rect x="16" y="86" width="220" height="16" rx="4" fill="#1e293b"/>
+    <circle cx="27" cy="94" r="3" fill="#38bdf8"/>
+    <rect x="36" y="91.5" width="126" height="5" rx="2.5" fill="#94a3b8"/>
+    <rect x="174" y="91.5" width="48" height="5" rx="2.5" fill="#34d399"/>
+  </g>
+</svg>

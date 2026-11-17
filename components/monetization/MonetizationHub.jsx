@@ -444,20 +444,9 @@ export default function MonetizationHub({
           padding: "1.25rem",
         }}
       >
-        <img
-          src={BANNER_PATHS.vip}
-          alt="Học viên luyện phát âm IPA & AI Study Coach VIP"
-          width={1440}
-          height={420}
-          className="ge-hero-banner-bg"
-        />
-        <div className="ge-hero-banner-scrim" />
-        <div
-          className="ge-hero-banner-content"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
-        >
-          <div style={{ flex: "1 1 520px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.45rem" }}>
+        <div className="ge-hero-split">
+          <div className="ge-hero-split-body" style={{ gap: "0.55rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
               <Badge tone={hasVip ? "success" : "accent"} icon={hasVip ? "crown" : "user"} isLight={isLight}>
                 {hasVip ? `${entitlement.effectiveRole} ACTIVE` : "GÓI FREE • NÂNG CẤP HỆ THỐNG HỌC TẬP VIP"}
               </Badge>
@@ -467,7 +456,7 @@ export default function MonetizationHub({
                 </Badge>
               )}
             </div>
-            <h1 style={{ margin: "0 0 0.4rem", fontSize: "1.22rem", fontWeight: 800, color: T.textHeading }}>
+            <h1 style={{ margin: 0, fontSize: "1.22rem", fontWeight: 800, color: T.textHeading }}>
               {hasVip
                 ? "Bạn đang sở hữu Toàn quyền Hệ thống Ngữ pháp Cá nhân hóa VIP"
                 : "Đầu tư Hệ thống Cải thiện Ngữ pháp Cá nhân hóa Toàn Diện"}
@@ -475,15 +464,15 @@ export default function MonetizationHub({
             <p style={{ margin: 0, fontSize: "0.86rem", color: T.textSecondary, lineHeight: 1.55 }}>
               <strong>{psychology.progressHighlight}</strong> {psychology.personalizedHook}
             </p>
-            <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted, marginTop: "0.4rem" }}>
+            <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted }}>
               {psychology.goalGradientHint} • {psychology.selfDeterminationNote}
             </div>
 
             {hasVip && sub && (
               <div
                 style={{
-                  marginTop: "0.75rem",
-                  backgroundColor: T.card,
+                  marginTop: "0.2rem",
+                  backgroundColor: T.bgElevated,
                   border: `1px solid ${T.successBorder}`,
                   borderRadius: "10px",
                   padding: "0.65rem 0.85rem",
@@ -532,17 +521,26 @@ export default function MonetizationHub({
                 </div>
               </div>
             )}
+
+            <div className="ge-vip-hero-actions" style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", alignItems: "center", marginTop: "0.25rem" }}>
+              <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
+                Xuất Báo cáo Năng lực (VIP API)
+              </Button>
+              {hasVip && sub && (
+                <Button variant="secondary" size="sm" icon="settings" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
+                  Quản lý / Hủy gói VIP
+                </Button>
+              )}
+            </div>
           </div>
 
-          <div className="ge-vip-hero-actions" style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
-            <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
-              Xuất Báo cáo Năng lực (VIP API)
-            </Button>
-            {hasVip && sub && (
-              <Button variant="ghost" size="sm" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
-                Quản lý / Hủy gói VIP
-              </Button>
-            )}
+          <div className="ge-hero-art-panel">
+            <img
+              src={BANNER_PATHS.vip}
+              alt="Học viên nâng cấp Hệ thống Ngữ pháp & TOEIC AI VIP"
+              width={640}
+              height={320}
+            />
           </div>
         </div>
       </div>

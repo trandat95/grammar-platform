@@ -395,6 +395,40 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--ds-shadow-md);
 }
 
+.ge-hero-split {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.ge-hero-split-body {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ge-hero-art-panel {
+  flex: 0 0 290px;
+  min-height: 158px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--ds-border);
+  background-color: #0b1120;
+  position: relative;
+  box-shadow: var(--ds-shadow-sm);
+}
+
+.ge-hero-art-panel img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 92% center;
+}
+
 .ge-hero-banner-bg {
   position: absolute;
   top: 0;
@@ -417,6 +451,42 @@ h1, h2, h3, h4, h5, h6 {
 .ge-hero-banner-content {
   position: relative;
   z-index: 2;
+}
+
+/* Homepage Rich Feature Card Visual Header */
+.ge-action-card-visual {
+  width: 100%;
+  height: 118px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--ds-border-subtle);
+  background-color: #0b1120;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ge-action-card-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 899px) {
+  .ge-hero-split {
+    flex-direction: column-reverse;
+    gap: 0.9rem;
+  }
+  .ge-hero-art-panel {
+    flex: none;
+    width: 100%;
+    height: 138px;
+    min-height: 0;
+  }
+  .ge-hero-art-panel img {
+    object-position: 94% center;
+  }
 }
 
 /* 2. STUDY EXPLORER 2-COLUMN LAYOUT (FIX P0 320px OVERFLOW & ALIGNMENT) */
@@ -1415,13 +1485,19 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .ge-hero-banner-card {
-    padding: 1rem !important;
+    padding: 0.95rem !important;
     margin-bottom: 0.75rem !important;
   }
 
-  .ge-hero-banner-bg,
-  .ge-hero-banner-scrim {
-    display: none !important;
+  .ge-hero-art-panel {
+    height: 128px;
+  }
+  .ge-hero-art-panel img {
+    object-position: 95% center;
+  }
+
+  .ge-action-card-visual {
+    height: 108px;
   }
 
   .ge-hero-banner-card h1 {

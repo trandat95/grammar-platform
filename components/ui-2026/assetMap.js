@@ -10,6 +10,12 @@ export const BANNER_PATHS = {
   toeic: "/assets/banners/05-toeic-adaptive.webp",
 };
 
+export const CARD_ART_PATHS = {
+  grammar: "/assets/cards/card-grammar-lesson.svg",
+  diagnostic: "/assets/cards/card-diagnostic-radar.svg",
+  toeic: "/assets/cards/card-toeic-adaptive.svg",
+};
+
 export const XRAY_PREVIEW_PATH = "/assets/banners/xray-preview.svg";
 
 export const MASCOT_PATHS = {

@@ -21,85 +21,89 @@ export default function DiagnosticOnboarding({
       <div
         className="ge-hero-banner-card"
         style={{
-          padding: "2rem",
+          padding: "1.75rem",
           border: `1px solid ${T.accentBorder}`,
           boxShadow: T.shadowElevated,
         }}
       >
-        <img
-          src={BANNER_PATHS.diagnostic}
-          alt="Học viên Việt Nam và Cố vấn quốc tế phân tích Knowledge Graph"
-          width={1440}
-          height={420}
-          className="ge-hero-banner-bg"
-        />
-        <div className="ge-hero-banner-scrim" />
-        <div className="ge-hero-banner-content">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-            <img
-              src={MASCOT_PATHS.ai_coach}
-              alt="Cú Tri Thức AI Chẩn đoán"
-              width={56}
-              height={56}
-              style={{ width: "56px", height: "56px", objectFit: "contain", flexShrink: 0 }}
-            />
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.35rem",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  padding: "0.3rem 0.75rem",
-                  borderRadius: "9999px",
-                  backgroundColor: T.accentBg,
-                  color: T.accent,
-                  border: `1px solid ${T.accentBorder}`,
-                }}
-              >
-                <KitIcon name="target" size={13} color={T.accent} />
-                <span>Milestone 2.8 • Central EdTech Engine</span>
-              </span>
-              <span
-                style={{
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  color: T.textMuted,
-                }}
-              >
-                2-Tier Zero-Hallucination Diagnostic
-              </span>
+        <div className="ge-hero-split" style={{ marginBottom: "1.5rem" }}>
+          <div className="ge-hero-split-body">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
+              <img
+                src={MASCOT_PATHS.ai_coach}
+                alt="Cú Tri Thức AI Chẩn đoán"
+                width={56}
+                height={56}
+                style={{ width: "56px", height: "56px", objectFit: "contain", flexShrink: 0 }}
+              />
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    padding: "0.3rem 0.75rem",
+                    borderRadius: "9999px",
+                    backgroundColor: T.accentBg,
+                    color: T.accent,
+                    border: `1px solid ${T.accentBorder}`,
+                  }}
+                >
+                  <KitIcon name="target" size={13} color={T.accent} />
+                  <span>Milestone 2.8 • Central EdTech Engine</span>
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    color: T.textMuted,
+                  }}
+                >
+                  2-Tier Zero-Hallucination Diagnostic
+                </span>
+              </div>
             </div>
+
+            <h1
+              style={{
+                fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)",
+                fontWeight: 800,
+                color: T.textHeading,
+                lineHeight: 1.25,
+                margin: "0 0 0.75rem 0",
+              }}
+            >
+              Khám Phá Trình Độ Ngữ Pháp &amp; Thiết Lập Lộ Trình Học Cá Nhân Hóa
+            </h1>
+
+            <p
+              style={{
+                fontSize: "0.95rem",
+                color: T.textSecondary,
+                lineHeight: 1.6,
+                margin: 0,
+              }}
+            >
+              Thay vì tự học mò mẫm trong 53 bài học, hãy để hệ thống đánh giá khách quan trình độ ngữ pháp của bạn,
+              chẩn đoán chính xác từng chuyên đề yếu và tự động thiết kế lộ trình học tập đo ni đóng giày riêng cho bạn.
+            </p>
           </div>
 
-          <h1
-            style={{
-              fontSize: "clamp(1.45rem, 2.8vw, 2rem)",
-              fontWeight: 800,
-              color: T.textHeading,
-              lineHeight: 1.25,
-              marginBottom: "1rem",
-              maxWidth: "680px",
-            }}
-          >
-            Khám Phá Trình Độ Ngữ Pháp &amp; Thiết Lập Lộ Trình Học Cá Nhân Hóa
-          </h1>
+          <div className="ge-hero-art-panel" style={{ flexBasis: "270px", minHeight: "170px" }}>
+            <img
+              src={BANNER_PATHS.diagnostic}
+              alt="Học viên Việt Nam và Cố vấn quốc tế phân tích Knowledge Graph"
+              width={640}
+              height={320}
+            />
+          </div>
+        </div>
 
-          <p
-            style={{
-              fontSize: "1rem",
-              color: T.textSecondary,
-              lineHeight: 1.6,
-              maxWidth: "680px",
-              marginBottom: "2rem",
-            }}
-          >
-            Thay vì tự học mò mẫm trong 53 bài học, hãy để hệ thống đánh giá khách quan trình độ ngữ pháp của bạn,
-            chẩn đoán chính xác từng chuyên đề yếu và tự động thiết kế lộ trình học tập đo ni đóng giày riêng cho bạn.
-          </p>
+        <div>
 
           {/* 4 Feature Badges */}
           <div

@@ -22,7 +22,7 @@ import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
 import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
-import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
+import { BANNER_PATHS, CARD_ART_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import QuestionRenderer from "../components/question-engine/QuestionRenderer";
@@ -5540,160 +5540,157 @@ export default function Home() {
           <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
-              {/* 1. COMPACT WELCOME STRIP (Streak, Level & 7-Day Calendar) */}
+              {/* 1. COMPACT WELCOME STRIP (Streak, Level, 7-Day Calendar & Hero Showcase) */}
               <div
                 className="ge-hero-banner-card"
                 style={{
                   padding: "1.15rem 1.35rem",
-                  marginBottom: "1rem",
+                  marginBottom: "1.1rem",
                 }}
               >
-                <img
-                  src={BANNER_PATHS.dashboard}
-                  alt=""
-                  width={1440}
-                  height={420}
-                  aria-hidden="true"
-                  className="ge-hero-banner-bg"
-                />
-                <div className="ge-hero-banner-scrim" />
-                <div
-                  className="ge-hero-banner-content"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "1rem",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flex: "1 1 auto" }}>
-                    <img
-                      src={MASCOT_PATHS.welcome}
-                      alt="Cú Tri Thức chào mừng bạn quay lại"
-                      width={64}
-                      height={64}
-                      style={{ width: "64px", height: "64px", objectFit: "contain", flexShrink: 0 }}
-                    />
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
-                        <div className="ge-streak-orb" aria-hidden="true">
-                          <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={20} /></span>
+                <div className="ge-hero-split">
+                  <div className="ge-hero-split-body" style={{ gap: "0.85rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+                      <img
+                        src={MASCOT_PATHS.welcome}
+                        alt="Cú Tri Thức chào mừng bạn quay lại"
+                        width={64}
+                        height={64}
+                        style={{ width: "64px", height: "64px", objectFit: "contain", flexShrink: 0 }}
+                      />
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
+                          <div className="ge-streak-orb" aria-hidden="true">
+                            <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={20} /></span>
+                          </div>
+                          <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
+                            Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
+                          </h1>
                         </div>
-                        <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
-                          Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
-                        </h1>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "5px",
+                              backgroundColor: "var(--ds-bg-elevated)",
+                              border: "1px solid var(--ds-border)",
+                              color: "var(--ds-text)",
+                              fontSize: "0.76rem",
+                              padding: "0.22rem 0.6rem",
+                              borderRadius: "6px",
+                              fontWeight: "600",
+                            }}
+                          >
+                            <KitIcon name={userRank.icon} size={13} />
+                            <span>{userRank.badge} • Cấp {userRank.level} ({userRank.title})</span>
+                          </span>
+
+                          <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)" }}>
+                            <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
+                          </span>
+
+                          {currentUser.role === "FREE" && (
+                            <button
+                              type="button"
+                              onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
+                              className="ds-focusable ge-drawer-lesson-btn"
+                              style={{
+                                fontSize: "0.74rem",
+                                color: "var(--ds-warning)",
+                                backgroundColor: "var(--ds-warning-bg)",
+                                border: "1px solid var(--ds-warning-border)",
+                                padding: "0.22rem 0.55rem",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "4px",
+                              }}
+                            >
+                              <KitIcon name="bolt" size={13} />
+                              <span>Nâng cấp VIP</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
-                      <span
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          backgroundColor: "var(--ds-bg-elevated)",
-                          border: "1px solid var(--ds-border)",
-                          color: "var(--ds-text)",
-                          fontSize: "0.76rem",
-                          padding: "0.22rem 0.6rem",
-                          borderRadius: "6px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        <KitIcon name={userRank.icon} size={13} />
-                        <span>{userRank.badge} • Cấp {userRank.level} ({userRank.title})</span>
-                      </span>
-
-                      <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)" }}>
-                        <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
-                      </span>
-
-                      {currentUser.role === "FREE" && (
-                        <button
-                          type="button"
-                          onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
-                          className="ds-focusable ge-drawer-lesson-btn"
-                          style={{
-                            fontSize: "0.74rem",
-                            color: "var(--ds-warning)",
-                            backgroundColor: "var(--ds-warning-bg)",
-                            border: "1px solid var(--ds-warning-border)",
-                            padding: "0.22rem 0.55rem",
-                            borderRadius: "6px",
-                            cursor: "pointer",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <KitIcon name="bolt" size={13} />
-                          <span>Nâng cấp VIP</span>
-                        </button>
-                      )}
                     </div>
+
+                    {/* 7-Day Mini Calendar (Desktop strip inside Hero body) */}
+                    <div
+                      className="ge-mobile-hide"
+                      style={{
+                        backgroundColor: "var(--ds-bg-elevated)",
+                        border: "1px solid var(--ds-border-subtle)",
+                        padding: "0.55rem 0.9rem",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "0.75rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: 700, color: "var(--ds-text-muted)", textTransform: "uppercase" }}>
+                        Chuỗi 7 ngày gần nhất
+                      </span>
+                      <div style={{ display: "flex", gap: "0.45rem" }}>
+                        {last7Days.map((d, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.25rem",
+                            }}
+                          >
+                            <span style={{ fontSize: "0.66rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
+                              {d.dayName}
+                            </span>
+                            <div
+                              className={d.isActive ? "ge-streak-day-active" : undefined}
+                              style={{
+                                width: "26px",
+                                height: "26px",
+                                borderRadius: "50%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-card)",
+                                color: d.isActive ? "#ffffff" : "var(--ds-text-muted)",
+                                fontSize: "0.74rem",
+                                fontWeight: "700",
+                                border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
+                              }}
+                            >
+                              {d.isActive ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={12} style={{ color: "var(--ds-text-on-accent)" }} /></span> : d.dayNum}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* 7-Day Mini Calendar (Desktop only to keep mobile crisp) */}
-                  <div
-                    className="ge-mobile-hide"
-                    style={{
-                      backgroundColor: "var(--ds-card)",
-                      border: "1px solid var(--ds-border)",
-                      padding: "0.75rem 1rem",
-                      borderRadius: "10px",
-                      boxShadow: "var(--ds-shadow-sm)",
-                    }}
-                  >
-                    <div style={{ fontSize: "0.68rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", marginBottom: "0.5rem", textAlign: "center" }}>
-                      7 NGÀY QUA
-                    </div>
-                    <div style={{ display: "flex", gap: "0.45rem" }}>
-                      {last7Days.map((d, i) => (
-                        <div
-                          key={i}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "0.25rem",
-                          }}
-                        >
-                          <span style={{ fontSize: "0.66rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
-                            {d.dayName}
-                          </span>
-                          <div
-                            className={d.isActive ? "ge-streak-day-active" : undefined}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-bg-elevated)",
-                              color: d.isActive ? "#ffffff" : "var(--ds-text-muted)",
-                              fontSize: "0.8rem",
-                              fontWeight: "700",
-                              border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
-                            }}
-                          >
-                            {d.isActive ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={14} style={{ color: "var(--ds-text-on-accent)" }} /></span> : d.dayNum}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                  {/* Crisp Dashboard Visual Artwork (Desktop Right / Mobile Top Strip) */}
+                  <div className="ge-hero-art-panel" style={{ flexBasis: "260px", minHeight: "136px" }}>
+                    <img
+                      src={BANNER_PATHS.dashboard}
+                      alt="Hệ thống học Ngữ pháp & TOEIC AI Cá nhân hóa"
+                      width={640}
+                      height={320}
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* 2. ACTION-FIRST CORE HUB (3 Direct Actions Above the Fold) */}
+              {/* 2. ACTION-FIRST CORE HUB (3 Illustrated Visual Cards Matching Exact Content) */}
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
-                  gap: "0.85rem",
-                  marginBottom: "1.15rem",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(255px, 100%), 1fr))",
+                  gap: "0.9rem",
+                  marginBottom: "1.25rem",
                 }}
               >
                 {/* Core Action 1: Study Today's Lesson */}
@@ -5703,8 +5700,8 @@ export default function Home() {
                   className="ds-focusable"
                   style={{
                     textAlign: "left",
-                    padding: "1rem 1.15rem",
-                    borderRadius: "12px",
+                    padding: "0.9rem",
+                    borderRadius: "14px",
                     backgroundColor: "var(--ds-card)",
                     border: "1.5px solid var(--ds-accent-border)",
                     boxShadow: "var(--ds-shadow-sm)",
@@ -5712,10 +5709,18 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    gap: "0.55rem",
+                    gap: "0.7rem",
                   }}
                 >
-                  <div>
+                  <div className="ge-action-card-visual">
+                    <img
+                      src={CARD_ART_PATHS.grammar}
+                      alt="Học Ngữ pháp Tiếng Anh — 12 Chuyên đề & 53 Bài học"
+                      width={480}
+                      height={180}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
                     <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
                       <KitIcon name="book" size={14} />
                       <span>Học Tiếp Hôm Nay</span>
@@ -5736,8 +5741,8 @@ export default function Home() {
                   className="ds-focusable"
                   style={{
                     textAlign: "left",
-                    padding: "1rem 1.15rem",
-                    borderRadius: "12px",
+                    padding: "0.9rem",
+                    borderRadius: "14px",
                     backgroundColor: "var(--ds-card)",
                     border: "1px solid var(--ds-border)",
                     boxShadow: "var(--ds-shadow-sm)",
@@ -5745,10 +5750,18 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    gap: "0.55rem",
+                    gap: "0.7rem",
                   }}
                 >
-                  <div>
+                  <div className="ge-action-card-visual">
+                    <img
+                      src={CARD_ART_PATHS.diagnostic}
+                      alt="Kiểm tra trình độ Ngữ pháp 30 câu & Bản đồ Năng lực 10 nhóm"
+                      width={480}
+                      height={180}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
                     <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
                       <KitIcon name="target" size={14} />
                       <span>Kiểm Tra Trình Độ (30 Câu)</span>
@@ -5771,8 +5784,8 @@ export default function Home() {
                   className="ds-focusable"
                   style={{
                     textAlign: "left",
-                    padding: "1rem 1.15rem",
-                    borderRadius: "12px",
+                    padding: "0.9rem",
+                    borderRadius: "14px",
                     backgroundColor: "var(--ds-card)",
                     border: "1px solid var(--ds-border)",
                     boxShadow: "var(--ds-shadow-sm)",
@@ -5780,10 +5793,18 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    gap: "0.55rem",
+                    gap: "0.7rem",
                   }}
                 >
-                  <div>
+                  <div className="ge-action-card-visual">
+                    <img
+                      src={CARD_ART_PATHS.toeic}
+                      alt="Luyện thi TOEIC 2026 — 20 Đề thi & Sentence X-Ray & 540 Tracks Dictation"
+                      width={480}
+                      height={180}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
                     <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
                       <KitIcon name="trophy" size={14} />
                       <span>Luyện Thi TOEIC 2026</span>

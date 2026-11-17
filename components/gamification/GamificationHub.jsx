@@ -209,28 +209,32 @@ export default function GamificationHub({
       <div
         className="ge-hero-banner-card ge-ach-hero-card"
         style={{
-          padding: "1.2rem 1.4rem",
+          padding: "1.2rem 1.35rem",
           border: `1px solid ${T.accentBorder}`,
         }}
       >
-        <img
-          src={BANNER_PATHS.gamification}
-          alt="Cộng đồng học viên ăn mừng chuỗi Streak & Thành tích"
-          width={1440}
-          height={420}
-          loading="lazy"
-          className="ge-hero-banner-bg"
-        />
-        <div className="ge-hero-banner-scrim" />
-        <div className="ge-hero-banner-content" style={{ maxWidth: "620px" }}>
-          <Badge tone="warning" isLight={isLight}>
-            Cộng đồng &amp; Bảng Xếp Hạng UTC+7
-          </Badge>
-          <div style={{ fontSize: "1.08rem", fontWeight: 800, color: T.textHeading, marginTop: "0.4rem" }}>
-            Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
+        <div className="ge-hero-split">
+          <div className="ge-hero-split-body">
+            <div>
+              <Badge tone="warning" icon="trophy" isLight={isLight}>
+                Cộng đồng &amp; Bảng Xếp Hạng UTC+7
+              </Badge>
+            </div>
+            <div style={{ fontSize: "1.12rem", fontWeight: 800, color: T.textHeading, marginTop: "0.45rem" }}>
+              Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
+            </div>
+            <div className="ge-mobile-hide-note" style={{ fontSize: "0.82rem", color: T.textSecondary, marginTop: "0.3rem", lineHeight: 1.5 }}>
+              Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
+            </div>
           </div>
-          <div className="ge-mobile-hide-note" style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem", lineHeight: 1.5 }}>
-            Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
+          <div className="ge-hero-art-panel" style={{ flexBasis: "250px", minHeight: "120px" }}>
+            <img
+              src={BANNER_PATHS.gamification}
+              alt="Cộng đồng học viên ăn mừng chuỗi Streak & Thành tích"
+              width={640}
+              height={320}
+              loading="lazy"
+            />
           </div>
         </div>
       </div>
