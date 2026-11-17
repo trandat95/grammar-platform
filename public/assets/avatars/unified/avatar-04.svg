@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Huấn luyện viên AI Nữ">
+  <defs>
+    <linearGradient id="avBg-avatar-04.svg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#065f46"/>
+    </linearGradient>
+    <clipPath id="avClip-avatar-04.svg">
+      <circle cx="128" cy="128" r="120"/>
+    </clipPath>
+  </defs>
+
+  <!-- Full-bleed circular-safe portrait canvas -->
+  <rect width="256" height="256" fill="url(#avBg-avatar-04.svg)"/>
+  <g clip-path="url(#avClip-avatar-04.svg)">
+    <circle cx="128" cy="110" r="88" fill="#ffffff" fill-opacity="0.08"/>
+    <circle cx="128" cy="128" r="110" fill="none" stroke="#10b981" stroke-opacity="0.4" stroke-width="2"/>
+
+    
+    <path d="M74 108 C70 68, 186 68, 182 108 V160 H74 Z" fill="#78350f"/>
+
+    <!-- Shoulders / Outfit -->
+    <path d="M44 256 C48 196, 82 178, 128 178 C174 178, 208 196, 212 256 Z" fill="#0f172a"/>
+    
+      <path d="M104 180 Q128 202 152 180" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+    
+
+    <!-- Neck -->
+    <rect x="112" y="148" width="32" height="36" rx="14" fill="#fbe0cc"/>
+
+    <!-- Hair Back / Top -->
+    
+      <path d="M80 110 C80 68, 176 68, 176 110" fill="#78350f"/>
+    
+
+    <!-- Head -->
+    <rect x="84" y="70" width="88" height="96" rx="44" fill="#fbe0cc"/>
+
+    <!-- Hair Bangs -->
+    
+      <path d="M84 102 C92 68, 166 68, 172 104 C150 86, 110 86, 84 102 Z" fill="#78350f"/>
+    
+
+    <!-- Eyes and Friendly Smile -->
+    <circle cx="109" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="147" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="107.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <circle cx="145.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <path d="M116 138 Q128 148 140 138" fill="none" stroke="#9a3412" stroke-width="3.5" stroke-linecap="round"/>
+
+    
+
+    
+
+    
+      <!-- Coach Mic Headset and AI Spark -->
+      <rect x="72" y="104" width="12" height="28" rx="6" fill="#22d3ee"/>
+      <path d="M78 128 Q84 146 112 146" fill="none" stroke="#67e8f9" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="114" cy="146" r="4" fill="#f59e0b"/>
+    
+
+    <!-- Subtle Brand Spark -->
+    <path d="M204 56 L206.5 62.5 L213 65 L206.5 67.5 L204 74 L201.5 67.5 L195 65 L201.5 62.5 Z" fill="#f59e0b"/>
+  </g>
+</svg>

@@ -54,6 +54,9 @@
   2. Alpha/Halo & Contrast check trên Light (`#FFF`) và Dark (`#09090B`) đạt 100%.
   3. Toàn bộ Banner đạt 55% safe-zone text contrast `>= 4.5:1`.
   4. Không chứa text giả / watermark / logo AI tự vẽ.
+- **Status & Post-Quota Upgrade Backlog (`2026-11-17` PO Sign-off — Option B):**
+  - **Approved (`45/45` trong `public/assets/asset-registry.json`):** `5` assets `M4.2` + `35` assets `M4.3` (`mascot-welcome.png`, `5` `.webp` banners, `xray-preview.svg`, `state-404.svg`, `free/vip-tier-showcase.svg`, `21` unified SVG badges, `4` unified SVG avatars) + `5` biến thể Mascot phương án B (`assetGenerationMode: "interim_composite_option_b"`, `quotaUpgradePending: true`).
+  - **TODO sau khi hồi quota `gemini-3.1-flash-image` (reset dự kiến sau `2026-11-17T08:41Z`):** Sinh lại **5** file AI raster đa tư thế riêng biệt kèm tách nền flood-fill alpha/halo QA cho `public/assets/mascot/{mascot-celebrate,mascot-encourage,mascot-vip,mascot-empty,mascot-ai-coach}.png` và cập nhật lại `sha256`/`version` (gỡ cờ `quotaUpgradePending`) trong `public/assets/asset-registry.json`.
 
 ---
 

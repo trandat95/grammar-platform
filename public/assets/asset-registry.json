@@ -89,6 +89,741 @@
       "status": "approved",
       "sha256": "d996f95403384746a001bbd16c8f2a67b85c9b3f583cfd1ecd13b0304c402f82",
       "fileSize": 242635
+    },
+    {
+      "assetId": "mascot-welcome",
+      "category": "mascot",
+      "purpose": "Greeting mascot waving right wing while holding a blue notebook (Guest/First-Time UX)",
+      "path": "/assets/mascot/mascot-welcome.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/master-mascot.png",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "7fc51091a05d101077848de8e57b8523540b84e761e758f0aefeb206fc996d43",
+      "fileSize": 228845
+    },
+    {
+      "assetId": "banner-hero-dashboard",
+      "category": "banner",
+      "purpose": "Dashboard hero banner with 55% left text safe zone (Concept A Midnight Navy + Cyan)",
+      "path": "/assets/banners/01-hero-dashboard.webp",
+      "dimensions": "1440x420",
+      "format": "webp",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "b7f1cae9c189b8bed6cdf85ed45eb2ced90ebd8528bd39ec3008c2cdde90dcb9",
+      "fileSize": 21858
+    },
+    {
+      "assetId": "banner-diagnostic-roadmap",
+      "category": "banner",
+      "purpose": "Diagnostic & adaptive study roadmap hero banner",
+      "path": "/assets/banners/02-diagnostic-roadmap.webp",
+      "dimensions": "1440x420",
+      "format": "webp",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "391db3fe43ce23957efdeccab10da6839071fd7b93c3e27f484a36e7600b001d",
+      "fileSize": 21222
+    },
+    {
+      "assetId": "banner-gamification-community",
+      "category": "banner",
+      "purpose": "Gamification streaks, XP podium & milestone hero banner",
+      "path": "/assets/banners/03-gamification-community.webp",
+      "dimensions": "1440x420",
+      "format": "webp",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "40bac9c74536cb410f3b0dcb097484f52c7666622f6347abf3c8c5c3551c9fc5",
+      "fileSize": 19696
+    },
+    {
+      "assetId": "banner-vip-coach",
+      "category": "banner",
+      "purpose": "VIP AI Tutor & Unlimited Mastery shield banner",
+      "path": "/assets/banners/04-vip-coach.webp",
+      "dimensions": "1440x420",
+      "format": "webp",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "bc93279bd712cf612165ca618dbb924aa01ff24f890694083fd7073fc5a7f3e3",
+      "fileSize": 23278
+    },
+    {
+      "assetId": "banner-toeic-adaptive",
+      "category": "banner",
+      "purpose": "TOEIC 2026 New Format listening/reading adaptive speedometer banner",
+      "path": "/assets/banners/05-toeic-adaptive.webp",
+      "dimensions": "1440x420",
+      "format": "webp",
+      "background": "solid",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "4f40330a59b51a8c72d7b4cf2a82aba6d6bc0fc74aae2848c76b772949f4cff3",
+      "fileSize": 21390
+    },
+    {
+      "assetId": "diagram-xray-preview",
+      "category": "illustration",
+      "purpose": "Sentence X-Ray grammatical clause architecture preview SVG",
+      "path": "/assets/banners/xray-preview.svg",
+      "dimensions": "600x280",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "2aa1855bc354321bde8db8de13c0d3e7f144e028a53b63dbf4c70884f58d98c5",
+      "fileSize": 7679
+    },
+    {
+      "assetId": "mascot-state-404",
+      "category": "mascot",
+      "purpose": "404 Not Found vector Scholar Owl illustration on transparent canvas",
+      "path": "/assets/mascot/state-404.svg",
+      "dimensions": "240x240",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/master-mascot.png",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "c44cf14a0f75d29c0a6e9aef256bdd3545b113e82e6f5208ede36d00682d93ed",
+      "fileSize": 5602
+    },
+    {
+      "assetId": "vip-free-tier-showcase",
+      "category": "vip",
+      "purpose": "Free tier preview card illustration (4 câu/bài, no misleading trial claims)",
+      "path": "/assets/vip/free-tier-showcase.svg",
+      "dimensions": "360x170",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "43c1c3b9c4ee23722ce7c60249b47bbb1406dfcb99e4eb9f8566e9890b4ea88d",
+      "fileSize": 3894
+    },
+    {
+      "assetId": "vip-tier-showcase",
+      "category": "vip",
+      "purpose": "VIP tier unlimited showcase illustration (2.939 câu, TOEIC 2026, Radar 12)",
+      "path": "/assets/vip/vip-tier-showcase.svg",
+      "dimensions": "360x170",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "3c0daaea2c952e441871ed0d2dbcf75df8f6a6cb49ed893a294b3884f8541559",
+      "fileSize": 4456
+    },
+    {
+      "assetId": "badge-unified-century-club",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"century_club\"",
+      "path": "/assets/badges/unified/century_club.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "bf45077870ef5cc73b27e493c6e8d8a937b6bd7845892bea40390ae8da92739e",
+      "fileSize": 2434
+    },
+    {
+      "assetId": "badge-unified-comeback-king",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"comeback_king\"",
+      "path": "/assets/badges/unified/comeback_king.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "65ed0714b5ffba8aafa9438d158808c5ee294b7a2ba9e5c18aec95add19144f3",
+      "fileSize": 2242
+    },
+    {
+      "assetId": "badge-unified-conditional-expert",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"conditional_expert\"",
+      "path": "/assets/badges/unified/conditional_expert.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "39e1e6d42bdfd75b538c5f604ea33dc0ed5bb5129cf825517f733e26b52651f6",
+      "fileSize": 2426
+    },
+    {
+      "assetId": "badge-unified-consistency-master-100",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"consistency_master_100\"",
+      "path": "/assets/badges/unified/consistency_master_100.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "a73a0a1b4b3adae6726ae72a92e069d47dda8f058cc5a2274afb940904ce0ba6",
+      "fileSize": 2395
+    },
+    {
+      "assetId": "badge-unified-daily-learner-3",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"daily_learner_3\"",
+      "path": "/assets/badges/unified/daily_learner_3.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "1dd7034d924620096139b35f2da264b012f5712f69bdceb502a6ea5fc1193835",
+      "fileSize": 2347
+    },
+    {
+      "assetId": "badge-unified-error-hunter",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"error_hunter\"",
+      "path": "/assets/badges/unified/error_hunter.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "4cb39e272eb1319d6929c9b13a638c7a45328c6592b9f2b5558a6b6419ae3fe8",
+      "fileSize": 2263
+    },
+    {
+      "assetId": "badge-unified-first-step",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"first_step\"",
+      "path": "/assets/badges/unified/first_step.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "be14dc4690da33cf664075b43b039901010345ac7822095306d04dda0b4687dd",
+      "fileSize": 2290
+    },
+    {
+      "assetId": "badge-unified-grammar-legend-12",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"grammar_legend_12\"",
+      "path": "/assets/badges/unified/grammar_legend_12.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "f2e3d4f3aa28370ebf6280c280b4ceee5353545faed6f5e0e620275f4b057159",
+      "fileSize": 2317
+    },
+    {
+      "assetId": "badge-unified-knowledge-collector",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"knowledge_collector\"",
+      "path": "/assets/badges/unified/knowledge_collector.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "1d6d827ae951311fb5f74320ffbc22dce54dd0ac74d17a756796bc598ee8d29b",
+      "fileSize": 2374
+    },
+    {
+      "assetId": "badge-unified-lightning-master-hidden",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"lightning_master_hidden\"",
+      "path": "/assets/badges/unified/lightning_master_hidden.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "1b2a843e6c55beb04e2db5664357d51eac37531c8751c280643d03c472bf1eaa",
+      "fileSize": 2250
+    },
+    {
+      "assetId": "badge-unified-master-13-tenses",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"master_13_tenses\"",
+      "path": "/assets/badges/unified/master_13_tenses.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "35def49cc60dcf380249130597ef60a8461632cca15592b8d1911325a04d0747",
+      "fileSize": 2498
+    },
+    {
+      "assetId": "badge-unified-mystery-locked",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"mystery_locked\"",
+      "path": "/assets/badges/unified/mystery_locked.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "052f6bc4479ffebae0bc2fc778f50a7f38879ca4e5db50738f0cbc2a433a5478",
+      "fileSize": 2274
+    },
+    {
+      "assetId": "badge-unified-night-owl-hidden",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"night_owl_hidden\"",
+      "path": "/assets/badges/unified/night_owl_hidden.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "678a9f48195e96f840d8f9bd8a46de3dd528964c1fd5900d99bbe169164e11ec",
+      "fileSize": 2379
+    },
+    {
+      "assetId": "badge-unified-passive-voice-master",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"passive_voice_master\"",
+      "path": "/assets/badges/unified/passive_voice_master.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "10315c3f2892ff05d54f5ef737854a8afa455ac399930203b42c9d3bc58a1bdc",
+      "fileSize": 2572
+    },
+    {
+      "assetId": "badge-unified-perfect-score",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"perfect_score\"",
+      "path": "/assets/badges/unified/perfect_score.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "61b99d429608f52e9b8d4f705183981139eca1e06fefab53b56167c6612cf434",
+      "fileSize": 2259
+    },
+    {
+      "assetId": "badge-unified-quiz-starter",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"quiz_starter\"",
+      "path": "/assets/badges/unified/quiz_starter.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "d0da1311d985f5202d29470abdd7ac7505827ff810bc0f9201490dcdc8a40a2c",
+      "fileSize": 2550
+    },
+    {
+      "assetId": "badge-unified-review-master",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"review_master\"",
+      "path": "/assets/badges/unified/review_master.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "f23b9f42de6fcd555fb05ae5afb1603d4a5e7aaa932d7170f8a15b394d400f90",
+      "fileSize": 2438
+    },
+    {
+      "assetId": "badge-unified-sharp-shooter",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"sharp_shooter\"",
+      "path": "/assets/badges/unified/sharp_shooter.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "3c25acd5522da975f9738d224501e091c6e0a0e902d20dd71dd818eae703d5b3",
+      "fileSize": 2404
+    },
+    {
+      "assetId": "badge-unified-streak-7-days",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"streak_7_days\"",
+      "path": "/assets/badges/unified/streak_7_days.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "d3dbe3e8de42d7d864411402125f28ab7b23636b232290e572148e1b53fcfa9d",
+      "fileSize": 2158
+    },
+    {
+      "assetId": "badge-unified-tense-explorer",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"tense_explorer\"",
+      "path": "/assets/badges/unified/tense_explorer.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "21986cc1673681b8c00b38fda55df787a6ddf3c2a1f0b7c924e65959e44829da",
+      "fileSize": 2279
+    },
+    {
+      "assetId": "badge-unified-warrior-30-days",
+      "category": "badge",
+      "purpose": "Unified achievement crest SVG for badge \"warrior_30_days\"",
+      "path": "/assets/badges/unified/warrior_30_days.svg",
+      "dimensions": "160x160",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "a88af4dcb57ee486c34df0d22fefefdd0e3b495787cfc51547494afe017d1d66",
+      "fileSize": 2283
+    },
+    {
+      "assetId": "avatar-unified-avatar-01",
+      "category": "avatar",
+      "purpose": "Unified geometric vector learner/mentor avatar (avatar-01)",
+      "path": "/assets/avatars/unified/avatar-01.svg",
+      "dimensions": "256x256",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "c7d015d5236f64aaa12d6e7208a78b6d9c1a7c2c520961315f5b12d67bb022ff",
+      "fileSize": 2418
+    },
+    {
+      "assetId": "avatar-unified-avatar-02",
+      "category": "avatar",
+      "purpose": "Unified geometric vector learner/mentor avatar (avatar-02)",
+      "path": "/assets/avatars/unified/avatar-02.svg",
+      "dimensions": "256x256",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "45facc1b88eece1f2f0f95311d6350073be043461dda0b7e2f2b8c6fc8333629",
+      "fileSize": 2408
+    },
+    {
+      "assetId": "avatar-unified-avatar-03",
+      "category": "avatar",
+      "purpose": "Unified geometric vector learner/mentor avatar (avatar-03)",
+      "path": "/assets/avatars/unified/avatar-03.svg",
+      "dimensions": "256x256",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "c943712baacc2648e93156a32a2445dd27b3d66b30f7895b2537162a75faf4e7",
+      "fileSize": 2408
+    },
+    {
+      "assetId": "avatar-unified-avatar-04",
+      "category": "avatar",
+      "purpose": "Unified geometric vector learner/mentor avatar (avatar-04)",
+      "path": "/assets/avatars/unified/avatar-04.svg",
+      "dimensions": "256x256",
+      "format": "svg",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "docs/governance/MASTER_ART_DIRECTION.md",
+      "version": "1.0.0",
+      "status": "approved",
+      "sha256": "52162f2353764b57f4c3db4ca988930755671e3e25d999ff4ae3cd6f1c7b76f4",
+      "fileSize": 2395
+    },
+    {
+      "assetId": "mascot-celebrate",
+      "category": "mascot",
+      "purpose": "Celebration mascot (confetti + trophy badge) for quiz completion & streak milestones",
+      "path": "/assets/mascot/mascot-celebrate.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/mascot-welcome.png",
+      "version": "1.0.0-interim",
+      "status": "approved",
+      "assetGenerationMode": "interim_composite_option_b",
+      "quotaUpgradePending": true,
+      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
+      "sha256": "072949cd8bc869148bbefca49e2ac3d04c4040ee71ccfe4dd8bff4070aebe392",
+      "fileSize": 281871
+    },
+    {
+      "assetId": "mascot-encourage",
+      "category": "mascot",
+      "purpose": "Encouragement mascot (emerald upward indicator) for remedial tips & supportive prompts",
+      "path": "/assets/mascot/mascot-encourage.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/mascot-welcome.png",
+      "version": "1.0.0-interim",
+      "status": "approved",
+      "assetGenerationMode": "interim_composite_option_b",
+      "quotaUpgradePending": true,
+      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
+      "sha256": "9bd858837a3daf2e3aebfa94cbf208dadd3e4e5300157427a8449af1b77a3bf0",
+      "fileSize": 252389
+    },
+    {
+      "assetId": "mascot-vip",
+      "category": "mascot",
+      "purpose": "VIP mascot wearing Royal Gold Crown with diamond ring for paywall & VIP badge",
+      "path": "/assets/mascot/mascot-vip.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/master-mascot.png",
+      "version": "1.0.0-interim",
+      "status": "approved",
+      "assetGenerationMode": "interim_composite_option_b",
+      "quotaUpgradePending": true,
+      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
+      "sha256": "63127e0c1247185f2bc312f65e4a09a3ff511da7bfe40e524863d4b6746eb9b8",
+      "fileSize": 295410
+    },
+    {
+      "assetId": "mascot-empty",
+      "category": "mascot",
+      "purpose": "Empty-state mascot with cyan magnifying glass for saved vocab / mistake notebook empty states",
+      "path": "/assets/mascot/mascot-empty.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/master-mascot.png",
+      "version": "1.0.0-interim",
+      "status": "approved",
+      "assetGenerationMode": "interim_composite_option_b",
+      "quotaUpgradePending": true,
+      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
+      "sha256": "68b0788932b266f11d3be176419abeb894f5ebb64e9cea3189725a425b45ce2e",
+      "fileSize": 108581
+    },
+    {
+      "assetId": "mascot-ai-coach",
+      "category": "mascot",
+      "purpose": "AI Tutor mascot with orbital neural ring for Grammar Diagnostic & AI Advisor drawer",
+      "path": "/assets/mascot/mascot-ai-coach.png",
+      "dimensions": "512x512",
+      "format": "png",
+      "background": "transparent",
+      "themeSupport": [
+        "light",
+        "dark"
+      ],
+      "visualReference": "public/assets/mascot/master-mascot.png",
+      "version": "1.0.0-interim",
+      "status": "approved",
+      "assetGenerationMode": "interim_composite_option_b",
+      "quotaUpgradePending": true,
+      "quotaUpgradeNote": "Option-B interim vector+raster composite from master-mascot.png / mascot-welcome.png (PO approved 2026-11-17). Regenerate full AI multi-pose raster once gemini-3.1-flash-image quota resets (~4h45m after 2026-11-17T03:55Z).",
+      "sha256": "b04765c731867520989f1ce378f2404a6f20af5857ded28881f1fc5871854d28",
+      "fileSize": 285901
     }
   ]
 }

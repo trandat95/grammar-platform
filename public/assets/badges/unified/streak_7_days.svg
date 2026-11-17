@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Chiến Binh 7 Ngày">
+  <defs>
+    <linearGradient id="rim-streak_7_days" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <radialGradient id="enamel-streak_7_days" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-streak_7_days" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-streak_7_days" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-streak_7_days)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-streak_7_days)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#67e8f9" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <polygon points="6,-34 -18,4 -2,4 -8,34 18,-4 2,-4" fill="url(#cyan-streak_7_days)" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="0" cy="0" r="34" fill="none" stroke="#67e8f9" stroke-opacity="0.32" stroke-width="2" stroke-dasharray="10 6"/>
+    
+  </g>
+
+  
+  <circle cx="38" cy="40" r="2" fill="#e0f2fe" fill-opacity="0.85"/>
+  <circle cx="122" cy="120" r="2" fill="#e0f2fe" fill-opacity="0.7"/>
+</svg>

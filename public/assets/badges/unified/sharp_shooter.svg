@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Xạ Thủ Chính Xác">
+  <defs>
+    <linearGradient id="rim-sharp_shooter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <radialGradient id="enamel-sharp_shooter" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#0e7490"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-sharp_shooter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-sharp_shooter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-sharp_shooter)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-sharp_shooter)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#fde047" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <path d="M-12 -28 C12 -18, 12 18, -12 28" fill="none" stroke="url(#amber-sharp_shooter)" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="-12" y1="-26" x2="-22" y2="0" stroke="#e0f2fe" stroke-width="1.8"/>
+      <line x1="-12" y1="26" x2="-22" y2="0" stroke="#e0f2fe" stroke-width="1.8"/>
+      <line x1="-26" y1="0" x2="22" y2="0" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+      <polygon points="32,0 16,-9 20,0 16,9" fill="url(#cyan-sharp_shooter)" stroke="#ffffff" stroke-width="1.5"/>
+    
+  </g>
+
+  
+  <circle cx="38" cy="40" r="2" fill="#fef08a" fill-opacity="0.85"/>
+  <circle cx="122" cy="120" r="2" fill="#fef08a" fill-opacity="0.7"/>
+</svg>

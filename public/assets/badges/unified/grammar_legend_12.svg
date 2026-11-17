@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Huyền Thoại 12 Chuyên Đề">
+  <defs>
+    <linearGradient id="rim-grammar_legend_12" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ecfeff"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <radialGradient id="enamel-grammar_legend_12" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#090f1e"/>
+    </radialGradient>
+    <linearGradient id="cyan-grammar_legend_12" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-grammar_legend_12" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-grammar_legend_12)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-grammar_legend_12)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#67e8f9" stroke-opacity="0.45" stroke-width="1.5" />
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <polygon points="-18,-28 18,-28 32,-8 0,32 -32,-8" fill="url(#cyan-grammar_legend_12)" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="-18,-28 18,-28 10,-8 -10,-8" fill="#e0f2fe" fill-opacity="0.55"/>
+      <polygon points="-10,-8 10,-8 0,32" fill="#0284c7" fill-opacity="0.6"/>
+      <line x1="-32" y1="-8" x2="32" y2="-8" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.5"/>
+    
+  </g>
+
+  
+  <circle cx="38" cy="40" r="2" fill="#fde68a" fill-opacity="0.85"/>
+  <circle cx="122" cy="120" r="2" fill="#fde68a" fill-opacity="0.7"/>
+</svg>

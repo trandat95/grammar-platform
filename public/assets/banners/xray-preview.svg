@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="280" viewBox="0 0 600 280" role="img" aria-label="Sentence X-Ray Structure Scanning Preview">
+  <defs>
+    <linearGradient id="xrBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1326"/>
+      <stop offset="55%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="xrBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="xrSubj" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="xrVerb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="xrObj" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <pattern id="xrDots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#38bdf8" fill-opacity="0.14"/>
+    </pattern>
+  </defs>
+
+  <!-- Self-contained high-contrast X-Ray Scanner Frame (legible on Light and Dark UI) -->
+  <rect x="2" y="2" width="596" height="276" rx="18" fill="url(#xrBg)" stroke="#38bdf8" stroke-opacity="0.4" stroke-width="2"/>
+  <rect x="2" y="2" width="596" height="276" rx="18" fill="url(#xrDots)"/>
+
+  <!-- Header Bar -->
+  <rect x="20" y="18" width="560" height="36" rx="10" fill="#1e293b" fill-opacity="0.72" stroke="#334155" stroke-width="1"/>
+  <!-- X-Ray Scanner Icon -->
+  <circle cx="40" cy="36" r="10" fill="#0891b2" fill-opacity="0.25" stroke="#22d3ee" stroke-width="1.5"/>
+  <path d="M35 36 H45 M40 31 V41" stroke="#67e8f9" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="58" y="40" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="11.5" font-weight="800" letter-spacing="0.08em" fill="#e0f2fe">SENTENCE X-RAY</text>
+
+  <!-- Right Header Status Pill -->
+  <rect x="444" y="25" width="124" height="22" rx="11" fill="#0f172a" stroke="#22d3ee" stroke-opacity="0.45" stroke-width="1"/>
+  <circle cx="458" cy="36" r="3.5" fill="#10b981"/>
+  <text x="468" y="39.5" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="10" font-weight="700" fill="#a7f3d0">CLAUSE LOCKED</text>
+
+  <!-- Subtle Vertical Scan Beam -->
+  <rect x="190" y="64" width="220" height="196" fill="url(#xrBeam)"/>
+  <line x1="300" y1="68" x2="300" y2="256" stroke="#22d3ee" stroke-opacity="0.32" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Primary Syntactic Pill Row: [Subject] + [Verb] + [Object] + Muted [Modifier] -->
+  <g transform="translate(0, 12)">
+    <!-- [Subject] Pill -->
+    <rect x="26" y="76" width="118" height="54" rx="14" fill="url(#xrSubj)" stroke="#93c5fd" stroke-width="1.8"/>
+    <rect x="36" y="84" width="20" height="16" rx="5" fill="#0f172a" fill-opacity="0.35"/>
+    <text x="46" y="95.5" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="800" fill="#bfdbfe">S</text>
+    <text x="88" y="108" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="800" fill="#ffffff">Subject</text>
+
+    <!-- + Connector 1 -->
+    <circle cx="162" cy="103" r="11" fill="#1e293b" stroke="#475569" stroke-width="1.2"/>
+    <text x="162" y="107.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="800" fill="#94a3b8">+</text>
+
+    <!-- [Verb] Pill -->
+    <rect x="180" y="76" width="110" height="54" rx="14" fill="url(#xrVerb)" stroke="#a5f3fc" stroke-width="1.8"/>
+    <rect x="190" y="84" width="20" height="16" rx="5" fill="#0f172a" fill-opacity="0.35"/>
+    <text x="200" y="95.5" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="800" fill="#cffafe">V</text>
+    <text x="240" y="108" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="800" fill="#ffffff">Verb</text>
+
+    <!-- + Connector 2 -->
+    <circle cx="308" cy="103" r="11" fill="#1e293b" stroke="#475569" stroke-width="1.2"/>
+    <text x="308" y="107.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="800" fill="#94a3b8">+</text>
+
+    <!-- [Object] Pill -->
+    <rect x="326" y="76" width="114" height="54" rx="14" fill="url(#xrObj)" stroke="#a7f3d0" stroke-width="1.8"/>
+    <rect x="336" y="84" width="20" height="16" rx="5" fill="#0f172a" fill-opacity="0.35"/>
+    <text x="346" y="95.5" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="800" fill="#d1fae5">O</text>
+    <text x="388" y="108" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="800" fill="#ffffff">Object</text>
+
+    <!-- Muted Modifier Pill -->
+    <rect x="456" y="78" width="118" height="50" rx="13" fill="#1e293b" fill-opacity="0.55" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="515" y="107" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" font-weight="700" fill="#94a3b8">Modifier</text>
+  </g>
+
+  <!-- Core Spine Bracket (S + V + O) -->
+  <path d="M34 156 V166 H432 V156" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="233" y1="166" x2="233" y2="176" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Muted Modifier Bracket -->
+  <path d="M462 156 V166 H568 V156" fill="none" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 3" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="515" y1="166" x2="515" y2="176" stroke="#64748b" stroke-width="1.6" stroke-dasharray="3 3"/>
+
+  <!-- Bottom Decoded Example Strip -->
+  <rect x="26" y="182" width="548" height="74" rx="14" fill="#0f172a" fill-opacity="0.92" stroke="#1e3a8a" stroke-width="1.5"/>
+
+  <!-- Token Chips matching above roles -->
+  <rect x="40" y="198" width="104" height="38" rx="9" fill="#1e3a8a" fill-opacity="0.65" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="92" y="222" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#dbeafe">The team</text>
+
+  <rect x="156" y="198" width="114" height="38" rx="9" fill="#0e7490" fill-opacity="0.55" stroke="#06b6d4" stroke-width="1.2"/>
+  <text x="213" y="222" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#cffafe">submitted</text>
+
+  <rect x="282" y="198" width="128" height="38" rx="9" fill="#065f46" fill-opacity="0.55" stroke="#10b981" stroke-width="1.2"/>
+  <text x="346" y="222" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#d1fae5">the report</text>
+
+  <rect x="424" y="198" width="136" height="38" rx="9" fill="#1e293b" fill-opacity="0.65" stroke="#475569" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="492" y="222" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12.5" font-weight="600" fill="#94a3b8">(before noon)</text>
+
+  <!-- Subtle AI Spark on corner -->
+  <path d="M568 68 L570.5 74.5 L577 77 L570.5 79.5 L568 86 L565.5 79.5 L559 77 L565.5 74.5 Z" fill="#f59e0b"/>
+</svg>

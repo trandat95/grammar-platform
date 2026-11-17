@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Cố vấn Nam Quốc tế">
+  <defs>
+    <linearGradient id="avBg-avatar-02.svg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <clipPath id="avClip-avatar-02.svg">
+      <circle cx="128" cy="128" r="120"/>
+    </clipPath>
+  </defs>
+
+  <!-- Full-bleed circular-safe portrait canvas -->
+  <rect width="256" height="256" fill="url(#avBg-avatar-02.svg)"/>
+  <g clip-path="url(#avClip-avatar-02.svg)">
+    <circle cx="128" cy="110" r="88" fill="#ffffff" fill-opacity="0.08"/>
+    <circle cx="128" cy="128" r="110" fill="none" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+
+    
+    
+
+    <!-- Shoulders / Outfit -->
+    <path d="M44 256 C48 196, 82 178, 128 178 C174 178, 208 196, 212 256 Z" fill="#1e3a8a"/>
+    
+      <polygon points="128,182 114,218 128,244 142,218" fill="#f8fafc"/>
+      <polygon points="128,194 121,218 128,248 135,218" fill="#f59e0b"/>
+    
+
+    <!-- Neck -->
+    <rect x="112" y="148" width="32" height="36" rx="14" fill="#f8d8c0"/>
+
+    <!-- Hair Back / Top -->
+    
+      <path d="M80 110 C80 68, 176 68, 176 110" fill="#475569"/>
+    
+
+    <!-- Head -->
+    <rect x="84" y="70" width="88" height="96" rx="44" fill="#f8d8c0"/>
+
+    <!-- Hair Bangs -->
+    
+      <path d="M84 98 C86 64, 170 64, 172 98 C154 82, 102 82, 84 98 Z" fill="#475569"/>
+    
+
+    <!-- Eyes and Friendly Smile -->
+    <circle cx="109" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="147" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="107.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <circle cx="145.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <path d="M116 138 Q128 148 140 138" fill="none" stroke="#9a3412" stroke-width="3.5" stroke-linecap="round"/>
+
+    
+      <!-- Clean Geometric Glasses -->
+      <rect x="93" y="104" width="32" height="24" rx="8" fill="none" stroke="#f59e0b" stroke-width="3.2"/>
+      <rect x="131" y="104" width="32" height="24" rx="8" fill="none" stroke="#f59e0b" stroke-width="3.2"/>
+      <line x1="125" y1="115" x2="131" y2="115" stroke="#f59e0b" stroke-width="3.2"/>
+    
+
+    
+
+    
+
+    <!-- Subtle Brand Spark -->
+    <path d="M204 56 L206.5 62.5 L213 65 L206.5 67.5 L204 74 L201.5 67.5 L195 65 L201.5 62.5 Z" fill="#f59e0b"/>
+  </g>
+</svg>

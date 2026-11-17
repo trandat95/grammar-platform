@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Khám Phá Các Thì">
+  <defs>
+    <linearGradient id="rim-tense_explorer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+    <radialGradient id="enamel-tense_explorer" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-tense_explorer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-tense_explorer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-tense_explorer)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-tense_explorer)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#fb923c" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <rect x="-20" y="-30" width="40" height="6" rx="3" fill="url(#amber-tense_explorer)"/>
+      <rect x="-20" y="24" width="40" height="6" rx="3" fill="url(#amber-tense_explorer)"/>
+      <path d="M-16 -24 H16 L4 -2 L16 24 H-16 L-4 -2 Z" fill="#1e3a8a" stroke="#67e8f9" stroke-width="2.2" stroke-linejoin="round"/>
+      <polygon points="-10,22 10,22 0,8" fill="url(#cyan-tense_explorer)"/>
+    
+  </g>
+
+  
+  <circle cx="38" cy="40" r="2" fill="#fdba74" fill-opacity="0.85"/>
+  <circle cx="122" cy="120" r="2" fill="#fdba74" fill-opacity="0.7"/>
+</svg>

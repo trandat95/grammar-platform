@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Tia Chớp Chuẩn Xác">
+  <defs>
+    <linearGradient id="rim-lightning_master_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <radialGradient id="enamel-lightning_master_hidden" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#0e7490"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-lightning_master_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-lightning_master_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-lightning_master_hidden)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-lightning_master_hidden)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#fde047" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <polygon points="8,-34 -16,2 -1,2 -10,34 20,-4 4,-4" fill="url(#amber-lightning_master_hidden)" stroke="#fef9c3" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="22,-18 14,-4 22,-4 18,12 30,-6 22,-6" fill="url(#cyan-lightning_master_hidden)" stroke="#ffffff" stroke-width="1.2"/>
+    
+  </g>
+
+  <!-- Subtle Hidden Emblem Pip -->
+  <path d="M122 24 L124.5 30.5 L131 33 L124.5 35.5 L122 42 L119.5 35.5 L113 33 L119.5 30.5 Z" fill="#fef08a"/>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Bước Chân Đầu Tiên">
+  <defs>
+    <linearGradient id="rim-first_step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+    <radialGradient id="enamel-first_step" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-first_step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-first_step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-first_step)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-first_step)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#fb923c" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <path d="M0 30 V-8" stroke="#6ee7b7" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M0 4 C-22 4, -30 -14, -18 -24 C-6 -24, 0 -10, 0 4 Z" fill="#10b981" stroke="#a7f3d0" stroke-width="1.8"/>
+      <path d="M0 -4 C22 -4, 30 -22, 18 -32 C6 -32, 0 -18, 0 -4 Z" fill="url(#cyan-first_step)" stroke="#e0f2fe" stroke-width="1.8"/>
+      <ellipse cx="0" cy="30" rx="20" ry="5" fill="#ea580c" fill-opacity="0.5"/>
+    
+  </g>
+
+  
+  <circle cx="38" cy="40" r="2" fill="#fdba74" fill-opacity="0.85"/>
+  <circle cx="122" cy="120" r="2" fill="#fdba74" fill-opacity="0.7"/>
+</svg>

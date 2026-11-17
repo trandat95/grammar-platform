@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Học viên Nữ Việt Nam">
+  <defs>
+    <linearGradient id="avBg-avatar-01.svg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <clipPath id="avClip-avatar-01.svg">
+      <circle cx="128" cy="128" r="120"/>
+    </clipPath>
+  </defs>
+
+  <!-- Full-bleed circular-safe portrait canvas -->
+  <rect width="256" height="256" fill="url(#avBg-avatar-01.svg)"/>
+  <g clip-path="url(#avClip-avatar-01.svg)">
+    <circle cx="128" cy="110" r="88" fill="#ffffff" fill-opacity="0.08"/>
+    <circle cx="128" cy="128" r="110" fill="none" stroke="#22d3ee" stroke-opacity="0.4" stroke-width="2"/>
+
+    <circle cx="128" cy="56" r="24" fill="#0f172a"/>
+    
+
+    <!-- Shoulders / Outfit -->
+    <path d="M44 256 C48 196, 82 178, 128 178 C174 178, 208 196, 212 256 Z" fill="#2563eb"/>
+    
+      <path d="M104 180 Q128 202 152 180" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+    
+
+    <!-- Neck -->
+    <rect x="112" y="148" width="32" height="36" rx="14" fill="#fde0c8"/>
+
+    <!-- Hair Back / Top -->
+    
+      <circle cx="128" cy="108" r="50" fill="#0f172a"/>
+    
+
+    <!-- Head -->
+    <rect x="84" y="70" width="88" height="96" rx="44" fill="#fde0c8"/>
+
+    <!-- Hair Bangs -->
+    
+      <path d="M84 102 C92 70, 164 70, 172 102 C154 88, 114 88, 84 102 Z" fill="#0f172a"/>
+    
+
+    <!-- Eyes and Friendly Smile -->
+    <circle cx="109" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="147" cy="116" r="5.5" fill="#0f172a"/>
+    <circle cx="107.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <circle cx="145.5" cy="114.5" r="1.8" fill="#ffffff"/>
+    <path d="M116 138 Q128 148 140 138" fill="none" stroke="#9a3412" stroke-width="3.5" stroke-linecap="round"/>
+
+    
+      <!-- Clean Geometric Glasses -->
+      <rect x="93" y="104" width="32" height="24" rx="8" fill="none" stroke="#22d3ee" stroke-width="3.2"/>
+      <rect x="131" y="104" width="32" height="24" rx="8" fill="none" stroke="#22d3ee" stroke-width="3.2"/>
+      <line x1="125" y1="115" x2="131" y2="115" stroke="#22d3ee" stroke-width="3.2"/>
+    
+
+    
+
+    
+
+    <!-- Subtle Brand Spark -->
+    <path d="M204 56 L206.5 62.5 L213 65 L206.5 67.5 L204 74 L201.5 67.5 L195 65 L201.5 62.5 Z" fill="#f59e0b"/>
+  </g>
+</svg>

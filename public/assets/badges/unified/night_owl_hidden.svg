@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Cú Đêm Cần Mẫn">
+  <defs>
+    <linearGradient id="rim-night_owl_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <radialGradient id="enamel-night_owl_hidden" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="cyan-night_owl_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5f3fc"/>
+      <stop offset="55%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="amber-night_owl_hidden" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Unified Concept A Medallion Frame (Transparent Outer Canvas) -->
+  <circle cx="80" cy="80" r="68" fill="url(#rim-night_owl_hidden)"/>
+  <circle cx="80" cy="80" r="61" fill="#0f172a"/>
+  <circle cx="80" cy="80" r="57" fill="url(#enamel-night_owl_hidden)"/>
+  <circle cx="80" cy="80" r="51" fill="none" stroke="#67e8f9" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Top Soft Rim Specular Arc -->
+  <path d="M36 52 A56 56 0 0 1 124 52" fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center Geometric Motif -->
+  <g transform="translate(80, 80)">
+    
+      <path d="M10 -30 A28 28 0 1 0 28 16 A22 22 0 1 1 10 -30 Z" fill="url(#amber-night_owl_hidden)" stroke="#fef08a" stroke-width="1.8"/>
+      <circle cx="-8" cy="-4" r="7" fill="#ffffff" stroke="#22d3ee" stroke-width="2"/>
+      <circle cx="8" cy="-4" r="7" fill="#ffffff" stroke="#22d3ee" stroke-width="2"/>
+      <circle cx="-8" cy="-4" r="3" fill="#0f172a"/>
+      <circle cx="8" cy="-4" r="3" fill="#0f172a"/>
+      <polygon points="0,3 4,9 0,13 -4,9" fill="#f59e0b"/>
+    
+  </g>
+
+  <!-- Subtle Hidden Emblem Pip -->
+  <path d="M122 24 L124.5 30.5 L131 33 L124.5 35.5 L122 42 L119.5 35.5 L113 33 L119.5 30.5 Z" fill="#e0f2fe"/>
+</svg>
