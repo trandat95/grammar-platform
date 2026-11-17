@@ -68,6 +68,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
+| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport & Preview QA Gate** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | ⏳ Đang chuẩn bị (Chờ duyệt Audit Baseline) |
 
 ---
 

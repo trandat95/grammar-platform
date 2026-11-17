@@ -1,4 +1,6 @@
-# 🗺️ ROADMAP TRIỂN KHAI UI/UX 2026 (2026 MODERN EDTECH REDESIGN TRACKER)
+# 🗺️ ROADMAP TRIỂN KHAI UI/UX 2026 (PHASE 2 ARCHIVE)
+
+> ℹ️ **Phạm vi Tài liệu:** Đây là nhật ký hoàn thành gói nâng cấp UI/UX thuộc **Phase 2 (`UI-2026.1 → UI-2026.7.17`)**. Kể từ **Phase 4 (Asset Generation & Full UX Refinement)**, tài liệu chuẩn duy nhất là **[`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md)** (kèm kết quả hiệu đính một số `#ffffff` hardcode còn sót tại `M4.1`).
 
 > **Tài liệu gốc:** [`implementation_guide_2026.md`](./implementation_guide_2026.md) • **Audit nền tảng:** [`UI_UX_DESIGN_REVIEW.md`](./UI_UX_DESIGN_REVIEW.md)  
 > **Bộ Kit tài nguyên:** `grammar-engine-ui-ux-2026-kit/` (4 Hero Banners + 1 Showcase Preview, 5 Avatars, 43 Vector SVG Icons, 2 Blueprint SVGs, `design-tokens-2026.json`, `design-system-2026.css`, `AppShell2026.jsx`, `FocusTrapModal2026.jsx`)  

@@ -1,4 +1,7 @@
-# Grammar Engine Design System (`v2.6-enterprise`)
+# Grammar Engine Design System (`v2.6-enterprise` → `V3.1 Unified`)
+
+> **Cập nhật Điều hướng:** Kể từ Phase 4 (`BRAND-UX-V3.1`), hệ Design System được quản lý theo bộ 4 đặc tả chuẩn tại thư mục này:
+> [`DESIGN_TOKEN_CONTRACT.md`](./DESIGN_TOKEN_CONTRACT.md) • [`COMPONENT_ANATOMY_SPEC.md`](./COMPONENT_ANATOMY_SPEC.md) • [`RESPONSIVE_BEHAVIOR_SPEC.md`](./RESPONSIVE_BEHAVIOR_SPEC.md) • [`ACCESSIBILITY_SPEC.md`](./ACCESSIBILITY_SPEC.md).
 
 ## 1. Kiến trúc Token 3 Tầng (`lib/tokens/`)
 - **Layer 1 (`PRIMITIVE_TOKENS`)**: Thang màu gốc (`slate`, `zinc`, `blue`, `sky`, `emerald`, `amber`, `red`) và z-index.
