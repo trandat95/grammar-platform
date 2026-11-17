@@ -1,9 +1,10 @@
 # 🧪 MILESTONE `M4.5` — ★ GATE B FIDELITY, CONTENT SHA-256 & PREVIEW RELEASE GATE REPORT
 
 > **Execution Date:** `2026-11-17`
-> **Target Preview Commit:** `b3eb06b` (`feat/m45-preview` -> Vercel Deployment `dpl_5A8VbiLBxuw77hNFpeZYqRzwy5gu` = **`success`**)
-> **Preview URL:** `https://grammar-platform-git-feat-m45-preview-datran.vercel.app` *(Vercel SSO Deployment Protection active)*
-> **Rollback Baseline Commit Hash:** `b3eb06b` (post-fix CSS patch queued on local `main`)
+> **Target Preview Commit:** `7ee1b2e` (`feat/m45-preview` -> Vercel Preview `https://grammar-platform-i0eb668ar-datran.vercel.app` = **`● Ready`**)
+> **Preview URL:** `https://grammar-platform-git-feat-m45-preview-datran.vercel.app`
+> **PO Gate B Sign-off:** ✅ **PASSED (`2026-11-17`)** — Cleared for `origin/main` Production Release
+> **Rollback Baseline Commit Hash:** `7ee1b2e`
 
 ---
 
