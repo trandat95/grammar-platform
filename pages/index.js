@@ -24,6 +24,7 @@ import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
 import { FeatureCardVisual, HeroBannerVisual, SectionCardWatermark } from "../components/ui-2026/EditorialArtwork";
 import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
+import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../lib/learning/behavioral-engine";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import QuestionRenderer from "../components/question-engine/QuestionRenderer";
@@ -1811,6 +1812,13 @@ export default function Home() {
         triggerXpGain(25, "Đã hoàn thành bài học: +25 XP!");
         if (currentUser?.id && !currentUser.isGuest) {
           logActivity(currentUser.id, currentUser.email, "STUDY_LESSON", { lesson_id: lessonId });
+          emitLearningAnalyticsEvent({
+            userId: currentUser.id,
+            authToken: activeAuthToken,
+            eventName: M47_ANALYTICS_EVENTS.EXERCISE_COMPLETED,
+            feature: "grammar_study",
+            properties: { lesson_id: lessonId },
+          });
         }
       }
       const next = {
@@ -1979,6 +1987,13 @@ export default function Home() {
 
       if (pwJson?.shouldShow) {
         setSmartPaywall({ open: true, context: pwJson, preview });
+        emitLearningAnalyticsEvent({
+          userId: currentUser.id,
+          authToken: activeAuthToken,
+          eventName: M47_ANALYTICS_EVENTS.PAYWALL_VIEWED,
+          feature: "monetization",
+          properties: { variant: pwJson.variantKey || "control", trigger_key: triggerKey },
+        });
       } else {
         setCurrentView("vip");
       }
@@ -2027,6 +2042,29 @@ export default function Home() {
       .then((res) => res.json())
       .then((json) => handleServerGamificationOutcome(json?.gamification))
       .catch(() => {});
+
+    const resolvedQType =
+      !question.starter_prompt &&
+      (Array.isArray(question.choices) && question.choices.length > 1
+        ? true
+        : Array.isArray(question.options) && question.options.length > 1
+        ? true
+        : question.type === "MULTIPLE_CHOICE")
+        ? "multiple_choice"
+        : "text_input";
+    emitLearningAnalyticsEvent({
+      userId: currentUser.id,
+      authToken: activeAuthToken,
+      eventName: M47_ANALYTICS_EVENTS.QUESTION_ANSWERED,
+      feature: "grammar_study",
+      properties: {
+        question_id: question.id,
+        question_type: resolvedQType,
+        result: isCorrect ? "correct" : "incorrect",
+        duration_ms: responseTimeMs,
+        touch_success: true,
+      },
+    });
   };
 
   const computeAndAttachRemedial = (question, userInput, correctAns, chapterTitleFallback = "Ngữ pháp") => {
@@ -5462,7 +5500,16 @@ export default function Home() {
           abVariant={smartPaywall.context?.variantKey || "control"}
           featurePreview={smartPaywall.preview}
           isGuest={Boolean(currentUser?.isGuest || !currentUser?.id || currentUser?.id === "guest")}
-          onOpenFullPricing={() => setCurrentView("vip")}
+          onOpenFullPricing={() => {
+            emitLearningAnalyticsEvent({
+              userId: currentUser?.id,
+              authToken: activeAuthToken,
+              eventName: M47_ANALYTICS_EVENTS.CHECKOUT_INITIATED,
+              feature: "monetization",
+              properties: { variant: smartPaywall.context?.variantKey || "control", source: "smart_paywall" },
+            });
+            setCurrentView("vip");
+          }}
           onRequireRegister={() => {
             setAuthError("");
             setAuthSuccess("Vui lòng đăng ký tài khoản mới (hoặc chuyển sang Đăng nhập) để nâng cấp gói VIP.");
@@ -6146,7 +6193,16 @@ export default function Home() {
                       Lý thuyết & Quy tắc ({selectedLesson?.sections?.length || 0} mục)
                     </button>
                     <button
-                      onClick={() => setActiveTab("exercises")}
+                      onClick={() => {
+                        setActiveTab("exercises");
+                        emitLearningAnalyticsEvent({
+                          userId: currentUser?.id,
+                          authToken: activeAuthToken,
+                          eventName: M47_ANALYTICS_EVENTS.EXERCISE_STARTED,
+                          feature: "grammar_study",
+                          properties: { lesson_id: selectedLesson?.id || "unknown" },
+                        });
+                      }}
                       style={{
                         padding: "0.35rem 0.85rem",
                         borderRadius: "4px",

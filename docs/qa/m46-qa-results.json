@@ -1,12 +1,12 @@
 {
   "baseUrl": "http://127.0.0.1:3005",
-  "executedAt": "2026-11-17T09:27:21.194Z",
+  "executedAt": "2026-11-17T10:37:54.205Z",
   "matrixSummary": {
     "total": 20,
     "passed": 20,
     "failed": 0,
     "maxCls": 0,
-    "maxLcpMs": 1004
+    "maxLcpMs": 384
   },
   "matrixReport": [
     {
@@ -22,7 +22,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 396,
+      "lcpMs": 340,
       "errors": 0,
       "status": "PASS"
     },
@@ -56,7 +56,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 208,
+      "lcpMs": 216,
       "errors": 0,
       "status": "PASS"
     },
@@ -73,7 +73,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 160,
+      "lcpMs": 156,
       "errors": 0,
       "status": "PASS"
     },
@@ -90,7 +90,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 120,
+      "lcpMs": 156,
       "errors": 0,
       "status": "PASS"
     },
@@ -107,7 +107,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 144,
+      "lcpMs": 164,
       "errors": 0,
       "status": "PASS"
     },
@@ -118,108 +118,6 @@
       "dataTheme": "light",
       "scrollWidth": 390,
       "innerWidth": 390,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 140,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "mobile-390",
-      "width": 390,
-      "theme": "dark",
-      "dataTheme": "dark",
-      "scrollWidth": 390,
-      "innerWidth": 390,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 204,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "mobile-412",
-      "width": 412,
-      "theme": "light",
-      "dataTheme": "light",
-      "scrollWidth": 412,
-      "innerWidth": 412,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 172,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "mobile-412",
-      "width": 412,
-      "theme": "dark",
-      "dataTheme": "dark",
-      "scrollWidth": 412,
-      "innerWidth": 412,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 148,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "mobile-430",
-      "width": 430,
-      "theme": "light",
-      "dataTheme": "light",
-      "scrollWidth": 430,
-      "innerWidth": 430,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 208,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "mobile-430",
-      "width": 430,
-      "theme": "dark",
-      "dataTheme": "dark",
-      "scrollWidth": 430,
-      "innerWidth": 430,
-      "overflow": false,
-      "headerOverlaps": 0,
-      "crampedCards": 0,
-      "brokenImages": 0,
-      "legacyJpgs": 0,
-      "cls": 0,
-      "lcpMs": 204,
-      "errors": 0,
-      "status": "PASS"
-    },
-    {
-      "viewport": "tablet-768",
-      "width": 768,
-      "theme": "light",
-      "dataTheme": "light",
-      "scrollWidth": 768,
-      "innerWidth": 768,
       "overflow": false,
       "headerOverlaps": 0,
       "crampedCards": 0,
@@ -231,6 +129,108 @@
       "status": "PASS"
     },
     {
+      "viewport": "mobile-390",
+      "width": 390,
+      "theme": "dark",
+      "dataTheme": "dark",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 160,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile-412",
+      "width": 412,
+      "theme": "light",
+      "dataTheme": "light",
+      "scrollWidth": 412,
+      "innerWidth": 412,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 164,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile-412",
+      "width": 412,
+      "theme": "dark",
+      "dataTheme": "dark",
+      "scrollWidth": 412,
+      "innerWidth": 412,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 132,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile-430",
+      "width": 430,
+      "theme": "light",
+      "dataTheme": "light",
+      "scrollWidth": 430,
+      "innerWidth": 430,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 168,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile-430",
+      "width": 430,
+      "theme": "dark",
+      "dataTheme": "dark",
+      "scrollWidth": 430,
+      "innerWidth": 430,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 156,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
+      "viewport": "tablet-768",
+      "width": 768,
+      "theme": "light",
+      "dataTheme": "light",
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflow": false,
+      "headerOverlaps": 0,
+      "crampedCards": 0,
+      "brokenImages": 0,
+      "legacyJpgs": 0,
+      "cls": 0,
+      "lcpMs": 204,
+      "errors": 0,
+      "status": "PASS"
+    },
+    {
       "viewport": "tablet-768",
       "width": 768,
       "theme": "dark",
@@ -243,7 +243,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 220,
+      "lcpMs": 196,
       "errors": 0,
       "status": "PASS"
     },
@@ -260,7 +260,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 1004,
+      "lcpMs": 284,
       "errors": 0,
       "status": "PASS"
     },
@@ -277,7 +277,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 188,
+      "lcpMs": 176,
       "errors": 0,
       "status": "PASS"
     },
@@ -294,7 +294,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 296,
+      "lcpMs": 384,
       "errors": 0,
       "status": "PASS"
     },
@@ -311,7 +311,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 212,
+      "lcpMs": 164,
       "errors": 0,
       "status": "PASS"
     },
@@ -328,7 +328,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 880,
+      "lcpMs": 288,
       "errors": 0,
       "status": "PASS"
     },
@@ -345,7 +345,7 @@
       "brokenImages": 0,
       "legacyJpgs": 0,
       "cls": 0,
-      "lcpMs": 156,
+      "lcpMs": 164,
       "errors": 0,
       "status": "PASS"
     }
@@ -359,7 +359,7 @@
       "brokenImages": 0,
       "legacyJpgCount": 0,
       "cls": 0,
-      "lcpMs": 176,
+      "lcpMs": 208,
       "status": "PASS"
     },
     {
@@ -370,7 +370,7 @@
       "brokenImages": 0,
       "legacyJpgCount": 0,
       "cls": 0,
-      "lcpMs": 96,
+      "lcpMs": 88,
       "status": "PASS"
     },
     {
@@ -381,7 +381,7 @@
       "brokenImages": 0,
       "legacyJpgCount": 0,
       "cls": 0,
-      "lcpMs": 96,
+      "lcpMs": 88,
       "has404Mascot": true,
       "status": "PASS"
     },
@@ -393,7 +393,7 @@
       "brokenImages": 0,
       "legacyJpgCount": 0,
       "cls": 0,
-      "lcpMs": 64,
+      "lcpMs": 96,
       "has404Mascot": true,
       "status": "PASS"
     }
@@ -492,17 +492,5 @@
       "result": "PASS"
     }
   ],
-  "capturedFiles": [
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-mobile-375-light.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-mobile-375-dark.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-tablet-768-light.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-tablet-768-dark.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-desktop-1440-light.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\home-desktop-1440-dark.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\toeic-desktop-1440-dark.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\toeic-mobile-375-light.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\404-desktop-1440-dark.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\404-mobile-375-light.png",
-    "D:\\grammarproject\\grammar-platform\\docs\\previews\\v31\\gate-b\\study-mobile-375-dark.png"
-  ]
+  "capturedFiles": []
 }

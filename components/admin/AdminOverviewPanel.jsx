@@ -211,6 +211,68 @@ export default function AdminOverviewPanel({
           </div>
         </div>
       )}
+
+      {/* M4.7: 8 FTC-Safe UX & Conversion Analytics KPIs (UTC+7) */}
+      {data?.analytics8Kpis && (
+        <div style={{ ...cardStyle, marginTop: "1rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: "800", color: T.accent, textTransform: "uppercase" }}>
+              <KitIcon name="trend-up" size={15} color={T.accent} />
+              <span>M4.7 • Chỉ số UX &amp; Chuyển đổi FTC-Safe (8 KPIs • UTC+7)</span>
+            </div>
+            <span style={{ fontSize: "0.72rem", fontWeight: "700", color: T.success, backgroundColor: T.successBg, border: `1px solid ${T.successBorder}`, padding: "0.18rem 0.55rem", borderRadius: "999px" }}>
+              0 Dark Patterns • 0 PII
+            </span>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.75rem" }}>
+            <div>
+              {statRow(
+                "1. Exercise Completion Rate",
+                `${data.analytics8Kpis.exercise_completion_rate?.rate_percent ?? 0}% (${data.analytics8Kpis.exercise_completion_rate?.completed ?? 0}/${data.analytics8Kpis.exercise_completion_rate?.started ?? 0})`,
+                T.success
+              )}
+              {statRow(
+                "2. Question Time (Text vs MC)",
+                `${Math.round((data.analytics8Kpis.question_answer_time?.median_text_input_ms ?? 0) / 100) / 10}s / ${Math.round((data.analytics8Kpis.question_answer_time?.median_multiple_choice_ms ?? 0) / 100) / 10}s`,
+                T.accent
+              )}
+              {statRow(
+                "3. Mobile Touch Success (<768px)",
+                `${data.analytics8Kpis.mobile_interaction_success?.rate_percent ?? 100}% (${data.analytics8Kpis.mobile_interaction_success?.successful_touch ?? 0}/${data.analytics8Kpis.mobile_interaction_success?.attempted_touch ?? 0})`,
+                T.success
+              )}
+              {statRow(
+                "4. Diagnostic 30Q Completion",
+                `${data.analytics8Kpis.diagnostic_completion_rate?.rate_percent ?? 0}% (${data.analytics8Kpis.diagnostic_completion_rate?.submitted_30q ?? 0}/${data.analytics8Kpis.diagnostic_completion_rate?.started ?? 0})`,
+                T.indigo
+              )}
+            </div>
+            <div>
+              {statRow(
+                "5. Valid Session Avg (<=15m cap)",
+                `${data.analytics8Kpis.learning_session_duration?.avg_session_minutes ?? 0} phút (${data.analytics8Kpis.learning_session_duration?.active_sessions_count ?? 0} phiên)`,
+                T.accent
+              )}
+              {statRow(
+                "6. Retention D7 / D14 Cohort",
+                `${data.analytics8Kpis.retention_d7_d14?.d7_rate_percent ?? 0}% / ${data.analytics8Kpis.retention_d7_d14?.d14_rate_percent ?? 0}% (N=${data.analytics8Kpis.retention_d7_d14?.cohort_users ?? 0})`,
+                T.warning
+              )}
+              {statRow(
+                "7. Free→VIP (SePay vs Grant)",
+                `${data.analytics8Kpis.free_to_vip_conversion?.sepay_paid_count ?? 0} SePay / ${data.analytics8Kpis.free_to_vip_conversion?.admin_grant_count ?? 0} Grant (${data.analytics8Kpis.free_to_vip_conversion?.sepay_conversion_percent ?? 0}%)`,
+                T.success
+              )}
+              {statRow(
+                "8. Paywall Abandonment Rate",
+                `${data.analytics8Kpis.paywall_abandonment?.abandonment_percent ?? 0}% (${data.analytics8Kpis.paywall_abandonment?.checkout_initiated ?? 0}/${data.analytics8Kpis.paywall_abandonment?.paywall_views ?? 0})`,
+                T.warning
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

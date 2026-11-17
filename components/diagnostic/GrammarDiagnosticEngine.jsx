@@ -12,6 +12,7 @@ import { calculateRetentionMetrics } from "../../lib/spaced-repetition/retention
 import { SyncManager } from "../../lib/sync/sync-manager";
 import { SYNC_EVENT_TYPES } from "../../lib/sync/sync-queue";
 import { KitIcon } from "../ui-2026/KitIcon";
+import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../../lib/learning/behavioral-engine";
 
 export default function GrammarDiagnosticEngine({
   currentUser,
@@ -117,6 +118,15 @@ export default function GrammarDiagnosticEngine({
   };
 
   const handleStartTest = () => {
+    if (currentUser?.id && !currentUser.isGuest) {
+      emitLearningAnalyticsEvent({
+        userId: currentUser.id,
+        authToken,
+        eventName: M47_ANALYTICS_EVENTS.DIAGNOSTIC_STARTED,
+        feature: "diagnostic",
+        properties: { question_count: 30 },
+      });
+    }
     loadTest();
   };
 
@@ -172,6 +182,16 @@ export default function GrammarDiagnosticEngine({
             percentage: data.score_result.percentage,
             estimated_level: data.score_result.estimated_level?.code,
           }).catch(() => {});
+          emitLearningAnalyticsEvent({
+            userId: currentUser.id,
+            authToken,
+            eventName: M47_ANALYTICS_EVENTS.DIAGNOSTIC_COMPLETED,
+            feature: "diagnostic",
+            properties: {
+              question_count: 30,
+              estimated_level: data.score_result.estimated_level?.code || "B1",
+            },
+          });
         }
         loadAnalytics();
         setDiagnosticMode("results");

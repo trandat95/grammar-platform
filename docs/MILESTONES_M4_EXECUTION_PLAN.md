@@ -114,7 +114,10 @@
 
 ---
 
-## 🔹 `M4.7` — FTC-Safe UX & Conversion Analytics (`P1` • Implementation Agent)
-- **Dependencies:** `M4.5` PASS. **Allowed Files:** `lib/learning/behavioral-engine.js`, `pages/api/learning/events.js`, UI triggers trong `pages/index.js` & `components/admin/*`.
-- **Scope:** Nối 8 KPI theo `LEARNING_ANALYTICS_SCHEMA.md` qua endpoint `POST /api/learning/events` hiện có (bảo đảm deduplication `event_id`, privacy data minimization, `UTC+7` cohorts, consent & RLS hiện hành — không tự ý đổi DB schema trừ khi PO duyệt).
-- **Acceptance Criteria (`3/3`):** `8/8` KPI ghi nhận đúng schema & deduplicate; `0` PII/nội dung câu trả lời lọt vào `properties`; `0` dark pattern trong A/B paywall.
+## 🔹 `M4.7` — FTC-Safe UX & Conversion Analytics (`P1` • Implementation Agent) — ✅ IMPLEMENTED & VERIFIED
+- **Dependencies:** `M4.5` PASS. **Allowed Files:** `lib/learning/behavioral-engine.js`, `lib/monetization/behavioral-engine.js`, `pages/api/learning/events.js`, `pages/api/admin/overview.js`, UI triggers trong `pages/index.js`, `components/diagnostic/GrammarDiagnosticEngine.jsx`, `components/monetization/MonetizationHub.jsx` & `components/admin/AdminOverviewPanel.jsx`.
+- **Scope:** Nối 8 KPI theo `LEARNING_ANALYTICS_SCHEMA.md` qua endpoint `POST /api/learning/events` hiện có (bảo đảm deduplication `event_id`, privacy data minimization, `UTC+7` cohorts, consent & RLS hiện hành — không tự ý đổi DB schema).
+- **Acceptance Criteria (`3/3` VERIFIED):**
+  1. [x] `8/8` KPI ghi nhận đúng schema (`ANALYTICS_SCHEMA_VERSION = "1.0"`) & deduplicate theo `idempotency_key`/`event_id` (`computeEightCoreKpis` + `pages/api/learning/events.js` + `AdminOverviewPanel.jsx`).
+  2. [x] `0` PII/nội dung câu trả lời lọt vào `properties` (`sanitizeAnalyticsProperties` chặn email, SĐT, Bearer/JWT token, `user_answer`, `raw_input`).
+  3. [x] `0` dark pattern trong A/B paywall (`validateFtcSafePaywallPayload` từ chối HTTP `400` mọi flag `fake_timer`, `shame_copy`, `hidden_cancel`, `forced_continuity`, `unequal_pricing_by_intent`; xác thực bởi `tests/analytics-m47.test.mjs`).

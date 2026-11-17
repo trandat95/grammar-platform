@@ -1,6 +1,7 @@
 import { getAdminClient } from "../../../lib/supabase/server";
 import { verifyAdminWithGuard } from "../../../lib/admin/admin-guard";
 import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { computeEightCoreKpis } from "../../../lib/learning/behavioral-engine";
 
 /**
  * Milestone 2.4.5: Real-Time Operational Health Dashboard API (/api/admin/overview)
@@ -30,6 +31,9 @@ export default async function handler(req, res) {
       explCountRes,
       policyRes,
       auditCountRes,
+      learningEventsRes,
+      behaviorEventsRes,
+      subscriptionsRes,
     ] = await Promise.all([
       serverClient.from("profiles").select("id, role, status, created_at"),
       serverClient.from("user_learning_trackers").select("user_id, streak, xp, last_active_date, completed_lessons"),
@@ -39,6 +43,17 @@ export default async function handler(req, res) {
       serverClient.from("explanations").select("id", { count: "exact", head: true }),
       serverClient.from("system_policies").select("*").eq("key", "default").maybeSingle(),
       serverClient.from("audit_logs").select("id", { count: "exact", head: true }),
+      serverClient
+        .from("learning_event_logs")
+        .select("user_id, event_type, is_correct, response_time_ms, device_id, payload, created_at")
+        .order("created_at", { ascending: false })
+        .limit(2000),
+      serverClient
+        .from("behavior_events")
+        .select("user_id, session_id, event_name, metadata, created_at")
+        .order("created_at", { ascending: false })
+        .limit(2000),
+      serverClient.from("user_subscriptions").select("user_id, provider, status, created_at"),
     ]);
 
     const profiles = profilesRes.data || [];
@@ -46,6 +61,12 @@ export default async function handler(req, res) {
     const quizzes24h = quiz24hRes.data || [];
     const syncs24h = syncLogsRes.data || [];
     const feedback = feedbackRes.data || [];
+    const analytics8Kpis = computeEightCoreKpis({
+      learningLogs: learningEventsRes.data || [],
+      behaviorEvents: behaviorEventsRes.data || [],
+      profiles,
+      subscriptions: subscriptionsRes.data || [],
+    });
 
     const totalUsers = profiles.length;
     const vipCount = profiles.filter((p) => p.role === "VIP").length;
@@ -115,6 +136,7 @@ export default async function handler(req, res) {
         databaseStatus: "ACTIVE_HEALTHY",
         immutableAuditTrigger: true,
       },
+      analytics8Kpis,
     });
   } catch (err) {
     console.error("[Admin Overview Error]:", err);

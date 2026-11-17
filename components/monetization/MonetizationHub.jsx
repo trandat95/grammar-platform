@@ -5,6 +5,7 @@ import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-
 import { BANNER_PATHS, MASCOT_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
 import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
+import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../../lib/learning/behavioral-engine";
 
 const FEATURE_VISUAL_META = {
   unlimited_exercises: { iconName: "books", freeLabel: "10 câu / bài", pct: 8 },
@@ -612,6 +613,13 @@ export default function MonetizationHub({
                       },
                       body: JSON.stringify({ action: "track_event", user_id: userId, event_name: "CHECKOUT_STARTED", metadata: { planCode: p.code } }),
                     }).catch(() => {});
+                    emitLearningAnalyticsEvent({
+                      userId,
+                      authToken,
+                      eventName: M47_ANALYTICS_EVENTS.CHECKOUT_INITIATED,
+                      feature: "monetization",
+                      properties: { plan_code: p.code, variant: "pricing_hub" },
+                    });
                   }}
                 >
                   <KitIcon name="crown" size={15} />
