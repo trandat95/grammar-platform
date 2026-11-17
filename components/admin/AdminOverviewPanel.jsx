@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 /**
  * Milestone 2.4.5: Real-Time Operational Health Overview Panel
@@ -61,8 +62,9 @@ export default function AdminOverviewPanel({
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: "1.02rem", fontWeight: "800", color: T.textHeading }}>
-            📊 Tổng quan Vận hành Thời gian thực (Operational Health)
+          <h3 style={{ display: "flex", alignItems: "center", gap: "0.45rem", margin: 0, fontSize: "1.02rem", fontWeight: "800", color: T.textHeading }}>
+            <KitIcon name="chart" size={18} color={T.accent} />
+            <span>Tổng quan Vận hành Thời gian thực (Operational Health)</span>
           </h3>
           <div style={{ fontSize: "0.78rem", color: T.textMuted, marginTop: "0.2rem" }}>
             {data?.generatedAt ? `Cập nhật lúc: ${new Date(data.generatedAt).toLocaleString("vi-VN")} • Edge Cache 30s` : "Đang kết nối Supabase Telemetry..."}
@@ -104,8 +106,9 @@ export default function AdminOverviewPanel({
           }}
         >
           <div>
-            <div style={{ fontSize: "0.88rem", fontWeight: "700", color: error === "NO_AUTH_TOKEN" ? T.warning : T.danger }}>
-              {error === "NO_AUTH_TOKEN" ? "⚠️ Yêu cầu chữ ký Quản trị viên từ Supabase Auth" : error}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.88rem", fontWeight: "700", color: error === "NO_AUTH_TOKEN" ? T.warning : T.danger }}>
+              {error === "NO_AUTH_TOKEN" && <KitIcon name="warning" size={15} color={T.warning} />}
+              <span>{error === "NO_AUTH_TOKEN" ? "Yêu cầu chữ ký Quản trị viên từ Supabase Auth" : error}</span>
             </div>
             <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem" }}>
               {error === "NO_AUTH_TOKEN"
@@ -122,13 +125,17 @@ export default function AdminOverviewPanel({
                 color: "#ffffff",
                 border: "none",
                 borderRadius: "8px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
                 padding: "0.5rem 0.95rem",
                 fontSize: "0.82rem",
                 fontWeight: "700",
                 cursor: "pointer",
               }}
             >
-              🔑 Đăng nhập Quản trị viên
+              <KitIcon name="key" size={14} />
+              <span>Đăng nhập Quản trị viên</span>
             </button>
           )}
         </div>
@@ -137,8 +144,9 @@ export default function AdminOverviewPanel({
       {data && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.9rem" }}>
           <div style={cardStyle}>
-            <div style={{ fontSize: "0.75rem", fontWeight: "800", color: T.accent, textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              👥 Người dùng & Chuyển đổi
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: "800", color: T.accent, textTransform: "uppercase", marginBottom: "0.6rem" }}>
+              <KitIcon name="users" size={14} color={T.accent} />
+              <span>Người dùng &amp; Chuyển đổi</span>
             </div>
             {statRow("Tổng tài khoản", data.users?.totalUsers ?? 0)}
             {statRow("DAU (Hôm nay)", data.users?.dauCount ?? 0, T.success)}
@@ -149,8 +157,9 @@ export default function AdminOverviewPanel({
           </div>
 
           <div style={cardStyle}>
-            <div style={{ fontSize: "0.75rem", fontWeight: "800", color: T.success, textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              🎯 Tương tác Học tập (24h)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: "800", color: T.success, textTransform: "uppercase", marginBottom: "0.6rem" }}>
+              <KitIcon name="target" size={14} color={T.success} />
+              <span>Tương tác Học tập (24h)</span>
             </div>
             {statRow("Tổng XP tích lũy", Number(data.learning?.totalXp || 0).toLocaleString(), T.warning)}
             {statRow("Lượt hoàn thành bài học", Number(data.learning?.totalLessonsCompleted || 0).toLocaleString())}
@@ -159,8 +168,9 @@ export default function AdminOverviewPanel({
           </div>
 
           <div style={cardStyle}>
-            <div style={{ fontSize: "0.75rem", fontWeight: "800", color: T.warning, textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              🎓 Chất lượng Sư phạm (M2.5)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: "800", color: T.warning, textTransform: "uppercase", marginBottom: "0.6rem" }}>
+              <KitIcon name="graduation" size={14} color={T.warning} />
+              <span>Chất lượng Sư phạm (M2.5)</span>
             </div>
             {statRow("Lời giải chuẩn 5-Field (DB)", Number(data.pedagogy?.ingestedExplanations || 0).toLocaleString(), T.accent)}
             {statRow("Tổng Feedback học viên", data.pedagogy?.totalFeedback ?? 0)}
@@ -189,13 +199,14 @@ export default function AdminOverviewPanel({
           </div>
 
           <div style={cardStyle}>
-            <div style={{ fontSize: "0.75rem", fontWeight: "800", color: T.textSecondary, textTransform: "uppercase", marginBottom: "0.6rem" }}>
-              🔐 Governance & Đồng bộ (M2.3 / M2.4)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: "800", color: T.textSecondary, textTransform: "uppercase", marginBottom: "0.6rem" }}>
+              <KitIcon name="lock" size={14} color={T.textSecondary} />
+              <span>Governance &amp; Đồng bộ (M2.3 / M2.4)</span>
             </div>
             {statRow("Sync Idempotent (24h)", data.operations?.syncEvents24h ?? 0, T.accent)}
             {statRow("Tổng Audit Logs", Number(data.operations?.auditLogsCount || 0).toLocaleString())}
             {statRow("Policy Version", `v${data.operations?.policyVersion || 1}`, T.warning)}
-            {statRow("Audit Immutability", data.operations?.immutableAuditTrigger ? "🔒 TRIGGER LOCKED" : "UNPROTECTED", T.success)}
+            {statRow("Audit Immutability", data.operations?.immutableAuditTrigger ? "TRIGGER LOCKED" : "UNPROTECTED", T.success)}
             {statRow("Supabase Status", data.operations?.databaseStatus || "ACTIVE_HEALTHY", T.success)}
           </div>
         </div>

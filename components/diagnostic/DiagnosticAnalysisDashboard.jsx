@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import DiagnosticQuestionReview from "./DiagnosticQuestionReview";
 import AiAdvisorDrawer from "./AiAdvisorDrawer";
 import { analyzeDiagnosticRootCauses } from "../../lib/diagnostic/knowledge.graph";
-import { Button, Badge } from "../design-system";
+import { Button, Badge, KitIcon, StatusDot } from "../design-system";
 
 export default function DiagnosticAnalysisDashboard({
   scoreResult,
@@ -190,7 +190,7 @@ export default function DiagnosticAnalysisDashboard({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-            <span style={{ fontSize: "1.3rem" }}>💡</span>
+            <KitIcon name="bulb" size={19} color="var(--ds-success)" />
             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--ds-success)" }}>
               Phân Tích Sư Phạm &amp; Khuyến Nghị Cá Nhân Hóa (AI Advisor)
             </h2>
@@ -208,8 +208,9 @@ export default function DiagnosticAnalysisDashboard({
                 borderRadius: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-success)", marginBottom: "0.25rem" }}>
-                🌟 Điểm mạnh của bạn:
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-success)", marginBottom: "0.25rem" }}>
+                <KitIcon name="star" size={14} color="var(--ds-success)" />
+                <span>Điểm mạnh của bạn:</span>
               </div>
               <div style={{ fontSize: "0.85rem", color: T.textSecondary, lineHeight: 1.4 }}>
                 {roadmap.ai_recommendation.strengths_summary}
@@ -223,8 +224,9 @@ export default function DiagnosticAnalysisDashboard({
                 borderRadius: "0.6rem",
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-danger)", marginBottom: "0.25rem" }}>
-                🔴 Vùng kiến thức cần ưu tiên khắc phục:
+              <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-danger)", marginBottom: "0.25rem" }}>
+                <StatusDot tone="danger" size={8} />
+                <span>Vùng kiến thức cần ưu tiên khắc phục:</span>
               </div>
               <div style={{ fontSize: "0.85rem", color: T.textSecondary, lineHeight: 1.4 }}>
                 {roadmap.ai_recommendation.weaknesses_summary}
@@ -234,6 +236,9 @@ export default function DiagnosticAnalysisDashboard({
 
           <div
             style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.45rem",
               marginTop: "1rem",
               paddingTop: "0.75rem",
               borderTop: `1px solid ${"var(--ds-success-border)"}`,
@@ -242,7 +247,8 @@ export default function DiagnosticAnalysisDashboard({
               fontWeight: 500,
             }}
           >
-            🧭 <strong>Lời khuyên học tập:</strong> {roadmap.ai_recommendation.study_advice}
+            <KitIcon name="compass" size={16} color="var(--ds-success)" style={{ flexShrink: 0, marginTop: "2px" }} />
+            <span><strong>Lời khuyên học tập:</strong> {roadmap.ai_recommendation.study_advice}</span>
           </div>
         </div>
       )}
@@ -275,7 +281,7 @@ export default function DiagnosticAnalysisDashboard({
           }}
         >
           <span>Khám phá Lộ trình Học 4 Tuần</span>
-          <span>🗺️</span>
+          <KitIcon name="map" size={16} />
         </button>
 
         <button
@@ -295,7 +301,7 @@ export default function DiagnosticAnalysisDashboard({
           }}
         >
           <span>Xem lại 30 câu hỏi &amp; Giải thích</span>
-          <span>🔍</span>
+          <KitIcon name="search" size={16} />
         </button>
 
         <button
@@ -316,7 +322,7 @@ export default function DiagnosticAnalysisDashboard({
           }}
         >
           <span>Làm lại bài kiểm tra</span>
-          <span>🔄</span>
+          <KitIcon name="refresh" size={16} />
         </button>
       </div>
 
@@ -333,8 +339,9 @@ export default function DiagnosticAnalysisDashboard({
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.85rem" }}>
-            <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
-              📈 Đối soát Tăng trưởng &amp; Độ bền Kiến thức (Analytics 2.8)
+            <h2 style={{ display: "flex", alignItems: "center", gap: "0.45rem", margin: 0, fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
+              <KitIcon name="trend-up" size={18} color={T.accent} />
+              <span>Đối soát Tăng trưởng &amp; Độ bền Kiến thức (Analytics 2.8)</span>
             </h2>
             <Badge tone={analytics.retentionMetrics.growthSummary.growthDelta >= 0 ? "success" : "warning"} isLight={isLight}>
               {analytics.retentionMetrics.growthSummary.attemptCount} lần kiểm tra •{" "}
@@ -386,8 +393,9 @@ export default function DiagnosticAnalysisDashboard({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.9rem" }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: T.textHeading }}>
-                🕸️ Phân tích Nguyên nhân Gốc rễ &amp; Tiên quyết (Knowledge Graph DAG)
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.45rem", margin: 0, fontSize: "1.1rem", fontWeight: 800, color: T.textHeading }}>
+                <KitIcon name="git-branch" size={18} color={T.accent} />
+                <span>Phân tích Nguyên nhân Gốc rễ &amp; Tiên quyết (Knowledge Graph DAG)</span>
               </h2>
               <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.8rem", color: T.textMuted }}>
                 Phân tích {rootCauseAnalysis.totalIncorrectAnalyzed} câu chưa đúng để truy vết lỗ hổng nền tảng cần vá trước.
@@ -434,9 +442,10 @@ export default function DiagnosticAnalysisDashboard({
                     variant="secondary"
                     size="sm"
                     isLight={isLight}
+                    icon="book"
                     onClick={() => onNavigateToLesson && onNavigateToLesson(pg.chapter_number, pg.lesson_id)}
                   >
-                    📖 Tiên quyết Ch.{pg.chapter_number}: {pg.lesson_title} (cho {pg.for_topic}) ➔
+                    Tiên quyết Ch.{pg.chapter_number}: {pg.lesson_title} (cho {pg.for_topic}) ➔
                   </Button>
                 ))}
               </div>

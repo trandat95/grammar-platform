@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
 import { getAspectColor, getTimeSphereInfo } from "../../lib/visualization/visualization.utils";
+import { KitIcon, StatusDot } from "../ui-2026/KitIcon";
 
 export default function TimelineVisualization({ data, initialFocusId = null, isLight = false }) {
   const tenses = data?.tenses || [];
@@ -205,10 +206,14 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                 color: "var(--ds-success)",
                 fontWeight: "800",
                 whiteSpace: "nowrap",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
                 zIndex: 4,
               }}
             >
-              〰️ đang diễn ra
+              <KitIcon name="wave" size={11} color="var(--ds-success)" />
+              <span>đang diễn ra</span>
             </div>
           </>
         )}
@@ -341,10 +346,10 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "1.1rem" }}>⏱️</span>
-              <h4 style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.45rem" }}>
+              <KitIcon name="timer" size={18} color="var(--ds-accent)" style={{ marginTop: "2px" }} />
+              <h4 style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0, lineHeight: 1.3 }}>
                 {selectedTense.name_vi} ({selectedTense.name_en})
               </h4>
             </div>
@@ -401,14 +406,16 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
             <AudioPlayer text={selectedTense.example.en} compact={true} isLight={isLight} />
           </div>
 
-          <div style={{ fontSize: "0.75rem", color: "var(--ds-success)", borderTop: `1px dashed ${"var(--ds-card-border)"}`, paddingTop: "0.4rem" }}>
-            💡 <strong>Phân tích ngữ pháp:</strong> {selectedTense.example.breakdown}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.38rem", fontSize: "0.75rem", color: "var(--ds-success)", borderTop: `1px dashed ${"var(--ds-card-border)"}`, paddingTop: "0.4rem" }}>
+            <KitIcon name="bulb" size={13} color="var(--ds-success)" style={{ flexShrink: 0, marginTop: "2px" }} />
+            <span><strong>Phân tích ngữ pháp:</strong> {selectedTense.example.breakdown}</span>
           </div>
         </div>
 
         {/* Common Mistakes Callout */}
-        <div style={{ fontSize: "0.78rem", color: "var(--ds-warning)", backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "var(--ds-warning-border)" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.5rem 0.75rem" }}>
-          ⚠️ <strong>Lỗi người học hay gặp:</strong> {selectedTense.common_mistakes}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.42rem", fontSize: "0.78rem", color: "var(--ds-warning)", backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "var(--ds-warning-border)" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.5rem 0.75rem" }}>
+          <KitIcon name="warning" size={14} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: "2px" }} />
+          <span><strong>Lỗi người học hay gặp:</strong> {selectedTense.common_mistakes}</span>
         </div>
       </div>
 
@@ -419,6 +426,9 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           onClick={() => setShowAllTenses((prev) => !prev)}
           className="ds-focusable"
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.38rem",
             padding: "0.35rem 0.75rem",
             fontSize: "0.76rem",
             fontWeight: "700",
@@ -429,7 +439,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
             cursor: "pointer",
           }}
         >
-          {showAllTenses ? "▲ Ẩn danh sách 13 thì" : "⚖️ So sánh hoặc xem toàn bộ 13 thì ▾"}
+          {!showAllTenses && <KitIcon name="scale" size={13} />}
+          <span>{showAllTenses ? "▲ Ẩn danh sách 13 thì" : "So sánh hoặc xem toàn bộ 13 thì ▾"}</span>
         </button>
 
         {showAllTenses && (
@@ -451,7 +462,7 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
               gap: "0.3rem",
             }}
           >
-            <span>⚖️</span>
+            <KitIcon name="scale" size={13} />
             <span>{compareMode ? "Tắt So Sánh" : "So Sánh 2 Thì"}</span>
           </button>
         )}
@@ -462,16 +473,19 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
             <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)", fontWeight: "700" }}>Thời gian:</span>
             {[
-              { id: "ALL", label: "Tất cả (13)" },
-              { id: "present", label: "🟢 Hiện tại (4)" },
-              { id: "past", label: "🟡 Quá khứ (4)" },
-              { id: "future", label: "🔵 Tương lai (5)" },
+              { id: "ALL", tone: null, label: "Tất cả (13)" },
+              { id: "present", tone: "success", label: "Hiện tại (4)" },
+              { id: "past", tone: "warning", label: "Quá khứ (4)" },
+              { id: "future", tone: "accent", label: "Tương lai (5)" },
             ].map((f) => (
               <button
                 key={f.id}
                 type="button"
                 onClick={() => setActiveFilter(f.id)}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
                   padding: "0.25rem 0.6rem",
                   fontSize: "0.72rem",
                   fontWeight: activeFilter === f.id ? "700" : "500",
@@ -482,7 +496,8 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
                   cursor: "pointer",
                 }}
               >
-                {f.label}
+                {f.tone && <StatusDot tone={f.tone} size={7} />}
+                <span>{f.label}</span>
               </button>
             ))}
           </div>
@@ -571,8 +586,9 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h4 style={{ fontSize: "0.95rem", fontWeight: "800", color: "var(--ds-warning)", margin: 0 }}>
-              ⚖️ Đối So Sánh: {selectedTense.name_vi} VS {compareTense.name_vi}
+            <h4 style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.95rem", fontWeight: "800", color: "var(--ds-warning)", margin: 0 }}>
+              <KitIcon name="scale" size={16} color="var(--ds-warning)" />
+              <span>Đối So Sánh: {selectedTense.name_vi} VS {compareTense.name_vi}</span>
             </h4>
             <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)" }}>
               Bấm chọn thẻ bất kỳ để đổi đối tượng so sánh

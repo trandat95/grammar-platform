@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BANNER_PATHS } from '../ui-2026/assetMap';
 import useGlobalAuth from '../../hooks/useGlobalAuth';
+import KitIcon from '../ui-2026/KitIcon';
 
 /**
  * ToeicHeroBanner Component
@@ -121,7 +122,7 @@ export default function ToeicHeroBanner({
           position: 'relative',
           zIndex: 2,
           padding: compact ? '1.15rem 1.4rem' : '2.25rem 2.25rem',
-          color: isLight ? 'var(--ds-text)' : '#ffffff'
+          color: 'var(--ds-text-heading)'
         }}
       >
         {/* Top Feature Pill */}
@@ -135,7 +136,7 @@ export default function ToeicHeroBanner({
               borderRadius: '999px',
               backgroundColor: isLight ? 'rgba(37, 99, 235, 0.08)' : 'rgba(56, 189, 248, 0.16)',
               border: isLight ? '1px solid rgba(37, 99, 235, 0.25)' : '1px solid rgba(56, 189, 248, 0.4)',
-              color: isLight ? 'var(--ds-accent)' : '#38bdf8',
+              color: 'var(--ds-accent)',
               fontSize: compact ? '0.72rem' : '0.78rem',
               fontWeight: 800,
               textTransform: 'uppercase',
@@ -156,7 +157,7 @@ export default function ToeicHeroBanner({
             fontSize: compact ? '1.25rem' : '1.85rem',
             fontWeight: 800,
             lineHeight: 1.3,
-            color: isLight ? 'var(--ds-text)' : '#ffffff',
+            color: 'var(--ds-text-heading)',
             margin: compact ? '0 0 0.4rem 0' : '0 0 0.85rem 0',
             maxWidth: '780px',
             textShadow: isLight ? 'none' : '0 2px 10px rgba(0, 0, 0, 0.4)'
@@ -193,12 +194,16 @@ export default function ToeicHeroBanner({
             style={{
               fontSize: '0.88rem',
               fontWeight: 700,
-              color: isLight ? 'var(--ds-accent)' : '#38bdf8',
+              color: 'var(--ds-accent)',
               margin: '0 0 1.25rem 0',
-              letterSpacing: '0.01em'
+              letterSpacing: '0.01em',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem'
             }}
           >
-            ✨ Bắt đầu hành trình TOEIC của bạn ngay hôm nay.
+            <KitIcon name="tool-spark" size={16} />
+            <span>Bắt đầu hành trình TOEIC của bạn ngay hôm nay.</span>
           </p>
         )}
 
@@ -226,7 +231,7 @@ export default function ToeicHeroBanner({
                   backgroundColor: isSelected
                     ? 'var(--ds-accent)'
                     : (isLight ? 'var(--ds-bg-elevated)' : 'rgba(255, 255, 255, 0.08)'),
-                  color: isSelected ? '#ffffff' : (isLight ? 'var(--ds-text)' : '#ffffff'),
+                  color: isSelected ? 'var(--ds-text-on-accent)' : 'var(--ds-text-heading)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   boxShadow: isSelected
@@ -251,7 +256,7 @@ export default function ToeicHeroBanner({
                 padding: compact ? '0.55rem 1.1rem' : '0.75rem 1.4rem',
                 borderRadius: '0.55rem',
                 backgroundColor: 'var(--ds-accent)',
-                color: '#ffffff',
+                color: 'var(--ds-text-on-accent)',
                 fontSize: compact ? '0.82rem' : '0.88rem',
                 fontWeight: 800,
                 boxShadow: isLight ? '0 3px 10px rgba(37, 99, 235, 0.2)' : '0 4px 14px rgba(37, 99, 235, 0.4)',
@@ -276,7 +281,7 @@ export default function ToeicHeroBanner({
                 borderRadius: '0.55rem',
                 backgroundColor: isLight ? 'var(--ds-card)' : 'rgba(255, 255, 255, 0.12)',
                 border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.25)',
-                color: isLight ? 'var(--ds-text)' : '#ffffff',
+                color: 'var(--ds-text-heading)',
                 fontSize: compact ? '0.82rem' : '0.88rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -303,7 +308,7 @@ export default function ToeicHeroBanner({
                 borderRadius: '0.55rem',
                 backgroundColor: isLight ? 'var(--ds-card)' : 'rgba(255, 255, 255, 0.08)',
                 border: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.15)',
-                color: isLight ? 'var(--ds-text)' : '#e2e8f0',
+                color: 'var(--ds-text-secondary)',
                 fontSize: compact ? '0.82rem' : '0.88rem',
                 fontWeight: 700,
                 boxShadow: isLight ? '0 1px 3px rgba(0, 0, 0, 0.05)' : 'none',
@@ -337,7 +342,7 @@ export default function ToeicHeroBanner({
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: compact ? '1.1rem' : '1.35rem', fontWeight: 800, color: isLight ? 'var(--ds-accent)' : '#38bdf8' }}>
+              <div style={{ fontSize: compact ? '1.1rem' : '1.35rem', fontWeight: 800, color: 'var(--ds-accent)' }}>
                 {userStats.estimatedScore}
               </div>
               <div style={{ fontSize: compact ? '0.68rem' : '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
@@ -388,8 +393,9 @@ export default function ToeicHeroBanner({
                 backdropFilter: 'blur(4px)'
               }}
             >
-              <div style={{ fontSize: compact ? '1.1rem' : '1.35rem', fontWeight: 800, color: 'var(--ds-warning)' }}>
-                🔥 {userStats.streakDays}d
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: compact ? '1.1rem' : '1.35rem', fontWeight: 800, color: 'var(--ds-warning)' }}>
+                <KitIcon name="flame" size={compact ? 17 : 20} color="var(--ds-warning)" />
+                <span>{userStats.streakDays}d</span>
               </div>
               <div style={{ fontSize: compact ? '0.68rem' : '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
                 Chuỗi Học Liên Tục

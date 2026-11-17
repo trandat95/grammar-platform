@@ -152,6 +152,9 @@ export default function AcademicSectionBody({
         <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
               fontSize: "0.72rem",
               fontFamily: "var(--font-sans)",
               color: "var(--ds-accent)",
@@ -160,7 +163,8 @@ export default function AcademicSectionBody({
               letterSpacing: "0.06em",
             }}
           >
-            ⚡ CÔNG THỨC CHUẨN XÁC
+            <KitIcon name="bolt" size={13} color="var(--ds-accent)" />
+            <span>CÔNG THỨC CHUẨN XÁC</span>
           </div>
           {formulas.map((f, fIdx) => {
             const formulaKindClass = f.type?.includes("(+)")
@@ -225,6 +229,9 @@ export default function AcademicSectionBody({
         <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
               fontSize: "0.72rem",
               fontFamily: "var(--font-sans)",
               color: "var(--ds-indigo)",
@@ -233,7 +240,8 @@ export default function AcademicSectionBody({
               letterSpacing: "0.06em",
             }}
           >
-            📌 QUY TẮC & TÌNH HUỐNG VẬN DỤNG
+            <KitIcon name="pin" size={13} color="var(--ds-indigo)" />
+            <span>QUY TẮC &amp; TÌNH HUỐNG VẬN DỤNG</span>
           </div>
           {rules.map((rule, rIdx) => {
             const ruleKey = `${lessonId || "ls"}-${secIdx}-${rIdx}`;
@@ -499,6 +507,9 @@ export default function AcademicSectionBody({
         >
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
               fontSize: "0.7rem",
               fontWeight: 800,
               color: "var(--ds-accent)",
@@ -507,7 +518,8 @@ export default function AcademicSectionBody({
               marginBottom: "0.6rem",
             }}
           >
-            💬 VÍ DỤ MINH HỌA ({bulletExamples.length})
+            <KitIcon name="chat" size={13} color="var(--ds-accent)" />
+            <span>VÍ DỤ MINH HỌA ({bulletExamples.length})</span>
           </div>
           <div
             style={{
@@ -609,7 +621,7 @@ export default function AcademicSectionBody({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.3rem" }}>
-                <span style={{ fontSize: "1rem" }}>⚠️</span>
+                <KitIcon name="warning" size={15} color="var(--ds-warning)" />
                 <span
                   style={{
                     fontSize: "0.75rem",

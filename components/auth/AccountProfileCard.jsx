@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Skeleton } from "../design-system";
 import { getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import KitIcon from "../ui-2026/KitIcon";
 import { getCachedMonetizationOverview } from "../monetization/MonetizationHub";
 import { getCachedGamificationSummary } from "../gamification/GamificationHub";
 
@@ -174,8 +175,8 @@ export default function AccountProfileCard({
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
               <span style={{ fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>{currentUser.name}</span>
-              <Badge tone={effectiveRole === "ADMIN" ? "danger" : hasVip ? "success" : "neutral"} isLight={isLight}>
-                {effectiveRole === "ADMIN" ? "🛡️ ADMIN" : hasVip ? "⭐ VIP" : "👤 FREE"}
+              <Badge tone={effectiveRole === "ADMIN" ? "danger" : hasVip ? "success" : "neutral"} icon={effectiveRole === "ADMIN" ? "shield" : hasVip ? "crown" : "user"} isLight={isLight}>
+                {effectiveRole === "ADMIN" ? "ADMIN" : hasVip ? "VIP" : "FREE"}
               </Badge>
             </div>
             <div style={{ fontSize: "0.78rem", color: T.textSecondary, marginTop: "0.1rem" }}>{currentUser.email}</div>
@@ -185,8 +186,8 @@ export default function AccountProfileCard({
           </div>
         </div>
 
-        <Button size="sm" variant="danger" isLight={isLight} onClick={onLogout}>
-          🚪 Đăng xuất
+        <Button size="sm" variant="danger" icon="close" isLight={isLight} onClick={onLogout}>
+          Đăng xuất
         </Button>
       </div>
 
@@ -203,8 +204,9 @@ export default function AccountProfileCard({
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>
-            💎 Thông tin Gói Cước &amp; Thời Hạn
+          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+            <KitIcon name="hub-vip" size={16} />
+            <span>Thông tin Gói Cước &amp; Thời Hạn</span>
           </div>
           {sub ? (
             <Badge tone={subStatusTone} isLight={isLight}>
@@ -277,8 +279,8 @@ export default function AccountProfileCard({
             <div style={{ fontSize: "0.78rem", color: T.textSecondary }}>
               Bạn đang dùng gói Miễn Phí. Nâng cấp VIP để mở khóa lời giải Nâng cao, 2,939 câu hỏi &amp; AI Study Coach.
             </div>
-            <Button size="sm" variant="primary" isLight={isLight} onClick={onOpenVipHub}>
-              💎 Nâng cấp VIP
+            <Button size="sm" variant="primary" icon="hub-vip" isLight={isLight} onClick={onOpenVipHub}>
+              Nâng cấp VIP
             </Button>
           </div>
         )}
@@ -296,8 +298,9 @@ export default function AccountProfileCard({
           gap: "0.7rem",
         }}
       >
-        <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>
-          📊 Tiến Độ Học Tập &amp; Kinh Nghiệm
+        <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          <KitIcon name="tool-chart" size={16} />
+          <span>Tiến Độ Học Tập &amp; Kinh Nghiệm</span>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(105px, 1fr))", gap: "0.5rem" }}>
@@ -358,8 +361,9 @@ export default function AccountProfileCard({
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>
-            🏆 Huy Hiệu Thành Tích ({unlockedBadges.length}/{achievements.length || 20})
+          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+            <KitIcon name="trophy" size={16} />
+            <span>Huy Hiệu Thành Tích ({unlockedBadges.length}/{achievements.length || 20})</span>
           </div>
           <Button size="sm" variant="ghost" isLight={isLight} onClick={onOpenGamificationHub} style={{ fontSize: "0.74rem" }}>
             Xem tất cả ➔
@@ -456,11 +460,11 @@ export default function AccountProfileCard({
 
       {/* Footer Actions */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-        <Button size="sm" variant="secondary" isLight={isLight} onClick={onSwitchAccount}>
-          🔄 Đổi / Đăng nhập tài khoản khác
+        <Button size="sm" variant="secondary" icon="refresh" isLight={isLight} onClick={onSwitchAccount}>
+          Đổi / Đăng nhập tài khoản khác
         </Button>
-        <Button size="sm" variant="primary" isLight={isLight} onClick={onOpenVipHub}>
-          {hasVip ? "💎 Xem chi tiết & Gia hạn VIP" : "💎 Nâng cấp VIP ngay"}
+        <Button size="sm" variant="primary" icon="hub-vip" isLight={isLight} onClick={onOpenVipHub}>
+          {hasVip ? "Xem chi tiết & Gia hạn VIP" : "Nâng cấp VIP ngay"}
         </Button>
       </div>
     </div>

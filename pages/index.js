@@ -1136,7 +1136,7 @@ export default function Home() {
       await resendConfirmationWithSupabase(targetEmail, redirectTo);
       setAuthUnconfirmedEmail("");
       setAuthSuccess(
-        `✅ Đã gửi lại email xác nhận tới ${targetEmail}. Vui lòng mở Hộp thư đến (hoặc Spam) và bấm vào link xác thực rồi đăng nhập lại.`
+        `Đã gửi lại email xác nhận tới ${targetEmail}. Vui lòng mở Hộp thư đến (hoặc Spam) và bấm vào link xác thực rồi đăng nhập lại.`
       );
     } catch (err) {
       setAuthError(err?.message || "Không thể gửi lại email xác nhận. Vui lòng thử lại sau!");
@@ -1203,7 +1203,7 @@ export default function Home() {
         } else {
           setAuthUnconfirmedEmail(email);
           setAuthSuccess(
-            `✅ Đã tạo tài khoản "${email}". Tuy nhiên Supabase vẫn đang BẬT "Confirm email" nên bạn cần bấm link xác nhận trong email trước khi đăng nhập (hoặc tắt "Confirm email" tại Auth > Providers > Email trên Supabase Dashboard để đăng ký mới vào thẳng luôn).`
+            `Đã tạo tài khoản "${email}". Tuy nhiên Supabase vẫn đang BẬT "Confirm email" nên bạn cần bấm link xác nhận trong email trước khi đăng nhập (hoặc tắt "Confirm email" tại Auth > Providers > Email trên Supabase Dashboard để đăng ký mới vào thẳng luôn).`
           );
           setAuthConfirmPassword("");
           setAuthTab("login");
@@ -1262,7 +1262,7 @@ export default function Home() {
       const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
       await resetPasswordWithSupabase(email, redirectTo);
       setAuthSuccess(
-        `✅ Đã gửi liên kết khôi phục mật khẩu tới ${email}. Vui lòng mở Hộp thư đến (hoặc mục Thư rác/Spam) và nhấn vào link để đặt mật khẩu mới.`
+        `Đã gửi liên kết khôi phục mật khẩu tới ${email}. Vui lòng mở Hộp thư đến (hoặc mục Thư rác/Spam) và nhấn vào link để đặt mật khẩu mới.`
       );
     } catch (err) {
       setAuthError(err?.message || "Không thể gửi email khôi phục mật khẩu. Vui lòng thử lại sau!");
@@ -1309,7 +1309,7 @@ export default function Home() {
       setAuthConfirmPassword("");
       setAuthModalOpen(false);
       setAuthTab("login");
-      triggerXpGain(0, "✅ Đã đặt lại mật khẩu mới thành công!");
+      triggerXpGain(0, "Đã đặt lại mật khẩu mới thành công!");
     } catch (err) {
       setAuthError(err?.message || "Liên kết khôi phục đã hết hạn hoặc không hợp lệ. Vui lòng gửi lại yêu cầu Quên mật khẩu.");
     } finally {
@@ -2150,6 +2150,9 @@ export default function Home() {
             onClick={() => playWordAudio(exContent.replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
             title="Nghe phát âm ví dụ này"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
               backgroundColor: "var(--ds-card)",
               border: `1px solid ${T.border}`,
               color: "var(--ds-accent)",
@@ -2160,7 +2163,8 @@ export default function Home() {
               flexShrink: 0,
             }}
           >
-            🔊 Nghe
+            <KitIcon name="tool-audio" size={12} />
+            <span>Nghe</span>
           </button>
         </div>
       );
@@ -2320,7 +2324,7 @@ export default function Home() {
         });
         setShowSwitchAuthForm(false);
         setAuthError("");
-        setAuthSuccess("🔑 Đăng nhập tài khoản miễn phí để nhận 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI (50/30/20)!");
+        setAuthSuccess("Đăng nhập tài khoản miễn phí để nhận 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI (50/30/20)!");
         setAuthTab("login");
         setAuthModalOpen(true);
         return;
@@ -2352,8 +2356,8 @@ export default function Home() {
           type: remain === 0 ? "free_last_shuffle" : "free_shuffle_used",
           message:
             remain === 0
-              ? "⚡ Đây là lượt trộn đề miễn phí cuối cùng (3/3) của bạn! Muốn trộn thêm hoặc mở khóa Câu 21 → 50, hãy nâng cấp VIP."
-              : `✅ Đã trộn bộ 20 câu mới! Tài khoản Miễn phí của bạn còn ${remain}/3 lượt trộn đề.`,
+              ? "Đây là lượt trộn đề miễn phí cuối cùng (3/3) của bạn! Muốn trộn thêm hoặc mở khóa Câu 21 → 50, hãy nâng cấp VIP."
+              : `Đã trộn bộ 20 câu mới! Tài khoản Miễn phí của bạn còn ${remain}/3 lượt trộn đề.`,
         });
       }
     }
@@ -2406,11 +2410,11 @@ export default function Home() {
       setQuizGateBanner({
         type: "guest_login_required",
         message:
-          "🎯 Đề Thích Ứng AI (50/30/20) yêu cầu đăng nhập tài khoản để AI phân tích hồ sơ lỗi sai của riêng bạn và mở 3 lượt trộn miễn phí!",
+          "Đề Thích Ứng AI (50/30/20) yêu cầu đăng nhập tài khoản để AI phân tích hồ sơ lỗi sai của riêng bạn và mở 3 lượt trộn miễn phí!",
       });
       setShowSwitchAuthForm(false);
       setAuthError("");
-      setAuthSuccess("🔑 Đăng nhập tài khoản để mở khóa Đề Thích Ứng AI (50/30/20) & nhận 3 lượt trộn đề miễn phí!");
+      setAuthSuccess("Đăng nhập tài khoản để mở khóa Đề Thích Ứng AI (50/30/20) & nhận 3 lượt trộn đề miễn phí!");
       setAuthTab("login");
       setAuthModalOpen(true);
       return;
@@ -2443,8 +2447,8 @@ export default function Home() {
         type: remain === 0 ? "free_last_shuffle" : "free_shuffle_used",
         message:
           remain === 0
-            ? "⚡ Bạn vừa dùng lượt trộn Đề Thích Ứng cuối cùng (3/3) của gói Miễn phí! Bản dùng thử chỉ hiển thị 20/50 câu."
-            : `🧠 Đã tạo Đề Thích Ứng 20 câu! Bạn còn ${remain}/3 lượt trộn đề miễn phí.`,
+            ? "Bạn vừa dùng lượt trộn Đề Thích Ứng cuối cùng (3/3) của gói Miễn phí! Bản dùng thử chỉ hiển thị 20/50 câu."
+            : `Đã tạo Đề Thích Ứng 20 câu! Bạn còn ${remain}/3 lượt trộn đề miễn phí.`,
       });
     }
 
@@ -2764,11 +2768,11 @@ export default function Home() {
   // User Rank / Level based on XP
   const userRank = useMemo(() => {
     const xp = userTracker.xp || 0;
-    if (xp >= 1500) return { title: "Bậc Thầy Anh Ngữ", level: 5, badge: "💎 Diamond", nextXp: 2000 };
-    if (xp >= 800) return { title: "Chiến Binh Ngữ Pháp", level: 4, badge: "🏆 Platinum", nextXp: 1500 };
-    if (xp >= 400) return { title: "Cao Thủ Cú Vọ", level: 3, badge: "🥇 Gold", nextXp: 800 };
-    if (xp >= 150) return { title: "Học Viên Tích Cực", level: 2, badge: "🥈 Silver", nextXp: 400 };
-    return { title: "Tập Sự Khởi Đầu", level: 1, badge: "🥉 Bronze", nextXp: 150 };
+    if (xp >= 1500) return { title: "Bậc Thầy Anh Ngữ", level: 5, badge: "Diamond", icon: "gem", nextXp: 2000 };
+    if (xp >= 800) return { title: "Chiến Binh Ngữ Pháp", level: 4, badge: "Platinum", icon: "trophy", nextXp: 1500 };
+    if (xp >= 400) return { title: "Cao Thủ Cú Vọ", level: 3, badge: "Gold", icon: "rank-1", nextXp: 800 };
+    if (xp >= 150) return { title: "Học Viên Tích Cực", level: 2, badge: "Silver", icon: "rank-2", nextXp: 400 };
+    return { title: "Tập Sự Khởi Đầu", level: 1, badge: "Bronze", icon: "rank-3", nextXp: 150 };
   }, [userTracker.xp]);
 
   // Smart Daily Recommendation Algorithm
@@ -3142,7 +3146,7 @@ export default function Home() {
             gap: "0.6rem",
           }}
         >
-          <span style={{ fontSize: "1.2rem" }} aria-hidden="true">⚡</span>
+          <span style={{ display: "inline-flex", alignItems: "center", color: T.success }} aria-hidden="true"><KitIcon name="bolt" size={18} /></span>
           <div>
             <div style={{ fontWeight: "700", color: T.success, fontSize: "0.95rem" }}>
               {xpToast.message}
@@ -3248,10 +3252,14 @@ export default function Home() {
                     borderRadius: "6px",
                     fontSize: "0.78rem",
                     fontWeight: "700",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
                     cursor: authSubmitting ? "not-allowed" : "pointer",
                   }}
                 >
-                  📧 Gửi lại email xác nhận ({authUnconfirmedEmail})
+                  <KitIcon name="refresh" size={14} />
+                  <span>Gửi lại email xác nhận ({authUnconfirmedEmail})</span>
                 </button>
               </div>
             )}
@@ -3596,7 +3604,7 @@ export default function Home() {
                   >
                     {authPassword === authConfirmPassword
                       ? "✓ Hai mật khẩu đã khớp"
-                      : "⚠ Mật khẩu nhập lại chưa khớp"}
+                      : "Mật khẩu nhập lại chưa khớp"}
                   </div>
                 )}
               </div>
@@ -3770,8 +3778,8 @@ export default function Home() {
           {/* Content / Loading state */}
           {dictPopup.loading ? (
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "1.25rem 0", color: "var(--ds-text-muted)", fontSize: "0.85rem" }}>
-              <span style={{ fontSize: "1.2rem" }}>⏳</span>
-              <span>Đang tra cứu từ điển & phiên âm IPA...</span>
+              <KitIcon name="hourglass" size={18} />
+              <span>Đang tra cứu từ điển &amp; phiên âm IPA...</span>
             </div>
           ) : (
             <>
@@ -4191,7 +4199,7 @@ export default function Home() {
               >
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "1.5rem" }}>🛡️</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", color: "var(--ds-accent)" }}><KitIcon name="shield" size={22} /></span>
                     <h1 style={{ fontSize: "1.45rem", fontWeight: "800", color: T.text, margin: 0 }}>
                       Bảng điều khiển Quản trị viên (Admin Panel)
                     </h1>
@@ -4237,7 +4245,7 @@ export default function Home() {
                       gap: "0.4rem",
                     }}
                   >
-                    <span>🔄</span> Làm mới
+                    <KitIcon name="refresh" size={15} /> Làm mới
                   </button>
 
                   <button
@@ -4282,7 +4290,7 @@ export default function Home() {
                     <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       Tổng Thành Viên
                     </span>
-                    <span style={{ fontSize: "1.2rem" }}>👥</span>
+                    <span style={{ color: "var(--ds-accent)", display: "inline-flex" }}><KitIcon name="users" size={18} /></span>
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "800", color: T.text }}>
                     {adminStats.total}
@@ -4310,7 +4318,7 @@ export default function Home() {
                     <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       Học Viên Hoạt Động
                     </span>
-                    <span style={{ fontSize: "1.2rem" }}>🔥</span>
+                    <span style={{ color: "var(--ds-warning)", display: "inline-flex" }}><KitIcon name="flame" size={18} /></span>
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "var(--ds-success)" }}>
                     {adminStats.activeCount}
@@ -4334,7 +4342,7 @@ export default function Home() {
                     <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       Tổng XP Toàn Hệ Thống
                     </span>
-                    <span style={{ fontSize: "1.2rem" }}>⚡</span>
+                    <span style={{ color: "var(--ds-warning)", display: "inline-flex" }}><KitIcon name="bolt" size={18} /></span>
                   </div>
                   <div style={{ fontSize: "1.75rem", fontWeight: "800", color: "var(--ds-warning)" }}>
                     {adminStats.totalXp.toLocaleString()} XP
@@ -4358,7 +4366,7 @@ export default function Home() {
                     <span style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       Bảo Mật Cơ Sở Dữ Liệu
                     </span>
-                    <span style={{ fontSize: "1.2rem" }}>🔒</span>
+                    <span style={{ color: "var(--ds-accent)", display: "inline-flex" }}><KitIcon name="lock" size={18} /></span>
                   </div>
                   <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--ds-accent)", display: "flex", alignItems: "center", gap: "0.3rem" }}>
                     RLS Active 100%
@@ -4381,12 +4389,12 @@ export default function Home() {
                 }}
               >
                 {[
-                  { id: "overview", label: "📊 Tổng quan Vận hành" },
-                  { id: "users", label: `👥 Quản lý Người dùng (${filteredAdminUsers.length})` },
-                  { id: "policy", label: `⚙️ Chính sách Truy cập (v${adminPolicyForm.policyVersion || 1})` },
-                  { id: "pedagogy", label: "🎓 Kiểm duyệt Sư phạm" },
-                  { id: "audit", label: `🛡️ Kiểm toán Server (${serverAuditLogs.length})` },
-                  { id: "activity", label: `📜 Hoạt động Realtime (${adminActivityLogs.length})` },
+                  { id: "overview", icon: "tool-chart", label: "Tổng quan Vận hành" },
+                  { id: "users", icon: "users", label: `Quản lý Người dùng (${filteredAdminUsers.length})` },
+                  { id: "policy", icon: "settings", label: `Chính sách Truy cập (v${adminPolicyForm.policyVersion || 1})` },
+                  { id: "pedagogy", icon: "graduation", label: "Kiểm duyệt Sư phạm" },
+                  { id: "audit", icon: "shield", label: `Kiểm toán Server (${serverAuditLogs.length})` },
+                  { id: "activity", icon: "receipt", label: `Hoạt động Realtime (${adminActivityLogs.length})` },
                 ].map((tab) => {
                   const isActive = adminActiveTab === tab.id;
                   return (
@@ -4397,6 +4405,9 @@ export default function Home() {
                         if (tab.id === "audit") fetchServerAuditLogs();
                       }}
                       style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
                         padding: "0.6rem 1.1rem",
                         backgroundColor: isActive ? ("var(--ds-card)") : "transparent",
                         border: isActive ? `1px solid ${T.border}` : "1px solid transparent",
@@ -4409,7 +4420,8 @@ export default function Home() {
                         transition: "all 0.15s ease",
                       }}
                     >
-                      {tab.label}
+                      <KitIcon name={tab.icon} size={15} />
+                      <span>{tab.label}</span>
                     </button>
                   );
                 })}
@@ -4456,8 +4468,8 @@ export default function Home() {
                   >
                     {/* Search Input */}
                     <div style={{ position: "relative", minWidth: "260px", flex: "1 1 280px" }}>
-                      <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", fontSize: "0.85rem", color: T.textMuted }}>
-                        🔍
+                      <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: T.textMuted, display: "inline-flex", pointerEvents: "none" }}>
+                        <KitIcon name="tool-search" size={15} />
                       </span>
                       <input
                         type="text"
@@ -4549,6 +4561,9 @@ export default function Home() {
                           type="button"
                           onClick={() => setAdminStreakFilter((prev) => (prev === "STREAK_7" ? "ALL" : "STREAK_7"))}
                           style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
                             padding: "0.25rem 0.6rem",
                             fontSize: "0.72rem",
                             fontWeight: "700",
@@ -4559,12 +4574,16 @@ export default function Home() {
                             cursor: "pointer",
                           }}
                         >
-                          🔥 Streak ≥ 7 ngày
+                          <KitIcon name="flame" size={13} />
+                          <span>Streak ≥ 7 ngày</span>
                         </button>
                         <button
                           type="button"
                           onClick={handleExportUsersCsv}
                           style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
                             padding: "0.25rem 0.65rem",
                             fontSize: "0.72rem",
                             fontWeight: "700",
@@ -4575,7 +4594,8 @@ export default function Home() {
                             cursor: "pointer",
                           }}
                         >
-                          📥 Xuất CSV (UTF-8)
+                          <KitIcon name="doc-export" size={13} />
+                          <span>Xuất CSV (UTF-8)</span>
                         </button>
                       </div>
                     </div>
@@ -4620,30 +4640,34 @@ export default function Home() {
                                 </td>
 
                                 <td style={{ padding: "0.85rem 0.5rem" }}>
-                                  <span
-                                    style={{
-                                      fontSize: "0.72rem",
-                                      fontFamily: "var(--font-sans)",
-                                      fontWeight: "700",
-                                      padding: "0.2rem 0.55rem",
-                                      borderRadius: "4px",
-                                      backgroundColor:
-                                        u.role === "ADMIN" ? ("var(--ds-danger-bg)")
-                                        : u.role === "VIP" ? ("var(--ds-warning-bg)")
-                                        : ("var(--ds-accent-bg)"),
-                                      color:
-                                        u.role === "ADMIN" ? ("var(--ds-danger)")
-                                        : u.role === "VIP" ? ("var(--ds-warning)")
-                                        : ("var(--ds-accent)"),
-                                      border: `1px solid ${
-                                        u.role === "ADMIN" ? ("var(--ds-danger-border)")
-                                        : u.role === "VIP" ? ("var(--ds-warning-border)")
-                                        : ("var(--ds-accent-border)")
-                                      }`,
-                                    }}
-                                  >
-                                    {u.role === "ADMIN" ? "🛡️ ADMIN" : u.role === "VIP" ? "⭐ VIP" : "👤 FREE"}
-                                  </span>
+                                    <span
+                                      style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "4px",
+                                        fontSize: "0.72rem",
+                                        fontFamily: "var(--font-sans)",
+                                        fontWeight: "700",
+                                        padding: "0.2rem 0.55rem",
+                                        borderRadius: "4px",
+                                        backgroundColor:
+                                          u.role === "ADMIN" ? ("var(--ds-danger-bg)")
+                                          : u.role === "VIP" ? ("var(--ds-warning-bg)")
+                                          : ("var(--ds-accent-bg)"),
+                                        color:
+                                          u.role === "ADMIN" ? ("var(--ds-danger)")
+                                          : u.role === "VIP" ? ("var(--ds-warning)")
+                                          : ("var(--ds-accent)"),
+                                        border: `1px solid ${
+                                          u.role === "ADMIN" ? ("var(--ds-danger-border)")
+                                          : u.role === "VIP" ? ("var(--ds-warning-border)")
+                                          : ("var(--ds-accent-border)")
+                                        }`,
+                                      }}
+                                    >
+                                      <KitIcon name={u.role === "ADMIN" ? "shield" : u.role === "VIP" ? "crown" : "user"} size={12} />
+                                      <span>{u.role === "ADMIN" ? "ADMIN" : u.role === "VIP" ? "VIP" : "FREE"}</span>
+                                    </span>
                                 </td>
 
                                 <td style={{ padding: "0.85rem 0.5rem" }}>
@@ -4697,7 +4721,7 @@ export default function Home() {
                                           </div>
                                           {sub.billing_cycle === "lifetime" ? (
                                             <span style={{ fontSize: "0.71rem", fontWeight: "700", color: "var(--ds-success)" }}>
-                                              ♾️ Vĩnh viễn (Trọn đời)
+                                              Vĩnh viễn (Trọn đời)
                                             </span>
                                           ) : (
                                             <span
@@ -4726,15 +4750,15 @@ export default function Home() {
                                 <td style={{ padding: "0.85rem 0.5rem" }}>
                                   <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
                                     <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)", fontWeight: "700" }}>
-                                        🔥 {u.tracker?.streak || 1} ngày
+                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-warning)", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "3px" }}>
+                                        <KitIcon name="flame" size={12} /> {u.tracker?.streak || 1} ngày
                                       </span>
-                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-accent)", fontWeight: "700" }}>
-                                        ⚡ {u.tracker?.xp || 0} XP
+                                      <span style={{ fontSize: "0.75rem", color: "var(--ds-accent)", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "3px" }}>
+                                        <KitIcon name="bolt" size={12} /> {u.tracker?.xp || 0} XP
                                       </span>
                                     </div>
-                                    <div style={{ fontSize: "0.72rem", color: T.textMuted }}>
-                                      📖 {u.tracker?.completed_lessons?.length || 0} bài học
+                                    <div style={{ fontSize: "0.72rem", color: T.textMuted, display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                                      <KitIcon name="book" size={12} /> {u.tracker?.completed_lessons?.length || 0} bài học
                                     </div>
                                   </div>
                                 </td>
@@ -4768,10 +4792,13 @@ export default function Home() {
                                           borderRadius: "4px",
                                           fontSize: "0.75rem",
                                           fontWeight: "700",
-                                          cursor: "pointer",
+                                          display: "inline-flex",
+                                          alignItems: "center",
+                                          gap: "4px",
                                         }}
                                       >
-                                        Nâng VIP ⭐
+                                        <span>Nâng VIP</span>
+                                        <KitIcon name="crown" size={12} />
                                       </button>
                                     )}
 
@@ -4852,8 +4879,9 @@ export default function Home() {
                     boxShadow: T.shadow,
                   }}
                 >
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: "0 0 0.5rem 0" }}>
-                    ⚙️ Cấu hình Quyền & Hạn mức truy cập cho User Default (FREE)
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: "0 0 0.5rem 0", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                    <KitIcon name="settings" size={18} />
+                    <span>Cấu hình Quyền &amp; Hạn mức truy cập cho User Default (FREE)</span>
                   </h3>
                   <p style={{ fontSize: "0.85rem", color: T.textMuted, margin: "0 0 1.5rem 0" }}>
                     Mọi thay đổi hạn mức sẽ được áp dụng trực tiếp lên bảng <code>system_policies</code> của Supabase Postgres 17 và lưu vết kiểm toán tự động.
@@ -4923,9 +4951,12 @@ export default function Home() {
                     <button
                       type="submit"
                       style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.45rem",
                         padding: "0.6rem 1.6rem",
                         backgroundColor: "var(--ds-btn-primary)",
-                        color: "#ffffff",
+                        color: "var(--ds-text-on-accent)",
                         border: "none",
                         borderRadius: "6px",
                         fontWeight: "700",
@@ -4935,7 +4966,8 @@ export default function Home() {
                         boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
                       }}
                     >
-                      🛡️ Lưu Policy v{(adminPolicyForm.policyVersion || 1) + 1} (Step-Up)
+                      <KitIcon name="shield" size={16} style={{ color: "var(--ds-text-on-accent)" }} />
+                      <span>Lưu Policy v{(adminPolicyForm.policyVersion || 1) + 1} (Step-Up)</span>
                     </button>
                   </form>
                 </div>
@@ -4964,11 +4996,15 @@ export default function Home() {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", flexWrap: "wrap" }}>
-                        <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                          🛡️ Nhật ký Kiểm toán Quản trị Server ({filteredAuditLogs.length})
+                        <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0, display: "inline-flex", alignItems: "center", gap: "0.45rem" }}>
+                          <KitIcon name="shield" size={18} />
+                          <span>Nhật ký Kiểm toán Quản trị Server ({filteredAuditLogs.length})</span>
                         </h3>
                         <span
                           style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.3rem",
                             fontSize: "0.7rem",
                             fontWeight: "800",
                             padding: "0.18rem 0.55rem",
@@ -4978,7 +5014,8 @@ export default function Home() {
                             color: T.success,
                           }}
                         >
-                          🔒 Trigger Bất biến DB Active (Append-Only)
+                          <KitIcon name="lock" size={12} />
+                          <span>Trigger Bất biến DB Active (Append-Only)</span>
                         </span>
                       </div>
                       <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
@@ -5013,6 +5050,9 @@ export default function Home() {
                         onClick={fetchServerAuditLogs}
                         disabled={isLoadingAudit}
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
                           padding: "0.35rem 0.75rem",
                           backgroundColor: "var(--ds-bg-elevated)",
                           border: `1px solid ${T.border}`,
@@ -5023,7 +5063,8 @@ export default function Home() {
                           cursor: "pointer",
                         }}
                       >
-                        {isLoadingAudit ? "Đang tải..." : "🔄 Làm mới Log"}
+                        <KitIcon name="refresh" size={14} />
+                        <span>{isLoadingAudit ? "Đang tải..." : "Làm mới Log"}</span>
                       </button>
                     </div>
                   </div>
@@ -5130,12 +5171,16 @@ export default function Home() {
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0 }}>
-                      📜 Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})
+                    <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: T.text, margin: 0, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+                      <KitIcon name="receipt" size={18} />
+                      <span>Nhật ký Hoạt động Người dùng Real-time ({adminActivityLogs.length})</span>
                     </h3>
                     <button
                       onClick={refreshAdminFromSupabase}
                       style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.32rem",
                         padding: "0.3rem 0.65rem",
                         backgroundColor: "var(--ds-bg-elevated)",
                         border: `1px solid ${T.border}`,
@@ -5145,7 +5190,8 @@ export default function Home() {
                         cursor: "pointer",
                       }}
                     >
-                      🔄 Cập nhật log
+                      <KitIcon name="refresh" size={13} />
+                      <span>Cập nhật log</span>
                     </button>
                   </div>
 
@@ -5280,7 +5326,7 @@ export default function Home() {
                       ? "Sử dụng Trọn đời (Vĩnh viễn)"
                       : "Thời hạn 1 năm";
                   const previewEnd = (() => {
-                    if (plan.billing_cycle === "lifetime") return "Không giới hạn (Trọn đời ♾️)";
+                    if (plan.billing_cycle === "lifetime") return "Không giới hạn (Trọn đời ∞)";
                     const d = new Date();
                     if (plan.billing_cycle === "monthly") d.setMonth(d.getMonth() + 1);
                     else if (plan.billing_cycle === "quarterly") d.setMonth(d.getMonth() + 3);
@@ -5362,17 +5408,21 @@ export default function Home() {
                   disabled={vipGrantModal.submitting}
                   onClick={handleConfirmGrantVip}
                   style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
                     padding: "0.55rem 1.2rem",
                     borderRadius: "8px",
                     border: "none",
                     backgroundColor: "var(--ds-btn-warning)",
-                    color: "#ffffff",
+                    color: "var(--ds-text-on-accent)",
                     fontWeight: "800",
                     fontSize: "0.84rem",
                     cursor: vipGrantModal.submitting ? "wait" : "pointer",
                   }}
                 >
-                  {vipGrantModal.submitting ? "Đang cấp gói..." : "Xác nhận Cấp VIP ⭐"}
+                  {!vipGrantModal.submitting && <KitIcon name="crown" size={14} style={{ color: "var(--ds-text-on-accent)" }} />}
+                  <span>{vipGrantModal.submitting ? "Đang cấp gói..." : "Xác nhận Cấp VIP"}</span>
                 </button>
               </div>
             </div>
@@ -5528,7 +5578,7 @@ export default function Home() {
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
                         <div className="ge-streak-orb" aria-hidden="true">
-                          <span className="ge-streak-flame-live" style={{ fontSize: "1.35rem" }}>🔥</span>
+                          <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={20} /></span>
                         </div>
                         <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
                           Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
@@ -5538,6 +5588,9 @@ export default function Home() {
                     <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                       <span
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
                           backgroundColor: "var(--ds-bg-elevated)",
                           border: "1px solid var(--ds-border)",
                           color: "var(--ds-text)",
@@ -5547,7 +5600,8 @@ export default function Home() {
                           fontWeight: "600",
                         }}
                       >
-                        {userRank.badge} • Cấp {userRank.level} ({userRank.title})
+                        <KitIcon name={userRank.icon} size={13} />
+                        <span>{userRank.badge} • Cấp {userRank.level} ({userRank.title})</span>
                       </span>
 
                       <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)" }}>
@@ -5567,10 +5621,13 @@ export default function Home() {
                             padding: "0.22rem 0.55rem",
                             borderRadius: "6px",
                             cursor: "pointer",
-                            fontWeight: "600",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
                           }}
                         >
-                          ⚡ Nâng cấp VIP
+                          <KitIcon name="bolt" size={13} />
+                          <span>Nâng cấp VIP</span>
                         </button>
                       )}
                     </div>
@@ -5621,7 +5678,7 @@ export default function Home() {
                               border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
                             }}
                           >
-                            {d.isActive ? <span className="ge-streak-flame-live">🔥</span> : d.dayNum}
+                            {d.isActive ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={14} style={{ color: "var(--ds-text-on-accent)" }} /></span> : d.dayNum}
                           </div>
                         </div>
                       ))}
@@ -5659,8 +5716,9 @@ export default function Home() {
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
-                      📖 Học Tiếp Hôm Nay
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                      <KitIcon name="book" size={14} />
+                      <span>Học Tiếp Hôm Nay</span>
                     </div>
                     <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
                       Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
@@ -5691,8 +5749,9 @@ export default function Home() {
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
-                      🎯 Kiểm Tra Trình Độ (30 Câu)
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                      <KitIcon name="target" size={14} />
+                      <span>Kiểm Tra Trình Độ (30 Câu)</span>
                     </div>
                     <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
                       Đo nhanh lỗ hổng ngữ pháp &amp; gợi ý bài cần ôn
@@ -5725,8 +5784,9 @@ export default function Home() {
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem" }}>
-                      🏆 Luyện Thi TOEIC 2026
+                    <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                      <KitIcon name="trophy" size={14} />
+                      <span>Luyện Thi TOEIC 2026</span>
                     </div>
                     <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
                       20 Đề thi thử, 24 dạng bài &amp; 540 đoạn nghe chép
@@ -5747,8 +5807,10 @@ export default function Home() {
                     aria-selected={dashboardZone === "today"}
                     onClick={() => setDashboardZone("today")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "today" ? "is-active" : ""}`}
+                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    ⚡ Hôm nay &amp; Mục tiêu
+                    <KitIcon name="bolt" size={14} />
+                    <span>Hôm nay &amp; Mục tiêu</span>
                   </button>
                   <button
                     type="button"
@@ -5756,8 +5818,10 @@ export default function Home() {
                     aria-selected={dashboardZone === "analytics"}
                     onClick={() => setDashboardZone("analytics")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "analytics" ? "is-active" : ""}`}
+                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    📊 Phân tích 12 Chuyên đề
+                    <KitIcon name="tool-chart" size={14} />
+                    <span>Phân tích 12 Chuyên đề</span>
                   </button>
                   <button
                     type="button"
@@ -5765,8 +5829,10 @@ export default function Home() {
                     aria-selected={dashboardZone === "ai"}
                     onClick={() => setDashboardZone("ai")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "ai" ? "is-active" : ""}`}
+                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    ✨ Khám phá AI &amp; TOEIC
+                    <KitIcon name="tool-spark" size={14} />
+                    <span>Khám phá AI &amp; TOEIC</span>
                   </button>
                 </div>
                 <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
@@ -5928,8 +5994,9 @@ export default function Home() {
                         {/* Daily Goal Progress Bar */}
                         <div style={{ paddingTop: "0.9rem", borderTop: "1px solid var(--ds-border-subtle)" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.78rem", marginBottom: "0.4rem" }}>
-                            <span style={{ color: "var(--ds-text-muted)" }}>
-                              🎯 Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập
+                            <span style={{ color: "var(--ds-text-muted)", display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                              <KitIcon name="target" size={14} />
+                              <span>Mục tiêu hàng ngày: <strong style={{ color: "var(--ds-text-heading)" }}>{userTracker.dailyGoal?.solvedToday || 0}</strong> / {userTracker.dailyGoal?.targetQuestions || 10} câu bài tập</span>
                             </span>
                             <span style={{ color: "var(--ds-success)", fontFamily: "var(--font-sans)", fontWeight: "700" }}>
                               {Math.min(100, Math.round(((userTracker.dailyGoal?.solvedToday || 0) / (userTracker.dailyGoal?.targetQuestions || 10)) * 100))}%
@@ -6258,7 +6325,7 @@ export default function Home() {
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                              <span style={{ fontSize: "1.35rem" }}>⚡</span>
+                              <span style={{ color: "var(--ds-accent)", display: "inline-flex" }}><KitIcon name="bolt" size={20} /></span>
                               <div>
                                 <h3 style={{ fontSize: "1.05rem", fontWeight: "800", color: T.text, margin: 0, letterSpacing: "-0.01em" }}>
                                   Tóm tắt nhanh: Công thức &amp; Dấu hiệu nhận biết
@@ -6270,6 +6337,9 @@ export default function Home() {
                             </div>
                             <span
                               style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "0.35rem",
                                 fontSize: "0.72rem",
                                 fontFamily: "var(--font-sans)",
                                 padding: "0.25rem 0.65rem",
@@ -6280,7 +6350,8 @@ export default function Home() {
                                 fontWeight: "700",
                               }}
                             >
-                              ⏳ {selectedLesson.cheatSheet.timeline}
+                              <KitIcon name="hourglass" size={13} />
+                              <span>{selectedLesson.cheatSheet.timeline}</span>
                             </span>
                           </div>
 
@@ -6295,9 +6366,13 @@ export default function Home() {
                               backgroundColor: "var(--ds-card)",
                               borderRadius: "8px",
                               border: `1px solid ${T.border}`,
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: "0.45rem",
                             }}
                           >
-                            🎯 <strong>Bản chất cốt lõi:</strong> {selectedLesson.cheatSheet.concept}
+                            <span style={{ display: "inline-flex", marginTop: "3px" }}><KitIcon name="target" size={15} /></span>
+                            <span><strong>Bản chất cốt lõi:</strong> {selectedLesson.cheatSheet.concept}</span>
                           </div>
 
                           {/* 3-tier Formula Cards Grid */}
@@ -6345,8 +6420,9 @@ export default function Home() {
                           {/* Signal Words Chips */}
                           {selectedLesson.cheatSheet.signals && selectedLesson.cheatSheet.signals.length > 0 && (
                             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-                              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: T.textMuted, textTransform: "uppercase" }}>
-                                🏷️ TỪ NHẬN BIẾT VÀNG:
+                              <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "700", color: T.textMuted, textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.32rem" }}>
+                                <KitIcon name="tag" size={13} />
+                                <span>TỪ NHẬN BIẾT VÀNG:</span>
                               </span>
                               {selectedLesson.cheatSheet.signals.map((sig, sIdx) => (
                                 <span
@@ -6379,9 +6455,13 @@ export default function Home() {
                                 fontSize: "0.825rem",
                                 color: "var(--ds-warning)",
                                 lineHeight: "1.5",
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: "0.45rem",
                               }}
                             >
-                              💡 <strong>Mẹo làm bài thi & Bẫy cần tránh:</strong> {selectedLesson.cheatSheet.examTip}
+                              <span style={{ display: "inline-flex", marginTop: "2px" }}><KitIcon name="bulb" size={15} /></span>
+                              <span><strong>Mẹo làm bài thi &amp; Bẫy cần tránh:</strong> {selectedLesson.cheatSheet.examTip}</span>
                             </div>
                           )}
                         </div>
@@ -6500,7 +6580,7 @@ export default function Home() {
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.5rem" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                              <span style={{ fontSize: "1.3rem" }}>📚</span>
+                              <span style={{ color: "var(--ds-accent)", display: "inline-flex" }}><KitIcon name="books" size={20} /></span>
                               <div>
                                 <h3 style={{ fontSize: "1.08rem", fontWeight: "700", color: T.textHeading, margin: 0 }}>
                                   Thư viện Ví dụ Mẫu ({allExamples.length} câu)
@@ -6534,7 +6614,8 @@ export default function Home() {
                                   </div>
                                   {ex.vi && (
                                     <div style={{ fontSize: "0.81rem", color: "var(--ds-success)", marginTop: "0.28rem", lineHeight: "1.4" }}>
-                                      🇻🇳 {ex.vi}
+                                      <strong style={{ fontSize: "0.7rem", marginRight: "0.3rem", opacity: 0.85 }}>VI:</strong>
+                                      {ex.vi}
                                     </div>
                                   )}
                                 </div>
@@ -6543,6 +6624,9 @@ export default function Home() {
                                   onClick={() => playWordAudio(String(ex.en || "").replace(/\[.*?\]|\(.*?\)/g, "").trim(), null)}
                                   title="Nghe phát âm bản ngữ câu này"
                                   style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.32rem",
                                     backgroundColor: "var(--ds-card)",
                                     border: `1px solid ${T.border}`,
                                     color: "var(--ds-accent)",
@@ -6554,7 +6638,8 @@ export default function Home() {
                                     flexShrink: 0,
                                   }}
                                 >
-                                  🔊 Nghe
+                                  <KitIcon name="tool-audio" size={14} />
+                                  <span>Nghe</span>
                                 </button>
                               </div>
                             ))}
@@ -6601,8 +6686,9 @@ export default function Home() {
                           boxShadow: T.shadow,
                         }}
                       >
-                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.4rem" }}>
-                          {isCurrentLessonDone ? "🎉 Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}
+                        <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.4rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.45rem" }}>
+                          {isCurrentLessonDone && <KitIcon name="celebrate" size={20} />}
+                          <span>{isCurrentLessonDone ? "Bạn đã hoàn thành lý thuyết bài học này!" : "Bạn đã nắm vững lý thuyết bài học này?"}</span>
                         </div>
                         <p style={{ fontSize: "0.85rem", color: T.textMuted, marginBottom: "1.25rem" }}>
                           Chuyên đề "{selectedChapter?.title_vi}" có {selectedChapter?.exercises?.length || 0} bài tập thực hành ({totalChapterExerciseQuestions} câu hỏi) để bạn củng cố kiến thức.
@@ -6679,7 +6765,7 @@ export default function Home() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <span>{currentUser.role === "VIP" ? "⭐" : "ℹ️"}</span>
+                      <KitIcon name={currentUser.role === "VIP" ? "crown" : "info"} size={16} />
                       <span style={{ fontSize: "0.85rem", color: T.text, fontWeight: 500 }}>
                         {currentUser.role === "VIP"
                           ? "Tài khoản VIP: Bạn có toàn quyền truy cập 100% tất cả 2,939 câu bài tập và lời giải chi tiết."
@@ -6691,8 +6777,11 @@ export default function Home() {
                       <button
                         onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Mở khóa 100% Bài tập Chuyên đề", description: "Không còn bị giới hạn 10 câu mỗi chương. Học và sửa lỗi chi tiết toàn bộ 2,939 câu." })}
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
                           backgroundColor: "var(--ds-btn-warning)",
-                          color: "#ffffff",
+                          color: "var(--ds-text-on-accent)",
                           border: "none",
                           padding: "0.35rem 0.85rem",
                           borderRadius: "4px",
@@ -6701,7 +6790,8 @@ export default function Home() {
                           cursor: "pointer",
                         }}
                       >
-                        Nâng cấp VIP ngay ⭐
+                        <KitIcon name="crown" size={14} style={{ color: "var(--ds-text-on-accent)" }} />
+                        <span>Nâng cấp VIP ngay</span>
                       </button>
                     )}
                   </div>
@@ -6818,8 +6908,9 @@ export default function Home() {
                                         textAlign: "center",
                                       }}
                                     >
-                                      <div style={{ fontSize: "0.9rem", fontWeight: "700", color: T.warning, marginBottom: "0.3rem" }}>
-                                        🔒 Đã hoàn thành {FREE_QUESTIONS_PER_EXERCISE}/{FREE_QUESTIONS_PER_EXERCISE} câu dùng thử — Còn {remainingInExercise} câu dành riêng cho Thành viên VIP
+                                      <div style={{ fontSize: "0.9rem", fontWeight: "700", color: T.warning, marginBottom: "0.3rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
+                                        <KitIcon name="lock" size={15} />
+                                        <span>Đã hoàn thành {FREE_QUESTIONS_PER_EXERCISE}/{FREE_QUESTIONS_PER_EXERCISE} câu dùng thử — Còn {remainingInExercise} câu dành riêng cho Thành viên VIP</span>
                                       </div>
                                       <p style={{ fontSize: "0.8rem", color: T.textSecondary, maxWidth: "520px", margin: "0 auto 0.75rem auto", lineHeight: 1.5 }}>
                                         Mỗi bài tập (Exercise) được làm thử {FREE_QUESTIONS_PER_EXERCISE} câu đầu tiên. Nâng cấp VIP để mở khóa toàn bộ {ex.questions?.length || 0} câu của bài này cùng đáp án giải thích chi tiết!
@@ -6916,8 +7007,9 @@ export default function Home() {
                     textAlign: "center",
                   }}
                 >
-                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--ds-danger)", marginBottom: "0.35rem" }}>
-                    🔒 Giới hạn lượt thi Quiz hôm nay
+                  <div style={{ fontSize: "1.1rem", fontWeight: "700", color: "var(--ds-danger)", marginBottom: "0.35rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem" }}>
+                    <KitIcon name="lock" size={18} />
+                    <span>Giới hạn lượt thi Quiz hôm nay</span>
                   </div>
                   <p style={{ fontSize: "0.875rem", color: "var(--ds-text-secondary)", margin: "0 0 1rem 0" }}>
                     Tài khoản Miễn phí được làm tối đa {accessPolicy.freeDailyQuizLimit} đề Quiz mỗi ngày (Bạn đã làm {userTracker.quizzesCompletedToday || 0}/{accessPolicy.freeDailyQuizLimit} đề). Nâng cấp lên VIP để làm bài thi không giới hạn!
@@ -6925,9 +7017,12 @@ export default function Home() {
                   <button
                     onClick={() => openContextualSmartPaywall("milestone_100_q", { title: "Luyện Thi Quiz & Đề Thích Ứng Không Giới Hạn", description: "Gỡ bỏ giới hạn Quiz trong ngày và sử dụng bộ trộn đề 50/30/20 không giới hạn." })}
                     style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.35rem",
                       padding: "0.55rem 1.25rem",
                       backgroundColor: "var(--ds-btn-warning)",
-                      color: "#ffffff",
+                      color: "var(--ds-text-on-accent)",
                       border: "none",
                       borderRadius: "6px",
                       fontSize: "0.85rem",
@@ -6935,7 +7030,8 @@ export default function Home() {
                       cursor: "pointer",
                     }}
                   >
-                    Nâng cấp VIP ngay ⭐
+                    <KitIcon name="crown" size={15} style={{ color: "var(--ds-text-on-accent)" }} />
+                    <span>Nâng cấp VIP ngay</span>
                   </button>
                 </div>
               )}
@@ -6972,11 +7068,16 @@ export default function Home() {
                               border: `1px solid ${isVipOrAdmin ? "var(--ds-success-border)" : freeExhausted ? "var(--ds-danger-border)" : "var(--ds-warning-border)"}`,
                             }}
                           >
-                            {isVipOrAdmin
-                              ? "⭐ VIP UNLIMITED • 50 CÂU / ĐỀ"
-                              : isGuestUser
-                              ? "🔒 KHÁCH DÙNG THỬ • 20 / 50 CÂU (KHÔNG TRỘN ĐỀ)"
-                              : `⚡ FREE ACCOUNT • 20 / 50 CÂU • CÒN ${shufflesLeft}/3 LƯỢT TRỘN`}
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                              <KitIcon name={isVipOrAdmin ? "crown" : isGuestUser ? "lock" : "bolt"} size={12} />
+                              <span>
+                                {isVipOrAdmin
+                                  ? "VIP UNLIMITED • 50 CÂU / ĐỀ"
+                                  : isGuestUser
+                                  ? "KHÁCH DÙNG THỬ • 20 / 50 CÂU (KHÔNG TRỘN ĐỀ)"
+                                  : `FREE ACCOUNT • 20 / 50 CÂU • CÒN ${shufflesLeft}/3 LƯỢT TRỘN`}
+                              </span>
+                            </span>
                           </span>
                         </div>
                         <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em", margin: 0 }}>
@@ -7019,15 +7120,17 @@ export default function Home() {
                             cursor: isQuizLimitReached || adaptiveLoading ? "not-allowed" : "pointer",
                           }}
                         >
-                          {adaptiveLoading
-                            ? "Đang trộn đề..."
-                            : isGuestUser
-                            ? "🔒 Đề Thích Ứng AI (Cần Login)"
-                            : freeExhausted
-                            ? "🔒 Mở Khóa Đề Thích Ứng VIP"
-                            : isVipOrAdmin
-                            ? "🎯 Đề Thích Ứng (50/30/20)"
-                            : `🎯 Đề Thích Ứng (${shufflesLeft}/3)`}
+                          {adaptiveLoading ? (
+                            "Đang trộn đề..."
+                          ) : isGuestUser ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Đề Thích Ứng AI (Cần Login)</span>
+                          ) : freeExhausted ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Mở Khóa Đề Thích Ứng VIP</span>
+                          ) : isVipOrAdmin ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="target" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> Đề Thích Ứng (50/30/20)</span>
+                          ) : (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="target" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> {`Đề Thích Ứng (${shufflesLeft}/3)`}</span>
+                          )}
                         </button>
 
                         <button
@@ -7047,19 +7150,21 @@ export default function Home() {
                               ? "var(--ds-text-muted)"
                               : isGuestUser || freeExhausted
                               ? "var(--ds-danger)"
-                              : "#ffffff",
+                              : "var(--ds-text-on-accent)",
                             fontSize: "0.82rem",
                             fontWeight: "700",
                             cursor: isQuizLimitReached ? "not-allowed" : "pointer",
                           }}
                         >
-                          {isGuestUser
-                            ? "🔒 Trộn đề mới (Cần Login)"
-                            : freeExhausted
-                            ? "🔒 Hết 3/3 lượt — Mở VIP"
-                            : isVipOrAdmin
-                            ? "Trộn đề mới (50 câu)"
-                            : `🎲 Trộn đề mới (${shufflesLeft}/3)`}
+                          {isGuestUser ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Trộn đề mới (Cần Login)</span>
+                          ) : freeExhausted ? (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Hết 3/3 lượt — Mở VIP</span>
+                          ) : isVipOrAdmin ? (
+                            "Trộn đề mới (50 câu)"
+                          ) : (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="refresh" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> {`Trộn đề mới (${shufflesLeft}/3)`}</span>
+                          )}
                         </button>
 
                         {!quizSubmitted && activeQuizQuestions.length > 0 && (
@@ -7100,12 +7205,15 @@ export default function Home() {
                         }}
                       >
                         <div style={{ fontSize: "0.81rem", color: "var(--ds-text)", lineHeight: 1.5, flex: "1 1 300px" }}>
-                          <strong>
-                            {isGuestUser
-                              ? "⚠️ Bạn đang ở Chế độ Khách (20 câu cố định): "
-                              : freeExhausted
-                              ? "🔥 Đã dùng hết 3/3 lượt trộn đề Miễn phí: "
-                              : "💡 Mẹo mở khóa toàn bộ đề: "}
+                          <strong style={{ display: "inline-flex", alignItems: "center", gap: "5px", marginRight: "4px" }}>
+                            <KitIcon name={isGuestUser ? "warning" : freeExhausted ? "flame" : "bulb"} size={14} />
+                            <span>
+                              {isGuestUser
+                                ? "Bạn đang ở Chế độ Khách (20 câu cố định): "
+                                : freeExhausted
+                                ? "Đã dùng hết 3/3 lượt trộn đề Miễn phí: "
+                                : "Mẹo mở khóa toàn bộ đề: "}
+                            </span>
                           </strong>
                           {quizGateBanner?.message ||
                             (isGuestUser
@@ -7119,22 +7227,26 @@ export default function Home() {
                               onClick={() => {
                                 setShowSwitchAuthForm(false);
                                 setAuthError("");
-                                setAuthSuccess("🔑 Đăng nhập để nhận ngay 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI!");
+                                setAuthSuccess("Đăng nhập để nhận ngay 3 lượt Trộn đề mới & dùng Đề Thích Ứng AI!");
                                 setAuthTab("login");
                                 setAuthModalOpen(true);
                               }}
                               style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "5px",
                                 padding: "0.42rem 0.85rem",
                                 borderRadius: "6px",
                                 border: "none",
                                 backgroundColor: "var(--ds-btn-primary)",
-                                color: "#ffffff",
+                                color: "var(--ds-text-on-accent)",
                                 fontSize: "0.78rem",
                                 fontWeight: 700,
                                 cursor: "pointer",
                               }}
                             >
-                              🔑 Đăng nhập mở 3 lượt trộn
+                              <KitIcon name="key" size={13} style={{ color: "var(--ds-text-on-accent)" }} />
+                              <span>Đăng nhập mở 3 lượt trộn</span>
                             </button>
                           )}
                           <button
@@ -7147,17 +7259,21 @@ export default function Home() {
                               })
                             }
                             style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "5px",
                               padding: "0.42rem 0.9rem",
                               borderRadius: "6px",
                               border: "none",
                               backgroundColor: "var(--ds-btn-warning)",
-                              color: "#ffffff",
+                              color: "var(--ds-text-on-accent)",
                               fontSize: "0.78rem",
                               fontWeight: 800,
                               cursor: "pointer",
                             }}
                           >
-                            💎 Mở khóa VIP (Chỉ 29k) →
+                            <KitIcon name="hub-vip" size={13} style={{ color: "var(--ds-text-on-accent)" }} />
+                            <span>Mở khóa VIP (Chỉ 29k) →</span>
                           </button>
                         </div>
                       </div>
@@ -7179,10 +7295,13 @@ export default function Home() {
                           fontSize: "0.8rem",
                         }}
                       >
-                        <span style={{ color: T.textHeading, fontWeight: "700" }}>
-                          {adaptiveQuizMeta.mode === "manual_review"
-                            ? `🎯 Chế độ Ôn tập Chuyên đề #${adaptiveQuizMeta.topicId}`
-                            : `🧠 Đề Thích Ứng 50/30/20 (${adaptiveQuizMeta.preferredDifficulty || "Adaptive"})`}
+                        <span style={{ color: T.textHeading, fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                          <KitIcon name={adaptiveQuizMeta.mode === "manual_review" ? "target" : "brain"} size={15} />
+                          <span>
+                            {adaptiveQuizMeta.mode === "manual_review"
+                              ? `Chế độ Ôn tập Chuyên đề #${adaptiveQuizMeta.topicId}`
+                              : `Đề Thích Ứng 50/30/20 (${adaptiveQuizMeta.preferredDifficulty || "Adaptive"})`}
+                          </span>
                         </span>
                         <span style={{ color: T.textMuted }}>
                           Weak: <strong style={{ color: T.warning }}>{adaptiveQuizMeta.breakdown?.weakCount ?? 0}</strong> • SR Review:{" "}
@@ -7229,7 +7348,7 @@ export default function Home() {
                           <option value="ALL">Toàn bộ 12 Chương (Tổng hợp)</option>
                           {quizData.topics.map((t) => (
                             <option key={t.id} value={t.id}>
-                              {isGuestUser ? "🔒 " : ""}Chương {t.number}: {t.title_vi} ({t.question_count} câu)
+                              {isGuestUser ? "[Cần Login] " : ""}Chương {t.number}: {t.title_vi} ({t.question_count} câu)
                             </option>
                           ))}
                         </select>
@@ -7387,12 +7506,14 @@ export default function Home() {
                                   overflow: "hidden",
                                 }}
                               >
-                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
-                                  🔒 {quizSubmitted ? "BẪY TƯ DUY AI & CÔNG THỨC TRÁNH LẶP LỖI NÀY (VIP)" : "PHÂN TÍCH BẪY TƯ DUY & MẸO GIẢI 3 GIÂY (CHỈ DÀNH CHO VIP)"}
+                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem", display: "flex", alignItems: "center", gap: "5px" }}>
+                                  <KitIcon name="lock" size={13} />
+                                  <span>{quizSubmitted ? "BẪY TƯ DUY AI & CÔNG THỨC TRÁNH LẶP LỖI NÀY (VIP)" : "PHÂN TÍCH BẪY TƯ DUY & MẸO GIẢI 3 GIÂY (CHỈ DÀNH CHO VIP)"}</span>
                                 </div>
                                 {!quizSubmitted && (
-                                  <div style={{ fontSize: "0.76rem", color: "var(--ds-text-secondary)", marginBottom: "0.45rem" }}>
-                                    ⚠️ 82% thí sinh mất điểm ở câu <strong>&ldquo;{targetQ.topic_name}&rdquo;</strong> vì dịch nghĩa từng từ mà bỏ qua dấu hiệu neo ngữ pháp:
+                                  <div style={{ fontSize: "0.76rem", color: "var(--ds-text-secondary)", marginBottom: "0.45rem", display: "flex", alignItems: "center", gap: "5px" }}>
+                                    <KitIcon name="warning" size={14} />
+                                    <span>82% thí sinh mất điểm ở câu <strong>&ldquo;{targetQ.topic_name}&rdquo;</strong> vì dịch nghĩa từng từ mà bỏ qua dấu hiệu neo ngữ pháp:</span>
                                   </div>
                                 )}
                                 <div style={{ position: "relative", padding: "0.5rem 0.65rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)" }}>
@@ -7413,17 +7534,21 @@ export default function Home() {
                                         })
                                       }
                                       style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "5px",
                                         padding: "0.35rem 0.75rem",
                                         borderRadius: "6px",
                                         border: "none",
                                         backgroundColor: "var(--ds-btn-warning)",
-                                        color: "#ffffff",
+                                        color: "var(--ds-text-on-accent)",
                                         fontSize: "0.74rem",
                                         fontWeight: 800,
                                         cursor: "pointer",
                                       }}
                                     >
-                                      {quizSubmitted ? "🔓 Mở khóa VIP phân tích lỗi này →" : "🔓 Mở khóa VIP xem mẹo giải 3s →"}
+                                      <KitIcon name="unlock" size={13} style={{ color: "var(--ds-text-on-accent)" }} />
+                                      <span>{quizSubmitted ? "Mở khóa VIP phân tích lỗi này →" : "Mở khóa VIP xem mẹo giải 3s →"}</span>
                                     </button>
                                   </div>
                                 </div>
@@ -7461,8 +7586,9 @@ export default function Home() {
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
-                    <span style={{ fontSize: "0.76rem", fontWeight: 800, color: "var(--ds-danger)", backgroundColor: "var(--ds-danger-bg)", border: "1px solid var(--ds-danger-border)", padding: "0.24rem 0.65rem", borderRadius: "9999px" }}>
-                      🔥 CÂU 21 / 50 → 50 / 50 ĐANG BỊ KHÓA (30 CÂU BẪY PHÂN LOẠI ĐIỂM 8.5–9+)
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "0.76rem", fontWeight: 800, color: "var(--ds-danger)", backgroundColor: "var(--ds-danger-bg)", border: "1px solid var(--ds-danger-border)", padding: "0.24rem 0.65rem", borderRadius: "9999px" }}>
+                      <KitIcon name="flame" size={13} />
+                      <span>CÂU 21 / 50 → 50 / 50 ĐANG BỊ KHÓA (30 CÂU BẪY PHÂN LOẠI ĐIỂM 8.5–9+)</span>
                     </span>
                     <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--ds-text-muted)" }}>
                       Bạn mới làm 20/50 câu của bộ đề này
@@ -7488,11 +7614,13 @@ export default function Home() {
                           }}
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.4rem", marginBottom: "0.5rem" }}>
-                            <span style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-text-muted)" }}>
-                              🔒 CÂU {21 + tIdx} / 50 • {tq.topic_name || "Ngữ pháp nâng cao"}
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-text-muted)" }}>
+                              <KitIcon name="lock" size={13} />
+                              <span>CÂU {21 + tIdx} / 50 • {tq.topic_name || "Ngữ pháp nâng cao"}</span>
                             </span>
-                            <span style={{ fontSize: "0.68rem", fontWeight: 800, padding: "0.15rem 0.5rem", borderRadius: "999px", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", border: "1px solid var(--ds-warning-border)" }}>
-                              ⚠️ 86% học viên làm sai câu này
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.68rem", fontWeight: 800, padding: "0.15rem 0.5rem", borderRadius: "999px", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", border: "1px solid var(--ds-warning-border)" }}>
+                              <KitIcon name="warning" size={12} />
+                              <span>86% học viên làm sai câu này</span>
                             </span>
                           </div>
                           <div style={{ fontSize: "0.92rem", color: T.text, fontWeight: 500, lineHeight: 1.55 }}>
@@ -7517,10 +7645,13 @@ export default function Home() {
                       textAlign: "center",
                     }}
                   >
-                    <div style={{ fontSize: "1.15rem", fontWeight: 900, color: T.textHeading, marginBottom: "0.45rem" }}>
-                      {currentUser.isGuest
-                        ? "🔐 Đừng Dừng Lại Ở Câu 20! Xem Ngay 30 Câu Bẫy & Thuật Toán Đề Thích Ứng AI"
-                        : "💎 Đừng Bỏ Lỡ 30 Câu Bẫy Phân Loại Điểm 8–9+ (Câu 21 → 50)!"}
+                    <div style={{ fontSize: "1.15rem", fontWeight: 900, color: T.textHeading, marginBottom: "0.45rem", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                      <KitIcon name={currentUser.isGuest ? "lock" : "hub-vip"} size={18} />
+                      <span>
+                        {currentUser.isGuest
+                          ? "Đừng Dừng Lại Ở Câu 20! Xem Ngay 30 Câu Bẫy & Thuật Toán Đề Thích Ứng AI"
+                          : "Đừng Bỏ Lỡ 30 Câu Bẫy Phân Loại Điểm 8–9+ (Câu 21 → 50)!"}
+                      </span>
                     </div>
                     <p style={{ fontSize: "0.84rem", color: T.textSecondary, maxWidth: "620px", margin: "0 auto 1rem auto", lineHeight: 1.55 }}>
                       {currentUser.isGuest
@@ -7535,23 +7666,27 @@ export default function Home() {
                           onClick={() => {
                             setShowSwitchAuthForm(false);
                             setAuthError("");
-                            setAuthSuccess("🔑 Đăng nhập ngay để nhận 3 lượt Trộn đề mới & mở Đề Thích Ứng AI!");
+                            setAuthSuccess("Đăng nhập ngay để nhận 3 lượt Trộn đề mới & mở Đề Thích Ứng AI!");
                             setAuthTab("login");
                             setAuthModalOpen(true);
                           }}
                           style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "6px",
                             padding: "0.65rem 1.35rem",
                             borderRadius: "8px",
                             border: "none",
                             backgroundColor: "var(--ds-btn-primary)",
-                            color: "#ffffff",
+                            color: "var(--ds-text-on-accent)",
                             fontSize: "0.88rem",
                             fontWeight: 800,
                             cursor: "pointer",
                             boxShadow: T.shadowSm,
                           }}
                         >
-                          🔑 Đăng nhập mở 3 lượt trộn đề (Miễn phí)
+                          <KitIcon name="key" size={15} style={{ color: "var(--ds-text-on-accent)" }} />
+                          <span>Đăng nhập mở 3 lượt trộn đề (Miễn phí)</span>
                         </button>
                       )}
                       <button
@@ -7564,18 +7699,22 @@ export default function Home() {
                           })
                         }
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
                           padding: "0.65rem 1.45rem",
                           borderRadius: "8px",
                           border: "none",
                           backgroundColor: "var(--ds-btn-warning)",
-                          color: "#ffffff",
+                          color: "var(--ds-text-on-accent)",
                           fontSize: "0.88rem",
                           fontWeight: 900,
                           cursor: "pointer",
                           boxShadow: T.shadowSm,
                         }}
                       >
-                        💎 Mở Khóa VIP Xem Trọn 50 Câu Ngay &rarr;
+                        <KitIcon name="hub-vip" size={15} style={{ color: "var(--ds-text-on-accent)" }} />
+                        <span>Mở Khóa VIP Xem Trọn 50 Câu Ngay →</span>
                       </button>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
-import { Badge, Button, Alert, Progress, Skeleton } from "../design-system";
+import { Badge, Button, Alert, Progress, Skeleton, KitIcon } from "../design-system";
 
 /**
  * Computes polygon vertices for SVG 12-axis Mastery Radar Chart
@@ -104,7 +104,7 @@ export default function MasteryIntelligenceDashboard({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.85rem", marginBottom: "1rem" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "1.1rem" }} aria-hidden="true">📡</span>
+            <KitIcon name="compass" size={18} color={T.accent} aria-hidden="true" />
             <h3 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
               Phân tích Thành thạo 12 Chuyên đề &amp; Đường cong Quên lãng (Milestone 2.9)
             </h3>
@@ -126,9 +126,10 @@ export default function MasteryIntelligenceDashboard({
               variant="primary"
               size="sm"
               isLight={isLight}
+              icon="target"
               onClick={() => onStartAdaptivePractice({ mode: "adaptive", count: 20 })}
             >
-              🎯 Luyện Đề Thích Ứng (50/30/20)
+              Luyện Đề Thích Ứng (50/30/20)
             </Button>
           )}
         </div>
@@ -194,8 +195,9 @@ export default function MasteryIntelligenceDashboard({
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: "1rem" }}>
         {/* Left: 12-Topic Radar & Bars */}
         <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "12px", padding: "0.95rem" }}>
-          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.6rem" }}>
-            🎯 Bản đồ Radar 12 Chuyên đề
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.6rem" }}>
+            <KitIcon name="target" size={15} color={T.accent} />
+            <span>Bản đồ Radar 12 Chuyên đề</span>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.65rem" }}>
@@ -284,8 +286,9 @@ export default function MasteryIntelligenceDashboard({
         {/* Right: Forgetting Curve, 5-State Memory Breakdown & 14-Day Heatmap */}
         <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
           <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "12px", padding: "0.95rem" }}>
-            <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.5rem" }}>
-              📉 Đường cong Quên lãng (1 → 3 → 7 → 14 → 30 ngày)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.5rem" }}>
+              <KitIcon name="trend-down" size={15} color={T.warning} />
+              <span>Đường cong Quên lãng (1 → 3 → 7 → 14 → 30 ngày)</span>
             </div>
             <svg width="100%" viewBox="0 0 295 130" role="img" aria-label="Biểu đồ đường cong quên lãng 5 mốc thời gian">
               <line x1="25" y1="22" x2="25" y2="108" stroke={T.border} strokeWidth="1" />
@@ -314,8 +317,9 @@ export default function MasteryIntelligenceDashboard({
 
           {/* 5-State Memory Machine Pills */}
           <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "12px", padding: "0.9rem" }}>
-            <div style={{ fontSize: "0.8rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.55rem" }}>
-              🧩 Trạng thái Ghi nhớ Câu hỏi (5-State Memory Machine)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.55rem" }}>
+              <KitIcon name="brain" size={14} color={T.accent} />
+              <span>Trạng thái Ghi nhớ Câu hỏi (5-State Memory Machine)</span>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
               {[
@@ -333,8 +337,9 @@ export default function MasteryIntelligenceDashboard({
 
           {/* 14-Day Activity Heatmap */}
           <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "12px", padding: "0.9rem" }}>
-            <div style={{ fontSize: "0.8rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.55rem" }}>
-              🔥 Bản đồ Hoạt động 14 Ngày (Activity Heatmap)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.55rem" }}>
+              <KitIcon name="flame" size={14} color={T.warning} />
+              <span>Bản đồ Hoạt động 14 Ngày (Activity Heatmap)</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(14, 1fr)", gap: "4px" }}>
               {heatmapDays.map((d) => (

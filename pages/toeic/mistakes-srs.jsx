@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../components/ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from '../../components/toeic/ui';
 
 export default function MistakesSrsPage() {
@@ -73,7 +74,7 @@ export default function MistakesSrsPage() {
     if (currentIndex < filteredCards.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      alert('🎉 Chúc mừng! Bạn đã hoàn thành toàn bộ lượt ôn tập SRS theo chu kỳ hôm nay!');
+      alert('Chúc mừng! Bạn đã hoàn thành toàn bộ lượt ôn tập SRS theo chu kỳ hôm nay!');
       setCurrentIndex(0);
     }
   };
@@ -200,8 +201,8 @@ export default function MistakesSrsPage() {
                     {/* FRONT OF CARD */}
                     <div className="toeic-flashcard-front">
                       <div className="toeic-flex-between">
-                        <ToeicBadge variant={currentCard.card_type === 'VOCABULARY' ? 'success' : 'danger'}>
-                          {currentCard.card_type === 'VOCABULARY' ? '📖 Flashcard Từ Vựng' : '❌ Câu Hỏi Từng Làm Sai'}
+                        <ToeicBadge variant={currentCard.card_type === 'VOCABULARY' ? 'success' : 'danger'} icon={currentCard.card_type === 'VOCABULARY' ? 'book' : 'danger'}>
+                          {currentCard.card_type === 'VOCABULARY' ? 'Flashcard Từ Vựng' : 'Câu Hỏi Từng Làm Sai'}
                         </ToeicBadge>
                         <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
                           Nhấp thẻ hoặc phím Space để lật ↻
@@ -227,6 +228,9 @@ export default function MistakesSrsPage() {
                                 type="button"
                                 onClick={(e) => handleSpeakWord(e, currentCard.word)}
                                 style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.3rem',
                                   padding: '0.25rem 0.6rem',
                                   borderRadius: '0.5rem',
                                   border: '1px solid var(--ds-border)',
@@ -237,7 +241,8 @@ export default function MistakesSrsPage() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                🔊 Phát âm
+                                <KitIcon name="tool-audio" size={13} />
+                                <span>Phát âm</span>
                               </button>
                             </div>
                           </div>

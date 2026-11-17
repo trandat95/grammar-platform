@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export const MODAL_MATRIX_TYPE = "modal-matrix";
 
@@ -28,9 +29,9 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
         }}
       >
         {[
-          { id: "gauge", label: "🎯 Thang Đo Xác Suất (0% - 100%)", desc: "Can't -> Might -> May -> Should -> Must" },
-          { id: "functions", label: "⚖️ Ma Trận Chức Năng Cốt Lõi", desc: "Ability, Permission, Obligation, Advice" },
-          { id: "perfect", label: "⏳ Perfect Modals (Quá Khứ)", desc: "Must have V3, Should have V3, Needn't have V3" },
+          { id: "gauge", icon: "target", label: "Thang Đo Xác Suất (0% - 100%)", desc: "Can't -> Might -> May -> Should -> Must" },
+          { id: "functions", icon: "scale", label: "Ma Trận Chức Năng Cốt Lõi", desc: "Ability, Permission, Obligation, Advice" },
+          { id: "perfect", icon: "hourglass", label: "Perfect Modals (Quá Khứ)", desc: "Must have V3, Should have V3, Needn't have V3" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -51,7 +52,10 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.label}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              <KitIcon name={tab.icon} size={14} />
+              <span>{tab.label}</span>
+            </span>
             <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>{tab.desc}</span>
           </button>
         ))}
@@ -289,12 +293,14 @@ export default function ModalMatrixVisualization({ data, isLight = false }) {
                 {pm.formula}
               </div>
 
-              <div style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--ds-text-heading)" }}>
-                🇻🇳 {pm.meaning}
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.85rem", fontWeight: "600", color: "var(--ds-text-heading)" }}>
+                <KitIcon name="globe" size={13} color="var(--ds-accent)" />
+                <span>{pm.meaning}</span>
               </div>
 
-              <div style={{ fontSize: "0.75rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.45rem 0.65rem", borderRadius: "6px" }}>
-                ⚠️ <strong>Cảnh báo bẫy thi:</strong> {pm.trap_alert}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "0.75rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.45rem 0.65rem", borderRadius: "6px" }}>
+                <KitIcon name="warning" size={13} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span><strong>Cảnh báo bẫy thi:</strong> {pm.trap_alert}</span>
               </div>
 
               <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>

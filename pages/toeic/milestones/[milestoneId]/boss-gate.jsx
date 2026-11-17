@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../../../components/ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton, ToeicChoiceCard } from '../../../../components/toeic/ui';
 import useGlobalAuth from '../../../../hooks/useGlobalAuth';
 
@@ -168,7 +169,10 @@ export default function BossGatePage() {
                 <div
                   className={`toeic-pacing-pill ${timeLeftSec < 60 ? 'toeic-pacing-red' : 'toeic-pacing-green'}`}
                 >
-                  <span>⏱️ Còn lại:</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem' }}>
+                    <KitIcon name="timer" size={14} />
+                    <span>Còn lại:</span>
+                  </span>
                   <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 800 }}>{timeFormatted}</span>
                 </div>
               )}
@@ -185,8 +189,20 @@ export default function BossGatePage() {
                   backgroundColor: 'var(--ds-card)'
                 }}
               >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                  {result.passed ? '🏆' : '⚠️'}
+                <div
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1rem auto',
+                    backgroundColor: result.passed ? 'var(--ds-success-bg)' : 'var(--ds-warning-bg)',
+                    color: result.passed ? 'var(--ds-success)' : 'var(--ds-warning)'
+                  }}
+                >
+                  <KitIcon name={result.passed ? 'medal' : 'warning'} size={28} />
                 </div>
 
                 <div style={{ marginBottom: '1.5rem' }}>
@@ -389,8 +405,10 @@ export default function BossGatePage() {
                     type="button"
                     className="ge-mobile-exam-dock-btn"
                     onClick={() => setShowMobilePalette(prev => !prev)}
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
                   >
-                    📋 {currentIndex + 1}/{questions.length}
+                    <KitIcon name="clipboard" size={14} />
+                    <span>{currentIndex + 1}/{questions.length}</span>
                   </button>
 
                   <button

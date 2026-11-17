@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { getThemeTokens, getComponentTokens } from "../../../lib/tokens/design-tokens";
 import { RADII, MOTION } from "../../../lib/tokens/spacing.tokens";
+import KitIcon from "../../ui-2026/KitIcon";
 
-export function Badge({ children, tone = "neutral", isLight = false, style = {} }) {
+export function Badge({ children, tone = "neutral", icon = null, isLight = false, style = {} }) {
   const T = getThemeTokens(isLight);
+  const resolvedTone = tone === "primary" ? "accent" : tone === "muted" ? "neutral" : tone;
   const map = {
     neutral: { bg: T.bgElevated, color: T.textSecondary, border: T.borderSubtle },
     accent: { bg: T.accentBg, color: T.accent, border: T.accentBorder },
@@ -11,14 +13,14 @@ export function Badge({ children, tone = "neutral", isLight = false, style = {} 
     warning: { bg: T.warningBg, color: T.warning, border: T.warningBorder },
     danger: { bg: T.dangerBg, color: T.danger, border: T.dangerBorder },
   };
-  const pal = map[tone] || map.neutral;
+  const pal = map[resolvedTone] || map.neutral;
 
   return (
     <span
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.28rem",
+        gap: "0.3rem",
         padding: "0.18rem 0.58rem",
         borderRadius: RADII.radiusFull,
         fontSize: "0.72rem",
@@ -29,18 +31,23 @@ export function Badge({ children, tone = "neutral", isLight = false, style = {} 
         ...style,
       }}
     >
+      {icon && (
+        <span style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
+          {typeof icon === "string" ? <KitIcon name={icon} size={13} /> : icon}
+        </span>
+      )}
       {children}
     </span>
   );
 }
 
-export function Alert({ children, title, tone = "info", isLight = false, style = {} }) {
+export function Alert({ children, title, tone = "info", icon = null, isLight = false, style = {} }) {
   const T = getThemeTokens(isLight);
   const map = {
-    info: { bg: T.infoBg, color: T.info, border: T.infoBorder, icon: "ℹ️" },
-    success: { bg: T.successBg, color: T.success, border: T.successBorder, icon: "✅" },
-    warning: { bg: T.warningBg, color: T.warning, border: T.warningBorder, icon: "⚠️" },
-    danger: { bg: T.dangerBg, color: T.danger, border: T.dangerBorder, icon: "🚨" },
+    info: { bg: T.infoBg, color: T.info, border: T.infoBorder, iconName: "info" },
+    success: { bg: T.successBg, color: T.success, border: T.successBorder, iconName: "check-circle" },
+    warning: { bg: T.warningBg, color: T.warning, border: T.warningBorder, iconName: "warning" },
+    danger: { bg: T.dangerBg, color: T.danger, border: T.dangerBorder, iconName: "danger" },
   };
   const pal = map[tone] || map.info;
 
@@ -60,8 +67,18 @@ export function Alert({ children, title, tone = "info", isLight = false, style =
       }}
     >
       {title && (
-        <div style={{ fontWeight: 700, color: pal.color, marginBottom: "0.2rem" }}>
-          {pal.icon} {title}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.42rem",
+            fontWeight: 700,
+            color: pal.color,
+            marginBottom: "0.22rem",
+          }}
+        >
+          {icon ? (typeof icon === "string" ? <KitIcon name={icon} size={16} /> : icon) : <KitIcon name={pal.iconName} size={16} />}
+          <span>{title}</span>
         </div>
       )}
       <div>{children}</div>

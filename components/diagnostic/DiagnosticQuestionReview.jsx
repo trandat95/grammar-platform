@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import StructuredExplanation from "../explanation/StructuredExplanation";
 import { migrateQuestionExplanation } from "../../lib/explanation/explanation.migrator";
+import { KitIcon, StatusDot } from "../ui-2026/KitIcon";
 
 export default function DiagnosticQuestionReview({
   detailedAnswers = [],
@@ -129,6 +130,9 @@ export default function DiagnosticQuestionReview({
           <button
             onClick={() => setFilterMode("INCORRECT")}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
               padding: "0.35rem 0.85rem",
               borderRadius: "9999px",
               fontSize: "0.8rem",
@@ -139,12 +143,16 @@ export default function DiagnosticQuestionReview({
               border: "none",
             }}
           >
-            🔴 Câu sai ({incorrectCount})
+            <StatusDot tone="danger" size={8} />
+            <span>Câu sai ({incorrectCount})</span>
           </button>
 
           <button
             onClick={() => setFilterMode("CORRECT")}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
               padding: "0.35rem 0.85rem",
               borderRadius: "9999px",
               fontSize: "0.8rem",
@@ -155,7 +163,8 @@ export default function DiagnosticQuestionReview({
               border: "none",
             }}
           >
-            🟢 Câu đúng ({correctCount})
+            <StatusDot tone="success" size={8} />
+            <span>Câu đúng ({correctCount})</span>
           </button>
         </div>
 
@@ -229,8 +238,9 @@ export default function DiagnosticQuestionReview({
                     {q.is_correct ? "✓ Trả lời Đúng" : "✕ Trả lời Sai"}
                   </span>
                   {q.time_spent_seconds > 0 && (
-                    <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
-                      ⏱️ {q.time_spent_seconds}s
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem", color: T.textMuted }}>
+                      <KitIcon name="timer" size={12} />
+                      <span>{q.time_spent_seconds}s</span>
                     </span>
                   )}
                 </div>
@@ -277,8 +287,8 @@ export default function DiagnosticQuestionReview({
                     >
                       <strong style={{ minWidth: "18px" }}>{opt.key}.</strong>
                       <span style={{ color: optColor }}>{opt.text}</span>
-                      {isAnswerCorrect && <span style={{ marginLeft: "auto", fontSize: "0.8rem" }}>✅</span>}
-                      {isUserSelection && !q.is_correct && <span style={{ marginLeft: "auto", fontSize: "0.8rem" }}>❌</span>}
+                      {isAnswerCorrect && <span style={{ marginLeft: "auto", display: "inline-flex", color: "var(--ds-success)" }}><KitIcon name="check-circle" size={15} /></span>}
+                      {isUserSelection && !q.is_correct && <span style={{ marginLeft: "auto", display: "inline-flex", color: "var(--ds-danger)" }}><KitIcon name="danger" size={15} /></span>}
                     </div>
                   );
                 })}

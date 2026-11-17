@@ -79,7 +79,7 @@ export default function AudioPlayer({
           }}
         >
           {isCurrentPlaying ? (
-            <span>{isCurrentPaused ? "▶️" : "⏸️"}</span>
+            <KitIcon name={isCurrentPaused ? "play" : "pause"} size={12} />
           ) : (
             <KitIcon name="tool-audio" size={13} />
           )}
@@ -104,7 +104,7 @@ export default function AudioPlayer({
               cursor: "pointer",
             }}
           >
-            ⏹
+            <KitIcon name="stop" size={11} />
           </button>
         )}
       </div>
@@ -150,7 +150,13 @@ export default function AudioPlayer({
               boxShadow: T.shadow,
             }}
           >
-            <span>{isCurrentPlaying ? (isCurrentPaused ? "▶️ Tiếp tục" : "⏸️ Tạm dừng") : "🔊 Phát âm"}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              <KitIcon
+                name={isCurrentPlaying ? (isCurrentPaused ? "play" : "pause") : "tool-audio"}
+                size={14}
+              />
+              <span>{isCurrentPlaying ? (isCurrentPaused ? "Tiếp tục" : "Tạm dừng") : "Phát âm"}</span>
+            </span>
           </button>
 
           {isCurrentPlaying && (
@@ -170,7 +176,10 @@ export default function AudioPlayer({
                 cursor: "pointer",
               }}
             >
-              ⏹ Dừng
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                <KitIcon name="stop" size={12} />
+                <span>Dừng</span>
+              </span>
             </button>
           )}
 

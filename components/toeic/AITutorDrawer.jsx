@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 
 /**
  * AITutorDrawer Component (Milestone E6, AC-U6.5)
@@ -82,12 +83,11 @@ export default function AITutorDrawer({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1rem',
                 backgroundColor: 'var(--ds-accent-bg)',
                 color: 'var(--ds-accent)'
               }}
             >
-              🧑‍🏫
+              <KitIcon name="bot" size={16} />
             </span>
             <div>
               <h3 style={{ fontSize: '0.95rem', fontWeight: 800, margin: 0, color: 'var(--ds-text)' }}>

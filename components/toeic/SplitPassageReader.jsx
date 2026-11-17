@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 import { ToeicBadge } from './ui';
 
 /**
@@ -327,25 +328,28 @@ export default function SplitPassageReader({
             type="button"
             onClick={() => setMobileTab('passage')}
             className={`toeic-target-chip ${mobileTab === 'passage' ? 'active' : ''}`}
-            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
           >
-            📄 Bài Đọc ({currentPassages.length})
+            <KitIcon name="book" size={12} />
+            <span>Bài Đọc ({currentPassages.length})</span>
           </button>
           <button
             type="button"
             onClick={() => setMobileTab('questions')}
             className={`toeic-target-chip ${mobileTab === 'questions' ? 'active' : ''}`}
-            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
           >
-            ❓ Câu Hỏi ({setQuestions.length})
+            <KitIcon name="question" size={12} />
+            <span>Câu Hỏi ({setQuestions.length})</span>
           </button>
           <button
             type="button"
             onClick={() => setMobileTab('split')}
             className={`toeic-target-chip ${mobileTab === 'split' ? 'active' : ''}`}
-            style={{ padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.38rem 0.25rem', fontSize: '0.76rem', whiteSpace: 'nowrap' }}
           >
-            📱 Chia Đôi
+            <KitIcon name="layout" size={12} />
+            <span>Chia Đôi</span>
           </button>
         </div>
       </div>
@@ -370,8 +374,9 @@ export default function SplitPassageReader({
                 {currentSet.label}
               </span>
               {evidenceSentence && (
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-warning)', backgroundColor: 'var(--ds-warning-bg)', padding: '0.2rem 0.5rem', borderRadius: 'var(--ds-radius-sm)' }}>
-                  📍 Đang soi dẫn chứng
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-warning)', backgroundColor: 'var(--ds-warning-bg)', padding: '0.2rem 0.5rem', borderRadius: 'var(--ds-radius-sm)' }}>
+                  <KitIcon name="pin" size={12} />
+                  <span>Đang soi dẫn chứng</span>
                 </span>
               )}
             </div>
@@ -621,18 +626,18 @@ export default function SplitPassageReader({
                         optBg = 'var(--ds-success-bg)';
                         optBorder = 'var(--ds-success)';
                         badgeBg = 'var(--ds-success)';
-                        badgeColor = '#ffffff';
+                        badgeColor = 'var(--ds-text-on-accent)';
                       } else if (isOptSelected && !isRight) {
                         optBg = 'var(--ds-danger-bg)';
                         optBorder = 'var(--ds-danger)';
                         badgeBg = 'var(--ds-danger)';
-                        badgeColor = '#ffffff';
+                        badgeColor = 'var(--ds-text-on-accent)';
                       }
                     } else if (isOptSelected) {
                       optBg = 'var(--ds-accent-bg)';
                       optBorder = 'var(--ds-accent)';
                       badgeBg = 'var(--ds-accent)';
-                      badgeColor = '#ffffff';
+                      badgeColor = 'var(--ds-text-on-accent)';
                     }
 
                     return (
@@ -715,13 +720,14 @@ export default function SplitPassageReader({
                       }}
                     >
                       <div className="toeic-flex-between" style={{ gap: '0.5rem', flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
-                          💡 {canSeeDeepAi ? 'Giải thích AI & Dẫn chứng' : 'Đáp án & Giải thích cơ bản'} (Câu #{q.number})
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontWeight: 800, color: 'var(--ds-accent)', fontSize: '0.8rem' }}>
+                          <KitIcon name="bulb" size={13} />
+                          <span>{canSeeDeepAi ? 'Giải thích AI & Dẫn chứng' : 'Đáp án & Giải thích cơ bản'} (Câu #{q.number})</span>
                         </span>
                         <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                           {showCrowd && qCrowd.correctRate !== null && (
-                            <ToeicBadge variant="muted">
-                              📊 {qCrowd.correctRate}% làm đúng ({qCrowd.attemptCount} lượt{qCrowd.sampleTier === 'preliminary' ? ' • Sơ bộ' : ''})
+                            <ToeicBadge variant="muted" icon="chart">
+                              {qCrowd.correctRate}% làm đúng ({qCrowd.attemptCount} lượt{qCrowd.sampleTier === 'preliminary' ? ' • Sơ bộ' : ''})
                             </ToeicBadge>
                           )}
                           {!canSeeDeepAi && (
@@ -731,8 +737,9 @@ export default function SplitPassageReader({
                       </div>
 
                       {!isCorrectAnswer && crowdWrongPct !== null && crowdWrongPct > 0 && (
-                        <div style={{ fontSize: '0.76rem', color: 'var(--ds-warning)', fontWeight: 700 }}>
-                          ⚠️ Bẫy phổ biến: {crowdWrongPct}% học viên cũng chọn nhầm đáp án ({userAns}) ở câu này{qCrowd.sampleTier === 'preliminary' ? ' (dữ liệu sơ bộ)' : ''}.
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.35rem', fontSize: '0.76rem', color: 'var(--ds-warning)', fontWeight: 700 }}>
+                          <KitIcon name="warning" size={13} style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span>Bẫy phổ biến: {crowdWrongPct}% học viên cũng chọn nhầm đáp án ({userAns}) ở câu này{qCrowd.sampleTier === 'preliminary' ? ' (dữ liệu sơ bộ)' : ''}.</span>
                         </div>
                       )}
 
@@ -756,8 +763,9 @@ export default function SplitPassageReader({
                             gap: '0.4rem'
                           }}
                         >
-                          <div>
-                            <strong>📌 Dẫn chứng:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.3rem' }}>
+                            <KitIcon name="pin" size={13} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                            <span><strong>Dẫn chứng:</strong> &ldquo;{ai.evidence_sentence_en || q.key_clue}&rdquo;</span>
                           </div>
                           {ai.evidence_sentence_en && (
                             <button
@@ -769,6 +777,9 @@ export default function SplitPassageReader({
                               className="toeic-mobile-only-inline"
                               style={{
                                 alignSelf: 'flex-start',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
                                 padding: '0.25rem 0.6rem',
                                 borderRadius: '6px',
                                 border: '1px solid var(--ds-warning-border)',
@@ -779,7 +790,8 @@ export default function SplitPassageReader({
                                 cursor: 'pointer'
                               }}
                             >
-                              🔍 Xem vị trí tô sáng trong bài đọc &rarr;
+                              <KitIcon name="search" size={12} />
+                              <span>Xem vị trí tô sáng trong bài đọc &rarr;</span>
                             </button>
                           )}
                         </div>
@@ -804,8 +816,9 @@ export default function SplitPassageReader({
                           )}
 
                           {ai.micro_rule_formula_vi && (
-                            <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)', borderTop: '1px dashed var(--ds-border)', paddingTop: '0.4rem', marginTop: '0.15rem' }}>
-                              <strong>📐 Mẹo / Công thức:</strong> {ai.micro_rule_formula_vi}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.3rem', fontSize: '0.78rem', color: 'var(--ds-text-muted)', borderTop: '1px dashed var(--ds-border)', paddingTop: '0.4rem', marginTop: '0.15rem' }}>
+                              <KitIcon name="ruler" size={13} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                              <span><strong>Mẹo / Công thức:</strong> {ai.micro_rule_formula_vi}</span>
                             </div>
                           )}
                         </>
@@ -824,8 +837,9 @@ export default function SplitPassageReader({
                             gap: '0.5rem'
                           }}
                         >
-                          <span style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)' }}>
-                            🔒 <strong>Phân tích bẫy lỗi AI &amp; Công thức xử lý nhanh</strong> cho dạng câu <em>{ai.primary_topic_name_vi || 'Đọc hiểu'}</em>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.78rem', color: 'var(--ds-text-secondary)' }}>
+                            <KitIcon name="lock" size={13} color="var(--ds-warning)" />
+                            <span><strong>Phân tích bẫy lỗi AI &amp; Công thức xử lý nhanh</strong> cho dạng câu <em>{ai.primary_topic_name_vi || 'Đọc hiểu'}</em></span>
                           </span>
                           {onRequireVip && (
                             <button
@@ -835,9 +849,10 @@ export default function SplitPassageReader({
                                 onRequireVip();
                               }}
                               className="toeic-btn toeic-btn-primary"
-                              style={{ fontSize: '0.74rem', padding: '0.3rem 0.7rem', fontWeight: 700 }}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.74rem', padding: '0.3rem 0.7rem', fontWeight: 700 }}
                             >
-                              Mở Khóa VIP ✨
+                              <span>Mở Khóa VIP</span>
+                              <KitIcon name="sparkles" size={12} />
                             </button>
                           )}
                         </div>
@@ -886,11 +901,20 @@ export default function SplitPassageReader({
           type="button"
           onClick={() => setMobileTab(prev => (prev === 'passage' ? 'questions' : 'passage'))}
           className="toeic-floating-mobile-switch"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           aria-label={mobileTab === 'passage' ? 'Chuyển sang làm câu hỏi' : 'Quay lại đọc bài đọc'}
         >
-          {mobileTab === 'passage'
-            ? `❓ Câu Hỏi (${setQuestions.filter(q => Boolean(userAnswers[q.id])).length}/${setQuestions.length})`
-            : '📄 Xem Bài Đọc'}
+          {mobileTab === 'passage' ? (
+            <>
+              <KitIcon name="question" size={14} />
+              <span>Câu Hỏi ({setQuestions.filter(q => Boolean(userAnswers[q.id])).length}/{setQuestions.length})</span>
+            </>
+          ) : (
+            <>
+              <KitIcon name="book" size={14} />
+              <span>Xem Bài Đọc</span>
+            </>
+          )}
         </button>
       )}
     </div>

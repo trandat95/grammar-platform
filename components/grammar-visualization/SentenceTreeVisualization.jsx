@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export const SENTENCE_TREE_TYPE = "sentence-tree";
 
@@ -27,10 +28,10 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
         }}
       >
         {[
-          { id: "breakdown", label: "🌳 Sơ Đồ Cấu Trúc Câu", desc: "Phân tích cú pháp tương tác" },
-          { id: "pronouns", label: "🔑 Đại Từ & Trạng Từ", desc: "Who, Whom, Which, Whose, That" },
-          { id: "clauses", label: "⚖️ Mệnh Đề Xác Định vs Không Xác Định", desc: "Dấu phẩy & That" },
-          { id: "reduced", label: "✂️ Rút Gọn Mệnh Đề Thần Tốc", desc: "V-ing, V3, To-V" },
+          { id: "breakdown", icon: "tree", label: "Sơ Đồ Cấu Trúc Câu", desc: "Phân tích cú pháp tương tác" },
+          { id: "pronouns", icon: "key", label: "Đại Từ & Trạng Từ", desc: "Who, Whom, Which, Whose, That" },
+          { id: "clauses", icon: "scale", label: "Mệnh Đề Xác Định vs Không Xác Định", desc: "Dấu phẩy & That" },
+          { id: "reduced", icon: "scissors", label: "Rút Gọn Mệnh Đề Thần Tốc", desc: "V-ing, V3, To-V" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -51,7 +52,10 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.label}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              <KitIcon name={tab.icon} size={14} />
+              <span>{tab.label}</span>
+            </span>
             <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>{tab.desc}</span>
           </button>
         ))}
@@ -256,6 +260,9 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
 
               <div
                 style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.35rem",
                   fontSize: "0.75rem",
                   backgroundColor: "var(--ds-bg-elevated)",
                   padding: "0.5rem",
@@ -264,15 +271,17 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                   color: "var(--ds-text-heading)",
                 }}
               >
-                💡 {p.rule_tip}
+                <KitIcon name="bulb" size={13} color={p.color} style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span>{p.rule_tip}</span>
               </div>
 
               <div style={{ marginTop: "auto", paddingTop: "0.5rem", borderTop: `1px dashed ${"var(--ds-card-border)"}` }}>
                 <div style={{ fontSize: "0.825rem", color: "var(--ds-text-heading)", fontWeight: "600" }}>
                   "{p.example}"
                 </div>
-                <div style={{ fontSize: "0.75rem", color: "var(--ds-success)", fontStyle: "italic", marginTop: "0.15rem" }}>
-                  🇻🇳 {p.translation}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.75rem", color: "var(--ds-success)", fontStyle: "italic", marginTop: "0.15rem" }}>
+                  <KitIcon name="globe" size={12} color="var(--ds-success)" />
+                  <span>{p.translation}</span>
                 </div>
                 <div style={{ marginTop: "0.4rem" }}>
                   <AudioPlayer text={p.example_audio} isLight={isLight} mode="compact" />
@@ -308,9 +317,9 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
               </p>
 
               <div style={{ fontSize: "0.78rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-                <div>📍 <strong>Dấu phẩy:</strong> {c.comma}</div>
-                <div>⚡ <strong>Đại từ 'that':</strong> {c.can_use_that}</div>
-                <div>✂️ <strong>Lược bỏ đại từ:</strong> {c.omission}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><KitIcon name="pin" size={13} color="var(--ds-accent)" /> <strong>Dấu phẩy:</strong> {c.comma}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><KitIcon name="bolt" size={13} color="var(--ds-warning)" /> <strong>Đại từ 'that':</strong> {c.can_use_that}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}><KitIcon name="scissors" size={13} color="var(--ds-purple)" /> <strong>Lược bỏ đại từ:</strong> {c.omission}</div>
               </div>
 
               <div
@@ -373,8 +382,9 @@ export default function SentenceTreeVisualization({ data, isLight = false }) {
                 <div style={{ fontSize: "0.875rem", fontWeight: "700", color: "var(--ds-success)" }}>
                   ➔ Rút gọn: "{r.reduced}"
                 </div>
-                <div style={{ fontSize: "0.72rem", color: "var(--ds-warning)", marginTop: "0.15rem" }}>
-                  💡 {r.rule_step}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "0.72rem", color: "var(--ds-warning)", marginTop: "0.15rem" }}>
+                  <KitIcon name="bulb" size={13} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: "1px" }} />
+                  <span>{r.rule_step}</span>
                 </div>
               </div>
 

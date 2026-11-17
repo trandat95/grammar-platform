@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FocusTrapModal2026 from '../ui-2026/FocusTrapModal2026';
 import AccountProfileCard from './AccountProfileCard';
 import GrammarProLogo from '../ui-2026/GrammarProLogo';
+import KitIcon from '../ui-2026/KitIcon';
 
 /**
  * UnifiedAuthModal Component
@@ -184,7 +185,10 @@ export default function UnifiedAuthModal({
                 marginBottom: '1rem'
               }}
             >
-              ⚠️ {errorMsg}
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                <KitIcon name="warning" size={16} />
+                <span>{errorMsg}</span>
+              </span>
             </div>
           )}
 

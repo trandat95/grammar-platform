@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
+import { KitIcon, StatusDot } from "../ui-2026/KitIcon";
 
 /**
  * Milestone 2.3.4 & 2.3.11: SyncStatusIndicator Component
@@ -21,7 +22,7 @@ export default function SyncStatusIndicator({
 
   const statusMeta = {
     SYNCED: {
-      dot: "🟢",
+      tone: "success",
       label: "Đã đồng bộ",
       bg: T.successBg,
       border: T.successBorder,
@@ -29,7 +30,7 @@ export default function SyncStatusIndicator({
       tooltip: `Dữ liệu an toàn trên Cloud lúc ${syncState.lastSyncTime || "vừa xong"}.`,
     },
     SYNCING: {
-      dot: "🟡",
+      tone: "warning",
       label: "Đang đồng bộ...",
       bg: T.accentBg,
       border: T.accentBorder,
@@ -37,7 +38,7 @@ export default function SyncStatusIndicator({
       tooltip: "Đang truyền mẻ dữ liệu lên Supabase PostgreSQL 17...",
     },
     PENDING: {
-      dot: "🟠",
+      tone: "warning",
       label: `Chờ gửi (${pendingCount})`,
       bg: T.warningBg,
       border: T.warningBorder,
@@ -45,7 +46,7 @@ export default function SyncStatusIndicator({
       tooltip: `${pendingCount} sự kiện đang xếp hàng trong IndexedDB Queue.`,
     },
     OFFLINE: {
-      dot: "⚪",
+      tone: "neutral",
       label: "Offline",
       bg: T.bgElevated,
       border: T.border,
@@ -53,7 +54,7 @@ export default function SyncStatusIndicator({
       tooltip: "Đang học ngoại tuyến (IndexedDB Multi-Store active). Sẽ tự động đồng bộ khi có mạng.",
     },
     ERROR: {
-      dot: "🔴",
+      tone: "danger",
       label: "Thử lại",
       bg: T.dangerBg,
       border: T.dangerBorder,
@@ -95,7 +96,7 @@ export default function SyncStatusIndicator({
           transition: "all 0.15s ease",
         }}
       >
-        <span style={{ fontSize: "0.65rem" }}>{current.dot}</span>
+        <StatusDot tone={current.tone} size={8} pulse={status === "SYNCING"} />
         <span>{current.label}</span>
       </button>
 
@@ -115,21 +116,25 @@ export default function SyncStatusIndicator({
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.55rem" }}>
-            <span style={{ fontSize: "0.8rem", fontWeight: "800", color: T.text }}>
-              🔄 Resilient Sync Engine
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.8rem", fontWeight: "800", color: T.text }}>
+              <KitIcon name="refresh" size={14} color={T.accent} />
+              <span>Resilient Sync Engine</span>
             </span>
             <button
               type="button"
               onClick={() => setOpenDetails(false)}
+              aria-label="Đóng chi tiết đồng bộ"
               style={{
                 background: "none",
                 border: "none",
                 color: T.textMuted,
                 cursor: "pointer",
-                fontSize: "0.85rem",
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "2px",
               }}
             >
-              ✕
+              <KitIcon name="close" size={14} />
             </button>
           </div>
 
@@ -173,13 +178,18 @@ export default function SyncStatusIndicator({
                 fontSize: "0.74rem",
                 fontWeight: "700",
                 backgroundColor: T.accent,
-                color: isLight ? "#ffffff" : T.bg,
+                color: "var(--ds-text-on-accent)",
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.3rem",
               }}
             >
-              ⬆️ Đẩy Queue
+              <KitIcon name="upload" size={12} />
+              <span>Đẩy Queue</span>
             </button>
             <button
               type="button"
@@ -195,9 +205,14 @@ export default function SyncStatusIndicator({
                 border: `1px solid ${T.border}`,
                 borderRadius: "6px",
                 cursor: isPulling ? "wait" : "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.3rem",
               }}
             >
-              {isPulling ? "Đang kéo..." : "⬇️ Pull Cloud"}
+              <KitIcon name="download" size={12} />
+              <span>{isPulling ? "Đang kéo..." : "Pull Cloud"}</span>
             </button>
           </div>
         </div>

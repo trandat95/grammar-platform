@@ -1494,25 +1494,32 @@
   .toeic-hub-tabs {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: center;
   }
 
   .toeic-hub-tab-btn {
-    flex: 0 0 auto;
-    padding: 0.45rem 0.8rem;
-    font-size: 0.8rem;
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.78rem;
+  }
+
+  .toeic-h-scroll-strip {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .toeic-h-scroll-strip > * {
+    flex: 1 1 auto;
+    justify-content: center;
   }
 
   .toeic-chip-scroll {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    overflow-x: visible;
     padding-bottom: 0.25rem;
-  }
-
-  .toeic-chip-scroll::-webkit-scrollbar {
-    display: none;
   }
 
   .toeic-chip-scroll .toeic-target-chip {

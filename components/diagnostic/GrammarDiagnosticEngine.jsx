@@ -11,6 +11,7 @@ import { evaluateAdaptiveAdjustments } from "../../lib/diagnostic/adaptive.learn
 import { calculateRetentionMetrics } from "../../lib/spaced-repetition/retention.tracker";
 import { SyncManager } from "../../lib/sync/sync-manager";
 import { SYNC_EVENT_TYPES } from "../../lib/sync/sync-queue";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function GrammarDiagnosticEngine({
   currentUser,
@@ -340,6 +341,9 @@ export default function GrammarDiagnosticEngine({
               <button
                 onClick={() => setDiagnosticMode("results")}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
                   padding: "0.4rem 0.85rem",
                   borderRadius: "0.5rem",
                   fontSize: "0.85rem",
@@ -350,12 +354,16 @@ export default function GrammarDiagnosticEngine({
                   border: "none",
                 }}
               >
-                📊 Kết Quả Chẩn Đoán ({scoreResult?.percentage || 0}/100)
+                <KitIcon name="chart" size={15} />
+                <span>Kết Quả Chẩn Đoán ({scoreResult?.percentage || 0}/100)</span>
               </button>
 
               <button
                 onClick={() => setDiagnosticMode("roadmap")}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
                   padding: "0.4rem 0.85rem",
                   borderRadius: "0.5rem",
                   fontSize: "0.85rem",
@@ -366,7 +374,8 @@ export default function GrammarDiagnosticEngine({
                   border: "none",
                 }}
               >
-                🗺️ Lộ Trình Học 4 Tuần
+                <KitIcon name="map" size={15} />
+                <span>Lộ Trình Học 4 Tuần</span>
               </button>
             </div>
 
@@ -387,7 +396,7 @@ export default function GrammarDiagnosticEngine({
               }}
             >
               <span>Làm lại bài kiểm tra</span>
-              <span>🔄</span>
+              <KitIcon name="refresh" size={14} />
             </button>
           </div>
         </div>

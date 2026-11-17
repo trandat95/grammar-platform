@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../components/ui-2026/KitIcon';
 import DictationStudio from '../../components/toeic/DictationStudio';
 import useToeicEntitlement from '../../hooks/useToeicEntitlement';
 import useGlobalAuth from '../../hooks/useGlobalAuth';
@@ -71,6 +72,9 @@ export default function DictationPage() {
                   <span
                     onClick={() => entitlement.openPaywall('TRG_05_DICTATION_PART34')}
                     style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
                       fontSize: '0.75rem',
                       fontWeight: 700,
                       color: 'var(--ds-warning)',
@@ -81,7 +85,8 @@ export default function DictationPage() {
                       cursor: 'pointer'
                     }}
                   >
-                    Free: Chỉ mở Test 01 • Nâng cấp VIP 🔒
+                    <span>Free: Chỉ mở Test 01 • Nâng cấp VIP</span>
+                    <KitIcon name="lock" size={12} />
                   </span>
                 )}
                 <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>Chọn Test:</span>
@@ -104,7 +109,7 @@ export default function DictationPage() {
                     const isLocked = !isVip && testNum > 1;
                     return (
                       <option key={testNum} value={testNum}>
-                        TOEIC New Format 2026 — Test {String(testNum).padStart(2, '0')}{isLocked ? ' 🔒 (VIP)' : (testNum === 1 && !isVip ? ' (Miễn phí)' : '')}
+                        TOEIC New Format 2026 — Test {String(testNum).padStart(2, '0')}{isLocked ? ' [VIP]' : (testNum === 1 && !isVip ? ' (Miễn phí)' : '')}
                       </option>
                     );
                   })}

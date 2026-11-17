@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from './ui';
 
 /**
@@ -82,8 +83,8 @@ export default function DiagnosticRadarDashboard({
         <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1.25rem' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <ToeicBadge variant="primary">
-                🎯 Kết Quả Đánh Giá Năng Lực AI (IRT 3PL)
+              <ToeicBadge variant="primary" icon="target">
+                Kết Quả Đánh Giá Năng Lực AI (IRT 3PL)
               </ToeicBadge>
             </div>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)', letterSpacing: '-0.02em' }}>
@@ -117,8 +118,18 @@ export default function DiagnosticRadarDashboard({
               >
                 {avgPart5TimeSec}s <span style={{ fontSize: '0.75rem', fontWeight: 500 }}>/câu</span>
               </div>
-              <div style={{ fontSize: '0.7rem', marginTop: '0.15rem', color: 'var(--ds-text-muted)' }}>
-                {avgPart5TimeSec <= 15 ? '✓ Chuẩn phản xạ' : '⚠️ Cần tăng tốc'}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.7rem', marginTop: '0.15rem', color: 'var(--ds-text-muted)' }}>
+                {avgPart5TimeSec <= 15 ? (
+                  <>
+                    <KitIcon name="check-circle" size={11} color="var(--ds-success)" />
+                    <span>Chuẩn phản xạ</span>
+                  </>
+                ) : (
+                  <>
+                    <KitIcon name="warning" size={11} color="var(--ds-warning)" />
+                    <span>Cần tăng tốc</span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -313,8 +324,8 @@ export default function DiagnosticRadarDashboard({
                 Sắp xếp theo Chỉ Số Ưu Tiên Tập Trung (Focus Priority Index - FPI)
               </p>
             </div>
-            <ToeicBadge variant="warning">
-              ⚡ Ưu tiên cao nhất
+            <ToeicBadge variant="warning" icon="bolt">
+              Ưu tiên cao nhất
             </ToeicBadge>
           </div>
 
@@ -367,6 +378,9 @@ export default function DiagnosticRadarDashboard({
                     {isSlow ? (
                       <span
                         style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.28rem',
                           fontSize: '0.75rem',
                           padding: '0.25rem 0.65rem',
                           borderRadius: '9999px',
@@ -375,11 +389,15 @@ export default function DiagnosticRadarDashboard({
                           color: 'var(--ds-warning)'
                         }}
                       >
-                        ⏱️ Phản xạ chậm ({topic.avg_time_sec || 20}s)
+                        <KitIcon name="timer" size={12} />
+                        <span>Phản xạ chậm ({topic.avg_time_sec || 20}s)</span>
                       </span>
                     ) : (
                       <span
                         style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.28rem',
                           fontSize: '0.75rem',
                           padding: '0.25rem 0.65rem',
                           borderRadius: '9999px',
@@ -388,7 +406,8 @@ export default function DiagnosticRadarDashboard({
                           color: 'var(--ds-danger)'
                         }}
                       >
-                        ⚠️ Cần củng cố lý thuyết
+                        <KitIcon name="warning" size={12} />
+                        <span>Cần củng cố lý thuyết</span>
                       </span>
                     )}
                   </div>
@@ -420,7 +439,8 @@ export default function DiagnosticRadarDashboard({
                     onClick={() => onStartTopicDrill && onStartTopicDrill(topic.grammar_topic_id)}
                     className="toeic-btn toeic-btn-sm toeic-btn-primary"
                   >
-                    <span>⚡ Luyện Ngay 15 Câu &rarr;</span>
+                    <KitIcon name="bolt" size={13} />
+                    <span>Luyện Ngay 15 Câu &rarr;</span>
                   </button>
                 </div>
               </div>

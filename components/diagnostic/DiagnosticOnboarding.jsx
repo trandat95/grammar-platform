@@ -1,5 +1,6 @@
 import React from "react";
 import { BANNER_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function DiagnosticOnboarding({
   onStartTest,
@@ -59,7 +60,8 @@ export default function DiagnosticOnboarding({
                   border: `1px solid ${T.accentBorder}`,
                 }}
               >
-                🎯 Milestone 2.8 • Central EdTech Engine
+                <KitIcon name="target" size={13} color={T.accent} />
+                <span>Milestone 2.8 • Central EdTech Engine</span>
               </span>
               <span
                 style={{
@@ -116,7 +118,9 @@ export default function DiagnosticOnboarding({
                 border: `1px solid ${T.borderSubtle}`,
               }}
             >
-              <div style={{ fontSize: "1.4rem", marginBottom: "0.25rem" }}>📝</div>
+              <div style={{ marginBottom: "0.4rem", color: T.accent }}>
+                <KitIcon name="clipboard" size={20} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", color: T.text }}>30 Câu trắc nghiệm</div>
               <div style={{ fontSize: "0.78rem", color: T.textMuted }}>Cân đối 10 Dễ • 12 TB • 8 Khó</div>
             </div>
@@ -129,7 +133,9 @@ export default function DiagnosticOnboarding({
                 border: `1px solid ${T.borderSubtle}`,
               }}
             >
-              <div style={{ fontSize: "1.4rem", marginBottom: "0.25rem" }}>⏱️</div>
+              <div style={{ marginBottom: "0.4rem", color: T.warning }}>
+                <KitIcon name="timer" size={20} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", color: T.text }}>15 – 20 Phút</div>
               <div style={{ fontSize: "0.78rem", color: T.textMuted }}>Thoải mái thời gian, không trừ điểm</div>
             </div>
@@ -142,7 +148,9 @@ export default function DiagnosticOnboarding({
                 border: `1px solid ${T.borderSubtle}`,
               }}
             >
-              <div style={{ fontSize: "1.4rem", marginBottom: "0.25rem" }}>🎯</div>
+              <div style={{ marginBottom: "0.4rem", color: T.success }}>
+                <KitIcon name="target" size={20} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", color: T.text }}>10 Nhóm kiến thức</div>
               <div style={{ fontSize: "0.78rem", color: T.textMuted }}>Độ tin cậy &amp; ma trận kỹ năng</div>
             </div>
@@ -155,7 +163,9 @@ export default function DiagnosticOnboarding({
                 border: `1px solid ${T.borderSubtle}`,
               }}
             >
-              <div style={{ fontSize: "1.4rem", marginBottom: "0.25rem" }}>🗺️</div>
+              <div style={{ marginBottom: "0.4rem", color: T.accent }}>
+                <KitIcon name="map" size={20} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", color: T.text }}>Lộ trình 4 Tuần</div>
               <div style={{ fontSize: "0.78rem", color: T.textMuted }}>Khắc phục điểm yếu chí mạng</div>
             </div>
@@ -206,7 +216,7 @@ export default function DiagnosticOnboarding({
                 }}
               >
                 <span>Xem lại Lộ trình cá nhân hóa</span>
-                <span>🗺️</span>
+                <KitIcon name="map" size={16} />
               </button>
             )}
           </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
-import FocusTrapModal2026 from "../ui-2026/FocusTrapModal2026";
+import { Modal } from "../design-system/overlays/Modal";
+import KitIcon from "../ui-2026/KitIcon";
 import { supabase } from "../../lib/supabase/client";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import {
@@ -143,7 +144,7 @@ export default function StructuredExplanation({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "1.25rem" }} aria-hidden="true">🎓</span>
+          <span style={{ display: "inline-flex", alignItems: "center", color: T.accent }} aria-hidden="true"><KitIcon name="graduation" size={20} /></span>
           <div>
             <h4
               style={{
@@ -233,7 +234,7 @@ export default function StructuredExplanation({
                   transition: "all 0.12s ease",
                 }}
               >
-                {isVipTab && <span aria-hidden="true">{hasVipAccess ? "⭐" : "🔒"}</span>}
+                {isVipTab && <span aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name={hasVipAccess ? "crown" : "lock"} size={13} /></span>}
                 <span>{LEVEL_SUBLABELS[lvl] || lvl}</span>
                 {isVipTab && !hasVipAccess && (
                   <span style={{ fontSize: "0.62rem", fontWeight: "800", opacity: 0.9 }}>VIP</span>
@@ -259,7 +260,7 @@ export default function StructuredExplanation({
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ fontSize: "1.2rem" }} aria-hidden="true">🔒</span>
+              <span style={{ display: "inline-flex", alignItems: "center", color: T.warning }} aria-hidden="true"><KitIcon name="lock" size={18} /></span>
               <h5 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "800", color: T.textHeading }}>
                 Giải thích Nâng cao dành riêng cho thành viên VIP
               </h5>
@@ -283,14 +284,17 @@ export default function StructuredExplanation({
           </p>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "0.5rem", fontSize: "0.8rem", color: T.text }}>
-            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
-              🎯 <strong>Ngoại lệ &amp; Bẫy đề thi</strong> (Tránh các cấu trúc dễ gây nhầm)
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <KitIcon name="target" size={15} />
+              <span><strong>Ngoại lệ &amp; Bẫy đề thi</strong> (Tránh các cấu trúc dễ gây nhầm)</span>
             </div>
-            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
-              ✓ <strong>Cách sửa chi tiết từng lỗi</strong> (Đối chiếu đáp án chuẩn)
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <KitIcon name="check-circle" size={15} />
+              <span><strong>Cách sửa chi tiết từng lỗi</strong> (Đối chiếu đáp án chuẩn)</span>
             </div>
-            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem" }}>
-              ⚡ <strong>Bước 5: Chiến thuật loại trừ</strong> (Mẹo giải nhanh phòng thi)
+            <div style={{ backgroundColor: T.card, border: `1px solid ${T.borderSubtle}`, borderRadius: "8px", padding: "0.55rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <KitIcon name="bolt" size={15} />
+              <span><strong>Bước 5: Chiến thuật loại trừ</strong> (Mẹo giải nhanh phòng thi)</span>
             </div>
           </div>
 
@@ -300,17 +304,21 @@ export default function StructuredExplanation({
               onClick={triggerVipUpgrade}
               className="ds-btn ds-focusable"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
                 padding: "0.5rem 1.05rem",
                 borderRadius: "8px",
                 border: "none",
                 backgroundColor: "var(--ds-btn-warning)",
-                color: "#ffffff",
+                color: "var(--ds-text-on-accent)",
                 fontSize: "0.82rem",
                 fontWeight: "800",
                 cursor: "pointer",
               }}
             >
-              ⚡ Nâng cấp VIP để mở khóa
+              <KitIcon name="bolt" size={14} style={{ color: "var(--ds-text-on-accent)" }} />
+              <span>Nâng cấp VIP để mở khóa</span>
             </button>
             <button
               type="button"
@@ -345,7 +353,7 @@ export default function StructuredExplanation({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.45rem" }}>
-            <span style={{ fontSize: "1rem" }} aria-hidden="true">🔍</span>
+            <span style={{ display: "inline-flex", alignItems: "center", color: T.accent }} aria-hidden="true"><KitIcon name="tool-search" size={16} /></span>
             <span
               style={{
                 fontSize: "0.78rem",
@@ -402,7 +410,7 @@ export default function StructuredExplanation({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.45rem" }}>
-            <span style={{ fontSize: "1rem" }} aria-hidden="true">📐</span>
+            <span style={{ display: "inline-flex", alignItems: "center", color: T.success }} aria-hidden="true"><KitIcon name="ruler" size={16} /></span>
             <span
               style={{
                 fontSize: "0.78rem",
@@ -472,8 +480,15 @@ export default function StructuredExplanation({
                 border: `1px solid ${pres.highlightAdvancedTraps ? "var(--ds-purple-border)" : T.borderSubtle}`,
               }}
             >
-              <div style={{ fontSize: "0.74rem", fontWeight: "800", color: pres.highlightAdvancedTraps ? "var(--ds-purple)" : T.textHeading, marginBottom: "0.25rem" }}>
-                {pres.highlightAdvancedTraps ? "🎯 Ngoại lệ & Biến thể bẫy (Nâng cao):" : "Ngoại lệ & Lưu ý quan trọng:"}
+              <div style={{ fontSize: "0.74rem", fontWeight: "800", color: pres.highlightAdvancedTraps ? "var(--ds-purple)" : T.textHeading, marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                {pres.highlightAdvancedTraps ? (
+                  <>
+                    <KitIcon name="target" size={14} />
+                    <span>Ngoại lệ &amp; Biến thể bẫy (Nâng cao):</span>
+                  </>
+                ) : (
+                  "Ngoại lệ & Lưu ý quan trọng:"
+                )}
               </div>
               {expl.rule.exceptions.map((ex, eIdx) => (
                 <div key={eIdx} style={{ fontSize: "0.82rem", color: T.text, lineHeight: 1.5 }}>
@@ -496,7 +511,7 @@ export default function StructuredExplanation({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.45rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-              <span style={{ fontSize: "1rem" }} aria-hidden="true">🌐</span>
+              <span style={{ display: "inline-flex", alignItems: "center", color: T.accent }} aria-hidden="true"><KitIcon name="globe" size={16} /></span>
               <span
                 style={{
                   fontSize: "0.78rem",
@@ -557,7 +572,7 @@ export default function StructuredExplanation({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.45rem" }}>
-              <span style={{ fontSize: "1rem" }} aria-hidden="true">🚫</span>
+              <span style={{ display: "inline-flex", alignItems: "center", color: T.danger }} aria-hidden="true"><KitIcon name="danger" size={16} /></span>
               <span
                 style={{
                   fontSize: "0.78rem",
@@ -586,8 +601,9 @@ export default function StructuredExplanation({
                     ✓ <strong>Cách sửa đúng:</strong> {cm.correction}
                   </div>
                 )}
-                <div style={{ marginTop: "0.2rem", color: T.textSecondary }}>
-                  💡 <strong>Cách khắc phục:</strong> {cm.prevention_tip}
+                <div style={{ marginTop: "0.2rem", color: T.textSecondary, display: "flex", alignItems: "flex-start", gap: "0.35rem" }}>
+                  <span style={{ display: "inline-flex", marginTop: "2px" }}><KitIcon name="bulb" size={15} /></span>
+                  <span><strong>Cách khắc phục:</strong> {cm.prevention_tip}</span>
                 </div>
               </div>
             ))}
@@ -608,7 +624,7 @@ export default function StructuredExplanation({
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.45rem", marginBottom: "0.45rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-                <span style={{ fontSize: "1rem" }} aria-hidden="true">⚡</span>
+                <span style={{ display: "inline-flex", alignItems: "center", color: T.warning }} aria-hidden="true"><KitIcon name="bolt" size={16} /></span>
                 <span
                   style={{
                     fontSize: "0.78rem",
@@ -629,7 +645,7 @@ export default function StructuredExplanation({
                     padding: "0.1rem 0.45rem",
                     borderRadius: "999px",
                     backgroundColor: "var(--ds-btn-warning)",
-                    color: "#ffffff",
+                    color: "var(--ds-text-on-accent)",
                   }}
                 >
                   Mẹo loại trừ Nâng cao
@@ -644,8 +660,9 @@ export default function StructuredExplanation({
                 </div>
                 <div style={{ marginTop: "0.15rem", fontStyle: "italic", color: T.textSecondary }}>{et.example}</div>
                 {pres.showExamWarning && et.warning && (
-                  <div style={{ marginTop: "0.25rem", fontWeight: "600", color: T.warning }}>
-                    ⚠️ {et.warning}
+                  <div style={{ marginTop: "0.25rem", fontWeight: "600", color: T.warning, display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                    <KitIcon name="warning" size={15} />
+                    <span>{et.warning}</span>
                   </div>
                 )}
               </div>
@@ -678,6 +695,9 @@ export default function StructuredExplanation({
               onClick={() => setCurrentLevel(DIFFICULTY_LEVELS.ADVANCED)}
               className="ds-focusable"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
                 padding: "0.4rem 0.8rem",
                 fontSize: "0.78rem",
                 fontWeight: "700",
@@ -688,7 +708,8 @@ export default function StructuredExplanation({
                 cursor: "pointer",
               }}
             >
-              {hasVipAccess ? "⭐ Xem phân tích Nâng cao ➔" : "🔒 Mở phân tích Nâng cao (VIP) ➔"}
+              <KitIcon name={hasVipAccess ? "crown" : "lock"} size={14} />
+              <span>{hasVipAccess ? "Xem phân tích Nâng cao →" : "Mở phân tích Nâng cao (VIP) →"}</span>
             </button>
           </div>
         )}
@@ -719,6 +740,9 @@ export default function StructuredExplanation({
             onClick={() => handleSendFeedback("helpful")}
             className="ds-focusable"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.32rem",
               padding: "0.35rem 0.75rem",
               fontSize: "0.75rem",
               fontWeight: "600",
@@ -729,7 +753,8 @@ export default function StructuredExplanation({
               cursor: feedbackSent !== null ? "default" : "pointer",
             }}
           >
-            {feedbackSent === "helpful" ? "✓ Đã đánh giá hữu ích" : "👍 Hữu ích"}
+            <KitIcon name={feedbackSent === "helpful" ? "check-circle" : "thumbs-up"} size={13} />
+            <span>{feedbackSent === "helpful" ? "Đã đánh giá hữu ích" : "Hữu ích"}</span>
           </button>
 
           <button
@@ -738,6 +763,9 @@ export default function StructuredExplanation({
             onClick={() => setShowReportModal(true)}
             className="ds-focusable"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.32rem",
               padding: "0.35rem 0.75rem",
               fontSize: "0.75rem",
               fontWeight: "600",
@@ -748,16 +776,18 @@ export default function StructuredExplanation({
               cursor: feedbackSent === "report_error" ? "default" : "pointer",
             }}
           >
-            {feedbackSent === "report_error" ? "✓ Đã báo lỗi" : "⚠️ Báo lỗi"}
+            <KitIcon name={feedbackSent === "report_error" ? "check-circle" : "warning"} size={13} />
+            <span>{feedbackSent === "report_error" ? "Đã báo lỗi" : "Báo lỗi"}</span>
           </button>
         </div>
       </div>
 
       {/* REPORT ERROR MODAL (FocusTrap WCAG 2.2 AA) */}
-      <FocusTrapModal2026
+      <Modal
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
-        title="⚠️ Báo lỗi lời giải câu hỏi"
+        title="Báo lỗi lời giải câu hỏi"
+        isLight={isLight}
         maxWidth="460px"
       >
         <p style={{ fontSize: "0.85rem", color: T.textMuted, margin: "0 0 1rem 0" }}>
@@ -847,7 +877,7 @@ export default function StructuredExplanation({
             {isSubmitting ? "Đang gửi..." : "Gửi phản hồi"}
           </button>
         </div>
-      </FocusTrapModal2026>
+      </Modal>
     </div>
   );
 }

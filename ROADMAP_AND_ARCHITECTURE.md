@@ -68,7 +68,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
-| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport QA Gate & Zero OS Emoji Consolidation (`M4.6`)** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | 🔄 `M4.0–M4.2` ✅ • `M4.3` ✅ *(Option B: 5 Mascot Composites pending AI upgrade post-quota)* • `M4.4A–B` ✅ • `M4.5` ✅ *(Gate B PASS — Commit `7ee1b2e`)* • **Next: `M4.6 (+ Zero OS Emoji)`** |
+| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport QA Gate & Zero OS Emoji Consolidation (`M4.6`)** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | 🔄 `M4.0–M4.2` ✅ • `M4.3` ✅ *(Option B: 5 Mascot Composites pending AI upgrade post-quota)* • `M4.4A–B` ✅ • `M4.5` ✅ *(Gate B PASS — `7ee1b2e`)* • `M4.6` ✅ *(QA Complete — Zero OS Emoji & Token Consolidation pending PO commit/push)* • **Next: `M4.7`** |
 
 ---
 

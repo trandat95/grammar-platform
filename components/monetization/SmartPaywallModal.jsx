@@ -38,7 +38,7 @@ export default function SmartPaywallModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleDismiss} title="⭐ Lộ Trình Học Tập Nâng Cao VIP" isLight={isLight} maxWidth="580px">
+    <Modal isOpen={isOpen} onClose={handleDismiss} title="Lộ Trình Học Tập Nâng Cao VIP" isLight={isLight} maxWidth="580px">
       <div style={{ display: "flex", flexDirection: "column", gap: "0.95rem" }}>
         <div
           style={{
@@ -126,13 +126,14 @@ export default function SmartPaywallModal({
           {isGuest && onRequireRegister && (
             <Button
               variant="secondary"
+              icon="edit"
               isLight={isLight}
               onClick={() => {
                 if (onClose) onClose();
                 onRequireRegister();
               }}
             >
-              📝 Đăng ký để nâng cấp VIP
+              Đăng ký để nâng cấp VIP
             </Button>
           )}
           <Button

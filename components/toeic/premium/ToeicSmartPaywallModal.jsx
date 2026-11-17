@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { KitIcon } from '../../ui-2026/KitIcon';
 import { PAYWALL_TRIGGERS, recordPaywallImpression } from '../../../lib/toeic/subscription/paywall-trigger-manager';
 import { ToeicBadge } from '../ui';
 
@@ -158,7 +159,7 @@ export default function ToeicSmartPaywallModal({
                       left: '50%',
                       transform: 'translateX(-50%)',
                       backgroundColor: 'var(--ds-accent)',
-                      color: '#ffffff',
+                      color: 'var(--ds-text-on-accent)',
                       fontSize: '0.62rem',
                       fontWeight: 800,
                       padding: '0.15rem 0.5rem',
@@ -224,8 +225,9 @@ export default function ToeicSmartPaywallModal({
             Nâng Cấp Gói VIP Ngay &rarr;
           </button>
 
-          <p style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', marginTop: '0.75rem', marginBottom: 0 }}>
-            🛡️ Kích hoạt tức thì • Thanh toán qua SePay VietQR / Thẻ / MoMo • Không tự động gia hạn ngầm
+          <p style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--ds-text-muted)', marginTop: '0.75rem', marginBottom: 0 }}>
+            <KitIcon name="shield" size={13} color="var(--ds-success)" />
+            <span>Kích hoạt tức thì • Thanh toán qua SePay VietQR / Thẻ / MoMo • Không tự động gia hạn ngầm</span>
           </p>
         </div>
       </div>

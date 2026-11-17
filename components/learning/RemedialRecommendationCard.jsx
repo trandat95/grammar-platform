@@ -1,7 +1,7 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { RADII } from "../../lib/tokens/spacing.tokens";
-import { Badge, Button } from "../design-system";
+import { Badge, Button, KitIcon } from "../design-system";
 
 export default function RemedialRecommendationCard({
   recommendation,
@@ -35,7 +35,7 @@ export default function RemedialRecommendationCard({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "1.25rem" }} aria-hidden="true">💡</span>
+          <KitIcon name="bulb" size={18} color={T.warning} aria-hidden="true" />
           <div>
             <h4 style={{ fontSize: "0.95rem", fontWeight: 700, color: T.success, margin: 0 }}>
               Đề Xuất Lộ Trình Củng Cố Kiến Thức (Remedial Engine)
@@ -84,8 +84,8 @@ export default function RemedialRecommendationCard({
       {/* Remedial Action Buttons */}
       <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", alignItems: "center" }}>
         {onAccept && (
-          <Button variant="success" size="sm" isLight={isLight} onClick={() => onAccept(recommendation)}>
-            <span>📖 Vào ôn bài: {recommendation.lesson_title}</span>
+          <Button variant="success" size="sm" isLight={isLight} icon="book" onClick={() => onAccept(recommendation)}>
+            <span>Vào ôn bài: {recommendation.lesson_title}</span>
             <span>→</span>
           </Button>
         )}

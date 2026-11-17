@@ -3,15 +3,16 @@ import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS, MASCOT_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
+import KitIcon from "../ui-2026/KitIcon";
 
 const FEATURE_VISUAL_META = {
-  unlimited_exercises: { icon: "📚", freeLabel: "10 câu / bài", pct: 8 },
-  unlimited_quizzes: { icon: "🎯", freeLabel: "2 đề / ngày", pct: 12 },
-  diagnostic_root_cause: { icon: "🧭", freeLabel: "1 lần xem thử", pct: 15 },
-  ai_advisor_full: { icon: "🤖", freeLabel: "3 lượt / phiên", pct: 15 },
-  advanced_mastery_radar: { icon: "📈", freeLabel: "1 biểu đồ cơ bản", pct: 12 },
-  fsrs_unlimited_sr: { icon: "🧠", freeLabel: "20 thẻ tối đa", pct: 14 },
-  pdf_exam_export: { icon: "📥", freeLabel: "Khóa hoàn toàn", pct: 0 },
+  unlimited_exercises: { iconName: "books", freeLabel: "10 câu / bài", pct: 8 },
+  unlimited_quizzes: { iconName: "target", freeLabel: "2 đề / ngày", pct: 12 },
+  diagnostic_root_cause: { iconName: "compass", freeLabel: "1 lần xem thử", pct: 15 },
+  ai_advisor_full: { iconName: "bot", freeLabel: "3 lượt / phiên", pct: 15 },
+  advanced_mastery_radar: { iconName: "trend-up", freeLabel: "1 biểu đồ cơ bản", pct: 12 },
+  fsrs_unlimited_sr: { iconName: "brain", freeLabel: "20 thẻ tối đa", pct: 14 },
+  pdf_exam_export: { iconName: "doc-export", freeLabel: "Khóa hoàn toàn", pct: 0 },
 };
 
 const DEFAULT_PROVIDER = "sepay";
@@ -194,7 +195,7 @@ export default function MonetizationHub({
           invalidateMonetizationClientCache();
           setStatusNotice({
             tone: "success",
-            text: `🎉 SePay VA đã xác nhận chuyển khoản! ${paidPlanName} đã được kích hoạt (Hạn sử dụng: ${paidExpiry}).`,
+            text: `SePay VA đã xác nhận chuyển khoản! ${paidPlanName} đã được kích hoạt (Hạn sử dụng: ${paidExpiry}).`,
           });
           if (onEntSyncRef.current && json.entitlement) {
             onEntSyncRef.current(json.entitlement);
@@ -273,7 +274,7 @@ export default function MonetizationHub({
         text:
           json.disclosure ||
           json.message ||
-          "🎉 Thanh toán xác thực thành công! Toàn bộ đặc quyền VIP đã được kích hoạt.",
+          "Thanh toán xác thực thành công! Toàn bộ đặc quyền VIP đã được kích hoạt.",
       });
       if (onEntitlementSync && json.entitlement) {
         onEntitlementSync(json.entitlement);
@@ -345,7 +346,7 @@ export default function MonetizationHub({
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: "1.5rem" }}>💎</div>
+        <div style={{ color: T.accent }}><KitIcon name="hub-vip" size={28} /></div>
         <div style={{ fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
           {loadError || "Chưa thể tải bảng giá Gói VIP"}
         </div>
@@ -353,12 +354,12 @@ export default function MonetizationHub({
           Bạn cần đăng ký hoặc đăng nhập tài khoản để nâng cấp VIP và lưu tiến độ học tập.
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", justifyContent: "center" }}>
-          <Button variant="secondary" isLight={isLight} onClick={loadOverview}>
-            🔄 Thử tải lại
+          <Button variant="secondary" icon="refresh" isLight={isLight} onClick={loadOverview}>
+            Thử tải lại
           </Button>
           {(onRequireRegister || onRequireLogin) && (
-            <Button variant="primary" isLight={isLight} onClick={() => (onRequireRegister ? onRequireRegister() : onRequireLogin())}>
-              📝 Đăng ký / Đăng nhập ngay
+            <Button variant="primary" icon="user" isLight={isLight} onClick={() => (onRequireRegister ? onRequireRegister() : onRequireLogin())}>
+              Đăng ký / Đăng nhập ngay
             </Button>
           )}
         </div>
@@ -414,8 +415,9 @@ export default function MonetizationHub({
           }}
         >
           <div style={{ flex: "1 1 280px" }}>
-            <div style={{ fontSize: "0.88rem", fontWeight: 800, color: T.textHeading }}>
-              🔒 Đăng nhập hoặc Tạo tài khoản miễn phí để mở khóa VIP
+            <div style={{ fontSize: "0.88rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <KitIcon name="lock" size={16} />
+              <span>Đăng nhập hoặc Tạo tài khoản miễn phí để mở khóa VIP</span>
             </div>
             <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textSecondary, marginTop: "0.2rem", lineHeight: 1.45 }}>
               Chỉ 15 giây để kích hoạt đặc quyền VIP và đồng bộ toàn bộ tiến độ cho bạn.
@@ -423,12 +425,12 @@ export default function MonetizationHub({
           </div>
           <div className="ge-vip-guest-actions" style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {onRequireLogin && (
-              <Button size="sm" variant="secondary" isLight={isLight} onClick={onRequireLogin}>
-                🔑 Đăng nhập
+              <Button size="sm" variant="secondary" icon="key" isLight={isLight} onClick={onRequireLogin}>
+                Đăng nhập
               </Button>
             )}
-            <Button size="sm" variant="primary" isLight={isLight} onClick={requireGuestAuth}>
-              📝 Đăng ký ngay
+            <Button size="sm" variant="primary" icon="user" isLight={isLight} onClick={requireGuestAuth}>
+              Đăng ký ngay
             </Button>
           </div>
         </div>
@@ -456,8 +458,8 @@ export default function MonetizationHub({
         >
           <div style={{ flex: "1 1 520px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.45rem" }}>
-              <Badge tone={hasVip ? "success" : "accent"} isLight={isLight}>
-                {hasVip ? `⭐ ${entitlement.effectiveRole} ACTIVE` : "👤 GÓI FREE • NÂNG CẤP HỆ THỐNG HỌC TẬP VIP"}
+              <Badge tone={hasVip ? "success" : "accent"} icon={hasVip ? "crown" : "user"} isLight={isLight}>
+                {hasVip ? `${entitlement.effectiveRole} ACTIVE` : "GÓI FREE • NÂNG CẤP HỆ THỐNG HỌC TẬP VIP"}
               </Badge>
               {!guestMode && segment?.segment && (
                 <Badge tone="neutral" isLight={isLight}>
@@ -533,8 +535,8 @@ export default function MonetizationHub({
           </div>
 
           <div className="ge-vip-hero-actions" style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
-            <Button variant={hasVip ? "success" : "secondary"} size="sm" isLight={isLight} onClick={handleDownloadVipReport}>
-              📄 Xuất Báo cáo Năng lực (VIP API)
+            <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
+              Xuất Báo cáo Năng lực (VIP API)
             </Button>
             {hasVip && sub && (
               <Button variant="ghost" size="sm" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
@@ -626,7 +628,8 @@ export default function MonetizationHub({
                     }).catch(() => {});
                   }}
                 >
-                  {!userId ? "📝 Đăng ký để nâng cấp VIP" : hasVip ? "Chuyển sang gói này" : "Chọn gói VIP"}
+                  <KitIcon name="crown" size={15} />
+                  <span>{!userId ? "Đăng ký để nâng cấp VIP" : hasVip ? "Chuyển sang gói này" : "Chọn gói VIP"}</span>
                 </Button>
               </div>
             </div>
@@ -665,8 +668,9 @@ export default function MonetizationHub({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: "1.08rem", fontWeight: 800, color: T.textHeading }}>
-              ⚖️ Khác biệt Trực quan: Gói FREE vs Thành viên VIP
+            <h2 style={{ margin: 0, fontSize: "1.08rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.45rem" }}>
+              <KitIcon name="scale" size={18} />
+              <span>Khác biệt Trực quan: Gói FREE vs Thành viên VIP</span>
             </h2>
             <p style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
               So sánh trực tiếp giới hạn học thử so với đặc quyền bứt phá không giới hạn của tài khoản VIP.
@@ -676,6 +680,7 @@ export default function MonetizationHub({
             <Button
               size="sm"
               variant="primary"
+              icon={!userId ? "crown" : "bolt"}
               isLight={isLight}
               onClick={() => {
                 const rec = plans.find((p) => p.is_recommended) || plans[0];
@@ -688,7 +693,7 @@ export default function MonetizationHub({
                 setCheckoutError("");
               }}
             >
-              {!userId ? "📝 Đăng ký để mở khóa VIP ➔" : "⚡ Mở khóa VIP ngay ➔"}
+              {!userId ? "Đăng ký để mở khóa VIP" : "Mở khóa VIP ngay"}
             </Button>
           )}
         </div>
@@ -708,8 +713,9 @@ export default function MonetizationHub({
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
-              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textSecondary }}>
-                👤 Gói FREE (Cơ bản)
+              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textSecondary, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <KitIcon name="user" size={16} />
+                <span>Gói FREE (Cơ bản)</span>
               </div>
               <Badge tone="neutral" isLight={isLight}>
                 Giới hạn lượt
@@ -734,11 +740,11 @@ export default function MonetizationHub({
               />
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textSecondary }}>
-              <div>⏱️ Chỉ mở <strong>4 câu / bài tập</strong> và <strong>2 lượt Quiz / ngày</strong></div>
-              <div>🤖 AI Grammar Coach giới hạn <strong>3 câu hỏi / phiên</strong></div>
-              <div>🧠 Ôn tập Spaced Repetition tối đa <strong>20 thẻ</strong></div>
-              <div style={{ color: T.textMuted }}>🔒 Khóa Radar 12 Chuyên đề chuyên sâu &amp; Xuất báo cáo</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.42rem", fontSize: "0.78rem", color: T.textSecondary }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="timer" size={14} /><span>Chỉ mở <strong>4 câu / bài tập</strong> và <strong>2 lượt Quiz / ngày</strong></span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="bot" size={14} /><span>AI Grammar Coach giới hạn <strong>3 câu hỏi / phiên</strong></span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="brain" size={14} /><span>Ôn tập Spaced Repetition tối đa <strong>20 thẻ</strong></span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: T.textMuted }}><KitIcon name="lock" size={14} /><span>Khóa Radar 12 Chuyên đề chuyên sâu &amp; Xuất báo cáo</span></div>
             </div>
           </div>
 
@@ -759,8 +765,9 @@ export default function MonetizationHub({
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
-              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textHeading }}>
-                👑 Thành viên VIP Toàn diện
+              <div style={{ fontSize: "0.95rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <KitIcon name="crown" size={16} />
+                <span>Thành viên VIP Toàn diện</span>
               </div>
               <Badge tone="success" isLight={isLight}>
                 ∞ Không giới hạn
@@ -799,11 +806,11 @@ export default function MonetizationHub({
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textHeading, fontWeight: 600 }}>
-              <div>✅ Mở khóa trọn bộ <strong>2,939 câu hỏi</strong> &amp; Quiz 50/30/20 không giới hạn</div>
-              <div>✅ <strong>AI Grammar Coach ∞</strong> giải thích cặn kẽ mọi bẫy thi cử</div>
-              <div>✅ <strong>Radar 12 Chuyên đề</strong> + Spaced Repetition FSRS mọi câu sai</div>
-              <div>✅ <strong>Xuất Báo cáo Năng lực</strong> &amp; Bộ đề cá nhân hóa mọi lúc</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.42rem", fontSize: "0.78rem", color: T.textHeading, fontWeight: 600 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span>Mở khóa trọn bộ <strong>2,939 câu hỏi</strong> &amp; Quiz 50/30/20 không giới hạn</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>AI Grammar Coach ∞</strong> giải thích cặn kẽ mọi bẫy thi cử</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>Radar 12 Chuyên đề</strong> + Spaced Repetition FSRS mọi câu sai</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>Xuất Báo cáo Năng lực</strong> &amp; Bộ đề cá nhân hóa mọi lúc</span></div>
             </div>
           </div>
         </div>
@@ -828,13 +835,13 @@ export default function MonetizationHub({
             }}
           >
             <div>Tính năng &amp; Công cụ Học thuật</div>
-            <div style={{ textAlign: "center" }}>👤 Gói FREE</div>
-            <div style={{ textAlign: "center", color: T.success }}>👑 Thành viên VIP</div>
+            <div style={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.3rem" }}><KitIcon name="user" size={13} /><span>Gói FREE</span></div>
+            <div style={{ textAlign: "center", color: T.success, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.3rem" }}><KitIcon name="crown" size={13} /><span>Thành viên VIP</span></div>
           </div>
 
           {features.map((f) => {
             const meta = FEATURE_VISUAL_META[f.feature_key] || {
-              icon: "✨",
+              iconName: "tool-spark",
               freeLabel: f.free_quota > 0 ? `Giới hạn (${f.free_quota})` : "Khóa",
               pct: f.free_quota > 0 ? 15 : 0,
             };
@@ -863,14 +870,14 @@ export default function MonetizationHub({
                       borderRadius: "9px",
                       backgroundColor: T.card,
                       border: `1px solid ${T.borderSubtle}`,
+                      color: T.accent,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "1.1rem",
                       flexShrink: 0,
                     }}
                   >
-                    {meta.icon}
+                    <KitIcon name={meta.iconName} size={18} />
                   </div>
                   <div>
                     <div style={{ fontWeight: 800, color: T.textHeading }}>{f.title_vi}</div>
@@ -882,10 +889,12 @@ export default function MonetizationHub({
                 <div className="ge-vip-matrix-tiers">
                   {/* FREE Quota Visual Meter */}
                   <div className="ge-vip-matrix-cell ge-vip-matrix-free" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
-                    <span className="ge-vip-tier-kicker">👤 FREE</span>
+                    <span className="ge-vip-tier-kicker" style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                      <KitIcon name="user" size={11} /> FREE
+                    </span>
                     {isLockedFree ? (
-                      <Badge tone="danger" isLight={isLight}>
-                        🔒 Chưa mở
+                      <Badge tone="danger" icon="lock" isLight={isLight}>
+                        Chưa mở
                       </Badge>
                     ) : (
                       <>
@@ -917,7 +926,9 @@ export default function MonetizationHub({
 
                   {/* VIP Unlimited Highlight */}
                   <div className="ge-vip-matrix-cell ge-vip-matrix-vip" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
-                    <span className="ge-vip-tier-kicker is-vip">👑 VIP</span>
+                    <span className="ge-vip-tier-kicker is-vip" style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                      <KitIcon name="crown" size={11} /> VIP
+                    </span>
                     <Badge tone="success" isLight={isLight}>
                       {isLockedFree ? "✓ Mở 100%" : "∞ Không giới hạn"}
                     </Badge>
@@ -957,8 +968,9 @@ export default function MonetizationHub({
             boxShadow: T.shadowSm,
           }}
         >
-          <h3 style={{ margin: "0 0 0.65rem", fontSize: "0.95rem", fontWeight: 800, color: T.textHeading }}>
-            🧾 Lịch sử Giao dịch Thanh toán (Idempotent)
+          <h3 style={{ margin: "0 0 0.65rem", fontSize: "0.95rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+            <KitIcon name="receipt" size={16} />
+            <span>Lịch sử Giao dịch Thanh toán (Idempotent)</span>
           </h3>
           {transactions.length === 0 ? (
             <div style={{ fontSize: "0.8rem", color: T.textMuted }}>Chưa có giao dịch thanh toán nào.</div>
@@ -1013,8 +1025,9 @@ export default function MonetizationHub({
             gap: "0.75rem",
           }}
         >
-          <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: T.textHeading }}>
-            🔔 Cài đặt Thông báo &amp; Quyền Người tiêu dùng
+          <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+            <KitIcon name="settings" size={16} />
+            <span>Cài đặt Thông báo &amp; Quyền Người tiêu dùng</span>
           </h3>
           <Switch
             label="Tắt thông báo tiếp thị & ưu đãi VIP (1-Click Unsubscribe)"
@@ -1095,8 +1108,9 @@ export default function MonetizationHub({
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading }}>
-                      🏦 Chuyển khoản VietQR Tự Động (SePay VA)
+                    <span style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
+                      <KitIcon name="bank" size={16} />
+                      <span>Chuyển khoản VietQR Tự Động (SePay VA)</span>
                     </span>
                     <Badge tone={sepayGateway?.account_number ? "success" : "warning"} isLight={isLight}>
                       {sepayGateway?.account_number ? `${sepayGateway.bank_code} • Sẵn sàng` : "Chờ cấu hình VA"}
@@ -1248,8 +1262,8 @@ export default function MonetizationHub({
                   </div>
                 </div>
 
-                <Alert tone="info" isLight={isLight}>
-                  ⏳ Hệ thống tự động kiểm tra giao dịch mỗi 3 giây. Giữ nguyên nội dung <strong>{sepayOrder.order_code}</strong> và số tiền để SePay mở khóa VIP tức thì ngay khi tiền vào!
+                <Alert tone="info" icon="hourglass" isLight={isLight}>
+                  Hệ thống tự động kiểm tra giao dịch mỗi 3 giây. Giữ nguyên nội dung <strong>{sepayOrder.order_code}</strong> và số tiền để SePay mở khóa VIP tức thì ngay khi tiền vào!
                 </Alert>
 
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -1277,11 +1291,12 @@ export default function MonetizationHub({
                     </Button>
                     <Button
                       variant="primary"
+                      icon="refresh"
                       isLight={isLight}
                       disabled={checkingSepay}
                       onClick={() => checkSepayOrderStatus(sepayOrder.order_code, false)}
                     >
-                      {checkingSepay ? "Đang kiểm tra..." : "🔄 Kiểm tra đã chuyển khoản"}
+                      {checkingSepay ? "Đang kiểm tra..." : "Kiểm tra đã chuyển khoản"}
                     </Button>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export const COMPARISON_SCALE_TYPE = "comparison-scale";
 
@@ -22,9 +23,9 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
         }}
       >
         {[
-          { id: "scale", label: "📊 Thang Đo So Sánh Đa Cấp", desc: "Equal / Comparative / Superlative / Double" },
-          { id: "short_long", label: "📏 Tính Từ Ngắn vs Dài", desc: "Quy tắc thêm -er/-est vs more/most" },
-          { id: "irregulars", label: "⚡ Bảng Bất Quy Tắc", desc: "Good -> Better -> Best, Bad -> Worse" },
+          { id: "scale", icon: "chart", label: "Thang Đo So Sánh Đa Cấp", desc: "Equal / Comparative / Superlative / Double" },
+          { id: "short_long", icon: "ruler", label: "Tính Từ Ngắn vs Dài", desc: "Quy tắc thêm -er/-est vs more/most" },
+          { id: "irregulars", icon: "bolt", label: "Bảng Bất Quy Tắc", desc: "Good -> Better -> Best, Bad -> Worse" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -45,7 +46,10 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.label}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              <KitIcon name={tab.icon} size={14} />
+              <span>{tab.label}</span>
+            </span>
             <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>{tab.desc}</span>
           </button>
         ))}
@@ -121,8 +125,9 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 border: `1px solid ${"var(--ds-card-border)"}`,
               }}
             >
-              <div style={{ fontSize: "0.8rem", fontWeight: "700", color: "var(--ds-text-secondary)" }}>
-                📊 Biểu Đồ Thước Đo Tỷ Lệ Thực Nghiệm:
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.8rem", fontWeight: "700", color: "var(--ds-text-secondary)" }}>
+                <KitIcon name="chart" size={14} color="var(--ds-accent)" />
+                <span>Biểu Đồ Thước Đo Tỷ Lệ Thực Nghiệm:</span>
               </div>
 
               {/* Bar A */}
@@ -255,8 +260,9 @@ export default function ComparisonScaleVisualization({ data, isLight = false }) 
                 </>
               )}
 
-              <div style={{ fontSize: "0.78rem", backgroundColor: "var(--ds-accent-bg)", padding: "0.6rem 0.85rem", borderRadius: "6px", color: "var(--ds-accent)", border: `1px solid ${"var(--ds-accent-border)"}` }}>
-                💡 <strong>Mẹo thi cử:</strong> {curTier.emphasis_tip || curTier.rule_summary}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", fontSize: "0.78rem", backgroundColor: "var(--ds-accent-bg)", padding: "0.6rem 0.85rem", borderRadius: "6px", color: "var(--ds-accent)", border: `1px solid ${"var(--ds-accent-border)"}` }}>
+                <KitIcon name="bulb" size={14} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span><strong>Mẹo thi cử:</strong> {curTier.emphasis_tip || curTier.rule_summary}</span>
               </div>
             </div>
           </div>

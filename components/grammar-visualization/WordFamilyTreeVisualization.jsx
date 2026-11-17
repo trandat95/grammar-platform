@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export const WORD_FAMILY_TREE_TYPE = "word-family-tree";
 
@@ -24,8 +25,8 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
         }}
       >
         {[
-          { id: "family_tree", label: "🌳 Cây Phân Nhánh Họ Từ (Word Tree)", desc: "Root -> Noun / Verb / Adj / Adv" },
-          { id: "suffix_rules", label: "✨ Hậu Tố Nhận Diện Vàng & Vị Trí", desc: "-tion, -ment, -ful, -able, -ize, -ly" },
+          { id: "family_tree", icon: "tree", label: "Cây Phân Nhánh Họ Từ (Word Tree)", desc: "Root -> Noun / Verb / Adj / Adv" },
+          { id: "suffix_rules", icon: "sparkles", label: "Hậu Tố Nhận Diện Vàng & Vị Trí", desc: "-tion, -ment, -ful, -able, -ize, -ly" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -46,7 +47,10 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.label}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+              <KitIcon name={tab.icon} size={14} />
+              <span>{tab.label}</span>
+            </span>
             <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>{tab.desc}</span>
           </button>
         ))}
@@ -280,19 +284,22 @@ export default function WordFamilyTreeVisualization({ data, isLight = false }) {
                 </span>
               </div>
 
-              <div style={{ fontSize: "0.78rem", color: "var(--ds-text-secondary)" }}>
-                📍 <strong>Vị trí đứng trong câu:</strong> {rule.position}
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "0.78rem", color: "var(--ds-text-secondary)" }}>
+                <KitIcon name="pin" size={13} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span><strong>Vị trí đứng trong câu:</strong> {rule.position}</span>
               </div>
 
               {rule.formula && (
-                <div style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
-                  📐 <strong>Công thức:</strong> {rule.formula}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
+                  <KitIcon name="ruler" size={13} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                  <span><strong>Công thức:</strong> {rule.formula}</span>
                 </div>
               )}
 
               {rule.special_notes && (
-                <div style={{ fontSize: "0.72rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.35rem 0.5rem", borderRadius: "4px" }}>
-                  ⚠️ {rule.special_notes}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", fontSize: "0.72rem", backgroundColor: "var(--ds-warning-bg)", color: "var(--ds-warning)", padding: "0.35rem 0.5rem", borderRadius: "4px" }}>
+                  <KitIcon name="warning" size={13} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: "1px" }} />
+                  <span>{rule.special_notes}</span>
                 </div>
               )}
 

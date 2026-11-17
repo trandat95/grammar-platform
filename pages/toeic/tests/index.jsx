@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../../components/ui-2026/KitIcon';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../../components/toeic/ui';
 import useGlobalAuth from '../../../hooks/useGlobalAuth';
 import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
@@ -89,16 +90,18 @@ export default function TestsCatalogPage() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem' }}>
                 <ToeicButton
                   variant={selectedSeries === 'ETS2024' ? 'primary' : 'secondary'}
+                  icon="book"
                   onClick={() => setSelectedSeries('ETS2024')}
                 >
-                  📘 TOEIC New Format 2026 — Bộ 01 (10 Đề • Test 01 - 10)
+                  TOEIC New Format 2026 — Bộ 01 (10 Đề • Test 01 - 10)
                 </ToeicButton>
 
                 <ToeicButton
                   variant={selectedSeries === 'ETS2026' ? 'primary' : 'secondary'}
+                  icon="headphones"
                   onClick={() => setSelectedSeries('ETS2026')}
                 >
-                  🎧 TOEIC New Format 2026 — Bộ 02 (10 Đề • Kèm 540 Tracks Dictation)
+                  TOEIC New Format 2026 — Bộ 02 (10 Đề • Kèm 540 Tracks Dictation)
                 </ToeicButton>
               </div>
             </div>
@@ -134,8 +137,8 @@ export default function TestsCatalogPage() {
                               {isFreeTest && !isVip ? 'Miễn phí (Free)' : difficultyText}
                             </ToeicBadge>
                           ) : (
-                            <ToeicBadge variant="warning">
-                              🔒 VIP Premium
+                            <ToeicBadge variant="warning" icon="lock">
+                              VIP Premium
                             </ToeicBadge>
                           )}
                         </div>
@@ -224,6 +227,10 @@ export default function TestsCatalogPage() {
                                 onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: num, series: selectedSeries, mode: `part${pIdx + 5}` })}
                                 style={{
                                   flex: 1,
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '0.25rem',
                                   padding: '0.45rem',
                                   textAlign: 'center',
                                   fontSize: '0.75rem',
@@ -235,7 +242,8 @@ export default function TestsCatalogPage() {
                                   cursor: 'pointer'
                                 }}
                               >
-                                🔒 {pLabel}
+                                <KitIcon name="lock" size={11} />
+                                <span>{pLabel}</span>
                               </button>
                             ))}
                           </>
@@ -276,7 +284,7 @@ export default function TestsCatalogPage() {
                             </svg>
                           }
                         >
-                          🔒 Mở Khóa Đề VIP Này
+                          Mở Khóa Đề VIP Này
                         </ToeicButton>
                       )}
                     </div>

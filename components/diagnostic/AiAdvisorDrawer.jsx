@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
-import { Button, Input, Badge, Alert } from "../design-system";
+import { Button, Input, Badge, Alert, KitIcon } from "../design-system";
 import { AVATAR_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
 
 const QUICK_PROMPTS = [
@@ -129,10 +129,11 @@ export default function AiAdvisorDrawer({
             variant="secondary"
             size="sm"
             isLight={isLight}
+            icon="chat"
             disabled={isAsking}
             onClick={() => handleAsk(q)}
           >
-            💬 {q}
+            {q}
           </Button>
         ))}
       </div>
@@ -195,9 +196,10 @@ export default function AiAdvisorDrawer({
                       variant="secondary"
                       size="sm"
                       isLight={isLight}
+                      icon="book"
                       onClick={() => onNavigateToLesson && onNavigateToLesson(ls.chapter_number, ls.lesson_id)}
                     >
-                      📖 {ls.role}: Ch.{ls.chapter_number} — {ls.title_vi} ➔
+                      {ls.role}: Ch.{ls.chapter_number} — {ls.title_vi} ➔
                     </Button>
                   ))}
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import StructuredExplanation from "../explanation/StructuredExplanation";
 import { migrateQuestionExplanation } from "../../lib/explanation/explanation.migrator";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 /**
  * Milestone 2.5.7, 2.5.9, 2.5.10 & 2.5.11:
@@ -97,8 +98,9 @@ export default function SpacedRepetitionPanel({
 
   if (loading) {
     return (
-      <div style={{ backgroundColor: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: "14px", padding: "1.1rem", color: T.textMuted, fontSize: "0.84rem" }}>
-        ⏳ Đang phân tích Knowledge Graph & Lịch ôn tập ngắt quãng...
+      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", backgroundColor: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: "14px", padding: "1.1rem", color: T.textMuted, fontSize: "0.84rem" }}>
+        <KitIcon name="hourglass" size={15} color={T.accent} />
+        <span>Đang phân tích Knowledge Graph &amp; Lịch ôn tập ngắt quãng...</span>
       </div>
     );
   }
@@ -114,7 +116,7 @@ export default function SpacedRepetitionPanel({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.95rem" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "1.05rem" }}>🧠</span>
+            <KitIcon name="brain" size={17} color={T.accent} />
             <h3 style={{ margin: 0, fontSize: "0.98rem", fontWeight: "800", color: T.textHeading }}>
               Spaced Repetition & Bản đồ Năng lực (SM-2)
             </h3>
@@ -145,8 +147,9 @@ export default function SpacedRepetitionPanel({
             Thành thạo: <strong style={{ color: T.success }}>{summaryStats.masteredConcepts || 0}/53</strong>
           </span>
           {(summaryStats.decayedConcepts || 0) > 0 && (
-            <span style={{ backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "8px", padding: "0.3rem 0.6rem", color: T.danger, fontWeight: "700" }}>
-              ⚠️ {summaryStats.decayedConcepts} chuyên đề suy giảm trí nhớ
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", backgroundColor: T.dangerBg, border: `1px solid ${T.dangerBorder}`, borderRadius: "8px", padding: "0.3rem 0.6rem", color: T.danger, fontWeight: "700" }}>
+              <KitIcon name="warning" size={13} color={T.danger} />
+              <span>{summaryStats.decayedConcepts} chuyên đề suy giảm trí nhớ</span>
             </span>
           )}
         </div>
@@ -239,10 +242,13 @@ export default function SpacedRepetitionPanel({
                   marginBottom: "0.6rem",
                 }}
               >
-                <span>
-                  {reviewOutcome.isCorrect
-                    ? `✅ Chính xác! Hẹn ôn lại sau ${reviewOutcome.nextIntervalDays} ngày (Mastery: ${reviewOutcome.masteryScore}%)`
-                    : `🔄 Đã đưa về chu kỳ củng cố 1 ngày (Mastery: ${reviewOutcome.masteryScore}%)`}
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                  <KitIcon name={reviewOutcome.isCorrect ? "check-circle" : "refresh"} size={14} color={reviewOutcome.isCorrect ? T.success : T.danger} />
+                  <span>
+                    {reviewOutcome.isCorrect
+                      ? `Chính xác! Hẹn ôn lại sau ${reviewOutcome.nextIntervalDays} ngày (Mastery: ${reviewOutcome.masteryScore}%)`
+                      : `Đã đưa về chu kỳ củng cố 1 ngày (Mastery: ${reviewOutcome.masteryScore}%)`}
+                  </span>
                 </span>
                 <button
                   type="button"
@@ -276,8 +282,9 @@ export default function SpacedRepetitionPanel({
       {/* Weak Concepts + Knowledge Graph Prerequisite Links */}
       {weakConcepts.length > 0 && (
         <div style={{ marginBottom: "0.9rem" }}>
-          <div style={{ fontSize: "0.78rem", fontWeight: "800", color: T.textSecondary, marginBottom: "0.5rem" }}>
-            🕸️ Lỗ hổng Kiến thức & Tiên quyết đề xuất (Knowledge Graph):
+          <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.78rem", fontWeight: "800", color: T.textSecondary, marginBottom: "0.5rem" }}>
+            <KitIcon name="git-branch" size={14} color={T.accent} />
+            <span>Lỗ hổng Kiến thức &amp; Tiên quyết đề xuất (Knowledge Graph):</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.6rem" }}>
             {weakConcepts.map((wc) => (
@@ -295,8 +302,9 @@ export default function SpacedRepetitionPanel({
                   <span style={{ fontSize: "0.76rem", fontWeight: "800", color: T.danger }}>{wc.decayed_score}%</span>
                 </div>
                 {wc.decay_penalty > 0 && (
-                  <div style={{ fontSize: "0.7rem", color: T.danger, marginTop: "0.18rem" }}>
-                    📉 Suy giảm -{wc.decay_penalty}% do quá hạn {wc.days_overdue} ngày
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.28rem", fontSize: "0.7rem", color: T.danger, marginTop: "0.18rem" }}>
+                    <KitIcon name="trend-down" size={12} color={T.danger} />
+                    <span>Suy giảm -{wc.decay_penalty}% do quá hạn {wc.days_overdue} ngày</span>
                   </div>
                 )}
                 {wc.prerequisites && wc.prerequisites.length > 0 && (
@@ -307,6 +315,9 @@ export default function SpacedRepetitionPanel({
                         type="button"
                         onClick={() => onOpenLessonByCode && onOpenLessonByCode(pr.lesson_code)}
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.28rem",
                           backgroundColor: T.accentBg,
                           border: `1px solid ${T.accentBorder}`,
                           color: T.accent,
@@ -317,7 +328,8 @@ export default function SpacedRepetitionPanel({
                           cursor: onOpenLessonByCode ? "pointer" : "default",
                         }}
                       >
-                        📖 Tiên quyết: {pr.title_vi}
+                        <KitIcon name="book" size={12} />
+                        <span>Tiên quyết: {pr.title_vi}</span>
                       </button>
                     ))}
                   </div>

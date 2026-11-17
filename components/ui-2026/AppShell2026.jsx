@@ -143,7 +143,7 @@ export default function AppShell2026({
             const isActive =
               activeView === hub.id || (hub.subViews && hub.subViews.includes(activeView));
             const labelText =
-              hub.isVip && effectiveUser?.role === "VIP" ? "⭐ VIP" : hub.label;
+              hub.isVip && effectiveUser?.role === "VIP" ? "VIP" : hub.label;
             return (
               <button
                 key={hub.id}
@@ -160,7 +160,7 @@ export default function AppShell2026({
                   <span
                     style={{
                       backgroundColor: "var(--ds-btn-danger)",
-                      color: "#ffffff",
+                      color: "var(--ds-text-on-accent)",
                       fontSize: "0.65rem",
                       fontWeight: 700,
                       padding: "1px 5px",
@@ -326,7 +326,9 @@ export default function AppShell2026({
               whiteSpace: "nowrap",
             }}
           >
-            <span className="ge-streak-flame-live" aria-hidden="true">🔥</span>
+            <span className="ge-streak-flame-live" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}>
+              <KitIcon name="flame" size={15} />
+            </span>
             <span>{effectiveTracker?.streak || 0}d</span>
           </button>
 
@@ -415,7 +417,8 @@ export default function AppShell2026({
               onClick={() => onSelectView("study")}
               className={`ge-subnav-btn ds-focusable ${activeView === "study" ? "is-active" : ""}`}
             >
-              📖 Bài học ngữ pháp (12 chương)
+              <KitIcon name="book" size={15} />
+              <span>Bài học ngữ pháp (12 chương)</span>
             </button>
             <button
               type="button"
@@ -424,7 +427,8 @@ export default function AppShell2026({
               onClick={() => onSelectView("diagnostic")}
               className={`ge-subnav-btn ds-focusable ${activeView === "diagnostic" ? "is-active" : ""}`}
             >
-              🎯 Kiểm tra trình độ &amp; Lộ trình
+              <KitIcon name="target" size={15} />
+              <span>Kiểm tra trình độ &amp; Lộ trình</span>
             </button>
           </div>
 
@@ -434,6 +438,9 @@ export default function AppShell2026({
               onClick={onToggleSidebarCollapse}
               className="ge-hide-desktop-toggle ds-focusable"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
                 padding: "5px 12px",
                 borderRadius: "7px",
                 border: "1px solid var(--ds-border)",
@@ -444,7 +451,8 @@ export default function AppShell2026({
                 cursor: "pointer",
               }}
             >
-              {sidebarCollapsed ? "☰ Hiện mục lục chương" : "◧ Thu gọn mục lục"}
+              <KitIcon name="menu" size={14} />
+              <span>{sidebarCollapsed ? "Hiện mục lục chương" : "Thu gọn mục lục"}</span>
             </button>
           )}
         </div>
@@ -460,7 +468,8 @@ export default function AppShell2026({
               onClick={() => handleSelectHub("quiz")}
               className={`ge-subnav-btn ds-focusable ${activeView === "quiz" ? "is-active" : ""}`}
             >
-              ⚡ Làm đề trắc nghiệm
+              <KitIcon name="bolt" size={15} />
+              <span>Làm đề trắc nghiệm</span>
             </button>
             <button
               type="button"
@@ -469,7 +478,8 @@ export default function AppShell2026({
               onClick={() => onSelectView("mistakes")}
               className={`ge-subnav-btn ds-focusable ${activeView === "mistakes" ? "is-active" : ""}`}
             >
-              📓 Sổ tay câu sai ({savedMistakesCount})
+              <KitIcon name="book" size={15} />
+              <span>Sổ tay câu sai ({savedMistakesCount})</span>
             </button>
           </div>
           <div style={{ display: "flex", gap: "6px" }} className="ge-show-mobile-only">
@@ -478,6 +488,9 @@ export default function AppShell2026({
               onClick={onOpenVocabModal}
               className="ds-focusable"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
                 padding: "4px 10px",
                 borderRadius: "7px",
                 border: "1px solid var(--ds-warning-border)",
@@ -488,7 +501,8 @@ export default function AppShell2026({
                 cursor: "pointer",
               }}
             >
-              ⭐ Sổ từ ({savedVocabCount})
+              <KitIcon name="tool-vocab" size={14} />
+              <span>Sổ từ ({savedVocabCount})</span>
             </button>
           </div>
         </div>
@@ -504,7 +518,8 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "hub" ? "is-active" : ""}`}
             >
-              🏠 Trung tâm TOEIC
+              <KitIcon name="home" size={15} />
+              <span>Trung tâm TOEIC</span>
             </button>
             <button
               type="button"
@@ -513,7 +528,8 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic/diagnostic")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "diagnostic" ? "is-active" : ""}`}
             >
-              🎯 Test Chẩn Đoán AI
+              <KitIcon name="target" size={15} />
+              <span>Test Chẩn Đoán AI</span>
             </button>
             <button
               type="button"
@@ -522,7 +538,8 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic/tests")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "tests" ? "is-active" : ""}`}
             >
-              📚 20 Đề TOEIC New Format 2026
+              <KitIcon name="books" size={15} />
+              <span>20 Đề TOEIC New Format 2026</span>
             </button>
             <button
               type="button"
@@ -531,7 +548,8 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic/dictation")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "dictation" ? "is-active" : ""}`}
             >
-              🎧 Dictation Studio
+              <KitIcon name="headphones" size={15} />
+              <span>Dictation Studio</span>
             </button>
             <button
               type="button"
@@ -540,7 +558,8 @@ export default function AppShell2026({
               onClick={() => handleToeicNav("/toeic/mistakes-srs")}
               className={`ge-subnav-btn ds-focusable ${activeToeicSub === "srs" ? "is-active" : ""}`}
             >
-              🔄 Sổ Tay Flashcard
+              <KitIcon name="refresh" size={15} />
+              <span>Sổ Tay Flashcard</span>
             </button>
           </div>
         </div>
@@ -633,8 +652,9 @@ export default function AppShell2026({
               <button type="button" onClick={() => handleToeicNav("/toeic/tests")} className="ge-brand-footer-link">
                 20 Đề New Format 2026
               </button>
-              <button type="button" onClick={() => handleSelectHub("vip")} className="ge-brand-footer-link" style={{ color: "var(--ds-warning)" }}>
-                ⭐ Nâng cấp VIP
+              <button type="button" onClick={() => handleSelectHub("vip")} className="ge-brand-footer-link" style={{ color: "var(--ds-warning)", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                <KitIcon name="crown" size={13} />
+                <span>Nâng cấp VIP</span>
               </button>
             </div>
             <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -669,7 +689,7 @@ export default function AppShell2026({
                     top: "4px",
                     right: "18%",
                     backgroundColor: "var(--ds-btn-danger)",
-                    color: "#ffffff",
+                    color: "var(--ds-text-on-accent)",
                     fontSize: "0.6rem",
                     fontWeight: 800,
                     padding: "1px 4px",

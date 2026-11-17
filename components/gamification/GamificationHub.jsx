@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import KitIcon from "../ui-2026/KitIcon";
 import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
 
 // Client-side SWR cache: renders Gamification tab instantaneously (0ms) on revisit & after prefetch
@@ -236,17 +237,21 @@ export default function GamificationHub({
 
       {/* Mobile Quick-Jump Strip (1-tap access to Challenges, Badges, Leaderboard, Settings) */}
       <nav aria-label="Điều hướng nhanh Thành tích" className="ge-ach-jump-pills">
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-challenges")}>
-          ⚡ Thử thách
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-challenges")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
+          <KitIcon name="bolt" size={14} />
+          <span>Thử thách</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-badges")}>
-          🏅 Huy hiệu ({unlockedTotal}/{achievements.length})
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-badges")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
+          <KitIcon name="medal" size={14} />
+          <span>Huy hiệu ({unlockedTotal}/{achievements.length})</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-leaderboard")}>
-          🏆 Bảng XH
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-leaderboard")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
+          <KitIcon name="trophy" size={14} />
+          <span>Bảng XH</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-settings")}>
-          ⚙️ Cài đặt
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-settings")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
+          <KitIcon name="settings" size={14} />
+          <span>Cài đặt</span>
         </button>
       </nav>
 
@@ -300,8 +305,8 @@ export default function GamificationHub({
               Còn <strong>{xpState.xpRemaining ?? 100} XP</strong> để thăng cấp tiếp theo
             </span>
             {onStartAdaptivePractice && (
-              <Button size="sm" variant="primary" isLight={isLight} onClick={() => onStartAdaptivePractice({ mode: "adaptive", count: 20 })}>
-                🎯 Kiếm XP (Đề 50/30/20)
+              <Button size="sm" variant="primary" icon="target" isLight={isLight} onClick={() => onStartAdaptivePractice({ mode: "adaptive", count: 20 })}>
+                Kiếm XP (Đề 50/30/20)
               </Button>
             )}
           </div>
@@ -320,7 +325,7 @@ export default function GamificationHub({
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
               <div className="ge-streak-orb" aria-hidden="true">
-                <span className="ge-streak-flame-live" style={{ fontSize: "1.45rem" }}>🔥</span>
+                <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={22} /></span>
               </div>
               <div>
                 <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
@@ -332,8 +337,8 @@ export default function GamificationHub({
               </div>
             </div>
             {streakState.can_recover && (
-              <Button size="sm" variant="success" isLight={isLight} onClick={() => handleServerAction({ action: "recover_streak" })}>
-                ❄️ Khôi phục Chuỗi
+              <Button size="sm" variant="success" icon="snowflake" isLight={isLight} onClick={() => handleServerAction({ action: "recover_streak" })}>
+                Khôi phục Chuỗi
               </Button>
             )}
           </div>
@@ -352,8 +357,8 @@ export default function GamificationHub({
                 }}
               >
                 <div style={{ fontSize: "0.68rem", color: d.active ? T.warning : T.textMuted, fontWeight: 700 }}>{d.label}</div>
-                <div style={{ fontSize: "0.92rem", fontWeight: 800, color: d.active ? T.warning : T.textSecondary, marginTop: "0.15rem" }}>
-                  {d.active ? <span className="ge-streak-flame-live">🔥</span> : d.dayNum}
+                <div style={{ fontSize: "0.92rem", fontWeight: 800, color: d.active ? T.warning : T.textSecondary, marginTop: "0.15rem", display: "flex", justifyContent: "center" }}>
+                  {d.active ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={16} /></span> : d.dayNum}
                 </div>
               </div>
             ))}
@@ -379,8 +384,9 @@ export default function GamificationHub({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.9rem", flexWrap: "wrap", gap: "0.5rem" }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
-              ⚡ Thử Thách Ngày &amp; Tuần (Daily &amp; Weekly Missions)
+            <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+              <KitIcon name="bolt" size={18} />
+              <span>Thử Thách Ngày &amp; Tuần (Daily &amp; Weekly Missions)</span>
             </h2>
             <p style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
               Hoàn thành mục tiêu để tự động nhận +50 XP (Ngày) hoặc +150 XP (Tuần) chống nhận thưởng kép.
@@ -413,8 +419,8 @@ export default function GamificationHub({
                       <Badge tone={tpl.period_type === "weekly" ? "warning" : "accent"} isLight={isLight}>
                         {tpl.period_type === "weekly" ? "Mục tiêu Tuần" : "Thử thách Ngày"}
                       </Badge>
-                      <Badge tone={isDone ? "success" : "neutral"} isLight={isLight}>
-                        {isDone ? `✅ +${tpl.xp_reward || 50} XP` : `+${tpl.xp_reward || 50} XP`}
+                      <Badge tone={isDone ? "success" : "neutral"} icon={isDone ? "check-circle" : null} isLight={isLight}>
+                        {`+${tpl.xp_reward || 50} XP`}
                       </Badge>
                     </div>
                     <div style={{ fontWeight: 800, fontSize: "0.86rem", color: T.textHeading, marginTop: "0.5rem" }}>
@@ -439,11 +445,12 @@ export default function GamificationHub({
                         <Button
                           size="sm"
                           variant="ghost"
+                          icon="refresh"
                           isLight={isLight}
                           onClick={() => handleServerAction({ action: "swap_challenge", user_challenge_id: ch.id })}
                           style={{ fontSize: "0.74rem", padding: "0.32rem 0.65rem", minHeight: "36px" }}
                         >
-                          🔄 Đổi thử thách
+                          Đổi thử thách
                         </Button>
                       </div>
                     )}
@@ -469,8 +476,9 @@ export default function GamificationHub({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.9rem" }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
-              🏅 Bộ Sưu Tập Huy Hiệu ({unlockedTotal} / {achievements.length})
+            <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+              <KitIcon name="medal" size={18} />
+              <span>Bộ Sưu Tập Huy Hiệu ({unlockedTotal} / {achievements.length})</span>
             </h2>
             <p className="ge-mobile-hide-note" style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
               4 hạng danh giá (Bronze / Silver / Gold / Diamond) kèm các Huy hiệu Bí ẩn tự động mở khóa.
@@ -536,8 +544,8 @@ export default function GamificationHub({
                     </Badge>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                       {isMysteryLocked && (
-                        <Badge tone="neutral" isLight={isLight}>
-                          🔒 Bí ẩn
+                        <Badge tone="neutral" icon="lock" isLight={isLight}>
+                          Bí ẩn
                         </Badge>
                       )}
                       {isUnlocked ? (
@@ -545,8 +553,9 @@ export default function GamificationHub({
                           ✓ Đã mở
                         </Badge>
                       ) : !isMysteryLocked ? (
-                        <span style={{ fontSize: "0.64rem", fontWeight: 700, color: T.textMuted }}>
-                          🔒 Khóa
+                        <span style={{ fontSize: "0.64rem", fontWeight: 700, color: T.textMuted, display: "inline-flex", alignItems: "center", gap: "3px" }}>
+                          <KitIcon name="lock" size={11} />
+                          <span>Khóa</span>
                         </span>
                       ) : null}
                     </div>
@@ -641,13 +650,14 @@ export default function GamificationHub({
             <Button
               variant="secondary"
               size="sm"
+              icon={badgeShowAll ? null : "medal"}
               isLight={isLight}
               onClick={() => setBadgeShowAll((v) => !v)}
               style={{ width: "100%", justifyContent: "center", minHeight: "40px", fontWeight: 700 }}
             >
               {badgeShowAll
-                ? "▲ Thu gọn bộ sưu tập huy hiệu"
-                : `🏅 Xem toàn bộ ${filteredBadges.length} huy hiệu (${filteredBadges.length - 6} huy hiệu khác)`}
+                ? "Thu gọn bộ sưu tập huy hiệu"
+                : `Xem toàn bộ ${filteredBadges.length} huy hiệu (${filteredBadges.length - 6} huy hiệu khác)`}
             </Button>
           </div>
         )}
@@ -678,8 +688,9 @@ export default function GamificationHub({
               gap: "0.85rem",
             }}
           >
-            <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
-              ⚙️ Quyền riêng tư &amp; Hiệu ứng (Privacy &amp; Accessibility)
+            <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+              <KitIcon name="settings" size={17} />
+              <span>Quyền riêng tư &amp; Hiệu ứng (Privacy &amp; Accessibility)</span>
             </h2>
 
             <Select
@@ -721,8 +732,9 @@ export default function GamificationHub({
               boxShadow: T.shadowSm,
             }}
           >
-            <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
-              📜 Lịch sử Giao dịch XP (Reward History)
+            <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+              <KitIcon name="receipt" size={17} />
+              <span>Lịch sử Giao dịch XP (Reward History)</span>
             </h2>
             {recentTransactions.length === 0 ? (
               <div style={{ fontSize: "0.8rem", color: T.textMuted }}>

@@ -69,7 +69,7 @@ function synthesizeDeterministicAdvice({ questionText, scoreResult, rootCauses, 
 
   if (qLower.includes("20 phút") || qLower.includes("hôm nay") || qLower.includes("nên học")) {
     lines.push(
-      `📅 **Kế hoạch 20 phút tối ưu hôm nay (Dựa trên điểm ${pct}/100 • Trình độ ${level}):**`
+      `[Kế hoạch 20 phút tối ưu hôm nay • Điểm ${pct}/100 • Trình độ ${level}]`
     );
     if (verifiedLessons.length > 0) {
       lines.push(
@@ -88,21 +88,21 @@ function synthesizeDeterministicAdvice({ questionText, scoreResult, rootCauses, 
     const gapToB2 = Math.max(0, 75 - pct);
     if (pct >= 75) {
       lines.push(
-        `🎯 **Đánh giá Sẵn sàng B2+:** Bạn đã đạt **${pct}/100 (${level})**, vượt ngưỡng mục tiêu B2 (75%). Hãy tập trung luyện câu điều kiện hỗn hợp, bị động đặc biệt và tổng hợp Chương 12 để hướng tới **C1 (≥90%)**.`
+        `[Đánh giá Sẵn sàng B2+] Bạn đã đạt **${pct}/100 (${level})**, vượt ngưỡng mục tiêu B2 (75%). Hãy tập trung luyện câu điều kiện hỗn hợp, bị động đặc biệt và tổng hợp Chương 12 để hướng tới **C1 (≥90%)**.`
       );
     } else {
       lines.push(
-        `📊 **Khoảng cách tới B2 (Ngưỡng chuẩn 75%):** Hiện tại bạn đạt **${pct}/100 (${level})**, cần cải thiện thêm **+${gapToB2} điểm**.`
+        `[Khoảng cách tới B2 — Ngưỡng chuẩn 75%] Hiện tại bạn đạt **${pct}/100 (${level})**, cần cải thiện thêm **+${gapToB2} điểm**.`
       );
       if (topWeak) {
         lines.push(
-          `🔑 **Đòn bẩy điểm cao nhất:** Chuyên đề **${topWeak.topic_name}** mới đạt **${topWeak.accuracy}%**. Nâng chuyên đề này lên ≥ 75% sẽ giúp tổng điểm bứt phá nhanh nhất.`
+          `[Đòn bẩy điểm cao nhất] Chuyên đề **${topWeak.topic_name}** mới đạt **${topWeak.accuracy}%**. Nâng chuyên đề này lên ≥ 75% sẽ giúp tổng điểm bứt phá nhanh nhất.`
         );
       }
     }
   } else {
     lines.push(
-      `🔍 **Phân tích Chẩn đoán Chuyên đề (${graphContext.node?.title_vi || topWeak?.topic_name || "Ngữ pháp cốt lõi"}):**`
+      `[Phân tích Chẩn đoán Chuyên đề • ${graphContext.node?.title_vi || topWeak?.topic_name || "Ngữ pháp cốt lõi"}]`
     );
     if (topWeak) {
       lines.push(

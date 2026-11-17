@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     const optAnalysis = selectedOption && aiAnalysis.option_deep_analysis?.[selectedOption];
 
     // Generate grounded pedagogical response
-    let replyMarkdown = `### 🧑‍🏫 Giải Thích Từ AI Gia Sư TOEIC\n\n`;
+    let replyMarkdown = `### Giải Thích Từ AI Gia Sư TOEIC\n\n`;
     replyMarkdown += `**Chủ điểm:** ${aiAnalysis.primary_topic_name_vi || question.primary_grammar_topic_id}\n\n`;
 
     if (formula) {
@@ -54,13 +54,13 @@ export default async function handler(req, res) {
       replyMarkdown += `**Phân tích phương án bạn chọn (${selectedOption}):**\n`;
       replyMarkdown += `- ${optAnalysis.ai_feedback_vi}\n`;
       if (optAnalysis.error_pattern_name_vi) {
-        replyMarkdown += `- ⚠️ **Mẫu lỗi nhận thức:** *${optAnalysis.error_pattern_name_vi}*\n`;
+        replyMarkdown += `- **Mẫu lỗi nhận thức:** *${optAnalysis.error_pattern_name_vi}*\n`;
       }
       replyMarkdown += `\n`;
     }
 
     if (trap) {
-      replyMarkdown += `💡 **Lưu ý bẫy thường gặp:** ${trap}\n\n`;
+      replyMarkdown += `**Lưu ý bẫy thường gặp:** ${trap}\n\n`;
     }
 
     if (userMessage) {

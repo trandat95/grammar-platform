@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from './ui';
 
 /**
@@ -320,7 +321,10 @@ export default function SentenceXRayCard({
               fontWeight: 700
             }}
           >
-            <span>⏱️ {timeSpentSec}s</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+              <KitIcon name="timer" size={13} />
+              <span>{timeSpentSec}s</span>
+            </span>
             <span style={{ fontSize: '0.65rem', color: 'var(--ds-text-muted)' }}>
               /{recommendedTime}s
             </span>
@@ -345,7 +349,8 @@ export default function SentenceXRayCard({
                 cursor: 'pointer'
               }}
             >
-              <span>💡 Gợi ý X-Ray (H)</span>
+              <KitIcon name="bulb" size={13} />
+              <span>Gợi ý X-Ray (H)</span>
             </button>
           )}
 
@@ -367,7 +372,8 @@ export default function SentenceXRayCard({
                 cursor: 'pointer'
               }}
             >
-              <span>🧑‍🏫 AI Gia Sư</span>
+              <KitIcon name="bot" size={13} color="var(--ds-accent)" />
+              <span>AI Gia Sư</span>
             </button>
           )}
         </div>
@@ -376,8 +382,9 @@ export default function SentenceXRayCard({
       {/* 2. HINT BANNER (When Hint Active) */}
       {state === XRAY_STATES.HINT_ACTIVE && xray && (
         <div className="toeic-formula-box trap" style={{ margin: '0 0 1.25rem 0' }}>
-          <div className="toeic-formula-title">
-            <span>🔍 GỢI Ý QUANG PHỔ CÂU (SENTENCE X-RAY):</span>
+          <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            <KitIcon name="search" size={14} />
+            <span>GỢI Ý QUANG PHỔ CÂU (SENTENCE X-RAY):</span>
           </div>
           <div style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
             <div>
@@ -465,18 +472,18 @@ export default function SentenceXRayCard({
               btnBg = 'var(--ds-success-bg)';
               btnBorder = 'var(--ds-success)';
               badgeBg = 'var(--ds-success)';
-              badgeColor = '#ffffff';
+              badgeColor = 'var(--ds-text-on-accent)';
             } else if (isSelected && !isCorrectAnswer) {
               btnBg = 'var(--ds-danger-bg)';
               btnBorder = 'var(--ds-danger)';
               badgeBg = 'var(--ds-danger)';
-              badgeColor = '#ffffff';
+              badgeColor = 'var(--ds-text-on-accent)';
             }
           } else if (isSelected) {
             btnBg = 'var(--ds-accent-bg)';
             btnBorder = 'var(--ds-accent)';
             badgeBg = 'var(--ds-accent)';
-            badgeColor = '#ffffff';
+            badgeColor = 'var(--ds-text-on-accent)';
           }
 
           return (
@@ -552,8 +559,8 @@ export default function SentenceXRayCard({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '1.1rem' }}>
-              {isCorrect ? '🎉' : '💡'}
+            <span style={{ display: 'inline-flex', color: isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)' }}>
+              <KitIcon name={isCorrect ? 'check-circle' : 'bulb'} size={18} />
             </span>
             <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-text)' }}>
               {isCorrect ? 'Chính xác!' : `Đáp án đúng là (${question.correct_answer}).`}
@@ -593,25 +600,28 @@ export default function SentenceXRayCard({
               type="button"
               onClick={() => setActiveTab('breakdown')}
               className={`toeic-target-chip ${activeTab === 'breakdown' ? 'active' : ''}`}
-              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              📐 Bóc Tách Cấu Trúc <span className="ge-hide-mobile">(State 2)</span>
+              <KitIcon name="ruler" size={13} />
+              <span>Bóc Tách Cấu Trúc <span className="ge-hide-mobile">(State 2)</span></span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('formula')}
               className={`toeic-target-chip ${activeTab === 'formula' ? 'active' : ''}`}
-              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              📐 Quy Tắc &amp; Công Thức <span className="ge-hide-mobile">(State 3)</span>
+              <KitIcon name="bolt" size={13} />
+              <span>Quy Tắc &amp; Công Thức <span className="ge-hide-mobile">(State 3)</span></span>
             </button>
             <button
               type="button"
               onClick={handleOpenTwinRemediation}
               className={`toeic-target-chip ${activeTab === 'twin' ? 'active' : ''}`}
-              style={{ fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem', padding: '0.38rem 0.75rem' }}
             >
-              🎯 Câu Sinh Đôi <span className="ge-hide-mobile">Twin-Questions (State 4)</span>
+              <KitIcon name="target" size={13} />
+              <span>Câu Sinh Đôi <span className="ge-hide-mobile">Twin-Questions (State 4)</span></span>
             </button>
           </div>
 
@@ -621,8 +631,9 @@ export default function SentenceXRayCard({
               {/* Cognitive Error Pattern Alert if wrong */}
               {selectedFeedback && !isCorrect && (
                 <div className="toeic-formula-box critical">
-                  <div className="toeic-formula-title">
-                    <span>⚠️ PHÂN TÍCH LỖI NHẬN THỨC:</span>
+                  <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+                    <KitIcon name="warning" size={14} />
+                    <span>PHÂN TÍCH LỖI NHẬN THỨC:</span>
                     {selectedFeedback.error_pattern_name_vi && (
                       <ToeicBadge variant="danger">{selectedFeedback.error_pattern_name_vi}</ToeicBadge>
                     )}
@@ -635,8 +646,11 @@ export default function SentenceXRayCard({
 
               {/* Structural Pattern Display */}
               {xray?.xray_pattern_display && (
-                <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--ds-accent)', wordBreak: 'break-word', overflowX: 'auto' }}>
-                  <span style={{ fontWeight: 800 }}>📐 Cấu trúc câu: </span>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', flexWrap: 'wrap', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--ds-accent)', wordBreak: 'break-word', overflowX: 'auto' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontWeight: 800 }}>
+                    <KitIcon name="ruler" size={13} />
+                    <span>Cấu trúc câu: </span>
+                  </span>
                   <span>{xray.xray_pattern_display}</span>
                 </div>
               )}
@@ -644,8 +658,9 @@ export default function SentenceXRayCard({
               {/* Word Family Matrix */}
               {aiAnalysis.word_family_matrix?.length > 0 && (
                 <div style={{ padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--ds-border)', backgroundColor: 'var(--ds-card)' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-text)', marginBottom: '0.75rem' }}>
-                    📚 Bảng Họ Từ Loại (Word Family Matrix):
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-text)', marginBottom: '0.75rem' }}>
+                    <KitIcon name="books" size={14} color="var(--ds-accent)" />
+                    <span>Bảng Họ Từ Loại (Word Family Matrix):</span>
                   </div>
                   <div className="toeic-grid-4" style={{ gap: '0.5rem' }}>
                     {aiAnalysis.word_family_matrix.map((wf, idx) => (
@@ -679,8 +694,9 @@ export default function SentenceXRayCard({
               {/* Standard Formula */}
               {aiAnalysis.micro_rule_formula_vi && (
                 <div className="toeic-formula-box standard">
-                  <div className="toeic-formula-title">
-                    <span>⚡ CÔNG THỨC NGỮ PHÁP CHUẨN:</span>
+                  <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <KitIcon name="bolt" size={14} />
+                    <span>CÔNG THỨC NGỮ PHÁP CHUẨN:</span>
                   </div>
                   <div className="toeic-formula-text">
                     {aiAnalysis.micro_rule_formula_vi}
@@ -691,8 +707,9 @@ export default function SentenceXRayCard({
               {/* Trap Alert */}
               {aiAnalysis.common_traps_vi && (
                 <div className="toeic-formula-box trap">
-                  <div className="toeic-formula-title">
-                    <span>⚠️ BẪY NHẬN THỨC THƯỜNG GẶP:</span>
+                  <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <KitIcon name="warning" size={14} />
+                    <span>BẪY NHẬN THỨC THƯỜNG GẶP:</span>
                   </div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--ds-text)', lineHeight: 1.5 }}>
                     {aiAnalysis.common_traps_vi}
@@ -703,8 +720,9 @@ export default function SentenceXRayCard({
               {/* 3 Solving Steps */}
               {aiAnalysis.solving_steps_vi?.length > 0 && (
                 <div className="toeic-formula-box tip">
-                  <div className="toeic-formula-title">
-                    <span>💡 3 BƯỚC GIẢI NHANH 10 GIÂY:</span>
+                  <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <KitIcon name="bulb" size={14} />
+                    <span>3 BƯỚC GIẢI NHANH 10 GIÂY:</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.85rem' }}>
                     {aiAnalysis.solving_steps_vi.map((step, idx) => (
@@ -725,8 +743,8 @@ export default function SentenceXRayCard({
               {twinQuestion ? (
                 <div className="toeic-card" style={{ border: '1.5px solid var(--ds-warning-border)', backgroundColor: 'var(--ds-warning-bg)' }}>
                   <div className="toeic-flex-between" style={{ marginBottom: '0.75rem' }}>
-                    <ToeicBadge variant="warning">
-                      🎯 Câu Hỏi Sinh Đôi (Twin Question Remediation)
+                    <ToeicBadge variant="warning" icon="target">
+                      Câu Hỏi Sinh Đôi (Twin Question Remediation)
                     </ToeicBadge>
                     <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
                       #{twinQuestion.id}
@@ -796,7 +814,7 @@ export default function SentenceXRayCard({
                       }}
                     >
                       {twinAnswered === twinQuestion.correct_answer
-                        ? '🎉 Xuất sắc! Bạn đã gỡ điểm thành công và nắm vững quy tắc này!'
+                        ? 'Xuất sắc! Bạn đã gỡ điểm thành công và nắm vững quy tắc này!'
                         : `Đáp án đúng là (${twinQuestion.correct_answer}). Hãy lưu câu này vào sổ tay SRS để ôn lại sau!`}
                     </div>
                   )}

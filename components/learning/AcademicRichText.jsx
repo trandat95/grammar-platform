@@ -1,4 +1,5 @@
 import React from "react";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 /**
  * AcademicRichText
@@ -122,6 +123,9 @@ function renderInlineLine(line, lineKey) {
         <span
           key={k}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "3px",
             backgroundColor: "var(--ds-danger-bg)",
             border: "1px solid var(--ds-danger-border)",
             color: "var(--ds-danger)",
@@ -132,7 +136,8 @@ function renderInlineLine(line, lineKey) {
             margin: "0 4px",
           }}
         >
-          ⚠️ {token.slice(1, -1)}
+          <KitIcon name="warning" size={11} />
+          <span>{token.slice(1, -1)}</span>
         </span>
       );
     }

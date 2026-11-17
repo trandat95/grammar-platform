@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { DIFFICULTY_LEVELS, validateExplanation } from "../../lib/explanation/explanation.schema";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 /**
  * Milestone 2.5.8 & 2.5.12: Pedagogical Quality & Explanation Governance Dashboard
@@ -157,8 +158,9 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
       {/* Header & Batch Ingest */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem" }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: "1.02rem", fontWeight: "800", color: T.textHeading }}>
-            🎓 Kiểm duyệt Sư phạm & Chất lượng Lời giải (Milestone 2.5)
+          <h3 style={{ display: "flex", alignItems: "center", gap: "0.45rem", margin: 0, fontSize: "1.02rem", fontWeight: "800", color: T.textHeading }}>
+            <KitIcon name="graduation" size={18} color={T.accent} />
+            <span>Kiểm duyệt Sư phạm &amp; Chất lượng Lời giải (Milestone 2.5)</span>
           </h3>
           <p style={{ margin: "0.2rem 0 0 0", fontSize: "0.78rem", color: T.textMuted }}>
             Quản lý Feedback học viên, đồng bộ 2,939 lời giải 5-field lên PostgreSQL & phát hành bản sửa đổi theo Version.
@@ -170,6 +172,9 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
           onClick={handleBatchIngest}
           disabled={isIngesting}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.4rem",
             backgroundColor: T.accent,
             border: "none",
             color: "#ffffff",
@@ -180,7 +185,8 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
             cursor: isIngesting ? "wait" : "pointer",
           }}
         >
-          {isIngesting ? "⏳ Đang đồng bộ 2,939 câu..." : "🚀 Đồng bộ 2,939 Lời Giải lên Supabase"}
+          <KitIcon name={isIngesting ? "hourglass" : "rocket"} size={14} />
+          <span>{isIngesting ? "Đang đồng bộ 2,939 câu..." : "Đồng bộ 2,939 Lời Giải lên Supabase"}</span>
         </button>
       </div>
 
@@ -250,15 +256,18 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.65rem" }}>
         <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
           {[
-            { id: "all", label: "Tất cả Feedback" },
-            { id: "flagged", label: "🚩 Bị báo lỗi (≥ 1)" },
-            { id: "critical", label: "🔥 Nghiêm trọng (≥ 3)" },
+            { id: "all", icon: null, label: "Tất cả Feedback" },
+            { id: "flagged", icon: "flag", label: "Bị báo lỗi (≥ 1)" },
+            { id: "critical", icon: "flame", label: "Nghiêm trọng (≥ 3)" },
           ].map((btn) => (
             <button
               key={btn.id}
               type="button"
               onClick={() => setFilterMode(btn.id)}
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
                 backgroundColor: filterMode === btn.id ? T.accentBg : T.bgElevated,
                 border: `1px solid ${filterMode === btn.id ? T.accentBorder : T.border}`,
                 color: filterMode === btn.id ? T.accent : T.textSecondary,
@@ -269,7 +278,8 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
                 cursor: "pointer",
               }}
             >
-              {btn.label}
+              {btn.icon && <KitIcon name={btn.icon} size={13} />}
+              <span>{btn.label}</span>
             </button>
           ))}
         </div>
@@ -346,9 +356,13 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
                       </div>
                     </td>
                     <td style={{ padding: "0.5rem 0.45rem", whiteSpace: "nowrap" }}>
-                      <span style={{ color: T.success, fontWeight: "700" }}>👍 {g.helpfulCount}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.22rem", color: T.success, fontWeight: "700" }}>
+                        <KitIcon name="thumbs-up" size={12} /> {g.helpfulCount}
+                      </span>
                       {" / "}
-                      <span style={{ color: g.reportCount > 0 ? T.danger : T.textMuted, fontWeight: "800" }}>🚩 {g.reportCount}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.22rem", color: g.reportCount > 0 ? T.danger : T.textMuted, fontWeight: "800" }}>
+                        <KitIcon name="flag" size={12} /> {g.reportCount}
+                      </span>
                     </td>
                     <td style={{ padding: "0.5rem 0.45rem", color: T.textSecondary, maxWidth: "200px" }}>
                       {g.latestComment || "—"}
@@ -396,8 +410,9 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
           <div style={{ backgroundColor: T.card, border: `1px solid ${T.accentBorder}`, borderRadius: "12px", padding: "0.95rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
               <div>
-                <div style={{ fontSize: "0.86rem", fontWeight: "800", color: T.textHeading }}>
-                  ✏️ Trình biên tập 5-Field Pedagogical JSON
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.86rem", fontWeight: "800", color: T.textHeading }}>
+                  <KitIcon name="edit" size={14} color={T.accent} />
+                  <span>Trình biên tập 5-Field Pedagogical JSON</span>
                 </div>
                 <div style={{ fontSize: "0.72rem", color: T.textMuted }}>
                   ID: <code>{editingQid}</code> {editingMeta?.conceptId ? `• Concept: ${editingMeta.conceptId}` : ""}
@@ -479,6 +494,9 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
                     onClick={handlePublishEditedExplanation}
                     disabled={isSaving}
                     style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.35rem",
                       backgroundColor: T.success,
                       border: "none",
                       color: "#ffffff",
@@ -489,7 +507,8 @@ export default function PedagogicalQualityDashboard({ authHeaders = {}, isLight 
                       cursor: isSaving ? "wait" : "pointer",
                     }}
                   >
-                    {isSaving ? "Đang xuất bản..." : "💾 Xuất bản Phiên bản Mới"}
+                    <KitIcon name="check-circle" size={14} />
+                    <span>{isSaving ? "Đang xuất bản..." : "Xuất bản Phiên bản Mới"}</span>
                   </button>
                 </div>
               </>

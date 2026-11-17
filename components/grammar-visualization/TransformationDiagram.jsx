@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function TransformationDiagram({ data, isLight = false }) {
   const [activeTenseIndex, setActiveTenseIndex] = useState(0);
@@ -25,13 +26,17 @@ export default function TransformationDiagram({ data, isLight = false }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
           <h3
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.45rem",
               fontSize: "1.15rem",
               fontWeight: "700",
               color: "var(--ds-text-heading)",
               margin: 0,
             }}
           >
-            🔄 {data.title}
+            <KitIcon name="refresh" size={17} color="var(--ds-accent)" />
+            <span>{data.title}</span>
           </h3>
           <span
             style={{
@@ -329,6 +334,9 @@ export default function TransformationDiagram({ data, isLight = false }) {
             {/* Pedagogical Note / Explanation */}
             <div
               style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "0.4rem",
                 marginTop: "0.75rem",
                 padding: "0.65rem 0.85rem",
                 backgroundColor: "var(--ds-bg-elevated)",
@@ -338,7 +346,8 @@ export default function TransformationDiagram({ data, isLight = false }) {
                 color: "var(--ds-text-secondary)",
               }}
             >
-              💡 <strong>Phân tích sư phạm:</strong> {currentExample.explanation}
+              <KitIcon name="bulb" size={14} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <span><strong>Phân tích sư phạm:</strong> {currentExample.explanation}</span>
             </div>
           </div>
         </div>
@@ -363,7 +372,10 @@ export default function TransformationDiagram({ data, isLight = false }) {
             fontWeight: "700",
           }}
         >
-          <span>📋 Quy tắc lược bỏ "By + Agent" trong đề thi tiếng Anh</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
+            <KitIcon name="clipboard" size={15} color="var(--ds-accent)" />
+            <span>Quy tắc lược bỏ "By + Agent" trong đề thi tiếng Anh</span>
+          </span>
           <span>{showAgentRules ? "▲ Thu gọn" : "▼ Xem chi tiết"}</span>
         </button>
 

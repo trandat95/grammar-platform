@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
-import { Alert, Badge, Button, Progress, Skeleton } from "../design-system";
+import { Alert, Badge, Button, Progress, Skeleton, KitIcon } from "../design-system";
 import { invalidateMonetizationClientCache } from "../monetization/MonetizationHub";
 
 /**
@@ -119,15 +119,15 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       if (res.ok && json.success) {
         invalidateMonetizationClientCache();
         setNoticeTone("success");
-        setNotice(`✅ Đã cập nhật giá gói ${planCode} (${Number(json.plan?.price_vnd || draft.price_vnd).toLocaleString()}đ) trực tiếp trên Database & áp dụng ngay!`);
+        setNotice(`Đã cập nhật giá gói ${planCode} (${Number(json.plan?.price_vnd || draft.price_vnd).toLocaleString()}đ) trực tiếp trên Database & áp dụng ngay!`);
         await loadMetrics();
       } else {
         setNoticeTone("danger");
-        setNotice(`⚠️ Lỗi cập nhật gói ${planCode}: ${json.error || "Không rõ"}`);
+        setNotice(`Lỗi cập nhật gói ${planCode}: ${json.error || "Không rõ"}`);
       }
     } catch (err) {
       setNoticeTone("danger");
-      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+      setNotice(`Lỗi kết nối: ${err.message}`);
     } finally {
       setSavingPlanCode(null);
     }
@@ -147,7 +147,7 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
     const trimmedCode = String(couponDraft.code || "").trim().toUpperCase();
     if (!trimmedCode) {
       setNoticeTone("danger");
-      setNotice("⚠️ Vui lòng nhập mã giảm giá (hoặc bấm Ngẫu nhiên).");
+      setNotice("Vui lòng nhập mã giảm giá (hoặc bấm Ngẫu nhiên).");
       return;
     }
     setSavingCoupon(true);
@@ -172,16 +172,16 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       const json = await res.json();
       if (res.ok && json.success) {
         setNoticeTone("success");
-        setNotice(`✅ Đã tạo / cập nhật mã giảm giá ${json.coupon?.code || trimmedCode} thành công!`);
+        setNotice(`Đã tạo / cập nhật mã giảm giá ${json.coupon?.code || trimmedCode} thành công!`);
         setCouponDraft((prev) => ({ ...prev, code: "" }));
         await loadMetrics();
       } else {
         setNoticeTone("danger");
-        setNotice(`⚠️ Lỗi tạo mã giảm giá: ${json.error || "Không rõ"}`);
+        setNotice(`Lỗi tạo mã giảm giá: ${json.error || "Không rõ"}`);
       }
     } catch (err) {
       setNoticeTone("danger");
-      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+      setNotice(`Lỗi kết nối: ${err.message}`);
     } finally {
       setSavingCoupon(false);
     }
@@ -206,15 +206,15 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       const json = await res.json();
       if (res.ok && json.success) {
         setNoticeTone("success");
-        setNotice(`✅ Đã ${nextActive ? "kích hoạt" : "tạm dừng"} mã giảm giá ${couponCode}.`);
+        setNotice(`Đã ${nextActive ? "kích hoạt" : "tạm dừng"} mã giảm giá ${couponCode}.`);
         await loadMetrics();
       } else {
         setNoticeTone("danger");
-        setNotice(`⚠️ Lỗi cập nhật mã ${couponCode}: ${json.error || "Không rõ"}`);
+        setNotice(`Lỗi cập nhật mã ${couponCode}: ${json.error || "Không rõ"}`);
       }
     } catch (err) {
       setNoticeTone("danger");
-      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+      setNotice(`Lỗi kết nối: ${err.message}`);
     } finally {
       setBusyCouponCode(null);
     }
@@ -237,20 +237,20 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       });
       const json = await res.json();
       if (res.ok && json.success) {
-        setNoticeTone("success");
+        setNoticeTone(json.softDeactivated ? "info" : "success");
         setNotice(
           json.softDeactivated
-            ? `ℹ️ Mã ${couponCode} đã có lượt sử dụng nên hệ thống chuyển sang Tạm dừng để bảo toàn lịch sử giao dịch.`
-            : `✅ Đã xóa vĩnh viễn mã giảm giá ${couponCode}.`
+            ? `Mã ${couponCode} đã có lượt sử dụng nên hệ thống chuyển sang Tạm dừng để bảo toàn lịch sử giao dịch.`
+            : `Đã xóa vĩnh viễn mã giảm giá ${couponCode}.`
         );
         await loadMetrics();
       } else {
         setNoticeTone("danger");
-        setNotice(`⚠️ Lỗi xóa mã ${couponCode}: ${json.error || "Không rõ"}`);
+        setNotice(`Lỗi xóa mã ${couponCode}: ${json.error || "Không rõ"}`);
       }
     } catch (err) {
       setNoticeTone("danger");
-      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+      setNotice(`Lỗi kết nối: ${err.message}`);
     } finally {
       setBusyCouponCode(null);
     }
@@ -307,16 +307,16 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       if (res.ok && json.success) {
         invalidateMonetizationClientCache();
         setNoticeTone("success");
-        setNotice("✅ Đã lưu cấu hình Tài khoản VA & Webhook SePay VietQR thành công!");
+        setNotice("Đã lưu cấu hình Tài khoản VA & Webhook SePay VietQR thành công!");
         setSepayDraft((prev) => ({ ...prev, webhook_api_key: "" }));
         await loadMetrics();
       } else {
         setNoticeTone("danger");
-        setNotice(`⚠️ Lỗi lưu cấu hình SePay: ${json.error || "Không rõ"}`);
+        setNotice(`Lỗi lưu cấu hình SePay: ${json.error || "Không rõ"}`);
       }
     } catch (err) {
       setNoticeTone("danger");
-      setNotice(`⚠️ Lỗi kết nối: ${err.message}`);
+      setNotice(`Lỗi kết nối: ${err.message}`);
     } finally {
       setSavingSepay(false);
     }
@@ -350,8 +350,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.9rem" }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
-              💎 Monetization Revenue, 14-Stage Funnel &amp; A/B Analytics (M2.12)
+            <h3 style={{ display: "flex", alignItems: "center", gap: "0.45rem", margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
+              <KitIcon name="crown" size={18} color={T.accent} />
+              <span>Monetization Revenue, 14-Stage Funnel &amp; A/B Analytics (M2.12)</span>
             </h3>
             <p style={{ margin: "0.15rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
               Dữ liệu doanh thu thực, MRR/ARR/LTV, tỷ lệ chuyển đổi và kiểm định A/B theo thời gian thực.
@@ -391,8 +392,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: "1rem" }}>
           {/* A/B Experiment Card */}
           <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.9rem" }}>
-            <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.45rem" }}>
-              🧪 A/B Testing: {abTesting.experimentKey}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.45rem" }}>
+              <KitIcon name="microscope" size={15} color={T.accent} />
+              <span>A/B Testing: {abTesting.experimentKey}</span>
             </div>
             <div style={{ fontSize: "0.78rem", color: T.textSecondary, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
               <div>Control ({abTesting.controlCount || 0} users): <strong>{abTesting.rateA ?? 0}% CVR</strong></div>
@@ -408,8 +410,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
 
           {/* 6 Paywall Config Controls */}
           <div style={{ backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.9rem" }}>
-            <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.45rem" }}>
-              🎛️ Paywall Trigger Controls (Cap &amp; Toggle)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.45rem" }}>
+              <KitIcon name="settings" size={15} color={T.accent} />
+              <span>Paywall Trigger Controls (Cap &amp; Toggle)</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem", maxHeight: "155px", overflowY: "auto" }}>
               {paywallConfigs.map((pw) => (
@@ -434,8 +437,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
 
         {/* Top Funnel Stages */}
         <div style={{ marginTop: "0.9rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.9rem" }}>
-          <div style={{ fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.5rem" }}>
-            📉 Phễu Chuyển Đổi (14-Stage Funnel)
+          <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.84rem", fontWeight: 800, color: T.textHeading, marginBottom: "0.5rem" }}>
+            <KitIcon name="trend-down" size={15} color={T.accent} />
+            <span>Phễu Chuyển Đổi (14-Stage Funnel)</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "0.5rem" }}>
             {funnel.slice(0, 8).map((f) => (
@@ -454,8 +458,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
         <div style={{ marginTop: "0.95rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.95rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.65rem" }}>
             <div>
-              <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
-                💳 Quản Lý &amp; Điều Chỉnh Giá Gói VIP (Lưu DB — Không Cần Sửa Code)
+              <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
+                <KitIcon name="credit-card" size={15} color={T.accent} />
+                <span>Quản Lý &amp; Điều Chỉnh Giá Gói VIP (Lưu DB — Không Cần Sửa Code)</span>
               </div>
               <div style={{ fontSize: "0.74rem", color: T.textMuted }}>
                 Thay đổi giá bán, giá niêm yết hoặc bật/tắt gói trực tiếp trên Supabase PostgreSQL. Trang nâng cấp VIP đồng bộ tức thì.
@@ -611,8 +616,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
         <div style={{ marginTop: "0.95rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.95rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
             <div>
-              <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
-                🎟️ Quản Lý &amp; Tạo Mã Giảm Giá (Coupons)
+              <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
+                <KitIcon name="ticket" size={15} color={T.accent} />
+                <span>Quản Lý &amp; Tạo Mã Giảm Giá (Coupons)</span>
               </div>
               <div style={{ fontSize: "0.74rem", color: T.textMuted }}>
                 Tạo hoặc cập nhật mã giảm giá (% hoặc VNĐ cố định), giới hạn lượt dùng, đơn tối thiểu và tạm dừng/xóa trực tiếp.
@@ -793,8 +799,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
-              <span style={{ fontSize: "0.71rem", color: T.textMuted }}>
-                💡 Nhập trùng mã đang có sẽ cập nhật lại thông số của mã đó (upsert).
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", fontSize: "0.71rem", color: T.textMuted }}>
+                <KitIcon name="bulb" size={12} color={T.accent} />
+                <span>Nhập trùng mã đang có sẽ cập nhật lại thông số của mã đó (upsert).</span>
               </span>
               <Button type="submit" size="sm" variant="primary" isLight={isLight} disabled={savingCoupon}>
                 {savingCoupon ? "Đang lưu mã..." : "+ Tạo / Cập nhật Mã Giảm Giá"}
@@ -903,8 +910,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
         <div style={{ marginTop: "0.95rem", backgroundColor: T.bgElevated, border: `1px solid ${T.borderSubtle}`, borderRadius: "10px", padding: "0.95rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
             <div>
-              <div style={{ fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
-                🏦 Cổng Thanh Toán SePay VA &amp; VietQR Tự Động
+              <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.86rem", fontWeight: 800, color: T.textHeading }}>
+                <KitIcon name="bank" size={15} color={T.accent} />
+                <span>Cổng Thanh Toán SePay VA &amp; VietQR Tự Động</span>
               </div>
               <div style={{ fontSize: "0.74rem", color: T.textMuted }}>
                 Cấu hình Tài khoản ảo (VA) từ SePay và Webhook API Key để tự động kích hoạt VIP sau khi user chuyển khoản VietQR.
@@ -927,8 +935,9 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
               gap: "0.45rem",
             }}
           >
-            <div style={{ fontSize: "0.74rem", fontWeight: 700, color: T.textHeading }}>
-              🔗 Thông tin dán vào SePay Dashboard (Webhooks ➔ Thêm Webhook):
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.74rem", fontWeight: 700, color: T.textHeading }}>
+              <KitIcon name="link" size={13} color={T.accent} />
+              <span>Thông tin dán vào SePay Dashboard (Webhooks ➔ Thêm Webhook):</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
               <code
@@ -1184,16 +1193,17 @@ export default function AdminMonetizationPanel({ authToken = null, isLight = fal
                 </span>
               )}
 
-              <Button type="submit" size="sm" variant="primary" isLight={isLight} disabled={savingSepay}>
-                {savingSepay ? "Đang lưu cấu hình..." : "💾 Lưu cấu hình SePay VA"}
+              <Button type="submit" size="sm" variant="primary" isLight={isLight} icon={savingSepay ? "hourglass" : "check-circle"} disabled={savingSepay}>
+                {savingSepay ? "Đang lưu cấu hình..." : "Lưu cấu hình SePay VA"}
               </Button>
             </div>
           </form>
 
           {sepayTransactions.length > 0 && (
             <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-              <div style={{ fontSize: "0.76rem", fontWeight: 700, color: T.textHeading }}>
-                🧾 Giao dịch VietQR SePay gần đây ({sepayTransactions.length}):
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.76rem", fontWeight: 700, color: T.textHeading }}>
+                <KitIcon name="receipt" size={14} color={T.accent} />
+                <span>Giao dịch VietQR SePay gần đây ({sepayTransactions.length}):</span>
               </div>
               {sepayTransactions.slice(0, 6).map((tx) => (
                 <div

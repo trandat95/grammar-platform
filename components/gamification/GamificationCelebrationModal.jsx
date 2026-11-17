@@ -1,7 +1,8 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Badge, Button, Modal } from "../design-system";
-import { getBadgeArtworkPath, MASCOT_PATHS } from "../ui-2026/assetMap";
+import { getBadgeArtworkPath, getLevelIconPath, MASCOT_PATHS } from "../ui-2026/assetMap";
+import KitIcon from "../ui-2026/KitIcon";
 
 /**
  * Milestone 2.10.7: Accessible Level Up Celebration & Achievement Unlock Modal
@@ -24,7 +25,7 @@ export default function GamificationCelebrationModal({
     <Modal
       isOpen={true}
       onClose={onClose}
-      title={leveledUp ? "🎉 Thăng Cấp Thành Công!" : "🏆 Chúc Mừng Thành Tích Mới!"}
+      title={leveledUp ? "Thăng Cấp Thành Công!" : "Chúc Mừng Thành Tích Mới!"}
       isLight={isLight}
       maxWidth="520px"
     >
@@ -55,7 +56,15 @@ export default function GamificationCelebrationModal({
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "2.25rem", marginBottom: "0.35rem" }}>{levelState.badgeIcon || "🎖️"}</div>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.45rem" }}>
+              <img
+                src={getLevelIconPath(levelState.level)}
+                alt={levelState.title}
+                width={48}
+                height={48}
+                style={{ width: "48px", height: "48px", objectFit: "contain" }}
+              />
+            </div>
             <div style={{ fontSize: "1.1rem", fontWeight: 800, color: T.textHeading }}>
               Level {previousLevel} ➔ Level {levelState.level}
             </div>
@@ -80,7 +89,7 @@ export default function GamificationCelebrationModal({
               gap: "0.75rem",
             }}
           >
-            <span style={{ fontSize: "1.6rem" }}>🔥</span>
+            <KitIcon name="flame" size={24} />
             <div>
               <div style={{ fontWeight: 800, color: T.warning, fontSize: "0.92rem" }}>
                 Cột mốc Chuỗi {streakState.milestone_reached} Ngày Liên Tiếp!

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../../components/ui-2026/AppShell2026';
+import { KitIcon, StatusDot } from '../../../../components/ui-2026/KitIcon';
 import SplitPassageReader from '../../../../components/toeic/SplitPassageReader';
 import SentenceXRayCard from '../../../../components/toeic/SentenceXRayCard';
 import { ToeicBadge, ToeicButton } from '../../../../components/toeic/ui';
@@ -405,8 +406,8 @@ export default function TestSimulationPage() {
 
               {examSessionMode && !isLoading && !isVipLocked && !errorMsg && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <ToeicBadge variant={examSessionMode === 'exam' ? 'warning' : 'primary'}>
-                    {examSessionMode === 'exam' ? '⏱️ Thi Thử' : '🎯 Luyện Tập'}
+                  <ToeicBadge variant={examSessionMode === 'exam' ? 'warning' : 'primary'} icon={examSessionMode === 'exam' ? 'timer' : 'target'}>
+                    {examSessionMode === 'exam' ? 'Thi Thử' : 'Luyện Tập'}
                   </ToeicBadge>
                   <button
                     type="button"
@@ -448,6 +449,9 @@ export default function TestSimulationPage() {
                   {examSessionMode === 'exam' && (
                     <span
                       style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.28rem',
                         padding: '0.28rem 0.6rem',
                         borderRadius: 'var(--ds-radius-md)',
                         fontSize: '0.82rem',
@@ -458,7 +462,8 @@ export default function TestSimulationPage() {
                         color: examTimeLeftSec <= 300 ? 'var(--ds-danger)' : 'var(--ds-text)'
                       }}
                     >
-                      ⏱️ {formatTimer(examTimeLeftSec)}
+                      <KitIcon name="timer" size={13} />
+                      <span>{formatTimer(examTimeLeftSec)}</span>
                     </span>
                   )}
                 </div>
@@ -469,10 +474,11 @@ export default function TestSimulationPage() {
                       type="button"
                       onClick={handleJumpNextUnanswered}
                       className="toeic-btn toeic-btn-secondary"
-                      style={{ fontSize: '0.76rem', padding: '0.35rem 0.65rem', minHeight: '36px', fontWeight: 700 }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem', fontSize: '0.76rem', padding: '0.35rem 0.65rem', minHeight: '36px', fontWeight: 700 }}
                       title="Chuyển nhanh tới câu chưa làm tiếp theo"
                     >
-                      ⚡ <span className="ge-hide-mobile">Câu chưa làm </span>({unansweredQuestions.length})
+                      <KitIcon name="bolt" size={13} />
+                      <span><span className="ge-hide-mobile">Câu chưa làm </span>({unansweredQuestions.length})</span>
                     </button>
                   )}
 
@@ -480,6 +486,9 @@ export default function TestSimulationPage() {
                     type="button"
                     onClick={() => setShowQuestionGrid(prev => !prev)}
                     style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
                       padding: '0.35rem 0.65rem',
                       minHeight: '36px',
                       borderRadius: 'var(--ds-radius-md)',
@@ -491,7 +500,8 @@ export default function TestSimulationPage() {
                       cursor: 'pointer'
                     }}
                   >
-                    🔢 Bảng <span className="ge-hide-mobile">Câu Hỏi </span>(101–200)
+                    <KitIcon name="hash" size={13} />
+                    <span>Bảng <span className="ge-hide-mobile">Câu Hỏi </span>(101–200)</span>
                   </button>
 
                   {examSessionMode === 'practice' && (
@@ -547,17 +557,18 @@ export default function TestSimulationPage() {
                 >
                   <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '0.6rem', marginBottom: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                        🔢 Bảng Theo Dõi Toàn Đề (101–200)
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                        <KitIcon name="hash" size={14} color="var(--ds-accent)" />
+                        <span>Bảng Theo Dõi Toàn Đề (101–200)</span>
                       </span>
-                      <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', fontSize: '0.72rem', color: 'var(--ds-text-muted)' }}>
-                        <span>🟦 Đã làm ({answeredCount})</span>
-                        <span>⬜ Chưa làm ({unansweredQuestions.length})</span>
-                        <span>🔷 Đang làm</span>
+                      <div style={{ display: 'flex', gap: '0.55rem', flexWrap: 'wrap', fontSize: '0.72rem', color: 'var(--ds-text-muted)', alignItems: 'center' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><StatusDot tone="accent" size={8} /> Đã làm ({answeredCount})</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><StatusDot tone="neutral" size={8} /> Chưa làm ({unansweredQuestions.length})</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><StatusDot tone="warning" size={8} /> Đang làm</span>
                         {(examSubmitted || examSessionMode === 'practice') && (
                           <>
-                            <span style={{ color: 'var(--ds-success)', fontWeight: 700 }}>🟩 Đúng</span>
-                            <span style={{ color: 'var(--ds-danger)', fontWeight: 700 }}>🟥 Sai</span>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'var(--ds-success)', fontWeight: 700 }}><StatusDot tone="success" size={8} /> Đúng</span>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: 'var(--ds-danger)', fontWeight: 700 }}><StatusDot tone="danger" size={8} /> Sai</span>
                           </>
                         )}
                       </div>
@@ -754,7 +765,7 @@ export default function TestSimulationPage() {
                   >
                     <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.85rem' }}>
                       <div>
-                        <ToeicBadge variant="warning">🤖 Chẩn Đoán Điểm Yếu AI &amp; Lộ Trình Nâng Điểm</ToeicBadge>
+                        <ToeicBadge variant="warning" icon="bot">Chẩn Đoán Điểm Yếu AI &amp; Lộ Trình Nâng Điểm</ToeicBadge>
                         <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0.4rem 0 0 0', color: 'var(--ds-text)' }}>
                           Phát hiện {examSummary.weakTopics.length} lỗ hổng kiến thức chính — Khắc phục ngay có thể tăng thêm +{examSummary.potentialScoreGain} điểm!
                         </h3>
@@ -764,9 +775,10 @@ export default function TestSimulationPage() {
                           type="button"
                           onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
                           className="toeic-btn toeic-btn-primary"
-                          style={{ fontSize: '0.8rem', padding: '0.5rem 1rem', fontWeight: 800 }}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', padding: '0.5rem 1rem', fontWeight: 800 }}
                         >
-                          🔓 Mở Khóa AI Lộ Trình VIP
+                          <KitIcon name="unlock" size={14} />
+                          <span>Mở Khóa AI Lộ Trình VIP</span>
                         </button>
                       )}
                     </div>
@@ -800,9 +812,10 @@ export default function TestSimulationPage() {
                             <a
                               href={`/toeic/practice/${wt.topicId}`}
                               className="toeic-btn toeic-btn-primary"
-                              style={{ fontSize: '0.76rem', padding: '0.38rem 0.8rem', fontWeight: 700, textDecoration: 'none' }}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.76rem', padding: '0.38rem 0.8rem', fontWeight: 700, textDecoration: 'none' }}
                             >
-                              ⚡ Luyện vá lỗ hổng này &rarr;
+                              <KitIcon name="bolt" size={13} />
+                              <span>Luyện vá lỗ hổng này &rarr;</span>
                             </a>
                           ) : (
                             <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--ds-success)' }}>
@@ -825,8 +838,9 @@ export default function TestSimulationPage() {
                             gap: '0.55rem'
                           }}
                         >
-                          <div style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                            🔒 Còn {Math.max(0, examSummary.weakTopics.length - 1)} chủ điểm yếu khác &amp; Bẫy lỗi sai lặp lại đang bị ẩn:
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                            <KitIcon name="lock" size={14} color="var(--ds-warning)" />
+                            <span>Còn {Math.max(0, examSummary.weakTopics.length - 1)} chủ điểm yếu khác &amp; Bẫy lỗi sai lặp lại đang bị ẩn:</span>
                           </div>
                           <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)', lineHeight: 1.5 }}>
                             • <strong>Chẩn đoán bẫy nhận thức (Error Trap DNA)</strong>: chỉ rõ bạn hay sập bẫy từ loại, bẫy ngữ nghĩa hay bẫy lặp từ.<br />
@@ -838,9 +852,10 @@ export default function TestSimulationPage() {
                               type="button"
                               onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
                               className="toeic-btn toeic-btn-primary"
-                              style={{ fontSize: '0.82rem', padding: '0.55rem 1.15rem', fontWeight: 800 }}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', padding: '0.55rem 1.15rem', fontWeight: 800 }}
                             >
-                              ✨ Mở Khóa VIP Để Xem Lộ Trình Tăng +{examSummary.potentialScoreGain} Điểm
+                              <KitIcon name="sparkles" size={14} />
+                              <span>Mở Khóa VIP Để Xem Lộ Trình Tăng +{examSummary.potentialScoreGain} Điểm</span>
                             </button>
                           </div>
                         </div>
@@ -856,8 +871,9 @@ export default function TestSimulationPage() {
                             gap: '0.45rem'
                           }}
                         >
-                          <div style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-accent)' }}>
-                            🗺️ Quy Trình Nâng Cấp Điểm Sai Cá Nhân Hóa (VIP Process):
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-accent)' }}>
+                            <KitIcon name="map" size={14} />
+                            <span>Quy Trình Nâng Cấp Điểm Sai Cá Nhân Hóa (VIP Process):</span>
                           </div>
                           {examSummary.errorTraps.length > 0 && (
                             <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)' }}>
@@ -879,17 +895,19 @@ export default function TestSimulationPage() {
                 {serverDsResult?.analysis && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1rem', padding: '0.85rem 1rem', borderRadius: 'var(--ds-radius-md)', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)' }}>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
-                      <span>📐 <strong>IRT 3PL Ability (θ):</strong> {serverDsResult.analysis.thetaEstimate}</span>
-                      <span>⚡ <strong>Suy giảm thể lực Part 7:</strong> {serverDsResult.analysis.fatigue?.fatigueDropRate || 0}%</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}><KitIcon name="ruler" size={13} color="var(--ds-accent)" /> <strong>IRT 3PL Ability (θ):</strong> {serverDsResult.analysis.thetaEstimate}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}><KitIcon name="bolt" size={13} color="var(--ds-warning)" /> <strong>Suy giảm thể lực Part 7:</strong> {serverDsResult.analysis.fatigue?.fatigueDropRate || 0}%</span>
                       {typeof serverDsResult.verifiedDelta === 'number' && (
-                        <span style={{ color: serverDsResult.verifiedDelta >= 0 ? 'var(--ds-success)' : 'var(--ds-danger)', fontWeight: 800 }}>
-                          📈 Chênh lệch từ Lộ trình trước: {serverDsResult.verifiedDelta >= 0 ? `+${serverDsResult.verifiedDelta}` : serverDsResult.verifiedDelta} điểm
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', color: serverDsResult.verifiedDelta >= 0 ? 'var(--ds-success)' : 'var(--ds-danger)', fontWeight: 800 }}>
+                          <KitIcon name="trend-up" size={13} />
+                          <span>Chênh lệch từ Lộ trình trước: {serverDsResult.verifiedDelta >= 0 ? `+${serverDsResult.verifiedDelta}` : serverDsResult.verifiedDelta} điểm</span>
                         </span>
                       )}
                     </div>
                     {serverDsResult.analysis.fatigue?.hasFatigueWarning && serverDsResult.analysis.fatigue?.coachingTip && (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--ds-warning)', fontWeight: 600 }}>
-                        ⚠️ {serverDsResult.analysis.fatigue.coachingTip}
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--ds-warning)', fontWeight: 600 }}>
+                        <KitIcon name="warning" size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+                        <span>{serverDsResult.analysis.fatigue.coachingTip}</span>
                       </div>
                     )}
                   </div>
@@ -900,9 +918,10 @@ export default function TestSimulationPage() {
                     <a
                       href={`/toeic/remediation/${serverDsResult.remediationPlanId}`}
                       className="toeic-btn toeic-btn-primary toeic-cta-wrap"
-                      style={{ fontSize: '0.82rem', fontWeight: 800, textDecoration: 'none' }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', fontWeight: 800, textDecoration: 'none' }}
                     >
-                      🚀 Bắt Đầu Lộ Trình Vá Lỗ Hổng ({(serverDsResult.analysis?.prescribedDrillQuestionIds?.length || 0) + (serverDsResult.analysis?.prescribedTwinQuestionIds?.length || 0)} câu đặc trị) &rarr;
+                      <KitIcon name="rocket" size={14} />
+                      <span>Bắt Đầu Lộ Trình Vá Lỗ Hổng ({(serverDsResult.analysis?.prescribedDrillQuestionIds?.length || 0) + (serverDsResult.analysis?.prescribedTwinQuestionIds?.length || 0)} câu đặc trị) &rarr;</span>
                     </a>
                   )}
                   <button
@@ -917,9 +936,10 @@ export default function TestSimulationPage() {
                     type="button"
                     onClick={() => handleStartMode('practice')}
                     className="toeic-btn toeic-btn-secondary"
-                    style={{ fontSize: '0.82rem', fontWeight: 700, flex: '1 1 160px' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', fontSize: '0.82rem', fontWeight: 700, flex: '1 1 160px' }}
                   >
-                    🎯 Chuyển Sang Luyện Tập Tự Do
+                    <KitIcon name="target" size={14} />
+                    <span>Chuyển Sang Luyện Tập Tự Do</span>
                   </button>
                 </div>
               </div>
@@ -952,9 +972,10 @@ export default function TestSimulationPage() {
                       if (part5Questions[0]) setActiveQuestionId(part5Questions[0].id);
                     }}
                     className={`toeic-target-chip ${activePart === 5 ? 'active' : ''}`}
-                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem', fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
                   >
-                    📝 Part 5 ({part5Questions.length})
+                    <KitIcon name="edit" size={13} />
+                    <span>Part 5 ({part5Questions.length})</span>
                   </button>
 
                   <button
@@ -964,9 +985,10 @@ export default function TestSimulationPage() {
                       if (part6Questions[0]) setActiveQuestionId(part6Questions[0].id);
                     }}
                     className={`toeic-target-chip ${activePart === 6 ? 'active' : ''}`}
-                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem', fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
                   >
-                    📄 Part 6 ({part6Questions.length})
+                    <KitIcon name="doc-export" size={13} />
+                    <span>Part 6 ({part6Questions.length})</span>
                   </button>
 
                   <button
@@ -976,18 +998,20 @@ export default function TestSimulationPage() {
                       if (part7Questions[0]) setActiveQuestionId(part7Questions[0].id);
                     }}
                     className={`toeic-target-chip ${activePart === 7 ? 'active' : ''}`}
-                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem', fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
                   >
-                    📖 Part 7 ({part7Questions.length})
+                    <KitIcon name="book" size={13} />
+                    <span>Part 7 ({part7Questions.length})</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setActivePart('all')}
                     className={`toeic-target-chip ${activePart === 'all' ? 'active' : ''}`}
-                    style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem', marginLeft: 'auto' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.28rem', fontSize: '0.8rem', padding: '0.35rem 0.75rem', marginLeft: 'auto' }}
                   >
-                    📋 Xem Toàn Đề
+                    <KitIcon name="clipboard" size={13} />
+                    <span>Xem Toàn Đề</span>
                   </button>
                 </div>
               </div>
@@ -1033,7 +1057,7 @@ export default function TestSimulationPage() {
                 </div>
 
                 <div style={{ display: 'inline-flex', marginBottom: '0.75rem' }}>
-                  <ToeicBadge variant="warning">🔒 Phân Hệ VIP Premium</ToeicBadge>
+                  <ToeicBadge variant="warning" icon="lock">Phân Hệ VIP Premium</ToeicBadge>
                 </div>
 
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.75rem 0', color: 'var(--ds-text)' }}>
@@ -1047,10 +1071,11 @@ export default function TestSimulationPage() {
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                   <ToeicButton
                     variant="primary"
+                    icon="sparkles"
                     onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: testNum, series })}
                     style={{ padding: '0.75rem 1.75rem', fontWeight: 800 }}
                   >
-                    Nâng Cấp Gói VIP Ngay ✨
+                    Nâng Cấp Gói VIP Ngay
                   </ToeicButton>
 
                   <a
@@ -1098,7 +1123,9 @@ export default function TestSimulationPage() {
                     }}
                   >
                     <div>
-                      <div style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>🎯</div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '0.75rem', backgroundColor: 'var(--ds-accent-bg)', color: 'var(--ds-accent)', marginBottom: '0.65rem' }}>
+                        <KitIcon name="target" size={22} />
+                      </div>
                       <h2 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
                         1. Chế Độ Luyện Tập (Practice)
                       </h2>
@@ -1129,7 +1156,9 @@ export default function TestSimulationPage() {
                     }}
                   >
                     <div>
-                      <div style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>⏱️</div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '0.75rem', backgroundColor: 'var(--ds-warning-bg)', color: 'var(--ds-warning)', marginBottom: '0.65rem' }}>
+                        <KitIcon name="timer" size={22} />
+                      </div>
                       <h2 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--ds-text)' }}>
                         2. Chế Độ Thi Thử (Real Exam)
                       </h2>

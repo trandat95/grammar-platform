@@ -13,7 +13,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 45,
         "h": 36
       },
@@ -33,8 +33,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -58,7 +58,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -78,8 +78,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -103,7 +103,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -123,8 +123,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -148,7 +148,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -168,8 +168,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -193,7 +193,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -213,8 +213,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -238,7 +238,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -258,8 +258,8 @@
         "h": 28
       },
       {
-        "text": "🏅 Huy hiệu & Thành tích ➔",
-        "w": 184,
+        "text": "Huy hiệu & Thành tích →",
+        "w": 187,
         "h": 36
       }
     ],
@@ -283,7 +283,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -328,7 +328,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -343,9 +343,9 @@
         "h": 20
       },
       {
-        "text": "Nâng cấp VIP ngay ⭐",
-        "w": 162,
-        "h": 28
+        "text": "Nâng cấp VIP ngay",
+        "w": 161,
+        "h": 27
       },
       {
         "text": "Chấm điểm bài này",
@@ -373,7 +373,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 45,
         "h": 36
       },
@@ -418,7 +418,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -428,19 +428,19 @@
         "h": 36
       },
       {
-        "text": "⭐ Sổ từ (2)",
-        "w": 90,
-        "h": 26
+        "text": "Sổ từ (2)",
+        "w": 89,
+        "h": 24
       },
       {
-        "text": "🔒 Đề Thích Ứng AI (Cần Login)",
-        "w": 234,
-        "h": 36
+        "text": "Đề Thích Ứng AI (Cần Login)",
+        "w": 232,
+        "h": 38
       },
       {
-        "text": "🔒 Trộn đề mới (Cần Login)",
-        "w": 206,
-        "h": 36
+        "text": "Trộn đề mới (Cần Login)",
+        "w": 204,
+        "h": 38
       }
     ],
     "overflowingCount": 0,
@@ -463,7 +463,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -473,8 +473,8 @@
         "h": 36
       },
       {
-        "text": "🎯 Kiếm XP (Đề 50/30/20)",
-        "w": 184,
+        "text": "Kiếm XP (Đề 50/30/20)",
+        "w": 185,
         "h": 30
       },
       {
@@ -500,7 +500,7 @@
     "vh": 812,
     "scrollWidth": 375,
     "overflow": false,
-    "smallTargetsCount": 4,
+    "smallTargetsCount": 8,
     "smallTargets": [
       {
         "text": "Chuyển sang giao diện Tối",
@@ -508,7 +508,7 @@
         "h": 36
       },
       {
-        "text": "🔥\n1d",
+        "text": "1d",
         "w": 50,
         "h": 36
       },
@@ -518,9 +518,19 @@
         "h": 36
       },
       {
-        "text": "📝 Đăng ký để mở khóa VIP ➔",
-        "w": 208,
-        "h": 30
+        "text": "Đăng ký để nâng cấp VIP",
+        "w": 317,
+        "h": 37
+      },
+      {
+        "text": "Đăng ký để nâng cấp VIP",
+        "w": 317,
+        "h": 37
+      },
+      {
+        "text": "Đăng ký để nâng cấp VIP",
+        "w": 317,
+        "h": 37
       }
     ],
     "overflowingCount": 0,
@@ -543,8 +553,8 @@
         "h": 36
       },
       {
-        "text": "🔥\n0d",
-        "w": 53,
+        "text": "0d",
+        "w": 52,
         "h": 36
       },
       {
@@ -568,34 +578,10 @@
         "h": 36
       }
     ],
-    "overflowingCount": 5,
-    "overflowingEls": [
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 526,
-        "sw": 214
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 663,
-        "sw": 132
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 807,
-        "sw": 138
-      },
-      {
-        "cls": "toeic-hub-tab-btn ",
-        "right": 386,
-        "sw": 170
-      }
-    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
     "crampedCards": [],
-    "clippedBtns": [
-      "📚 20 Đề TOEIC New Format 2026",
-      "🎯 24 Dạng Bài Hay Thi"
-    ],
+    "clippedBtns": [],
     "bottomNavH": 60
   },
   {
@@ -612,8 +598,8 @@
         "h": 36
       },
       {
-        "text": "🔥\n0d",
-        "w": 47,
+        "text": "0d",
+        "w": 48,
         "h": 36
       },
       {
@@ -637,34 +623,10 @@
         "h": 36
       }
     ],
-    "overflowingCount": 5,
-    "overflowingEls": [
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 526,
-        "sw": 214
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 663,
-        "sw": 132
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 807,
-        "sw": 138
-      },
-      {
-        "cls": "toeic-hub-tab-btn ",
-        "right": 386,
-        "sw": 170
-      }
-    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
     "crampedCards": [],
-    "clippedBtns": [
-      "📚 20 Đề TOEIC New Format 2026",
-      "🎯 24 Dạng Bài Hay Thi"
-    ],
+    "clippedBtns": [],
     "bottomNavH": 60
   },
   {
@@ -681,8 +643,8 @@
         "h": 36
       },
       {
-        "text": "🔥\n0d",
-        "w": 53,
+        "text": "0d",
+        "w": 52,
         "h": 36
       },
       {
@@ -696,28 +658,10 @@
         "h": 17
       }
     ],
-    "overflowingCount": 3,
-    "overflowingEls": [
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 526,
-        "sw": 214
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 663,
-        "sw": 132
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 807,
-        "sw": 138
-      }
-    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
     "crampedCards": [],
-    "clippedBtns": [
-      "📚 20 Đề TOEIC New Format 2026"
-    ],
+    "clippedBtns": [],
     "bottomNavH": 60
   },
   {
@@ -734,8 +678,8 @@
         "h": 36
       },
       {
-        "text": "🔥\n0d",
-        "w": 53,
+        "text": "0d",
+        "w": 52,
         "h": 36
       },
       {
@@ -759,34 +703,10 @@
         "h": 34
       }
     ],
-    "overflowingCount": 9,
-    "overflowingEls": [
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 526,
-        "sw": 214
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 663,
-        "sw": 132
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 807,
-        "sw": 138
-      },
-      {
-        "cls": "BUTTON",
-        "right": 419,
-        "sw": 32
-      }
-    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
     "crampedCards": [],
-    "clippedBtns": [
-      "📚 20 Đề TOEIC New Format 2026",
-      "10"
-    ],
+    "clippedBtns": [],
     "bottomNavH": 60
   },
   {
@@ -803,8 +723,8 @@
         "h": 36
       },
       {
-        "text": "🔥\n0d",
-        "w": 53,
+        "text": "0d",
+        "w": 52,
         "h": 36
       },
       {
@@ -828,28 +748,10 @@
         "h": 31
       }
     ],
-    "overflowingCount": 3,
-    "overflowingEls": [
-      {
-        "cls": "ge-subnav-btn ds-focusable is-active",
-        "right": 526,
-        "sw": 214
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 663,
-        "sw": 132
-      },
-      {
-        "cls": "ge-subnav-btn ds-focusable ",
-        "right": 807,
-        "sw": 138
-      }
-    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
     "crampedCards": [],
-    "clippedBtns": [
-      "📚 20 Đề TOEIC New Format 2026"
-    ],
+    "clippedBtns": [],
     "bottomNavH": 60
   }
 ]

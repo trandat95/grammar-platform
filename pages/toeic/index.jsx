@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../components/ui-2026/KitIcon';
 import AiPowerShowcase2026 from '../../components/ui-2026/AiPowerShowcase2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
 import ToeicHeroBanner from '../../components/toeic/ToeicHeroBanner';
@@ -196,7 +197,8 @@ export default function ToeicHubPage() {
                 onClick={() => setHubTab('modules')}
                 className={`toeic-hub-tab-btn ${hubTab === 'modules' ? 'is-active' : ''}`}
               >
-                ⚡ Lộ Trình &amp; Luyện Ngay
+                <KitIcon name="bolt" size={14} />
+                <span>Lộ Trình &amp; Luyện Ngay</span>
               </button>
               <button
                 type="button"
@@ -205,7 +207,8 @@ export default function ToeicHubPage() {
                 onClick={() => setHubTab('topics')}
                 className={`toeic-hub-tab-btn ${hubTab === 'topics' ? 'is-active' : ''}`}
               >
-                🎯 24 Dạng Bài Hay Thi
+                <KitIcon name="target" size={14} />
+                <span>24 Dạng Bài Hay Thi</span>
               </button>
               <button
                 type="button"
@@ -214,7 +217,8 @@ export default function ToeicHubPage() {
                 onClick={() => setHubTab('ai')}
                 className={`toeic-hub-tab-btn ${hubTab === 'ai' ? 'is-active' : ''}`}
               >
-                ✨ Công Nghệ AI
+                <KitIcon name="sparkles" size={14} />
+                <span>Công Nghệ AI</span>
               </button>
             </div>
 
@@ -265,8 +269,9 @@ export default function ToeicHubPage() {
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                      🎯 Luyện nhanh theo 24 Dạng Bài Hay Ra Thi
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.92rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                      <KitIcon name="target" size={15} color="var(--ds-accent)" />
+                      <span>Luyện nhanh theo 24 Dạng Bài Hay Ra Thi</span>
                     </div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-muted)' }}>
                       Làm thử miễn phí 4 câu cho mỗi dạng bài — tập trung đúng chỗ bạn hay mất điểm.
@@ -288,10 +293,13 @@ export default function ToeicHubPage() {
             {hubTab === 'topics' && (
               <div id="topics" style={{ marginBottom: '2.5rem' }}>
                 <div className="toeic-flex-between" style={{ marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.6rem' }}>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-                    {isVip
-                      ? '👑 VIP: Đã mở toàn bộ 24 chủ điểm (450–990+)'
-                      : '⚡ Tài khoản Miễn phí: Mở 4 câu dùng thử cho mỗi chủ điểm 550+'}
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
+                    <KitIcon name={isVip ? 'crown' : 'bolt'} size={14} color={isVip ? 'var(--ds-warning)' : 'var(--ds-accent)'} />
+                    <span>
+                      {isVip
+                        ? 'VIP: Đã mở toàn bộ 24 chủ điểm (450–990+)'
+                        : 'Tài khoản Miễn phí: Mở 4 câu dùng thử cho mỗi chủ điểm 550+'}
+                    </span>
                   </div>
                   {!isVip && (
                     <button
@@ -311,7 +319,8 @@ export default function ToeicHubPage() {
                         cursor: 'pointer'
                       }}
                     >
-                      👑 Mở Khóa VIP
+                      <KitIcon name="crown" size={13} />
+                      <span>Mở Khóa VIP</span>
                     </button>
                   )}
                 </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import KitIcon from "./KitIcon";
+import KitIcon, { StatusDot } from "./KitIcon";
 import { XRAY_PREVIEW_PATH } from "./assetMap";
 
 /**
@@ -128,7 +128,7 @@ export default function AiPowerShowcase2026({
           left: 0,
           right: 0,
           height: "3px",
-          background: "linear-gradient(90deg, var(--ds-accent) 0%, #06b6d4 50%, var(--ds-indigo) 100%)",
+          background: "linear-gradient(90deg, var(--ds-accent) 0%, var(--ds-cyan) 50%, var(--ds-indigo) 100%)",
         }}
       />
 
@@ -142,17 +142,23 @@ export default function AiPowerShowcase2026({
               padding: "0.28rem 0.75rem",
               letterSpacing: "0.04em",
               textTransform: "uppercase",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.38rem",
             }}
           >
-            ✨ CÁCH HỌC THÔNG MINH TẠI GRAMMARPRO.IO.VN
+            <KitIcon name="tool-spark" size={14} />
+            <span>CÁCH HỌC THÔNG MINH TẠI GRAMMARPRO.IO.VN</span>
           </span>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap", fontSize: "0.74rem", fontWeight: 700, color: "var(--ds-text-muted)" }}>
-            <span style={{ padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-success-bg)", color: "var(--ds-success)", border: "1px solid var(--ds-success-border)" }}>
-              ⚡ Hiểu bản chất trong 3 giây
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.32rem", padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-success-bg)", color: "var(--ds-success)", border: "1px solid var(--ds-success-border)" }}>
+              <KitIcon name="bolt" size={13} />
+              <span>Hiểu bản chất trong 3 giây</span>
             </span>
-            <span style={{ padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-bg-elevated)", border: "1px solid var(--ds-border)" }}>
-              📊 6.939+ câu hỏi có giải thích chi tiết
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.32rem", padding: "0.2rem 0.55rem", borderRadius: "999px", backgroundColor: "var(--ds-bg-elevated)", border: "1px solid var(--ds-border)" }}>
+              <KitIcon name="tool-chart" size={13} />
+              <span>6.939+ câu hỏi có giải thích chi tiết</span>
             </span>
           </div>
         </div>
@@ -197,8 +203,9 @@ export default function AiPowerShowcase2026({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.85rem" }}>
-          <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
-            ⚡ Bấm Để Xem AI Bóc Tách Thực Tế Trong 0.2 Giây:
+          <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em", display: "inline-flex", alignItems: "center", gap: "0.38rem" }}>
+            <KitIcon name="bolt" size={14} />
+            <span>Bấm Để Xem AI Bóc Tách Thực Tế Trong 0.2 Giây:</span>
           </span>
 
           <div className="toeic-h-scroll-strip" role="tablist" aria-label="Demo Công Nghệ AI">
@@ -244,25 +251,30 @@ export default function AiPowerShowcase2026({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.65rem" }}>
-                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase" }}>
-                  🔬 Ví Dụ Thực Chiến (Chủ Điểm: Hòa Hợp Chủ Vị &amp; Thì)
+                <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                  <KitIcon name="microscope" size={14} />
+                  <span>Ví Dụ Thực Chiến (Chủ Điểm: Hòa Hợp Chủ Vị &amp; Thì)</span>
                 </span>
                 <button
                   type="button"
                   onClick={() => setXrayScanActive((prev) => !prev)}
                   className="ds-focusable"
                   style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
                     padding: "0.28rem 0.7rem",
                     borderRadius: "999px",
                     border: "1px solid var(--ds-accent-border)",
                     backgroundColor: xrayScanActive ? "var(--ds-accent)" : "var(--ds-card)",
-                    color: xrayScanActive ? "#ffffff" : "var(--ds-accent)",
+                    color: xrayScanActive ? "var(--ds-text-on-accent)" : "var(--ds-accent)",
                     fontSize: "0.74rem",
                     fontWeight: 800,
                     cursor: "pointer",
                   }}
                 >
-                  {xrayScanActive ? "✓ Đang bật Tia X-Ray AI (Bấm để tắt)" : "⚡ Bật Tia X-Ray AI Ngay"}
+                  <KitIcon name={xrayScanActive ? "check-circle" : "bolt"} size={14} style={{ color: xrayScanActive ? "var(--ds-text-on-accent)" : undefined }} />
+                  <span>{xrayScanActive ? "Đang bật Tia X-Ray AI (Bấm để tắt)" : "Bật Tia X-Ray AI Ngay"}</span>
                 </button>
               </div>
 
@@ -387,8 +399,9 @@ export default function AiPowerShowcase2026({
                   border: "1px solid var(--ds-danger-border)",
                 }}
               >
-                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-danger)", marginBottom: "0.35rem" }}>
-                  ❌ Cách Học Cũ (Mất 45 giây &amp; Dễ Sập Bẫy)
+                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-danger)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
+                  <KitIcon name="danger" size={15} />
+                  <span>Cách Học Cũ (Mất 45 giây &amp; Dễ Sập Bẫy)</span>
                 </div>
                 <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
                   Đọc dịch từng chữ từ đầu tới cuối → nhìn thấy <strong>&ldquo;directors&rdquo;</strong> đứng ngay trước chỗ trống liền chọn nhầm động từ số nhiều <strong>(A) approve</strong>, bỏ quên mốc <em>yesterday</em> và mất 45 giây quý giá.
@@ -403,8 +416,9 @@ export default function AiPowerShowcase2026({
                   border: "1px solid var(--ds-success-border)",
                 }}
               >
-                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-success)", marginBottom: "0.35rem" }}>
-                  ✅ AI Sentence X-Ray™ (3 Giây • Chính Xác 100%)
+                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-success)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
+                  <KitIcon name="check-circle" size={15} />
+                  <span>AI Sentence X-Ray™ (3 Giây • Chính Xác 100%)</span>
                 </div>
                 <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
                   Quét tia X-Ray khóa ngay <strong>Chủ ngữ thật (The board)</strong>, gạch chéo cụm giới từ nhiễu <em>of directors</em> và tô sáng từ neo <strong>yesterday</strong> → Chọn <strong>(B) approved</strong> tức thì không cần dịch!
@@ -424,7 +438,8 @@ export default function AiPowerShowcase2026({
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.75rem" }}>
               {[
                 {
-                  badge: "🔴 CẦN ÔN GẤP (Sai + >20s)",
+                  dotTone: "danger",
+                  badge: "CẦN ÔN GẤP (Sai + >20s)",
                   title: "Chưa Nắm Chắc Kiến Thức",
                   action: "Hệ thống mở lại ngay công thức & mẹo nhận biết ngắn gọn để bạn nắm lại từ gốc.",
                   color: "var(--ds-danger)",
@@ -432,7 +447,8 @@ export default function AiPowerShowcase2026({
                   border: "var(--ds-danger-border)",
                 },
                 {
-                  badge: "🟠 HAY MẮC BẪY (Sai + <8s)",
+                  dotTone: "warning",
+                  badge: "HAY MẮC BẪY (Sai + <8s)",
                   title: "Làm Nhanh Nhưng Sập Bẫy",
                   action: "Chỉ rõ bạn vừa vướng bẫy gì (như nhầm danh từ số nhiều đứng xen giữa) để lần sau không dính lại.",
                   color: "var(--ds-warning)",
@@ -440,7 +456,8 @@ export default function AiPowerShowcase2026({
                   border: "var(--ds-warning-border)",
                 },
                 {
-                  badge: "🟡 CẦN TĂNG TỐC (Đúng + >18s)",
+                  dotTone: "accent",
+                  badge: "CẦN TĂNG TỐC (Đúng + >18s)",
                   title: "Làm Đúng Nhưng Còn Chậm",
                   action: "Bạn hiểu bài nhưng còn dịch lâu — hệ thống đưa bài luyện tốc độ xuống dưới 10 giây.",
                   color: "var(--ds-accent)",
@@ -448,7 +465,8 @@ export default function AiPowerShowcase2026({
                   border: "var(--ds-accent-border)",
                 },
                 {
-                  badge: "🟢 ĐÃ CHẮC TAY (Đúng + <10s)",
+                  dotTone: "success",
+                  badge: "ĐÃ CHẮC TAY (Đúng + <10s)",
                   title: "Phản Xạ Tự Nhiên",
                   action: "Giảm bớt câu đã quen để bạn dồn thời gian ôn những phần kéo điểm nhiều nhất.",
                   color: "var(--ds-success)",
@@ -465,8 +483,9 @@ export default function AiPowerShowcase2026({
                     border: `1px solid ${q.border}`,
                   }}
                 >
-                  <div style={{ fontSize: "0.7rem", fontWeight: 800, color: q.color, marginBottom: "0.25rem" }}>
-                    {q.badge}
+                  <div style={{ fontSize: "0.7rem", fontWeight: 800, color: q.color, marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <StatusDot tone={q.dotTone} size={8} />
+                    <span>{q.badge}</span>
                   </div>
                   <div style={{ fontSize: "0.88rem", fontWeight: 800, color: "var(--ds-text-heading)", marginBottom: "0.3rem" }}>
                     {q.title}
@@ -503,7 +522,7 @@ export default function AiPowerShowcase2026({
               {
                 step: "BƯỚC 03 • KIỂM CHỨNG",
                 title: "Thấy Điểm Tăng Ở Đề Tiếp Theo",
-                desc: "Khi làm sang đề tiếp theo, hệ thống tự so sánh điểm phần Đọc với đề trước để bạn thấy rõ từng phần yếu đã chuyển sang màu xanh 🟢.",
+                desc: "Khi làm sang đề tiếp theo, hệ thống tự so sánh điểm phần Đọc với đề trước để bạn thấy rõ từng phần yếu đã chuyển sang vùng xanh.",
                 metric: "Điểm số tăng thật qua từng đề",
                 color: "var(--ds-success)",
                 bg: "var(--ds-success-bg)",
@@ -632,34 +651,38 @@ export default function AiPowerShowcase2026({
           borderTop: "1px solid var(--ds-border-subtle)",
         }}
       >
-        <div style={{ fontSize: "0.82rem", color: "var(--ds-text-secondary)", fontWeight: 600 }}>
-          💡 <strong style={{ color: "var(--ds-text-heading)" }}>Trải nghiệm ngay trong 30 giây:</strong> Tự mình cảm nhận sự khác biệt của công nghệ AI trên bài học đầu tiên.
+        <div style={{ fontSize: "0.82rem", color: "var(--ds-text-secondary)", fontWeight: 600, display: "flex", alignItems: "center", gap: "0.42rem" }}>
+          <KitIcon name="bulb" size={16} />
+          <span><strong style={{ color: "var(--ds-text-heading)" }}>Trải nghiệm ngay trong 30 giây:</strong> Tự mình cảm nhận sự khác biệt của công nghệ AI trên bài học đầu tiên.</span>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
           <button
             type="button"
             onClick={handleGoStudy}
-            className="toeic-btn toeic-btn-primary"
+            className="toeic-btn toeic-btn-primary ds-focusable"
             style={{ fontSize: "0.82rem", padding: "0.55rem 1rem", fontWeight: 800 }}
           >
-            🔬 Trải Nghiệm X-Ray Miễn Phí
+            <KitIcon name="microscope" size={15} style={{ color: "var(--ds-text-on-accent)" }} />
+            <span>Trải Nghiệm X-Ray Miễn Phí</span>
           </button>
           <button
             type="button"
             onClick={handleGoDiagnostic}
-            className="toeic-btn toeic-btn-secondary"
+            className="toeic-btn toeic-btn-secondary ds-focusable"
             style={{ fontSize: "0.82rem", padding: "0.55rem 1rem", fontWeight: 700 }}
           >
-            🎯 Đo Trình Độ AI (15 Phút)
+            <KitIcon name="target" size={15} />
+            <span>Đo Trình Độ AI (15 Phút)</span>
           </button>
           <button
             type="button"
             onClick={handleGoVip}
-            className="toeic-btn toeic-btn-outline"
+            className="toeic-btn toeic-btn-outline ds-focusable"
             style={{ fontSize: "0.82rem", padding: "0.55rem 1rem", fontWeight: 800 }}
           >
-            💎 Khám Phá Đặc Quyền VIP
+            <KitIcon name="hub-vip" size={15} />
+            <span>Khám Phá Đặc Quyền VIP</span>
           </button>
         </div>
       </div>

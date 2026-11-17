@@ -1,4 +1,5 @@
 import React from "react";
+import { KitIcon } from "../../ui-2026/KitIcon";
 
 /**
  * Strips inline parenthetical choice hints or blank markers for natural TTS pronunciation.
@@ -51,7 +52,7 @@ export default function QuestionAudio({
         whiteSpace: "nowrap",
       }}
     >
-      <span aria-hidden="true">🔊</span>
+      <KitIcon name="tool-audio" size={14} aria-hidden="true" />
       <span>{label}</span>
     </button>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 const REQUIRED_PHRASE = "CONFIRM_SECURITY_ACTION";
 
@@ -80,6 +81,9 @@ export default function StepUpConfirmModal({
         <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", marginBottom: "0.75rem" }}>
           <span
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.3rem",
               backgroundColor: T.dangerBg,
               color: T.danger,
               border: `1px solid ${T.dangerBorder}`,
@@ -89,7 +93,8 @@ export default function StepUpConfirmModal({
               fontWeight: "800",
             }}
           >
-            🛡️ STEP-UP
+            <KitIcon name="shield" size={14} />
+            <span>STEP-UP</span>
           </span>
           <h3 id="stepup-modal-title" style={{ margin: 0, fontSize: "1.02rem", fontWeight: "800", color: T.textHeading }}>
             {title}

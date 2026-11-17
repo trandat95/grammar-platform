@@ -93,8 +93,8 @@ export default function ToeicFeatureGate({
           }}
         >
           <div style={{ marginBottom: '0.75rem' }}>
-            <ToeicBadge variant="warning">
-              🔒 VIP Premium
+            <ToeicBadge variant="warning" icon="lock">
+              VIP Premium
             </ToeicBadge>
           </div>
 

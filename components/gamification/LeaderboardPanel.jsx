@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Skeleton } from "../design-system";
 import { AVATAR_PATHS } from "../ui-2026/assetMap";
+import KitIcon from "../ui-2026/KitIcon";
 
 const BOARD_TABS = [
   { id: "weekly_xp", label: "XP Tuần", unit: "XP" },
@@ -87,9 +88,9 @@ export default function LeaderboardPanel({
   const activeUnit = BOARD_TABS.find((b) => b.id === boardType)?.unit || "XP";
 
   const getRankDisplay = (rank) => {
-    if (rank === 1) return "🥇";
-    if (rank === 2) return "🥈";
-    if (rank === 3) return "🥉";
+    if (rank === 1) return <KitIcon name="rank-1" size={20} />;
+    if (rank === 2) return <KitIcon name="rank-2" size={20} />;
+    if (rank === 3) return <KitIcon name="rank-3" size={20} />;
     return `#${rank}`;
   };
 
@@ -116,7 +117,7 @@ export default function LeaderboardPanel({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", flexWrap: "wrap" }}>
           <h2 style={{ margin: 0, fontSize: compact ? "1.06rem" : "1rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.45rem" }}>
-            <span className="ge-trophy-float" aria-hidden="true">🏆</span>
+            <span className="ge-trophy-float" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="trophy" size={19} /></span>
             <span>Bảng Xếp Hạng Thành Tích</span>
           </h2>
           <span className="ge-live-badge" title="Cập nhật thời gian thực">
@@ -142,11 +143,12 @@ export default function LeaderboardPanel({
             <Button
               size="sm"
               variant="ghost"
+              icon="medal"
               isLight={isLight}
               onClick={onOpenFullAchievements}
               style={{ fontSize: "0.74rem", padding: "0.28rem 0.65rem", minHeight: "36px" }}
             >
-              🏅 Huy hiệu &amp; Thành tích ➔
+              Huy hiệu &amp; Thành tích →
             </Button>
           )}
         </div>

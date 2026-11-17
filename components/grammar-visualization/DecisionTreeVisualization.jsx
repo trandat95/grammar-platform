@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function DecisionTreeVisualization({ data, isLight = false }) {
   const nodes = data?.nodes || {};
@@ -43,6 +44,9 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
           <button
             onClick={handleReset}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.3rem",
               padding: "0.25rem 0.55rem",
               fontSize: "0.72rem",
               fontWeight: "700",
@@ -53,7 +57,8 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
               cursor: "pointer",
             }}
           >
-            🌳 Bắt đầu lại
+            <KitIcon name="tree" size={13} color="var(--ds-success)" />
+            <span>Bắt đầu lại</span>
           </button>
 
           {history.map((step, idx) => (
@@ -292,8 +297,9 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
               padding: "0.85rem 1rem",
             }}
           >
-            <div style={{ fontSize: "0.75rem", color: "var(--ds-accent)", fontWeight: "800", textTransform: "uppercase", marginBottom: "0.2rem" }}>
-              🧠 TẠI SAO LẠI CHỌN LOẠI CÂU ĐIỀU KIỆN NÀY? (WHY THIS TYPE?):
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: "var(--ds-accent)", fontWeight: "800", textTransform: "uppercase", marginBottom: "0.2rem" }}>
+              <KitIcon name="brain" size={14} color="var(--ds-accent)" />
+              <span>TẠI SAO LẠI CHỌN LOẠI CÂU ĐIỀU KIỆN NÀY? (WHY THIS TYPE?):</span>
             </div>
             <div style={{ fontSize: "0.875rem", color: "var(--ds-text-heading)", lineHeight: "1.5" }}>
               {currentResult.reason}
@@ -328,14 +334,16 @@ export default function DecisionTreeVisualization({ data, isLight = false }) {
               <AudioPlayer text={currentResult.example.en} compact={true} isLight={isLight} />
             </div>
 
-            <div style={{ fontSize: "0.78rem", color: "var(--ds-success)", borderTop: `1px dashed ${"var(--ds-border)"}`, paddingTop: "0.45rem" }}>
-              🔍 {currentResult.example.breakdown}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.38rem", fontSize: "0.78rem", color: "var(--ds-success)", borderTop: `1px dashed ${"var(--ds-border)"}`, paddingTop: "0.45rem" }}>
+              <KitIcon name="search" size={13} color="var(--ds-success)" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <span>{currentResult.example.breakdown}</span>
             </div>
           </div>
 
           {/* Common Mistakes */}
-          <div style={{ fontSize: "0.78rem", color: "var(--ds-warning)", backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "var(--ds-warning-border)" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.6rem 0.85rem" }}>
-            ⚠️ <strong>Lỗi kinh điển khi làm bài thi:</strong> {currentResult.common_mistakes}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", fontSize: "0.78rem", color: "var(--ds-warning)", backgroundColor: isLight ? "var(--ds-warning-bg)" : "rgba(245, 158, 11, 0.1)", border: `1px solid ${isLight ? "var(--ds-warning-border)" : "rgba(245, 158, 11, 0.3)"}`, borderRadius: "6px", padding: "0.6rem 0.85rem" }}>
+            <KitIcon name="warning" size={14} color="var(--ds-warning)" style={{ flexShrink: 0, marginTop: "2px" }} />
+            <span><strong>Lỗi kinh điển khi làm bài thi:</strong> {currentResult.common_mistakes}</span>
           </div>
         </div>
       )}

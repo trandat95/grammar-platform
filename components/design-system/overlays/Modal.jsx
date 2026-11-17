@@ -1,18 +1,25 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useId, useRef } from "react";
 import { getThemeTokens, getComponentTokens } from "../../../lib/tokens/design-tokens";
 import { RADII } from "../../../lib/tokens/spacing.tokens";
+import KitIcon from "../../ui-2026/KitIcon";
 
 /**
- * WCAG 2.2 AA Accessible Modal with Focus Trap, Escape Close & Focus Restoration
+ * WCAG 2.2 AA Consolidated Modal (Replaces FocusTrapModal2026 duplication)
+ * Supports Focus Trap (Tab / Shift+Tab), Escape Close, Backdrop Dismiss, and Automatic Focus Restoration.
  */
 export function Modal({
+  id,
   isOpen = false,
   onClose,
   title,
+  headerLeft = null,
   children,
   maxWidth = "640px",
+  padding = "1.25rem",
+  dataNoDict = true,
   isLight = false,
 }) {
+  const titleId = useId();
   const dialogRef = useRef(null);
   const previousFocusRef = useRef(null);
   const onCloseRef = useRef(onClose);
@@ -23,6 +30,9 @@ export function Modal({
   useEffect(() => {
     if (!isOpen) return undefined;
     previousFocusRef.current = document.activeElement;
+
+    const focusableSelector =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     const timer = setTimeout(() => {
       const modalEl = dialogRef.current;
@@ -35,9 +45,7 @@ export function Modal({
         firstInput.focus();
         return;
       }
-      const focusables = modalEl.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
+      const focusables = modalEl.querySelectorAll(focusableSelector);
       if (focusables.length > 0) {
         focusables[0].focus();
       } else {
@@ -48,15 +56,12 @@ export function Modal({
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
+        e.stopPropagation();
         onCloseRef.current();
         return;
       }
       if (e.key === "Tab" && dialogRef.current) {
-        const focusables = Array.from(
-          dialogRef.current.querySelectorAll(
-            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          )
-        );
+        const focusables = Array.from(dialogRef.current.querySelectorAll(focusableSelector));
         if (focusables.length === 0) return;
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
@@ -70,10 +75,10 @@ export function Modal({
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
       if (previousFocusRef.current && typeof previousFocusRef.current.focus === "function") {
         previousFocusRef.current.focus();
       }
@@ -84,15 +89,19 @@ export function Modal({
 
   return (
     <div
+      id={id}
+      data-no-dict={dataNoDict ? "true" : undefined}
       role="dialog"
       aria-modal="true"
-      aria-label={typeof title === "string" ? title : "Dialog"}
+      aria-labelledby={title && !headerLeft ? titleId : undefined}
+      aria-label={headerLeft && typeof title === "string" ? title : undefined}
       style={{
         position: "fixed",
         inset: 0,
         zIndex: C.modal.zIndex,
         backgroundColor: C.modal.backdrop,
-        backdropFilter: "blur(5px)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -116,20 +125,30 @@ export function Modal({
           boxShadow: C.modal.shadow,
           color: T.text,
           outline: "none",
+          boxSizing: "border-box",
         }}
       >
-        {title && (
+        {(title || headerLeft || onClose) && (
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "1rem 1.25rem",
+              gap: "0.75rem",
+              padding: "0.95rem 1.25rem",
               borderBottom: `1px solid ${T.borderSubtle}`,
               backgroundColor: C.modal.headerBg,
             }}
           >
-            <h3 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>{title}</h3>
+            {headerLeft ? (
+              headerLeft
+            ) : title ? (
+              <h3 id={titleId} style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
+                {title}
+              </h3>
+            ) : (
+              <span />
+            )}
             {onClose && (
               <button
                 type="button"
@@ -137,22 +156,27 @@ export function Modal({
                 onClick={onClose}
                 className="ds-focusable ds-target-min"
                 style={{
-                  width: "32px",
-                  height: "32px",
+                  width: "34px",
+                  height: "34px",
+                  minWidth: "34px",
+                  minHeight: "34px",
                   borderRadius: "50%",
                   border: `1px solid ${T.border}`,
                   backgroundColor: T.bgElevated,
                   color: T.text,
                   cursor: "pointer",
-                  fontWeight: 700,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
                 }}
               >
-                ✕
+                <KitIcon name="close" size={16} />
               </button>
             )}
           </div>
         )}
-        <div style={{ padding: "1.25rem" }}>{children}</div>
+        <div style={{ padding }}>{children}</div>
       </div>
     </div>
   );

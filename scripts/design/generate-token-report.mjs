@@ -5,6 +5,7 @@ const scripts = [
   "scripts/design/validate-design-tokens.mjs",
   "scripts/design/validate-color-contrast.mjs",
   "scripts/design/validate-z-index.mjs",
+  "scripts/design/validate-zero-os-emoji.mjs",
 ];
 
 let allPass = true;

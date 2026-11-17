@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AudioPlayer from "../audio/AudioPlayer";
+import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function ConversionFlowVisualization({ data, isLight = false }) {
   const [activeTab, setActiveTab] = useState("flow"); // "flow" | "backshift" | "adverbs" | "exceptions"
@@ -25,13 +26,17 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
           <h3
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.45rem",
               fontSize: "1.15rem",
               fontWeight: "700",
               color: "var(--ds-text-heading)",
               margin: 0,
             }}
           >
-            🗣️ {data.title}
+            <KitIcon name="chat" size={18} color="var(--ds-accent)" />
+            <span>{data.title}</span>
           </h3>
           <span
             style={{
@@ -74,6 +79,10 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
         <button
           onClick={() => setActiveTab("flow")}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            whiteSpace: "nowrap",
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "flow" ? "700" : "500",
@@ -84,12 +93,17 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             cursor: "pointer",
           }}
         >
-          🚀 7 Giai Đoạn Chuyển Đổi
+          <KitIcon name="rocket" size={14} />
+          <span>7 Giai Đoạn Chuyển Đổi</span>
         </button>
 
         <button
           onClick={() => setActiveTab("backshift")}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            whiteSpace: "nowrap",
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "backshift" ? "700" : "500",
@@ -100,12 +114,17 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             cursor: "pointer",
           }}
         >
-          ⏱️ Ma Trận Lùi Thì (Backshift)
+          <KitIcon name="timer" size={14} />
+          <span>Ma Trận Lùi Thì (Backshift)</span>
         </button>
 
         <button
           onClick={() => setActiveTab("adverbs")}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            whiteSpace: "nowrap",
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "adverbs" ? "700" : "500",
@@ -116,12 +135,17 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             cursor: "pointer",
           }}
         >
-          📍 Trạng Từ Thời Gian & Nơi Chốn
+          <KitIcon name="pin" size={14} />
+          <span>Trạng Từ Thời Gian &amp; Nơi Chốn</span>
         </button>
 
         <button
           onClick={() => setActiveTab("exceptions")}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            whiteSpace: "nowrap",
             padding: "0.45rem 0.85rem",
             fontSize: "0.82rem",
             fontWeight: activeTab === "exceptions" ? "700" : "500",
@@ -132,7 +156,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
             cursor: "pointer",
           }}
         >
-          ⚠️ Bẫy & Trường Hợp Không Lùi Thì
+          <KitIcon name="warning" size={14} />
+          <span>Bẫy &amp; Trường Hợp Không Lùi Thì</span>
         </button>
       </div>
 
@@ -239,6 +264,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
 
                 <div
                   style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.4rem",
                     backgroundColor: "var(--ds-card)",
                     border: `1px solid ${"var(--ds-border)"}`,
                     borderRadius: "6px",
@@ -248,7 +276,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                     color: "var(--ds-accent)",
                   }}
                 >
-                  💡 <strong>Ví dụ mẫu:</strong> {st.example}
+                  <KitIcon name="bulb" size={14} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                  <span><strong>Ví dụ mẫu:</strong> {st.example}</span>
                 </div>
               </div>
             );
@@ -415,8 +444,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
-              ⏳ Trạng từ thời gian (Time)
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-accent)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
+              <KitIcon name="hourglass" size={14} color="var(--ds-accent)" />
+              <span>Trạng từ thời gian (Time)</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
               {data.adverbChanges.time.map((adv, idx) => (
@@ -449,8 +479,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               padding: "1rem",
             }}
           >
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-purple)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
-              📍 Trạng từ nơi chốn / Đại từ chỉ định
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.85rem", fontWeight: "700", color: "var(--ds-purple)", marginBottom: "0.75rem", fontFamily: "var(--font-sans)" }}>
+              <KitIcon name="pin" size={14} color="var(--ds-purple)" />
+              <span>Trạng từ nơi chốn / Đại từ chỉ định</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
               {data.adverbChanges.place.map((adv, idx) => (
@@ -491,7 +522,7 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.35rem" }}>
-                <span style={{ fontSize: "1.1rem" }}>⚠️</span>
+                <KitIcon name="warning" size={16} color="var(--ds-warning)" />
                 <span style={{ fontSize: "0.85rem", fontWeight: "800", color: "var(--ds-warning)" }}>
                   {exc.rule}
                 </span>
@@ -501,6 +532,9 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
               </div>
               <div
                 style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.4rem",
                   fontSize: "0.82rem",
                   fontFamily: "var(--font-sans)",
                   padding: "0.45rem 0.75rem",
@@ -510,7 +544,8 @@ export default function ConversionFlowVisualization({ data, isLight = false }) {
                   color: "var(--ds-text-heading)",
                 }}
               >
-                📝 Ví dụ: {exc.example}
+                <KitIcon name="edit" size={13} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                <span>Ví dụ: {exc.example}</span>
               </div>
             </div>
           ))}

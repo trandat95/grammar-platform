@@ -44,7 +44,7 @@ export function Grid({ children, minColumnWidth = "240px", gap = "1rem", style =
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(auto-fit, minmax(${minColumnWidth}, 1fr))`,
+        gridTemplateColumns: `repeat(auto-fit, minmax(min(${minColumnWidth}, 100%), 1fr))`,
         gap,
         ...style,
       }}

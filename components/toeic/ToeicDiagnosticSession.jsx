@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 import DiagnosticRadarDashboard from './DiagnosticRadarDashboard';
 import MilestoneSkillTree from './MilestoneSkillTree';
 import { ToeicCard, ToeicButton, ToeicBadge, ToeicChoiceCard, ToeicQuestionPalette } from './ui';
@@ -231,16 +232,18 @@ export default function ToeicDiagnosticSession({
         <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
           <ToeicButton
             variant={activeTab === 'radar' ? 'primary' : 'secondary'}
+            icon="chart"
             onClick={() => setActiveTab('radar')}
           >
-            📊 Bản Đồ Năng Lực &amp; Mục Tiêu Focus
+            Bản Đồ Năng Lực &amp; Mục Tiêu Focus
           </ToeicButton>
 
           <ToeicButton
             variant={activeTab === 'tree' ? 'primary' : 'secondary'}
+            icon="medal"
             onClick={() => setActiveTab('tree')}
           >
-            🏆 Lộ Trình 7 Milestones Vượt Trạm
+            Lộ Trình 7 Milestones Vượt Trạm
           </ToeicButton>
         </div>
 
@@ -343,7 +346,7 @@ export default function ToeicDiagnosticSession({
             height: '36px',
             borderRadius: '50%',
             backgroundColor: 'var(--ds-accent)',
-            color: '#ffffff',
+            color: 'var(--ds-text-on-accent)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -400,7 +403,10 @@ export default function ToeicDiagnosticSession({
               {/* Timer & Flag Button */}
               <div className="toeic-flex-row" style={{ flexWrap: 'nowrap', gap: '0.4rem' }}>
                 <div className={`toeic-pacing-pill ${questionTimerSec > recommendedTime ? 'toeic-pacing-yellow' : 'toeic-pacing-green'}`}>
-                  <span>⏱️ {questionTimerSec}s</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <KitIcon name="timer" size={13} />
+                    <span>{questionTimerSec}s</span>
+                  </span>
                   <span className="ge-mobile-hide">/ mục tiêu {recommendedTime}s</span>
                 </div>
 
@@ -409,7 +415,7 @@ export default function ToeicDiagnosticSession({
                   size="sm"
                   onClick={toggleFlag}
                   style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
-                  icon={<span>{isFlagged ? '🚩' : '🏳️'}</span>}
+                  icon={<KitIcon name="flag" size={13} />}
                 >
                   {isFlagged ? 'Đã cắm cờ' : 'Cắm cờ'}
                 </ToeicButton>
@@ -429,8 +435,9 @@ export default function ToeicDiagnosticSession({
                 maxHeight: '220px',
                 overflowY: 'auto'
               }}>
-                <div style={{ fontWeight: 800, marginBottom: '0.5rem', color: 'var(--ds-accent)' }}>
-                  📄 {currentPassage.title || 'Đoạn văn đọc hiểu:'}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--ds-accent)' }}>
+                  <KitIcon name="book" size={14} />
+                  <span>{currentPassage.title || 'Đoạn văn đọc hiểu:'}</span>
                 </div>
                 <div style={{ whiteSpace: 'pre-line' }}>
                   {currentPassage.content_en || currentPassage.text}
@@ -546,8 +553,10 @@ export default function ToeicDiagnosticSession({
           type="button"
           className="ge-mobile-exam-dock-btn"
           onClick={() => setShowMobilePalette(prev => !prev)}
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}
         >
-          📋 {currentIndex + 1}/{questions.length}
+          <KitIcon name="clipboard" size={14} />
+          <span>{currentIndex + 1}/{questions.length}</span>
         </button>
 
         <button

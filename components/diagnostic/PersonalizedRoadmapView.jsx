@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AiAdvisorDrawer from "./AiAdvisorDrawer";
-import { Button, Badge, Alert } from "../design-system";
+import { Button, Badge, Alert, KitIcon } from "../design-system";
 
 export default function PersonalizedRoadmapView({
   roadmap,
@@ -73,6 +73,9 @@ export default function PersonalizedRoadmapView({
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
           <span
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.35rem",
               fontSize: "0.75rem",
               fontWeight: 700,
               textTransform: "uppercase",
@@ -83,7 +86,8 @@ export default function PersonalizedRoadmapView({
               color: "var(--ds-success)",
             }}
           >
-            🗺️ Actionable Learning Roadmap
+            <KitIcon name="map" size={13} color="var(--ds-success)" />
+            <span>Actionable Learning Roadmap</span>
           </span>
           <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
             Liên kết 100% với 53 bài học giáo trình
@@ -109,10 +113,11 @@ export default function PersonalizedRoadmapView({
               variant="primary"
               size="sm"
               isLight={isLight}
+              icon="bolt"
               isLoading={isAdjusting}
               onClick={onAdaptiveAdjust}
             >
-              ⚡ Tự động Điều chỉnh Thích ứng (Adaptive Engine)
+              Tự động Điều chỉnh Thích ứng (Adaptive Engine)
             </Button>
           )}
           {Array.isArray(roadmap.version_history) && roadmap.version_history.length > 0 && (
@@ -120,9 +125,10 @@ export default function PersonalizedRoadmapView({
               variant="secondary"
               size="sm"
               isLight={isLight}
+              icon={showVersionHistory ? undefined : "clock"}
               onClick={() => setShowVersionHistory((p) => !p)}
             >
-              {showVersionHistory ? "Ẩn Lịch sử Phiên bản" : `🕒 Lịch sử Phiên bản (${roadmap.version_history.length})`}
+              {showVersionHistory ? "Ẩn Lịch sử Phiên bản" : `Lịch sử Phiên bản (${roadmap.version_history.length})`}
             </Button>
           )}
         </div>
@@ -412,8 +418,9 @@ export default function PersonalizedRoadmapView({
                         )}
 
                         {task.duration_est && (
-                          <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
-                            ⏱️ {task.duration_est}
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem", color: T.textMuted }}>
+                            <KitIcon name="timer" size={12} />
+                            <span>{task.duration_est}</span>
                           </span>
                         )}
                       </div>
@@ -438,10 +445,13 @@ export default function PersonalizedRoadmapView({
                             padding: "0.35rem 0.65rem",
                             borderRadius: "0.4rem",
                             marginBottom: "0.6rem",
-                            display: "inline-block",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.35rem",
                           }}
                         >
-                          💡 <em>Lý do: {task.reason}</em>
+                          <KitIcon name="bulb" size={13} color="var(--ds-accent)" />
+                          <span><em>Lý do: {task.reason}</em></span>
                         </div>
                       )}
 
@@ -456,8 +466,9 @@ export default function PersonalizedRoadmapView({
                           marginTop: "0.25rem",
                         }}
                       >
-                        <span style={{ fontSize: "0.78rem", color: T.textSecondary }}>
-                          📖 Chương {task.chapter_number} • Bài: {task.lesson_title}
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", fontSize: "0.78rem", color: T.textSecondary }}>
+                          <KitIcon name="book" size={13} color={T.accent} />
+                          <span>Chương {task.chapter_number} • Bài: {task.lesson_title}</span>
                         </span>
 
                         {task.action_type === "retake_diagnostic" ? (
@@ -533,6 +544,9 @@ export default function PersonalizedRoadmapView({
         <button
           onClick={onRetakeTest}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.45rem",
             padding: "0.75rem 1.5rem",
             borderRadius: "0.6rem",
             backgroundColor: "var(--ds-card)",
@@ -543,7 +557,8 @@ export default function PersonalizedRoadmapView({
             cursor: "pointer",
           }}
         >
-          Làm bài Retake Assessment 🔄
+          <span>Làm bài Retake Assessment</span>
+          <KitIcon name="refresh" size={15} />
         </button>
       </div>
 

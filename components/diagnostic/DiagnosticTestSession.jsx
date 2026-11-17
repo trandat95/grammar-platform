@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import FocusTrapModal2026 from "../ui-2026/FocusTrapModal2026";
+import { KitIcon, StatusDot } from "../ui-2026/KitIcon";
 
 export default function DiagnosticTestSession({
   test,
@@ -243,7 +244,7 @@ export default function DiagnosticTestSession({
             letterSpacing: "0.05em",
           }}
         >
-          <span>⏱️</span>
+          <KitIcon name="timer" size={16} />
           <span>{formatTimer(secondsRemaining)}</span>
         </div>
       </div>
@@ -312,6 +313,9 @@ export default function DiagnosticTestSession({
 
             <span
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
                 fontSize: "0.72rem",
                 fontWeight: 600,
                 padding: "0.2rem 0.6rem",
@@ -330,7 +334,13 @@ export default function DiagnosticTestSession({
                     : "var(--ds-danger)",
               }}
             >
-              {currentQ.difficulty === "easy" ? "🟢 Dễ" : currentQ.difficulty === "medium" ? "🟡 Trung bình" : "🔴 Khó"}
+              <StatusDot
+                tone={currentQ.difficulty === "easy" ? "success" : currentQ.difficulty === "medium" ? "warning" : "danger"}
+                size={7}
+              />
+              <span>
+                {currentQ.difficulty === "easy" ? "Dễ" : currentQ.difficulty === "medium" ? "Trung bình" : "Khó"}
+              </span>
             </span>
           </div>
 
@@ -355,7 +365,7 @@ export default function DiagnosticTestSession({
               cursor: "pointer",
             }}
           >
-            <span>🚩</span>
+            <KitIcon name="flag" size={14} color={isCurrentFlagged ? "var(--ds-warning)" : T.textMuted} />
             <span>{isCurrentFlagged ? "Đã đánh dấu" : "Đánh dấu xem lại"}</span>
           </button>
         </div>
@@ -466,9 +476,9 @@ export default function DiagnosticTestSession({
           >
             <span style={{ fontWeight: 700, color: T.textSecondary }}>Bảng danh sách câu hỏi:</span>
             <div className="ge-diag-legend" style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-              <span>🟢 Đã chọn ({answeredCount})</span>
-              <span>🚩 Đánh dấu ({flaggedCount})</span>
-              <span>⚪ Chưa chọn ({unansweredCount})</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}><StatusDot tone="success" size={8} /> Đã chọn ({answeredCount})</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}><KitIcon name="flag" size={12} color="var(--ds-warning)" /> Đánh dấu ({flaggedCount})</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}><StatusDot tone="neutral" size={8} /> Chưa chọn ({unansweredCount})</span>
             </div>
           </div>
 
@@ -529,10 +539,11 @@ export default function DiagnosticTestSession({
                         position: "absolute",
                         top: "-4px",
                         right: "-2px",
-                        fontSize: "0.6rem",
+                        display: "inline-flex",
+                        color: "var(--ds-warning)",
                       }}
                     >
-                      🚩
+                      <KitIcon name="flag" size={10} />
                     </span>
                   )}
                 </button>
@@ -629,8 +640,11 @@ export default function DiagnosticTestSession({
       {showMobilePalette && (
         <div className="ge-mobile-palette-sheet" role="dialog" aria-label="Bảng danh sách câu hỏi">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-            <span style={{ fontWeight: 800, fontSize: "0.82rem", color: T.text }}>
-              Bảng câu hỏi • 🟢 {answeredCount} • 🚩 {flaggedCount} • ⚪ {unansweredCount}
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap", fontWeight: 800, fontSize: "0.82rem", color: T.text }}>
+              <span>Bảng câu hỏi</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}><StatusDot tone="success" size={7} /> {answeredCount}</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}><KitIcon name="flag" size={11} color="var(--ds-warning)" /> {flaggedCount}</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}><StatusDot tone="neutral" size={7} /> {unansweredCount}</span>
             </span>
             <button
               type="button"
@@ -692,8 +706,8 @@ export default function DiagnosticTestSession({
                 >
                   {idx + 1}
                   {isFlag && (
-                    <span style={{ position: "absolute", top: "-4px", right: "-2px", fontSize: "0.58rem" }}>
-                      🚩
+                    <span style={{ position: "absolute", top: "-4px", right: "-2px", display: "inline-flex", color: "var(--ds-warning)" }}>
+                      <KitIcon name="flag" size={10} />
                     </span>
                   )}
                 </button>
@@ -709,8 +723,10 @@ export default function DiagnosticTestSession({
           type="button"
           className="ge-mobile-exam-dock-btn"
           onClick={() => setShowMobilePalette((prev) => !prev)}
+          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.3rem" }}
         >
-          📋 {currentIndex + 1}/{totalQuestions}
+          <KitIcon name="clipboard" size={14} />
+          <span>{currentIndex + 1}/{totalQuestions}</span>
         </button>
 
         <button

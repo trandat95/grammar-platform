@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import KitIcon from '../ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from './ui';
 
 /**
@@ -263,8 +264,8 @@ export default function DictationStudio({
       <div className="toeic-flex-between" style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-            <ToeicBadge variant="primary">
-              🎧 Dictation Studio • {seriesLabel}
+            <ToeicBadge variant="primary" icon="headphones">
+              Dictation Studio • {seriesLabel}
             </ToeicBadge>
             <ToeicBadge variant="muted">
               Test {String(testNum).padStart(2, '0')} • Track {filteredTracks.length > 0 ? currentTrackIndex + 1 : 0}/{filteredTracks.length} ({currentTrack ? (String(currentTrack.question_range).startsWith('Q') ? currentTrack.question_range : 'Q' + (String(currentTrack.question_range).includes('-') ? currentTrack.question_range : String(currentTrack.question_range).padStart(2, '0'))) : ''})
@@ -334,7 +335,7 @@ export default function DictationStudio({
               height: '44px',
               borderRadius: '50%',
               backgroundColor: 'var(--ds-accent)',
-              color: '#ffffff',
+              color: 'var(--ds-text-on-accent)',
               border: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -345,7 +346,7 @@ export default function DictationStudio({
             }}
             title={isPlaying ? 'Tạm dừng (Phím Space)' : 'Phát âm thanh (Phím Space)'}
           >
-            {isPlaying ? '⏸' : '▶'}
+            <KitIcon name={isPlaying ? 'pause' : 'play'} size={18} style={{ color: 'var(--ds-text-on-accent)' }} />
           </button>
 
           {/* Sóng âm thanh Waveform Visualizer */}
@@ -437,8 +438,9 @@ export default function DictationStudio({
             gap: '0.75rem'
           }}>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--ds-warning)' }}>
-                🔒 Nội dung thuộc gói VIP Premium
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800, fontSize: '0.9rem', color: 'var(--ds-warning)' }}>
+                <KitIcon name="lock" size={14} />
+                <span>Nội dung thuộc gói VIP Premium</span>
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--ds-text-secondary)', marginTop: '0.2rem' }}>
                 {errorMsg || `Đề ${seriesLabel} Test ${String(testNum).padStart(2, '0')} yêu cầu tài khoản VIP. Học viên miễn phí mở trọn vẹn Test 01.`}
@@ -451,7 +453,8 @@ export default function DictationStudio({
                 className="toeic-btn toeic-btn-primary"
                 style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', fontWeight: 700 }}
               >
-                ✨ Mở khóa VIP
+                <KitIcon name="sparkles" size={14} />
+                <span>Mở khóa VIP</span>
               </button>
             )}
           </div>
@@ -485,8 +488,9 @@ export default function DictationStudio({
       {/* 4. INTERACTIVE CLOZE / FULL DICTATION AREA (AC-U6.3) */}
       {currentTrack && (
         <div style={{ padding: '1.5rem', borderRadius: '1rem', border: '1px solid var(--ds-border)', backgroundColor: 'var(--ds-bg-elevated)', marginBottom: '1.25rem' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', marginBottom: '1rem' }}>
-            💡 Hướng dẫn: Gõ từ còn thiếu vào ô trống, nhấn <strong>Phím Cách (Space)</strong> hoặc <strong>Enter</strong> để kiểm tra tức thì. Ô sẽ tự động chuyển màu xanh lá và nhảy con trỏ sang ô tiếp theo!
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ds-text-muted)', marginBottom: '1rem' }}>
+            <KitIcon name="bulb" size={14} color="var(--ds-accent)" style={{ flexShrink: 0, marginTop: '1px' }} />
+            <span>Hướng dẫn: Gõ từ còn thiếu vào ô trống, nhấn <strong>Phím Cách (Space)</strong> hoặc <strong>Enter</strong> để kiểm tra tức thì. Ô sẽ tự động chuyển màu xanh lá và nhảy con trỏ sang ô tiếp theo!</span>
           </div>
 
           {dictationMode === 'cloze' ? (
@@ -564,8 +568,9 @@ export default function DictationStudio({
           {/* FULL TRANSCRIPT REVEAL WHEN COMPLETED */}
           {isAllDone && (
             <div className="toeic-formula-box tip" style={{ marginTop: '1.25rem', marginBottom: 0 }}>
-              <div className="toeic-formula-title">
-                <span>🎉 HOÀN THÀNH TRACK {currentTrack.track}! TOÀN BỘ TRANSCRIPT:</span>
+              <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <KitIcon name="check-circle" size={15} color="var(--ds-success)" />
+                <span>HOÀN THÀNH TRACK {currentTrack.track}! TOÀN BỘ TRANSCRIPT:</span>
               </div>
               <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--ds-text)', margin: '0.25rem 0 0 0', lineHeight: 1.6 }}>
                 {currentTrack.full_text}

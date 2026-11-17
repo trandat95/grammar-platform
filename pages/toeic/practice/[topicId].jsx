@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
+import { KitIcon } from '../../../components/ui-2026/KitIcon';
 import SentenceXRayCard from '../../../components/toeic/SentenceXRayCard';
 import AITutorDrawer from '../../../components/toeic/AITutorDrawer';
 import useGlobalAuth from '../../../hooks/useGlobalAuth';
@@ -140,7 +141,9 @@ export default function TopicPracticePage() {
                   marginTop: '1.5rem'
                 }}
               >
-                <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🔒</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--ds-warning-bg)', color: 'var(--ds-warning)', marginBottom: '0.75rem' }}>
+                  <KitIcon name="lock" size={26} />
+                </div>
                 <div style={{ display: 'inline-flex', marginBottom: '0.75rem' }}>
                   <ToeicBadge variant="warning">
                     Đặc Quyền VIP • Target {topicInfo?.target_score_band || '550'}+
@@ -192,8 +195,9 @@ export default function TopicPracticePage() {
                       backgroundColor: 'var(--ds-warning-bg)',
                     }}
                   >
-                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--ds-warning)' }}>
-                      ⚡ Chế độ dùng thử: Làm miễn phí {questions.length} câu đầu của chuyên đề Band {topicInfo?.target_score_band || 550}+
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', fontWeight: 700, color: 'var(--ds-warning)' }}>
+                      <KitIcon name="bolt" size={14} />
+                      <span>Chế độ dùng thử: Làm miễn phí {questions.length} câu đầu của chuyên đề Band {topicInfo?.target_score_band || 550}+</span>
                     </span>
                     <button
                       type="button"
@@ -252,7 +256,7 @@ export default function TopicPracticePage() {
                     </div>
 
                     {/* Progress Indicators */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflowX: 'auto', maxWidth: '100%', paddingBottom: '2px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.3rem', maxWidth: '100%' }}>
                       {questions.map((_, i) => (
                         <button
                           key={i}

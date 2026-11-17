@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
+import { KitIcon, StatusDot } from '../../../components/ui-2026/KitIcon';
 import SentenceXRayCard from '../../../components/toeic/SentenceXRayCard';
 import { ToeicBadge, ToeicButton } from '../../../components/toeic/ui';
 import useGlobalAuth from '../../../hooks/useGlobalAuth';
@@ -143,7 +144,7 @@ export default function RemediationPlanPage() {
                 <div className="toeic-card" style={{ padding: '1.5rem', border: '1.5px solid var(--ds-accent)' }}>
                   <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                     <div>
-                      <ToeicBadge variant="primary">🗺️ Cross-Test Remediation Loop • {formatSeries(plan.series)} Test {String(plan.source_test_number).padStart(2, '0')} &rarr; Test {String(plan.target_next_test_number).padStart(2, '0')}</ToeicBadge>
+                      <ToeicBadge variant="primary" icon="map">Cross-Test Remediation Loop • {formatSeries(plan.series)} Test {String(plan.source_test_number).padStart(2, '0')} &rarr; Test {String(plan.target_next_test_number).padStart(2, '0')}</ToeicBadge>
                       <h1 style={{ fontSize: '1.35rem', fontWeight: 900, margin: '0.5rem 0 0.25rem 0', color: 'var(--ds-text)' }}>
                         Quy Trình Vá Lỗ Hổng &amp; Nâng Điểm Cá Nhân Hóa
                       </h1>
@@ -160,15 +161,18 @@ export default function RemediationPlanPage() {
                   {/* 4-QUADRANT MATRIX SUMMARY */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem' }}>
                     {[
-                      { key: 'CRITICAL_GAP', title: '🔴 Nguy cấp (Sai + Chậm)', color: 'var(--ds-danger)', desc: 'Học lại công thức & drill nền' },
-                      { key: 'TRAP_PRONE', title: '🟠 Hay sập bẫy (Sai + Nhanh)', color: 'var(--ds-warning)', desc: 'Phá bẫy bằng Câu Sinh Đôi' },
-                      { key: 'SLOW_FLUENCY', title: '🟡 Chưa phản xạ (Đúng + Chậm)', color: 'var(--ds-accent)', desc: 'Tăng tốc phản xạ < 12s' },
-                      { key: 'MASTERED', title: '🟢 Thành thạo (Đúng + Nhanh)', color: 'var(--ds-success)', desc: 'Duy trì qua SRS Flashcards' },
+                      { key: 'CRITICAL_GAP', tone: 'danger', title: 'Nguy cấp (Sai + Chậm)', color: 'var(--ds-danger)', desc: 'Học lại công thức & drill nền' },
+                      { key: 'TRAP_PRONE', tone: 'warning', title: 'Hay sập bẫy (Sai + Nhanh)', color: 'var(--ds-warning)', desc: 'Phá bẫy bằng Câu Sinh Đôi' },
+                      { key: 'SLOW_FLUENCY', tone: 'accent', title: 'Chưa phản xạ (Đúng + Chậm)', color: 'var(--ds-accent)', desc: 'Tăng tốc phản xạ < 12s' },
+                      { key: 'MASTERED', tone: 'success', title: 'Thành thạo (Đúng + Nhanh)', color: 'var(--ds-success)', desc: 'Duy trì qua SRS Flashcards' },
                     ].map(qBox => {
                       const list = quadrants[qBox.key] || [];
                       return (
                         <div key={qBox.key} style={{ padding: '0.75rem', borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-border)', backgroundColor: 'var(--ds-bg-elevated)' }}>
-                          <div style={{ fontSize: '0.78rem', fontWeight: 800, color: qBox.color }}>{qBox.title} ({list.length})</div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', fontWeight: 800, color: qBox.color }}>
+                            <StatusDot tone={qBox.tone} size={8} />
+                            <span>{qBox.title} ({list.length})</span>
+                          </div>
                           <div style={{ fontSize: '0.72rem', color: 'var(--ds-text-muted)', marginTop: '0.2rem' }}>{qBox.desc}</div>
                         </div>
                       );
@@ -207,6 +211,9 @@ export default function RemediationPlanPage() {
                           type="button"
                           onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: plan.source_test_number, series: plan.series })}
                           style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.28rem',
                             fontSize: '0.74rem',
                             padding: '0.25rem 0.65rem',
                             borderRadius: 'var(--ds-radius-sm)',
@@ -217,7 +224,8 @@ export default function RemediationPlanPage() {
                             cursor: 'pointer',
                           }}
                         >
-                          🔒 +{planData.lockedCount} câu VIP
+                          <KitIcon name="lock" size={11} />
+                          <span>+{planData.lockedCount} câu VIP</span>
                         </button>
                       )}
                     </div>
@@ -241,8 +249,9 @@ export default function RemediationPlanPage() {
                 {/* STEP 3: VERIFY AT TEST N+1 */}
                 <div className="toeic-card" style={{ padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundColor: 'var(--ds-bg-elevated)' }}>
                   <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--ds-text)' }}>
-                      🏁 Bước Cuối: Kiểm chứng điểm số tại {formatSeries(plan.series)} Test {String(plan.target_next_test_number).padStart(2, '0')}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.88rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                      <KitIcon name="flag" size={15} color="var(--ds-accent)" />
+                      <span>Bước Cuối: Kiểm chứng điểm số tại {formatSeries(plan.series)} Test {String(plan.target_next_test_number).padStart(2, '0')}</span>
                     </div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--ds-text-secondary)', marginTop: '0.2rem' }}>
                       Hệ thống sẽ tự động đo chênh lệch điểm (Verified Score Delta) ngay khi bạn nộp Test {String(plan.target_next_test_number).padStart(2, '0')}.

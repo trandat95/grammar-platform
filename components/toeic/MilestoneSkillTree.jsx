@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { KitIcon } from '../ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from './ui';
 import useToeicEntitlement from '../../hooks/useToeicEntitlement';
 import ToeicSmartPaywallModal from './premium/ToeicSmartPaywallModal';
@@ -97,7 +98,7 @@ export default function MilestoneSkillTree({
                     : {}
                 }
               >
-                {isCompleted ? '✓' : isVipLocked ? '🔒' : ms.milestone_order || index + 1}
+                {isCompleted ? <KitIcon name="check" size={15} /> : isVipLocked ? <KitIcon name="lock" size={15} /> : ms.milestone_order || index + 1}
               </div>
 
               {/* CARD CONTAINER */}
@@ -132,11 +133,12 @@ export default function MilestoneSkillTree({
                             ? 'primary'
                             : 'muted'
                         }
+                        icon={isVipLocked ? 'lock' : undefined}
                       >
                         {isCompleted
                           ? 'Trạm Đã Đạt'
                           : isVipLocked
-                          ? '🔒 VIP Premium'
+                          ? 'VIP Premium'
                           : isInProgress
                           ? 'Trạm Hiện Tại'
                           : 'Chưa Mở Khóa'}
@@ -182,7 +184,8 @@ export default function MilestoneSkillTree({
                           gap: '0.35rem'
                         }}
                       >
-                        <span>✨ Mở Khóa VIP Trạm Này</span>
+                        <KitIcon name="sparkles" size={14} />
+                        <span>Mở Khóa VIP Trạm Này</span>
                       </button>
                     ) : (
                       <>
@@ -191,9 +194,10 @@ export default function MilestoneSkillTree({
                             type="button"
                             onClick={() => onStartDrill && onStartDrill(ms)}
                             className="toeic-btn toeic-btn-primary"
-                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
+                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
                           >
-                            ⚡ Luyện Trạm Này
+                            <KitIcon name="bolt" size={14} />
+                            <span>Luyện Trạm Này</span>
                           </button>
                         )}
 
@@ -202,9 +206,10 @@ export default function MilestoneSkillTree({
                             type="button"
                             onClick={() => onStartBossGate && onStartBossGate(ms)}
                             className="toeic-btn toeic-btn-secondary"
-                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem' }}
+                            style={{ padding: '0.45rem 1rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
                           >
-                            <span>🏆 Thi Vượt Trạm Boss Gate</span>
+                            <KitIcon name="medal" size={14} />
+                            <span>Thi Vượt Trạm Boss Gate</span>
                           </button>
                         )}
                       </>
@@ -241,6 +246,9 @@ export default function MilestoneSkillTree({
                       <span
                         key={`inj_${i}`}
                         style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
                           fontSize: '0.75rem',
                           padding: '0.2rem 0.6rem',
                           borderRadius: 'var(--ds-radius-sm)',
@@ -251,7 +259,8 @@ export default function MilestoneSkillTree({
                           fontWeight: 700
                         }}
                       >
-                        🎯 Điểm yếu bổ trợ: {wid}
+                        <KitIcon name="target" size={12} />
+                        <span>Điểm yếu bổ trợ: {wid}</span>
                       </span>
                     ))}
                   </div>
