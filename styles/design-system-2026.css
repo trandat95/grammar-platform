@@ -437,6 +437,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   padding: 28px 36px;
   box-sizing: border-box;
+  transition: max-width var(--ds-duration-normal, 200ms) var(--ds-ease-default, ease);
+}
+
+.ge-study-shell.is-collapsed .ge-study-main {
+  max-width: 780px;
 }
 
 .ge-lesson-title-clamp {
@@ -537,10 +542,11 @@ h1, h2, h3, h4, h5, h6 {
   .ge-chapter-sidebar {
     position: fixed;
     left: 0;
-    top: var(--ds-header-h);
+    top: calc(var(--ds-header-h, 56px) + 48px);
     width: min(300px, 86vw);
-    height: calc(100vh - var(--ds-header-h));
-    z-index: 220;
+    height: calc(100vh - var(--ds-header-h, 56px) - 48px);
+    overflow-x: hidden;
+    z-index: var(--ds-z-drawer, 220);
     transform: translateX(-105%);
     box-shadow: var(--ds-shadow-lg);
   }
@@ -550,21 +556,23 @@ h1, h2, h3, h4, h5, h6 {
   .ge-drawer-backdrop {
     display: block;
     position: fixed;
-    inset: var(--ds-header-h) 0 0 0;
+    inset: calc(var(--ds-header-h, 56px) + 48px) 0 0 0;
     background: var(--ds-backdrop);
-    z-index: 210;
+    z-index: var(--ds-z-backdrop, 210);
   }
   .ge-mobile-chapter-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 10px 16px;
+    min-height: 48px;
+    box-sizing: border-box;
+    padding: 8px 16px;
     background: var(--ds-accent-bg);
     border-bottom: 1px solid var(--ds-accent-border);
     position: sticky;
-    top: var(--ds-header-h);
-    z-index: 35;
+    top: var(--ds-header-h, 56px);
+    z-index: var(--ds-z-mobile-bar, 225);
   }
   .ge-hide-desktop-toggle {
     display: none !important;
@@ -784,6 +792,7 @@ h1, h2, h3, h4, h5, h6 {
     max-height: 62vh !important;
     overflow-y: auto !important;
     border-radius: 16px !important;
+    z-index: var(--ds-z-dict, 250) !important;
   }
   .ge-vip-matrix-row {
     grid-template-columns: 1fr !important;
@@ -1353,8 +1362,43 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* M4.4A Micro-Interaction: Radio / Option Card */
+.ge-radio-card {
+  transition:
+    transform var(--ds-duration-fast, 120ms) var(--ds-ease-default, ease),
+    border-color var(--ds-duration-fast, 120ms) var(--ds-ease-default, ease),
+    background-color var(--ds-duration-fast, 120ms) var(--ds-ease-default, ease),
+    box-shadow var(--ds-duration-fast, 120ms) var(--ds-ease-default, ease);
+  cursor: pointer;
+}
+
+.ge-radio-card:hover:not(:disabled):not([aria-disabled="true"]) {
+  border-color: var(--ds-accent-border);
+  background-color: var(--ds-card-hover);
+  box-shadow: var(--ds-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.ge-radio-card.is-selected,
+.ge-radio-card[aria-checked="true"],
+.ge-radio-card[aria-pressed="true"] {
+  border-color: var(--ds-accent);
+  background-color: var(--ds-accent-bg);
+  box-shadow: 0 0 0 1px var(--ds-accent);
+}
+
+.ge-radio-card:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+
 /* WCAG 2.3.3 Tôn trọng Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+  .ge-radio-card,
+  .ge-radio-card:hover:not(:disabled):not([aria-disabled="true"]) {
+    transition: none !important;
+    transform: none !important;
+  }
   *,
   *::before,
   *::after {

@@ -25,6 +25,7 @@ import KitIcon from "../components/ui-2026/KitIcon";
 import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
+import QuestionRenderer from "../components/question-engine/QuestionRenderer";
 
 // Milestone 2.11.6: Code-split secondary heavy workspaces & modals out of the initial Homepage JS bundle
 const GrammarVisualization = dynamic(() => import("../components/grammar-visualization/GrammarVisualization"), { ssr: false });
@@ -990,6 +991,29 @@ export default function Home() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [dictEnabled]);
+
+  // M4.4A: Dismiss floating dictionary popup whenever any blocking modal or paywall opens
+  useEffect(() => {
+    if (
+      authModalOpen ||
+      newUserModalOpen ||
+      vocabModalOpen ||
+      smartPaywall?.open ||
+      Boolean(gamificationCelebration) ||
+      stepUpModal?.open ||
+      vipGrantModal?.open
+    ) {
+      setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
+    }
+  }, [
+    authModalOpen,
+    newUserModalOpen,
+    vocabModalOpen,
+    smartPaywall?.open,
+    gamificationCelebration,
+    stepUpModal?.open,
+    vipGrantModal?.open,
+  ]);
 
     // Load user vocabulary on user change
   useEffect(() => {
@@ -3693,7 +3717,7 @@ export default function Home() {
             border: "1px solid var(--ds-accent-border)",
             boxShadow: "var(--ds-shadow-lg)",
             borderRadius: "14px",
-            zIndex: 1300,
+            zIndex: "var(--ds-z-dict, 250)",
             padding: "1rem 1.15rem",
             color: "var(--ds-text)",
             backdropFilter: "blur(12px)",
@@ -6802,188 +6826,42 @@ export default function Home() {
                                 }
 
                                 return (
-                                  <div
+                                  <QuestionRenderer
                                     key={q.id || qIdx}
-                                    style={{
-                                      backgroundColor: "var(--ds-bg-elevated)",
-                                      border: res?.checked
-                                        ? res.isCorrect
-                                          ? "1px solid var(--ds-success)"
-                                          : "1px solid var(--ds-danger)"
-                                        : `1px solid ${T.border}`,
-                                      borderRadius: "6px",
-                                      padding: "1.1rem",
+                                    question={q}
+                                    fallbackType={ex.type}
+                                    displayNumber={q.num || qIdx + 1}
+                                    scope={`study-${selectedChapter?.id || "ch"}-${selectedLesson?.id || "ls"}`}
+                                    value={inputVal}
+                                    onChange={(nextVal) => handleInputChange(q.id, nextVal)}
+                                    onCheck={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, qIdx)}
+                                    onShowAnswer={() => toggleShowAnswer(q.id)}
+                                    isAnswerOpen={Boolean(isAnswerOpen)}
+                                    checkResult={res}
+                                    onListen={(cleanStem) => playWordAudio(cleanStem, null)}
+                                    onRetry={() => {
+                                      handleInputChange(q.id, "");
+                                      setResults((prev) => {
+                                        const next = { ...prev };
+                                        delete next[q.id];
+                                        return next;
+                                      });
+                                      setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }));
                                     }}
-                                  >
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
-                                      <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", fontWeight: "600" }}>
-                                        CÂU {q.num || qIdx + 1}
-                                      </span>
-                                      <span
-                                        style={{
-                                          fontSize: "0.68rem",
-                                          fontFamily: "var(--font-sans)",
-                                          padding: "0.15rem 0.45rem",
-                                          borderRadius: "4px",
-                                          backgroundColor: "var(--ds-bg-elevated)",
-                                          color: "var(--ds-text-secondary)",
-                                          border: `1px solid ${T.border}`,
-                                          fontWeight: "700",
-                                        }}
-                                      >
-                                        {typeInfo.tag}
-                                      </span>
-                                    </div>
-
-                                    {/* Stem */}
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.75rem" }}>
-                                      <div style={{ fontSize: "0.95rem", color: T.text, lineHeight: "1.6" }}>
-                                        {q.stem}
-                                      </div>
-                                      <button
-                                        onClick={() => playWordAudio(q.stem.replace(/\(.*?\)|_.*?_/g, "").trim(), null)}
-                                        title="Nghe phát âm câu hỏi này"
-                                        style={{
-                                          backgroundColor: "var(--ds-card)",
-                                          border: `1px solid ${T.border}`,
-                                          color: "var(--ds-accent)",
-                                          borderRadius: "4px",
-                                          padding: "0.2rem 0.5rem",
-                                          fontSize: "0.72rem",
-                                          fontWeight: "600",
-                                          cursor: "pointer",
-                                          flexShrink: 0,
-                                        }}
-                                      >
-                                        🔊 Nghe câu
-                                      </button>
-                                    </div>
-
-                                    {/* Starter Prompt for Rewriting */}
-                                    {q.starter_prompt && (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          gap: "0.5rem",
-                                          backgroundColor: "var(--ds-warning-bg)",
-                                          border: "1px solid var(--ds-warning-border)",
-                                          padding: "0.45rem 0.75rem",
-                                          borderRadius: "6px",
-                                          fontSize: "0.825rem",
-                                          color: "var(--ds-warning)",
-                                          marginBottom: "0.75rem",
-                                        }}
-                                      >
-                                        <span style={{ color: "var(--ds-warning)", fontSize: "0.75rem", fontWeight: "700" }}>GỢI Ý MỞ ĐẦU:</span>
-                                        <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
-                                      </div>
-                                    )}
-
-                                    {/* Input Row */}
-                                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-                                      <input
-                                        type="text"
-                                        value={inputVal}
-                                        placeholder={q.starter_prompt ? `Tiếp tục câu: "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
-                                        onChange={(e) => handleInputChange(q.id, e.target.value)}
-                                        onKeyDown={(e) => {
-                                          if (e.key === "Enter") checkSingleQuestion(q, ex.instruction_vi || ex.title, questionGlobalIdx);
-                                        }}
-                                        style={{
-                                          flex: 1,
-                                          minWidth: "220px",
-                                          padding: "0.5rem 0.75rem",
-                                          backgroundColor: "var(--ds-card)",
-                                          border: res?.checked
-                                            ? res.isCorrect
-                                              ? "1px solid var(--ds-success)"
-                                              : "1px solid var(--ds-danger)"
-                                            : `1px solid ${T.border}`,
-                                          borderRadius: "5px",
-                                          color: T.text,
-                                          fontSize: "0.875rem",
-                                          outline: "none",
-                                        }}
-                                      />
-
-                                      <button
-                                        onClick={() => checkSingleQuestion(q, ex.instruction_vi || ex.title, qIdx)}
-                                        style={{
-                                          padding: "0.5rem 0.9rem",
-                                          backgroundColor: "var(--ds-btn-primary)",
-                                          border: "1px solid var(--ds-btn-primary)",
-                                          borderRadius: "5px",
-                                          color: "#ffffff",
-                                          fontSize: "0.8rem",
-                                          fontWeight: "600",
-                                          cursor: "pointer",
-                                        }}
-                                      >
-                                        Kiểm tra
-                                      </button>
-
-                                      <button
-                                        onClick={() => toggleShowAnswer(q.id)}
-                                        style={{
-                                          padding: "0.5rem 0.75rem",
-                                          backgroundColor: "var(--ds-card-subtle)",
-                                          border: `1px solid ${T.border}`,
-                                          borderRadius: "5px",
-                                          color: T.textSecondary,
-                                          fontSize: "0.8rem",
-                                          fontWeight: "500",
-                                          cursor: "pointer",
-                                        }}
-                                      >
-                                        {isAnswerOpen ? "Ẩn đáp án" : "Đáp án"}
-                                      </button>
-                                    </div>
-
-                                    {/* Instant Result Message + Adaptive Remedial Recommendation */}
-                                    {res?.checked && (
-                                      <div
-                                        style={{
-                                          marginTop: "0.6rem",
-                                          fontSize: "0.825rem",
-                                          fontWeight: "500",
-                                          color: res.isCorrect ? "var(--ds-success)" : "var(--ds-danger)",
-                                        }}
-                                      >
-                                        {res.feedback}
-                                      </div>
-                                    )}
-
-                                    {res?.checked && !res.isCorrect && activeRemedialMap[q.id] && (
-                                      <RemedialRecommendationCard
-                                        recommendation={activeRemedialMap[q.id]}
-                                        onAccept={handleAcceptRemedial}
-                                        onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }))}
-                                        isLight={isLight}
-                                      />
-                                    )}
-
-                                    {/* Correct Answer Box */}
-                                    {isAnswerOpen && (
-                                      <div
-                                        style={{
-                                          marginTop: "0.75rem",
-                                          padding: "0.75rem 0.95rem",
-                                          backgroundColor: "var(--ds-card-subtle)",
-                                          border: `1px solid ${T.border}`,
-                                          borderRadius: "6px",
-                                        }}
-                                      >
-                                        <div style={{ fontSize: "0.72rem", color: "var(--ds-text-muted)", fontWeight: "600", textTransform: "uppercase" }}>
-                                          Đáp án chính xác:
-                                        </div>
-                                        <div style={{ fontSize: "0.95rem", color: "var(--ds-accent)", fontWeight: "700", marginTop: "0.2rem" }}>
-                                          {q.answers.map((a) => a.correct).join("  /  ")}
-                                        </div>
-                                        {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
-                                      </div>
-                                    )}
-                                  </div>
+                                    renderExplanation={(targetQ) =>
+                                      renderPedagogicalExplanation(targetQ.explanation, targetQ.pedagogy, targetQ)
+                                    }
+                                    renderPostAnswerExtra={(targetQ, checkRes) =>
+                                      checkRes?.checked && !checkRes.isCorrect && activeRemedialMap[targetQ.id] ? (
+                                        <RemedialRecommendationCard
+                                          recommendation={activeRemedialMap[targetQ.id]}
+                                          onAccept={handleAcceptRemedial}
+                                          onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [targetQ.id]: null }))}
+                                          isLight={isLight}
+                                        />
+                                      ) : null
+                                    }
+                                  />
                                 );
                               })}
                             </div>
@@ -7395,42 +7273,34 @@ export default function Home() {
                   const isAnswerShown = quizShowAnswers[q.id];
                   const typeInfo = getQuestionTypeInfo(q.type);
 
-                  return (
-                    <div
-                      key={q.id || idx}
-                      style={{
-                        backgroundColor: T.card,
-                        border: quizSubmitted
-                          ? detail?.isCorrect
-                            ? "1px solid var(--ds-success)"
-                            : "1px solid var(--ds-danger)"
-                          : singleCheck?.checked
-                          ? singleCheck.isCorrect
-                            ? "1px solid var(--ds-success)"
-                            : "1px solid var(--ds-danger)"
-                          : `1px solid ${T.border}`,
-                        borderRadius: "8px",
-                        padding: "1.25rem 1.5rem",
-                        boxShadow: T.shadow,
-                      }}
-                    >
-                      {/* Question meta header */}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, fontWeight: "600" }}>
-                            CÂU {idx + 1} / {activeQuizQuestions.length}
-                          </span>
-                          <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
-                          <span style={{ fontSize: "0.75rem", color: T.textMuted }}>{q.topic_name}</span>
-                        </div>
+                  const effectiveCheckResult =
+                    quizSubmitted && detail
+                      ? {
+                          checked: true,
+                          isCorrect: Boolean(detail.isCorrect),
+                          feedback: detail.isCorrect ? "✓ Chính xác" : "✕ Chưa đúng",
+                        }
+                      : singleCheck;
 
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+                  const showVipTrapTeaser =
+                    currentUser.role !== "VIP" &&
+                    currentUser.role !== "ADMIN" &&
+                    (quizSubmitted || isAnswerShown);
+
+                  return (
+                    <div key={q.id || idx} style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                      {(q.topic_name || q.adaptive_bucket) && (
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", padding: "0 0.25rem" }}>
+                          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, fontWeight: "600" }}>
+                            Câu {idx + 1} / {activeQuizQuestions.length}
+                            {q.topic_name ? ` • ${q.topic_name}` : ""}
+                          </span>
                           {q.adaptive_bucket && (
                             <span
                               style={{
                                 fontSize: "0.66rem",
                                 fontWeight: "700",
-                                padding: "0.15rem 0.45rem",
+                                padding: "0.15rem 0.5rem",
                                 borderRadius: "9999px",
                                 backgroundColor: T.bgElevated,
                                 color: T.accent,
@@ -7440,283 +7310,107 @@ export default function Home() {
                               {q.adaptive_bucket}
                             </span>
                           )}
-                          <span
-                            style={{
-                              fontSize: "0.68rem",
-                              fontFamily: "var(--font-sans)",
-                              padding: "0.15rem 0.45rem",
-                              borderRadius: "4px",
-                              backgroundColor: "var(--ds-bg-elevated)",
-                              color: "var(--ds-text-secondary)",
-                              border: `1px solid ${T.border}`,
-                              fontWeight: "700",
-                            }}
-                          >
-                            {typeInfo.tag}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Explicit Instruction Box */}
-                      {q.instruction && (
-                        <div
-                          style={{
-                            backgroundColor: "var(--ds-accent-bg)",
-                            borderLeft: "4px solid var(--ds-accent)",
-                            border: "1px solid var(--ds-accent-border)",
-                            padding: "0.5rem 0.85rem",
-                            borderRadius: "6px",
-                            marginBottom: "0.85rem",
-                            fontSize: "0.825rem",
-                            color: "var(--ds-accent)",
-                            lineHeight: "1.5",
-                            boxShadow: isLight ? "0 1px 2px rgba(37,99,235,0.05)" : "none",
-                          }}
-                        >
-                          <strong style={{ color: "var(--ds-accent)" }}>Yêu cầu:</strong> {q.instruction}
                         </div>
                       )}
 
-                      {/* Stem */}
-                      <div style={{ fontSize: "0.975rem", color: T.text, lineHeight: "1.6", marginBottom: "0.75rem", fontWeight: "500" }}>
-                        {typeof q.stem === 'string' ? q.stem.replace(/\\_/g, '_') : q.stem}
-                      </div>
-
-                      {/* Starter Prompt Box */}
-                      {q.starter_prompt && (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            backgroundColor: "var(--ds-warning-bg)",
-                            border: "1px solid var(--ds-warning-border)",
-                            padding: "0.45rem 0.75rem",
-                            borderRadius: "6px",
-                            fontSize: "0.825rem",
-                            color: "var(--ds-warning)",
-                            marginBottom: "0.85rem",
-                          }}
-                        >
-                          <span style={{ color: "var(--ds-warning)", fontSize: "0.72rem", fontWeight: "700" }}>BẮT ĐẦU VỚI:</span>
-                          <span style={{ fontWeight: "600" }}>"{q.starter_prompt}..."</span>
-                        </div>
-                      )}
-
-                      {/* Input & Action Buttons */}
-                      <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap", marginTop: "0.85rem" }}>
-                        <input
-                          type="text"
-                          disabled={quizSubmitted}
-                          value={userAns}
-                          placeholder={q.starter_prompt ? `Viết tiếp từ "${q.starter_prompt}..."` : "Nhập câu trả lời..."}
-                          onChange={(e) => handleQuizAnswerChange(q.id, e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && !quizSubmitted) checkSingleQuizQuestion(q);
-                          }}
-                          style={{
-                            flex: 1,
-                            minWidth: "240px",
-                            padding: "0.55rem 0.85rem",
-                            borderRadius: "6px",
-                            border: singleCheck?.checked
-                              ? singleCheck.isCorrect
-                                ? "1px solid var(--ds-success)"
-                                : "1px solid var(--ds-danger)"
-                              : `1px solid ${T.border}`,
-                            fontSize: "0.875rem",
-                            backgroundColor: "var(--ds-card)",
-                            color: T.text,
-                            outline: "none",
-                          }}
-                        />
-
-                        {!quizSubmitted && (
+                      <QuestionRenderer
+                        question={q}
+                        fallbackType={q.type}
+                        displayNumber={idx + 1}
+                        scope="quiz"
+                        value={userAns}
+                        onChange={(nextVal) => handleQuizAnswerChange(q.id, nextVal)}
+                        onCheck={() => checkSingleQuizQuestion(q)}
+                        onShowAnswer={() => toggleQuizShowAnswer(q.id)}
+                        isAnswerOpen={Boolean(quizSubmitted || isAnswerShown)}
+                        checkResult={effectiveCheckResult}
+                        disabled={Boolean(quizSubmitted)}
+                        showCheckButton={!quizSubmitted}
+                        showAnswerButton={!quizSubmitted}
+                        onRetry={
+                          quizSubmitted
+                            ? undefined
+                            : () => {
+                                handleQuizAnswerChange(q.id, "");
+                                setQuizSingleChecks((prev) => {
+                                  const next = { ...prev };
+                                  delete next[q.id];
+                                  return next;
+                                });
+                                setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }));
+                              }
+                        }
+                        renderExplanation={(targetQ) =>
+                          renderPedagogicalExplanation(targetQ.explanation, targetQ.pedagogy, targetQ)
+                        }
+                        renderPostAnswerExtra={(targetQ, checkRes) => (
                           <>
-                            <button
-                              onClick={() => checkSingleQuizQuestion(q)}
-                              style={{
-                                backgroundColor: "var(--ds-bg-elevated)",
-                                color: T.text,
-                                border: `1px solid ${T.border}`,
-                                padding: "0.55rem 1rem",
-                                borderRadius: "6px",
-                                fontSize: "0.8rem",
-                                fontWeight: "600",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Kiểm tra
-                            </button>
-                            <button
-                              onClick={() => toggleQuizShowAnswer(q.id)}
-                              style={{
-                                backgroundColor: "var(--ds-card-subtle)",
-                                color: T.textSecondary,
-                                border: `1px solid ${T.border}`,
-                                padding: "0.55rem 0.85rem",
-                                borderRadius: "6px",
-                                fontSize: "0.8rem",
-                                fontWeight: "500",
-                                cursor: "pointer",
-                              }}
-                            >
-                              {isAnswerShown ? "Ẩn đáp án" : "Xem đáp án"}
-                            </button>
-                          </>
-                        )}
-                      </div>
-
-                      {/* Instant Single Check Feedback */}
-                      {!quizSubmitted && singleCheck?.checked && (
-                        <div
-                          style={{
-                            marginTop: "0.55rem",
-                            fontSize: "0.8rem",
-                            fontWeight: "500",
-                            color: singleCheck.isCorrect ? "var(--ds-success)" : "var(--ds-danger)",
-                          }}
-                        >
-                          {singleCheck.feedback}
-                        </div>
-                      )}
-
-                      {/* Answer Reveal Box */}
-                      {!quizSubmitted && isAnswerShown && (
-                        <div
-                          style={{
-                            marginTop: "0.75rem",
-                            padding: "0.75rem 0.95rem",
-                            backgroundColor: "var(--ds-card-subtle)",
-                            border: `1px solid ${T.border}`,
-                            borderRadius: "6px",
-                          }}
-                        >
-                          <div style={{ fontSize: "0.72rem", color: T.textMuted, fontWeight: "600", textTransform: "uppercase" }}>
-                            Đáp án chính xác:
-                          </div>
-                          <div style={{ fontSize: "0.95rem", color: "var(--ds-accent)", fontWeight: "700", marginTop: "0.2rem" }}>
-                            {q.answers.join("  /  ")}
-                          </div>
-                          {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
-                          {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && (
-                            <div
-                              style={{
-                                marginTop: "0.75rem",
-                                padding: "0.75rem 0.9rem",
-                                borderRadius: "8px",
-                                border: "1px dashed var(--ds-warning)",
-                                backgroundColor: "var(--ds-warning-bg)",
-                                position: "relative",
-                                overflow: "hidden",
-                              }}
-                            >
-                              <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
-                                🔒 PHÂN TÍCH BẪY TƯ DUY &amp; MẸO GIẢI 3 GIÂY (CHỈ DÀNH CHO VIP)
-                              </div>
-                              <div style={{ fontSize: "0.76rem", color: "var(--ds-text-secondary)", marginBottom: "0.45rem" }}>
-                                ⚠️ 82% thí sinh mất điểm ở câu <strong>&ldquo;{q.topic_name}&rdquo;</strong> vì dịch nghĩa từng từ mà bỏ qua dấu hiệu neo ngữ pháp:
-                              </div>
-                              <div style={{ position: "relative", padding: "0.5rem 0.65rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)" }}>
-                                <div style={{ filter: "blur(4.2px)", userSelect: "none", fontSize: "0.78rem", color: "var(--ds-text)", lineHeight: 1.5 }}>
-                                  Mẹo nhận diện siêu tốc: Khóa cụm danh từ đứng sau giới từ và đối chiếu thì ở mệnh đề chính theo công thức [S + Aux + V-pp]...
-                                </div>
-                                <div style={{ marginTop: "0.45rem", textAlign: "right" }}>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      openContextualSmartPaywall("milestone_100_q", {
-                                        title: "Mở Khóa Mẹo Giải 3 Giây & Bẫy Tư Duy AI",
-                                        description: "Xem ngay phân tích bẫy chi tiết của toàn bộ 2.939 câu ngữ pháp & công thức giải nhanh 3 giây.",
-                                      })
-                                    }
-                                    style={{
-                                      padding: "0.35rem 0.75rem",
-                                      borderRadius: "6px",
-                                      border: "none",
-                                      backgroundColor: "var(--ds-btn-warning)",
-                                      color: "#ffffff",
-                                      fontSize: "0.74rem",
-                                      fontWeight: 800,
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    🔓 Mở khóa VIP xem mẹo giải 3s &rarr;
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Post-submission Review Box */}
-                      {quizSubmitted && detail && (
-                        <div
-                          style={{
-                            marginTop: "0.85rem",
-                            padding: "0.75rem 0.95rem",
-                            backgroundColor: detail.isCorrect ? "rgba(16, 185, 129, 0.05)" : "rgba(244, 63, 94, 0.05)",
-                            borderRadius: "6px",
-                            border: `1px solid ${detail.isCorrect ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`,
-                          }}
-                        >
-                          <div style={{ fontSize: "0.8rem", color: detail.isCorrect ? "var(--ds-success)" : "var(--ds-danger)", fontWeight: "600" }}>
-                            {detail.isCorrect ? "✓ Chính xác" : "✕ Chưa đúng"}
-                          </div>
-                          <div style={{ fontSize: "0.825rem", color: "var(--ds-text-secondary)", marginTop: "0.25rem" }}>
-                            Đáp án chuẩn: <strong style={{ color: T.text }}>{q.answers.join(" / ")}</strong>
-                          </div>
-                          {renderPedagogicalExplanation(q.explanation, q.pedagogy, q)}
-                          {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && (
-                            <div
-                              style={{
-                                marginTop: "0.75rem",
-                                padding: "0.75rem 0.9rem",
-                                borderRadius: "8px",
-                                border: "1px dashed var(--ds-warning)",
-                                backgroundColor: "var(--ds-warning-bg)",
-                              }}
-                            >
-                              <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
-                                🔒 BẪY TƯ DUY AI &amp; CÔNG THỨC TRÁNH LẶP LỖI NÀY (VIP)
-                              </div>
-                              <div style={{ filter: "blur(4px)", userSelect: "none", fontSize: "0.76rem", color: "var(--ds-text)", marginBottom: "0.45rem" }}>
-                                Chú ý bẫy đảo ngữ &amp; cụm từ loại dễ nhầm: Đối chiếu ngay cặp câu Sinh Đôi tương ứng trong chuyên đề...
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  openContextualSmartPaywall("milestone_100_q", {
-                                    title: "Mở Khóa Phân Tích Bẫy AI & Luyện Lỗi Sai VIP",
-                                    description: "Xem ngay nguyên nhân gốc rễ khiến bạn sai câu này và mở khóa bộ Câu Sinh Đôi đặc trị lỗi sai.",
-                                  })
-                                }
+                            {showVipTrapTeaser && (
+                              <div
                                 style={{
-                                  padding: "0.35rem 0.75rem",
-                                  borderRadius: "6px",
-                                  border: "none",
-                                  backgroundColor: "var(--ds-btn-warning)",
-                                  color: "#ffffff",
-                                  fontSize: "0.74rem",
-                                  fontWeight: 800,
-                                  cursor: "pointer",
+                                  marginTop: "0.75rem",
+                                  padding: "0.75rem 0.9rem",
+                                  borderRadius: "8px",
+                                  border: "1px dashed var(--ds-warning)",
+                                  backgroundColor: "var(--ds-warning-bg)",
+                                  position: "relative",
+                                  overflow: "hidden",
                                 }}
                               >
-                                🔓 Mở khóa VIP phân tích lỗi này &rarr;
-                              </button>
-                            </div>
-                          )}
-                          {!detail.isCorrect && activeRemedialMap[q.id] && (
-                            <RemedialRecommendationCard
-                              recommendation={activeRemedialMap[q.id]}
-                              onAccept={handleAcceptRemedial}
-                              onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [q.id]: null }))}
-                              isLight={isLight}
-                            />
-                          )}
-                        </div>
-                      )}
+                                <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "var(--ds-warning)", marginBottom: "0.3rem" }}>
+                                  🔒 {quizSubmitted ? "BẪY TƯ DUY AI & CÔNG THỨC TRÁNH LẶP LỖI NÀY (VIP)" : "PHÂN TÍCH BẪY TƯ DUY & MẸO GIẢI 3 GIÂY (CHỈ DÀNH CHO VIP)"}
+                                </div>
+                                {!quizSubmitted && (
+                                  <div style={{ fontSize: "0.76rem", color: "var(--ds-text-secondary)", marginBottom: "0.45rem" }}>
+                                    ⚠️ 82% thí sinh mất điểm ở câu <strong>&ldquo;{targetQ.topic_name}&rdquo;</strong> vì dịch nghĩa từng từ mà bỏ qua dấu hiệu neo ngữ pháp:
+                                  </div>
+                                )}
+                                <div style={{ position: "relative", padding: "0.5rem 0.65rem", borderRadius: "6px", backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)" }}>
+                                  <div style={{ filter: "blur(4.2px)", userSelect: "none", fontSize: "0.78rem", color: "var(--ds-text)", lineHeight: 1.5 }}>
+                                    {quizSubmitted
+                                      ? "Chú ý bẫy đảo ngữ & cụm từ loại dễ nhầm: Đối chiếu ngay cặp câu Sinh Đôi tương ứng trong chuyên đề..."
+                                      : "Mẹo nhận diện siêu tốc: Khóa cụm danh từ đứng sau giới từ và đối chiếu thì ở mệnh đề chính theo công thức [S + Aux + V-pp]..."}
+                                  </div>
+                                  <div style={{ marginTop: "0.45rem", textAlign: "right" }}>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        openContextualSmartPaywall("milestone_100_q", {
+                                          title: quizSubmitted ? "Mở Khóa Phân Tích Bẫy AI & Luyện Lỗi Sai VIP" : "Mở Khóa Mẹo Giải 3 Giây & Bẫy Tư Duy AI",
+                                          description: quizSubmitted
+                                            ? "Xem ngay nguyên nhân gốc rễ khiến bạn sai câu này và mở khóa bộ Câu Sinh Đôi đặc trị lỗi sai."
+                                            : "Xem ngay phân tích bẫy chi tiết của toàn bộ 2.939 câu ngữ pháp & công thức giải nhanh 3 giây.",
+                                        })
+                                      }
+                                      style={{
+                                        padding: "0.35rem 0.75rem",
+                                        borderRadius: "6px",
+                                        border: "none",
+                                        backgroundColor: "var(--ds-btn-warning)",
+                                        color: "#ffffff",
+                                        fontSize: "0.74rem",
+                                        fontWeight: 800,
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {quizSubmitted ? "🔓 Mở khóa VIP phân tích lỗi này →" : "🔓 Mở khóa VIP xem mẹo giải 3s →"}
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {checkRes?.checked && !checkRes.isCorrect && activeRemedialMap[targetQ.id] && (
+                              <RemedialRecommendationCard
+                                recommendation={activeRemedialMap[targetQ.id]}
+                                onAccept={handleAcceptRemedial}
+                                onDismiss={() => setActiveRemedialMap((prev) => ({ ...prev, [targetQ.id]: null }))}
+                                isLight={isLight}
+                              />
+                            )}
+                          </>
+                        )}
+                      />
                     </div>
                   );
                 })}
