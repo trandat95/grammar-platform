@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
 
@@ -213,16 +214,7 @@ export default function GamificationHub({
           border: `1px solid ${T.accentBorder}`,
         }}
       >
-        <img
-          src={BANNER_PATHS.gamification}
-          alt=""
-          aria-hidden="true"
-          width={1440}
-          height={420}
-          loading="lazy"
-          className="ge-hero-banner-bg"
-        />
-        <div className="ge-hero-banner-scrim" aria-hidden="true" />
+        <HeroBannerVisual kind="gamification" webpSrc={BANNER_PATHS.gamification} />
         <div className="ge-hero-banner-content ge-hero-banner-content--safe">
           <div>
             <Badge tone="warning" icon="trophy" isLight={isLight}>

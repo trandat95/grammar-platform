@@ -1,5 +1,6 @@
 import React from "react";
 import { BANNER_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
+import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import { KitIcon } from "../ui-2026/KitIcon";
 
 export default function DiagnosticOnboarding({
@@ -27,6 +28,7 @@ export default function DiagnosticOnboarding({
         }}
       >
         <div
+          className="ge-hero-banner-card"
           style={{
             position: "relative",
             borderRadius: "12px",
@@ -36,15 +38,7 @@ export default function DiagnosticOnboarding({
             border: `1px solid ${T.borderSubtle}`,
           }}
         >
-          <img
-            src={BANNER_PATHS.diagnostic}
-            alt=""
-            aria-hidden="true"
-            width={1440}
-            height={420}
-            className="ge-hero-banner-bg"
-          />
-          <div className="ge-hero-banner-scrim" aria-hidden="true" />
+          <HeroBannerVisual kind="diagnostic" webpSrc={BANNER_PATHS.diagnostic} />
           <div className="ge-hero-banner-content ge-hero-banner-content--safe">
             <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
               <img

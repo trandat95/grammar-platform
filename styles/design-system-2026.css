@@ -397,17 +397,48 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--ds-shadow-sm);
 }
 
-/* 2026 Hero Banner Artwork Container */
+.ge-hero-banner-card-placeholder { display: none; }
+/* Theme-aware Hero Surface & Integrated Artwork Modes */
 .ge-hero-banner-card {
   position: relative;
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid var(--ds-card-border);
-  background: var(--ds-card);
+  background: linear-gradient(135deg, #ffffff 0%, #f1f6ff 100%);
   box-shadow: var(--ds-shadow-md);
 }
 
-/* Unified Blended Hero Backdrop (Desktop & Mobile seamless integration) */
+[data-theme="dark"] .ge-hero-banner-card {
+  background: var(--ds-card);
+}
+
+.ge-hero-dark-only {
+  display: none !important;
+}
+
+.ge-hero-light-only {
+  display: flex !important;
+}
+
+[data-theme="dark"] .ge-hero-dark-only {
+  display: block !important;
+}
+
+[data-theme="dark"] .ge-hero-light-only {
+  display: none !important;
+}
+
+.ge-hero-light-vector {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 0.75rem;
+}
+
+/* Unified Blended Hero Backdrop (Dark Mode Glowing WebP) */
 .ge-hero-banner-bg {
   position: absolute;
   inset: 0;
@@ -436,24 +467,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .ge-hero-banner-content--safe {
-  max-width: min(700px, 66%);
+  max-width: min(700px, 65%);
 }
 
-/* Integrated Feature Action Cards (Text + Vector Artwork Blended Inside Surface) */
+/* Integrated Feature Action Cards (Cohesive 2-Zone Flex Row: Crisp Text + Integrated Vector Motif) */
 .ge-feature-card {
   position: relative;
   overflow: hidden;
   text-align: left;
-  padding: 1.05rem 1.15rem;
+  padding: 0.95rem 1.05rem;
   border-radius: 14px;
   background: var(--ds-card);
   border: 1px solid var(--ds-border);
   box-shadow: var(--ds-shadow-sm);
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  min-height: 144px;
+  gap: 0.75rem;
+  min-height: 122px;
   transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
 }
 
@@ -477,39 +510,36 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--ds-success-border);
 }
 
-.ge-feature-card-art {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 38%, rgba(0, 0, 0, 0.94) 68%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 38%, rgba(0, 0, 0, 0.94) 68%, #000 100%);
-}
-
-.ge-feature-card-art img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  object-position: right center;
-}
-
 .ge-feature-card-body {
-  position: relative;
-  z-index: 2;
-  max-width: 60%;
-  flex: 1;
+  flex: 1 1 0%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.ge-feature-card-visual {
+  flex: 0 0 98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+}
+
+.ge-fc-svg {
+  display: block;
+  width: 98px;
+  height: 82px;
 }
 
 @media (max-width: 899px) {
   .ge-hero-banner-content--safe {
-    max-width: 78%;
+    max-width: 76%;
   }
 }
 
@@ -1524,22 +1554,34 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--ds-banner-scrim-mobile);
   }
 
+  .ge-hero-light-vector {
+    opacity: 0.36;
+    padding-right: 0.25rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 54%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 54%, #000 100%);
+  }
+
   .ge-hero-banner-content--safe {
     max-width: 100%;
   }
 
   .ge-feature-card {
-    min-height: 108px;
-    padding: 0.85rem 0.95rem;
-  }
-
-  .ge-feature-card-art {
-    opacity: 0.95;
+    min-height: 98px;
+    padding: 0.82rem 0.9rem;
+    gap: 0.55rem;
   }
 
   .ge-feature-card-body {
-    max-width: 66%;
-    gap: 0.4rem;
+    gap: 0.38rem;
+  }
+
+  .ge-feature-card-visual {
+    flex: 0 0 82px;
+  }
+
+  .ge-fc-svg {
+    width: 82px;
+    height: 68px;
   }
 
   .ge-hero-banner-card h1 {

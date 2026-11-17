@@ -3,6 +3,7 @@ import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS, MASCOT_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
+import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 
 const FEATURE_VISUAL_META = {
@@ -444,15 +445,7 @@ export default function MonetizationHub({
           padding: "1.25rem 1.4rem",
         }}
       >
-        <img
-          src={BANNER_PATHS.vip}
-          alt=""
-          aria-hidden="true"
-          width={1440}
-          height={420}
-          className="ge-hero-banner-bg"
-        />
-        <div className="ge-hero-banner-scrim" aria-hidden="true" />
+        <HeroBannerVisual kind="vip" webpSrc={BANNER_PATHS.vip} />
         <div className="ge-hero-banner-content ge-hero-banner-content--safe" style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
             <Badge tone={hasVip ? "success" : "accent"} icon={hasVip ? "crown" : "user"} isLight={isLight}>

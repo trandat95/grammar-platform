@@ -22,7 +22,8 @@ import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
 import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
-import { BANNER_PATHS, CARD_ART_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
+import { FeatureCardVisual, HeroBannerVisual } from "../components/ui-2026/EditorialArtwork";
+import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import QuestionRenderer from "../components/question-engine/QuestionRenderer";
@@ -5548,15 +5549,7 @@ export default function Home() {
                   marginBottom: "1.1rem",
                 }}
               >
-                <img
-                  src={BANNER_PATHS.dashboard}
-                  alt=""
-                  aria-hidden="true"
-                  width={1440}
-                  height={420}
-                  className="ge-hero-banner-bg"
-                />
-                <div className="ge-hero-banner-scrim" aria-hidden="true" />
+                <HeroBannerVisual kind="dashboard" webpSrc={BANNER_PATHS.dashboard} />
                 <div className="ge-hero-banner-content ge-hero-banner-content--safe" style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
                     <img
@@ -5681,7 +5674,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 2. ACTION-FIRST CORE HUB (3 Seamless Blended Visual + Content Cards) */}
+              {/* 2. ACTION-FIRST CORE HUB (3 Seamless Theme-Aware Illustrated Feature Cards) */}
               <div
                 style={{
                   display: "grid",
@@ -5696,14 +5689,6 @@ export default function Home() {
                   onClick={startRecommendedLesson}
                   className="ds-focusable ge-feature-card ge-feature-card--grammar"
                 >
-                  <div className="ge-feature-card-art" aria-hidden="true">
-                    <img
-                      src={CARD_ART_PATHS.grammar}
-                      alt=""
-                      width={300}
-                      height={180}
-                    />
-                  </div>
                   <div className="ge-feature-card-body">
                     <div>
                       <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
@@ -5718,6 +5703,9 @@ export default function Home() {
                       Vào học ngay →
                     </div>
                   </div>
+                  <div className="ge-feature-card-visual">
+                    <FeatureCardVisual kind="grammar" />
+                  </div>
                 </button>
 
                 {/* Core Action 2: 30-Question Diagnostic Test */}
@@ -5726,14 +5714,6 @@ export default function Home() {
                   onClick={() => setCurrentView("diagnostic")}
                   className="ds-focusable ge-feature-card ge-feature-card--diagnostic"
                 >
-                  <div className="ge-feature-card-art" aria-hidden="true">
-                    <img
-                      src={CARD_ART_PATHS.diagnostic}
-                      alt=""
-                      width={300}
-                      height={180}
-                    />
-                  </div>
                   <div className="ge-feature-card-body">
                     <div>
                       <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
@@ -5748,6 +5728,9 @@ export default function Home() {
                       Làm bài test 15p →
                     </div>
                   </div>
+                  <div className="ge-feature-card-visual">
+                    <FeatureCardVisual kind="diagnostic" />
+                  </div>
                 </button>
 
                 {/* Core Action 3: TOEIC 2026 Hub */}
@@ -5758,14 +5741,6 @@ export default function Home() {
                   }}
                   className="ds-focusable ge-feature-card ge-feature-card--toeic"
                 >
-                  <div className="ge-feature-card-art" aria-hidden="true">
-                    <img
-                      src={CARD_ART_PATHS.toeic}
-                      alt=""
-                      width={300}
-                      height={180}
-                    />
-                  </div>
                   <div className="ge-feature-card-body">
                     <div>
                       <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
@@ -5779,6 +5754,9 @@ export default function Home() {
                     <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-success)" }}>
                       Mở TOEIC Hub →
                     </div>
+                  </div>
+                  <div className="ge-feature-card-visual">
+                    <FeatureCardVisual kind="toeic" />
                   </div>
                 </button>
               </div>
