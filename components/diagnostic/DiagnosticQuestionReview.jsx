@@ -41,7 +41,7 @@ export default function DiagnosticQuestionReview({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 9999,
+        zIndex: "var(--ds-z-modal, 1200)",
         padding: "1rem",
       }}
     >
@@ -119,7 +119,7 @@ export default function DiagnosticQuestionReview({
               fontWeight: 600,
               cursor: "pointer",
               backgroundColor: filterMode === "ALL" ? "var(--ds-btn-primary)" : "var(--ds-bg-elevated)",
-              color: filterMode === "ALL" ? "#ffffff" : T.text,
+              color: filterMode === "ALL" ? "var(--ds-text-on-accent)" : T.text,
               border: "none",
             }}
           >
@@ -134,8 +134,8 @@ export default function DiagnosticQuestionReview({
               fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
-              backgroundColor: filterMode === "INCORRECT" ? T.danger : "var(--ds-danger-bg)",
-              color: filterMode === "INCORRECT" ? "#ffffff" : "var(--ds-danger)",
+              backgroundColor: filterMode === "INCORRECT" ? "var(--ds-btn-danger)" : "var(--ds-danger-bg)",
+              color: filterMode === "INCORRECT" ? "var(--ds-text-on-accent)" : "var(--ds-danger)",
               border: "none",
             }}
           >
@@ -150,8 +150,8 @@ export default function DiagnosticQuestionReview({
               fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
-              backgroundColor: filterMode === "CORRECT" ? T.success : "var(--ds-success-bg)",
-              color: filterMode === "CORRECT" ? "#ffffff" : "var(--ds-success)",
+              backgroundColor: filterMode === "CORRECT" ? "var(--ds-btn-success)" : "var(--ds-success-bg)",
+              color: filterMode === "CORRECT" ? "var(--ds-text-on-accent)" : "var(--ds-success)",
               border: "none",
             }}
           >

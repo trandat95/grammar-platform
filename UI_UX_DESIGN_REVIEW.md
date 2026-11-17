@@ -45,7 +45,7 @@
 
 ### 1.2 Thống kê Độ dài Văn bản Thực tế (Text Envelope — Đo từ JSON)
 
-> **Cảnh báo thiết kế quan trọng:** Toàn bộ **2,939 câu hỏi** trong ngân hàng luyện tập (`quiz_bank.json` & bài tập chương) là dạng **tự luận ngắn / điền từ / viết lại câu (`has choices/options = 0`)**; CHỈ CÓ bài **Chẩn đoán đầu vào 30 câu (`DiagnosticTestSession`)** sử dụng trắc nghiệm **4 lựa chọn A / B / C / D**.
+> **Cảnh báo thiết kế quan trọng:** Toàn bộ **`2,939` câu hỏi** trong `data/ui/quiz_bank.json` (trong đó bao gồm `507` câu bài tập chương của `data/ui/preview_data.json` — không cộng dồn hai tập) đa phần là tự luận ngắn / điền từ / viết lại câu; riêng nhóm `MULTIPLE_CHOICE` có **`151` câu** trong `quiz_bank.json` (**`148` câu** nhúng lựa chọn `(opt1/opt2)` ngay trong `stem`, `3` câu ngoại lệ), và bài **Chẩn đoán đầu vào 30 câu (`DiagnosticTestSession`)** dùng trắc nghiệm **4 lựa chọn A / B / C / D**.
 
 | Thành phần Nội dung | Tổng số | Min | Trung bình | P95 (95%) | Max | Lưu ý Thiết kế UI |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
@@ -62,7 +62,9 @@
 | Ví dụ song ngữ (`examples`) | 639 | — | — | — | — | Cặp câu EN + VN + nút 🔊 nghe phát âm |
 | Tóm tắt nhanh (`cheatSheet`) | 13 | — | — | — | — | Hiện có ở **13/53 bài** (công thức `(+)/(-)/(?)`, timeline, từ nhận biết) |
 
-- **9 loại bài tập trong dữ liệu:** `FILL_IN_THE_BLANKS` (19), `SENTENCE_TRANSFORMATION` (10), `REWRITE_SENTENCES` (7), `MULTIPLE_CHOICE` (5), `MATCHING` (4), `COMPLETE_SENTENCES` (3), `TRANSLATION` (1), `WORD_FORMATION` (1), `SHORT_ANSWER` (1). Tất cả hiện dùng chung ô `<input type="text">` nhập câu trả lời + phím `Enter` chấm điểm.
+| **Lưu ý Đồng bộ `BRAND-UX-V3.1`:** Tài liệu này đã được hiệu đính các số liệu thực tế trên `main` (`FREE_QUESTIONS_PER_EXERCISE = 4`, `0` ngày dùng thử, thanh toán **SePay VA + Dynamic VietQR**, `AppShell2026`, `FocusTrapModal2026`, `148` câu `MULTIPLE_CHOICE` inline). Mọi đặc tả thiết kế & kiểm định hiện hành tuân theo **[`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md)**. |
+
+- **9 loại bài tập trong dữ liệu:** `FILL_IN_THE_BLANKS` (19), `SENTENCE_TRANSFORMATION` (10), `REWRITE_SENTENCES` (7), `MULTIPLE_CHOICE` (5), `MATCHING` (4), `COMPLETE_SENTENCES` (3), `TRANSLATION` (1), `WORD_FORMATION` (1), `SHORT_ANSWER` (1). Các câu tự luận/nhiều ô trống dùng `<input type="text">` + `Enter`; `148` câu `MULTIPLE_CHOICE` inline hợp lệ được nâng cấp lên Radio Cards tại `M4.4A`.
 
 ---
 
@@ -75,8 +77,8 @@
 | Lý thuyết 12 Chương / 53 Bài học + 8 Mô hình Trực quan | Toàn quyền | Toàn quyền | Toàn quyền | Toàn quyền |
 | Click tra từ điển Anh–Việt + IPA + Phát âm (`#dict-popup`) | Toàn quyền | Toàn quyền | Toàn quyền | Toàn quyền |
 | Lưu Sổ từ vựng & Sổ tay câu sai | Chỉ `localStorage` | Sync Cloud Multi-Device | Sync Cloud Multi-Device | Sync Cloud |
-| Bài tập Thực hành trong 12 Chương | Giới hạn `freeExerciseLimit` (mặc định **10 câu/chương**), câu 11+ hiện thẻ khóa | Giới hạn **10 câu/chương**, câu 11+ hiện thẻ khóa + CTA Smart Paywall | **Không giới hạn** (2,939 câu) | Không giới hạn |
-| Quiz Engine (50 câu) & Đề Thích Ứng `50/30/20` | Giới hạn `freeDailyQuizLimit` (**2 đề/ngày**) | Giới hạn **2 đề/ngày**; vượt mức hiện Banner khóa đỏ | **Không giới hạn** | Không giới hạn |
+| Bài tập Thực hành trong 12 Chương | Giới hạn `FREE_QUESTIONS_PER_EXERCISE` (**4 câu đầu mỗi bài tập**), câu 5+ hiện thẻ khóa | Giới hạn **4 câu/bài tập**, câu 5+ hiện thẻ khóa + CTA Smart Paywall | **Không giới hạn** (2,939 câu) | Không giới hạn |
+| Quiz Engine (50 câu) & Đề Thích Ứng `50/30/20` | Giới hạn lượt FREE/ngày; hết lượt hiện Banner khóa | Giới hạn lượt trộn/ngày (`3` lượt free); vượt mức hiện Banner khóa | **Không giới hạn** | Không giới hạn |
 | Chẩn đoán 30 câu + Lộ trình 4 tuần + Knowledge Graph | Xem & thi thử (lưu local) | Lưu Server + Cooldown `7` ngày | Toàn quyền + AI Study Coach | Toàn quyền |
 | Xuất Báo cáo Năng lực (`export-report`) | Khóa (API trả HTTP `403`) | Khóa (hiển thị Paywall) | Tải JSON/Báo cáo trực tiếp | Toàn quyền |
 | Tab `🏆 Thành tích` (XP, Challenge, Badge, Leaderboard) | Chế độ Preview (Banner nhắc đăng nhập) | Tham gia đầy đủ (XP thật trên Server) | Tham gia đầy đủ | Tham gia đầy đủ |
@@ -87,7 +89,7 @@
 Bên thứ 3 **không được phép** thiết kế các pattern vi phạm 4 nguyên tắc sau:
 1. **FTC Anti-Dark-Pattern (Bắt buộc trên Paywall & VIP Hub):**
    - **CẤM** đồng hồ đếm ngược giả, số lượng người đang xem giả, thông báo khan hiếm ảo, hoặc câu hù dọa *"Bạn sẽ mất hết chuỗi/điểm nếu không mua VIP"*.
-   - **BẮT BUỘC** hiển thị rõ giá sau dùng thử (ví dụ: *99,000đ/tháng hoặc 699,000đ/năm*), chiến dịch giảm giá có ngày kết thúc thực từ DB, và luồng **Hủy VIP minh bạch trong 2 chạm** kèm cam kết giữ 100% XP, Streak & Sổ tay câu sai.
+   - **BẮT BUỘC** hiển thị rõ giá niêm yết (*99,000đ/tháng, 249,000đ/quý, 699,000đ/năm, 1,990,000đ/trọn đời — đã gỡ bỏ hoàn toàn dùng thử 7 ngày*), chiến dịch giảm giá có ngày kết thúc thực từ DB, thanh toán qua **SePay VA + Dynamic VietQR**, và luồng **Hủy VIP minh bạch trong 2 chạm** kèm cam kết giữ 100% XP, Streak & Sổ tay câu sai.
    - **CẤM** chen ngang Smart Paywall khi người dùng đang làm dở bài tập miễn phí (`NO_INTERRUPT_MID_FREE_EXERCISE`), và phải tôn trọng giới hạn tần suất (`daily_cap: 2/ngày`, cooldown `60 phút` sau khi dismiss).
 2. **Server-Authoritative Gamification & Anti-Farming (Minh bạch cho User):**
    - Server kiểm soát XP: không cộng điểm khi lặp lại câu đã `Mastered`, áp dụng **6 yếu tố Mastery** (*Accuracy, Consistency, Retention, Difficulty, Recency, Topic Coverage*) và **Suy giảm trí nhớ** (`-5%/tuần` nếu quá hạn ôn tập > 14 ngày). Giao diện cần truyền đạt rõ *tại sao* điểm thành thạo tăng/giảm.
@@ -316,10 +318,10 @@ Chứa **4 màn hình con chuyển đổi theo state `diagnosticMode`**:
 ```
 
 - **Chi tiết Tab 2 (`Bài tập thực hành`) bên trong Study View:**
-  - Trên cùng có **Status Banner**: nếu `VIP` hiện nền vàng nhạt *"Toàn quyền 2,939 câu"*; nếu `FREE` hiện nền xanh *"Tối đa 10 câu đầu mỗi chuyên đề"* + nút `Nâng cấp VIP ngay ⭐`.
+  - Trên cùng có **Status Banner**: nếu `VIP` hiện nền vàng nhạt *"Toàn quyền 2,939 câu"*; nếu `FREE` hiện nền xanh *"Được làm thử 4 câu đầu mỗi bài tập (Exercise)"* + nút `Nâng cấp VIP ngay ⭐`.
   - Mỗi Exercise Group card (`EXERCISE I`, tiêu đề VN/EN, nút `Kiểm tra toàn bộ` + `Làm lại`) liệt kê từng câu hỏi:
-    - **Câu `<= 10` (hoặc tài khoản `VIP`):** Card câu hỏi gồm Số câu, Badge loại câu (`typeInfo.tag`), nút **`🔊 Nghe câu`**, hộp vàng **`GỢI Ý MỞ ĐẦU:`** (nếu có `starter_prompt`), ô `<input type="text">` nhập đáp án + nút `Kiểm tra` / `Xem đáp án` + **`StructuredExplanation`** (5 bước sư phạm + nút báo lỗi) + **`RemedialRecommendationCard`** nếu trả lời sai.
-    - **Câu `>= 11` (chỉ tài khoản `FREE`/`guest`):** Thay toàn bộ nội dung câu hỏi bằng Card khóa nét đứt (`border: 1px dashed T.warningBorder`), tiêu đề `🔒 Câu N: Nội dung khóa dành riêng cho Thành viên VIP` + nút CTA `Nâng cấp VIP ngay ➔` mở `SmartPaywallModal`.
+    - **Câu `1..4` (hoặc tài khoản `VIP`):** Card câu hỏi gồm Số câu, Badge loại câu (`typeInfo.tag`), nút **`🔊 Nghe câu`**, hộp vàng **`GỢI Ý MỞ ĐẦU:`** (nếu có `starter_prompt`), ô nhập đáp án (hoặc Radio Cards cho `MULTIPLE_CHOICE`) + nút `Kiểm tra` / `Xem đáp án` + **`StructuredExplanation`** (5 bước sư phạm + nút báo lỗi) + **`RemedialRecommendationCard`** nếu trả lời sai.
+    - **Câu `5+` (chỉ tài khoản `FREE`/`guest`):** Thay toàn bộ nội dung câu hỏi bằng Card khóa nét đứt (`border: 1px dashed T.warningBorder`), tiêu đề `🔒 Đã hoàn thành 4/4 câu dùng thử` + nút CTA `Nâng cấp VIP ngay ➔` mở `SmartPaywallModal`.
 
 - **Chi tiết 8 Mô hình Trực quan hóa Ngữ pháp (`GrammarVisualization.jsx`):**
   Container có Header (Icon + Tên mô hình + Badge + Mô tả), nút **`Mở rộng / Thu gọn chiều cao`** (`VisualizationControls`), công tắc ẩn/hiện khối (`Thu gọn / Mở sơ đồ`), chú thích (`VisualizationLegend`), và tự động chọn đúng mô hình theo bài học đang mở:
@@ -378,11 +380,11 @@ Chứa **4 màn hình con chuyển đổi theo state `diagnosticMode`**:
   2. **Ethical Verified Campaigns Strip:** Tối đa 2 banner chiến dịch khuyến mãi đang chạy kèm **ngày kết thúc thực tế** (`ends_at`).
   3. **Grid 4 Gói Subscription (`minmax(225px, 1fr)`):**
      - `VIP_MONTHLY` (`99,000đ`), `VIP_QUARTERLY` (`249,000đ`), `VIP_YEARLY` (`699,000đ` — Recommended, viền nổi `2px T.accent`), `VIP_LIFETIME` (`1,990,000đ`).
-     - Mỗi card hiển thị Badge, Tên gói, Giá niêm yết + Giá gạch ngang (nếu có), Giá quy đổi/tháng, Số tiền tiết kiệm thực, nút `Chọn gói VIP` và nút phụ `🎁 Dùng thử 7 ngày miễn phí` (nếu chưa từng dùng trial).
-  4. **`📊 So sánh Quyền lợi FREE vs VIP`:** Bảng 3 cột (`1.6fr 0.7fr 0.8fr`) so từng tính năng: `Free: Giới hạn (N) / 🔒 Khóa` vs `✅ VIP: Không giới hạn`.
+     - Mỗi card hiển thị Badge, Tên gói, Giá niêm yết + Giá gạch ngang (nếu có), Giá quy đổi/tháng, Số tiền tiết kiệm thực, nút `Chọn gói VIP` (*không có nút dùng thử 7 ngày — đã gỡ bỏ ở Migration `011`*).
+  4. **`📊 So sánh Quyền lợi FREE vs VIP`:** Bảng 3 cột (`1.6fr 0.7fr 0.8fr`) so từng tính năng kèm minh họa `free-tier-showcase.svg` & `vip-tier-showcase.svg`: `Free: 4 câu/bài tập / 🔒 Khóa` vs `✅ VIP: Không giới hạn`.
   5. **Bottom Split (`minmax(300px, 1fr)`):** *Trái:* `🧾 Lịch sử Giao dịch Thanh toán` (`maxHeight: 210px`); *Phải:* `🔔 Cài đặt Thông báo & Quyền Người tiêu dùng` (`Switch 1-Click Unsubscribe` + cam kết idempotency/bảo lưu).
   6. **2 Modal `<Modal>` đi kèm:**
-     - *Checkout Modal (`maxWidth: 520px`):* Tóm tắt giá gói + chọn cổng thanh toán (`VNPay / MoMo / Stripe`) + ô nhập mã giảm giá (`WELCOME15`, `STUDENT20`) + nút `Áp dụng` tính giá real-time + `Xác nhận Thanh toán VIP ➔`.
+     - *Checkout Modal (`maxWidth: 520px`):* Tóm tắt giá gói + thanh toán **SePay VA & Dynamic VietQR (`qr.sepay.vn/img`)** (tự động kiểm tra trạng thái 3s) + ô nhập mã giảm giá (`WELCOME15`, `STUDENT20`) + nút `Áp dụng` tính giá real-time.
      - *Cancel VIP Modal (`maxWidth: 480px`):* Luồng hủy minh bạch **2 chạm**, Alert cam kết giữ nguyên 100% XP/Streak/Sổ tay, ô lý do hủy tùy chọn, nút `Giữ lại gói VIP` và `Xác nhận Hủy VIP ngay`.
 
 ---

@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-11-17T03:29:01.530Z",
+  "baselineCommit": "cfd4d36",
+  "counts": {
+    "chapters": 12,
+    "lessons": 53,
+    "exercises": 51,
+    "previewQuestions": 507,
+    "previewMC": 49,
+    "previewMCInline": 48,
+    "quizBankQuestions": 2939,
+    "quizBankMC": 151,
+    "quizBankMCInline": 148
+  },
+  "answersChecksum": {
+    "preview": "a01baad9e56afb62057a2f047f8f41af99427b10792800660ab475a603c2df0d",
+    "quizBank": "5aa414d10a1863ac35ab51d7412ee964f9c74b9c41b4ba9d034dd566ef6509e7"
+  },
+  "files": {
+    "data\\grammar-visualizations\\comparisons.data.js": {
+      "sha256": "d1c9d53266bc0d4aa503112dd7126f0ebee905f2cca2e32863c6dc580e1cd565",
+      "bytes": 6655
+    },
+    "data\\grammar-visualizations\\conditionals.data.js": {
+      "sha256": "a78917fed105fb25b367063f75240276ff4bcf16244a011953a851cd63dd2c2d",
+      "bytes": 7709
+    },
+    "data\\grammar-visualizations\\modal-verbs.data.js": {
+      "sha256": "55dd10cca8fbb6443f8fcd8f06c555c677a9eb2e45ec48d794cbd13ed92953bb",
+      "bytes": 9088
+    },
+    "data\\grammar-visualizations\\passive-voice.data.js": {
+      "sha256": "298f27db2e77902b7dbafec6c2af08a14f9ce41113afe8e39e494af6f6ec47dd",
+      "bytes": 6691
+    },
+    "data\\grammar-visualizations\\relative-clauses.data.js": {
+      "sha256": "685caae1f028a361f184cc00940852749969143f55f2400ca7515b40fcbb0d1d",
+      "bytes": 9484
+    },
+    "data\\grammar-visualizations\\reported-speech.data.js": {
+      "sha256": "55d902175d51632b5ed288058960529716819ae1edd353085e8fea5e91dcf8a6",
+      "bytes": 6365
+    },
+    "data\\grammar-visualizations\\tenses.data.js": {
+      "sha256": "65e2f6478d52bedbcbae82142692f9fc9318e642a56a6dd3c5b7e2aec4c929b3",
+      "bytes": 15502
+    },
+    "data\\grammar-visualizations\\word-forms.data.js": {
+      "sha256": "9de0763586d0ae4abb69779210319139566000a6b371ca9280ec539fc1742be3",
+      "bytes": 8642
+    },
+    "data\\toeic\\database_audit_report.json": {
+      "sha256": "c7a1f4ee6e40a293c06c33677742063de876c4472b625c7809d7f8babe5887c5",
+      "bytes": 1369
+    },
+    "data\\toeic\\error_pattern_catalog.json": {
+      "sha256": "050c3a0807d0d89429ac9ec095f58fd0b361c16155d2950c60d9d0e5e2ad2620",
+      "bytes": 8044
+    },
+    "data\\toeic\\ets_toeic_ai_grammar_master.json": {
+      "sha256": "590b057f9a0457a96803918120d1586021960a02890e88ba46504ff2e7936043",
+      "bytes": 7879645
+    },
+    "data\\toeic\\grammar_taxonomy.json": {
+      "sha256": "45659730bdac2e7f193914cfe1d86afd4655db4243e86746237ff385c90bf2ed",
+      "bytes": 21829
+    },
+    "data\\toeic\\milestone_templates.json": {
+      "sha256": "5e443e1392a90235c6c8a6e1b954f02cccc6f5293b2c42cff8781ebcf83b4ee4",
+      "bytes": 5191
+    },
+    "data\\ui\\preview_data.json": {
+      "sha256": "4e67dd3b9848b75c74b3b1aaa059677ade99a4891e0d1d161e47516659249582",
+      "bytes": 1425308
+    },
+    "data\\ui\\quiz_bank.json": {
+      "sha256": "d61cfa7c388e2cf8e9588f9c5cf05600d05bac26684f3a070cf4e4e83fb028ec",
+      "bytes": 3779455
+    }
+  }
+}

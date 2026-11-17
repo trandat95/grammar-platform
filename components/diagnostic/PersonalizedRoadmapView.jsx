@@ -62,9 +62,7 @@ export default function PersonalizedRoadmapView({
       {/* Roadmap Header Card */}
       <div
         style={{
-          background: isLight
-            ? "linear-gradient(135deg, #ffffff 0%, var(--ds-success-bg) 100%)"
-            : "linear-gradient(135deg, var(--ds-bg-elevated) 0%, var(--ds-success-bg) 100%)",
+          background: "linear-gradient(135deg, var(--ds-card) 0%, var(--ds-success-bg) 100%)",
           borderRadius: "1.25rem",
           padding: "2.25rem",
           border: `1px solid ${"var(--ds-success-border)"}`,
@@ -223,7 +221,7 @@ export default function PersonalizedRoadmapView({
             fontWeight: 700,
             cursor: "pointer",
             backgroundColor: activeWeekTab === "all" ? "var(--ds-btn-primary)" : "var(--ds-card)",
-            color: activeWeekTab === "all" ? "#ffffff" : T.text,
+            color: activeWeekTab === "all" ? "var(--ds-text-on-accent)" : T.text,
             border: `1px solid ${activeWeekTab === "all" ? "var(--ds-btn-primary)" : T.borderSubtle}`,
             whiteSpace: "nowrap",
           }}
@@ -242,7 +240,7 @@ export default function PersonalizedRoadmapView({
               fontWeight: 700,
               cursor: "pointer",
               backgroundColor: activeWeekTab === w.week_number ? "var(--ds-btn-primary)" : "var(--ds-card)",
-              color: activeWeekTab === w.week_number ? "#ffffff" : T.text,
+              color: activeWeekTab === w.week_number ? "var(--ds-text-on-accent)" : T.text,
               border: `1px solid ${activeWeekTab === w.week_number ? "var(--ds-btn-primary)" : T.borderSubtle}`,
               whiteSpace: "nowrap",
             }}
@@ -468,8 +466,8 @@ export default function PersonalizedRoadmapView({
                             style={{
                               padding: "0.35rem 0.85rem",
                               borderRadius: "0.45rem",
-                              backgroundColor: T.success,
-                              color: "#ffffff",
+                              backgroundColor: "var(--ds-btn-success)",
+                              color: "var(--ds-text-on-accent)",
                               fontSize: "0.8rem",
                               fontWeight: 700,
                               border: "none",
@@ -485,7 +483,7 @@ export default function PersonalizedRoadmapView({
                               padding: "0.35rem 0.85rem",
                               borderRadius: "0.45rem",
                               backgroundColor: "var(--ds-btn-primary)",
-                              color: "#ffffff",
+                              color: "var(--ds-text-on-accent)",
                               fontSize: "0.8rem",
                               fontWeight: 700,
                               border: "none",

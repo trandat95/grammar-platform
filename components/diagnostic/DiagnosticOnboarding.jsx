@@ -163,7 +163,7 @@ export default function DiagnosticOnboarding({
                 padding: "0.85rem 1.8rem",
                 borderRadius: "0.75rem",
                 backgroundColor: "var(--ds-btn-primary)",
-                color: "#ffffff",
+                color: "var(--ds-text-on-accent)",
                 fontSize: "1rem",
                 fontWeight: 700,
                 border: "none",

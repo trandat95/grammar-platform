@@ -60,9 +60,7 @@ export default function DiagnosticAnalysisDashboard({
       {/* Hero Result Banner */}
       <div
         style={{
-          background: isLight
-            ? "linear-gradient(135deg, #ffffff 0%, var(--ds-accent-bg) 100%)"
-            : "linear-gradient(135deg, var(--ds-bg-elevated) 0%, var(--ds-accent-bg) 100%)",
+          background: "linear-gradient(135deg, var(--ds-card) 0%, var(--ds-accent-bg) 100%)",
           borderRadius: "1.25rem",
           padding: "2.5rem",
           border: `1px solid ${"var(--ds-accent-border)"}`,
@@ -268,7 +266,7 @@ export default function DiagnosticAnalysisDashboard({
             padding: "0.85rem 1.75rem",
             borderRadius: "0.75rem",
             backgroundColor: "var(--ds-btn-primary)",
-            color: "#ffffff",
+            color: "var(--ds-text-on-accent)",
             fontSize: "0.95rem",
             fontWeight: 700,
             border: "none",

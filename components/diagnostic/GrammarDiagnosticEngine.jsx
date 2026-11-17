@@ -346,7 +346,7 @@ export default function GrammarDiagnosticEngine({
                   fontWeight: 700,
                   cursor: "pointer",
                   backgroundColor: diagnosticMode === "results" ? "var(--ds-btn-primary)" : "transparent",
-                  color: diagnosticMode === "results" ? "#ffffff" : T.textMuted,
+                  color: diagnosticMode === "results" ? "var(--ds-text-on-accent)" : T.textMuted,
                   border: "none",
                 }}
               >
@@ -362,7 +362,7 @@ export default function GrammarDiagnosticEngine({
                   fontWeight: 700,
                   cursor: "pointer",
                   backgroundColor: diagnosticMode === "roadmap" ? "var(--ds-btn-primary)" : "transparent",
-                  color: diagnosticMode === "roadmap" ? "#ffffff" : T.textMuted,
+                  color: diagnosticMode === "roadmap" ? "var(--ds-text-on-accent)" : T.textMuted,
                   border: "none",
                 }}
               >
