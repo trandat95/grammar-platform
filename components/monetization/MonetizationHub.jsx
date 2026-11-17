@@ -441,106 +441,104 @@ export default function MonetizationHub({
         className="ge-hero-banner-card ge-vip-hero-card"
         style={{
           border: `1px solid ${hasVip ? T.successBorder : T.accentBorder}`,
-          padding: "1.25rem",
+          padding: "1.25rem 1.4rem",
         }}
       >
-        <div className="ge-hero-split">
-          <div className="ge-hero-split-body" style={{ gap: "0.55rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-              <Badge tone={hasVip ? "success" : "accent"} icon={hasVip ? "crown" : "user"} isLight={isLight}>
-                {hasVip ? `${entitlement.effectiveRole} ACTIVE` : "GÓI FREE • NÂNG CẤP HỆ THỐNG HỌC TẬP VIP"}
+        <img
+          src={BANNER_PATHS.vip}
+          alt=""
+          aria-hidden="true"
+          width={1440}
+          height={420}
+          className="ge-hero-banner-bg"
+        />
+        <div className="ge-hero-banner-scrim" aria-hidden="true" />
+        <div className="ge-hero-banner-content ge-hero-banner-content--safe" style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+            <Badge tone={hasVip ? "success" : "accent"} icon={hasVip ? "crown" : "user"} isLight={isLight}>
+              {hasVip ? `${entitlement.effectiveRole} ACTIVE` : "GÓI FREE • NÂNG CẤP HỆ THỐNG HỌC TẬP VIP"}
+            </Badge>
+            {!guestMode && segment?.segment && (
+              <Badge tone="neutral" isLight={isLight}>
+                Phân khúc: {segment.segment}
               </Badge>
-              {!guestMode && segment?.segment && (
-                <Badge tone="neutral" isLight={isLight}>
-                  Phân khúc: {segment.segment}
-                </Badge>
-              )}
-            </div>
-            <h1 style={{ margin: 0, fontSize: "1.22rem", fontWeight: 800, color: T.textHeading }}>
-              {hasVip
-                ? "Bạn đang sở hữu Toàn quyền Hệ thống Ngữ pháp Cá nhân hóa VIP"
-                : "Đầu tư Hệ thống Cải thiện Ngữ pháp Cá nhân hóa Toàn Diện"}
-            </h1>
-            <p style={{ margin: 0, fontSize: "0.86rem", color: T.textSecondary, lineHeight: 1.55 }}>
-              <strong>{psychology.progressHighlight}</strong> {psychology.personalizedHook}
-            </p>
-            <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted }}>
-              {psychology.goalGradientHint} • {psychology.selfDeterminationNote}
-            </div>
-
-            {hasVip && sub && (
-              <div
-                style={{
-                  marginTop: "0.2rem",
-                  backgroundColor: T.bgElevated,
-                  border: `1px solid ${T.successBorder}`,
-                  borderRadius: "10px",
-                  padding: "0.65rem 0.85rem",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "0.9rem",
-                  fontSize: "0.78rem",
-                }}
-              >
-                <div>
-                  <span style={{ color: T.textMuted }}>Gói đang dùng: </span>
-                  <strong style={{ color: T.textHeading }}>{sub.plan?.name_vi || "Gói VIP"}</strong>
-                </div>
-                <div>
-                  <span style={{ color: T.textMuted }}>Ngày kích hoạt: </span>
-                  <strong style={{ color: T.textSecondary }}>
-                    {sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString("vi-VN") : "—"}
-                  </strong>
-                </div>
-                <div>
-                  <span style={{ color: T.textMuted }}>Ngày hết hạn: </span>
-                  <strong style={{ color: T.success }}>
-                    {sub.plan?.billing_cycle === "lifetime"
-                      ? "Trọn đời (Vĩnh viễn)"
-                      : (sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end)
-                      ? `${new Date(
-                          sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
-                        ).toLocaleDateString("vi-VN")} (Còn ${Math.max(
-                          0,
-                          Math.ceil(
-                            (new Date(
-                              sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
-                            ).getTime() -
-                              Date.now()) /
-                              86400000
-                          )
-                        )} ngày)`
-                      : "—"}
-                  </strong>
-                </div>
-                <div>
-                  <span style={{ color: T.textMuted }}>Cổng: </span>
-                  <strong style={{ color: T.accent }}>
-                    {sub.provider === "sepay" ? "SePay VA (VietQR)" : sub.provider === "manual" ? "Kích hoạt Hệ thống" : sub.provider?.toUpperCase()}
-                  </strong>
-                </div>
-              </div>
             )}
-
-            <div className="ge-vip-hero-actions" style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", alignItems: "center", marginTop: "0.25rem" }}>
-              <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
-                Xuất Báo cáo Năng lực (VIP API)
-              </Button>
-              {hasVip && sub && (
-                <Button variant="secondary" size="sm" icon="settings" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
-                  Quản lý / Hủy gói VIP
-                </Button>
-              )}
-            </div>
+          </div>
+          <h1 style={{ margin: 0, fontSize: "1.22rem", fontWeight: 800, color: T.textHeading }}>
+            {hasVip
+              ? "Bạn đang sở hữu Toàn quyền Hệ thống Ngữ pháp Cá nhân hóa VIP"
+              : "Đầu tư Hệ thống Cải thiện Ngữ pháp Cá nhân hóa Toàn Diện"}
+          </h1>
+          <p style={{ margin: 0, fontSize: "0.86rem", color: T.textSecondary, lineHeight: 1.55 }}>
+            <strong>{psychology.progressHighlight}</strong> {psychology.personalizedHook}
+          </p>
+          <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted }}>
+            {psychology.goalGradientHint} • {psychology.selfDeterminationNote}
           </div>
 
-          <div className="ge-hero-art-panel">
-            <img
-              src={BANNER_PATHS.vip}
-              alt="Học viên nâng cấp Hệ thống Ngữ pháp & TOEIC AI VIP"
-              width={640}
-              height={320}
-            />
+          {hasVip && sub && (
+            <div
+              style={{
+                marginTop: "0.2rem",
+                backgroundColor: T.bgElevated,
+                border: `1px solid ${T.successBorder}`,
+                borderRadius: "10px",
+                padding: "0.65rem 0.85rem",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.9rem",
+                fontSize: "0.78rem",
+              }}
+            >
+              <div>
+                <span style={{ color: T.textMuted }}>Gói đang dùng: </span>
+                <strong style={{ color: T.textHeading }}>{sub.plan?.name_vi || "Gói VIP"}</strong>
+              </div>
+              <div>
+                <span style={{ color: T.textMuted }}>Ngày kích hoạt: </span>
+                <strong style={{ color: T.textSecondary }}>
+                  {sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString("vi-VN") : "—"}
+                </strong>
+              </div>
+              <div>
+                <span style={{ color: T.textMuted }}>Ngày hết hạn: </span>
+                <strong style={{ color: T.success }}>
+                  {sub.plan?.billing_cycle === "lifetime"
+                    ? "Trọn đời (Vĩnh viễn)"
+                    : (sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end)
+                    ? `${new Date(
+                        sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
+                      ).toLocaleDateString("vi-VN")} (Còn ${Math.max(
+                        0,
+                        Math.ceil(
+                          (new Date(
+                            sub.status === "trialing" && sub.trial_ends_at ? sub.trial_ends_at : sub.current_period_end
+                          ).getTime() -
+                            Date.now()) /
+                            86400000
+                        )
+                      )} ngày)`
+                    : "—"}
+                </strong>
+              </div>
+              <div>
+                <span style={{ color: T.textMuted }}>Cổng: </span>
+                <strong style={{ color: T.accent }}>
+                  {sub.provider === "sepay" ? "SePay VA (VietQR)" : sub.provider === "manual" ? "Kích hoạt Hệ thống" : sub.provider?.toUpperCase()}
+                </strong>
+              </div>
+            </div>
+          )}
+
+          <div className="ge-vip-hero-actions" style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", alignItems: "center", marginTop: "0.25rem" }}>
+            <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
+              Xuất Báo cáo Năng lực (VIP API)
+            </Button>
+            {hasVip && sub && (
+              <Button variant="secondary" size="sm" icon="settings" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
+                Quản lý / Hủy gói VIP
+              </Button>
+            )}
           </div>
         </div>
       </div>

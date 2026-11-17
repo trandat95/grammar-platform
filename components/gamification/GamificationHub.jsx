@@ -213,28 +213,27 @@ export default function GamificationHub({
           border: `1px solid ${T.accentBorder}`,
         }}
       >
-        <div className="ge-hero-split">
-          <div className="ge-hero-split-body">
-            <div>
-              <Badge tone="warning" icon="trophy" isLight={isLight}>
-                Cộng đồng &amp; Bảng Xếp Hạng UTC+7
-              </Badge>
-            </div>
-            <div style={{ fontSize: "1.12rem", fontWeight: 800, color: T.textHeading, marginTop: "0.45rem" }}>
-              Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
-            </div>
-            <div className="ge-mobile-hide-note" style={{ fontSize: "0.82rem", color: T.textSecondary, marginTop: "0.3rem", lineHeight: 1.5 }}>
-              Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
-            </div>
+        <img
+          src={BANNER_PATHS.gamification}
+          alt=""
+          aria-hidden="true"
+          width={1440}
+          height={420}
+          loading="lazy"
+          className="ge-hero-banner-bg"
+        />
+        <div className="ge-hero-banner-scrim" aria-hidden="true" />
+        <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+          <div>
+            <Badge tone="warning" icon="trophy" isLight={isLight}>
+              Cộng đồng &amp; Bảng Xếp Hạng UTC+7
+            </Badge>
           </div>
-          <div className="ge-hero-art-panel" style={{ flexBasis: "250px", minHeight: "120px" }}>
-            <img
-              src={BANNER_PATHS.gamification}
-              alt="Cộng đồng học viên ăn mừng chuỗi Streak & Thành tích"
-              width={640}
-              height={320}
-              loading="lazy"
-            />
+          <div style={{ fontSize: "1.12rem", fontWeight: 800, color: T.textHeading, marginTop: "0.45rem" }}>
+            Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
+          </div>
+          <div className="ge-mobile-hide-note" style={{ fontSize: "0.82rem", color: T.textSecondary, marginTop: "0.3rem", lineHeight: 1.5 }}>
+            Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
           </div>
         </div>
       </div>

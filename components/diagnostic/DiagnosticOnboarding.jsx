@@ -26,8 +26,26 @@ export default function DiagnosticOnboarding({
           boxShadow: T.shadowElevated,
         }}
       >
-        <div className="ge-hero-split" style={{ marginBottom: "1.5rem" }}>
-          <div className="ge-hero-split-body">
+        <div
+          style={{
+            position: "relative",
+            borderRadius: "12px",
+            overflow: "hidden",
+            marginBottom: "1.5rem",
+            padding: "1.35rem 1.4rem",
+            border: `1px solid ${T.borderSubtle}`,
+          }}
+        >
+          <img
+            src={BANNER_PATHS.diagnostic}
+            alt=""
+            aria-hidden="true"
+            width={1440}
+            height={420}
+            className="ge-hero-banner-bg"
+          />
+          <div className="ge-hero-banner-scrim" aria-hidden="true" />
+          <div className="ge-hero-banner-content ge-hero-banner-content--safe">
             <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
               <img
                 src={MASCOT_PATHS.ai_coach}
@@ -91,15 +109,6 @@ export default function DiagnosticOnboarding({
               Thay vì tự học mò mẫm trong 53 bài học, hãy để hệ thống đánh giá khách quan trình độ ngữ pháp của bạn,
               chẩn đoán chính xác từng chuyên đề yếu và tự động thiết kế lộ trình học tập đo ni đóng giày riêng cho bạn.
             </p>
-          </div>
-
-          <div className="ge-hero-art-panel" style={{ flexBasis: "270px", minHeight: "170px" }}>
-            <img
-              src={BANNER_PATHS.diagnostic}
-              alt="Học viên Việt Nam và Cố vấn quốc tế phân tích Knowledge Graph"
-              width={640}
-              height={320}
-            />
           </div>
         </div>
 

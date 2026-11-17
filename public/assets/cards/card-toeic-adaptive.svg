@@ -1,57 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 180" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" fill="none">
   <defs>
-    <linearGradient id="bg-t" x1="0" y1="0" x2="480" y2="180" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#071821"/>
-      <stop offset="55%" stop-color="#0a2936"/>
-      <stop offset="100%" stop-color="#0c3a47"/>
-    </linearGradient>
-    <radialGradient id="glow-t" cx="0.72" cy="0.5" r="0.55">
-      <stop offset="0%" stop-color="#10b981" stop-opacity="0.32"/>
-      <stop offset="100%" stop-color="#071821" stop-opacity="0"/>
+    <radialGradient id="ta-glow" cx="78%" cy="50%" r="52%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.28"/>
+      <stop offset="65%" stop-color="#06B6D4" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="ta-arc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="55%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
   </defs>
-  <rect width="480" height="180" rx="14" fill="url(#bg-t)"/>
-  <rect width="480" height="180" rx="14" fill="url(#glow-t)"/>
-  <!-- Left: TOEIC 990 Score Gauge Dial -->
-  <g transform="translate(106, 95)">
-    <path d="M-54 14 A56 56 0 1 1 54 14" stroke="#1e293b" stroke-width="11" stroke-linecap="round" fill="none"/>
-    <path d="M-54 14 A56 56 0 0 1 0 -54" stroke="#38bdf8" stroke-width="11" stroke-linecap="round" fill="none"/>
-    <path d="M0 -54 A56 56 0 0 1 48 -18" stroke="#10b981" stroke-width="11" stroke-linecap="round" fill="none"/>
-    <path d="M48 -18 A56 56 0 0 1 54 14" stroke="#f59e0b" stroke-width="11" stroke-linecap="round" fill="none"/>
-    <text x="0" y="-4" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="900" fill="#ffffff">990</text>
-    <text x="0" y="14" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#34d399">NEW FORMAT 2026</text>
+
+  <circle cx="230" cy="90" r="80" fill="url(#ta-glow)"/>
+
+  <!-- Target 990 Gauge shifted cleanly into x=176..282 -->
+  <g transform="translate(229, 92)">
+    <path d="M -50 9 A 52 52 0 1 1 50 9" stroke="#10B981" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M -50 9 A 52 52 0 1 1 41 -25" stroke="url(#ta-arc)" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <circle cx="41" cy="-25" r="5.5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="1.8"/>
+    <text x="0" y="-1" text-anchor="middle" fill="#10B981" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="900">990</text>
+    <text x="0" y="13" text-anchor="middle" fill="#06B6D4" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" letter-spacing="0.7">TOEIC 2026</text>
   </g>
-  <!-- Right: Sentence X-Ray & Audio Dictation Waveform -->
-  <g transform="translate(198, 28)">
-    <rect x="0" y="0" width="248" height="124" rx="12" fill="#0f172a" fill-opacity="0.92" stroke="#115e59" stroke-width="1.5"/>
-    <rect x="16" y="14" width="96" height="18" rx="9" fill="#064e3b" stroke="#10b981" stroke-opacity="0.7"/>
-    <text x="27" y="26" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#34d399">20 ĐỀ • X-RAY</text>
-    <rect x="122" y="14" width="110" height="18" rx="9" fill="#0c4a6e" stroke="#38bdf8" stroke-opacity="0.6"/>
-    <text x="133" y="26" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#7dd3fc">540 TRACKS</text>
-    <!-- Highlighted X-Ray Sentence Strip -->
-    <rect x="16" y="44" width="216" height="28" rx="7" fill="#1e293b" stroke="#334155"/>
-    <rect x="24" y="53" width="44" height="10" rx="4" fill="#38bdf8" fill-opacity="0.25" stroke="#38bdf8" stroke-width="1"/>
-    <rect x="74" y="55" width="46" height="6" rx="3" fill="#64748b"/>
-    <rect x="126" y="52" width="48" height="12" rx="4" fill="#10b981" fill-opacity="0.3" stroke="#10b981" stroke-width="1.2"/>
-    <rect x="180" y="55" width="42" height="6" rx="3" fill="#64748b"/>
-    <!-- Stereo Audio Waveform -->
-    <g transform="translate(16, 86)">
-      <rect x="0" y="0" width="216" height="26" rx="7" fill="#0b1120"/>
-      <!-- Headphones mini icon -->
-      <path d="M14 17v-3a5 5 0 0 1 10 0v3" stroke="#38bdf8" stroke-width="1.6" fill="none"/>
-      <rect x="12" y="15" width="3" height="5" rx="1.5" fill="#38bdf8"/>
-      <rect x="23" y="15" width="3" height="5" rx="1.5" fill="#38bdf8"/>
-      <!-- Equalizer Bars -->
-      <rect x="38" y="9" width="4" height="8" rx="2" fill="#34d399"/>
-      <rect x="46" y="5" width="4" height="16" rx="2" fill="#38bdf8"/>
-      <rect x="54" y="8" width="4" height="10" rx="2" fill="#10b981"/>
-      <rect x="62" y="4" width="4" height="18" rx="2" fill="#fbbf24"/>
-      <rect x="70" y="7" width="4" height="12" rx="2" fill="#38bdf8"/>
-      <rect x="78" y="9" width="4" height="8" rx="2" fill="#34d399"/>
-      <rect x="86" y="6" width="4" height="14" rx="2" fill="#38bdf8"/>
-      <rect x="94" y="10" width="4" height="6" rx="2" fill="#64748b"/>
-      <rect x="108" y="10" width="96" height="6" rx="3" fill="#1e293b"/>
-      <rect x="108" y="10" width="64" height="6" rx="3" fill="#10b981"/>
+
+  <!-- Dictation Soundwave Bars strictly right (x=166..286) -->
+  <g transform="translate(166, 134)">
+    <rect x="0" y="0" width="120" height="24" rx="12" fill="#047857" fill-opacity="0.9"/>
+    <g fill="#A7F3D0" fill-opacity="0.95">
+      <rect x="11" y="9" width="3" height="6" rx="1.5"/>
+      <rect x="17" y="5" width="3" height="14" rx="1.5"/>
+      <rect x="23" y="8" width="3" height="8" rx="1.5"/>
+      <rect x="29" y="4.5" width="3" height="15" rx="1.5"/>
+      <rect x="35" y="7" width="3" height="10" rx="1.5"/>
     </g>
+    <text x="80" y="15.5" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="800">20 ĐỀ • 540 TRACK</text>
+  </g>
+
+  <!-- Floating X-Ray Chip shifted right (x=226..286) -->
+  <g transform="translate(226, 16)">
+    <rect x="0" y="0" width="60" height="20" rx="10" fill="#0891B2" fill-opacity="0.9"/>
+    <text x="30" y="13.5" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800">X-RAY AI</text>
   </g>
 </svg>
