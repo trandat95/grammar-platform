@@ -2994,7 +2994,7 @@ export default function Home() {
                           setSelectedLessonId(ls.id);
                           setActiveTab("theory");
                         }}
-                        className="ds-focusable"
+                        className="ds-focusable ge-drawer-lesson-btn"
                         style={{
                           width: "100%",
                           textAlign: "left",
@@ -4048,7 +4048,7 @@ export default function Home() {
                         type="button"
                         onClick={() => playWordAudio(item.word, item.audioUrl)}
                         title="Nghe phát âm"
-                        className="ds-focusable"
+                        className="ds-focusable ge-drawer-lesson-btn"
                         style={{
                           backgroundColor: "var(--ds-accent-bg)",
                           border: "1px solid var(--ds-accent-border)",
@@ -4072,7 +4072,7 @@ export default function Home() {
                         onClick={() => toggleSaveWord(item)}
                         title="Xóa khỏi sổ từ vựng"
                         aria-label={`Xóa từ ${item.word}`}
-                        className="ds-focusable"
+                        className="ds-focusable ge-drawer-lesson-btn"
                         style={{
                           backgroundColor: "var(--ds-danger-bg)",
                           border: "1px solid var(--ds-danger-border)",
@@ -4170,7 +4170,7 @@ export default function Home() {
         {/* VIEW 4: ADMIN MANAGEMENT PANEL (QUẢN TRỊ VIÊN HỆ THỐNG)        */}
         {/* ============================================================== */}
         {currentView === "admin" && !currentUser.isGuest && currentUser.role === "ADMIN" && (
-          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1120px", margin: "0 auto" }}>
               
               {/* 1. Admin Header */}
@@ -4263,7 +4263,7 @@ export default function Home() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
                   gap: "1rem",
                   marginBottom: "1.5rem",
                 }}
@@ -5426,7 +5426,7 @@ export default function Home() {
         {/* VIEW 7: INTELLIGENT MONETIZATION & VIP HUB (MILESTONE 2.12)    */}
         {/* ============================================================== */}
         {currentView === "vip" && (
-          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1020px", margin: "0 auto" }}>
               <MonetizationHub
                 userId={!currentUser?.isGuest && currentUser?.id !== "guest" ? currentUser?.id : null}
@@ -5456,7 +5456,7 @@ export default function Home() {
         {/* VIEW 6: INTELLIGENT GAMIFICATION & LEADERBOARD (MILESTONE 2.10)*/}
         {/* ============================================================== */}
         {currentView === "gamification" && (
-          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "1020px", margin: "0 auto" }}>
               <GamificationHub
                 userId={!currentUser?.isGuest ? currentUser?.id : null}
@@ -5487,7 +5487,7 @@ export default function Home() {
         {/* VIEW 0: DUOLINGO-STYLE PROGRESS & STREAK DASHBOARD             */}
         {/* ============================================================== */}
         {currentView === "dashboard" && (
-          <div style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
               {/* 1. COMPACT WELCOME STRIP (Streak, Level & 7-Day Calendar) */}
@@ -5558,7 +5558,7 @@ export default function Home() {
                         <button
                           type="button"
                           onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
-                          className="ds-focusable"
+                          className="ds-focusable ge-drawer-lesson-btn"
                           style={{
                             fontSize: "0.74rem",
                             color: "var(--ds-warning)",
@@ -5634,7 +5634,7 @@ export default function Home() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
                   gap: "0.85rem",
                   marginBottom: "1.15rem",
                 }}
@@ -5843,7 +5843,7 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={() => setCurrentView("mistakes")}
-                        className="ds-focusable"
+                        className="ds-focusable ge-drawer-lesson-btn"
                         style={{ fontSize: "0.75rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0, fontWeight: "600" }}
                       >
                         Luyện lại →
@@ -5855,7 +5855,7 @@ export default function Home() {
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(min(360px, 100%), 1fr))",
                       gap: "1.15rem",
                       alignItems: "stretch",
                       marginBottom: "1.35rem",
@@ -5908,7 +5908,7 @@ export default function Home() {
                         <button
                           type="button"
                           onClick={startRecommendedLesson}
-                          className="ds-focusable"
+                          className="ds-focusable ge-drawer-lesson-btn"
                           style={{
                             padding: "0.6rem 1.35rem",
                             backgroundColor: "var(--ds-btn-primary)",
@@ -5999,7 +5999,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "1rem" }}>
                       {previewData.chapters.map((ch) => {
                         const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
                         const pct = Math.round((doneLessons / ch.lessons.length) * 100);
@@ -6013,7 +6013,7 @@ export default function Home() {
                               handleSelectChapter(ch);
                               setCurrentView("study");
                             }}
-                            className="ds-focusable"
+                            className="ds-focusable ge-drawer-lesson-btn"
                             style={{
                               textAlign: "left",
                               backgroundColor: "var(--ds-card)",
@@ -6301,7 +6301,7 @@ export default function Home() {
                           </div>
 
                           {/* 3-tier Formula Cards Grid */}
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
                             {selectedLesson.cheatSheet.formulas?.map((f, fIdx) => {
                               const isPos = f.type.includes("(+)");
                               const isNeg = f.type.includes("(-)");
@@ -6512,7 +6512,7 @@ export default function Home() {
                             </div>
                           </div>
 
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "0.75rem" }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))", gap: "0.75rem" }}>
                             {visibleLibExamples.map((ex, exIdx) => (
                               <div
                                 key={exIdx}
@@ -7213,6 +7213,9 @@ export default function Home() {
                             startNewQuiz(val);
                           }}
                           style={{
+                            width: "100%",
+                            maxWidth: "100%",
+                            minWidth: 0,
                             backgroundColor: "var(--ds-card)",
                             border: `1px solid ${T.border}`,
                             borderRadius: "6px",
@@ -7607,7 +7610,7 @@ export default function Home() {
         {/* VIEW 3: MISTAKES NOTEBOOK (SỔ TAY CÂU SAI ĐỂ ÔN LẠI)            */}
         {/* ============================================================== */}
         {currentView === "mistakes" && (
-          <div id="mistakes-area" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
+          <div id="mistakes-area" className="ge-view-container" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
               {/* Notebook Header Card */}

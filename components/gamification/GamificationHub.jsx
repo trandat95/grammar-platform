@@ -72,6 +72,7 @@ export default function GamificationHub({
   const [loading, setLoading] = useState(!initialSummary);
   const [lbRefreshKey, setLbRefreshKey] = useState(0);
   const [badgeFilter, setBadgeFilter] = useState("ALL");
+  const [badgeShowAll, setBadgeShowAll] = useState(false);
   const [actionNotice, setActionNotice] = useState(null);
   const onPrefsRef = useRef(onPreferencesChange);
   onPrefsRef.current = onPreferencesChange;
@@ -180,12 +181,21 @@ export default function GamificationHub({
     badgeFilter === "ALL" ? achievements : achievements.filter((b) => b.category === badgeFilter);
   const unlockedTotal = achievements.filter((b) => b.unlocked).length;
 
+  const scrollToAchSection = (sectionId) => {
+    try {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {}
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.15rem" }}>
       {guestMode && (
-        <Alert tone="info" title="Chế độ Xem trước Khách (Guest Preview)" isLight={isLight}>
-          Đăng nhập để hệ thống Server XP Engine ghi nhận điểm kinh nghiệm thực tế, mở khóa huy hiệu, lưu thử thách ngày UTC+7 và tranh hạng Leaderboard!
-        </Alert>
+        <div className="ge-ach-guest-alert">
+          <Alert tone="info" title="Chế độ Xem trước Khách (Guest Preview)" isLight={isLight}>
+            Đăng nhập để hệ thống ghi nhận XP thực tế, mở khóa huy hiệu và tranh hạng Leaderboard!
+          </Alert>
+        </div>
       )}
 
       {actionNotice && (
@@ -196,7 +206,7 @@ export default function GamificationHub({
 
       {/* Community Gamification Editorial Banner */}
       <div
-        className="ge-hero-banner-card"
+        className="ge-hero-banner-card ge-ach-hero-card"
         style={{
           padding: "1.2rem 1.4rem",
           border: `1px solid ${T.accentBorder}`,
@@ -215,29 +225,46 @@ export default function GamificationHub({
           <Badge tone="warning" isLight={isLight}>
             Cộng đồng &amp; Bảng Xếp Hạng UTC+7
           </Badge>
-          <div style={{ fontSize: "1.1rem", fontWeight: 800, color: T.textHeading, marginTop: "0.45rem" }}>
+          <div style={{ fontSize: "1.08rem", fontWeight: 800, color: T.textHeading, marginTop: "0.4rem" }}>
             Duy trì Kỷ luật Hàng ngày — Chinh phục 20 Huy hiệu &amp; 6 Danh hiệu
           </div>
-          <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem", lineHeight: 1.5 }}>
+          <div className="ge-mobile-hide-note" style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.25rem", lineHeight: 1.5 }}>
             Mọi XP đều được xác thực chống học vẹt từ Server Ledger và đồng bộ Streak Freeze theo múi giờ Việt Nam.
           </div>
         </div>
       </div>
 
+      {/* Mobile Quick-Jump Strip (1-tap access to Challenges, Badges, Leaderboard, Settings) */}
+      <nav aria-label="Điều hướng nhanh Thành tích" className="ge-ach-jump-pills">
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-challenges")}>
+          ⚡ Thử thách
+        </button>
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-badges")}>
+          🏅 Huy hiệu ({unlockedTotal}/{achievements.length})
+        </button>
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-leaderboard")}>
+          🏆 Bảng XH
+        </button>
+        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-settings")}>
+          ⚙️ Cài đặt
+        </button>
+      </nav>
+
       {/* Top Grid: Level Progression & Timezone Streak System */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem" }}>
+      <div className="ge-ach-top-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "1rem" }}>
         {/* Level & Authoritative XP Card */}
         <div
+          className="ge-ach-card"
           style={{
             backgroundColor: T.card,
             border: `1px solid ${T.cardBorder}`,
             borderRadius: "14px",
-            padding: "1.25rem",
+            padding: "1.2rem",
             boxShadow: T.shadowSm,
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", minWidth: 0 }}>
               <img
                 src={getLevelIconPath(xpState.level || 1)}
                 alt={xpState.title || "Beginner"}
@@ -245,12 +272,12 @@ export default function GamificationHub({
                 height={40}
                 style={{ width: 40, height: 40, flexShrink: 0 }}
               />
-              <div>
-                <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
                   Level {xpState.level || 1} — {xpState.title || "Beginner"}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
-                  Server-Authoritative XP Ledger (Chống cộng trùng & chống gian lận)
+                <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted }}>
+                  Server-Authoritative XP Ledger (Chống cộng trùng &amp; chống gian lận)
                 </div>
               </div>
             </div>
@@ -311,7 +338,7 @@ export default function GamificationHub({
             )}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.45rem", marginTop: "0.5rem" }}>
+          <div className="ge-streak-week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.45rem", marginTop: "0.5rem" }}>
             {weekCalendar.map((d) => (
               <div
                 key={d.iso}
@@ -339,12 +366,15 @@ export default function GamificationHub({
 
       {/* Daily & Weekly Challenges */}
       <div
+        id="ge-ach-challenges"
+        className="ge-ach-card"
         style={{
           backgroundColor: T.card,
           border: `1px solid ${T.cardBorder}`,
           borderRadius: "14px",
           padding: "1.25rem",
           boxShadow: T.shadowSm,
+          scrollMarginTop: "72px",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.9rem", flexWrap: "wrap", gap: "0.5rem" }}>
@@ -358,7 +388,7 @@ export default function GamificationHub({
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "0.8rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(250px, 100%), 1fr))", gap: "0.8rem" }}>
           {challenges
             .filter((c) => c.status !== "swapped")
             .map((ch) => {
@@ -411,7 +441,7 @@ export default function GamificationHub({
                           variant="ghost"
                           isLight={isLight}
                           onClick={() => handleServerAction({ action: "swap_challenge", user_challenge_id: ch.id })}
-                          style={{ fontSize: "0.72rem", padding: "0.2rem 0.5rem", minHeight: "26px" }}
+                          style={{ fontSize: "0.74rem", padding: "0.32rem 0.65rem", minHeight: "36px" }}
                         >
                           🔄 Đổi thử thách
                         </Button>
@@ -426,12 +456,15 @@ export default function GamificationHub({
 
       {/* Achievement & Badge Collection Gallery */}
       <div
+        id="ge-ach-badges"
+        className="ge-ach-card"
         style={{
           backgroundColor: T.card,
           border: `1px solid ${T.cardBorder}`,
           borderRadius: "14px",
           padding: "1.25rem",
           boxShadow: T.shadowSm,
+          scrollMarginTop: "72px",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.9rem" }}>
@@ -439,19 +472,22 @@ export default function GamificationHub({
             <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
               🏅 Bộ Sưu Tập Huy Hiệu ({unlockedTotal} / {achievements.length})
             </h2>
-            <p style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
+            <p className="ge-mobile-hide-note" style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
               4 hạng danh giá (Bronze / Silver / Gold / Diamond) kèm các Huy hiệu Bí ẩn tự động mở khóa.
             </p>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+          <div className="ge-ach-filter-row" style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
             {BADGE_CATEGORIES.map((cat) => (
               <Button
                 key={cat}
                 size="sm"
                 variant={badgeFilter === cat ? "primary" : "secondary"}
                 isLight={isLight}
-                onClick={() => setBadgeFilter(cat)}
-                style={{ fontSize: "0.72rem", padding: "0.28rem 0.65rem", minHeight: "30px" }}
+                onClick={() => {
+                  setBadgeFilter(cat);
+                  if (cat !== "ALL") setBadgeShowAll(true);
+                }}
+                style={{ fontSize: "0.74rem", padding: "0.32rem 0.7rem", minHeight: "36px" }}
               >
                 {cat === "ALL" ? "Tất cả" : cat}
               </Button>
@@ -459,10 +495,11 @@ export default function GamificationHub({
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(235px, 1fr))", gap: "0.9rem" }}>
-          {filteredBadges.map((b) => {
+        <div className="ge-badges-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(235px, 100%), 1fr))", gap: "0.9rem" }}>
+          {filteredBadges.map((b, idx) => {
             const isUnlocked = Boolean(b.unlocked);
             const isMysteryLocked = Boolean(!isUnlocked && b.is_hidden);
+            const isMobileExtra = !badgeShowAll && badgeFilter === "ALL" && idx >= 6;
             const tierFrameBorder = !isUnlocked
               ? T.borderSubtle
               : b.tier === "Diamond"
@@ -476,27 +513,28 @@ export default function GamificationHub({
             return (
               <div
                 key={b.code}
+                className={isMobileExtra ? "ge-badge-card ge-badge-mobile-extra" : "ge-badge-card"}
                 style={{
                   backgroundColor: isUnlocked ? T.card : T.bgElevated,
                   border: `1px solid ${isUnlocked ? T.successBorder : T.borderSubtle}`,
                   borderRadius: "14px",
-                  padding: "0.95rem",
+                  padding: "0.9rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  gap: "0.65rem",
+                  gap: "0.6rem",
                   boxShadow: isUnlocked ? T.shadowSm : "none",
-                  opacity: isUnlocked ? 1 : 0.82,
+                  opacity: isUnlocked ? 1 : 0.85,
                   transition: "transform 160ms ease, box-shadow 160ms ease, filter 200ms ease",
                 }}
               >
                 <div>
                   {/* Top Pill Row */}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.7rem" }}>
+                  <div className="ge-badge-card-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.3rem", marginBottom: "0.65rem" }}>
                     <Badge tone={isUnlocked ? getTierTone(b.tier) : "neutral"} isLight={isLight}>
                       {b.tier}
                     </Badge>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                       {isMysteryLocked && (
                         <Badge tone="neutral" isLight={isLight}>
                           🔒 Bí ẩn
@@ -507,16 +545,17 @@ export default function GamificationHub({
                           ✓ Đã mở
                         </Badge>
                       ) : !isMysteryLocked ? (
-                        <span style={{ fontSize: "0.66rem", fontWeight: 700, color: T.textMuted }}>
-                          🔒 Chưa đạt
+                        <span style={{ fontSize: "0.64rem", fontWeight: 700, color: T.textMuted }}>
+                          🔒 Khóa
                         </span>
                       ) : null}
                     </div>
                   </div>
 
                   {/* Centerpiece Artwork Medallion */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+                  <div className="ge-badge-card-body" style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
                     <div
+                      className="ge-badge-medallion"
                       style={{
                         width: "74px",
                         height: "74px",
@@ -550,10 +589,11 @@ export default function GamificationHub({
                       />
                     </div>
 
-                    <div style={{ minWidth: 0, flex: 1 }}>
+                    <div className="ge-badge-text-col" style={{ minWidth: 0, flex: 1 }}>
                       <div
+                        className="ge-badge-title"
                         style={{
-                          fontSize: "0.88rem",
+                          fontSize: "0.86rem",
                           fontWeight: 800,
                           color: isUnlocked ? T.textHeading : T.textSecondary,
                           lineHeight: 1.3,
@@ -562,11 +602,12 @@ export default function GamificationHub({
                         {b.title_vi}
                       </div>
                       <div
+                        className="ge-badge-desc"
                         style={{
-                          fontSize: "0.73rem",
+                          fontSize: "0.72rem",
                           color: isUnlocked ? T.textSecondary : T.textMuted,
-                          marginTop: "0.28rem",
-                          lineHeight: 1.42,
+                          marginTop: "0.24rem",
+                          lineHeight: 1.38,
                         }}
                       >
                         {b.description_vi}
@@ -580,33 +621,51 @@ export default function GamificationHub({
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    paddingTop: "0.5rem",
+                    paddingTop: "0.45rem",
                     borderTop: `1px solid ${T.borderSubtle}`,
-                    fontSize: "0.72rem",
+                    fontSize: "0.7rem",
                   }}
                 >
                   <span style={{ color: isUnlocked ? T.accent : T.textMuted, fontWeight: 800 }}>
-                    Thưởng: +{b.xp_bonus} XP
+                    +{b.xp_bonus} XP
                   </span>
-                  <span style={{ color: T.textMuted, fontSize: "0.68rem" }}>{b.category}</span>
+                  <span style={{ color: T.textMuted, fontSize: "0.66rem" }}>{b.category}</span>
                 </div>
               </div>
             );
           })}
         </div>
+
+        {badgeFilter === "ALL" && filteredBadges.length > 6 && (
+          <div className="ge-badge-expand-wrap" style={{ marginTop: "0.85rem" }}>
+            <Button
+              variant="secondary"
+              size="sm"
+              isLight={isLight}
+              onClick={() => setBadgeShowAll((v) => !v)}
+              style={{ width: "100%", justifyContent: "center", minHeight: "40px", fontWeight: 700 }}
+            >
+              {badgeShowAll
+                ? "▲ Thu gọn bộ sưu tập huy hiệu"
+                : `🏅 Xem toàn bộ ${filteredBadges.length} huy hiệu (${filteredBadges.length - 6} huy hiệu khác)`}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* 5-Mode Leaderboard + Privacy & Motion Preferences + Reward History */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1rem" }}>
-        <LeaderboardPanel
-          userId={userId}
-          authToken={authToken}
-          isLight={isLight}
-          refreshKey={lbRefreshKey}
-        />
+      <div className="ge-ach-bottom-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: "1rem" }}>
+        <div id="ge-ach-leaderboard" style={{ scrollMarginTop: "72px", minWidth: 0 }}>
+          <LeaderboardPanel
+            userId={userId}
+            authToken={authToken}
+            isLight={isLight}
+            refreshKey={lbRefreshKey}
+          />
+        </div>
 
         {/* Privacy, Accessibility Settings & Reward Ledger */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div id="ge-ach-settings" style={{ display: "flex", flexDirection: "column", gap: "1rem", scrollMarginTop: "72px", minWidth: 0 }}>
           <div
             style={{
               backgroundColor: T.card,

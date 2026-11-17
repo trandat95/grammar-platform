@@ -400,34 +400,35 @@ export default function MonetizationHub({
 
       {(guestMode || !userId) && (
         <div
+          className="ge-vip-guest-bar"
           style={{
             backgroundColor: T.warningBg,
             border: `1px solid ${T.warningBorder}`,
             borderRadius: "12px",
-            padding: "1rem 1.25rem",
+            padding: "0.85rem 1rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "0.85rem",
+            gap: "0.75rem",
           }}
         >
-          <div style={{ flex: "1 1 380px" }}>
-            <div style={{ fontSize: "0.92rem", fontWeight: 800, color: T.textHeading }}>
-              🔒 Bạn chưa đăng nhập — Cần đăng ký tài khoản để nâng cấp VIP
+          <div style={{ flex: "1 1 280px" }}>
+            <div style={{ fontSize: "0.88rem", fontWeight: 800, color: T.textHeading }}>
+              🔒 Đăng nhập hoặc Tạo tài khoản miễn phí để mở khóa VIP
             </div>
-            <div style={{ fontSize: "0.8rem", color: T.textSecondary, marginTop: "0.2rem", lineHeight: 1.45 }}>
-              Hãy tạo tài khoản miễn phí (chỉ 15 giây) hoặc đăng nhập trước khi thanh toán để hệ thống kích hoạt đặc quyền VIP và đồng bộ toàn bộ tiến độ cho bạn.
+            <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textSecondary, marginTop: "0.2rem", lineHeight: 1.45 }}>
+              Chỉ 15 giây để kích hoạt đặc quyền VIP và đồng bộ toàn bộ tiến độ cho bạn.
             </div>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <div className="ge-vip-guest-actions" style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {onRequireLogin && (
               <Button size="sm" variant="secondary" isLight={isLight} onClick={onRequireLogin}>
                 🔑 Đăng nhập
               </Button>
             )}
             <Button size="sm" variant="primary" isLight={isLight} onClick={requireGuestAuth}>
-              📝 Đăng ký tài khoản ngay
+              📝 Đăng ký ngay
             </Button>
           </div>
         </div>
@@ -435,10 +436,10 @@ export default function MonetizationHub({
 
       {/* Behavioral Psychology Value Banner + 2026 AI Coach VIP Artwork */}
       <div
-        className="ge-hero-banner-card"
+        className="ge-hero-banner-card ge-vip-hero-card"
         style={{
           border: `1px solid ${hasVip ? T.successBorder : T.accentBorder}`,
-          padding: "1.35rem",
+          padding: "1.25rem",
         }}
       >
         <img
@@ -472,7 +473,7 @@ export default function MonetizationHub({
             <p style={{ margin: 0, fontSize: "0.86rem", color: T.textSecondary, lineHeight: 1.55 }}>
               <strong>{psychology.progressHighlight}</strong> {psychology.personalizedHook}
             </p>
-            <div style={{ fontSize: "0.78rem", color: T.textMuted, marginTop: "0.4rem" }}>
+            <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted, marginTop: "0.4rem" }}>
               {psychology.goalGradientHint} • {psychology.selfDeterminationNote}
             </div>
 
@@ -531,7 +532,7 @@ export default function MonetizationHub({
             )}
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
+          <div className="ge-vip-hero-actions" style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
             <Button variant={hasVip ? "success" : "secondary"} size="sm" isLight={isLight} onClick={handleDownloadVipReport}>
               📄 Xuất Báo cáo Năng lực (VIP API)
             </Button>
@@ -544,24 +545,8 @@ export default function MonetizationHub({
         </div>
       </div>
 
-      {/* Ethical Verified Campaigns Strip */}
-      {campaigns.length > 0 && !hasVip && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "0.75rem" }}>
-          {campaigns.map((camp) => (
-            <Alert key={camp.id} tone="info" title={camp.title_vi} isLight={isLight}>
-              <div>{camp.description_vi}</div>
-              {camp.ends_at && (
-                <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>
-                  Hiệu lực chiến dịch thực tế đến: {new Date(camp.ends_at).toLocaleDateString("vi-VN")}
-                </div>
-              )}
-            </Alert>
-          ))}
-        </div>
-      )}
-
       {/* 4 Subscription Pricing Cards (Price Anchoring & Annual Savings) */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(225px, 1fr))", gap: "1rem" }}>
+      <div className="ge-vip-plans-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(225px, 100%), 1fr))", gap: "1rem" }}>
         {plans.map((p) => {
           const perMonth =
             p.billing_cycle === "yearly"
@@ -574,15 +559,16 @@ export default function MonetizationHub({
           return (
             <div
               key={p.id}
+              className={p.is_recommended ? "ge-vip-plan-card is-recommended" : "ge-vip-plan-card"}
               style={{
                 backgroundColor: T.card,
                 border: `2px solid ${p.is_recommended ? T.accent : T.cardBorder}`,
                 borderRadius: "14px",
-                padding: "1.2rem",
+                padding: "1.15rem",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                gap: "0.85rem",
+                gap: "0.8rem",
                 boxShadow: p.is_recommended ? T.shadowMd : T.shadowSm,
               }}
             >
@@ -648,6 +634,22 @@ export default function MonetizationHub({
         })}
       </div>
 
+      {/* Ethical Verified Campaigns Strip */}
+      {campaigns.length > 0 && !hasVip && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "0.75rem" }}>
+          {campaigns.map((camp) => (
+            <Alert key={camp.id} tone="info" title={camp.title_vi} isLight={isLight}>
+              <div>{camp.description_vi}</div>
+              {camp.ends_at && (
+                <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.25rem" }}>
+                  Hiệu lực chiến dịch thực tế đến: {new Date(camp.ends_at).toLocaleDateString("vi-VN")}
+                </div>
+              )}
+            </Alert>
+          ))}
+        </div>
+      )}
+
       {/* Visual Side-by-Side Tier Duel + Detailed FREE vs VIP Matrix */}
       <div
         style={{
@@ -692,7 +694,7 @@ export default function MonetizationHub({
         </div>
 
         {/* Side-by-Side Illustrated Comparison Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+        <div className="ge-vip-duel-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "1rem" }}>
           {/* FREE Card */}
           <div
             style={{
@@ -807,9 +809,9 @@ export default function MonetizationHub({
         </div>
 
         {/* Detailed Visual Quota Comparison Table */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
           <div
-            className="ge-vip-matrix-row"
+            className="ge-vip-matrix-row ge-vip-matrix-header"
             style={{
               display: "grid",
               gridTemplateColumns: "1.6fr 0.85fr 0.85fr",
@@ -853,7 +855,7 @@ export default function MonetizationHub({
                   fontSize: "0.82rem",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
+                <div className="ge-vip-matrix-feature" style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
                   <div
                     style={{
                       width: "36px",
@@ -876,60 +878,66 @@ export default function MonetizationHub({
                   </div>
                 </div>
 
-                {/* FREE Quota Visual Meter */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem" }}>
-                  {isLockedFree ? (
-                    <Badge tone="danger" isLight={isLight}>
-                      🔒 Chưa mở
-                    </Badge>
-                  ) : (
-                    <>
-                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: T.textSecondary }}>
-                        {meta.freeLabel}
-                      </span>
-                      <div
-                        style={{
-                          width: "92px",
-                          height: "6px",
-                          borderRadius: "999px",
-                          backgroundColor: T.borderSubtle,
-                          overflow: "hidden",
-                        }}
-                      >
+                {/* Tier Meters Wrapper (display: contents on desktop -> 2-col side-by-side comparison box on mobile) */}
+                <div className="ge-vip-matrix-tiers">
+                  {/* FREE Quota Visual Meter */}
+                  <div className="ge-vip-matrix-cell ge-vip-matrix-free" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
+                    <span className="ge-vip-tier-kicker">👤 FREE</span>
+                    {isLockedFree ? (
+                      <Badge tone="danger" isLight={isLight}>
+                        🔒 Chưa mở
+                      </Badge>
+                    ) : (
+                      <>
+                        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: T.textSecondary, textAlign: "center" }}>
+                          {meta.freeLabel}
+                        </span>
                         <div
+                          className="ge-vip-meter-track"
                           style={{
-                            width: `${meta.pct}%`,
-                            height: "100%",
-                            backgroundColor: T.textMuted,
+                            width: "92px",
+                            height: "6px",
                             borderRadius: "999px",
+                            backgroundColor: T.borderSubtle,
+                            overflow: "hidden",
                           }}
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
+                        >
+                          <div
+                            style={{
+                              width: `${meta.pct}%`,
+                              height: "100%",
+                              backgroundColor: T.textMuted,
+                              borderRadius: "999px",
+                            }}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
 
-                {/* VIP Unlimited Highlight */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
-                  <Badge tone="success" isLight={isLight}>
-                    {isLockedFree ? "✓ Mở khóa 100%" : "∞ Không giới hạn"}
-                  </Badge>
-                  <div
-                    className="ge-energy-bar-track"
-                    style={{
-                      width: "92px",
-                      height: "6px",
-                      backgroundColor: T.successBg,
-                    }}
-                  >
+                  {/* VIP Unlimited Highlight */}
+                  <div className="ge-vip-matrix-cell ge-vip-matrix-vip" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.28rem" }}>
+                    <span className="ge-vip-tier-kicker is-vip">👑 VIP</span>
+                    <Badge tone="success" isLight={isLight}>
+                      {isLockedFree ? "✓ Mở 100%" : "∞ Không giới hạn"}
+                    </Badge>
                     <div
-                      className="ge-energy-bar-fill"
+                      className="ge-energy-bar-track ge-vip-meter-track"
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: T.success,
+                        width: "92px",
+                        height: "6px",
+                        backgroundColor: T.successBg,
                       }}
-                    />
+                    >
+                      <div
+                        className="ge-energy-bar-fill"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: T.success,
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -939,7 +947,7 @@ export default function MonetizationHub({
       </div>
 
       {/* Billing History & Transparent Unsubscribe / Opt-Out Preferences */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "1rem" }}>
         <div
           style={{
             backgroundColor: T.card,

@@ -215,7 +215,8 @@ export default function ToeicHeroBanner({
                 type="button"
                 onClick={() => handleSelectTarget(score)}
                 style={{
-                  padding: compact ? '0.2rem 0.65rem' : '0.35rem 0.85rem',
+                  padding: compact ? '0.38rem 0.75rem' : '0.45rem 0.9rem',
+                  minHeight: '36px',
                   borderRadius: '999px',
                   fontSize: compact ? '0.74rem' : '0.8rem',
                   fontWeight: isSelected ? 800 : 600,
@@ -321,10 +322,8 @@ export default function ToeicHeroBanner({
         {/* Real-time Learning Stats Grid (Zone 1) */}
         {showStats && (
           <div
+            className="ge-toeic-hero-stats"
             style={{
-              display: 'grid',
-              gridTemplateColumns: compact ? 'repeat(4, 1fr)' : 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: compact ? '0.5rem' : '0.75rem',
               paddingTop: compact ? '0.75rem' : '1.25rem',
               borderTop: isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.15)'
             }}

@@ -200,7 +200,7 @@ export default function DiagnosticAnalysisDashboard({
             {roadmap.ai_recommendation.headline}
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))", gap: "1rem" }}>
             <div
               style={{
                 backgroundColor: isLight ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.25)",

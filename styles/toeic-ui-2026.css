@@ -292,6 +292,19 @@
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
+.ge-toeic-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .ge-toeic-hero-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+}
+
 .toeic-stat-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -300,7 +313,20 @@
 }
 
 @media (min-width: 640px) {
-  .toeic-stat-row {
+  .ge-toeic-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .ge-toeic-hero-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+.toeic-stat-row {
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
   }

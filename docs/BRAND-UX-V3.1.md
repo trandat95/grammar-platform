@@ -46,7 +46,7 @@ M4.3 (Asset Library - P1)  M4.4A (Question Engine Core, Mobile Drawer, UX Core -
 ★ GATE B & M4.5 (Implementation Fidelity >= 90/100, SHA-256 Content, Preview QA - P0)
               │
               ▼
-M4.6 (Design System Consolidation - P1)
+M4.6 (Design System Consolidation & Zero OS Emoji Migration - P1)
               │
               ▼
 M4.7 (FTC-Safe Learning & Conversion Analytics - P1)
@@ -85,6 +85,7 @@ Không giao toàn bộ `M4.0..M4.7` trong một lần. Mỗi Milestone bắt bu�
 - [`COMPONENT_ANATOMY_SPEC.md`](./design-system/COMPONENT_ANATOMY_SPEC.md) — 8 chiều giải phẫu Buttons, Cards, Modals & 12 UI States.
 - [`RESPONSIVE_BEHAVIOR_SPEC.md`](./design-system/RESPONSIVE_BEHAVIOR_SPEC.md) — Ma trận 9 viewport (`320..1440px`), bàn phím ảo, iOS Safe Area, Mobile Drawer.
 - [`ACCESSIBILITY_SPEC.md`](./design-system/ACCESSIBILITY_SPEC.md) — WCAG 2.2 AA phân cấp (`>= 4.5:1` text thường, `>= 3:1` chữ lớn & UI boundaries), keyboard & focus trap.
+- [`ZERO_OS_EMOJI_MIGRATION_PLAN.md`](./design-system/ZERO_OS_EMOJI_MIGRATION_PLAN.md) — Kế hoạch chi tiết thay toàn bộ `~543` OS Color Emoji trên Buttons/Cards/Badges sang `KitIcon` SVG (`M4.6` — 4 Wave + CI validator).
 
 ### Learning Experience (`docs/learning-experience/`)
 - [`QUESTION_EXPERIENCE_ENGINE.md`](./learning-experience/QUESTION_EXPERIENCE_ENGINE.md) — `components/question-engine/`, Audited MC Registry, 3-State Flow + Persistence & 10 Test Fixtures.

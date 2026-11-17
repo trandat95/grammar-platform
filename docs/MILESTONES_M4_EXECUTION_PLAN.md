@@ -100,10 +100,17 @@
 
 ---
 
-## 🔹 `M4.6` — Design System Consolidation (`P1` • Implementation Agent)
-- **Dependencies:** `M4.5` PASS. **Allowed Files:** `components/design-system/*`, `components/ui-2026/*`, `components/toeic/ui/*`, `docs/design-system/README.md`, optional `/design-showcase` (dev/admin-only).
-- **Scope:** Hợp nhất các primitive trùng chức năng (Button, Card, Modal/FocusTrap, EmptyState, Skeleton, Alert) về 1 Contract dùng chung cho Grammar + TOEIC; xóa file thừa chỉ sau khi grep chứng minh `0` dependency (Rule 05).
-- **Acceptance Criteria (`3/3`):** `0` component trùng chức năng; `npm run build` & `M4.5` smoke regression PASS; `docs/design-system/README.md` đồng bộ `V3.1`.
+## 🔹 `M4.6` — Design System Consolidation & Zero OS Emoji UI Migration (`P1` • Implementation Agent)
+- **Dependencies:** `M4.5` PASS. **Allowed Files:** `components/design-system/*`, `components/ui-2026/*`, `components/toeic/*`, `components/gamification/*`, `components/monetization/*`, `components/diagnostic/*`, `components/explanation/*`, `components/grammar-visualization/*`, `components/auth/*`, `components/admin/*`, `pages/index.js`, `pages/toeic/**`, `scripts/design/validate-zero-os-emoji.mjs`, `scripts/design/generate-token-report.mjs`, `docs/design-system/README.md`, `docs/design-system/ZERO_OS_EMOJI_MIGRATION_PLAN.md`, optional `/design-showcase` (dev/admin-only).
+- **Scope:**
+  1. Hợp nhất các primitive trùng chức năng (`Button`, `Card`, `Modal/FocusTrap`, `EmptyState`, `Skeleton`, `Alert`) về 1 Contract dùng chung cho Grammar + TOEIC; xóa file thừa chỉ sau khi grep chứng minh `0` dependency (Rule 05).
+  2. **Zero OS Emoji Migration ([`ZERO_OS_EMOJI_MIGRATION_PLAN.md`](./design-system/ZERO_OS_EMOJI_MIGRATION_PLAN.md)):** Mở rộng `KitIcon.jsx` thêm `+28` vector SVG stroke icons + `<StatusDot />`, thực hiện thay thế toàn bộ `~543` OS Color Emojis trên **tất cả UI buttons, cards, badges, headers & alerts** (`66` files trong `pages/**` & `components/**` qua 4 Wave — **tuyệt đối không chạm `data/**`**), và gắn CI validator `scripts/design/validate-zero-os-emoji.mjs` vào `generate-token-report.mjs`.
+- **Acceptance Criteria (`5/5`):**
+  1. `0` component primitive trùng chức năng; `docs/design-system/README.md` đồng bộ `V3.1`.
+  2. `KitIcon.jsx` mở rộng đủ bộ vector cho Buttons, Cards, Badges & Status; `validate-zero-os-emoji.mjs` đạt **`0` OS Color Emoji** trên `pages/**` & `components/**`.
+  3. Light/Dark Mode parity & `generate-token-report.mjs` (`36/36` WCAG AA) PASS.
+  4. `npm run build` exit code `0`, `11/11` `question-engine.test.mjs` PASS & `M4.5` `visual-regression.spec.mjs` (`20/20`) PASS.
+  5. `15/15` Content SHA-256 `Diffs: 0` (`data/**` không thay đổi).
 
 ---
 

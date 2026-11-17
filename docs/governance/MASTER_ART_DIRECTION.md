@@ -36,8 +36,9 @@
 - **Clear Space:** Tối thiểu `8px` (`0.25 × emblem`) khoảng trống xung quanh ở mọi kích thước.
 - **PWA iOS Icon (`apple-touch-icon.png`):** Canvas vuông **`180×180px` nền đặc** (không tự cắt bo góc để iOS tự render chuẩn).
 
-### 7. Iconography Guidelines
-- Toàn bộ icon điều hướng & công cụ dùng **Unified SVG Stroke System** (`viewBox 0 0 24 24`, `strokeWidth 1.8`, `strokeLinecap="round"`, `strokeLinejoin="round"`) qua [`KitIcon.jsx`](../../components/ui-2026/KitIcon.jsx).
+### 7. Iconography Guidelines & Zero OS Emoji Policy
+- Toàn bộ icon điều hướng & công cụ chính dùng **Unified SVG Stroke System** (`viewBox 0 0 24 24`, `strokeWidth 1.8`, `strokeLinecap="round"`, `strokeLinejoin="round"`) qua [`KitIcon.jsx`](../../components/ui-2026/KitIcon.jsx) (đã triển khai 18 icon điều hướng/công cụ ở `M4.4B`).
+- **Mở rộng bắt buộc tại `M4.6`:** Loại bỏ hoàn toàn **OS Color Emoji** trong tất cả UI buttons, cards, badges, headers và alerts trên `pages/**` & `components/**` (mở rộng thêm `+28` icon micro + `<StatusDot />` theo [`ZERO_OS_EMOJI_MIGRATION_PLAN.md`](../design-system/ZERO_OS_EMOJI_MIGRATION_PLAN.md)), giữ nguyên `data/**` (`15/15 Diffs: 0`).
 
 ### 8. Card, Surface & Light/Dark Direction
 - **Light Mode:** Card `#FFFFFF`, viền hairline `1px solid #E2E8F0`, shadow siêu mảnh (`0 1px 2px rgba(15,23,42,0.05)`).

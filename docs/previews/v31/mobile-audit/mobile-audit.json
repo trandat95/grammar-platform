@@ -1,0 +1,855 @@
+[
+  {
+    "label": "home-m-320",
+    "vw": 320,
+    "vh": 568,
+    "scrollWidth": 320,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 32,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 45,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 74,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "home-m-360",
+    "vw": 360,
+    "vh": 740,
+    "scrollWidth": 360,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "home-m-375",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "home-m-390",
+    "vw": 390,
+    "vh": 844,
+    "scrollWidth": 390,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "home-m-412",
+    "vw": 412,
+    "vh": 915,
+    "scrollWidth": 412,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 85,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "home-m-430",
+    "vw": 430,
+    "vh": 932,
+    "scrollWidth": 430,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 85,
+        "h": 36
+      },
+      {
+        "text": "Top 10",
+        "w": 56,
+        "h": 28
+      },
+      {
+        "text": "Top 50",
+        "w": 58,
+        "h": 28
+      },
+      {
+        "text": "🏅 Huy hiệu & Thành tích ➔",
+        "w": 184,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "study-timeline-m-375",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "Lọc 12 chuyên đề",
+        "w": 222,
+        "h": 20
+      },
+      {
+        "text": "Đánh dấu đã học xong (+25 XP)",
+        "w": 226,
+        "h": 31
+      },
+      {
+        "text": "01.\nCấu trúc chuẩn 3 thể (Form &",
+        "w": 283,
+        "h": 27
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "study-exercises-m-375",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "Lọc 12 chuyên đề",
+        "w": 222,
+        "h": 20
+      },
+      {
+        "text": "Nâng cấp VIP ngay ⭐",
+        "w": 162,
+        "h": 28
+      },
+      {
+        "text": "Chấm điểm bài này",
+        "w": 137,
+        "h": 30
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "study-drawer-open-m-320",
+    "vw": 320,
+    "vh": 568,
+    "scrollWidth": 320,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 32,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 45,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 74,
+        "h": 36
+      },
+      {
+        "text": "Lọc 12 chuyên đề",
+        "w": 197,
+        "h": 20
+      },
+      {
+        "text": "Đánh dấu đã học xong (+25 XP)",
+        "w": 226,
+        "h": 31
+      },
+      {
+        "text": "01.\nCấu trúc (Form)",
+        "w": 139,
+        "h": 27
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "quiz-hub-m-375",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 9,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "⭐ Sổ từ (2)",
+        "w": 90,
+        "h": 26
+      },
+      {
+        "text": "🔒 Đề Thích Ứng AI (Cần Login)",
+        "w": 234,
+        "h": 36
+      },
+      {
+        "text": "🔒 Trộn đề mới (Cần Login)",
+        "w": 206,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "gamification-hub-m-360",
+    "vw": 360,
+    "vh": 740,
+    "scrollWidth": 360,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Sáng",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "🎯 Kiếm XP (Đề 50/30/20)",
+        "w": 184,
+        "h": 30
+      },
+      {
+        "text": "Tất cả",
+        "w": 60,
+        "h": 36
+      },
+      {
+        "text": "Learning Consistency",
+        "w": 149,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "vip-hub-m-375",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 4,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n1d",
+        "w": 50,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 81,
+        "h": 36
+      },
+      {
+        "text": "📝 Đăng ký để mở khóa VIP ➔",
+        "w": 208,
+        "h": 30
+      }
+    ],
+    "overflowingCount": 0,
+    "overflowingEls": [],
+    "crampedCards": [],
+    "clippedBtns": [],
+    "bottomNavH": 60
+  },
+  {
+    "label": "toeic-hub",
+    "vw": 360,
+    "vh": 740,
+    "scrollWidth": 360,
+    "overflow": false,
+    "smallTargetsCount": 11,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n0d",
+        "w": 53,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 79,
+        "h": 36
+      },
+      {
+        "text": "Target 500+",
+        "w": 91,
+        "h": 36
+      },
+      {
+        "text": "Target 650+",
+        "w": 91,
+        "h": 36
+      },
+      {
+        "text": "Target 750+",
+        "w": 104,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 5,
+    "overflowingEls": [
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 526,
+        "sw": 214
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 663,
+        "sw": 132
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 807,
+        "sw": 138
+      },
+      {
+        "cls": "toeic-hub-tab-btn ",
+        "right": 386,
+        "sw": 170
+      }
+    ],
+    "crampedCards": [],
+    "clippedBtns": [
+      "📚 20 Đề TOEIC New Format 2026",
+      "🎯 24 Dạng Bài Hay Thi"
+    ],
+    "bottomNavH": 60
+  },
+  {
+    "label": "toeic-hub-320",
+    "vw": 320,
+    "vh": 568,
+    "scrollWidth": 320,
+    "overflow": false,
+    "smallTargetsCount": 10,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 32,
+        "h": 36
+      },
+      {
+        "text": "🔥\n0d",
+        "w": 47,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 74,
+        "h": 36
+      },
+      {
+        "text": "Target 500+",
+        "w": 91,
+        "h": 36
+      },
+      {
+        "text": "Target 650+",
+        "w": 91,
+        "h": 36
+      },
+      {
+        "text": "Target 750+",
+        "w": 104,
+        "h": 36
+      }
+    ],
+    "overflowingCount": 5,
+    "overflowingEls": [
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 526,
+        "sw": 214
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 663,
+        "sw": 132
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 807,
+        "sw": 138
+      },
+      {
+        "cls": "toeic-hub-tab-btn ",
+        "right": 386,
+        "sw": 170
+      }
+    ],
+    "crampedCards": [],
+    "clippedBtns": [
+      "📚 20 Đề TOEIC New Format 2026",
+      "🎯 24 Dạng Bài Hay Thi"
+    ],
+    "bottomNavH": 60
+  },
+  {
+    "label": "toeic-diagnostic",
+    "vw": 375,
+    "vh": 812,
+    "scrollWidth": 375,
+    "overflow": false,
+    "smallTargetsCount": 4,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n0d",
+        "w": 53,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 79,
+        "h": 36
+      },
+      {
+        "text": "← Quay lại TOEIC Hub",
+        "w": 148,
+        "h": 17
+      }
+    ],
+    "overflowingCount": 3,
+    "overflowingEls": [
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 526,
+        "sw": 214
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 663,
+        "sw": 132
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 807,
+        "sw": 138
+      }
+    ],
+    "crampedCards": [],
+    "clippedBtns": [
+      "📚 20 Đề TOEIC New Format 2026"
+    ],
+    "bottomNavH": 60
+  },
+  {
+    "label": "toeic-practice",
+    "vw": 390,
+    "vh": 844,
+    "scrollWidth": 390,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n0d",
+        "w": 53,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 79,
+        "h": 36
+      },
+      {
+        "text": "← Quay lại TOEIC Hub",
+        "w": 148,
+        "h": 17
+      },
+      {
+        "text": "1",
+        "w": 34,
+        "h": 34
+      },
+      {
+        "text": "2",
+        "w": 34,
+        "h": 34
+      }
+    ],
+    "overflowingCount": 9,
+    "overflowingEls": [
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 526,
+        "sw": 214
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 663,
+        "sw": 132
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 807,
+        "sw": 138
+      },
+      {
+        "cls": "BUTTON",
+        "right": 419,
+        "sw": 32
+      }
+    ],
+    "crampedCards": [],
+    "clippedBtns": [
+      "📚 20 Đề TOEIC New Format 2026",
+      "10"
+    ],
+    "bottomNavH": 60
+  },
+  {
+    "label": "toeic-tests",
+    "vw": 412,
+    "vh": 915,
+    "scrollWidth": 412,
+    "overflow": false,
+    "smallTargetsCount": 15,
+    "smallTargets": [
+      {
+        "text": "Chuyển sang giao diện Tối",
+        "w": 36,
+        "h": 36
+      },
+      {
+        "text": "🔥\n0d",
+        "w": 53,
+        "h": 36
+      },
+      {
+        "text": "Đăng nhập",
+        "w": 83,
+        "h": 36
+      },
+      {
+        "text": "← Quay lại TOEIC Hub",
+        "w": 148,
+        "h": 17
+      },
+      {
+        "text": "Part 5 (30c)",
+        "w": 106,
+        "h": 31
+      },
+      {
+        "text": "Part 6 (16c)",
+        "w": 106,
+        "h": 31
+      }
+    ],
+    "overflowingCount": 3,
+    "overflowingEls": [
+      {
+        "cls": "ge-subnav-btn ds-focusable is-active",
+        "right": 526,
+        "sw": 214
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 663,
+        "sw": 132
+      },
+      {
+        "cls": "ge-subnav-btn ds-focusable ",
+        "right": 807,
+        "sw": 138
+      }
+    ],
+    "crampedCards": [],
+    "clippedBtns": [
+      "📚 20 Đề TOEIC New Format 2026"
+    ],
+    "bottomNavH": 60
+  }
+]

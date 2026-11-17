@@ -115,14 +115,14 @@ export default function TopicPracticePage() {
               </a>
 
               {topicInfo && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
                   <span>
                     Chủ điểm: <strong style={{ color: 'var(--ds-text)' }}>{topicInfo.name_vi}</strong>
                   </span>
                   <span>•</span>
-                  <span>Band {topicInfo.target_score_band}+</span>
+                  <span style={{ whiteSpace: 'nowrap' }}>Band {topicInfo.target_score_band}+</span>
                   <span>•</span>
-                  <span>Trọng số {topicInfo.weight_in_toeic}%</span>
+                  <span style={{ whiteSpace: 'nowrap' }}>Trọng số {topicInfo.weight_in_toeic}%</span>
                 </div>
               )}
             </div>
@@ -223,16 +223,17 @@ export default function TopicPracticePage() {
                   <div
                     className="toeic-card"
                     style={{
-                      padding: '0.85rem 1.25rem',
+                      padding: '0.75rem 1rem',
                       display: 'flex',
+                      flexWrap: 'wrap',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      gap: '1rem',
-                      marginBottom: '1rem'
+                      gap: '0.65rem',
+                      marginBottom: '0.9rem'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--ds-text)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--ds-text)', whiteSpace: 'nowrap' }}>
                         Câu {currentIndex + 1} / {questions.length}
                       </span>
                       <span
@@ -242,7 +243,8 @@ export default function TopicPracticePage() {
                           padding: '0.15rem 0.5rem',
                           borderRadius: '0.35rem',
                           backgroundColor: 'var(--ds-success-bg)',
-                          color: 'var(--ds-success)'
+                          color: 'var(--ds-success)',
+                          whiteSpace: 'nowrap',
                         }}
                       >
                         Đúng: {correctCount} câu
@@ -250,17 +252,18 @@ export default function TopicPracticePage() {
                     </div>
 
                     {/* Progress Indicators */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', overflowX: 'auto' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflowX: 'auto', maxWidth: '100%', paddingBottom: '2px' }}>
                       {questions.map((_, i) => (
                         <button
                           key={i}
                           type="button"
                           onClick={() => setCurrentIndex(i)}
                           style={{
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '0.35rem',
-                            fontSize: '0.7rem',
+                            minWidth: '34px',
+                            height: '34px',
+                            flexShrink: 0,
+                            borderRadius: '0.45rem',
+                            fontSize: '0.76rem',
                             fontWeight: 800,
                             border: i === currentIndex ? '1.5px solid var(--ds-accent)' : '1px solid var(--ds-border)',
                             backgroundColor: i < currentIndex

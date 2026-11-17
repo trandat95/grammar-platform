@@ -46,112 +46,179 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
 
     return (
       <div
+        className="ge-timeline-graphic"
         style={{
           position: "relative",
           width: "100%",
-          height: "80px",
+          height: "112px",
           backgroundColor: "var(--ds-bg-elevated)",
           border: `1px solid ${"var(--ds-border)"}`,
-          borderRadius: "8px",
-          padding: "0.5rem 1rem",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          borderRadius: "10px",
+          padding: "0.5rem 0.75rem",
           overflow: "hidden",
         }}
       >
-        {/* Horizontal Axis Line */}
+        {/* Top Band: Reference Node Labels + Guide Ticks (Strictly separated from Axis Line) */}
         <div
           style={{
             position: "absolute",
-            left: "10%",
-            right: "10%",
-            top: "50%",
+            top: "10px",
+            left: "6%",
+            right: "6%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "54px" }}>
+            <span style={{ fontSize: "0.64rem", fontFamily: "var(--font-sans)", color: "var(--ds-warning)", fontWeight: "700", whiteSpace: "nowrap" }}>
+              QUÁ KHỨ
+            </span>
+            <span style={{ width: "2px", height: "8px", backgroundColor: "var(--ds-warning)", opacity: 0.55, marginTop: "3px", borderRadius: "1px" }} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "82px" }}>
+            <span style={{ fontSize: "0.64rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "800", whiteSpace: "nowrap" }}>
+              HIỆN TẠI (NOW)
+            </span>
+            <span style={{ width: "2px", height: "8px", backgroundColor: "var(--ds-success)", opacity: 0.7, marginTop: "3px", borderRadius: "1px" }} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: "58px" }}>
+            <span style={{ fontSize: "0.64rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700", whiteSpace: "nowrap" }}>
+              TƯƠNG LAI
+            </span>
+            <span style={{ width: "2px", height: "8px", backgroundColor: "var(--ds-accent)", opacity: 0.55, marginTop: "3px", borderRadius: "1px" }} />
+          </div>
+        </div>
+
+        {/* Middle Band: Horizontal Axis Line & Reference Dots */}
+        <div
+          style={{
+            position: "absolute",
+            left: "11%",
+            right: "11%",
+            top: "52%",
             height: "3px",
             backgroundColor: "var(--ds-border-strong)",
             transform: "translateY(-50%)",
           }}
         />
+        <div
+          style={{
+            position: "absolute",
+            left: "11%",
+            top: "52%",
+            transform: "translate(-50%, -50%)",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: "var(--ds-warning)",
+            zIndex: 2,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "52%",
+            transform: "translate(-50%, -50%)",
+            width: "14px",
+            height: "14px",
+            borderRadius: "50%",
+            backgroundColor: "var(--ds-btn-success)",
+            border: "2px solid var(--ds-card)",
+            boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)",
+            zIndex: 2,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: "89%",
+            top: "52%",
+            transform: "translate(-50%, -50%)",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: "var(--ds-accent)",
+            zIndex: 2,
+          }}
+        />
 
-        {/* 3 Core Time Nodes: Past, Present (Now), Future */}
-        <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 10%" }}>
-          {/* Past Reference Node */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-sans)", color: "var(--ds-warning)", fontWeight: "700" }}>QUÁ KHỨ</span>
-            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "var(--ds-warning)", marginTop: "2px" }} />
+        {/* Dynamic Action Span / Marker on Axis + Clean Non-Overlapping Lower Pill */}
+        {tense.timeline.type === "point" && (
+          <div
+            style={{
+              position: "absolute",
+              top: "52%",
+              left: isPast ? "26%" : isPresent ? "50%" : "74%",
+              transform: "translate(-50%, -50%)",
+              width: "22px",
+              height: "22px",
+              borderRadius: "50%",
+              backgroundColor: isPast ? "var(--ds-warning)" : isPresent ? "var(--ds-success)" : "var(--ds-accent)",
+              border: "3px solid var(--ds-card)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+              zIndex: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.65rem",
+              color: "var(--ds-text-on-accent)",
+              fontWeight: "800",
+            }}
+            title="Thời điểm diễn ra hành động đơn"
+          >
+            ★
           </div>
+        )}
 
-          {/* Present (Now) Reference Node */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-sans)", color: "var(--ds-success)", fontWeight: "800" }}>HIỆN TẠI (NOW)</span>
-            <div style={{ width: "14px", height: "14px", borderRadius: "50%", backgroundColor: "var(--ds-btn-success)", border: "2px solid var(--ds-card)", marginTop: "2px", boxShadow: "0 0 8px rgba(16, 185, 129, 0.6)" }} />
-          </div>
-
-          {/* Future Reference Node */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", zIndex: 2 }}>
-            <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-sans)", color: "var(--ds-accent)", fontWeight: "700" }}>TƯƠNG LAI</span>
-            <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "var(--ds-accent)", marginTop: "2px" }} />
-          </div>
-
-          {/* Dynamic Action Span / Marker */}
-          {tense.timeline.type === "point" && (
+        {tense.timeline.type === "continuous_range" && (
+          <>
             <div
               style={{
                 position: "absolute",
-                top: "50%",
-                left: isPast ? "25%" : isPresent ? "50%" : "75%",
-                transform: "translate(-50%, -50%)",
-                width: "22px",
-                height: "22px",
-                borderRadius: "50%",
-                backgroundColor: isPast ? "var(--ds-warning)" : isPresent ? "var(--ds-success)" : "var(--ds-accent)",
-                border: "3px solid var(--ds-card)",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                zIndex: 3,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.65rem",
-                color: "var(--ds-text-on-accent)",
-                fontWeight: "800",
-              }}
-              title="Thời điểm diễn ra hành động đơn"
-            >
-              ★
-            </div>
-          )}
-
-          {tense.timeline.type === "continuous_range" && (
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: isPast ? "20%" : isPresent ? "42%" : "68%",
-                width: isPast ? "22%" : isPresent ? "18%" : "22%",
-                height: "14px",
+                top: "52%",
+                left: isPast ? "18%" : isPresent ? "38%" : "58%",
+                width: "24%",
+                height: "10px",
                 transform: "translateY(-50%)",
-                backgroundColor: isLight ? "rgba(16, 185, 129, 0.4)" : "rgba(16, 185, 129, 0.5)",
+                backgroundColor: isLight ? "rgba(16, 185, 129, 0.35)" : "rgba(16, 185, 129, 0.45)",
                 border: "2px dashed var(--ds-success)",
                 borderRadius: "999px",
                 zIndex: 3,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.6rem",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: "8px",
+                left: isPast ? "30%" : isPresent ? "50%" : "70%",
+                transform: "translateX(-50%)",
+                padding: "2px 9px",
+                borderRadius: "999px",
+                backgroundColor: isLight ? "rgba(16, 185, 129, 0.14)" : "rgba(16, 185, 129, 0.22)",
+                border: "1px solid var(--ds-success)",
+                fontSize: "0.64rem",
                 fontFamily: "var(--font-sans)",
                 color: "var(--ds-success)",
-                fontWeight: "700",
+                fontWeight: "800",
+                whiteSpace: "nowrap",
+                zIndex: 4,
               }}
             >
               〰️ đang diễn ra
             </div>
-          )}
+          </>
+        )}
 
-          {tense.timeline.type === "continuing_to" && (
+        {tense.timeline.type === "continuing_to" && (
+          <>
             <div
               style={{
                 position: "absolute",
-                top: "50%",
+                top: "52%",
                 left: "22%",
                 width: "28%",
                 height: "8px",
@@ -163,64 +230,98 @@ export default function TimelineVisualization({ data, initialFocusId = null, isL
               }}
               title="Bắt đầu trong quá khứ kéo dài chạm mốc Hiện tại"
             />
-          )}
-
-          {tense.timeline.type === "completed_before" && (
             <div
               style={{
                 position: "absolute",
-                top: "50%",
+                bottom: "8px",
+                left: "36%",
+                transform: "translateX(-50%)",
+                padding: "2px 8px",
+                borderRadius: "999px",
+                backgroundColor: isLight ? "rgba(16, 185, 129, 0.12)" : "rgba(16, 185, 129, 0.18)",
+                border: "1px solid var(--ds-success)",
+                fontSize: "0.6rem",
+                fontFamily: "var(--font-sans)",
+                color: "var(--ds-success)",
+                fontWeight: "700",
+                whiteSpace: "nowrap",
+                zIndex: 4,
+              }}
+            >
+              ↗ kéo dài tới hiện tại
+            </div>
+          </>
+        )}
+
+        {tense.timeline.type === "completed_before" && (
+          <>
+            <div
+              style={{
+                position: "absolute",
+                top: "52%",
                 left: isPast ? "14%" : "60%",
-                width: "16%",
+                width: "18%",
                 height: "10px",
                 transform: "translateY(-50%)",
                 backgroundColor: isLight ? "var(--ds-purple-bg)" : "rgba(99, 102, 241, 0.4)",
                 border: "2px solid var(--ds-accent)",
                 borderRadius: "4px",
                 zIndex: 3,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.55rem",
-                color: "var(--ds-accent-border)",
-                fontWeight: "700",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: "8px",
+                left: isPast ? "23%" : "69%",
+                transform: "translateX(-50%)",
+                padding: "2px 8px",
+                borderRadius: "999px",
+                backgroundColor: isLight ? "var(--ds-purple-bg)" : "rgba(99, 102, 241, 0.22)",
+                border: "1px solid var(--ds-accent)",
+                fontSize: "0.6rem",
+                fontFamily: "var(--font-sans)",
+                color: "var(--ds-accent)",
+                fontWeight: "800",
+                whiteSpace: "nowrap",
+                zIndex: 4,
               }}
             >
               ✓ hoàn tất trước
             </div>
-          )}
+          </>
+        )}
 
-          {tense.timeline.type === "habitual" && (
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "15%",
-                right: "15%",
-                height: "2px",
-                transform: "translateY(-50%)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                zIndex: 3,
-              }}
-            >
-              {[1, 2, 3, 4, 5, 6].map((pt) => (
-                <div
-                  key={pt}
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    backgroundColor: "var(--ds-btn-success)",
-                    border: "1px solid var(--ds-card)",
-                  }}
-                  title="Thói quen / Sự thật lặp đi lặp lại"
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {tense.timeline.type === "habitual" && (
+          <div
+            style={{
+              position: "absolute",
+              top: "52%",
+              left: "16%",
+              right: "16%",
+              height: "2px",
+              transform: "translateY(-50%)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              zIndex: 3,
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6].map((pt) => (
+              <div
+                key={pt}
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--ds-btn-success)",
+                  border: "1px solid var(--ds-card)",
+                }}
+                title="Thói quen / Sự thật lặp đi lặp lại"
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   };

@@ -144,7 +144,7 @@ export default function LeaderboardPanel({
               variant="ghost"
               isLight={isLight}
               onClick={onOpenFullAchievements}
-              style={{ fontSize: "0.74rem", padding: "0.22rem 0.6rem", minHeight: "28px" }}
+              style={{ fontSize: "0.74rem", padding: "0.28rem 0.65rem", minHeight: "36px" }}
             >
               🏅 Huy hiệu &amp; Thành tích ➔
             </Button>
@@ -153,7 +153,7 @@ export default function LeaderboardPanel({
       </div>
 
       {/* Mode Switcher Tabs */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "0.85rem" }}>
+      <div className="ge-lb-tab-row" style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "0.85rem" }}>
         {BOARD_TABS.map((tb) => (
           <Button
             key={tb.id}
@@ -161,7 +161,7 @@ export default function LeaderboardPanel({
             variant={boardType === tb.id ? "primary" : "ghost"}
             isLight={isLight}
             onClick={() => setBoardType(tb.id)}
-            style={{ fontSize: "0.73rem", padding: "0.25rem 0.65rem", minHeight: "28px" }}
+            style={{ fontSize: "0.74rem", padding: "0.32rem 0.7rem", minHeight: "36px" }}
           >
             {tb.label}
           </Button>
@@ -189,9 +189,7 @@ export default function LeaderboardPanel({
             display: "flex",
             flexDirection: "column",
             gap: "0.5rem",
-            maxHeight: compact ? "380px" : "350px",
-            overflowY: "auto",
-            paddingRight: "2px",
+            ...(compact ? { maxHeight: "380px", overflowY: "auto", paddingRight: "2px" } : {}),
           }}
         >
           {leaderboard.entries.map((row, idx) => {
@@ -227,6 +225,7 @@ export default function LeaderboardPanel({
                   justifyContent: "space-between",
                   gap: "0.75rem",
                   padding: isTop1 ? "0.65rem 0.85rem" : "0.55rem 0.8rem",
+                  flexShrink: 0,
                   borderRadius: "10px",
                   backgroundColor: rowBg,
                   border: `1px solid ${rowBorder}`,

@@ -245,6 +245,25 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--ds-bg-elevated);
   border: 1px solid var(--ds-card-border);
   min-width: 0;
+  flex-shrink: 0;
+}
+
+.ge-brand-wrap,
+.ge-header-actions > *:not(.ge-search-wrap) {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ge-search-wrap {
+  flex: 0 1 138px;
+  min-width: 88px;
+  overflow: hidden;
+}
+
+.ge-search-wrap input {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .ge-hub-tab {
@@ -344,10 +363,13 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 10px;
   background: var(--ds-bg-elevated);
   border: 1px solid var(--ds-card-border);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .ge-bento-zone-btn {
-  padding: 7px 14px;
+  padding: 8px 14px;
+  min-height: 40px;
   border-radius: 7px;
   border: none;
   background: transparent;
@@ -499,16 +521,23 @@ h1, h2, h3, h4, h5, h6 {
    4. RESPONSIVE MEDIA QUERIES (FIX P0 MISSING BREAKPOINTS)
    ========================================================= */
 
-/* Laptop Wide / Admin 6-Tab Compaction (<= 1400px) */
-@media (max-width: 1400px) {
+/* Desktop Compact & Laptop (<= 1460px) */
+@media (max-width: 1460px) {
   .ge-header-2026 {
-    padding: 0 14px;
+    padding: 0 12px;
     gap: 6px;
   }
   .ge-hub-tab {
     padding: 5px 8px;
     font-size: 0.775rem;
   }
+  .ge-search-wrap {
+    max-width: 112px;
+  }
+}
+
+/* Laptop Wide / Admin 6-Tab Compaction (<= 1400px) */
+@media (max-width: 1400px) {
   .ge-hide-laptop-compact {
     display: none !important;
   }
@@ -581,13 +610,58 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     opacity: 0.18;
   }
+  /* Tablet & Mobile (<= 1023px): Switch top hub nav cleanly to Bottom Nav bar to eliminate 768px header collisions */
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  }
+  .ge-hub-nav {
+    display: none;
+  }
+  .ge-mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    background: var(--ds-glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--ds-card-border);
+    padding: 4px 2px env(safe-area-inset-bottom, 0px);
+  }
+  .ge-mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    min-width: 0 !important;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--ds-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 2px 1px;
+  }
+  .ge-mobile-nav-item span {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ge-mobile-nav-item.is-active {
+    color: var(--ds-accent);
+  }
 }
 
 /* Mobile Standard (<= 767px / 375px-430px Viewport) */
 @media (max-width: 767px) {
-  body {
-    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)); /* Chừa chỗ cho Bottom Nav + iOS safe-area */
-  }
   .ge-header-2026 {
     padding: 0 10px;
     gap: 6px;
@@ -634,9 +708,6 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 36px !important;
     min-width: auto !important;
   }
-  .ge-hub-nav {
-    display: none; /* Chuyển xuống Bottom Nav 5 nút */
-  }
   .ge-hide-mobile {
     display: none !important;
   }
@@ -644,20 +715,34 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex;
   }
   .ge-subnav-bar {
-    padding: 8px 10px;
+    padding: 6px 8px;
     justify-content: flex-start;
   }
   .ge-subnav-pills {
     width: 100%;
+    max-width: 100%;
     display: flex;
     flex-wrap: nowrap;
     justify-content: flex-start;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 6px;
-    padding: 0 2px;
+    gap: 5px;
+    padding: 3px;
     box-sizing: border-box;
+  }
+  .ge-subnav-pills:not(:has(> *:nth-child(3))) {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  .ge-subnav-pills:not(:has(> *:nth-child(3))) .ge-subnav-btn {
+    flex: 1 1 135px;
+    white-space: normal;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.25;
+    font-size: 0.78rem;
+    padding: 8px 10px;
   }
   .ge-subnav-pills::-webkit-scrollbar {
     display: none;
@@ -670,10 +755,42 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     white-space: nowrap;
     line-height: 1.25;
-    min-height: 38px;
+    min-height: 40px;
+  }
+  .ge-view-container {
+    padding: 0.9rem 0.75rem 88px !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .ge-mobile-chapter-bar button,
+  .ge-drawer-lesson-btn {
+    min-height: 40px !important;
+  }
+  .ge-app-root input[type="text"],
+  .ge-app-root input[type="search"],
+  .ge-app-root input[type="email"],
+  .ge-app-root input[type="password"],
+  .ge-app-root select,
+  .ge-app-root textarea {
+    font-size: 16px !important;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
   .ge-study-main {
-    padding: 14px 10px;
+    padding: 14px 10px 84px !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .ge-study-shell {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden;
+  }
+  .ge-hero-banner-card {
+    padding: 1rem !important;
   }
   .ge-quiz-area {
     padding: 12px 10px 84px !important;
@@ -740,46 +857,8 @@ h1, h2, h3, h4, h5, h6 {
   .ge-expl-step {
     padding: 10px 12px !important;
   }
-  .ge-mobile-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(60px + env(safe-area-inset-bottom, 0px));
-    box-sizing: border-box;
-    z-index: 90;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    background: var(--ds-glass);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid var(--ds-card-border);
-    padding: 4px 2px env(safe-area-inset-bottom, 0px);
-  }
   .ge-mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    min-height: 44px;
-    min-width: 0 !important;
     font-size: 0.61rem;
-    font-weight: 600;
-    color: var(--ds-text-muted);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 2px 1px;
-  }
-  .ge-mobile-nav-item span {
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .ge-mobile-nav-item.is-active {
-    color: var(--ds-accent);
   }
   /* #dict-popup biến thành Bottom Sheet trên màn hình Mobile */
   #dict-popup {
@@ -794,10 +873,6 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 16px !important;
     z-index: var(--ds-z-dict, 250) !important;
   }
-  .ge-vip-matrix-row {
-    grid-template-columns: 1fr !important;
-    gap: 6px !important;
-  }
 }
 
 @media (max-width: 390px) {
@@ -808,6 +883,33 @@ h1, h2, h3, h4, h5, h6 {
   .ge-auth-pill {
     max-width: 84px !important;
     padding: 5px 8px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  .ge-header-2026 {
+    padding: 0 8px !important;
+    gap: 4px !important;
+  }
+  .ge-brand-title {
+    max-width: 68px !important;
+    font-size: 0.72rem !important;
+  }
+  .ge-header-actions {
+    gap: 3px !important;
+  }
+  .ge-theme-btn {
+    width: 32px !important;
+    min-width: 32px !important;
+  }
+  .ge-streak-pill-live {
+    padding: 3px 6px !important;
+    font-size: 0.68rem !important;
+  }
+  .ge-auth-pill {
+    max-width: 74px !important;
+    padding: 4px 7px !important;
+    font-size: 0.7rem !important;
   }
 }
 
@@ -1016,6 +1118,7 @@ h1, h2, h3, h4, h5, h6 {
 .ge-lb-row {
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
   animation: geRowRiseIn 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
@@ -1359,6 +1462,271 @@ h1, h2, h3, h4, h5, h6 {
 
   .ge-brand-footer-links {
     display: none !important;
+  }
+}
+
+/* M4.5 Cycle 4: Base + Mobile-First VIP & Achievements Deep Redesign */
+.ge-vip-matrix-tiers {
+  display: contents;
+}
+
+.ge-vip-tier-kicker {
+  display: none;
+}
+
+.ge-ach-jump-pills {
+  display: none;
+}
+
+.ge-badge-expand-wrap {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .ge-mobile-hide-note {
+    display: none !important;
+  }
+
+  /* Trang Gói VIP (MonetizationHub) Mobile-First */
+  .ge-vip-guest-bar {
+    padding: 0.75rem 0.85rem !important;
+    gap: 0.55rem !important;
+  }
+
+  .ge-vip-guest-actions {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem !important;
+  }
+
+  .ge-vip-guest-actions > button {
+    width: 100%;
+    justify-content: center;
+    min-height: 38px !important;
+  }
+
+  .ge-vip-hero-card {
+    padding: 0.95rem !important;
+  }
+
+  .ge-vip-hero-card h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .ge-vip-hero-actions {
+    width: 100%;
+    align-items: stretch !important;
+  }
+
+  .ge-vip-hero-actions > button {
+    width: 100%;
+    justify-content: center;
+    min-height: 38px !important;
+  }
+
+  .ge-vip-plans-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .ge-vip-plan-card {
+    padding: 0.95rem !important;
+    gap: 0.65rem !important;
+  }
+
+  /* Đưa Gói Đề Xuất Tốt Nhất lên vị trí đầu tiên trên Mobile */
+  .ge-vip-plan-card.is-recommended {
+    order: -1;
+  }
+
+  .ge-vip-duel-grid img {
+    max-height: 120px;
+    object-fit: cover;
+  }
+
+  .ge-vip-matrix-header {
+    display: none !important;
+  }
+
+  .ge-vip-matrix-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+    padding: 0.8rem !important;
+  }
+
+  .ge-vip-matrix-tiers {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .ge-vip-matrix-cell {
+    align-items: flex-start !important;
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+    background: var(--ds-card);
+    border: 1px solid var(--ds-border-subtle);
+    min-width: 0;
+  }
+
+  .ge-vip-matrix-vip {
+    background: var(--ds-success-bg) !important;
+    border-color: var(--ds-success-border) !important;
+  }
+
+  .ge-vip-tier-kicker {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ds-text-muted);
+  }
+
+  .ge-vip-tier-kicker.is-vip {
+    color: var(--ds-success);
+  }
+
+  .ge-vip-matrix-cell span {
+    text-align: left !important;
+  }
+
+  .ge-vip-meter-track {
+    width: 100% !important;
+  }
+
+  /* Trang Thành Tích (GamificationHub) Mobile-First */
+  .ge-ach-hero-card {
+    padding: 0.9rem 1rem !important;
+  }
+
+  .ge-ach-jump-pills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .ge-ach-jump-btn {
+    width: 100%;
+    min-height: 38px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--ds-border);
+    background: var(--ds-card);
+    color: var(--ds-text-heading);
+    font-size: 0.76rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--ds-shadow-xs, none);
+  }
+
+  .ge-ach-card {
+    padding: 0.95rem !important;
+  }
+
+  .ge-streak-week-grid {
+    gap: 4px !important;
+  }
+
+  .ge-streak-week-grid > div {
+    padding: 0.38rem 0.15rem !important;
+    border-radius: 8px !important;
+  }
+
+  .ge-ach-filter-row {
+    width: 100%;
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    gap: 0.4rem !important;
+  }
+
+  .ge-ach-filter-row > button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 36px !important;
+  }
+
+  /* 2-Column Centered Trophy Medallion Grid on Mobile */
+  .ge-badges-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+  }
+
+  .ge-badge-mobile-extra {
+    display: none !important;
+  }
+
+  .ge-badge-expand-wrap {
+    display: block;
+  }
+
+  .ge-badge-card {
+    padding: 0.72rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .ge-badge-card-top {
+    margin-bottom: 0.45rem !important;
+    flex-wrap: wrap;
+  }
+
+  .ge-badge-card-body {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
+
+  .ge-badge-medallion {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 14px !important;
+  }
+
+  .ge-badge-title {
+    font-size: 0.8rem !important;
+  }
+
+  .ge-badge-desc {
+    font-size: 0.68rem !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ge-lb-tab-row {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    gap: 0.35rem !important;
+  }
+
+  .ge-lb-tab-row > button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 36px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  .ge-vip-matrix-tiers {
+    grid-template-columns: 1fr;
+  }
+
+  .ge-badges-grid {
+    gap: 0.5rem !important;
+  }
+
+  .ge-badge-medallion {
+    width: 50px !important;
+    height: 50px !important;
   }
 }
 

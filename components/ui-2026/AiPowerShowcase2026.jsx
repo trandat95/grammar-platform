@@ -378,7 +378,7 @@ export default function AiPowerShowcase2026({
             </div>
 
             {/* Before vs After Comparison */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "0.85rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem" }}>
               <div
                 style={{
                   padding: "0.9rem 1rem",
