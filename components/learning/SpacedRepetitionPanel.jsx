@@ -25,6 +25,8 @@ export default function SpacedRepetitionPanel({
   const [reviewOutcome, setReviewOutcome] = useState(null);
   const [submittingReview, setSubmittingReview] = useState(false);
   const [selectedConceptForGraph, setSelectedConceptForGraph] = useState(null);
+  const [showAllWeak, setShowAllWeak] = useState(false);
+  const [showAllTracked, setShowAllTracked] = useState(false);
   const T = getThemeTokens(isLight);
 
   const loadMastery = useCallback(async () => {
@@ -283,13 +285,32 @@ export default function SpacedRepetitionPanel({
 
       {/* Weak Concepts + Knowledge Graph Prerequisite Links */}
       {weakConcepts.length > 0 && (
-        <div style={{ marginBottom: "0.9rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.78rem", fontWeight: "800", color: T.textSecondary, marginBottom: "0.5rem" }}>
-            <KitIcon name="git-branch" size={14} color={T.accent} />
-            <span>Lỗ hổng Kiến thức &amp; Tiên quyết đề xuất (Knowledge Graph):</span>
+        <div style={{ position: "relative", zIndex: 2, marginBottom: "0.9rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.4rem", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.38rem", fontSize: "0.78rem", fontWeight: "800", color: T.textSecondary }}>
+              <KitIcon name="git-branch" size={14} color={T.accent} />
+              <span>Lỗ hổng Kiến thức &amp; Tiên quyết đề xuất ({weakConcepts.length}):</span>
+            </div>
+            {weakConcepts.length > 2 && (
+              <button
+                type="button"
+                onClick={() => setShowAllWeak((v) => !v)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  color: T.accent,
+                  fontSize: "0.74rem",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                }}
+              >
+                {showAllWeak ? "Thu gọn ▲" : `Xem thêm ${weakConcepts.length - 2} chuyên đề ▾`}
+              </button>
+            )}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "0.6rem" }}>
-            {weakConcepts.map((wc) => (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "0.55rem" }}>
+            {(showAllWeak ? weakConcepts : weakConcepts.slice(0, 2)).map((wc) => (
               <div
                 key={wc.id}
                 style={{
@@ -344,12 +365,31 @@ export default function SpacedRepetitionPanel({
 
       {/* Tracked Concept Mastery Compact Pills */}
       {activeTrackedConcepts.length > 0 && (
-        <div>
-          <div style={{ fontSize: "0.76rem", fontWeight: "800", color: T.textMuted, marginBottom: "0.45rem" }}>
-            Mức độ Thành thạo ({activeTrackedConcepts.length} chuyên đề đã luyện):
+        <div style={{ position: "relative", zIndex: 2 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.4rem", marginBottom: "0.45rem" }}>
+            <div style={{ fontSize: "0.76rem", fontWeight: "800", color: T.textMuted }}>
+              Mức độ Thành thạo ({activeTrackedConcepts.length} chuyên đề đã luyện):
+            </div>
+            {activeTrackedConcepts.length > 6 && (
+              <button
+                type="button"
+                onClick={() => setShowAllTracked((v) => !v)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  color: T.accent,
+                  fontSize: "0.74rem",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                }}
+              >
+                {showAllTracked ? "Thu gọn ▲" : `Xem tất cả ${activeTrackedConcepts.length} chuyên đề ▾`}
+              </button>
+            )}
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
-            {activeTrackedConcepts.slice(0, 14).map((c) => {
+            {(showAllTracked ? activeTrackedConcepts : activeTrackedConcepts.slice(0, 6)).map((c) => {
               const color = c.decayed_score >= 85 ? T.success : c.decayed_score >= 55 ? T.warning : T.danger;
               return (
                 <button

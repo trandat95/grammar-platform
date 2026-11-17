@@ -5886,7 +5886,7 @@ export default function Home() {
                       display: "grid",
                       gridTemplateColumns: "repeat(auto-fit, minmax(min(360px, 100%), 1fr))",
                       gap: "1.15rem",
-                      alignItems: "stretch",
+                      alignItems: "start",
                       marginBottom: "1.35rem",
                     }}
                   >
