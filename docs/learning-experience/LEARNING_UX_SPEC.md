@@ -1,5 +1,7 @@
 # 🧠 LEARNING EXPERIENCE & RETENTION UX SPECIFICATION
 
+> **Chi tiết 5 Core User Journeys & Quy tắc Hiển thị/Cấm Mascot (`M4.0`):** Xem [`M4_0_UX_JOURNEYS_AND_MASCOT_MAP.md`](./M4_0_UX_JOURNEYS_AND_MASCOT_MAP.md).
+
 > Thiết kế trải nghiệm để người học **hiểu bản chất, sửa đúng lỗi gốc và thấy sự tiến bộ thực sự** — không chỉ là app tích điểm XP/streak.
 
 ---
