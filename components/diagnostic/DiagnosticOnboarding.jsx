@@ -1,5 +1,5 @@
 import React from "react";
-import { BANNER_PATHS } from "../ui-2026/assetMap";
+import { BANNER_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
 
 export default function DiagnosticOnboarding({
   onStartTest,
@@ -28,38 +28,49 @@ export default function DiagnosticOnboarding({
         <img
           src={BANNER_PATHS.diagnostic}
           alt="Học viên Việt Nam và Cố vấn quốc tế phân tích Knowledge Graph"
+          width={1440}
+          height={420}
           className="ge-hero-banner-bg"
         />
         <div className="ge-hero-banner-scrim" />
         <div className="ge-hero-banner-content">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                padding: "0.3rem 0.75rem",
-                borderRadius: "9999px",
-                backgroundColor: T.accentBg,
-                color: T.accent,
-                border: `1px solid ${T.accentBorder}`,
-              }}
-            >
-              🎯 Milestone 2.8 • Central EdTech Engine
-            </span>
-            <span
-              style={{
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                color: T.textMuted,
-              }}
-            >
-              2-Tier Zero-Hallucination Diagnostic
-            </span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+            <img
+              src={MASCOT_PATHS.ai_coach}
+              alt="Cú Tri Thức AI Chẩn đoán"
+              width={56}
+              height={56}
+              style={{ width: "56px", height: "56px", objectFit: "contain", flexShrink: 0 }}
+            />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  padding: "0.3rem 0.75rem",
+                  borderRadius: "9999px",
+                  backgroundColor: T.accentBg,
+                  color: T.accent,
+                  border: `1px solid ${T.accentBorder}`,
+                }}
+              >
+                🎯 Milestone 2.8 • Central EdTech Engine
+              </span>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  color: T.textMuted,
+                }}
+              >
+                2-Tier Zero-Hallucination Diagnostic
+              </span>
+            </div>
           </div>
 
           <h1

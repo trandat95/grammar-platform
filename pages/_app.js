@@ -21,9 +21,16 @@ export default function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="application-name" content="GrammarPro.io.vn" />
-        <meta name="theme-color" content="#2563eb" />
+        <meta name="theme-color" content="#06b6d4" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="GrammarPro.io.vn" />
+        <meta property="og:image" content="/og-grammarpro.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="/og-grammarpro.png" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/logo-grammarpro.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
-import { BANNER_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
+import { BANNER_PATHS, MASCOT_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
 
 const FEATURE_VISUAL_META = {
   unlimited_exercises: { icon: "📚", freeLabel: "10 câu / bài", pct: 8 },
@@ -444,12 +444,14 @@ export default function MonetizationHub({
         <img
           src={BANNER_PATHS.vip}
           alt="Học viên luyện phát âm IPA & AI Study Coach VIP"
+          width={1440}
+          height={420}
           className="ge-hero-banner-bg"
         />
         <div className="ge-hero-banner-scrim" />
         <div
           className="ge-hero-banner-content"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}
+          style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}
         >
           <div style={{ flex: "1 1 520px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.45rem" }}>
@@ -722,13 +724,16 @@ export default function MonetizationHub({
             >
               <img
                 src={VIP_SHOWCASE_PATHS.free}
-                alt="Minh họa Gói FREE có giới hạn lượt học"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                alt="Minh họa Gói FREE có giới hạn 4 câu/bài"
+                width={360}
+                height={170}
+                loading="lazy"
+                style={{ width: "100%", height: "auto", display: "block", aspectRatio: "360 / 170" }}
               />
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textSecondary }}>
-              <div>⏱️ Chỉ mở <strong>10 câu / bài tập</strong> và <strong>2 lượt Quiz / ngày</strong></div>
+              <div>⏱️ Chỉ mở <strong>4 câu / bài tập</strong> và <strong>2 lượt Quiz / ngày</strong></div>
               <div>🤖 AI Grammar Coach giới hạn <strong>3 câu hỏi / phiên</strong></div>
               <div>🧠 Ôn tập Spaced Repetition tối đa <strong>20 thẻ</strong></div>
               <div style={{ color: T.textMuted }}>🔒 Khóa Radar 12 Chuyên đề chuyên sâu &amp; Xuất báo cáo</div>
@@ -771,8 +776,25 @@ export default function MonetizationHub({
               <img
                 src={VIP_SHOWCASE_PATHS.vip}
                 alt="Minh họa Thành viên VIP mở khóa 100% tính năng"
-                style={{ width: "100%", height: "auto", display: "block" }}
+                width={360}
+                height={170}
+                loading="lazy"
+                style={{ width: "100%", height: "auto", display: "block", aspectRatio: "360 / 170" }}
               />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+              <img
+                src={MASCOT_PATHS.vip}
+                alt="Cú Tri Thức VIP"
+                width={52}
+                height={52}
+                loading="lazy"
+                style={{ width: "52px", height: "52px", objectFit: "contain", flexShrink: 0 }}
+              />
+              <div style={{ fontSize: "0.78rem", color: T.accent, fontWeight: 700, lineHeight: 1.4 }}>
+                Đồng hành cùng Cú Tri Thức VIP — Không giới hạn 2.939 câu &amp; TOEIC 2026
+              </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.78rem", color: T.textHeading, fontWeight: 600 }}>

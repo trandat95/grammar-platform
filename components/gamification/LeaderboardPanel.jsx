@@ -256,6 +256,7 @@ export default function LeaderboardPanel({
                     alt={row.display_name}
                     width={isTop1 ? 34 : 30}
                     height={isTop1 ? 34 : 30}
+                    loading="lazy"
                     style={{
                       width: isTop1 ? 34 : 30,
                       height: isTop1 ? 34 : 30,

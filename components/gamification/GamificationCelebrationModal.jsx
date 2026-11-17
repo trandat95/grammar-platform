@@ -1,7 +1,7 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Badge, Button, Modal } from "../design-system";
-import { getBadgeArtworkPath } from "../ui-2026/assetMap";
+import { getBadgeArtworkPath, MASCOT_PATHS } from "../ui-2026/assetMap";
 
 /**
  * Milestone 2.10.7: Accessible Level Up Celebration & Achievement Unlock Modal
@@ -36,6 +36,15 @@ export default function GamificationCelebrationModal({
           transition: reducedMotion ? "none" : "transform 220ms ease",
         }}
       >
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src={MASCOT_PATHS.celebrate}
+            alt="Cú Tri Thức chúc mừng thành tích mới"
+            width={88}
+            height={88}
+            style={{ width: "88px", height: "88px", objectFit: "contain", display: "block" }}
+          />
+        </div>
         {leveledUp && levelState && (
           <div
             style={{

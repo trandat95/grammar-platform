@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Button, Input, Badge, Alert } from "../design-system";
-import { AVATAR_PATHS } from "../ui-2026/assetMap";
+import { AVATAR_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
 
 const QUICK_PROMPTS = [
   "Hôm nay nên dành 20 phút học bài nào?",
@@ -81,37 +81,34 @@ export default function AiAdvisorDrawer({
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={AVATAR_PATHS[1]}
-              alt="Cố vấn Anh Quốc"
-              width={36}
-              height={36}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: `2px solid ${T.card}`,
-                boxShadow: T.shadow,
-              }}
-            />
-            <img
-              src={AVATAR_PATHS[3]}
-              alt="Cố vấn Hoa Kỳ"
-              width={36}
-              height={36}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: `2px solid ${T.card}`,
-                marginLeft: "-10px",
-                boxShadow: T.shadow,
-              }}
-            />
-          </div>
+          <img
+            src={MASCOT_PATHS.ai_coach}
+            alt="Cú Tri Thức AI Study Coach"
+            width={44}
+            height={44}
+            loading="lazy"
+            style={{
+              width: 44,
+              height: 44,
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
+          />
+          <img
+            src={AVATAR_PATHS[1]}
+            alt="Cố vấn Anh Quốc"
+            width={34}
+            height={34}
+            loading="lazy"
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: `2px solid ${T.card}`,
+              boxShadow: T.shadow,
+            }}
+          />
           <div>
             <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>
               Cố vấn Học tập AI (AI Study Coach)

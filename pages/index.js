@@ -22,7 +22,7 @@ import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
 import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
-import { BANNER_PATHS, CHAPTER_ICON_MAP } from "../components/ui-2026/assetMap";
+import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import QuestionRenderer from "../components/question-engine/QuestionRenderer";
@@ -3976,9 +3976,16 @@ export default function Home() {
 
             if (filtered.length === 0) {
               return (
-                <div style={{ textAlign: "center", padding: "2.5rem 1rem", color: "var(--ds-text-muted)" }}>
-                  <div style={{ display: "inline-flex", padding: "0.75rem", borderRadius: "12px", backgroundColor: "var(--ds-accent-bg)", color: "var(--ds-accent)", marginBottom: "0.75rem" }}>
-                    <KitIcon name="tool-vocab" size={28} />
+                <div style={{ textAlign: "center", padding: "2rem 1rem", color: "var(--ds-text-muted)" }}>
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
+                    <img
+                      src={MASCOT_PATHS.empty}
+                      alt="Sổ từ vựng đang trống"
+                      width={92}
+                      height={92}
+                      loading="lazy"
+                      style={{ width: "92px", height: "92px", objectFit: "contain", display: "block" }}
+                    />
                   </div>
                   <p style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--ds-text-heading)", marginBottom: "0.45rem" }}>
                     Chưa có từ vựng nào trong sổ
@@ -5494,6 +5501,8 @@ export default function Home() {
                 <img
                   src={BANNER_PATHS.dashboard}
                   alt=""
+                  width={1440}
+                  height={420}
                   aria-hidden="true"
                   className="ge-hero-banner-bg"
                 />
@@ -5508,15 +5517,23 @@ export default function Home() {
                     gap: "1rem",
                   }}
                 >
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
-                      <div className="ge-streak-orb" aria-hidden="true">
-                        <span className="ge-streak-flame-live" style={{ fontSize: "1.35rem" }}>🔥</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flex: "1 1 auto" }}>
+                    <img
+                      src={MASCOT_PATHS.welcome}
+                      alt="Cú Tri Thức chào mừng bạn quay lại"
+                      width={64}
+                      height={64}
+                      style={{ width: "64px", height: "64px", objectFit: "contain", flexShrink: 0 }}
+                    />
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
+                        <div className="ge-streak-orb" aria-hidden="true">
+                          <span className="ge-streak-flame-live" style={{ fontSize: "1.35rem" }}>🔥</span>
+                        </div>
+                        <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
+                          Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
+                        </h1>
                       </div>
-                      <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
-                        Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
-                      </h1>
-                    </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                       <span
@@ -5556,6 +5573,7 @@ export default function Home() {
                           ⚡ Nâng cấp VIP
                         </button>
                       )}
+                    </div>
                     </div>
                   </div>
 
@@ -7240,6 +7258,15 @@ export default function Home() {
                     boxShadow: T.shadow,
                   }}
                 >
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.65rem" }}>
+                    <img
+                      src={quizResults.percentage >= 80 ? MASCOT_PATHS.celebrate : MASCOT_PATHS.encourage}
+                      alt={quizResults.percentage >= 80 ? "Cú Tri Thức chúc mừng kết quả cao" : "Cú Tri Thức khích lệ tiếp tục cố gắng"}
+                      width={88}
+                      height={88}
+                      style={{ width: "88px", height: "88px", objectFit: "contain", display: "block" }}
+                    />
+                  </div>
                   <div style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     KẾT QUẢ ĐÁNH GIÁ
                   </div>
@@ -7654,7 +7681,7 @@ export default function Home() {
               {savedMistakes.length === 0 ? (
                 <div
                   style={{
-                    padding: "4rem 2rem",
+                    padding: "3rem 2rem",
                     textAlign: "center",
                     backgroundColor: T.card,
                     border: `1px dashed ${T.border}`,
@@ -7662,6 +7689,16 @@ export default function Home() {
                     boxShadow: T.shadow,
                   }}
                 >
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.85rem" }}>
+                    <img
+                      src={MASCOT_PATHS.empty}
+                      alt="Sổ tay lỗi sai đang trống"
+                      width={92}
+                      height={92}
+                      loading="lazy"
+                      style={{ width: "92px", height: "92px", objectFit: "contain", display: "block" }}
+                    />
+                  </div>
                   <div style={{ fontSize: "1.1rem", fontWeight: "700", color: T.text, marginBottom: "0.5rem" }}>
                     Chưa có câu sai nào trong sổ tay của bạn
                   </div>

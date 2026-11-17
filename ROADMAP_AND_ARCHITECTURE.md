@@ -68,7 +68,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Data Science Engine** | **3.2 (DS-2)** | **Exam Telemetry Persistence (`exam_attempts`, `user_error_dna_snapshots`) & Distractor Analytics** | **P0 (Core DS)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
-| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport & Preview QA Gate** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | 🔄 `M4.0–M4.2` ✅ • `M4.3` ✅ *(Option B: 5 Mascot SVG/Canvas Composites pending AI raster upgrade post-quota)* • `M4.4A` ✅ • **Next: `M4.4B`** |
+| **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport & Preview QA Gate** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | 🔄 `M4.0–M4.2` ✅ • `M4.3` ✅ *(Option B: 5 Mascot Composites pending AI upgrade post-quota)* • `M4.4A–B` ✅ • **Next: `M4.5`** |
 
 ---
 

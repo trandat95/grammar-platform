@@ -205,6 +205,9 @@ export default function GamificationHub({
         <img
           src={BANNER_PATHS.gamification}
           alt="Cộng đồng học viên ăn mừng chuỗi Streak & Thành tích"
+          width={1440}
+          height={420}
+          loading="lazy"
           className="ge-hero-banner-bg"
         />
         <div className="ge-hero-banner-scrim" />
@@ -531,6 +534,7 @@ export default function GamificationHub({
                         alt={b.title_vi}
                         width={74}
                         height={74}
+                        loading="lazy"
                         style={{
                           width: "100%",
                           height: "100%",

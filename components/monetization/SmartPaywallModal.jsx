@@ -1,6 +1,7 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Modal } from "../design-system";
+import { MASCOT_PATHS } from "../ui-2026/assetMap";
 
 /**
  * Milestone 2.12.8 & 2.12.9: Contextual Smart Paywall Modal
@@ -45,21 +46,34 @@ export default function SmartPaywallModal({
             border: `1px solid ${T.accentBorder}`,
             borderRadius: "12px",
             padding: "1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.85rem",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
-            <Badge tone="accent" isLight={isLight}>
-              Đề xuất theo Tiến độ Thực tế
-            </Badge>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
+              <Badge tone="accent" isLight={isLight}>
+                Đề xuất theo Tiến độ Thực tế
+              </Badge>
+            </div>
+            <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
+              {title}
+            </h3>
+            <p style={{ margin: 0, fontSize: "0.84rem", color: T.textSecondary, lineHeight: 1.5 }}>
+              {cfg.subtitle_vi ||
+                psychology.personalizedHook ||
+                "Mở khóa toàn bộ 2,939 câu bài tập, AI Coach & Lộ trình cá nhân hóa."}
+            </p>
           </div>
-          <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
-            {title}
-          </h3>
-          <p style={{ margin: 0, fontSize: "0.84rem", color: T.textSecondary, lineHeight: 1.5 }}>
-            {cfg.subtitle_vi ||
-              psychology.personalizedHook ||
-              "Mở khóa toàn bộ 2,939 câu bài tập, AI Coach & Lộ trình cá nhân hóa."}
-          </p>
+          <img
+            src={MASCOT_PATHS.vip}
+            alt="Cú Tri Thức VIP"
+            width={68}
+            height={68}
+            style={{ width: "68px", height: "68px", objectFit: "contain", flexShrink: 0 }}
+          />
         </div>
 
         {psychology.goalGradientHint && (

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import KitIcon from "./KitIcon";
+import { XRAY_PREVIEW_PATH } from "./assetMap";
 
 /**
  * AiPowerShowcase2026
@@ -43,27 +45,30 @@ export default function AiPowerShowcase2026({
   const tabs = [
     {
       id: "xray",
-      label: "🔬 1. Soi Cấu Trúc Câu (X-Ray)",
-      shortLabel: "🔬 1. Soi Câu X-Ray",
+      iconName: "tool-xray",
+      label: "1. Soi Cấu Trúc Câu (X-Ray)",
+      shortLabel: "1. Soi Câu X-Ray",
       tag: "Giải trong 3s",
     },
     {
       id: "dna",
-      label: "🩺 2. Bắt Bệnh Lỗi Hay Sai",
-      shortLabel: "🩺 2. Lỗi Hay Sai",
+      iconName: "tool-dna",
+      label: "2. Bắt Bệnh Lỗi Hay Sai",
+      shortLabel: "2. Lỗi Hay Sai",
       tag: "Tránh mất điểm oan",
     },
     {
       id: "loop",
-      label: "🔄 3. Luyện Lại Câu Tương Tự",
-      shortLabel: "🔄 3. Luyện Câu Tương Tự",
+      iconName: "tool-loop",
+      label: "3. Luyện Lại Câu Tương Tự",
+      shortLabel: "3. Luyện Câu Tương Tự",
       tag: "Hết sai lần 2",
     },
   ];
 
   const pillars = [
     {
-      icon: "🔬",
+      iconName: "tool-xray",
       title: "Nhìn Thấu Cấu Trúc Câu",
       desc: "Gạch chân Chủ–Vị, bỏ qua cụm từ gây nhiễu để chọn đúng trong 3 giây thay vì học vẹt.",
       stat: "2.939 câu + 215 mẹo giải",
@@ -72,7 +77,7 @@ export default function AiPowerShowcase2026({
       border: "var(--ds-accent-border)",
     },
     {
-      icon: "📐",
+      iconName: "tool-chart",
       title: "Biết Rõ Mình Yếu Ở Đâu",
       desc: "Đo cả độ đúng lẫn tốc độ làm bài để tách biệt 'chưa hiểu bài' với 'chọn nhầm vì vội'.",
       stat: "Chấm điểm theo độ khó",
@@ -81,7 +86,7 @@ export default function AiPowerShowcase2026({
       border: "var(--ds-indigo-border)",
     },
     {
-      icon: "🧑‍🏫",
+      iconName: "tool-spark",
       title: "Giải Thích Dễ Hiểu Theo Trình Độ",
       desc: "Dù đang mất gốc hay ôn mục tiêu 850+, lời giải luôn đi thẳng vào trọng tâm dễ nhớ.",
       stat: "4.000 câu TOEIC 2026",
@@ -90,7 +95,7 @@ export default function AiPowerShowcase2026({
       border: "var(--ds-purple-border)",
     },
     {
-      icon: "🚀",
+      iconName: "tool-loop",
       title: "Sai Đâu Luyện Lại Đúng Chỗ Đó",
       desc: "Sai bẫy nào hệ thống đưa ngay câu cùng dạng để bạn làm lại tới khi chắc tay và thấy điểm tăng.",
       stat: "Kiểm chứng qua từng đề",
@@ -211,8 +216,12 @@ export default function AiPowerShowcase2026({
                     fontSize: "0.78rem",
                     padding: "0.38rem 0.85rem",
                     fontWeight: 700,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
                   }}
                 >
+                  <KitIcon name={tab.iconName} size={15} />
                   <span className="ge-hide-mobile">{tab.label}</span>
                   <span className="ge-show-mobile-only">{tab.shortLabel}</span>
                 </button>
@@ -346,6 +355,26 @@ export default function AiPowerShowcase2026({
                   </>
                 )}
               </div>
+            </div>
+
+            {/* M4.4B Vector X-Ray Architecture Preview */}
+            <div
+              style={{
+                borderRadius: "12px",
+                overflow: "hidden",
+                border: "1px solid var(--ds-border)",
+                backgroundColor: "var(--ds-bg)",
+                padding: "0.5rem",
+              }}
+            >
+              <img
+                src={XRAY_PREVIEW_PATH}
+                alt="Sơ đồ phân tích cấu trúc câu Sentence X-Ray GrammarPro"
+                width={600}
+                height={280}
+                loading="lazy"
+                style={{ width: "100%", height: "auto", maxHeight: "240px", objectFit: "contain", display: "block", margin: "0 auto", aspectRatio: "600 / 280" }}
+              />
             </div>
 
             {/* Before vs After Comparison */}
@@ -549,7 +578,22 @@ export default function AiPowerShowcase2026({
           >
             <div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem", marginBottom: "0.4rem" }}>
-                <span style={{ fontSize: "1.3rem" }} aria-hidden="true">{p.icon}</span>
+                <span
+                  aria-hidden="true"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "8px",
+                    backgroundColor: p.bg,
+                    border: `1px solid ${p.border}`,
+                    color: p.color,
+                  }}
+                >
+                  <KitIcon name={p.iconName} size={18} />
+                </span>
                 <span
                   style={{
                     fontSize: "0.68rem",

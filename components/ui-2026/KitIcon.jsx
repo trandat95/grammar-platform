@@ -127,6 +127,45 @@ export default function KitIcon({ name, size = 18, className = "", style = {} })
           <circle cx="12" cy="12" r="1.5" fill="var(--ds-accent)" stroke="var(--ds-accent)" />
         </svg>
       );
+    case "tool-xray":
+      return (
+        <svg {...common}>
+          <rect x="3" y="5" width="18" height="14" rx="3" fill="var(--ds-accent-bg)" stroke="var(--ds-accent)" />
+          <path d="M7 10h4M7 14h10M14 10h3" stroke="var(--ds-accent)" strokeWidth="2" />
+        </svg>
+      );
+    case "tool-dna":
+      return (
+        <svg {...common}>
+          <path d="M6 3c0 5 12 5 12 10s-12 5-12 8" stroke="var(--ds-warning)" />
+          <path d="M18 3c0 5-12 5-12 10s12 5 12 8" stroke="var(--ds-accent)" />
+          <path d="M8 7h8M8 17h8" stroke="var(--ds-text-muted)" />
+        </svg>
+      );
+    case "tool-loop":
+      return (
+        <svg {...common}>
+          <path d="M3 12a9 9 0 0 1 15-6.7L21 8" stroke="var(--ds-success)" />
+          <path d="M21 3v5h-5" stroke="var(--ds-success)" />
+          <path d="M21 12a9 9 0 0 1-15 6.7L3 16" stroke="var(--ds-accent)" />
+          <path d="M3 21v-5h5" stroke="var(--ds-accent)" />
+        </svg>
+      );
+    case "tool-chart":
+      return (
+        <svg {...common}>
+          <path d="M4 20h16" />
+          <rect x="6" y="12" width="3" height="6" rx="1" fill="var(--ds-accent-bg)" stroke="var(--ds-accent)" />
+          <rect x="11" y="8" width="3" height="10" rx="1" fill="var(--ds-indigo-bg)" stroke="var(--ds-indigo)" />
+          <rect x="16" y="4" width="3" height="14" rx="1" fill="var(--ds-success-bg)" stroke="var(--ds-success)" />
+        </svg>
+      );
+    case "tool-spark":
+      return (
+        <svg {...common}>
+          <path d="m12 3 2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3Z" fill="var(--ds-warning-bg)" stroke="var(--ds-warning)" />
+        </svg>
+      );
     default:
       return null;
   }

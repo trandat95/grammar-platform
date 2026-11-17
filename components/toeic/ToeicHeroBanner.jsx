@@ -82,8 +82,10 @@ export default function ToeicHeroBanner({
     >
       {/* Background Illustration */}
       <img
-        src={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive-ai.jpg'}
+        src={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive.webp'}
         alt="TOEIC AI Adaptive Background"
+        width={1440}
+        height={420}
         aria-hidden="true"
         style={{
           position: 'absolute',

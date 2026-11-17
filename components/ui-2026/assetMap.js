@@ -3,11 +3,24 @@
  */
 
 export const BANNER_PATHS = {
-  dashboard: "/assets/banners/01-hero-dashboard-vn-foreign.jpg",
-  diagnostic: "/assets/banners/02-diagnostic-roadmap-ai.jpg",
-  gamification: "/assets/banners/03-gamification-streak-community.jpg",
-  vip: "/assets/banners/04-vip-ai-study-coach.jpg",
-  toeic: "/assets/banners/05-toeic-adaptive-ai.jpg",
+  dashboard: "/assets/banners/01-hero-dashboard.webp",
+  diagnostic: "/assets/banners/02-diagnostic-roadmap.webp",
+  gamification: "/assets/banners/03-gamification-community.webp",
+  vip: "/assets/banners/04-vip-coach.webp",
+  toeic: "/assets/banners/05-toeic-adaptive.webp",
+};
+
+export const XRAY_PREVIEW_PATH = "/assets/banners/xray-preview.svg";
+
+export const MASCOT_PATHS = {
+  master: "/assets/mascot/master-mascot.png",
+  welcome: "/assets/mascot/mascot-welcome.png",
+  celebrate: "/assets/mascot/mascot-celebrate.png",
+  encourage: "/assets/mascot/mascot-encourage.png",
+  vip: "/assets/mascot/mascot-vip.png",
+  empty: "/assets/mascot/mascot-empty.png",
+  ai_coach: "/assets/mascot/mascot-ai-coach.png",
+  state_404: "/assets/mascot/state-404.svg",
 };
 
 export const VIP_SHOWCASE_PATHS = {
@@ -16,10 +29,10 @@ export const VIP_SHOWCASE_PATHS = {
 };
 
 export const AVATAR_PATHS = [
-  "/assets/avatars/avatar-01-vn-student-female.jpg",
-  "/assets/avatars/avatar-02-uk-mentor-male.jpg",
-  "/assets/avatars/avatar-03-vn-learner-male.jpg",
-  "/assets/avatars/avatar-04-us-coach-female.jpg",
+  "/assets/avatars/unified/avatar-01.svg",
+  "/assets/avatars/unified/avatar-02.svg",
+  "/assets/avatars/unified/avatar-03.svg",
+  "/assets/avatars/unified/avatar-04.svg",
 ];
 
 export const CHAPTER_ICON_MAP = {
@@ -62,27 +75,27 @@ export function getBadgeTierIconPath(tier = "Bronze", unlocked = false, isHidden
 }
 
 export const BADGE_ART_MAP = {
-  first_step: "/assets/badges/first_step.jpg",
-  daily_learner_3: "/assets/badges/daily_learner_3.jpg",
-  streak_7_days: "/assets/badges/streak_7_days.jpg",
-  warrior_30_days: "/assets/badges/warrior_30_days.jpg",
-  consistency_master_100: "/assets/badges/consistency_master_100.jpg",
-  night_owl_hidden: "/assets/badges/night_owl_hidden.jpg",
-  tense_explorer: "/assets/badges/tense_explorer.jpg",
-  master_13_tenses: "/assets/badges/master_13_tenses.jpg",
-  conditional_expert: "/assets/badges/conditional_expert.jpg",
-  passive_voice_master: "/assets/badges/passive_voice_master.svg",
-  grammar_legend_12: "/assets/badges/grammar_legend_12.jpg",
-  perfect_score: "/assets/badges/perfect_score.jpg",
-  sharp_shooter: "/assets/badges/sharp_shooter.svg",
-  error_hunter: "/assets/badges/error_hunter.svg",
-  comeback_king: "/assets/badges/comeback_king.svg",
-  lightning_master_hidden: "/assets/badges/lightning_master_hidden.svg",
-  quiz_starter: "/assets/badges/quiz_starter.svg",
-  century_club: "/assets/badges/century_club.svg",
-  knowledge_collector: "/assets/badges/knowledge_collector.svg",
-  review_master: "/assets/badges/review_master.svg",
-  mystery_locked: "/assets/badges/mystery_locked.jpg",
+  first_step: "/assets/badges/unified/first_step.svg",
+  daily_learner_3: "/assets/badges/unified/daily_learner_3.svg",
+  streak_7_days: "/assets/badges/unified/streak_7_days.svg",
+  warrior_30_days: "/assets/badges/unified/warrior_30_days.svg",
+  consistency_master_100: "/assets/badges/unified/consistency_master_100.svg",
+  night_owl_hidden: "/assets/badges/unified/night_owl_hidden.svg",
+  tense_explorer: "/assets/badges/unified/tense_explorer.svg",
+  master_13_tenses: "/assets/badges/unified/master_13_tenses.svg",
+  conditional_expert: "/assets/badges/unified/conditional_expert.svg",
+  passive_voice_master: "/assets/badges/unified/passive_voice_master.svg",
+  grammar_legend_12: "/assets/badges/unified/grammar_legend_12.svg",
+  perfect_score: "/assets/badges/unified/perfect_score.svg",
+  sharp_shooter: "/assets/badges/unified/sharp_shooter.svg",
+  error_hunter: "/assets/badges/unified/error_hunter.svg",
+  comeback_king: "/assets/badges/unified/comeback_king.svg",
+  lightning_master_hidden: "/assets/badges/unified/lightning_master_hidden.svg",
+  quiz_starter: "/assets/badges/unified/quiz_starter.svg",
+  century_club: "/assets/badges/unified/century_club.svg",
+  knowledge_collector: "/assets/badges/unified/knowledge_collector.svg",
+  review_master: "/assets/badges/unified/review_master.svg",
+  mystery_locked: "/assets/badges/unified/mystery_locked.svg",
 };
 
 export function getBadgeArtworkPath(code, tier = "Bronze", unlocked = false, isHidden = false) {
