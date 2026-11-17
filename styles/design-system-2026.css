@@ -470,6 +470,10 @@ h1, h2, h3, h4, h5, h6 {
   max-width: min(700px, 65%);
 }
 
+.ge-hero-banner-content--wide {
+  max-width: min(620px, 72%);
+}
+
 /* Integrated Feature Action Cards (Cohesive 2-Zone Flex Row: Crisp Text + Integrated Vector Motif) */
 .ge-feature-card {
   position: relative;
@@ -1598,7 +1602,8 @@ h1, h2, h3, h4, h5, h6 {
     mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 54%, #000 100%);
   }
 
-  .ge-hero-banner-content--safe {
+  .ge-hero-banner-content--safe,
+  .ge-hero-banner-content--wide {
     max-width: 100%;
   }
 

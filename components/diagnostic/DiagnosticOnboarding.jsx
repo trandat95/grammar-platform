@@ -18,7 +18,7 @@ export default function DiagnosticOnboarding({
         padding: "2rem 1.25rem",
       }}
     >
-      {/* Hero Card with 2026 Editorial Diagnostic Banner */}
+      {/* Single Unified Hero Card with Integrated Diagnostic Backdrop */}
       <div
         className="ge-hero-banner-card"
         style={{
@@ -28,37 +28,32 @@ export default function DiagnosticOnboarding({
         }}
       >
         <div
-          className="ge-hero-banner-card"
           style={{
             position: "relative",
-            borderRadius: "12px",
-            overflow: "hidden",
             marginBottom: "1.5rem",
-            padding: "1.35rem 1.4rem",
-            border: `1px solid ${T.borderSubtle}`,
           }}
         >
           <HeroBannerVisual kind="diagnostic" webpSrc={BANNER_PATHS.diagnostic} />
-          <div className="ge-hero-banner-content ge-hero-banner-content--safe">
-            <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
+          <div className="ge-hero-banner-content ge-hero-banner-content--safe ge-hero-banner-content--wide">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.85rem" }}>
               <img
                 src={MASCOT_PATHS.ai_coach}
                 alt="Cú Tri Thức AI Chẩn đoán"
-                width={56}
-                height={56}
-                style={{ width: "56px", height: "56px", objectFit: "contain", flexShrink: 0 }}
+                width={52}
+                height={52}
+                style={{ width: "52px", height: "52px", objectFit: "contain", flexShrink: 0 }}
               />
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", minWidth: 0 }}>
                 <span
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "0.35rem",
-                    fontSize: "0.75rem",
+                    fontSize: "0.72rem",
                     fontWeight: 700,
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    padding: "0.3rem 0.75rem",
+                    letterSpacing: "0.06em",
+                    padding: "0.26rem 0.68rem",
                     borderRadius: "9999px",
                     backgroundColor: T.accentBg,
                     color: T.accent,
@@ -70,7 +65,7 @@ export default function DiagnosticOnboarding({
                 </span>
                 <span
                   style={{
-                    fontSize: "0.75rem",
+                    fontSize: "0.74rem",
                     fontWeight: 600,
                     color: T.textMuted,
                   }}
@@ -82,11 +77,11 @@ export default function DiagnosticOnboarding({
 
             <h1
               style={{
-                fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)",
+                fontSize: "clamp(1.32rem, 2.3vw, 1.72rem)",
                 fontWeight: 800,
                 color: T.textHeading,
-                lineHeight: 1.25,
-                margin: "0 0 0.75rem 0",
+                lineHeight: 1.28,
+                margin: "0 0 0.65rem 0",
               }}
             >
               Khám Phá Trình Độ Ngữ Pháp &amp; Thiết Lập Lộ Trình Học Cá Nhân Hóa
@@ -94,7 +89,7 @@ export default function DiagnosticOnboarding({
 
             <p
               style={{
-                fontSize: "0.95rem",
+                fontSize: "0.92rem",
                 color: T.textSecondary,
                 lineHeight: 1.6,
                 margin: 0,

@@ -563,23 +563,23 @@ function HeroLightSvg({ kind }) {
     return (
       <svg viewBox="0 0 360 180" width="100%" height="100%" preserveAspectRatio="xMaxYMid meet" fill="none">
         <defs>
-          <radialGradient id="hl-diag-aura" cx="72%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--ds-indigo)" stopOpacity="0.2" />
+          <radialGradient id="hl-diag-aura" cx="78%" cy="50%" r="48%">
+            <stop offset="0%" stopColor="var(--ds-indigo)" stopOpacity="0.18" />
             <stop offset="100%" stopColor="var(--ds-indigo)" stopOpacity="0" />
           </radialGradient>
         </defs>
-        <circle cx="262" cy="90" r="84" fill="url(#hl-diag-aura)" />
-        <g transform="translate(262, 90)">
-          <polygon points="0,-58 50,-29 50,29 0,58 -50,29 -50,-29" stroke="var(--ds-indigo)" strokeOpacity="0.32" strokeWidth="1.5" fill="var(--ds-card)" fillOpacity="0.65" />
-          <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" stroke="var(--ds-indigo)" strokeOpacity="0.28" strokeWidth="1.2" strokeDasharray="4 4" />
-          <line x1="0" y1="-58" x2="0" y2="58" stroke="var(--ds-indigo)" strokeOpacity="0.2" />
-          <line x1="-50" y1="-29" x2="50" y2="29" stroke="var(--ds-indigo)" strokeOpacity="0.2" />
-          <line x1="-50" y1="29" x2="50" y2="-29" stroke="var(--ds-indigo)" strokeOpacity="0.2" />
-          <polygon points="0,-46 42,-19 28,24 0,44 -36,14 -30,-22" fill="var(--ds-indigo)" fillOpacity="0.25" stroke="var(--ds-indigo)" strokeWidth="2.2" />
-          <circle cx="0" cy="-46" r="4" fill="var(--ds-indigo)" />
-          <circle cx="42" cy="-19" r="4" fill="var(--ds-cyan)" />
-          <circle cx="28" cy="24" r="4" fill="var(--ds-success)" />
-          <circle cx="-36" cy="14" r="4" fill="var(--ds-warning)" />
+        <circle cx="282" cy="90" r="76" fill="url(#hl-diag-aura)" />
+        <g transform="translate(282, 90)">
+          <polygon points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" stroke="var(--ds-indigo)" strokeOpacity="0.3" strokeWidth="1.4" fill="var(--ds-card)" fillOpacity="0.6" />
+          <polygon points="0,-32 27.7,-16 27.7,16 0,32 -27.7,16 -27.7,-16" stroke="var(--ds-indigo)" strokeOpacity="0.25" strokeWidth="1.1" strokeDasharray="3.5 3.5" />
+          <line x1="0" y1="-50" x2="0" y2="50" stroke="var(--ds-indigo)" strokeOpacity="0.18" />
+          <line x1="-43.3" y1="-25" x2="43.3" y2="25" stroke="var(--ds-indigo)" strokeOpacity="0.18" />
+          <line x1="-43.3" y1="25" x2="43.3" y2="-25" stroke="var(--ds-indigo)" strokeOpacity="0.18" />
+          <polygon points="0,-40 36,-16 24,20 0,38 -31,12 -26,-19" fill="var(--ds-indigo)" fillOpacity="0.22" stroke="var(--ds-indigo)" strokeWidth="2" />
+          <circle cx="0" cy="-40" r="3.5" fill="var(--ds-indigo)" />
+          <circle cx="36" cy="-16" r="3.5" fill="var(--ds-cyan)" />
+          <circle cx="24" cy="20" r="3.5" fill="var(--ds-success)" />
+          <circle cx="-31" cy="12" r="3.5" fill="var(--ds-warning)" />
         </g>
       </svg>
     );
