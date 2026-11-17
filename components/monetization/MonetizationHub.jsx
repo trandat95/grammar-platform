@@ -523,16 +523,13 @@ export default function MonetizationHub({
             </div>
           )}
 
-          <div className="ge-vip-hero-actions" style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", alignItems: "center", marginTop: "0.25rem" }}>
-            <Button variant={hasVip ? "success" : "secondary"} size="sm" icon="doc-export" isLight={isLight} onClick={handleDownloadVipReport}>
-              Xuất Báo cáo Năng lực (VIP API)
-            </Button>
-            {hasVip && sub && (
+          {hasVip && sub && (
+            <div className="ge-vip-hero-actions" style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", alignItems: "center", marginTop: "0.25rem" }}>
               <Button variant="secondary" size="sm" icon="settings" isLight={isLight} onClick={() => setCancelConfirmOpen(true)}>
                 Quản lý / Hủy gói VIP
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -799,7 +796,7 @@ export default function MonetizationHub({
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span>Mở khóa trọn bộ <strong>2,939 câu hỏi</strong> &amp; Quiz 50/30/20 không giới hạn</span></div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>AI Grammar Coach ∞</strong> giải thích cặn kẽ mọi bẫy thi cử</span></div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>Radar 12 Chuyên đề</strong> + Spaced Repetition FSRS mọi câu sai</span></div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>Xuất Báo cáo Năng lực</strong> &amp; Bộ đề cá nhân hóa mọi lúc</span></div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><KitIcon name="check-circle" size={14} /><span><strong>Bộ đề Thích ứng &amp; Lộ trình</strong> cá nhân hóa mọi lúc</span></div>
             </div>
           </div>
         </div>

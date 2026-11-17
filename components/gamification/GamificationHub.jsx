@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
 import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
-import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
+import { HeroBannerVisual, BadgeCardWatermark } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
 
@@ -518,6 +518,8 @@ export default function GamificationHub({
                 key={b.code}
                 className={isMobileExtra ? "ge-badge-card ge-badge-mobile-extra" : "ge-badge-card"}
                 style={{
+                  position: "relative",
+                  overflow: "hidden",
                   backgroundColor: isUnlocked ? T.card : T.bgElevated,
                   border: `1px solid ${isUnlocked ? T.successBorder : T.borderSubtle}`,
                   borderRadius: "14px",
@@ -531,7 +533,8 @@ export default function GamificationHub({
                   transition: "transform 160ms ease, box-shadow 160ms ease, filter 200ms ease",
                 }}
               >
-                <div>
+                <BadgeCardWatermark category={b.category} tier={b.tier} unlocked={isUnlocked} />
+                <div style={{ position: "relative", zIndex: 2 }}>
                   {/* Top Pill Row */}
                   <div className="ge-badge-card-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.3rem", marginBottom: "0.65rem" }}>
                     <Badge tone={isUnlocked ? getTierTone(b.tier) : "neutral"} isLight={isLight}>
@@ -622,6 +625,8 @@ export default function GamificationHub({
 
                 <div
                   style={{
+                    position: "relative",
+                    zIndex: 2,
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",

@@ -3,6 +3,7 @@ import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import StructuredExplanation from "../explanation/StructuredExplanation";
 import { migrateQuestionExplanation } from "../../lib/explanation/explanation.migrator";
 import { KitIcon } from "../ui-2026/KitIcon";
+import { SectionCardWatermark } from "../ui-2026/EditorialArtwork";
 
 /**
  * Milestone 2.5.7, 2.5.9, 2.5.10 & 2.5.11:
@@ -111,9 +112,10 @@ export default function SpacedRepetitionPanel({
   const activeTrackedConcepts = concepts.filter((c) => c.attempts > 0);
 
   return (
-    <div style={{ backgroundColor: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: "14px", padding: "1.15rem", boxShadow: T.shadow }}>
+    <div style={{ position: "relative", overflow: "hidden", backgroundColor: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: "14px", padding: "1.15rem", boxShadow: T.shadow }}>
+      <SectionCardWatermark kind="spaced-rep" />
       {/* Daily Prompt Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.95rem" }}>
+      <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.95rem" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
             <KitIcon name="brain" size={17} color={T.accent} />

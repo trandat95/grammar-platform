@@ -22,7 +22,7 @@ import GrammarProLogo from "../components/ui-2026/GrammarProLogo";
 import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
-import { FeatureCardVisual, HeroBannerVisual } from "../components/ui-2026/EditorialArtwork";
+import { FeatureCardVisual, HeroBannerVisual, SectionCardWatermark } from "../components/ui-2026/EditorialArtwork";
 import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
@@ -5905,7 +5905,8 @@ export default function Home() {
                         justifyContent: "space-between",
                       }}
                     >
-                      <div>
+                      <SectionCardWatermark kind="next-lesson" />
+                      <div style={{ position: "relative", zIndex: 2 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.45rem", flexWrap: "wrap" }}>
                           <span
                             style={{
@@ -5933,7 +5934,7 @@ export default function Home() {
                         </p>
                       </div>
 
-                      <div>
+                      <div style={{ position: "relative", zIndex: 2 }}>
                         <button
                           type="button"
                           onClick={startRecommendedLesson}
@@ -7009,6 +7010,8 @@ export default function Home() {
                 return (
                   <div
                     style={{
+                      position: "relative",
+                      overflow: "hidden",
                       backgroundColor: T.card,
                       border: `1px solid ${freeExhausted ? "var(--ds-warning)" : T.border}`,
                       borderRadius: "10px",
@@ -7017,7 +7020,8 @@ export default function Home() {
                       boxShadow: T.shadow,
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                    <SectionCardWatermark kind="quiz-arena" />
+                    <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                       <div style={{ flex: "1 1 320px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.35rem" }}>
                           <span

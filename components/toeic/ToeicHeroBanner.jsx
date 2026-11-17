@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BANNER_PATHS } from '../ui-2026/assetMap';
+import { HeroBannerVisual } from '../ui-2026/EditorialArtwork';
 import useGlobalAuth from '../../hooks/useGlobalAuth';
 import KitIcon from '../ui-2026/KitIcon';
 
@@ -70,7 +71,7 @@ export default function ToeicHeroBanner({
 
   return (
     <div
-      className="ge-toeic-hero-banner-card"
+      className="ge-toeic-hero-banner-card ge-hero-banner-card"
       style={{
         position: 'relative',
         borderRadius: 'var(--ds-radius-xl, 1rem)',
@@ -78,43 +79,9 @@ export default function ToeicHeroBanner({
         border: '1px solid var(--ds-border)',
         boxShadow: isLight ? '0 3px 14px rgba(0, 0, 0, 0.04)' : 'var(--ds-shadow-md)',
         marginBottom: compact ? '1.25rem' : '2.25rem',
-        backgroundColor: 'var(--ds-card)'
       }}
     >
-      {/* Background Illustration */}
-      <img
-        src={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive.webp'}
-        alt="TOEIC AI Adaptive Background"
-        width={1440}
-        height={420}
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'right center',
-          zIndex: 0,
-          opacity: isLight ? (compact ? 0.65 : 0.75) : 0.85
-        }}
-      />
-
-      {/* Dual Gradient Scrim Overlay - Adapts to White / Dark mode */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: isLight
-            ? 'linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.92) 58%, rgba(255, 255, 255, 0.35) 100%)'
-            : 'linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.88) 55%, rgba(15, 23, 42, 0.45) 100%)',
-          zIndex: 1
-        }}
-      />
+      <HeroBannerVisual kind="toeic" webpSrc={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive.webp'} />
 
       {/* Banner Content Container */}
       <div

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../components/ui-2026/AppShell2026';
 import { KitIcon } from '../../components/ui-2026/KitIcon';
+import { SectionCardWatermark } from '../../components/ui-2026/EditorialArtwork';
 import AiPowerShowcase2026 from '../../components/ui-2026/AiPowerShowcase2026';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../components/toeic/ui';
 import ToeicHeroBanner from '../../components/toeic/ToeicHeroBanner';
@@ -226,10 +227,20 @@ export default function ToeicHubPage() {
             {hubTab === 'modules' && (
               <div style={{ marginBottom: '2rem' }}>
                 <div className="toeic-grid-2" style={{ gap: '1rem' }}>
-                  {featureCards.map(fc => (
+                  {featureCards.map(fc => {
+                    const wmKind =
+                      fc.id === 'diagnostic'
+                        ? 'toeic-diag'
+                        : fc.id === 'practice'
+                        ? 'toeic-xray'
+                        : fc.id === 'tests'
+                        ? 'toeic-tests'
+                        : 'toeic-dictation';
+                    return (
                     <Link key={fc.id} href={fc.href} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <div className="toeic-card toeic-card-interactive" style={{ height: '100%', padding: '1.15rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.75rem' }}>
-                        <div>
+                      <div className="toeic-card toeic-card-interactive" style={{ position: 'relative', overflow: 'hidden', height: '100%', padding: '1.15rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.75rem' }}>
+                        <SectionCardWatermark kind={wmKind} />
+                        <div style={{ position: 'relative', zIndex: 2 }}>
                           <div className="toeic-flex-between" style={{ marginBottom: '0.6rem' }}>
                             <span style={{ color: 'var(--ds-accent)' }}>{fc.icon}</span>
                             <ToeicBadge variant={fc.badgeVariant}>{fc.badge}</ToeicBadge>
@@ -242,7 +253,7 @@ export default function ToeicHubPage() {
                           </p>
                         </div>
 
-                        <div style={{ paddingTop: '0.65rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                        <div style={{ position: 'relative', zIndex: 2, paddingTop: '0.65rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                           <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>
                             {fc.stats}
                           </span>
@@ -252,13 +263,16 @@ export default function ToeicHubPage() {
                         </div>
                       </div>
                     </Link>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Quick Jump Strip to 24 Topics */}
                 <div
                   className="toeic-card"
                   style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     marginTop: '1rem',
                     padding: '0.9rem 1.15rem',
                     display: 'flex',
@@ -268,7 +282,8 @@ export default function ToeicHubPage() {
                     gap: '0.75rem',
                   }}
                 >
-                  <div>
+                  <SectionCardWatermark kind="toeic-fast" />
+                  <div style={{ position: 'relative', zIndex: 2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.92rem', fontWeight: 800, color: 'var(--ds-text)' }}>
                       <KitIcon name="target" size={15} color="var(--ds-accent)" />
                       <span>Luyện nhanh theo 24 Dạng Bài Hay Ra Thi</span>
@@ -281,7 +296,7 @@ export default function ToeicHubPage() {
                     type="button"
                     className="toeic-btn toeic-btn-primary"
                     onClick={() => setHubTab('topics')}
-                    style={{ fontSize: '0.82rem', padding: '0.5rem 1rem' }}
+                    style={{ position: 'relative', zIndex: 2, fontSize: '0.82rem', padding: '0.5rem 1rem' }}
                   >
                     Xem 24 Dạng Bài &rarr;
                   </button>
