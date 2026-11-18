@@ -3,6 +3,7 @@ import FocusTrapModal2026 from '../ui-2026/FocusTrapModal2026';
 import AccountProfileCard from './AccountProfileCard';
 import GrammarProLogo from '../ui-2026/GrammarProLogo';
 import KitIcon from '../ui-2026/KitIcon';
+import { supabase } from '../../lib/supabase/client';
 
 /**
  * UnifiedAuthModal Component
@@ -27,9 +28,29 @@ export default function UnifiedAuthModal({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSwitchForm, setShowSwitchForm] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setErrorMsg('');
+    setIsSubmitting(true);
+    try {
+      const redirectTo = typeof window !== 'undefined' ? window.location.origin : undefined;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: redirectTo ? { redirectTo } : undefined,
+      });
+      if (error) {
+        setErrorMsg(error.message || 'Không thể kết nối Google Sign-In');
+        setIsSubmitting(false);
+      }
+    } catch {
+      setErrorMsg('Lỗi kết nối Google Sign-In');
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -132,6 +153,45 @@ export default function UnifiedAuthModal({
       ) : (
         <div>
           <GrammarProLogo variant="auth" />
+          {/* 1-Tap Google OAuth CTA */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isSubmitting}
+            style={{
+              width: '100%',
+              minHeight: '44px',
+              padding: '0.65rem 1rem',
+              marginBottom: '1rem',
+              borderRadius: 'var(--ds-radius-md)',
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-card)',
+              color: 'var(--ds-text)',
+              fontSize: '0.88rem',
+              fontWeight: 700,
+              cursor: isSubmitting ? 'wait' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.55rem',
+              boxShadow: 'var(--ds-shadow-sm)',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96z"/>
+            </svg>
+            <span>Tiếp tục với Google (1 chạm)</span>
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--ds-border)' }} />
+            <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--ds-text-muted)' }}>HOẶC DÙNG EMAIL</span>
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--ds-border)' }} />
+          </div>
+
           {/* TAB SWITCHER */}
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', padding: '0.25rem', backgroundColor: 'var(--ds-bg-elevated)', borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-border)' }}>
             <button
@@ -245,23 +305,56 @@ export default function UnifiedAuthModal({
               <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--ds-text-secondary)', marginBottom: '0.35rem' }}>
                 Mật khẩu
               </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Tối thiểu 6 ký tự"
-                style={{
-                  width: '100%',
-                  padding: '0.65rem 0.85rem',
-                  borderRadius: 'var(--ds-radius-md)',
-                  border: '1px solid var(--ds-border)',
-                  backgroundColor: 'var(--ds-bg-elevated)',
-                  color: 'var(--ds-text)',
-                  fontSize: '0.9rem',
-                  boxSizing: 'border-box'
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Tối thiểu 6 ký tự"
+                  style={{
+                    width: '100%',
+                    padding: '0.65rem 2.6rem 0.65rem 0.85rem',
+                    borderRadius: 'var(--ds-radius-md)',
+                    border: '1px solid var(--ds-border)',
+                    backgroundColor: 'var(--ds-bg-elevated)',
+                    color: 'var(--ds-text)',
+                    fontSize: '0.9rem',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  style={{
+                    position: 'absolute',
+                    right: '0.5rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--ds-text-muted)',
+                    cursor: 'pointer',
+                    padding: '0.25rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             <button

@@ -13,7 +13,7 @@ export function extractFactualFallbackMeta(question) {
   }
 
   const ped = question.pedagogy && typeof question.pedagogy === "object" ? question.pedagogy : null;
-  const ruleHint =
+  let rawRuleHint =
     (typeof ped?.rule === "string" && ped.rule.trim()) ||
     (typeof question.topic_name === "string" && question.topic_name.trim()
       ? `Chủ điểm ngữ pháp: ${question.topic_name.trim()}`
@@ -21,6 +21,21 @@ export function extractFactualFallbackMeta(question) {
     (typeof question.instruction === "string" && question.instruction.trim()
       ? `Yêu cầu bài học: ${question.instruction.trim()}`
       : null);
+
+  if (rawRuleHint) {
+    const answerTokens = extractAnswerStrings(question)
+      .flatMap((ans) => String(ans).split(/\s*[-/|,]\s*/))
+      .map((s) => s.trim())
+      .filter((s) => s.length >= 2);
+    for (const tok of answerTokens) {
+      const escaped = tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      rawRuleHint = rawRuleHint
+        .replace(new RegExp(`['"“”]?\\b${escaped}\\b['"“”]?`, "gi"), "___")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+    }
+  }
+  const ruleHint = rawRuleHint;
 
   const signalHint =
     (typeof ped?.signal === "string" && ped.signal.trim()) || null;

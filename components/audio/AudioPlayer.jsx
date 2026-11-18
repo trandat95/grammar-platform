@@ -83,7 +83,7 @@ export default function AudioPlayer({
           ) : (
             <KitIcon name="tool-audio" size={13} />
           )}
-          <span>{isCurrentPlaying ? (isCurrentPaused ? "Tiếp tục" : "Dừng") : "Nghe"}</span>
+          <span>{isCurrentPlaying ? (isCurrentPaused ? "Tiếp tục" : "Đang phát...") : "Nghe câu"}</span>
         </button>
 
         {isCurrentPlaying && (

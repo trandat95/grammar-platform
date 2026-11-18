@@ -28,6 +28,7 @@ import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../lib/learnin
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
 import QuestionRenderer from "../components/question-engine/QuestionRenderer";
+import { resolveQuestionPresentation, QUESTION_MODES } from "../components/question-engine/resolver/QuestionTypeResolver";
 
 // Milestone 2.11.6: Code-split secondary heavy workspaces & modals out of the initial Homepage JS bundle
 const GrammarVisualization = dynamic(() => import("../components/grammar-visualization/GrammarVisualization"), { ssr: false });
@@ -187,6 +188,15 @@ export default function Home() {
   const [dashboardZone, setDashboardZone] = useState("today"); // 'today' | 'analytics' | 'all'
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedRulesMap, setExpandedRulesMap] = useState({});
+  const [showMobileHomeExtras, setShowMobileHomeExtras] = useState(true);
+  const [activeChapterStage, setActiveChapterStage] = useState("ALL");
+  const [quizQuestionFormatFilter, setQuizQuestionFormatFilter] = useState("ALL");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setShowMobileHomeExtras(false);
+    }
+  }, []);
 
   // --- Theme State (Dark vs Light / White Mode + OS MatchMedia Fallback) ---
   const [themeMode, setThemeMode] = useState("dark");
@@ -196,12 +206,41 @@ export default function Home() {
       if (typeof window !== "undefined") {
         const params = new URLSearchParams(window.location.search);
         const viewParam = params.get("view");
-        if (viewParam && ["dashboard", "study", "quiz", "gamification", "vip", "admin"].includes(viewParam)) {
+        if (viewParam && ["dashboard", "study", "diagnostic", "quiz", "mistakes", "gamification", "vip", "admin"].includes(viewParam)) {
           setCurrentView(viewParam);
         }
+        const handlePopState = () => {
+          const nextParams = new URLSearchParams(window.location.search);
+          const v = nextParams.get("view") || "dashboard";
+          setCurrentView(["dashboard", "study", "diagnostic", "quiz", "mistakes", "gamification", "vip", "admin"].includes(v) ? v : "dashboard");
+        };
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
       }
     } catch (e) {}
   }, []);
+
+  const didMountViewRef = useRef(false);
+  useEffect(() => {
+    if (!didMountViewRef.current) {
+      didMountViewRef.current = true;
+      return;
+    }
+    if (typeof window !== "undefined") {
+      try {
+        const targetUrl = currentView === "dashboard" ? "/" : `/?view=${encodeURIComponent(currentView)}`;
+        const currentUrl = window.location.pathname + window.location.search;
+        if (currentUrl !== targetUrl) {
+          window.history.pushState({ view: currentView }, "", targetUrl);
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (e) {}
+    }
+  }, [currentView]);
+
+  const navigateToView = (nextView) => {
+    setCurrentView(nextView);
+  };
 
   useEffect(() => {
     try {
@@ -277,6 +316,10 @@ export default function Home() {
     if (!selectedChapter?.lessons?.length) return null;
     return selectedChapter.lessons.find((l) => l.id === selectedLessonId) || selectedChapter.lessons[0];
   }, [selectedChapter, selectedLessonId]);
+
+  useEffect(() => {
+    setDictPopup((prev) => (prev.open ? { ...prev, open: false } : prev));
+  }, [currentView, selectedChapter?.id, selectedLesson?.id]);
 
   useEffect(() => {
     if (selectedLesson?.id) {
@@ -913,9 +956,11 @@ export default function Home() {
       }
 
       const sel = window.getSelection();
-      const selStr = sel ? sel.toString().trim() : "";
-      if (selStr && isEnglishWord(selStr)) {
-        triggerLookup(selStr, e.clientX, e.clientY);
+      const rawSel = sel ? sel.toString().trim() : "";
+      // Snap partial touch selections to the first valid clean English word token
+      const cleanToken = rawSel.replace(/^[^a-zA-Z'-]+|[^a-zA-Z'-]+$/g, "").split(/\s+/)[0] || "";
+      if (cleanToken && isEnglishWord(cleanToken)) {
+        triggerLookup(cleanToken, e.clientX, e.clientY);
         return;
       }
 
@@ -937,9 +982,11 @@ export default function Home() {
       if (!contentArea) return;
 
       const sel = window.getSelection();
-      const selStr = sel ? sel.toString().trim() : "";
-      if (selStr && isEnglishWord(selStr)) {
-        triggerLookup(selStr, e.clientX, e.clientY);
+      const rawSel = sel ? sel.toString().trim() : "";
+      // Snap partial touch selections to the first valid clean English word token
+      const cleanToken = rawSel.replace(/^[^a-zA-Z'-]+|[^a-zA-Z'-]+$/g, "").split(/\s+/)[0] || "";
+      if (cleanToken && isEnglishWord(cleanToken)) {
+        triggerLookup(cleanToken, e.clientX, e.clientY);
         return;
       }
 
@@ -2615,13 +2662,59 @@ export default function Home() {
     setQuizShowAnswers((prev) => ({ ...prev, [qId]: !prev[qId] }));
   };
 
-  const submitQuiz = () => {
+  const [quizSubmitConfirmOpen, setQuizSubmitConfirmOpen] = useState(false);
+  const [quizFocusMode, setQuizFocusMode] = useState(false);
+  const [quizFocusIndex, setQuizFocusIndex] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setQuizFocusMode(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    setQuizFocusIndex(0);
+  }, [activeQuizQuestions.length, quizQuestionFormatFilter]);
+
+  const displayedQuizQuestions = useMemo(() => {
+    if (quizQuestionFormatFilter === "ALL") return activeQuizQuestions;
+    return activeQuizQuestions.filter((q) => {
+      const resolved = resolveQuestionPresentation(q, q?.type || "");
+      if (quizQuestionFormatFilter === "MC") {
+        return resolved.mode === QUESTION_MODES.MULTIPLE_CHOICE;
+      }
+      if (quizQuestionFormatFilter === "TEXT") {
+        return resolved.mode !== QUESTION_MODES.MULTIPLE_CHOICE;
+      }
+      return true;
+    });
+  }, [activeQuizQuestions, quizQuestionFormatFilter]);
+
+  const submitQuiz = (forceSubmit = false) => {
+    const unansweredCount = activeQuizQuestions.filter((q) => !String(quizAnswers[q.id] || "").trim()).length;
+    if (!forceSubmit && unansweredCount > 0) {
+      setQuizSubmitConfirmOpen(true);
+      return;
+    }
+    setQuizSubmitConfirmOpen(false);
+
     let correctCount = 0;
     const details = [];
     const newMistakesToAdd = [];
 
     activeQuizQuestions.forEach((q, idx) => {
-      const userAns = quizAnswers[q.id] || "";
+      const userAns = String(quizAnswers[q.id] || "").trim();
+      if (!userAns) {
+        details.push({
+          num: idx + 1,
+          question: q,
+          userAnswer: "",
+          isCorrect: false,
+          isSkipped: true,
+        });
+        return;
+      }
+
       const isCorrect = isAnswerMatching(userAns, q.answers);
 
       if (isCorrect) {
@@ -3962,6 +4055,7 @@ export default function Home() {
         onClose={() => setVocabModalOpen(false)}
         maxWidth="680px"
         padding="20px"
+        isLight={isLight}
         headerLeft={
           <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
             <span
@@ -4178,7 +4272,7 @@ export default function Home() {
       {/* Main Content Layout (2026 Responsive 5-Hub Shell) */}
       <AppShell2026
         activeView={currentView}
-        onSelectView={setCurrentView}
+        onSelectView={navigateToView}
         currentUser={currentUser}
         userTracker={userTracker}
         savedMistakesCount={savedMistakes.length}
@@ -5871,17 +5965,22 @@ export default function Home() {
               {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone === "today" && (
                 <div>
-                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile) */}
+                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile - UX-08 Endowed Progress) */}
                   <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
                     <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
                       <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
                         Bài học đã xong
                       </div>
                       <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {userTracker.completedLessons?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalLessonsCount}</span>
+                        {userTracker.completedLessons?.length || 0}{" "}
+                        <span className="ge-hide-mobile" style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>
+                          / {totalLessonsCount}
+                        </span>
                       </div>
-                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-success)", fontWeight: "600" }}>
-                        {overallLessonsProgress}% toàn bộ khóa học
+                      <div style={{ fontSize: "0.76rem", color: "var(--ds-success)", fontWeight: "600", lineHeight: 1.3 }}>
+                        {(userTracker.completedLessons?.length || 0) === 0
+                          ? "Bước 1/3: Khởi động (33%)"
+                          : `${overallLessonsProgress}% toàn bộ khóa học`}
                       </div>
                     </div>
 
@@ -5890,10 +5989,15 @@ export default function Home() {
                         Câu đã giải đúng
                       </div>
                       <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {userTracker.completedQuestions?.length || 0} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>/ {totalQuestionsCount}</span>
+                        {userTracker.completedQuestions?.length || 0}{" "}
+                        <span className="ge-hide-mobile" style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>
+                          / {totalQuestionsCount}
+                        </span>
                       </div>
-                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-accent)", fontWeight: "600" }}>
-                        Tích lũy từ bài tập &amp; Quiz
+                      <div style={{ fontSize: "0.76rem", color: "var(--ds-accent)", fontWeight: "600", lineHeight: 1.3 }}>
+                        {(userTracker.completedQuestions?.length || 0) === 0
+                          ? "Mục tiêu đầu: 5 câu nhanh (3 phút)"
+                          : "Tích lũy từ bài tập & Quiz"}
                       </div>
                     </div>
 
@@ -6037,15 +6141,64 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* 4. HOME LEADERBOARD SHOWCASE (LIVE RANKING & ENERGY) */}
+                  {/* 4. HOME LEADERBOARD SHOWCASE (UX-07: Progressive disclosure on mobile) */}
                   <div style={{ marginBottom: "1.75rem" }}>
-                    <LeaderboardPanel
-                      userId={!currentUser?.isGuest ? currentUser?.id : null}
-                      authToken={activeAuthToken}
-                      isLight={isLight}
-                      compact={true}
-                      onOpenFullAchievements={() => setCurrentView("gamification")}
-                    />
+                    {!showMobileHomeExtras ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowMobileHomeExtras(true)}
+                        style={{
+                          width: "100%",
+                          minHeight: "46px",
+                          padding: "0.75rem 1rem",
+                          borderRadius: "10px",
+                          border: "1px solid var(--ds-border)",
+                          backgroundColor: "var(--ds-card)",
+                          color: "var(--ds-text-heading)",
+                          fontSize: "0.86rem",
+                          fontWeight: 700,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: "0.5rem",
+                          cursor: "pointer",
+                          boxShadow: "var(--ds-shadow-sm)",
+                        }}
+                      >
+                        <span>Xem Bảng Xếp Hạng Thành Tích Live (Chạm để mở)</span>
+                        <span style={{ color: "var(--ds-accent)", fontWeight: 800 }}>↓</span>
+                      </button>
+                    ) : (
+                      <>
+                        <LeaderboardPanel
+                          userId={!currentUser?.isGuest ? currentUser?.id : null}
+                          authToken={activeAuthToken}
+                          isLight={isLight}
+                          compact={true}
+                          onOpenFullAchievements={() => setCurrentView("gamification")}
+                        />
+                        <div className="ge-show-mobile-only" style={{ width: "100%", marginTop: "0.6rem", justifyContent: "center" }}>
+                          <button
+                            type="button"
+                            onClick={() => setShowMobileHomeExtras(false)}
+                            style={{
+                              width: "100%",
+                              minHeight: "40px",
+                              padding: "0.5rem 0.9rem",
+                              borderRadius: "8px",
+                              border: "1px solid var(--ds-border)",
+                              backgroundColor: "var(--ds-card)",
+                              color: "var(--ds-text-muted)",
+                              fontSize: "0.8rem",
+                              fontWeight: 600,
+                              cursor: "pointer",
+                            }}
+                          >
+                            Thu gọn Bảng Xếp Hạng ↑
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
@@ -6066,7 +6219,7 @@ export default function Home() {
 
                   {/* 12 Chapters Mastery Map */}
                   <div style={{ marginBottom: "2rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.85rem", flexWrap: "wrap", gap: "0.75rem" }}>
                       <div>
                         <h3 style={{ fontSize: "1.15rem", fontWeight: "700", color: "var(--ds-text-heading)", margin: 0 }}>
                           Bản đồ tiến độ 12 Chuyên đề Ngữ pháp
@@ -6077,8 +6230,48 @@ export default function Home() {
                       </div>
                     </div>
 
+                    {/* UX-10: 12-Chapter Stage Filter Pills */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+                      {[
+                        { id: "ALL", label: "Tất cả (12 chương)" },
+                        { id: "STAGE1", label: "Chặng 1: Nền tảng (1–4)" },
+                        { id: "STAGE2", label: "Chặng 2: Trung cấp (5–8)" },
+                        { id: "STAGE3", label: "Chặng 3: Nâng cao (9–12)" },
+                      ].map((stage) => {
+                        const isActive = activeChapterStage === stage.id;
+                        return (
+                          <button
+                            key={stage.id}
+                            type="button"
+                            onClick={() => setActiveChapterStage(stage.id)}
+                            style={{
+                              minHeight: "36px",
+                              padding: "0.45rem 0.85rem",
+                              borderRadius: "999px",
+                              border: `1px solid ${isActive ? "var(--ds-accent-border)" : "var(--ds-border)"}`,
+                              backgroundColor: isActive ? "var(--ds-accent-bg)" : "var(--ds-card)",
+                              color: isActive ? "var(--ds-accent)" : "var(--ds-text-muted)",
+                              fontSize: "0.78rem",
+                              fontWeight: isActive ? 800 : 600,
+                              cursor: "pointer",
+                              transition: "all 0.15s ease",
+                            }}
+                          >
+                            {stage.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: "1rem" }}>
-                      {previewData.chapters.map((ch) => {
+                      {previewData.chapters
+                        .filter((_, chIdx) => {
+                          if (activeChapterStage === "STAGE1") return chIdx < 4;
+                          if (activeChapterStage === "STAGE2") return chIdx >= 4 && chIdx < 8;
+                          if (activeChapterStage === "STAGE3") return chIdx >= 8;
+                          return true;
+                        })
+                        .map((ch) => {
                         const doneLessons = ch.lessons.filter((l) => userTracker.completedLessons?.includes(l.id)).length;
                         const pct = Math.round((doneLessons / ch.lessons.length) * 100);
                         const chIcon = CHAPTER_ICON_MAP[Number(ch.number)] || CHAPTER_ICON_MAP[1];
@@ -6249,20 +6442,32 @@ export default function Home() {
                                 fontWeight: "700",
                               }}
                             >
-                              {selectedLesson.code}
+                              {({
+                                PRACTICE_SENTENCE_TRANSFORMATION: "Luyện tập Chuyển đổi câu",
+                                PRACTICE_ERROR_CORRECTION: "Luyện tập Sửa lỗi sai",
+                                PRACTICE_WORD_FORMS: "Luyện tập Biến đổi từ loại",
+                              }[selectedLesson.code] || (String(selectedLesson.code || "").startsWith("PRACTICE_") ? "Bài tập Thực hành" : selectedLesson.code))}
                             </span>
                             <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
                             <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
                               {selectedLesson.sections?.length || 0} Phân mục
                             </span>
-                            <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
-                            <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
-                              {totalLessonFormulas} Công thức
-                            </span>
-                            <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
-                            <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
-                              {selectedLesson.examples?.length || 0} Ví dụ
-                            </span>
+                            {totalLessonFormulas > 0 && (
+                              <>
+                                <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
+                                <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
+                                  {totalLessonFormulas} Công thức
+                                </span>
+                              </>
+                            )}
+                            {(selectedLesson.examples?.length || 0) > 0 && (
+                              <>
+                                <span style={{ fontSize: "0.75rem", color: "var(--ds-text-muted)" }}>•</span>
+                                <span style={{ fontSize: "0.75rem", color: T.textSecondary }}>
+                                  {selectedLesson.examples.length} Ví dụ
+                                </span>
+                              </>
+                            )}
                           </div>
 
                           {/* Duolingo Mark as Completed Button */}
@@ -6395,8 +6600,8 @@ export default function Home() {
                             <span><strong>Bản chất cốt lõi:</strong> {selectedLesson.cheatSheet.concept}</span>
                           </div>
 
-                          {/* 3-tier Formula Cards Grid */}
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
+                          {/* 3-tier Formula Cards Grid (UX-12: Swipeable on mobile + audio) */}
+                          <div className="ge-formula-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem", marginBottom: "1.25rem" }}>
                             {selectedLesson.cheatSheet.formulas?.map((f, fIdx) => {
                               const isPos = f.type.includes("(+)");
                               const isNeg = f.type.includes("(-)");
@@ -6412,24 +6617,61 @@ export default function Home() {
                                   style={{
                                     backgroundColor: colorTheme.bg,
                                     border: `1px solid ${colorTheme.border}`,
-                                    borderRadius: "8px",
-                                    padding: "0.85rem 1rem",
+                                    borderRadius: "10px",
+                                    padding: "0.95rem 1.05rem",
                                     display: "flex",
                                     flexDirection: "column",
                                     justifyContent: "space-between",
                                   }}
                                 >
                                   <div>
-                                    <div style={{ fontSize: "0.7rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: colorTheme.text, textTransform: "uppercase", marginBottom: "0.35rem" }}>
+                                    <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: "800", color: colorTheme.text, textTransform: "uppercase", marginBottom: "0.4rem" }}>
                                       {colorTheme.label}
                                     </div>
-                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.88rem", fontWeight: "700", color: T.text, lineHeight: "1.4", marginBottom: "0.5rem" }}>
+                                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "1.05rem", fontWeight: "800", color: T.text, lineHeight: "1.4", marginBottom: "0.6rem" }}>
                                       {f.text}
                                     </div>
                                   </div>
                                   {f.example && (
-                                    <div style={{ fontSize: "0.78rem", fontStyle: "italic", color: T.textMuted, borderTop: `1px dashed ${T.border}`, paddingTop: "0.4rem" }}>
-                                      Ví dụ: "{f.example}"
+                                    <div
+                                      style={{
+                                        fontSize: "0.8rem",
+                                        fontStyle: "italic",
+                                        color: T.textMuted,
+                                        borderTop: `1px dashed ${T.border}`,
+                                        paddingTop: "0.5rem",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        gap: "0.5rem",
+                                      }}
+                                    >
+                                      <span>Ví dụ: &ldquo;{f.example}&rdquo;</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => speechService.speak(f.example)}
+                                        title="Nghe phát âm ví dụ"
+                                        aria-label="Nghe phát âm ví dụ"
+                                        style={{
+                                          flexShrink: 0,
+                                          display: "inline-flex",
+                                          alignItems: "center",
+                                          gap: "0.3rem",
+                                          padding: "0.25rem 0.6rem",
+                                          minHeight: "30px",
+                                          borderRadius: "999px",
+                                          border: `1px solid ${T.border}`,
+                                          backgroundColor: "var(--ds-card)",
+                                          color: colorTheme.text,
+                                          fontSize: "0.74rem",
+                                          fontWeight: "700",
+                                          fontStyle: "normal",
+                                          cursor: "pointer",
+                                        }}
+                                      >
+                                        <KitIcon name="tool-audio" size={13} />
+                                        <span>Nghe</span>
+                                      </button>
                                     </div>
                                   )}
                                 </div>
@@ -7193,7 +7435,7 @@ export default function Home() {
                         {!quizSubmitted && activeQuizQuestions.length > 0 && (
                           <button
                             type="button"
-                            onClick={submitQuiz}
+                            onClick={() => submitQuiz(false)}
                             style={{
                               padding: "0.5rem 1.25rem",
                               backgroundColor: "var(--ds-btn-success)",
@@ -7211,9 +7453,67 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Dynamic Gate / FOMO Alert Banner */}
+                    {quizSubmitConfirmOpen && (
+                      <FocusTrapModal2026
+                        id="quiz-submit-confirm-modal"
+                        isOpen={quizSubmitConfirmOpen}
+                        onClose={() => setQuizSubmitConfirmOpen(false)}
+                        title="Xác nhận nộp bài?"
+                        maxWidth="420px"
+                        isLight={isLight}
+                      >
+                        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                          <p style={{ margin: 0, fontSize: "0.88rem", lineHeight: 1.55, color: T.textSecondary }}>
+                            Bạn vẫn còn{" "}
+                            <strong style={{ color: T.warning }}>
+                              {activeQuizQuestions.filter((q) => !String(quizAnswers[q.id] || "").trim()).length} câu chưa làm
+                            </strong>
+                            . Các câu bỏ trống sẽ không bị đẩy vào Sổ tay câu sai. Bạn muốn làm tiếp hay nộp bài ngay?
+                          </p>
+                          <div style={{ display: "flex", gap: "0.6rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
+                            <button
+                              type="button"
+                              onClick={() => setQuizSubmitConfirmOpen(false)}
+                              style={{
+                                minHeight: "42px",
+                                padding: "0.5rem 1rem",
+                                borderRadius: "8px",
+                                border: `1px solid ${T.border}`,
+                                backgroundColor: "transparent",
+                                color: T.text,
+                                fontSize: "0.82rem",
+                                fontWeight: 700,
+                                cursor: "pointer",
+                              }}
+                            >
+                              Làm tiếp
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => submitQuiz(true)}
+                              style={{
+                                minHeight: "42px",
+                                padding: "0.5rem 1.1rem",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "var(--ds-btn-success)",
+                                color: "#ffffff",
+                                fontSize: "0.82rem",
+                                fontWeight: 700,
+                                cursor: "pointer",
+                              }}
+                            >
+                              Nộp bài ngay
+                            </button>
+                          </div>
+                        </div>
+                      </FocusTrapModal2026>
+                    )}
+
+                    {/* Dynamic Gate / FOMO Alert Banner (UX-18: hide above-the-fold on mobile until >=5 answers) */}
                     {!isVipOrAdmin && (quizGateBanner || isGuestUser || freeExhausted) && (
                       <div
+                        className={Object.keys(quizAnswers).length < 5 ? "ge-hide-mobile" : undefined}
                         style={{
                           marginTop: "1rem",
                           padding: "0.85rem 1rem",
@@ -7296,7 +7596,7 @@ export default function Home() {
                             }}
                           >
                             <KitIcon name="hub-vip" size={13} style={{ color: "var(--ds-text-on-accent)" }} />
-                            <span>Mở khóa VIP (Chỉ 29k) →</span>
+                            <span>Mở khóa VIP (Chỉ từ 8.250đ/tháng)</span>
                           </button>
                         </div>
                       </div>
@@ -7378,8 +7678,54 @@ export default function Home() {
                       </div>
 
                       {activeQuizQuestions.length > 0 && (
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                          <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
+                        <div
+                          style={{
+                            position: "relative",
+                            zIndex: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            gap: "0.75rem",
+                            width: "100%",
+                          }}
+                        >
+                          {/* DD-11: Segmented Question Format Toggle */}
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+                            {[
+                              { id: "ALL", label: "Tất cả" },
+                              { id: "MC", label: "Trắc nghiệm" },
+                              { id: "TEXT", label: "Tự luận" },
+                            ].map((fmt) => {
+                              const isActive = quizQuestionFormatFilter === fmt.id;
+                              return (
+                                <button
+                                  key={fmt.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setQuizQuestionFormatFilter(fmt.id);
+                                    setQuizFocusIndex(0);
+                                  }}
+                                  style={{
+                                    minHeight: "34px",
+                                    padding: "0.3rem 0.75rem",
+                                    borderRadius: "999px",
+                                    border: `1px solid ${isActive ? "var(--ds-accent-border)" : "var(--ds-border)"}`,
+                                    backgroundColor: isActive ? "var(--ds-accent-bg)" : "var(--ds-card)",
+                                    color: isActive ? "var(--ds-accent)" : "var(--ds-text-muted)",
+                                    fontSize: "0.76rem",
+                                    fontWeight: isActive ? 800 : 600,
+                                    cursor: "pointer",
+                                    transition: "all 0.15s ease",
+                                  }}
+                                >
+                                  {fmt.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          <span style={{ position: "relative", zIndex: 2, fontSize: "0.8rem", fontFamily: "var(--font-sans)", color: "var(--ds-text-muted)" }}>
                             Đã làm: <strong style={{ color: T.text }}>{answeredCount}</strong> / {activeQuizQuestions.length}
                             {!isVipOrAdmin && <span style={{ color: "var(--ds-warning)", fontWeight: 700 }}> (Khóa 30 câu nâng cao)</span>}
                           </span>
@@ -7436,9 +7782,70 @@ export default function Home() {
                 </div>
               )}
 
-              {/* Questions List */}
+              {/* Questions List (UX-17: Focus Mode 1-question-at-a-time toggle) */}
+              {!quizSubmitted && displayedQuizQuestions.length > 1 && (
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => setQuizFocusMode((prev) => !prev)}
+                    style={{
+                      minHeight: "38px",
+                      padding: "0.38rem 0.85rem",
+                      borderRadius: "999px",
+                      border: `1px solid ${quizFocusMode ? T.accent : T.border}`,
+                      backgroundColor: quizFocusMode ? "var(--ds-accent-bg)" : T.card,
+                      color: quizFocusMode ? T.accent : T.textSecondary,
+                      fontSize: "0.78rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {quizFocusMode ? `Đang bật Focus Mode (${quizFocusIndex + 1}/${displayedQuizQuestions.length}) • Xem tất cả` : "Bật chế độ Focus (Từng câu một)"}
+                  </button>
+                  {quizFocusMode && (
+                    <span style={{ fontSize: "0.76rem", fontWeight: 700, color: T.textMuted }}>
+                      Đã trả lời: {displayedQuizQuestions.filter((dq) => String(quizAnswers[dq.id] || "").trim()).length} / {displayedQuizQuestions.length}
+                    </span>
+                  )}
+                </div>
+              )}
+
               <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                {activeQuizQuestions.map((q, idx) => {
+                {displayedQuizQuestions.length === 0 && activeQuizQuestions.length > 0 && (
+                  <div
+                    style={{
+                      padding: "1.5rem",
+                      borderRadius: "10px",
+                      border: `1px dashed ${T.border}`,
+                      backgroundColor: T.card,
+                      textAlign: "center",
+                      color: T.textMuted,
+                    }}
+                  >
+                    <p style={{ margin: "0 0 0.75rem 0", fontSize: "0.88rem" }}>
+                      Không có câu hỏi nào thuộc định dạng đang chọn trong bộ đề này.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setQuizQuestionFormatFilter("ALL")}
+                      style={{
+                        minHeight: "36px",
+                        padding: "0.4rem 0.9rem",
+                        borderRadius: "8px",
+                        border: "1px solid var(--ds-accent-border)",
+                        backgroundColor: "var(--ds-accent-bg)",
+                        color: "var(--ds-accent)",
+                        fontSize: "0.8rem",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Hiển thị tất cả câu hỏi
+                    </button>
+                  </div>
+                )}
+                {displayedQuizQuestions.map((q, idx) => {
+                  if (!quizSubmitted && quizFocusMode && idx !== quizFocusIndex) return null;
                   const userAns = quizAnswers[q.id] || "";
                   const detail = quizResults?.details?.find((d) => d.question.id === q.id);
                   const singleCheck = quizSingleChecks[q.id];
@@ -7464,7 +7871,7 @@ export default function Home() {
                       {(q.topic_name || q.adaptive_bucket) && (
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem", padding: "0 0.25rem" }}>
                           <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-sans)", color: T.textMuted, fontWeight: "600" }}>
-                            Câu {idx + 1} / {activeQuizQuestions.length}
+                            Câu {idx + 1} / {displayedQuizQuestions.length}
                             {q.topic_name ? ` • ${q.topic_name}` : ""}
                           </span>
                           {q.adaptive_bucket && (
@@ -7593,6 +8000,86 @@ export default function Home() {
                   );
                 })}
               </div>
+
+              {/* UX-17: Focus Mode Bottom Navigation Bar */}
+              {!quizSubmitted && quizFocusMode && displayedQuizQuestions.length > 1 && (
+                <div
+                  style={{
+                    position: "sticky",
+                    bottom: "74px",
+                    zIndex: 40,
+                    marginTop: "1rem",
+                    padding: "0.65rem 0.85rem",
+                    borderRadius: "12px",
+                    backgroundColor: T.card,
+                    border: `1px solid ${T.border}`,
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <button
+                    type="button"
+                    disabled={quizFocusIndex === 0}
+                    onClick={() => setQuizFocusIndex((i) => Math.max(0, i - 1))}
+                    style={{
+                      minHeight: "42px",
+                      padding: "0.45rem 0.9rem",
+                      borderRadius: "8px",
+                      border: `1px solid ${T.border}`,
+                      backgroundColor: T.bgElevated,
+                      color: quizFocusIndex === 0 ? T.textMuted : T.text,
+                      fontSize: "0.8rem",
+                      fontWeight: 700,
+                      cursor: quizFocusIndex === 0 ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    ← Trước
+                  </button>
+                  <span style={{ fontSize: "0.8rem", fontWeight: 800, color: T.textHeading }}>
+                    {quizFocusIndex + 1} / {displayedQuizQuestions.length}
+                  </span>
+                  {quizFocusIndex < displayedQuizQuestions.length - 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => setQuizFocusIndex((i) => Math.min(displayedQuizQuestions.length - 1, i + 1))}
+                      style={{
+                        minHeight: "42px",
+                        padding: "0.45rem 1rem",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "var(--ds-btn-primary)",
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Câu tiếp →
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => submitQuiz(false)}
+                      style={{
+                        minHeight: "42px",
+                        padding: "0.45rem 1rem",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "var(--ds-btn-success)",
+                        color: "#ffffff",
+                        fontSize: "0.8rem",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Nộp bài →
+                    </button>
+                  )}
+                </div>
+              )}
 
               {/* QUESTION 21 -> 50 CLIFFHANGER FOMO WALL (GUEST & FREE USERS) */}
               {currentUser.role !== "VIP" && currentUser.role !== "ADMIN" && activeQuizQuestions.length > 0 && (

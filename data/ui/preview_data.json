@@ -9882,7 +9882,7 @@
                 "Dùng trạng từ thay cho tính từ (hoặc ngược lại)",
                 "Ví dụ: He is a careful driver.",
                 "Ví dụ: He drives carefully.",
-                "Ví dụ: Adj Adv"
+                "Ví dụ: Tính từ (Adj) → Trạng từ (Adv)"
               ],
               "notes": [],
               "tables": [],
@@ -9896,7 +9896,7 @@
                 "Mary’s homework has been finished.",
                 "We should keep dangerous chemicals in safe places.",
                 "Dangerous chemicals should be kept in safe places.",
-                "Tom is a good student. Tom studies well. Adj Adv",
+                "Tom is a good student (Adj). → Tom studies well (Adv).",
                 "Mary can type well. Mary is a good typist."
               ],
               "id": "STYLE_PATTERNS_sec_1",

@@ -77,17 +77,17 @@ export default function useGlobalAuth() {
           } catch (e) {}
         }
       } else {
-        // Fallback to local guest profile
+        // Fallback to local guest profile (load guest or last active user tracker/counts)
         setCurrentUser(GUEST_USER);
         setActiveAuthToken(null);
         if (typeof window !== 'undefined') {
-          const storedUserId = localStorage.getItem('grammar_active_user_id');
-          if (storedUserId && storedUserId !== 'guest') {
-            try {
-              const localTrk = JSON.parse(localStorage.getItem(`grammar_tracker_${storedUserId}`) || 'null');
-              if (localTrk) setUserTracker(localTrk);
-            } catch (e) {}
-          }
+          const storedUserId = localStorage.getItem('grammar_active_user_id') || 'guest';
+          try {
+            const localTrk =
+              JSON.parse(localStorage.getItem(`grammar_tracker_${storedUserId}`) || 'null') ||
+              JSON.parse(localStorage.getItem('grammar_tracker_guest') || 'null');
+            if (localTrk) setUserTracker(localTrk);
+          } catch (e) {}
         }
       }
     } catch (err) {

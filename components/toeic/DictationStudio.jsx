@@ -210,10 +210,11 @@ export default function DictationStudio({
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [currentTrack, isPlaying, playbackSpeed]);
 
-  // Handle Cloze Text Segments
+  // Handle Cloze Text Segments (strip leaked "[Câu X: (Y)]" prefixes before rendering)
   const clozeSegments = React.useMemo(() => {
     if (!currentTrack) return [];
-    return currentTrack.cloze_text.split('_____');
+    const sanitized = String(currentTrack.cloze_text || '').replace(/\[Câu\s*\d+\s*:\s*\([A-D]\)\]\s*/gi, '');
+    return sanitized.split('_____');
   }, [currentTrack]);
 
   // Check Blank when Space or Enter is pressed
@@ -242,8 +243,16 @@ export default function DictationStudio({
     }
   };
 
+  const [isSolutionRevealed, setIsSolutionRevealed] = React.useState(false);
+
   const handleRevealAll = () => {
     if (!currentTrack) return;
+    if (isSolutionRevealed) {
+      setInputs({});
+      setLockedBlanks({});
+      setIsSolutionRevealed(false);
+      return;
+    }
     const newInputs = {};
     const newLocked = {};
     currentTrack.blank_answers.forEach((ans, i) => {
@@ -252,11 +261,12 @@ export default function DictationStudio({
     });
     setInputs(newInputs);
     setLockedBlanks(newLocked);
+    setIsSolutionRevealed(true);
   };
 
   const correctCount = Object.keys(lockedBlanks).filter(k => lockedBlanks[k]).length;
   const totalBlanks = currentTrack?.blank_answers?.length || 1;
-  const isAllDone = correctCount === totalBlanks;
+  const isAllDone = !isSolutionRevealed && correctCount === totalBlanks;
 
   return (
     <div className="toeic-card" style={{ padding: '1.25rem', marginBottom: '1.5rem', overflow: 'visible' }}>
@@ -318,7 +328,7 @@ export default function DictationStudio({
             onClick={handleRevealAll}
             className="toeic-btn toeic-btn-sm toeic-btn-outline"
           >
-            Hiện Đáp Án
+            {isSolutionRevealed ? 'Ẩn Đáp Án & Gõ Lại' : 'Hiện Đáp Án'}
           </button>
         </div>
       </div>
@@ -469,6 +479,7 @@ export default function DictationStudio({
                   setCurrentTrackIndex(idx);
                   setInputs({});
                   setLockedBlanks({});
+                  setIsSolutionRevealed(false);
                   setFullSentenceInput('');
                   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
@@ -616,6 +627,78 @@ export default function DictationStudio({
           </button>
         )}
       </div>
+      {/* 5. MOBILE STICKY MINI AUDIO PLAYER BAR (UX-22) */}
+      {currentTrack && (
+        <div className="ge-dictation-mini-bar" role="region" aria-label="Điều khiển nghe nhanh trên điện thoại">
+          <button
+            type="button"
+            onClick={handlePlayAudio}
+            style={{
+              minWidth: '44px',
+              minHeight: '44px',
+              borderRadius: '999px',
+              border: 'none',
+              backgroundColor: 'var(--ds-accent)',
+              color: 'var(--ds-text-on-accent)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.35rem',
+              padding: '0 0.85rem',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+          >
+            <KitIcon name={isPlaying ? 'pause' : 'play'} size={16} style={{ color: 'var(--ds-text-on-accent)' }} />
+            <span>{isPlaying ? 'Dừng' : 'Nghe'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPlaybackSpeed((s) => (s === 1 ? 0.8 : s === 0.8 ? 1.2 : 1))}
+            style={{
+              minHeight: '40px',
+              padding: '0 0.7rem',
+              borderRadius: '8px',
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-bg-elevated)',
+              color: 'var(--ds-text)',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+          >
+            {playbackSpeed}x
+          </button>
+
+          <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--ds-text-muted)', whiteSpace: 'nowrap' }}>
+            {correctCount}/{totalBlanks} ô
+          </span>
+
+          <button
+            type="button"
+            onClick={handleRevealAll}
+            style={{
+              minHeight: '40px',
+              padding: '0 0.75rem',
+              borderRadius: '8px',
+              border: '1px solid var(--ds-border)',
+              backgroundColor: 'var(--ds-card)',
+              color: 'var(--ds-accent)',
+              fontSize: '0.76rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginLeft: 'auto',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {isSolutionRevealed ? 'Ẩn & Gõ lại' : 'Gợi ý đáp án'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

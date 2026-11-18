@@ -17,15 +17,21 @@ export function Modal({
   maxWidth = "640px",
   padding = "1.25rem",
   dataNoDict = true,
-  isLight = false,
+  isLight = undefined,
 }) {
   const titleId = useId();
   const dialogRef = useRef(null);
   const previousFocusRef = useRef(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
-  const T = getThemeTokens(isLight);
-  const C = getComponentTokens(isLight);
+  const resolvedIsLight =
+    typeof isLight === "boolean"
+      ? isLight
+      : typeof document !== "undefined"
+        ? document.documentElement.getAttribute("data-theme") !== "dark"
+        : true;
+  const T = getThemeTokens(resolvedIsLight);
+  const C = getComponentTokens(resolvedIsLight);
 
   useEffect(() => {
     if (!isOpen) return undefined;

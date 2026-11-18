@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BANNER_PATHS, MASCOT_PATHS } from "../ui-2026/assetMap";
 import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import { KitIcon } from "../ui-2026/KitIcon";
@@ -10,6 +10,12 @@ export default function DiagnosticOnboarding({
   T,
   isLight,
 }) {
+  const [showMatrix, setShowMatrix] = useState(true);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setShowMatrix(false);
+    }
+  }, []);
   return (
     <div
       style={{
@@ -236,14 +242,37 @@ export default function DiagnosticOnboarding({
           boxShadow: T.shadow,
         }}
       >
-        <h2 style={{ fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.5rem" }}>
-          Ma Trận Đánh Giá 10 Nhóm Kiến Thức Ngữ Pháp Chuẩn Hóa
-        </h2>
-        <p style={{ fontSize: "0.875rem", color: T.textMuted, marginBottom: "1.25rem" }}>
-          Được trích xuất từ 2.939 câu hỏi ngữ pháp học thuật chuẩn hóa, phân bổ cân đối theo độ khó.
-        </p>
+        <button
+          type="button"
+          onClick={() => setShowMatrix((prev) => !prev)}
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "0.75rem",
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            textAlign: "left",
+          }}
+        >
+          <div>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: T.text, margin: "0 0 0.25rem 0" }}>
+              Ma Trận Đánh Giá 10 Nhóm Kiến Thức Ngữ Pháp Chuẩn Hóa
+            </h2>
+            <p style={{ fontSize: "0.82rem", color: T.textMuted, margin: 0 }}>
+              {showMatrix ? "Trích xuất từ 2.939 câu hỏi chuẩn hóa, phân bổ theo độ khó." : "Chạm để xem chi tiết cấu trúc 10 chuyên đề đề thi"}
+            </p>
+          </div>
+          <span style={{ fontSize: "0.82rem", fontWeight: 800, color: T.accent, flexShrink: 0 }}>
+            {showMatrix ? "Thu gọn" : "Mở rộng"}
+          </span>
+        </button>
 
-        <div style={{ overflowX: "auto" }}>
+        {showMatrix && (
+        <div style={{ overflowX: "auto", marginTop: "1.15rem" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
             <thead>
               <tr style={{ borderBottom: `2px solid ${T.border}`, textAlign: "left" }}>
@@ -282,6 +311,7 @@ export default function DiagnosticOnboarding({
             </tbody>
           </table>
         </div>
+        )}
       </div>
     </div>
   );

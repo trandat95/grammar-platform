@@ -576,7 +576,7 @@
       },
       "source_page": 2,
       "id": "ETS2024_T01_Q101",
-      "correct_answer": "C",
+      "correct_answer": "B",
       "passage_group_id": null,
       "passage_doc_ids": [],
       "context_sentence": "Former Sendai Company CEO Ken Nakata spoke about ------- career experiences.",
@@ -588,12 +588,12 @@
       "difficulty_level": 1,
       "target_score_band": 450,
       "recommended_time_sec": 10,
-      "key_clue": "... spoke about [ him ] career experiences. ...",
-      "explanation_vi": "Đáp án đúng là (C) \"him\". Xét vị trí ngữ pháp xung quanh chỗ trống (... spoke about [ him ] career experiences. ...): trước danh từ dùng Tính từ sở hữu, trước động từ chia thì dùng Đại từ chủ ngữ, sau động từ/giới từ dùng Đại từ tân ngữ hoặc Đại từ phản thân.",
+      "key_clue": "... spoke about [ his ] career experiences. ...",
+      "explanation_vi": "Đáp án đúng là (B) \"his\". Xét vị trí ngữ pháp xung quanh chỗ trống (... spoke about [ his ] career experiences. ...): trước danh từ \"career experiences\" bắt buộc dùng Tính từ sở hữu (his).",
       "distractor_analysis": {
-        "A": "\"he\" sai chức năng ngữ pháp của đại từ tại vị trí này.",
-        "B": "\"his\" sai chức năng ngữ pháp của đại từ tại vị trí này.",
-        "D": "\"himself\" sai chức năng ngữ pháp của đại từ tại vị trí này."
+        "A": "\"he\" là đại từ chủ ngữ, không đứng trước danh từ \"career experiences\".",
+        "C": "\"him\" là đại từ tân ngữ, không đứng trước danh từ \"career experiences\".",
+        "D": "\"himself\" là đại từ phản thân, không dùng làm tính từ sở hữu trước danh từ."
       },
       "ai_analysis": {
         "primary_topic_id": "GRM_PRON_CASE",

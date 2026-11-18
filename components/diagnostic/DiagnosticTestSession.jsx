@@ -631,7 +631,7 @@ export default function DiagnosticTestSession({
               whiteSpace: "nowrap",
             }}
           >
-            {isSubmitting ? "Đang chấm điểm..." : "Nộp bài kiểm tra ➔"}
+            {isSubmitting ? "Đang chấm điểm..." : "Nộp bài kiểm tra →"}
           </button>
         </div>
       </div>

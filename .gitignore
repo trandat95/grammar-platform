@@ -49,3 +49,4 @@ scratch/
 *mcp_config.json
 
 ETS_Audio_All/
+.vercel

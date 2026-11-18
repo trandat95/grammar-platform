@@ -40,6 +40,10 @@ export default function TextInputRenderer({
         value={value}
         disabled={isLocked}
         placeholder={resolvedPlaceholder}
+        autoCapitalize="none"
+        autoCorrect="off"
+        autoComplete="off"
+        spellCheck={false}
         aria-label={
           question?.num
             ? `Nhập câu trả lời cho câu ${question.num}`
@@ -61,13 +65,13 @@ export default function TextInputRenderer({
           flex: "1 1 220px",
           minWidth: 0,
           width: "100%",
-          minHeight: "44px",
+          minHeight: "46px",
           padding: "0.55rem 0.85rem",
           backgroundColor: isLocked ? "var(--ds-bg-elevated)" : "var(--ds-card)",
           border: inputBorder,
           borderRadius: "var(--ds-radius-md, 8px)",
           color: "var(--ds-text)",
-          fontSize: "0.9rem",
+          fontSize: "1rem",
           boxSizing: "border-box",
           outline: "none",
         }}

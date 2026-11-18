@@ -81,8 +81,15 @@ export default function MonetizationHub({
   const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState("COMPLETED_GOAL");
   const [statusNotice, setStatusNotice] = useState(null);
+  const [showFullQuotaMatrix, setShowFullQuotaMatrix] = useState(true);
   const onEntSyncRef = useRef(onEntitlementSync);
   onEntSyncRef.current = onEntitlementSync;
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setShowFullQuotaMatrix(false);
+    }
+  }, []);
 
   const copyText = async (label, value) => {
     try {
@@ -537,13 +544,19 @@ export default function MonetizationHub({
       {/* 4 Subscription Pricing Cards (Price Anchoring & Annual Savings) */}
       <div className="ge-vip-plans-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(225px, 100%), 1fr))", gap: "1rem" }}>
         {plans.map((p) => {
-          const perMonth =
-            p.billing_cycle === "yearly"
-              ? Math.round(p.price_vnd / 12)
-              : p.billing_cycle === "quarterly"
-              ? Math.round(p.price_vnd / 3)
-              : p.price_vnd;
-          const savings = p.compare_at_vnd > p.price_vnd ? p.compare_at_vnd - p.price_vnd : 0;
+          const isYearly = p.billing_cycle === "yearly" || p.code === "VIP_YEARLY";
+          const displayCompareAt = isYearly && Number(p.compare_at_vnd) === 1188000 ? 468000 : Number(p.compare_at_vnd || 0);
+          const perMonth = isYearly
+            ? Math.round(p.price_vnd / 12)
+            : p.billing_cycle === "quarterly"
+            ? Math.round(p.price_vnd / 3)
+            : p.price_vnd;
+          const savings = displayCompareAt > p.price_vnd ? displayCompareAt - p.price_vnd : 0;
+          const discountPct = displayCompareAt > p.price_vnd ? Math.round((savings / displayCompareAt) * 100) : 0;
+          const displayBadge =
+            isYearly && typeof p.badge_text === "string" && p.badge_text.includes("41%")
+              ? `Best Value • Tiết kiệm ${discountPct}%`
+              : p.badge_text || p.billing_cycle;
 
           return (
             <div
@@ -564,7 +577,7 @@ export default function MonetizationHub({
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.5rem" }}>
                   <Badge tone={p.is_recommended ? "accent" : "neutral"} isLight={isLight}>
-                    {p.badge_text || p.billing_cycle}
+                    {displayBadge}
                   </Badge>
                 </div>
                 <div style={{ fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>{p.name_vi}</div>
@@ -572,15 +585,17 @@ export default function MonetizationHub({
                   <span style={{ fontSize: "1.45rem", fontWeight: 900, color: p.is_recommended ? T.accent : T.textHeading }}>
                     {Number(p.price_vnd).toLocaleString()}đ
                   </span>
-                  {p.compare_at_vnd > p.price_vnd && (
+                  {displayCompareAt > p.price_vnd && (
                     <span style={{ fontSize: "0.8rem", color: T.textMuted, textDecoration: "line-through" }}>
-                      {Number(p.compare_at_vnd).toLocaleString()}đ
+                      {Number(displayCompareAt).toLocaleString()}đ
                     </span>
                   )}
                 </div>
                 <div style={{ fontSize: "0.75rem", color: T.textMuted, marginTop: "0.2rem" }}>
                   {p.billing_cycle === "lifetime"
                     ? "Thanh toán 1 lần duy nhất • Sở hữu trọn đời"
+                    : isYearly
+                    ? `Tương đương ~${Number(perMonth).toLocaleString()}đ/tháng (Chỉ ~${Math.round(p.price_vnd / 365).toLocaleString()}đ/ngày)`
                     : `Tương đương ~${Number(perMonth).toLocaleString()}đ/tháng`}
                 </div>
                 {savings > 0 && (
@@ -596,15 +611,12 @@ export default function MonetizationHub({
                   isLight={isLight}
                   disabled={checkoutBusy}
                   onClick={() => {
-                    if (!userId) {
-                      requireGuestAuth();
-                      return;
-                    }
                     setSelectedPlan(p);
                     setSepayOrder(null);
                     setCheckoutError("");
                     setCouponPreview(null);
                     setCouponError("");
+                    if (!userId) return;
                     fetch("/api/monetization/overview", {
                       method: "POST",
                       headers: {
@@ -623,7 +635,7 @@ export default function MonetizationHub({
                   }}
                 >
                   <KitIcon name="crown" size={15} />
-                  <span>{!userId ? "Đăng ký để nâng cấp VIP" : hasVip ? "Chuyển sang gói này" : "Chọn gói VIP"}</span>
+                  <span>{hasVip ? "Chuyển sang gói này" : "Mở khóa & Xem VietQR"}</span>
                 </Button>
               </div>
             </div>
@@ -678,16 +690,12 @@ export default function MonetizationHub({
               isLight={isLight}
               onClick={() => {
                 const rec = plans.find((p) => p.is_recommended) || plans[0];
-                if (!userId) {
-                  requireGuestAuth();
-                  return;
-                }
                 setSelectedPlan(rec);
                 setSepayOrder(null);
                 setCheckoutError("");
               }}
             >
-              {!userId ? "Đăng ký để mở khóa VIP" : "Mở khóa VIP ngay"}
+              Mở khóa VIP ngay
             </Button>
           )}
         </div>
@@ -730,7 +738,13 @@ export default function MonetizationHub({
                 width={360}
                 height={170}
                 loading="lazy"
-                style={{ width: "100%", height: "auto", display: "block", aspectRatio: "360 / 170" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  aspectRatio: "360 / 170",
+                  filter: isLight ? "none" : "invert(0.9) hue-rotate(180deg) contrast(0.95)",
+                }}
               />
             </div>
 
@@ -782,7 +796,13 @@ export default function MonetizationHub({
                 width={360}
                 height={170}
                 loading="lazy"
-                style={{ width: "100%", height: "auto", display: "block", aspectRatio: "360 / 170" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  aspectRatio: "360 / 170",
+                  filter: isLight ? "none" : "invert(0.9) hue-rotate(180deg) contrast(0.95)",
+                }}
               />
             </div>
 
@@ -809,7 +829,32 @@ export default function MonetizationHub({
           </div>
         </div>
 
-        {/* Detailed Visual Quota Comparison Table */}
+        {/* Detailed Visual Quota Comparison Table (UX-28: collapsible detail table on Mobile) */}
+        <button
+          type="button"
+          onClick={() => setShowFullQuotaMatrix((prev) => !prev)}
+          style={{
+            width: "100%",
+            minHeight: "42px",
+            padding: "0.6rem 0.9rem",
+            borderRadius: "10px",
+            border: `1px solid ${T.border}`,
+            backgroundColor: T.bgElevated,
+            color: T.accent,
+            fontSize: "0.82rem",
+            fontWeight: 800,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+          }}
+        >
+          <span>Xem bảng so sánh chi tiết ({features.length} hạng mục Free vs VIP)</span>
+          <span>{showFullQuotaMatrix ? "Thu gọn" : "Mở rộng"}</span>
+        </button>
+
+        {showFullQuotaMatrix && (
         <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
           <div
             className="ge-vip-matrix-row ge-vip-matrix-header"
@@ -949,6 +994,7 @@ export default function MonetizationHub({
             );
           })}
         </div>
+        )}
       </div>
 
       {/* Billing History & Transparent Unsubscribe / Opt-Out Preferences */}
@@ -1131,18 +1177,44 @@ export default function MonetizationHub({
                   </Button>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+                {!userId && (
+                  <div
+                    style={{
+                      backgroundColor: T.warningBg,
+                      border: `1px solid ${T.warningBorder}`,
+                      borderRadius: "10px",
+                      padding: "0.8rem 0.9rem",
+                      fontSize: "0.78rem",
+                      color: T.text,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    <strong>Bước 1/2 (1 chạm):</strong> Xác thực nhanh bằng <strong>Google</strong> hoặc <strong>Email</strong> để hệ thống tạo mã VietQR riêng gắn tự động với tài khoản của bạn.
+                  </div>
+                )}
+
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", flexWrap: "wrap" }}>
                   <Button variant="ghost" isLight={isLight} onClick={() => setSelectedPlan(null)}>
                     Đóng
                   </Button>
-                  <Button
-                    variant="primary"
-                    isLight={isLight}
-                    disabled={checkoutBusy}
-                    onClick={() => handleCheckoutAction("create_sepay_order", selectedPlan)}
-                  >
-                    {checkoutBusy ? "Đang tạo mã VietQR..." : "Tạo mã VietQR thanh toán ➔"}
-                  </Button>
+                  {!userId ? (
+                    <Button
+                      variant="primary"
+                      isLight={isLight}
+                      onClick={() => requireGuestAuth()}
+                    >
+                      Xác thực 1 chạm &amp; Mở mã VietQR →
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="primary"
+                      isLight={isLight}
+                      disabled={checkoutBusy}
+                      onClick={() => handleCheckoutAction("create_sepay_order", selectedPlan)}
+                    >
+                      {checkoutBusy ? "Đang tạo mã VietQR..." : "Tạo mã VietQR thanh toán →"}
+                    </Button>
+                  )}
                 </div>
               </>
             ) : (

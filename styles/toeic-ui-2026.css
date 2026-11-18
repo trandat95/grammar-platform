@@ -1711,4 +1711,39 @@
   box-shadow: 0 0 0 4px var(--ds-accent-bg);
 }
 
+/* UX-20: Hide desktop keyboard shortcut badges on touch devices */
+@media (hover: none), (max-width: 767px) {
+  .ge-mobile-hide {
+    display: none !important;
+  }
+}
+
+/* UX-22: Fixed Mobile Mini Audio Player Bar for Dictation Studio */
+.ge-dictation-mini-bar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .toeic-srs-options {
+    grid-template-columns: 1fr !important;
+  }
+  .ge-dictation-mini-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    padding: 0.5rem 0.75rem;
+    border-radius: 14px;
+    background: var(--ds-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--ds-border);
+    box-shadow: var(--ds-shadow-lg);
+  }
+}
+
 

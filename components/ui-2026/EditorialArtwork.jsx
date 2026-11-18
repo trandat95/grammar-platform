@@ -425,7 +425,7 @@ function SectionWatermarkSvg({ kind }) {
  * - Light Mode: crisp transparent architectural vector SVG blended into airy tinted canvas (0 muddy grey fog).
  * - Dark Mode: rich glowing raster WebP artwork blended invisibly into #111115 dark canvas.
  */
-export function HeroBannerVisual({ kind, webpSrc }) {
+export function HeroBannerVisual({ kind, webpSrc, targetScore = 990 }) {
   return (
     <>
       {webpSrc && (
@@ -441,13 +441,13 @@ export function HeroBannerVisual({ kind, webpSrc }) {
       )}
       <div className="ge-hero-banner-scrim ge-hero-dark-only" aria-hidden="true" />
       <div className="ge-hero-light-vector ge-hero-light-only" aria-hidden="true">
-        <HeroLightSvg kind={kind} />
+        <HeroLightSvg kind={kind} targetScore={targetScore} />
       </div>
     </>
   );
 }
 
-function HeroLightSvg({ kind }) {
+function HeroLightSvg({ kind, targetScore = 990 }) {
   if (kind === "toeic") {
     return (
       <svg viewBox="0 0 360 180" width="100%" height="100%" preserveAspectRatio="xMaxYMid meet" fill="none">
@@ -475,7 +475,7 @@ function HeroLightSvg({ kind }) {
           <path d="M -39.8 33.4 A 52 52 0 1 1 39.8 33.4" stroke="var(--ds-success)" strokeOpacity="0.2" strokeWidth="10" strokeLinecap="round" />
           <path d="M -39.8 33.4 A 52 52 0 1 1 50.2 13.5" stroke="url(#hl-toeic-arc)" strokeWidth="10" strokeLinecap="round" />
           <circle cx="50.2" cy="13.5" r="6" fill="var(--ds-warning)" stroke="var(--ds-card)" strokeWidth="2" />
-          <text x="0" y="3" textAnchor="middle" fill="var(--ds-success)" fontSize="24" fontWeight="900" fontFamily="var(--font-heading)">990</text>
+          <text x="0" y="3" textAnchor="middle" fill="var(--ds-success)" fontSize="24" fontWeight="900" fontFamily="var(--font-heading)">{targetScore}</text>
           <text x="0" y="18" textAnchor="middle" fill="var(--ds-text-muted)" fontSize="8.5" fontWeight="800" fontFamily="var(--font-sans)">TARGET SCORE</text>
         </g>
       </svg>

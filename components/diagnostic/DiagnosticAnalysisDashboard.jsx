@@ -178,6 +178,109 @@ export default function DiagnosticAnalysisDashboard({
         </div>
       </div>
 
+      {/* Visual Radar Chart across Grammar Skill Groups (EC-11) */}
+      {Array.isArray(skill_results) && skill_results.length >= 3 && (() => {
+        const axes = skill_results.slice(0, 10);
+        const cx = 170;
+        const cy = 155;
+        const maxR = 102;
+        const count = axes.length;
+        const radarPts = axes.map((s, idx) => {
+          const angle = ((idx * 360) / count - 90) * (Math.PI / 180);
+          const pct = Math.max(8, Math.min(100, Number(s.accuracy_pct ?? s.accuracy ?? 0)));
+          const r = (pct / 100) * maxR;
+          return {
+            x: cx + r * Math.cos(angle),
+            y: cy + r * Math.sin(angle),
+            lx: cx + (maxR + 24) * Math.cos(angle),
+            ly: cy + (maxR + 18) * Math.sin(angle),
+            label: String(s.category_name || s.name || s.topic || `Nhóm ${idx + 1}`).split("(")[0].trim().slice(0, 16),
+            pct: Math.round(Number(s.accuracy_pct ?? s.accuracy ?? 0)),
+          };
+        });
+        const poly = radarPts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+        return (
+          <div
+            style={{
+              backgroundColor: "var(--ds-card)",
+              borderRadius: "1rem",
+              padding: "1.5rem",
+              border: `1px solid ${T.borderSubtle}`,
+              boxShadow: T.shadow,
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem" }}>
+              <div>
+                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: T.text, margin: 0 }}>
+                  Biểu Đồ Radar Năng Lực ({axes.length} Nhóm Kiến Thức)
+                </h2>
+                <p style={{ fontSize: "0.8rem", color: T.textMuted, margin: "0.2rem 0 0 0" }}>
+                  Trực quan hóa độ vững của từng mảng ngữ pháp sau bài kiểm tra 30 câu
+                </p>
+              </div>
+              <Badge tone="accent" isLight={isLight}>
+                Trung bình {percentage}%
+              </Badge>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "1.5rem" }}>
+              <svg viewBox="0 0 340 310" width="320" height="292" style={{ maxWidth: "100%", height: "auto" }} aria-label="Biểu đồ Radar năng lực ngữ pháp">
+                {[0.25, 0.5, 0.75, 1].map((lvl) => {
+                  const ringPts = axes.map((_, idx) => {
+                    const angle = ((idx * 360) / count - 90) * (Math.PI / 180);
+                    return `${(cx + lvl * maxR * Math.cos(angle)).toFixed(1)},${(cy + lvl * maxR * Math.sin(angle)).toFixed(1)}`;
+                  }).join(" ");
+                  return <polygon key={lvl} points={ringPts} fill="none" stroke="var(--ds-border)" strokeWidth="1" strokeDasharray={lvl < 1 ? "3 3" : undefined} />;
+                })}
+                {axes.map((_, idx) => {
+                  const angle = ((idx * 360) / count - 90) * (Math.PI / 180);
+                  return (
+                    <line
+                      key={idx}
+                      x1={cx}
+                      y1={cy}
+                      x2={(cx + maxR * Math.cos(angle)).toFixed(1)}
+                      y2={(cy + maxR * Math.sin(angle)).toFixed(1)}
+                      stroke="var(--ds-border)"
+                      strokeWidth="1"
+                    />
+                  );
+                })}
+                <polygon points={poly} fill="var(--ds-accent)" fillOpacity="0.22" stroke="var(--ds-accent)" strokeWidth="2.5" />
+                {radarPts.map((p, idx) => (
+                  <g key={idx}>
+                    <circle cx={p.x} cy={p.y} r="4" fill="var(--ds-accent)" stroke="var(--ds-card)" strokeWidth="1.5" />
+                    <text x={p.lx} y={p.ly} textAnchor="middle" fill="var(--ds-text-secondary)" fontSize="9.5" fontWeight="700">
+                      {p.label}
+                    </text>
+                  </g>
+                ))}
+              </svg>
+              <div style={{ flex: "1 1 240px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.5rem" }}>
+                {radarPts.map((p, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "0.45rem 0.7rem",
+                      borderRadius: "0.5rem",
+                      backgroundColor: "var(--ds-bg-elevated)",
+                      border: `1px solid ${T.borderSubtle}`,
+                      fontSize: "0.78rem",
+                    }}
+                  >
+                    <span style={{ color: T.text, fontWeight: 600 }}>{p.label}</span>
+                    <strong style={{ color: p.pct >= 70 ? T.success : p.pct >= 40 ? T.warning : T.danger }}>{p.pct}%</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* AI Learning Recommendation Box */}
       {roadmap?.ai_recommendation && (
         <div

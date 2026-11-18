@@ -69,6 +69,7 @@ export default function AppShell2026({
   children,
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dictToastMsg, setDictToastMsg] = useState("");
   const globalAuth = useGlobalAuth();
 
   // Resolved user state (supports both parent-injected and global auto-detected auth)
@@ -195,6 +196,8 @@ export default function AppShell2026({
             <SyncStatusIndicator
               syncState={effectiveSyncState}
               isLight={isLight}
+              isGuest={Boolean(effectiveUser?.isGuest)}
+              onOpenAuth={effectiveOpenAuth}
               onTriggerSync={onTriggerSync}
               onPullRemote={onPullRemote}
             />
@@ -233,7 +236,16 @@ export default function AppShell2026({
           {/* Click-to-Lookup Dictionary Pill */}
           <button
             type="button"
-            onClick={onToggleDict}
+            onClick={() => {
+              if (onToggleDict) onToggleDict();
+              const nextState = !dictEnabled;
+              setDictToastMsg(
+                nextState
+                  ? "Đã bật Từ điển 1 chạm: Chạm hoặc bôi đen từ tiếng Anh bất kỳ để tra nghĩa."
+                  : "Đã tắt chế độ Từ điển 1 chạm."
+              );
+              setTimeout(() => setDictToastMsg(""), 2600);
+            }}
             aria-pressed={dictEnabled}
             title={dictEnabled ? "Chế độ click tra từ nhanh đang BẬT" : "Click để bật tra từ nhanh"}
             className="ds-btn ds-focusable ge-hide-tablet"
@@ -703,6 +715,32 @@ export default function AppShell2026({
           );
         })}
       </nav>
+
+      {dictToastMsg && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            bottom: "80px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 1350,
+            backgroundColor: "var(--ds-card)",
+            color: "var(--ds-text)",
+            border: "1px solid var(--ds-accent-border)",
+            borderRadius: "999px",
+            padding: "0.55rem 1.05rem",
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+            maxWidth: "90vw",
+            textAlign: "center",
+          }}
+        >
+          {dictToastMsg}
+        </div>
+      )}
 
       {/* Fallback Unified Auth & Account Profile Modal when parent doesn't provide onOpenAuthModal */}
       {!onOpenAuthModal && (

@@ -45,6 +45,14 @@ const BADGE_CATEGORIES = [
   "Learning Milestones",
 ];
 
+const BADGE_CATEGORY_LABELS = {
+  ALL: "Tất cả",
+  "Learning Consistency": "Chăm chỉ",
+  "Grammar Mastery": "Thông thạo",
+  "Accuracy & Performance": "Chính xác",
+  "Learning Milestones": "Cột mốc",
+};
+
 function getTierTone(tier) {
   if (tier === "Diamond") return "accent";
   if (tier === "Gold") return "warning";
@@ -435,20 +443,38 @@ export default function GamificationHub({
                       isLight={isLight}
                       height={7}
                     />
-                    {!guestMode && ch.status === "active" && tpl.period_type === "daily" && (
-                      <div style={{ marginTop: "0.55rem", display: "flex", justifyContent: "flex-end" }}>
+                    <div style={{ marginTop: "0.55rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                      {!isDone && (
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          isLight={isLight}
+                          onClick={() => {
+                            const targetView = String(tpl.metric_key || tpl.title_vi || "").toLowerCase().includes("bài")
+                              ? "study"
+                              : "quiz";
+                            if (typeof window !== "undefined") {
+                              window.location.href = `/?view=${targetView}`;
+                            }
+                          }}
+                          style={{ fontSize: "0.75rem", padding: "0.35rem 0.85rem", minHeight: "40px" }}
+                        >
+                          Làm ngay →
+                        </Button>
+                      )}
+                      {!guestMode && ch.status === "active" && tpl.period_type === "daily" && (
                         <Button
                           size="sm"
                           variant="ghost"
                           icon="refresh"
                           isLight={isLight}
                           onClick={() => handleServerAction({ action: "swap_challenge", user_challenge_id: ch.id })}
-                          style={{ fontSize: "0.74rem", padding: "0.32rem 0.65rem", minHeight: "36px" }}
+                          style={{ fontSize: "0.74rem", padding: "0.32rem 0.65rem", minHeight: "36px", marginLeft: "auto" }}
                         >
                           Đổi thử thách
                         </Button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -492,7 +518,7 @@ export default function GamificationHub({
                 }}
                 style={{ fontSize: "0.74rem", padding: "0.32rem 0.7rem", minHeight: "36px" }}
               >
-                {cat === "ALL" ? "Tất cả" : cat}
+                {BADGE_CATEGORY_LABELS[cat] || cat}
               </Button>
             ))}
           </div>

@@ -38,6 +38,19 @@ export default function TestSimulationPage() {
   const [clientAttemptId, setClientAttemptId] = useState(null);
   const [serverDsResult, setServerDsResult] = useState(null);
   const [isSubmittingExam, setIsSubmittingExam] = useState(false);
+  const [confirmModalState, setConfirmModalState] = useState(null);
+
+  const normalizedMode = String(mode || 'full').toLowerCase();
+  const examDurationMinutes =
+    normalizedMode === 'part5' ? 15 : normalizedMode === 'part6' ? 10 : normalizedMode === 'part7' ? 50 : 75;
+  const questionRangeLabel =
+    normalizedMode === 'part5'
+      ? 'Bảng Câu Hỏi Part 5 (101–130)'
+      : normalizedMode === 'part6'
+      ? 'Bảng Câu Hỏi Part 6 (131–146)'
+      : normalizedMode === 'part7'
+      ? 'Bảng Câu Hỏi Part 7 (147–200)'
+      : 'Bảng Theo Dõi Toàn Đề (101–200)';
 
   const globalAuth = useGlobalAuth();
   const entitlement = useToeicEntitlement(globalAuth.currentUser?.id, globalAuth.currentUser?.role);
@@ -151,7 +164,7 @@ export default function TestSimulationPage() {
     setServerDsResult(null);
     setExamSubmitted(false);
     setIsReviewMode(false);
-    setExamTimeLeftSec(75 * 60);
+    setExamTimeLeftSec(examDurationMinutes * 60);
     setExamElapsedSec(0);
     setShowUnansweredDrawer(false);
     setActivePart(5);
@@ -198,11 +211,14 @@ export default function TestSimulationPage() {
 
   const handleSubmitExam = () => {
     const unanswered = readingQuestions.filter(q => !userAnswers[q.id]).length;
-    if (
-      unanswered > 0 &&
-      typeof window !== 'undefined' &&
-      !window.confirm(`Bạn còn ${unanswered} câu chưa làm. Bạn có chắc chắn muốn nộp bài và chấm điểm ngay không?`)
-    ) {
+    if (unanswered > 0) {
+      setConfirmModalState({
+        type: 'submit',
+        title: `Còn ${unanswered} câu chưa làm`,
+        message: `Bạn vẫn còn ${unanswered} câu bỏ trống. Bạn muốn quay lại làm tiếp hay nộp bài chấm điểm ngay?`,
+        confirmLabel: 'Nộp bài & Xem kết quả',
+        cancelLabel: 'Làm tiếp các câu trống',
+      });
       return;
     }
     finalizeExamSubmission();
@@ -412,8 +428,15 @@ export default function TestSimulationPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (answeredCount > 0 && !examSubmitted && typeof window !== 'undefined') {
-                        if (!window.confirm('Đổi chế độ sẽ làm mới tiến độ hiện tại. Bạn có chắc không?')) return;
+                      if (answeredCount > 0 && !examSubmitted) {
+                        setConfirmModalState({
+                          type: 'switch_mode',
+                          title: 'Đổi chế độ làm bài?',
+                          message: 'Chuyển chế độ sẽ làm mới toàn bộ đáp án bạn vừa chọn ở phiên này. Bạn có muốn tiếp tục không?',
+                          confirmLabel: 'Xác nhận đổi chế độ',
+                          cancelLabel: 'Ở lại làm tiếp',
+                        });
+                        return;
                       }
                       setExamSessionMode(null);
                       setUserAnswers({});
@@ -559,7 +582,7 @@ export default function TestSimulationPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.82rem', fontWeight: 800, color: 'var(--ds-text)' }}>
                         <KitIcon name="hash" size={14} color="var(--ds-accent)" />
-                        <span>Bảng Theo Dõi Toàn Đề (101–200)</span>
+                        <span>{questionRangeLabel}</span>
                       </span>
                       <div style={{ display: 'flex', gap: '0.55rem', flexWrap: 'wrap', fontSize: '0.72rem', color: 'var(--ds-text-muted)', alignItems: 'center' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}><StatusDot tone="accent" size={8} /> Đã làm ({answeredCount})</span>
@@ -1163,7 +1186,7 @@ export default function TestSimulationPage() {
                         2. Chế Độ Thi Thử (Real Exam)
                       </h2>
                       <p style={{ fontSize: '0.84rem', color: 'var(--ds-text-secondary)', lineHeight: 1.55, margin: 0 }}>
-                        Đồng hồ đếm ngược <strong>75 phút</strong> chuẩn phòng thi, ẩn đáp án khi đang làm, có <strong>chọn nhanh các câu chưa làm</strong>, tự do đổi đáp án và <strong>Nộp bài chấm điểm tổng kết</strong>.
+                        Đồng hồ đếm ngược <strong>{examDurationMinutes} phút</strong> chuẩn phòng thi, ẩn đáp án khi đang làm, có <strong>chọn nhanh các câu chưa làm</strong>, tự do đổi đáp án và <strong>Nộp bài chấm điểm tổng kết</strong>.
                       </p>
                     </div>
                     <button
@@ -1179,7 +1202,7 @@ export default function TestSimulationPage() {
                         border: 'none'
                       }}
                     >
-                      Bắt Đầu Thi Thử (75 Phút) &rarr;
+                      Bắt Đầu Thi Thử ({examDurationMinutes} Phút) &rarr;
                     </button>
                   </div>
                 </div>
@@ -1202,9 +1225,9 @@ export default function TestSimulationPage() {
                       </span>
                     </div>
 
-                    {/* Part 5 Question Palette */}
+                    {/* Part 5 Question Palette (desktop inline; mobile uses sticky Bottom Sheet Drawer) */}
                     <div
-                      className="toeic-card"
+                      className="toeic-card ge-hide-mobile"
                       style={{
                         padding: '0.75rem 1rem',
                         marginBottom: '1.25rem',
@@ -1385,6 +1408,78 @@ export default function TestSimulationPage() {
             )}
           </div>
         </div>
+
+        {/* Custom Confirm Modal (replaces browser window.confirm for Zalo/FB WebView compatibility) */}
+        {confirmModalState && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={confirmModalState.title}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 1350,
+              backgroundColor: 'rgba(15, 23, 42, 0.55)',
+              backdropFilter: 'blur(4px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '1rem'
+            }}
+            onClick={() => setConfirmModalState(null)}
+          >
+            <div
+              className="toeic-card"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: '100%',
+                maxWidth: '420px',
+                padding: '1.35rem',
+                borderRadius: '1rem',
+                backgroundColor: 'var(--ds-card)',
+                border: '1px solid var(--ds-border)',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.25)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', marginBottom: '0.6rem' }}>
+                <KitIcon name="warning" size={20} color="var(--ds-warning)" />
+                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                  {confirmModalState.title}
+                </h3>
+              </div>
+              <p style={{ margin: '0 0 1.2rem 0', fontSize: '0.88rem', lineHeight: 1.55, color: 'var(--ds-text-secondary)' }}>
+                {confirmModalState.message}
+              </p>
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <ToeicButton
+                  variant="secondary"
+                  onClick={() => setConfirmModalState(null)}
+                  style={{ minHeight: '44px' }}
+                >
+                  {confirmModalState.cancelLabel}
+                </ToeicButton>
+                <ToeicButton
+                  variant="primary"
+                  onClick={() => {
+                    const actionType = confirmModalState.type;
+                    setConfirmModalState(null);
+                    if (actionType === 'submit') {
+                      finalizeExamSubmission();
+                    } else if (actionType === 'switch_mode') {
+                      setExamSessionMode(null);
+                      setUserAnswers({});
+                      setExamSubmitted(false);
+                      setIsReviewMode(false);
+                    }
+                  }}
+                  style={{ minHeight: '44px' }}
+                >
+                  {confirmModalState.confirmLabel}
+                </ToeicButton>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* TOEIC Smart Paywall Modal */}
         <ToeicSmartPaywallModal

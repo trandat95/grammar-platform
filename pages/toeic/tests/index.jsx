@@ -264,28 +264,45 @@ export default function TestsCatalogPage() {
                               </svg>
                             }
                           >
-                            Luyện Full Đề 200 Câu
+                            Luyện Full Reading 100 Câu (Part 5–7)
                           </ToeicButton>
                         </Link>
                       ) : (
-                        <ToeicButton
-                          variant="secondary"
-                          onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: num, series: selectedSeries, mode: 'full' })}
-                          style={{
-                            width: '100%',
-                            border: '1px solid var(--ds-warning)',
-                            color: 'var(--ds-warning)',
-                            fontWeight: 800
-                          }}
-                          icon={
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
-                          }
-                        >
-                          Mở Khóa Đề VIP Này
-                        </ToeicButton>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                          <ToeicButton
+                            variant="secondary"
+                            onClick={() => entitlement.openPaywall('TRG_04_FULL_MOCK_TEST', { testNumber: num, series: selectedSeries, mode: 'full' })}
+                            style={{
+                              width: '100%',
+                              border: '1px solid var(--ds-warning)',
+                              color: 'var(--ds-warning)',
+                              fontWeight: 800
+                            }}
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                              </svg>
+                            }
+                          >
+                            Mở Khóa Đề VIP Này
+                          </ToeicButton>
+                          <Link
+                            href={`/toeic/tests/${selectedSeries}/1?mode=part5`}
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '0.74rem',
+                              fontWeight: 700,
+                              color: 'var(--ds-accent)',
+                              textDecoration: 'none',
+                              padding: '0.25rem 0'
+                            }}
+                          >
+                            Làm thử Mini-Test Part 5 (Miễn phí) &rarr;
+                          </Link>
+                        </div>
                       )}
                     </div>
                   </div>

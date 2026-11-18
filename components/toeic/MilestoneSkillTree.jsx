@@ -3,6 +3,12 @@ import { KitIcon } from '../ui-2026/KitIcon';
 import { ToeicBadge, ToeicButton } from './ui';
 import useToeicEntitlement from '../../hooks/useToeicEntitlement';
 import ToeicSmartPaywallModal from './premium/ToeicSmartPaywallModal';
+import grammarTaxonomy from '../../data/toeic/grammar_taxonomy.json';
+
+const SKILL_DISPLAY_MAP = Object.fromEntries(
+  (grammarTaxonomy?.topics || []).map((t) => [t.id, t.name_vi])
+);
+const getSkillDisplayName = (code) => SKILL_DISPLAY_MAP[code] || code;
 
 /**
  * MilestoneSkillTree Component (Milestones E3 & E7)
@@ -228,16 +234,15 @@ export default function MilestoneSkillTree({
                         key={i}
                         style={{
                           fontSize: '0.75rem',
-                          padding: '0.2rem 0.6rem',
+                          padding: '0.25rem 0.65rem',
                           borderRadius: 'var(--ds-radius-sm)',
                           border: '1px solid var(--ds-border)',
                           backgroundColor: 'var(--ds-bg-elevated)',
                           color: 'var(--ds-text)',
-                          fontFamily: 'monospace',
                           fontWeight: 600
                         }}
                       >
-                        {tid}
+                        {getSkillDisplayName(tid)}
                       </span>
                     ))}
 
@@ -250,17 +255,16 @@ export default function MilestoneSkillTree({
                           alignItems: 'center',
                           gap: '0.3rem',
                           fontSize: '0.75rem',
-                          padding: '0.2rem 0.6rem',
+                          padding: '0.25rem 0.65rem',
                           borderRadius: 'var(--ds-radius-sm)',
                           border: '1px solid var(--ds-danger-border)',
                           backgroundColor: 'var(--ds-danger-bg)',
                           color: 'var(--ds-danger)',
-                          fontFamily: 'monospace',
                           fontWeight: 700
                         }}
                       >
                         <KitIcon name="target" size={12} />
-                        <span>Điểm yếu bổ trợ: {wid}</span>
+                        <span>Điểm yếu bổ trợ: {getSkillDisplayName(wid)}</span>
                       </span>
                     ))}
                   </div>

@@ -22,9 +22,9 @@ export default function ToeicHeroBanner({
   const [targetScore, setTargetScore] = useState(initialTargetScore);
   const globalAuth = useGlobalAuth();
   const [userStats, setUserStats] = useState({
-    estimatedScore: 625,
+    estimatedScore: null,
     completedQuestions: 0,
-    accuracyRate: 78.5,
+    accuracyRate: null,
     streakDays: 0
   });
 
@@ -42,7 +42,7 @@ export default function ToeicHeroBanner({
       }
     } catch (e) {}
 
-    let estScore = 625;
+    let estScore = null;
     try {
       const diagRaw = localStorage.getItem(`toeic_diagnostic_${uid}`);
       if (diagRaw) {
@@ -54,7 +54,7 @@ export default function ToeicHeroBanner({
     setUserStats({
       estimatedScore: estScore,
       completedQuestions: completed,
-      accuracyRate: completed > 0 ? 82.0 : 78.5,
+      accuracyRate: completed > 0 ? 82.0 : null,
       streakDays: streak
     });
   }, [globalAuth.currentUser?.id, globalAuth.userTracker?.streak]);
@@ -81,7 +81,7 @@ export default function ToeicHeroBanner({
         marginBottom: compact ? '1.25rem' : '2.25rem',
       }}
     >
-      <HeroBannerVisual kind="toeic" webpSrc={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive.webp'} />
+      <HeroBannerVisual kind="toeic" webpSrc={BANNER_PATHS.toeic || '/assets/banners/05-toeic-adaptive.webp'} targetScore={targetScore} />
 
       {/* Banner Content Container */}
       <div
@@ -174,42 +174,65 @@ export default function ToeicHeroBanner({
           </p>
         )}
 
-        {/* Target Band Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: compact ? '0.45rem' : '0.6rem', flexWrap: 'wrap', marginBottom: compact ? '0.85rem' : '1.5rem' }}>
-          <span style={{ fontSize: compact ? '0.75rem' : '0.8rem', fontWeight: 700, color: isLight ? 'var(--ds-text-muted)' : 'rgba(241, 245, 249, 0.8)' }}>
-            Mục tiêu của bạn:
-          </span>
-          {[500, 650, 750, 850, 990].map(score => {
-            const isSelected = targetScore === score;
-            return (
-              <button
-                key={score}
-                type="button"
-                onClick={() => handleSelectTarget(score)}
-                style={{
-                  padding: compact ? '0.38rem 0.75rem' : '0.45rem 0.9rem',
-                  minHeight: '36px',
-                  borderRadius: '999px',
-                  fontSize: compact ? '0.74rem' : '0.8rem',
-                  fontWeight: isSelected ? 800 : 600,
-                  border: isSelected
-                    ? '1px solid var(--ds-accent)'
-                    : (isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.2)'),
-                  backgroundColor: isSelected
-                    ? 'var(--ds-accent)'
-                    : (isLight ? 'var(--ds-bg-elevated)' : 'rgba(255, 255, 255, 0.08)'),
-                  color: isSelected ? 'var(--ds-text-on-accent)' : 'var(--ds-text-heading)',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  boxShadow: isSelected
-                    ? (isLight ? '0 2px 8px rgba(37, 99, 235, 0.25)' : '0 0 12px rgba(37, 99, 235, 0.5)')
-                    : 'none'
-                }}
-              >
-                Target {score}+
-              </button>
-            );
-          })}
+        {/* Target Band Selector (Interactive Pills + Mobile Touch Slider UX-10) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? '0.5rem' : '0.65rem', marginBottom: compact ? '0.85rem' : '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: compact ? '0.45rem' : '0.6rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: compact ? '0.75rem' : '0.8rem', fontWeight: 700, color: isLight ? 'var(--ds-text-muted)' : 'rgba(241, 245, 249, 0.8)' }}>
+              Mục tiêu của bạn:
+            </span>
+            {[500, 650, 750, 850, 990].map(score => {
+              const isSelected = targetScore === score;
+              return (
+                <button
+                  key={score}
+                  type="button"
+                  onClick={() => handleSelectTarget(score)}
+                  style={{
+                    padding: compact ? '0.38rem 0.75rem' : '0.45rem 0.9rem',
+                    minHeight: '36px',
+                    borderRadius: '999px',
+                    fontSize: compact ? '0.74rem' : '0.8rem',
+                    fontWeight: isSelected ? 800 : 600,
+                    border: isSelected
+                      ? '1px solid var(--ds-accent)'
+                      : (isLight ? '1px solid var(--ds-border)' : '1px solid rgba(255, 255, 255, 0.2)'),
+                    backgroundColor: isSelected
+                      ? 'var(--ds-accent)'
+                      : (isLight ? 'var(--ds-bg-elevated)' : 'rgba(255, 255, 255, 0.08)'),
+                    color: isSelected ? 'var(--ds-text-on-accent)' : 'var(--ds-text-heading)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    boxShadow: isSelected
+                      ? (isLight ? '0 2px 8px rgba(37, 99, 235, 0.25)' : '0 0 12px rgba(37, 99, 235, 0.5)')
+                      : 'none'
+                  }}
+                >
+                  Target {score}+
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="ge-show-mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', padding: '0.35rem 0.65rem', borderRadius: '0.65rem', backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)', border: '1px solid var(--ds-border)' }}>
+            <label htmlFor="toeic-target-slider" style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--ds-accent)', whiteSpace: 'nowrap' }}>
+              Kéo chọn: {targetScore}+
+            </label>
+            <input
+              id="toeic-target-slider"
+              type="range"
+              min={0}
+              max={4}
+              step={1}
+              value={Math.max(0, [500, 650, 750, 850, 990].indexOf(targetScore))}
+              onChange={(e) => {
+                const steps = [500, 650, 750, 850, 990];
+                const picked = steps[Number(e.target.value)] || 750;
+                handleSelectTarget(picked);
+              }}
+              aria-label="Thanh trượt chọn điểm TOEIC mục tiêu"
+              style={{ flex: 1, accentColor: 'var(--ds-accent)', minHeight: '28px', cursor: 'pointer' }}
+            />
+          </div>
         </div>
 
         {/* Fast-Access Action CTA Buttons */}
@@ -310,10 +333,10 @@ export default function ToeicHeroBanner({
               }}
             >
               <div style={{ fontSize: compact ? '1.1rem' : '1.35rem', fontWeight: 800, color: 'var(--ds-accent)' }}>
-                {userStats.estimatedScore}
+                {userStats.estimatedScore ?? '? Điểm'}
               </div>
               <div style={{ fontSize: compact ? '0.68rem' : '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-                Điểm Dự Đoán (IRT)
+                {userStats.estimatedScore ? 'Điểm Dự Đoán (IRT)' : 'Chưa đo • Làm 10 câu để mở'}
               </div>
             </div>
 
@@ -347,7 +370,9 @@ export default function ToeicHeroBanner({
                 {userStats.completedQuestions}
               </div>
               <div style={{ fontSize: compact ? '0.68rem' : '0.74rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-                Câu Đã Làm ({userStats.accuracyRate}%)
+                {userStats.completedQuestions > 0 && userStats.accuracyRate !== null
+                  ? `Câu Đã Làm (${userStats.accuracyRate}%)`
+                  : 'Câu Đã Làm (Chưa có dữ liệu)'}
               </div>
             </div>
 

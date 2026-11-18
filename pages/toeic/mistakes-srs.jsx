@@ -17,7 +17,7 @@ export default function MistakesSrsPage() {
       card_type: 'MISTAKE_QUESTION',
       questionId: 'ETS2024_T01_Q105',
       stem: 'The marketing team is currently _______ new strategies to enhance customer engagement.',
-      correct_answer: 'D',
+      correct_answer: 'B',
       options: { A: 'update', B: 'updating', C: 'updates', D: 'updated' },
       explanation_vi: 'Cấu trúc be + V-ing/V-ed. Theo ngữ cảnh chủ động "is currently implementing/updating", cần dạng V-ing bổ nghĩa.',
       ease_factor: 2.5,
@@ -204,8 +204,10 @@ export default function MistakesSrsPage() {
                         <ToeicBadge variant={currentCard.card_type === 'VOCABULARY' ? 'success' : 'danger'} icon={currentCard.card_type === 'VOCABULARY' ? 'book' : 'danger'}>
                           {currentCard.card_type === 'VOCABULARY' ? 'Flashcard Từ Vựng' : 'Câu Hỏi Từng Làm Sai'}
                         </ToeicBadge>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
-                          Nhấp thẻ hoặc phím Space để lật ↻
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                          <KitIcon name="refresh" size={13} />
+                          <span className="ge-mobile-hide">Nhấp thẻ hoặc phím Space để lật</span>
+                          <span className="ge-show-mobile-only">Chạm để lật • Vuốt trái/phải qua thẻ</span>
                         </span>
                       </div>
 
@@ -251,16 +253,20 @@ export default function MistakesSrsPage() {
                             <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--ds-text)', lineHeight: 1.6, marginBottom: '1rem' }}>
                               {currentCard.stem}
                             </p>
-                            <div className="toeic-grid-2" style={{ gap: '0.5rem' }}>
+                            <div className="toeic-grid-2 toeic-srs-options" style={{ gap: '0.5rem' }}>
                               {Object.entries(currentCard.options || {}).map(([k, v]) => (
                                 <div
                                   key={k}
                                   style={{
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.75rem 0.9rem',
+                                    minHeight: '48px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.35rem',
                                     borderRadius: '0.5rem',
                                     border: '1px solid var(--ds-border)',
                                     backgroundColor: 'var(--ds-bg-elevated)',
-                                    fontSize: '0.85rem'
+                                    fontSize: '0.9rem'
                                   }}
                                 >
                                   <strong>({k})</strong> {v}
@@ -282,8 +288,9 @@ export default function MistakesSrsPage() {
                         <ToeicBadge variant="primary">
                           ✓ Mặt Sau: Nghĩa &amp; Giải Thích
                         </ToeicBadge>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
-                          Chọn mức độ nhớ bên dưới ⇣
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--ds-text-muted)' }}>
+                          <span>Chọn mức độ nhớ bên dưới</span>
+                          <KitIcon name="chevron-down" size={13} />
                         </span>
                       </div>
 

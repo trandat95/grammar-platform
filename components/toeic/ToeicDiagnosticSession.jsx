@@ -289,7 +289,7 @@ export default function ToeicDiagnosticSession({
         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 0.5rem 0' }}>
           {currentStage === 1
             ? 'Đang nạp bộ câu hỏi chẩn đoán 3 chặng...'
-            : `Đang phân tích Chặng ${currentStage - 1} & chuẩn bị câu hỏi thích ứng Chặng ${currentStage}...`}
+            : `Đang phân tích Chặng ${currentStage} & chuẩn bị câu hỏi thích ứng Chặng ${currentStage + 1}...`}
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--ds-text-muted)' }}>
           Hệ thống AI ước lượng năng lực IRT 3PL theo thời gian thực
@@ -313,6 +313,7 @@ export default function ToeicDiagnosticSession({
   }
 
   const answeredCount = Object.keys(answers).length;
+  const stageAnsweredCount = questions.filter((q) => Boolean(answers[q.id])).length;
   const currentAnswer = currentQ ? answers[currentQ.id]?.selectedOption : null;
   const isFlagged = currentQ ? !!flags[currentQ.id] : false;
   const recommendedTime = currentQ?.recommended_time_sec || 12;
@@ -362,7 +363,7 @@ export default function ToeicDiagnosticSession({
               {currentStage === 3 && 'Chặng 3: Xác Thực Điểm Yếu & Tốc Độ (Verification)'}
             </div>
             <div style={{ fontSize: '0.8rem', color: 'var(--ds-text-muted)' }}>
-              Câu {currentIndex + 1} / {questions.length} • Đã làm: {answeredCount}/30
+              Câu {currentIndex + 1} / {questions.length} • Chặng này: {stageAnsweredCount}/{questions.length} (Tổng {answeredCount}/30)
             </div>
           </div>
         </div>
@@ -386,12 +387,58 @@ export default function ToeicDiagnosticSession({
       <div className="toeic-bento-grid">
         {/* LEFT / CENTER: Question Area */}
         <div className="toeic-col-8">
+          {/* Mobile Compact Progress Dots (UX-20) */}
+          <div
+            className="ge-show-mobile-only"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.4rem',
+              marginBottom: '0.75rem',
+              flexWrap: 'wrap'
+            }}
+            aria-label="Tiến độ câu hỏi chặng hiện tại"
+          >
+            {questions.map((q, idx) => {
+              const isCur = idx === currentIndex;
+              const isAns = Boolean(answers[q.id]);
+              return (
+                <button
+                  key={q.id || idx}
+                  type="button"
+                  onClick={() => setCurrentIndex(idx)}
+                  aria-label={`Câu ${idx + 1}`}
+                  style={{
+                    width: isCur ? '22px' : '10px',
+                    height: '10px',
+                    borderRadius: '999px',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                    backgroundColor: isCur
+                      ? 'var(--ds-accent)'
+                      : isAns
+                      ? 'var(--ds-success)'
+                      : 'var(--ds-border)',
+                    transition: 'all 0.15s ease'
+                  }}
+                />
+              );
+            })}
+          </div>
+
           <div className="toeic-q-card">
             {/* Question Card Header */}
             <div className="toeic-q-header">
               <div className="toeic-flex-row">
                 <ToeicBadge variant="primary">
-                  {currentQ?.skill_category || 'Part 5'} • #{currentQ?.number || currentIndex + 1}
+                  {({
+                    GRAMMAR: 'Ngữ pháp Part 5',
+                    VOCABULARY: 'Từ vựng TOEIC',
+                    READING_COMPREHENSION: 'Đọc hiểu Part 7',
+                    CLOZE_READING: 'Điền từ Part 6'
+                  }[currentQ?.skill_category] || `Part ${currentQ?.part || 5}`)} • #{currentQ?.number || currentIndex + 1}
                 </ToeicBadge>
                 {currentQ?.target_score_band && (
                   <ToeicBadge variant="muted">
@@ -422,8 +469,8 @@ export default function ToeicDiagnosticSession({
               </div>
             </div>
 
-            {/* Reading Passage if available (Stage 3 Part 7) */}
-            {currentPassage && (
+            {/* Reading Passage if available (only for Part 6/7 or passage-linked questions) */}
+            {currentPassage && (currentQ?.part === 6 || currentQ?.part === 7 || Boolean(currentQ?.passage_id)) && (
               <div style={{
                 backgroundColor: 'var(--ds-bg-elevated)',
                 border: '1px solid var(--ds-border)',

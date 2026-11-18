@@ -174,6 +174,16 @@ export default async function handler(req, res) {
         const prof = profileMap.get(uid);
         if (!prof) continue;
 
+        const rawName = String(prof.name || "").trim();
+        const rawEmail = String(prof.email || "").trim().toLowerCase();
+        const isCurrentUser = requestedUserId === uid;
+        const isTestAccount =
+          !isCurrentUser &&
+          (/^(test|tester|demo|qa|dummy|dev|admin_test|le thi a)$/i.test(rawName) ||
+            /^(test|demo|qa|dummy)@/i.test(rawEmail) ||
+            rawEmail.endsWith("@example.com"));
+        if (isTestAccount) continue;
+
         const totalXp = Math.max(Number(xpObj?.total_xp || 0), Number(trackerMap.get(uid)?.xp || 0));
         const lvl = calculateLevelProgress(totalXp);
         const stObj = streakMap.get(uid);

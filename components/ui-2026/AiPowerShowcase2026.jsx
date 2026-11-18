@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import KitIcon, { StatusDot } from "./KitIcon";
 import { XRAY_PREVIEW_PATH } from "./assetMap";
 
@@ -17,6 +17,13 @@ export default function AiPowerShowcase2026({
 }) {
   const [activeTab, setActiveTab] = useState("xray"); // 'xray' | 'dna' | 'loop'
   const [xrayScanActive, setXrayScanActive] = useState(true);
+  const [showXrayComparison, setShowXrayComparison] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setShowXrayComparison(false);
+    }
+  }, []);
 
   const handleGoStudy = () => {
     if (onNavigateStudy) {
@@ -369,62 +376,91 @@ export default function AiPowerShowcase2026({
               </div>
             </div>
 
-            {/* M4.4B Vector X-Ray Architecture Preview */}
-            <div
+            {/* UX-23: Collapsible Before vs After Comparison & Diagram on Mobile */}
+            <button
+              type="button"
+              onClick={() => setShowXrayComparison((prev) => !prev)}
               style={{
-                borderRadius: "12px",
-                overflow: "hidden",
+                width: "100%",
+                minHeight: "42px",
+                padding: "0.55rem 0.9rem",
+                borderRadius: "10px",
                 border: "1px solid var(--ds-border)",
-                backgroundColor: "var(--ds-bg)",
-                padding: "0.5rem",
+                backgroundColor: "var(--ds-bg-elevated)",
+                color: "var(--ds-accent)",
+                fontSize: "0.82rem",
+                fontWeight: 800,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "0.5rem",
               }}
             >
-              <img
-                src={XRAY_PREVIEW_PATH}
-                alt="Sơ đồ phân tích cấu trúc câu Sentence X-Ray GrammarPro"
-                width={600}
-                height={280}
-                loading="lazy"
-                style={{ width: "100%", height: "auto", maxHeight: "240px", objectFit: "contain", display: "block", margin: "0 auto", aspectRatio: "600 / 280" }}
-              />
-            </div>
+              <span>Vì sao Sentence X-Ray hiệu quả gấp 3 lần?</span>
+              <span>{showXrayComparison ? "Thu gọn" : "Chạm để xem"}</span>
+            </button>
 
-            {/* Before vs After Comparison */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem" }}>
-              <div
-                style={{
-                  padding: "0.9rem 1rem",
-                  borderRadius: "10px",
-                  backgroundColor: "var(--ds-danger-bg)",
-                  border: "1px solid var(--ds-danger-border)",
-                }}
-              >
-                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-danger)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
-                  <KitIcon name="danger" size={15} />
-                  <span>Cách Học Cũ (Mất 45 giây &amp; Dễ Sập Bẫy)</span>
+            {showXrayComparison && (
+              <>
+                {/* M4.4B Vector X-Ray Architecture Preview */}
+                <div
+                  style={{
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    border: "1px solid var(--ds-border)",
+                    backgroundColor: "var(--ds-bg)",
+                    padding: "0.5rem",
+                  }}
+                >
+                  <img
+                    src={XRAY_PREVIEW_PATH}
+                    alt="Sơ đồ phân tích cấu trúc câu Sentence X-Ray GrammarPro"
+                    width={600}
+                    height={280}
+                    loading="lazy"
+                    style={{ width: "100%", height: "auto", maxHeight: "240px", objectFit: "contain", display: "block", margin: "0 auto", aspectRatio: "600 / 280" }}
+                  />
                 </div>
-                <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
-                  Đọc dịch từng chữ từ đầu tới cuối → nhìn thấy <strong>&ldquo;directors&rdquo;</strong> đứng ngay trước chỗ trống liền chọn nhầm động từ số nhiều <strong>(A) approve</strong>, bỏ quên mốc <em>yesterday</em> và mất 45 giây quý giá.
-                </p>
-              </div>
 
-              <div
-                style={{
-                  padding: "0.9rem 1rem",
-                  borderRadius: "10px",
-                  backgroundColor: "var(--ds-success-bg)",
-                  border: "1px solid var(--ds-success-border)",
-                }}
-              >
-                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-success)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
-                  <KitIcon name="check-circle" size={15} />
-                  <span>AI Sentence X-Ray™ (3 Giây • Chính Xác 100%)</span>
+                {/* Before vs After Comparison */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: "0.85rem" }}>
+                  <div
+                    style={{
+                      padding: "0.9rem 1rem",
+                      borderRadius: "10px",
+                      backgroundColor: "var(--ds-danger-bg)",
+                      border: "1px solid var(--ds-danger-border)",
+                    }}
+                  >
+                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-danger)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
+                      <KitIcon name="danger" size={15} />
+                      <span>Cách Học Cũ (Mất 45 giây &amp; Dễ Sập Bẫy)</span>
+                    </div>
+                    <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
+                      Đọc dịch từng chữ từ đầu tới cuối → nhìn thấy <strong>&ldquo;directors&rdquo;</strong> đứng ngay trước chỗ trống liền chọn nhầm động từ số nhiều <strong>(A) approve</strong>, bỏ quên mốc <em>yesterday</em> và mất 45 giây quý giá.
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      padding: "0.9rem 1rem",
+                      borderRadius: "10px",
+                      backgroundColor: "var(--ds-success-bg)",
+                      border: "1px solid var(--ds-success-border)",
+                    }}
+                  >
+                    <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--ds-success)", marginBottom: "0.35rem", display: "flex", alignItems: "center", gap: "0.38rem" }}>
+                      <KitIcon name="check-circle" size={15} />
+                      <span>AI Sentence X-Ray™ (3 Giây • Chính Xác 100%)</span>
+                    </div>
+                    <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
+                      Quét tia X-Ray khóa ngay <strong>Chủ ngữ thật (The board)</strong>, gạch chéo cụm giới từ nhiễu <em>of directors</em> và tô sáng từ neo <strong>yesterday</strong> → Chọn <strong>(B) approved</strong> tức thì không cần dịch!
+                    </p>
+                  </div>
                 </div>
-                <p style={{ fontSize: "0.81rem", color: "var(--ds-text-secondary)", lineHeight: 1.5, margin: 0 }}>
-                  Quét tia X-Ray khóa ngay <strong>Chủ ngữ thật (The board)</strong>, gạch chéo cụm giới từ nhiễu <em>of directors</em> và tô sáng từ neo <strong>yesterday</strong> → Chọn <strong>(B) approved</strong> tức thì không cần dịch!
-                </p>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         )}
 

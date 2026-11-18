@@ -110,6 +110,46 @@ export default async function handler(req, res) {
       }
     }
 
+    // Fallback: If GTX returned identical English word or empty, try detailedMeanings -> MyMemory EN->VI -> core map
+    const CORE_EN_VI_FALLBACK = {
+      people: 'người, con người, dân tộc',
+      homework: 'bài tập về nhà',
+      already: 'đã, rồi',
+      study: 'học tập, nghiên cứu',
+      grammar: 'ngữ pháp',
+      sentence: 'câu',
+      example: 'ví dụ',
+      usually: 'thường xuyên',
+      seldom: 'hiếm khi',
+    };
+
+    if (!vietnamese || vietnamese.trim().toLowerCase() === cleanWord) {
+      const dmVi = detailedMeanings
+        .flatMap((d) => d.meanings || [])
+        .find((m) => m && String(m).trim().toLowerCase() !== cleanWord);
+      if (dmVi) {
+        vietnamese = dmVi;
+      } else {
+        try {
+          const mmRes = await fetch(
+            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanWord)}&langpair=en|vi`,
+            { signal: AbortSignal.timeout(3000) }
+          );
+          if (mmRes.ok) {
+            const mmJson = await mmRes.json();
+            const translated = String(mmJson?.responseData?.translatedText || '').trim();
+            if (translated && translated.toLowerCase() !== cleanWord) {
+              vietnamese = translated;
+            }
+          }
+        } catch {}
+      }
+    }
+
+    if (!vietnamese || vietnamese.trim().toLowerCase() === cleanWord) {
+      vietnamese = CORE_EN_VI_FALLBACK[cleanWord] || englishDefinition || cleanWord;
+    }
+
     // Fallback part of speech if empty but detailedMeanings exists
     if (!partOfSpeech && detailedMeanings.length > 0) {
       partOfSpeech = detailedMeanings[0].pos;

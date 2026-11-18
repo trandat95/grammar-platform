@@ -171,8 +171,10 @@ export default async function handler(req, res) {
       radarAxes[groupCode] = g.count > 0 ? Number((g.totalScore / g.count).toFixed(1)) : 0;
     }
 
-    // Top Focus Topics sorted by FPI descending
-    const topFocusTopics = [...topicMasteryList]
+    // Top Focus Topics sorted by FPI descending (strictly from topics actually tested in this session)
+    const attemptedTopics = topicMasteryList.filter((t) => t.questions_attempted > 0);
+    const focusPool = attemptedTopics.length > 0 ? attemptedTopics : topicMasteryList;
+    const topFocusTopics = [...focusPool]
       .sort((a, b) => b.focus_priority_index - a.focus_priority_index)
       .slice(0, 3);
 

@@ -144,7 +144,7 @@ export default function SmartPaywallModal({
               if (onClose) onClose();
             }}
           >
-            {cfg.cta_label || "Xem Bảng Giá & Quyền Lợi VIP ➔"}
+            {cfg.cta_label || "Xem Bảng Giá & Quyền Lợi VIP →"}
           </Button>
         </div>
       </div>

@@ -9,12 +9,41 @@ import { KitIcon, StatusDot } from "../ui-2026/KitIcon";
 export default function SyncStatusIndicator({
   syncState = { status: "SYNCED", pendingCount: 0 },
   isLight = false,
+  isGuest = false,
+  onOpenAuth,
   onTriggerSync,
   onPullRemote,
 }) {
   const [openDetails, setOpenDetails] = useState(false);
   const [isPulling, setIsPulling] = useState(false);
   const T = getThemeTokens(isLight);
+
+  if (isGuest) {
+    return (
+      <button
+        type="button"
+        onClick={() => onOpenAuth && onOpenAuth()}
+        title="Đăng nhập 1 chạm để lưu chuỗi ngày học & XP lên đám mây"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.35rem",
+          backgroundColor: T.warningBg,
+          border: `1px solid ${T.warningBorder}`,
+          borderRadius: "999px",
+          padding: "0.32rem 0.72rem",
+          color: T.warning,
+          fontSize: "0.75rem",
+          fontWeight: "700",
+          cursor: "pointer",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <StatusDot tone="warning" size={7} />
+        <span>Lưu tiến trình (1 chạm)</span>
+      </button>
+    );
+  }
 
   const status = syncState?.status || "SYNCED";
   const pendingCount = syncState?.pendingCount || 0;

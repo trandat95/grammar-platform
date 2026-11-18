@@ -894,6 +894,63 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4px;
     box-sizing: border-box;
   }
+  .ge-subnav-pills:has(> *:nth-child(3)) {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 20px;
+    mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+  }
+  .ge-subnav-pills:has(> *:nth-child(3))::-webkit-scrollbar {
+    display: none;
+  }
+  .ge-subnav-pills:has(> *:nth-child(3)) .ge-subnav-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 40px;
+    padding: 6px 12px;
+  }
+  /* UX-11: Slide-up Bottom Sheet Drawer (80vh) for 12-Chapter Sidebar on Mobile */
+  .ge-chapter-sidebar {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 80vh;
+    border-radius: 18px 18px 0 0;
+    transform: translateY(105%);
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  .ge-chapter-sidebar.is-open {
+    transform: translateY(0);
+  }
+  .ge-drawer-backdrop {
+    inset: 0;
+  }
+  /* UX-27: Anchor Recommended Yearly VIP Plan first on Mobile */
+  .ge-vip-plan-card.is-recommended {
+    order: -1;
+  }
+  /* UX-12: Swipeable 3-tier Formula Cards on Mobile */
+  .ge-formula-cards-grid {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0.75rem !important;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ge-formula-cards-grid > div {
+    flex: 0 0 85%;
+    min-width: 245px;
+    scroll-snap-align: start;
+  }
   .ge-subnav-btn {
     flex: 1 1 auto;
     min-width: 0;

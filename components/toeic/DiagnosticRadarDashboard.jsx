@@ -17,13 +17,25 @@ export default function DiagnosticRadarDashboard({
 
   const {
     predictedScore = 450,
-    targetScore = 650,
+    targetScore: rawTargetScore = 650,
     radarAxes = {},
     topFocusTopics = [],
     detectedErrorPatterns = [],
     avgPart5TimeSec = 14.5,
     overallAccuracy = 60.0
   } = diagnosticResult;
+
+  const [storedTargetScore, setStoredTargetScore] = React.useState(null);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const saved = Number(localStorage.getItem('toeic_target_score'));
+      if (saved && [500, 650, 750, 850, 990].includes(saved)) {
+        setStoredTargetScore(saved);
+      }
+    } catch {}
+  }, []);
+  const targetScore = storedTargetScore || rawTargetScore;
 
   // 6 Radar Axes Configuration
   const axisConfig = [
@@ -66,7 +78,7 @@ export default function DiagnosticRadarDashboard({
     return { cx, cy, maxRadius, points, polygonPointsStr, webLevels };
   }, [radarAxes]);
 
-  const scoreProgressPct = Math.min(100, Math.max(10, Math.round((predictedScore / targetScore) * 100)));
+  const scoreProgressPct = Math.min(100, Math.max(0, Math.round((predictedScore / Math.max(1, targetScore)) * 100)));
 
   return (
     <div style={{ width: '100%', maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
