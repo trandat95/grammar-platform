@@ -175,7 +175,7 @@ export default function ToeicHeroBanner({
         )}
 
         {/* Target Band Selector (Interactive Pills + Mobile Touch Slider UX-10) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? '0.5rem' : '0.65rem', marginBottom: compact ? '0.85rem' : '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: compact ? '0.5rem' : '0.65rem', marginBottom: compact ? '0.85rem' : '1.5rem', maxWidth: compact ? '680px' : '720px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: compact ? '0.45rem' : '0.6rem', flexWrap: 'wrap' }}>
             <span style={{ fontSize: compact ? '0.75rem' : '0.8rem', fontWeight: 700, color: isLight ? 'var(--ds-text-muted)' : 'rgba(241, 245, 249, 0.8)' }}>
               Mục tiêu của bạn:
@@ -213,7 +213,7 @@ export default function ToeicHeroBanner({
             })}
           </div>
 
-          <div className="ge-show-mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', padding: '0.35rem 0.65rem', borderRadius: '0.65rem', backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)', border: '1px solid var(--ds-border)' }}>
+          <div className="ge-show-mobile-only" style={{ alignItems: 'center', gap: '0.65rem', padding: '0.35rem 0.65rem', borderRadius: '0.65rem', backgroundColor: isLight ? 'var(--ds-bg-elevated)' : 'rgba(15, 23, 42, 0.45)', border: '1px solid var(--ds-border)' }}>
             <label htmlFor="toeic-target-slider" style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--ds-accent)', whiteSpace: 'nowrap' }}>
               Kéo chọn: {targetScore}+
             </label>

@@ -494,7 +494,7 @@ export default function AppShell2026({
               <span>Sổ tay câu sai ({savedMistakesCount})</span>
             </button>
           </div>
-          <div style={{ display: "flex", gap: "6px" }} className="ge-show-mobile-only">
+          <div style={{ gap: "6px" }} className="ge-show-mobile-only">
             <button
               type="button"
               onClick={onOpenVocabModal}

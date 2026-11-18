@@ -682,12 +682,18 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
+@media (min-width: 768px) {
+  .ge-show-mobile-only {
+    display: none !important;
+  }
+}
+
 /* =========================================================
    4. RESPONSIVE MEDIA QUERIES (FIX P0 MISSING BREAKPOINTS)
    ========================================================= */
 
-/* Desktop Compact & Laptop (<= 1460px) */
-@media (max-width: 1460px) {
+/* Desktop Compact & Laptop (<= 1620px) */
+@media (max-width: 1620px) {
   .ge-header-2026 {
     padding: 0 12px;
     gap: 6px;
@@ -701,8 +707,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Laptop Wide / Admin 6-Tab Compaction (<= 1400px) */
-@media (max-width: 1400px) {
+/* Laptop Wide / Admin 6-Tab Compaction (<= 1560px) */
+@media (max-width: 1560px) {
   .ge-hide-laptop-compact {
     display: none !important;
   }
@@ -877,7 +883,7 @@ h1, h2, h3, h4, h5, h6 {
     display: none !important;
   }
   .ge-show-mobile-only {
-    display: inline-flex;
+    display: flex;
   }
   .ge-subnav-bar {
     padding: 6px 8px;

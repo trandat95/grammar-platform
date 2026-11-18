@@ -391,7 +391,6 @@ export default function ToeicDiagnosticSession({
           <div
             className="ge-show-mobile-only"
             style={{
-              display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.4rem',

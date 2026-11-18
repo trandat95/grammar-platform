@@ -40,7 +40,10 @@ export default function SyncStatusIndicator({
         }}
       >
         <StatusDot tone="warning" size={7} />
-        <span>Lưu tiến trình (1 chạm)</span>
+        <span>
+          Lưu tiến trình
+          <span className="ge-hide-laptop-compact"> (1 chạm)</span>
+        </span>
       </button>
     );
   }
