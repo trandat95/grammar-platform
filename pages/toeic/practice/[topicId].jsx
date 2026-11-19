@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
@@ -27,6 +27,16 @@ export default function TopicPracticePage() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
   const [aiTutorContext, setAiTutorContext] = useState({ question: null, selectedOption: null });
+  const questionCardRef = useRef(null);
+
+  const scrollToQuestionCard = () => {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth < 768 && questionCardRef.current) {
+      questionCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     if (!topicId || globalAuth.isLoading) return;
@@ -99,7 +109,7 @@ export default function TopicPracticePage() {
         <div className="toeic-page-wrap">
           <div className="toeic-container" style={{ maxWidth: '860px' }}>
             {/* BACK TO HUB & TOPIC INFO */}
-            <div className="toeic-flex-between" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+            <div className="toeic-flex-between toeic-practice-topbar" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
               <a
                 href="/toeic"
                 style={{
@@ -116,14 +126,14 @@ export default function TopicPracticePage() {
               </a>
 
               {topicInfo && (
-                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
+                <div className="toeic-practice-topic-meta" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
                   <span>
                     Chủ điểm: <strong style={{ color: 'var(--ds-text)' }}>{topicInfo.name_vi}</strong>
                   </span>
-                  <span>•</span>
-                  <span style={{ whiteSpace: 'nowrap' }}>Band {topicInfo.target_score_band}+</span>
-                  <span>•</span>
-                  <span style={{ whiteSpace: 'nowrap' }}>Trọng số {topicInfo.weight_in_toeic}%</span>
+                  <span className="ge-hide-mobile">•</span>
+                  <span className="ge-hide-mobile" style={{ whiteSpace: 'nowrap' }}>Band {topicInfo.target_score_band}+</span>
+                  <span className="ge-hide-mobile">•</span>
+                  <span className="ge-hide-mobile" style={{ whiteSpace: 'nowrap' }}>Trọng số {topicInfo.weight_in_toeic}%</span>
                 </div>
               )}
             </div>
@@ -225,7 +235,7 @@ export default function TopicPracticePage() {
                 {/* PROGRESS BAR */}
                 {questions.length > 0 && (
                   <div
-                    className="toeic-card"
+                    className="toeic-card toeic-practice-progress-card"
                     style={{
                       padding: '0.75rem 1rem',
                       display: 'flex',
@@ -256,12 +266,16 @@ export default function TopicPracticePage() {
                     </div>
 
                     {/* Progress Indicators */}
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.3rem', maxWidth: '100%' }}>
+                    <div className="toeic-practice-num-strip" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.3rem', maxWidth: '100%' }}>
                       {questions.map((_, i) => (
                         <button
                           key={i}
                           type="button"
-                          onClick={() => setCurrentIndex(i)}
+                          className="toeic-practice-num-btn"
+                          onClick={() => {
+                            setCurrentIndex(i);
+                            scrollToQuestionCard();
+                          }}
                           style={{
                             minWidth: '34px',
                             height: '34px',
@@ -309,7 +323,7 @@ export default function TopicPracticePage() {
                     </a>
                   </div>
                 ) : currentQ ? (
-                  <div>
+                  <div ref={questionCardRef} className="toeic-xray-card-anchor">
                     <SentenceXRayCard
                       question={currentQ}
                       onAnswerSubmit={({ isCorrect, selectedOption }) => {
@@ -332,7 +346,7 @@ export default function TopicPracticePage() {
                       onNextQuestion={() => {
                         if (currentIndex < questions.length - 1) {
                           setCurrentIndex(prev => prev + 1);
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          scrollToQuestionCard();
                         }
                       }}
                     />
@@ -352,7 +366,7 @@ export default function TopicPracticePage() {
                         disabled={currentIndex === 0}
                         onClick={() => {
                           setCurrentIndex(prev => prev - 1);
-                          if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                          scrollToQuestionCard();
                         }}
                         className="toeic-btn toeic-btn-secondary"
                         style={{ opacity: currentIndex === 0 ? 0.4 : 1, cursor: currentIndex === 0 ? 'default' : 'pointer' }}
@@ -365,7 +379,7 @@ export default function TopicPracticePage() {
                           type="button"
                           onClick={() => {
                             setCurrentIndex(prev => prev + 1);
-                            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                            scrollToQuestionCard();
                           }}
                           className="toeic-btn toeic-btn-primary"
                         >
@@ -390,7 +404,7 @@ export default function TopicPracticePage() {
                           disabled={currentIndex === 0}
                           onClick={() => {
                             setCurrentIndex(prev => prev - 1);
-                            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                            scrollToQuestionCard();
                           }}
                         >
                           ← Trước
@@ -415,7 +429,7 @@ export default function TopicPracticePage() {
                             className="ge-mobile-exam-dock-btn primary"
                             onClick={() => {
                               setCurrentIndex(prev => prev + 1);
-                              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                              scrollToQuestionCard();
                             }}
                           >
                             Tiếp theo →

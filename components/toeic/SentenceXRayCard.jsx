@@ -292,41 +292,44 @@ export default function SentenceXRayCard({
   };
 
   return (
-    <div className="toeic-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+    <div className="toeic-card toeic-xray-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
       {/* 1. TOP HEADER & PACING TIMER */}
-      <div className="toeic-flex-between" style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+      <div className="toeic-flex-between toeic-xray-card-header" style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--ds-border)', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <ToeicBadge variant="muted">
             Part {question.part} • #{question.number || 101}
           </ToeicBadge>
-          <ToeicBadge variant="primary">
-            {aiAnalysis.primary_topic_name_vi || question.primary_grammar_topic_id}
-          </ToeicBadge>
-          <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-            Band {question.target_score_band || 500}+
+          <span className="ge-hide-mobile" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <ToeicBadge variant="primary">
+              {aiAnalysis.primary_topic_name_vi || question.primary_grammar_topic_id}
+            </ToeicBadge>
+            <span style={{ fontSize: '0.75rem', color: 'var(--ds-text-muted)', fontWeight: 600 }}>
+              Band {question.target_score_band || 500}+
+            </span>
           </span>
         </div>
 
         {/* Pacing Timer & Quick Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.25rem 0.65rem',
+              gap: '0.25rem',
+              padding: '0.25rem 0.55rem',
               borderRadius: '9999px',
               border: `1px solid ${pacingColor}`,
               color: pacingColor,
-              fontSize: '0.75rem',
-              fontWeight: 700
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              whiteSpace: 'nowrap'
             }}
           >
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
               <KitIcon name="timer" size={13} />
               <span>{timeSpentSec}s</span>
             </span>
-            <span style={{ fontSize: '0.65rem', color: 'var(--ds-text-muted)' }}>
+            <span className="ge-hide-mobile" style={{ fontSize: '0.65rem', color: 'var(--ds-text-muted)' }}>
               /{recommendedTime}s
             </span>
           </div>
@@ -340,18 +343,19 @@ export default function SentenceXRayCard({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.25rem',
-                padding: '0.3rem 0.7rem',
+                padding: '0.28rem 0.6rem',
                 borderRadius: '0.5rem',
                 border: '1px solid var(--ds-border)',
                 backgroundColor: state === XRAY_STATES.HINT_ACTIVE ? 'var(--ds-accent-bg)' : 'transparent',
                 color: 'var(--ds-accent)',
-                fontSize: '0.75rem',
+                fontSize: '0.74rem',
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
               }}
             >
               <KitIcon name="bulb" size={13} />
-              <span>Gợi ý X-Ray (H)</span>
+              <span>Gợi ý<span className="ge-hide-mobile"> X-Ray (H)</span></span>
             </button>
           )}
 
@@ -363,18 +367,19 @@ export default function SentenceXRayCard({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.25rem',
-                padding: '0.3rem 0.7rem',
+                padding: '0.28rem 0.6rem',
                 borderRadius: '0.5rem',
                 border: '1px solid var(--ds-border)',
                 backgroundColor: 'var(--ds-bg-elevated)',
                 color: 'var(--ds-text)',
-                fontSize: '0.75rem',
+                fontSize: '0.74rem',
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
               }}
             >
               <KitIcon name="bot" size={13} color="var(--ds-accent)" />
-              <span>AI Gia Sư</span>
+              <span>AI<span className="ge-hide-mobile"> Gia Sư</span></span>
             </button>
           )}
         </div>
@@ -399,7 +404,7 @@ export default function SentenceXRayCard({
       )}
 
       {/* 3. PROMPT SENTENCE */}
-      <div style={{ margin: '0.75rem 0 1.5rem 0', fontWeight: 500 }}>
+      <div className="toeic-xray-prompt-wrap" style={{ margin: '0.75rem 0 1.5rem 0', fontWeight: 500 }}>
         {renderPromptSentence()}
       </div>
 
@@ -454,7 +459,7 @@ export default function SentenceXRayCard({
       )}
 
       {/* 5. 4 OPTIONS (A, B, C, D) */}
-      <div className="toeic-grid-2" style={{ gap: '0.75rem', marginBottom: '1.5rem' }}>
+      <div className="toeic-grid-2 toeic-xray-options-grid" style={{ gap: '0.75rem', marginBottom: '1.5rem' }}>
         {(['A', 'B', 'C', 'D']).map(optKey => {
           const optText = question.options?.[optKey];
           if (!optText) return null;
@@ -491,6 +496,7 @@ export default function SentenceXRayCard({
             <button
               key={optKey}
               type="button"
+              className="toeic-xray-option-btn"
               disabled={isSubmitted}
               onClick={() => handleSelectOption(optKey)}
               style={{
