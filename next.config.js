@@ -30,7 +30,9 @@ const nextConfig = {
       {
         key: "Content-Security-Policy",
         value:
-          "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' data: blob: https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';",
+          process.env.NODE_ENV === "production"
+            ? "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' data: blob: https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';"
+            : "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' data: blob: https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';",
       },
     ];
 

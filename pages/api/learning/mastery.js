@@ -14,7 +14,7 @@ import {
 import { generatePersonalRecommendations } from "../../../lib/learning/adaptive-question-engine";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
 import quizData from "../../../data/ui/quiz_bank.json";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, checkApiRateLimit, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -39,6 +39,9 @@ const DIFF_TO_SCORE = { Beginner: 1, Elementary: 2, Intermediate: 3, Advanced: 4
  */
 export default async function handler(req, res) {
   const correlationId = attachCorrelationId(req, res);
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "learning_mastery", maxRequests: 90, correlationId });
+  if (!rate.allowed) return;
+
   const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
 

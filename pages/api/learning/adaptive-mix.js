@@ -3,7 +3,7 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery, applyKnowledgeDecay } from "../../../lib/learning/mastery-tracker";
 import { buildAdaptiveQuestionSet } from "../../../lib/learning/adaptive-question-engine";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, checkApiRateLimit, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -17,6 +17,9 @@ export default async function handler(req, res) {
     res.setHeader("Allow", ["GET", "POST"]);
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "learning_adaptive_mix", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
 
   const serverClient = getAdminClient();
   const authUser = await verifyServerSession(req);

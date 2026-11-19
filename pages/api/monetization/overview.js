@@ -13,7 +13,7 @@ import {
   validateEthicalCampaign,
 } from "../../../lib/monetization/paywall-ab-engine";
 import { calculateServerOrderPricing } from "../../../lib/monetization/payment-provider-adapter";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, checkApiRateLimit, sendSafeServerError } from "../../../lib/api/security-guard";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -76,6 +76,9 @@ async function getMonetizationCatalog(serverClient) {
  */
 export default async function handler(req, res) {
   const correlationId = attachCorrelationId(req, res);
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "monetization_overview", maxRequests: 60, correlationId });
+  if (!rate.allowed) return;
+
   const serverClient = getAdminClient(req);
 
   if (req.method === "GET") {

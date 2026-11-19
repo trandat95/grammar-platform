@@ -3,7 +3,7 @@ import { verifyServerSession } from "../../../lib/supabase/middleware";
 import { KNOWLEDGE_GRAPH } from "../../../lib/knowledge/knowledge-graph";
 import { aggregateTwelveTopicMastery } from "../../../lib/learning/mastery-tracker";
 import { processLearningGamificationEvent } from "../../../lib/gamification/gamification-processor";
-import { attachCorrelationId, sendSafeServerError } from "../../../lib/api/security-guard";
+import { attachCorrelationId, checkApiRateLimit, sendSafeServerError } from "../../../lib/api/security-guard";
 import {
   ANALYTICS_SCHEMA_VERSION,
   sanitizeAnalyticsProperties,
@@ -22,6 +22,9 @@ export default async function handler(req, res) {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ success: false, error: "Method not allowed. Use POST." });
   }
+
+  const rate = checkApiRateLimit(req, res, { keyPrefix: "learning_events", maxRequests: 120, correlationId });
+  if (!rate.allowed) return;
 
   const serverClient = getAdminClient(req);
   const authUser = await verifyServerSession(req);
