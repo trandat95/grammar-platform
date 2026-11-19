@@ -1017,6 +1017,144 @@
   padding: 0.04rem 0.22rem;
 }
 
+.toeic-pos-token.is-left-anchor {
+  background-color: var(--ds-warning-bg);
+  border-bottom: 2px solid var(--ds-warning);
+  border-radius: 0.25rem;
+  padding: 0.04rem 0.22rem;
+}
+
+.toeic-pos-token.is-right-anchor {
+  background-color: var(--ds-accent-bg);
+  border-bottom: 2px solid var(--ds-accent);
+  border-radius: 0.25rem;
+  padding: 0.04rem 0.22rem;
+}
+
+/* ==========================================================================
+   8B. SENTENCE X-RAY 2.0 ENHANCEMENTS (Milestones MX1 - MX4)
+   ========================================================================== */
+.toeic-xray-context-card {
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+  border-left: 3.5px solid var(--ds-accent);
+  margin-bottom: 0.85rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ds-text-secondary);
+}
+
+.toeic-xray-spectrum-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1.25fr auto 1fr;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border-radius: 0.85rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+}
+
+.toeic-xray-spectrum-node {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.65rem;
+  background-color: var(--ds-card);
+  border: 1px solid var(--ds-border);
+  min-width: 0;
+}
+
+.toeic-xray-spectrum-node.left-anchor {
+  border-color: var(--ds-warning-border);
+  background-color: var(--ds-warning-bg);
+}
+
+.toeic-xray-spectrum-node.target-slot {
+  border: 1.5px solid var(--ds-success);
+  background-color: var(--ds-success-bg);
+}
+
+.toeic-xray-spectrum-node.right-anchor {
+  border-color: var(--ds-accent-border);
+  background-color: var(--ds-accent-bg);
+}
+
+.toeic-xray-spectrum-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: var(--ds-text-muted);
+  font-size: 0.95rem;
+  padding: 0 0.1rem;
+}
+
+@media (max-width: 767px) {
+  .toeic-xray-context-card {
+    padding: 0.65rem 0.8rem;
+    margin-bottom: 0.65rem;
+    font-size: 0.86rem;
+  }
+  .toeic-xray-spectrum-bar {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    padding: 0.65rem;
+  }
+  .toeic-xray-spectrum-arrow {
+    display: none;
+  }
+}
+
+.toeic-xray-option-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.toeic-xray-option-btn.is-eliminated {
+  opacity: 0.46;
+  filter: grayscale(0.5);
+}
+
+.toeic-xray-option-btn.is-eliminated .toeic-xray-option-text {
+  text-decoration: line-through;
+}
+
+.toeic-xray-option-btn.is-inspected {
+  box-shadow: 0 0 0 2.5px var(--ds-accent);
+}
+
+.toeic-xray-eliminate-toggle {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--ds-border);
+  background-color: var(--ds-bg-elevated);
+  color: var(--ds-text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.15s ease;
+}
+
+.toeic-xray-eliminate-toggle:hover,
+.toeic-xray-eliminate-toggle.active {
+  border-color: var(--ds-danger);
+  color: var(--ds-danger);
+  background-color: var(--ds-danger-bg);
+}
+
 .toeic-pos-token:hover {
   background-color: var(--ds-accent-bg);
   border-color: var(--ds-accent-border);
