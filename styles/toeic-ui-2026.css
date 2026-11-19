@@ -1194,36 +1194,45 @@
 
 @media (max-width: 767px) {
   .toeic-super-xray-sentence {
-    font-size: 0.96rem;
-    gap: 0.28rem 0.2rem;
-    margin-bottom: 0.55rem;
+    font-size: 0.92rem;
+    gap: 0.22rem 0.16rem;
+    margin-bottom: 0.42rem;
+    line-height: 1.4;
   }
   .toeic-super-role-pill {
-    font-size: 0.54rem;
-    padding: 0.08rem 0.34rem;
-    margin-bottom: 0.12rem;
+    font-size: 0.5rem;
+    padding: 0.06rem 0.28rem;
+    margin-bottom: 0.08rem;
+  }
+  .toeic-super-chunk-words {
+    padding: 0.03rem 0.22rem;
   }
   .toeic-super-target-box {
-    padding: 0.12rem 0.5rem;
+    padding: 0.08rem 0.42rem;
   }
   .toeic-super-xray-box {
-    padding: 0.65rem 0.78rem;
-    gap: 0.36rem;
+    padding: 0.48rem 0.62rem;
+    gap: 0.26rem;
+    border-radius: 0.65rem;
   }
   .toeic-super-xray-box-title {
-    font-size: 0.7rem;
+    display: none !important;
   }
   .toeic-super-xray-trans-quote {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.76rem;
-    line-height: 1.38;
+    padding: 0.24rem 0.42rem;
+    font-size: 0.72rem;
+    line-height: 1.32;
   }
   .toeic-super-xray-formula-line {
-    font-size: 0.78rem;
+    font-size: 0.73rem;
   }
   .toeic-super-xray-pivot-text {
-    font-size: 0.78rem;
-    line-height: 1.42;
+    font-size: 0.73rem;
+    line-height: 1.35;
+  }
+  .toeic-xray-result-bar {
+    padding: 0.48rem 0.65rem !important;
+    gap: 0.45rem !important;
   }
 }
 

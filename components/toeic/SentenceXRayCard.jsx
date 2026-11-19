@@ -415,6 +415,7 @@ export default function SentenceXRayCard({
     question.translation_vi || question.ai_analysis?.sentence_translation_vi || ''
   );
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
+  const [showFullAnalysis, setShowFullAnalysis] = useState(Boolean(forceReview));
 
   const aiAnalysis = question.ai_analysis || {};
   const xray = aiAnalysis.sentence_xray || null;
@@ -430,6 +431,7 @@ export default function SentenceXRayCard({
     } else {
       setState(XRAY_STATES.SOLVING);
     }
+    setShowFullAnalysis(Boolean(forceReview));
     setActiveTab('breakdown');
     setTimeSpentSec(0);
     setUsedHint(false);
@@ -465,10 +467,12 @@ export default function SentenceXRayCard({
   const handleSelectOption = useCallback((optionKey) => {
     if (forceReview) {
       setInspectedOption(optionKey);
+      setShowFullAnalysis(true);
       return;
     }
     if (examMode === 'practice' && state !== XRAY_STATES.SOLVING && state !== XRAY_STATES.HINT_ACTIVE) {
       setInspectedOption(optionKey);
+      setShowFullAnalysis(true);
       return;
     }
 
@@ -476,6 +480,7 @@ export default function SentenceXRayCard({
     setInspectedOption(optionKey);
     if (examMode === 'practice') {
       setState(XRAY_STATES.SUBMITTED);
+      setShowFullAnalysis(false);
     }
 
     const isCorrect = optionKey === question.correct_answer;
@@ -733,7 +738,46 @@ export default function SentenceXRayCard({
       );
     }
 
-    // When submitted: Super X-Ray Annotated Sentence + Breakdown Box (exact mockup layout)
+    // When submitted BUT user hasn't clicked "Phân tích X-Ray" yet:
+    // Show clean sentence with the filled correct answer only (zero vertical bloat, instant right/wrong feedback).
+    if (!showFullAnalysis) {
+      const rawSentence = parsedPrompt.mainStem || question.context_sentence || question.stem || '';
+      const correctWord = question.options?.[question.correct_answer] || '';
+      if (!rawSentence.includes('-------') && !rawSentence.includes('_____')) {
+        return (
+          <>
+            {contextCard}
+            <span style={{ lineHeight: 1.65 }}>{rawSentence}</span>
+          </>
+        );
+      }
+      const parts = rawSentence.split(/-------|_____/);
+      return (
+        <>
+          {contextCard}
+          <span style={{ lineHeight: 1.65 }}>
+            {parts[0]}
+            <span
+              style={{
+                display: 'inline-block',
+                padding: '0.08rem 0.5rem',
+                borderRadius: '0.35rem',
+                backgroundColor: 'var(--ds-success-bg)',
+                border: '1.5px solid var(--ds-success)',
+                color: 'var(--ds-success)',
+                fontWeight: 800,
+                margin: '0 0.2rem'
+              }}
+            >
+              {correctWord}
+            </span>
+            {parts[1]}
+          </span>
+        </>
+      );
+    }
+
+    // When showFullAnalysis is TRUE: Super X-Ray Annotated Sentence + Breakdown Box
     const visualSegments = buildXRayVisualSegments(interactiveTokens, xray, question);
     const leftBadgeLabel = classifyRoleBadge(xray?.left_anchor_words, '', 'left');
     const targetBadgeLabel = classifyRoleBadge(
@@ -828,9 +872,9 @@ export default function SentenceXRayCard({
           })}
         </div>
 
-        {/* 2. "SIÊU QUANG PHỔ X-RAY BÓC TÁCH:" BOX (Directly under sentence, before options) */}
+        {/* 2. X-RAY BREAKDOWN BOX (Title hidden on mobile to save vertical space) */}
         <div className="toeic-super-xray-box">
-          <div className="toeic-super-xray-box-title">
+          <div className="toeic-super-xray-box-title ge-hide-mobile">
             <span style={{ color: 'var(--ds-warning)', fontSize: '0.9rem' }}>⚡</span>
             <span>SIÊU QUANG PHỔ X-RAY BÓC TÁCH:</span>
           </div>
@@ -1142,16 +1186,16 @@ export default function SentenceXRayCard({
                         <span style={{ color: 'var(--ds-success)' }}>✓ Đúng</span>
                       ) : isSelected ? (
                         <span style={{ color: 'var(--ds-danger)' }}>✗ Đã chọn</span>
-                      ) : (
+                      ) : showFullAnalysis ? (
                         <span style={{ color: isInspected ? 'var(--ds-accent)' : 'var(--ds-text-muted)', fontWeight: 600 }}>
                           {isInspected ? '● Đang soi' : 'Soi bẫy'}
                         </span>
-                      )}
+                      ) : null}
                     </span>
                   )}
                 </div>
 
-                {isSubmitted && optAnalysis && (
+                {isSubmitted && showFullAnalysis && optAnalysis && (
                   <div className="toeic-xray-option-meta">
                     <span className="ge-hide-mobile" style={{ fontFamily: 'monospace' }}>
                       {optAnalysis.pos_or_role || 'Từ loại N/A'}
@@ -1167,59 +1211,81 @@ export default function SentenceXRayCard({
         })}
       </div>
 
-      {/* QUICK NEXT STRIP (Desktop Only — Mobile already has fixed Bottom Exam Dock) */}
-      {isSubmitted && onNextQuestion && (
+      {/* ON-DEMAND X-RAY ANALYSIS TRIGGER STRIP (Shown right after answering) */}
+      {isSubmitted && (
         <div
-          className="ge-hide-mobile"
+          className="toeic-xray-result-bar"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '0.75rem',
-            padding: '0.75rem 1rem',
+            gap: '0.6rem',
+            padding: '0.65rem 0.85rem',
             borderRadius: 'var(--ds-radius-md)',
-            backgroundColor: 'var(--ds-bg-elevated)',
-            border: '1.5px solid var(--ds-accent)',
-            marginBottom: '1.25rem',
-            boxShadow: 'var(--ds-shadow-sm)',
+            backgroundColor: isCorrect ? 'var(--ds-success-bg)' : 'var(--ds-danger-bg)',
+            border: `1.5px solid ${isCorrect ? 'var(--ds-success-border)' : 'var(--ds-danger-border)'}`,
+            marginBottom: showFullAnalysis ? '1rem' : '0.25rem',
             flexWrap: 'wrap'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ display: 'inline-flex', color: isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)' }}>
-              <KitIcon name={isCorrect ? 'check-circle' : 'bulb'} size={18} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0 }}>
+            <span style={{ display: 'inline-flex', color: isCorrect ? 'var(--ds-success)' : 'var(--ds-danger)', flexShrink: 0 }}>
+              <KitIcon name={isCorrect ? 'check-circle' : 'warning'} size={17} />
             </span>
-            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ds-text)' }}>
-              {isCorrect ? 'Chính xác!' : `Đáp án đúng là (${question.correct_answer}).`}
-              <span style={{ fontWeight: 500, color: 'var(--ds-text-secondary)', marginLeft: '0.35rem' }}>
-                Bấm vào từng phương án A/B/C/D để soi bẫy hoặc bấm Next sang câu mới.
-              </span>
+            <span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+              {isCorrect ? 'Chính xác!' : `Chưa đúng • Đáp án (${question.correct_answer})`}
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={onNextQuestion}
-            className="toeic-btn toeic-btn-primary"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.55rem 1.15rem',
-              fontSize: '0.85rem',
-              fontWeight: 800,
-              whiteSpace: 'nowrap',
-              marginLeft: 'auto'
-            }}
-          >
-            <span>Câu Tiếp Theo &rarr;</span>
-            <kbd className="ge-hide-mobile" style={{ fontSize: '0.7rem', padding: '0.1rem 0.35rem', borderRadius: '4px', backgroundColor: 'var(--ds-bg-elevated)', color: 'var(--ds-accent)' }}>Enter ↵</kbd>
-          </button>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', marginLeft: 'auto', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => setShowFullAnalysis(prev => !prev)}
+              className="toeic-btn toeic-btn-sm"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.32rem',
+                padding: '0.42rem 0.8rem',
+                borderRadius: '0.55rem',
+                border: `1.5px solid ${showFullAnalysis ? 'var(--ds-border)' : 'var(--ds-accent)'}`,
+                backgroundColor: showFullAnalysis ? 'var(--ds-card)' : 'var(--ds-accent)',
+                color: showFullAnalysis ? 'var(--ds-text)' : '#ffffff',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <KitIcon name="search" size={13} />
+              <span>{showFullAnalysis ? 'Thu gọn phân tích' : 'Phân tích X-Ray'}</span>
+            </button>
+
+            {onNextQuestion && (
+              <button
+                type="button"
+                onClick={onNextQuestion}
+                className="toeic-btn toeic-btn-primary ge-hide-mobile"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.42rem 0.9rem',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <span>Câu Tiếp Theo &rarr;</span>
+                <kbd style={{ fontSize: '0.68rem', padding: '0.08rem 0.3rem', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>Enter ↵</kbd>
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      {/* 6. POST-SUBMISSION 4-STATE PEDAGOGICAL WORKSPACE (X-Ray 2.0) */}
-      {isSubmitted && (
+      {/* 6. POST-SUBMISSION 4-STATE PEDAGOGICAL WORKSPACE (Expanded only when user clicks "Phân tích X-Ray") */}
+      {isSubmitted && showFullAnalysis && (
         <div style={{ borderTop: '1px solid var(--ds-border)', paddingTop: '1.25rem' }}>
           {/* Navigation Tabs for X-Ray Analysis */}
           <div className="toeic-h-scroll-strip" style={{ marginBottom: '1.15rem' }}>
