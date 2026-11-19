@@ -39,6 +39,94 @@ function cleanTokenWord(word) {
 }
 
 /**
+ * Generates an explicit, learner-friendly causal explanation of WHY the highlighted
+ * words before/after the blank force the required grammatical role and correct answer.
+ */
+function buildCausalAnchorBridge(question, xray, aiAnalysis) {
+  const left = (xray?.left_anchor_words || '').trim();
+  const right = (xray?.right_anchor_words || '').trim();
+  const role = xray?.required_grammatical_role || 'Từ loại phù hợp';
+  const roleVi = shortenPosRole(role);
+  const corrKey = question.correct_answer || 'A';
+  const corrWord = question.options?.[corrKey] || '';
+  const formula = aiAnalysis?.micro_rule_formula_vi || '';
+  const topicId = question.primary_grammar_topic_id || '';
+
+  let leftReason = left
+    ? `Dấu hiệu đứng trước "${left}" mở cấu trúc ngữ pháp đòi hỏi vị trí tiếp theo phải là ${role}`
+    : `Vị trí đứng đầu mệnh đề cần ${role}`;
+  let rightReason = right
+    ? `kết hợp với cụm phía sau "${right}" để hoàn chỉnh nghĩa và cấu trúc`
+    : `để kết thúc trọn vẹn cấu trúc câu`;
+
+  if (/\b(which|what|where|how|when|whether)\b/i.test(left) && /To-Infinitive/i.test(role)) {
+    leftReason = `Cấu trúc Từ để hỏi "${left}" (WH-word + Danh từ) bắt buộc theo sau bởi Động từ nguyên mẫu có "to" (To-V: "${corrWord}") làm tân ngữ rút gọn`;
+    rightReason = right ? `bổ nghĩa mục đích/đối tượng "${right}"` : `hoàn chỉnh tân ngữ`;
+  } else if (topicId === 'GRM_POS_NOUN') {
+    leftReason = left
+      ? `Phía trước có "${left}" (mạo từ / tính từ / sở hữu cách / giới từ) nên vị trí ngay sau bắt buộc phải là Danh từ chính`
+      : `Đầu câu trước động từ/giới từ cần một Danh từ làm chủ ngữ`;
+    rightReason = right
+      ? `đứng trước "${right}" (giới từ / động từ chia thì) để đóng cụm danh từ`
+      : `làm danh từ trung tâm (Head Noun) ở cuối câu`;
+  } else if (topicId === 'GRM_POS_ADJ') {
+    leftReason = left
+      ? `Phía trước có "${left}" (động từ nối / mạo từ / trạng từ) đòi hỏi một Tính từ đi kèm`
+      : `Vị trí này cần một Tính từ bổ nghĩa`;
+    rightReason = right
+      ? `để bổ nghĩa trực tiếp cho danh từ hoặc giới từ theo sau "${right}"`
+      : `làm bổ ngữ tính từ hoàn chỉnh câu`;
+  } else if (topicId === 'GRM_POS_ADV') {
+    leftReason = left
+      ? `Cấu trúc "${left}" đã đủ thành phần chính nên cần một Trạng từ (-ly)`
+      : `Đầu câu trước dấu phẩy cần một Trạng từ bổ nghĩa cho cả mệnh đề`;
+    rightReason = right
+      ? `để bổ nghĩa trực tiếp cho động từ / tính từ / phân từ "${right}"`
+      : `để bổ nghĩa cách thức/mức độ cho động từ phía trước`;
+  } else if (topicId === 'GRM_VERB_PASSIVE') {
+    leftReason = left
+      ? `Chủ ngữ/trợ động từ "${left}" mang nghĩa chịu tác động nên cần Động từ ở thể Bị động (be + V3/ed)`
+      : `Cấu trúc câu yêu cầu Động từ thể Bị động (be + V3/ed)`;
+    rightReason = right
+      ? `vì phía sau là giới từ / tác nhân "${right}" (không có tân ngữ trực tiếp)`
+      : `vì phía sau không có tân ngữ trực tiếp`;
+  } else if (topicId === 'GRM_VERB_INFINITIVE_GERUND') {
+    leftReason = left
+      ? `Từ khóa phía trước "${left}" quy định trực tiếp dạng thức của động từ theo sau (${roleVi})`
+      : `Đầu câu làm chủ ngữ hoặc chỉ mục đích cần ${roleVi}`;
+    rightReason = right
+      ? `kết nối với tân ngữ/giới từ "${right}" phía sau`
+      : `theo đúng công thức động từ đi kèm`;
+  } else if (topicId === 'GRM_CONN_CORRELATIVE_COORD') {
+    leftReason = left
+      ? `Từ khóa "${left}" phía trước`
+      : `Vị trí mở đầu cấu trúc song song`;
+    rightReason = right
+      ? `bắt cặp cố định với từ khóa "${right}" phía sau để tạo cặp liên từ tương quan (${corrWord})`
+      : `tạo cấu trúc liên từ song song`;
+  } else if (topicId === 'GRM_CONN_PREP_VS_CONJ') {
+    rightReason = right
+      ? `Phía sau chỗ trống là "${right}" — dựa vào việc cụm này là Mệnh đề (có S + V) hay Cụm danh từ để quyết định chọn Liên từ hay Giới từ "${corrWord}"`
+      : `Phụ thuộc vào cấu trúc Mệnh đề hay Cụm danh từ đi kèm`;
+  }
+
+  const oneLineCausalVi = `${leftReason}, ${rightReason} ➔ Chọn (${corrKey}) "${corrWord}".`;
+
+  return {
+    left,
+    right,
+    role,
+    roleVi,
+    corrKey,
+    corrWord,
+    formula,
+    leftReason,
+    rightReason,
+    oneLineCausalVi
+  };
+}
+
+/**
  * MX1.2: Extract leading [Memo: ...] / [Doc 1 ... / Doc 2 ...] / [Part 3 Transcript: ...]
  * into a separate Context Document / Transcript Card so the main question stem stays clean.
  */
@@ -307,6 +395,12 @@ export default function SentenceXRayCard({
   const activeInspectKey = inspectedOption || selectedOption || question.correct_answer;
   const inspectedFeedback = activeInspectKey && aiAnalysis.option_deep_analysis?.[activeInspectKey];
   const distractorWhyVi = activeInspectKey && aiAnalysis.distractor_analysis?.[activeInspectKey];
+  const explanationTextVi = question.explanation_vi || aiAnalysis.explanation_vi || '';
+  const keyClueText = question.key_clue || aiAnalysis.key_clue || '';
+  const causalBridge = useMemo(
+    () => buildCausalAnchorBridge(question, xray, aiAnalysis),
+    [question, xray, aiAnalysis]
+  );
 
   // MX1.2: Parse optional [Context / Transcript / Doc 1 & 2] prefix from sentence
   const parsedPrompt = useMemo(() => {
@@ -474,10 +568,29 @@ export default function SentenceXRayCard({
       );
     }
 
-    // When submitted: Interactive POS Token Stream with exact left/right phrase anchors
+    // When submitted: Interactive POS Token Stream with exact left/right phrase anchors + clear legend
     return (
       <>
         {contextCard}
+
+        {/* Visual Legend & 1-Line Causal Clue Strip so learners immediately understand the highlights */}
+        <div className="toeic-xray-inline-legend">
+          <span className="toeic-xray-legend-pill left">
+            <span className="dot" /> Dấu hiệu trước
+          </span>
+          <span style={{ color: 'var(--ds-text-muted)', fontSize: '0.7rem', fontWeight: 800 }}>&rarr;</span>
+          <span className="toeic-xray-legend-pill target">
+            <span className="dot" /> Đáp án ({question.correct_answer})
+          </span>
+          <span style={{ color: 'var(--ds-text-muted)', fontSize: '0.7rem', fontWeight: 800 }}>&larr;</span>
+          <span className="toeic-xray-legend-pill right">
+            <span className="dot" /> Dấu hiệu sau
+          </span>
+          <span style={{ fontSize: '0.68rem', color: 'var(--ds-text-muted)', marginLeft: 'auto' }}>
+            (Chạm vào từ để soi)
+          </span>
+        </div>
+
         <div className="toeic-xray-sentence-stream">
           {interactiveTokens.map(tok => {
             if (tok.isBlank) {
@@ -517,9 +630,9 @@ export default function SentenceXRayCard({
                 className={`toeic-pos-token ${anchorClass} ${isSelected ? 'active' : ''}`}
                 title={
                   tok.anchorSide === 'left'
-                    ? 'Từ neo phía trước (Left Anchor) — Click để xem chi tiết'
+                    ? 'Dấu hiệu phía trước (bấm để xem tại sao từ này quyết định đáp án)'
                     : tok.anchorSide === 'right'
-                      ? 'Từ neo phía sau (Right Anchor) — Click để xem chi tiết'
+                      ? 'Dấu hiệu phía sau (bấm để xem tại sao từ này quyết định đáp án)'
                       : 'Click để xem phân tích từ loại & cấu trúc'
                 }
               >
@@ -544,6 +657,12 @@ export default function SentenceXRayCard({
               </span>
             );
           })}
+        </div>
+
+        {/* Instant 1-Line "Why These Highlighted Words Choose The Answer" Summary */}
+        <div className="toeic-xray-why-highlight-strip">
+          <span className="toeic-xray-why-badge">TẠI SAO TÔ MÀU?</span>
+          <span>{causalBridge.oneLineCausalVi}</span>
         </div>
 
         {/* Compact Vietnamese Translation Strip (Post-Submission Only) */}
@@ -952,15 +1071,18 @@ export default function SentenceXRayCard({
           {/* TAB 1: STRUCTURAL BREAKDOWN (MX2 + MX3) */}
           {activeTab === 'breakdown' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {/* MX2.1: 3-BLOCK VISUAL X-RAY SPECTRUM BAR */}
+              {/* MX2.1: 3-BLOCK CAUSAL X-RAY SPECTRUM BAR (Explains WHY each highlighted phrase matters) */}
               {xray && (
                 <div className="toeic-xray-spectrum-bar">
                   <div className="toeic-xray-spectrum-node left-anchor">
                     <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-warning)', marginBottom: '0.18rem' }}>
-                      1. Từ Neo Phía Trước
+                      1. Dấu Hiệu Đứng Trước (Tô Cam)
                     </span>
-                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--ds-text)', wordBreak: 'break-word' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ds-text)', wordBreak: 'break-word' }}>
                       {xray.left_anchor_words ? `“${xray.left_anchor_words}”` : '(Đầu câu)'}
+                    </span>
+                    <span style={{ fontSize: '0.73rem', color: 'var(--ds-text-secondary)', marginTop: '0.22rem', lineHeight: 1.38 }}>
+                      {causalBridge.leftReason}
                     </span>
                   </div>
 
@@ -968,13 +1090,13 @@ export default function SentenceXRayCard({
 
                   <div className="toeic-xray-spectrum-node target-slot">
                     <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-success)', marginBottom: '0.18rem' }}>
-                      2. Chốt Chặn Cần Điền ({question.correct_answer})
+                      2. Bắt Buộc Điền ({question.correct_answer})
                     </span>
-                    <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--ds-success)' }}>
+                    <span style={{ fontSize: '0.98rem', fontWeight: 800, color: 'var(--ds-success)' }}>
                       {question.options?.[question.correct_answer]}
                     </span>
-                    <span style={{ fontSize: '0.73rem', fontWeight: 600, color: 'var(--ds-text-secondary)', marginTop: '0.1rem' }}>
-                      {xray.required_grammatical_role}
+                    <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--ds-text)', marginTop: '0.15rem' }}>
+                      Cần: {xray.required_grammatical_role}
                     </span>
                   </div>
 
@@ -982,27 +1104,30 @@ export default function SentenceXRayCard({
 
                   <div className="toeic-xray-spectrum-node right-anchor">
                     <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-accent)', marginBottom: '0.18rem' }}>
-                      3. Từ Neo Phía Sau
+                      3. Dấu Hiệu Đứng Sau (Tô Xanh)
                     </span>
-                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--ds-text)', wordBreak: 'break-word' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ds-text)', wordBreak: 'break-word' }}>
                       {xray.right_anchor_words ? `“${xray.right_anchor_words}”` : '(Cuối câu)'}
+                    </span>
+                    <span style={{ fontSize: '0.73rem', color: 'var(--ds-text-secondary)', marginTop: '0.22rem', lineHeight: 1.38 }}>
+                      {causalBridge.rightReason}
                     </span>
                   </div>
                 </div>
               )}
 
-              {/* MX2.2: UNLOCK ACADEMIC EXPLANATION (explanation_vi) FOR BOTH CORRECT & WRONG ANSWERS */}
-              {aiAnalysis.explanation_vi && (
+              {/* MX2.2: UNLOCK ACADEMIC EXPLANATION (question.explanation_vi || aiAnalysis.explanation_vi) */}
+              {explanationTextVi && (
                 <div className="toeic-formula-box standard">
                   <div className="toeic-formula-title" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
                     <KitIcon name="check-circle" size={14} />
-                    <span>CHỐT CHẶN NGỮ PHÁP &amp; LỜI GIẢI HỌC THUẬT:</span>
-                    {aiAnalysis.key_clue && (
-                      <ToeicBadge variant="primary">{aiAnalysis.key_clue}</ToeicBadge>
+                    <span>GIẢI THÍCH LOGIC SOI CÂU X-RAY:</span>
+                    {keyClueText && (
+                      <ToeicBadge variant="primary">{keyClueText}</ToeicBadge>
                     )}
                   </div>
                   <p style={{ fontSize: '0.88rem', color: 'var(--ds-text)', margin: '0.35rem 0 0 0', lineHeight: 1.55 }}>
-                    {aiAnalysis.explanation_vi}
+                    {explanationTextVi}
                   </p>
                 </div>
               )}
