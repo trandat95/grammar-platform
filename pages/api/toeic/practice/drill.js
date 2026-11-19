@@ -20,10 +20,11 @@ export default async function handler(req, res) {
       id: t.id,
       name_vi: t.name_vi,
       name_en: t.name_en || '',
-      category_group: t.category_group || 'OTHER',
+      category_group: t.category_group || t.group_code || t.category || 'OTHER',
       target_score_band: Number(t.target_score_band || t.min_target_band || 450),
       weight_in_toeic: t.weight_in_toeic || 0,
       theory_summary_vi: t.theory_summary_vi || '',
+      questionCount: Number(t.questionCount || 0),
     }));
 
     if (String(listTopics) === '1') {

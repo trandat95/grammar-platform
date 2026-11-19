@@ -255,7 +255,7 @@ export default function ToeicPracticeDirectoryPage() {
                           }}
                         >
                           <span style={{ color: 'var(--ds-text-muted)', fontWeight: 600 }}>
-                            Trọng số {top.weight_in_toeic || 0}%
+                            {top.questionCount ? `${top.questionCount} câu X-Ray • ` : ''}Trọng số {top.weight_in_toeic || 0}%
                           </span>
                           <span style={{ color: 'var(--ds-accent)', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                             <KitIcon name="target" size={13} />

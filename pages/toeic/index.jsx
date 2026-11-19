@@ -97,7 +97,7 @@ export default function ToeicHubPage() {
       id: 'practice',
       title: 'Luyện 24 Dạng Bài (Soi Câu X-Ray)',
       desc: 'Đánh dấu từ khóa trước/sau chỗ trống để chọn nhanh và luyện lại câu cùng dạng.',
-      badge: '920 câu • Part 5-6',
+      badge: '1.451 câu • 24 Chủ Điểm',
       badgeVariant: 'success',
       cta: 'Chọn Dạng Bài',
       href: '/toeic/practice',
