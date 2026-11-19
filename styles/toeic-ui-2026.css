@@ -986,25 +986,46 @@
     font-size: 0.72rem !important;
   }
   .toeic-xray-card {
-    padding: 0.85rem 0.9rem !important;
-    margin-bottom: 0.75rem !important;
+    padding: 0.7rem 0.78rem !important;
+    margin-bottom: 0.65rem !important;
   }
   .toeic-xray-card-header {
-    padding-bottom: 0.55rem !important;
-    margin-bottom: 0.65rem !important;
-    gap: 0.4rem !important;
+    padding-bottom: 0.45rem !important;
+    margin-bottom: 0.5rem !important;
+    gap: 0.35rem !important;
     flex-wrap: nowrap !important;
   }
   .toeic-xray-prompt-wrap {
-    margin: 0.35rem 0 0.85rem 0 !important;
+    margin: 0.25rem 0 0.6rem 0 !important;
   }
   .toeic-xray-options-grid {
-    gap: 0.5rem !important;
-    margin-bottom: 0.85rem !important;
+    gap: 0.42rem !important;
+    margin-bottom: 0.7rem !important;
   }
   .toeic-xray-option-btn {
-    padding: 0.62rem 0.75rem !important;
-    min-height: 44px;
+    padding: 0.5rem 0.65rem !important;
+    min-height: 40px;
+  }
+}
+
+.toeic-xray-option-meta {
+  margin-top: 0.4rem;
+  padding-top: 0.38rem;
+  border-top: 1px solid var(--ds-border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.73rem;
+  color: var(--ds-text-muted);
+}
+
+@media (max-width: 767px) {
+  .toeic-xray-option-meta {
+    margin-top: 0.24rem;
+    padding-top: 0.22rem;
+    font-size: 0.68rem;
+    line-height: 1.25;
   }
 }
 
@@ -1080,15 +1101,15 @@
 
 @media (max-width: 767px) {
   .toeic-xray-translation-line {
-    margin-top: 0.35rem;
-    padding: 0.25rem 0.45rem;
-    font-size: 0.74rem;
-    line-height: 1.38;
-    gap: 0.35rem;
+    margin-top: 0.28rem;
+    padding: 0.18rem 0.42rem;
+    font-size: 0.72rem;
+    line-height: 1.32;
+    gap: 0.3rem;
   }
   .toeic-xray-translation-badge {
-    font-size: 0.6rem;
-    padding: 0.06rem 0.3rem;
+    font-size: 0.58rem;
+    padding: 0.04rem 0.26rem;
   }
 }
 

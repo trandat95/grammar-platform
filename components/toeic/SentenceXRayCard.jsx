@@ -20,6 +20,18 @@ export const XRAY_STATES = {
   TWIN_REMEDIATION: 'STATE_TWIN_REMEDIATION'
 };
 
+function shortenPosRole(posOrRole) {
+  if (!posOrRole) return 'N/A';
+  const s = String(posOrRole).trim();
+  const parenMatch = s.match(/^([^(]+)\(([^)]+)\)$/);
+  if (parenMatch) {
+    const left = parenMatch[1].trim();
+    const right = parenMatch[2].trim();
+    return left.length <= 28 ? left : right;
+  }
+  return s.length > 36 ? s.slice(0, 34) + '…' : s;
+}
+
 function cleanTokenWord(word) {
   return String(word || '')
     .replace(/^[^a-zA-Z0-9$€£¥%]+|[^a-zA-Z0-9$€£¥%]+$/g, '')
@@ -537,7 +549,7 @@ export default function SentenceXRayCard({
         {/* Compact Vietnamese Translation Strip (Post-Submission Only) */}
         {(sentenceTranslationVi || isLoadingTranslation) && (
           <div className="toeic-xray-translation-line">
-            <span className="toeic-xray-translation-badge">Dịch nghĩa</span>
+            <span className="toeic-xray-translation-badge">Dịch</span>
             <span className="toeic-xray-translation-text">
               {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}
             </span>
@@ -797,41 +809,53 @@ export default function SentenceXRayCard({
                   width: '100%'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span
-                    style={{
-                      width: '26px',
-                      height: '26px',
-                      borderRadius: '6px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '0.8rem',
-                      backgroundColor: badgeBg,
-                      color: badgeColor,
-                      flexShrink: 0
-                    }}
-                  >
-                    {optKey}
-                  </span>
-                  <span className="toeic-xray-option-text" style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--ds-text)' }}>
-                    {optText}
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0 }}>
+                    <span
+                      style={{
+                        width: '25px',
+                        height: '25px',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 800,
+                        fontSize: '0.78rem',
+                        backgroundColor: badgeBg,
+                        color: badgeColor,
+                        flexShrink: 0
+                      }}
+                    >
+                      {optKey}
+                    </span>
+                    <span className="toeic-xray-option-text" style={{ fontSize: '0.93rem', fontWeight: 700, color: 'var(--ds-text)', wordBreak: 'break-word' }}>
+                      {optText}
+                    </span>
+                  </div>
+
+                  {isSubmitted && (
+                    <span style={{ flexShrink: 0, fontSize: '0.72rem', fontWeight: 800 }}>
+                      {isCorrectAnswer ? (
+                        <span style={{ color: 'var(--ds-success)' }}>✓ Đúng</span>
+                      ) : isSelected ? (
+                        <span style={{ color: 'var(--ds-danger)' }}>✗ Đã chọn</span>
+                      ) : (
+                        <span style={{ color: isInspected ? 'var(--ds-accent)' : 'var(--ds-text-muted)', fontWeight: 600 }}>
+                          {isInspected ? '● Đang soi' : 'Soi bẫy'}
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </div>
 
                 {isSubmitted && optAnalysis && (
-                  <div style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--ds-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.35rem', fontSize: '0.74rem', color: 'var(--ds-text-muted)', flexWrap: 'wrap' }}>
-                    <span style={{ fontFamily: 'monospace' }}>{optAnalysis.pos_or_role || 'Từ loại N/A'}</span>
-                    {isCorrectAnswer ? (
-                      <span style={{ fontWeight: 800, color: 'var(--ds-success)' }}>✓ Đáp án đúng</span>
-                    ) : isSelected ? (
-                      <span style={{ fontWeight: 700, color: 'var(--ds-danger)' }}>✗ Bạn đã chọn</span>
-                    ) : (
-                      <span style={{ fontWeight: 600, color: isInspected ? 'var(--ds-accent)' : 'var(--ds-text-muted)' }}>
-                        {isInspected ? '● Đang soi lỗi' : 'Bấm để soi bẫy'}
-                      </span>
-                    )}
+                  <div className="toeic-xray-option-meta">
+                    <span className="ge-hide-mobile" style={{ fontFamily: 'monospace' }}>
+                      {optAnalysis.pos_or_role || 'Từ loại N/A'}
+                    </span>
+                    <span className="ge-show-mobile-only" style={{ fontFamily: 'monospace' }}>
+                      {shortenPosRole(optAnalysis.pos_or_role)}
+                    </span>
                   </div>
                 )}
               </button>
@@ -840,9 +864,10 @@ export default function SentenceXRayCard({
         })}
       </div>
 
-      {/* QUICK NEXT STRIP (Within Immediate Reach / Cùng Tầm Với) */}
+      {/* QUICK NEXT STRIP (Desktop Only — Mobile already has fixed Bottom Exam Dock) */}
       {isSubmitted && onNextQuestion && (
         <div
+          className="ge-hide-mobile"
           style={{
             display: 'flex',
             alignItems: 'center',
