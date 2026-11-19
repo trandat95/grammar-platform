@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import { KitIcon } from '../../../components/ui-2026/KitIcon';
 import SentenceXRayCard from '../../../components/toeic/SentenceXRayCard';
@@ -19,9 +20,12 @@ export default function TopicPracticePage() {
   const { topicId } = router.query;
   const [isLight, setIsLight] = useState(true);
   const [topicInfo, setTopicInfo] = useState(null);
+  const [allTopics, setAllTopics] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [sessionNonce, setSessionNonce] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -43,6 +47,7 @@ export default function TopicPracticePage() {
     let isMounted = true;
     setIsLoading(true);
     setErrorMsg(null);
+    setIsCompleted(false);
 
     const headers = {};
     if (globalAuth.activeAuthToken) {
@@ -56,11 +61,15 @@ export default function TopicPracticePage() {
         if (data.topicInfo) {
           setTopicInfo(data.topicInfo);
         }
+        if (Array.isArray(data.allTopics)) {
+          setAllTopics(data.allTopics);
+        }
         if (data.success) {
           setQuestions(data.questions || []);
           setIsPreviewMode(Boolean(data.isPreviewMode));
           setCurrentIndex(0);
           setCorrectCount(0);
+          setIsCompleted(false);
         } else if (data.locked || data.isVipRequired) {
           setQuestions([]);
           setIsPreviewMode(false);
@@ -80,6 +89,20 @@ export default function TopicPracticePage() {
 
   const currentQ = questions[currentIndex] || null;
   const isLockedForFree = !isLoading && questions.length === 0 && topicInfo && parseInt(topicInfo.target_score_band || 450, 10) >= 550 && !isVip;
+
+  const recommendedTopics = useMemo(() => {
+    if (!allTopics.length) return [];
+    const curBand = Number(topicInfo?.target_score_band || 450);
+    const others = allTopics.filter((t) => t.id !== topicId);
+    return [...others]
+      .sort((a, b) => {
+        const diffA = Math.abs(Number(a.target_score_band || 450) - curBand);
+        const diffB = Math.abs(Number(b.target_score_band || 450) - curBand);
+        if (diffA !== diffB) return diffA - diffB;
+        return Number(b.weight_in_toeic || 0) - Number(a.weight_in_toeic || 0);
+      })
+      .slice(0, 4);
+  }, [allTopics, topicId, topicInfo]);
 
   return (
     <>
@@ -110,20 +133,38 @@ export default function TopicPracticePage() {
           <div className="toeic-container" style={{ maxWidth: '860px' }}>
             {/* BACK TO HUB & TOPIC INFO */}
             <div className="toeic-flex-between toeic-practice-topbar" style={{ marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-              <a
-                href="/toeic"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  color: 'var(--ds-accent)',
-                  textDecoration: 'none'
-                }}
-              >
-                <span>&larr; Quay lại TOEIC Hub</span>
-              </a>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                <Link
+                  href="/toeic/practice"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    fontSize: '0.84rem',
+                    fontWeight: 700,
+                    color: 'var(--ds-accent)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>&larr; Chọn bài khác (24)</span>
+                </Link>
+                <span className="ge-hide-mobile" style={{ color: 'var(--ds-border)' }}>|</span>
+                <Link
+                  href="/toeic"
+                  className="ge-hide-mobile"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: 'var(--ds-text-muted)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>TOEIC Hub</span>
+                </Link>
+              </div>
 
               {topicInfo && (
                 <div className="toeic-practice-topic-meta" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--ds-text-secondary)' }}>
@@ -322,9 +363,130 @@ export default function TopicPracticePage() {
                       Quay Lại Hub
                     </a>
                   </div>
+                ) : isCompleted ? (
+                  <div className="toeic-card" style={{ padding: '1.5rem 1.25rem', marginBottom: '1.5rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '1.35rem' }}>
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '54px',
+                          height: '54px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--ds-success-bg)',
+                          color: 'var(--ds-success)',
+                          marginBottom: '0.65rem',
+                        }}
+                      >
+                        <KitIcon name="check" size={26} />
+                      </div>
+                      <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ds-text-heading)', margin: '0 0 0.35rem 0' }}>
+                        Hoàn thành chuyên đề!
+                      </h2>
+                      <p style={{ fontSize: '0.88rem', color: 'var(--ds-text-secondary)', margin: '0 0 0.75rem 0' }}>
+                        {topicInfo?.name_vi || topicId}
+                      </p>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', padding: '0.5rem 1rem', borderRadius: '999px', backgroundColor: 'var(--ds-bg-elevated)', border: '1px solid var(--ds-border)' }}>
+                        <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--ds-success)' }}>
+                          Đúng {correctCount} / {questions.length} câu
+                        </span>
+                        <span style={{ color: 'var(--ds-border)' }}>•</span>
+                        <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ds-accent)' }}>
+                          {questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0}% chính xác
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.65rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+                      <button
+                        type="button"
+                        className="toeic-btn toeic-btn-secondary"
+                        onClick={() => {
+                          setIsCompleted(false);
+                          setCurrentIndex(0);
+                          setCorrectCount(0);
+                          setSessionNonce((n) => n + 1);
+                          scrollToQuestionCard();
+                        }}
+                      >
+                        Làm lại bài này
+                      </button>
+                      <Link
+                        href="/toeic/practice"
+                        className="toeic-btn toeic-btn-primary"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        Xem tất cả 24 dạng bài &rarr;
+                      </Link>
+                      <Link
+                        href="/toeic"
+                        className="toeic-btn toeic-btn-outline"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        Về TOEIC Hub
+                      </Link>
+                    </div>
+
+                    {/* Next Recommended Topics */}
+                    {recommendedTopics.length > 0 && (
+                      <div style={{ borderTop: '1px solid var(--ds-border)', paddingTop: '1.25rem' }}>
+                        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--ds-text-heading)', margin: '0 0 0.75rem 0' }}>
+                          Gợi ý dạng bài luyện tiếp theo
+                        </h3>
+                        <div className="toeic-grid-2" style={{ gap: '0.75rem' }}>
+                          {recommendedTopics.map((rec) => {
+                            const recBand = Number(rec.target_score_band || 450);
+                            const recFree = recBand < 550;
+                            const recAccess = isVip || recFree;
+                            return (
+                              <Link
+                                key={rec.id}
+                                href={`/toeic/practice/${rec.id}`}
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                              >
+                                <div
+                                  className="toeic-topic-card"
+                                  style={{
+                                    padding: '0.85rem 0.95rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    gap: '0.5rem',
+                                    height: '100%',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  <div>
+                                    <div className="toeic-flex-between" style={{ marginBottom: '0.4rem' }}>
+                                      <ToeicBadge variant="muted">Band {recBand}+</ToeicBadge>
+                                      {recAccess ? (
+                                        <ToeicBadge variant="success">{recFree ? 'Miễn phí' : 'VIP'}</ToeicBadge>
+                                      ) : (
+                                        <ToeicBadge variant="warning">4 câu thử</ToeicBadge>
+                                      )}
+                                    </div>
+                                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ds-text-heading)', lineHeight: 1.35 }}>
+                                      {rec.name_vi}
+                                    </div>
+                                  </div>
+                                  <div className="toeic-flex-between" style={{ fontSize: '0.76rem', paddingTop: '0.4rem', borderTop: '1px solid var(--ds-border)' }}>
+                                    <span style={{ color: 'var(--ds-text-muted)' }}>Trọng số {rec.weight_in_toeic || 0}%</span>
+                                    <span style={{ color: 'var(--ds-accent)', fontWeight: 800 }}>Luyện ngay &rarr;</span>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ) : currentQ ? (
                   <div ref={questionCardRef} className="toeic-xray-card-anchor">
                     <SentenceXRayCard
+                      key={`${currentQ.id}-${sessionNonce}`}
                       question={currentQ}
                       onAnswerSubmit={({ isCorrect, selectedOption }) => {
                         if (isCorrect) setCorrectCount(prev => prev + 1);
@@ -347,6 +509,9 @@ export default function TopicPracticePage() {
                         if (currentIndex < questions.length - 1) {
                           setCurrentIndex(prev => prev + 1);
                           scrollToQuestionCard();
+                        } else {
+                          setIsCompleted(true);
+                          if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
                         }
                       }}
                     />
@@ -386,12 +551,16 @@ export default function TopicPracticePage() {
                           <span>Câu tiếp theo &rarr;</span>
                         </button>
                       ) : (
-                        <a
-                          href="/toeic"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsCompleted(true);
+                            if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
                           className="toeic-btn toeic-btn-success"
                         >
-                          <span>Hoàn Thành 15 Câu • Về Hub ✓</span>
-                        </a>
+                          <span>Hoàn Thành &amp; Xem Gợi Ý ✓</span>
+                        </button>
                       )}
                     </div>
 
@@ -435,13 +604,17 @@ export default function TopicPracticePage() {
                             Tiếp theo →
                           </button>
                         ) : (
-                          <a
-                            href="/toeic"
+                          <button
+                            type="button"
                             className="ge-mobile-exam-dock-btn success"
-                            style={{ textDecoration: 'none', flex: 1 }}
+                            onClick={() => {
+                              setIsCompleted(true);
+                              if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ flex: 1 }}
                           >
                             Hoàn thành ✓
-                          </a>
+                          </button>
                         )}
                       </div>
                     )}

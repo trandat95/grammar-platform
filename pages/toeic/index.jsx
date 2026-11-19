@@ -99,8 +99,8 @@ export default function ToeicHubPage() {
       desc: 'Đánh dấu từ khóa trước/sau chỗ trống để chọn nhanh và luyện lại câu cùng dạng.',
       badge: '920 câu • Part 5-6',
       badgeVariant: 'success',
-      cta: 'Luyện Ngay',
-      href: '/toeic/practice/GRM_POS_NOUN',
+      cta: 'Chọn Dạng Bài',
+      href: '/toeic/practice',
       stats: '24 Dạng Bài',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

@@ -14,7 +14,24 @@ export default async function handler(req, res) {
   if (!rate.allowed) return;
 
   try {
-    const { topicId, limit = 15, excludeIds = '' } = req.query;
+    const { topicId, limit = 15, excludeIds = '', listTopics = '' } = req.query;
+
+    const allTopics = (ToeicRepository.getTaxonomy() || []).map((t) => ({
+      id: t.id,
+      name_vi: t.name_vi,
+      name_en: t.name_en || '',
+      category_group: t.category_group || 'OTHER',
+      target_score_band: Number(t.target_score_band || t.min_target_band || 450),
+      weight_in_toeic: t.weight_in_toeic || 0,
+      theory_summary_vi: t.theory_summary_vi || '',
+    }));
+
+    if (String(listTopics) === '1') {
+      return res.status(200).json({
+        success: true,
+        topics: allTopics,
+      });
+    }
 
     if (!topicId) {
       return res.status(422).json({ success: false, error: 'Thiếu tham số topicId' });
@@ -47,6 +64,7 @@ export default async function handler(req, res) {
       isPreviewMode,
       freePreviewLimit: isPreviewMode ? 4 : null,
       topicInfo: topic,
+      allTopics,
       questions
     });
   } catch (err) {
