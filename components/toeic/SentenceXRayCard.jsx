@@ -32,6 +32,171 @@ function shortenPosRole(posOrRole) {
   return s.length > 36 ? s.slice(0, 34) + '…' : s;
 }
 
+const LINKING_VERBS = new Set([
+  'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'become', 'becomes', 'became', 'remain', 'remains', 'remained',
+  'stay', 'stays', 'stayed', 'seem', 'seems', 'seemed',
+  'appear', 'appears', 'appeared', 'look', 'looks', 'looked',
+  'feel', 'feels', 'felt', 'prove', 'proves', 'proved', 'sound', 'sounds'
+]);
+
+const MODAL_AUX = new Set([
+  'will', 'would', 'can', 'could', 'shall', 'should', 'may', 'might', 'must',
+  'has', 'have', 'had', 'do', 'does', 'did'
+]);
+
+const PREPOSITIONS = new Set([
+  'in', 'on', 'at', 'of', 'for', 'to', 'with', 'by', 'from', 'into', 'onto',
+  'upon', 'within', 'without', 'during', 'through', 'throughout', 'among',
+  'between', 'under', 'over', 'across', 'after', 'before', 'since', 'until',
+  'despite', 'regarding', 'concerning', 'about', 'against', 'toward', 'towards'
+]);
+
+const SUBORDINATING_CONJ = new Set([
+  'although', 'though', 'even', 'because', 'while', 'whereas', 'unless',
+  'if', 'whether', 'once', 'whenever', 'wherever', 'provided', 'providing'
+]);
+
+const DETERMINERS = new Set([
+  'a', 'an', 'the', 'this', 'that', 'these', 'those', 'my', 'your', 'his',
+  'her', 'its', 'our', 'their', 'each', 'every', 'any', 'some', 'no', 'all', 'both'
+]);
+
+const WH_RELATIVES = new Set([
+  'who', 'whom', 'whose', 'which', 'what', 'where', 'when', 'why', 'how'
+]);
+
+/**
+ * Classifies a short anchor phrase or grammatical role into an uppercase badge label
+ * (e.g. LINKING VERB, ADVERB, ADJECTIVE, NOUN PHRASE, PREPOSITION, TO-INFINITIVE, SUBJECT)
+ * matching the Super X-Ray visual style.
+ */
+function classifyRoleBadge(phrase, roleHint = '', side = 'target') {
+  const r = String(roleHint || '').toLowerCase();
+  if (side === 'target' && r) {
+    if (r.includes('adverb') || r.includes('trạng từ')) return 'ADVERB';
+    if (r.includes('adjective') || r.includes('tính từ')) return 'ADJECTIVE';
+    if (r.includes('to-infinitive') || r.includes('to-v') || r.includes('nguyên mẫu có to')) return 'TO-INFINITIVE';
+    if (r.includes('gerund') || r.includes('present participle') || r.includes('v-ing')) return 'V-ING / GERUND';
+    if (r.includes('passive') || r.includes('bị động')) return 'PASSIVE VERB';
+    if (r.includes('past participle') || r.includes('v3') || r.includes('v-ed')) return 'PAST PARTICIPLE';
+    if (r.includes('pronoun') || r.includes('đại từ')) return 'PRONOUN';
+    if (r.includes('preposition') || r.includes('giới từ')) return 'PREPOSITION';
+    if (r.includes('conjunction') || r.includes('liên từ')) return 'CONJUNCTION';
+    if (r.includes('quantifier') || r.includes('lượng từ')) return 'QUANTIFIER';
+    if (r.includes('noun') || r.includes('danh từ')) return 'NOUN';
+    if (r.includes('verb') || r.includes('động từ')) return 'VERB';
+    return shortenPosRole(roleHint).toUpperCase().slice(0, 18);
+  }
+
+  const words = String(phrase || '')
+    .trim()
+    .split(/\s+/)
+    .map(w => w.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, '').toLowerCase())
+    .filter(Boolean);
+
+  if (words.length === 0) return side === 'left' ? 'LEFT CLUE' : 'RIGHT CLUE';
+  const first = words[0];
+  const last = words[words.length - 1];
+
+  if (words.some(w => WH_RELATIVES.has(w))) return 'WH-CLAUSE';
+  if (words.length === 1 && LINKING_VERBS.has(first)) return 'LINKING VERB';
+  if (LINKING_VERBS.has(last)) return 'LINKING VERB';
+  if (MODAL_AUX.has(last)) return 'AUX / MODAL';
+  if (PREPOSITIONS.has(first) || PREPOSITIONS.has(last)) return 'PREPOSITION';
+  if (SUBORDINATING_CONJ.has(first)) return 'CONJUNCTION';
+  if (DETERMINERS.has(last)) return 'DETERMINER';
+  if (last.endsWith('ly') && last.length > 4) return 'ADVERB';
+  if (/(able|ible|ous|ive|al|ic|ful|less|ent|ant)$/.test(last)) return 'ADJECTIVE';
+  if (/(tion|sion|ment|ness|ity|ance|ence|ship|er|or|ist)$/.test(last)) return 'NOUN';
+  if (/(ed|ing)$/.test(last)) return 'VERB / PARTICIPLE';
+  return side === 'left' ? 'KEY ANCHOR' : 'FOLLOW-UP';
+}
+
+/**
+ * Groups interactiveTokens into visual segments so that:
+ * - A leading subject noun phrase before the left anchor gets a blue [SUBJECT] pill
+ * - Contiguous left-anchor tokens are grouped under one amber [ROLE] pill
+ * - The blank slot is a glowing green box with an emerald [ROLE] pill above it
+ * - Contiguous right-anchor tokens are grouped under one blue [ROLE] pill
+ */
+function buildXRayVisualSegments(interactiveTokens, xray, question) {
+  const segments = [];
+  const blankIdx = interactiveTokens.findIndex(t => t.isBlank);
+  const firstLeftIdx = interactiveTokens.findIndex(t => t.anchorSide === 'left');
+
+  // Identify optional leading Subject phrase (1..5 tokens right before left-anchor)
+  let subjStart = -1;
+  let subjEnd = -1;
+  if (firstLeftIdx > 0 && firstLeftIdx <= 6) {
+    const preTokens = interactiveTokens.slice(0, firstLeftIdx);
+    const hasComma = preTokens.some(t => t.raw.includes(','));
+    if (!hasComma) {
+      subjStart = 0;
+      subjEnd = firstLeftIdx - 1;
+    }
+  }
+
+  let i = 0;
+  while (i < interactiveTokens.length) {
+    const tok = interactiveTokens[i];
+
+    if (i === subjStart && subjEnd >= subjStart) {
+      const group = interactiveTokens.slice(subjStart, subjEnd + 1);
+      segments.push({
+        type: 'subject-group',
+        id: `seg_subj_${i}`,
+        badge: 'SUBJECT',
+        tokens: group
+      });
+      i = subjEnd + 1;
+      continue;
+    }
+
+    if (tok.isBlank) {
+      const correctWord = question.options?.[question.correct_answer] || '';
+      segments.push({
+        type: 'blank-slot',
+        id: `seg_blank_${i}`,
+        badge: classifyRoleBadge(correctWord, xray?.required_grammatical_role, 'target'),
+        word: correctWord,
+        token: tok
+      });
+      i++;
+      continue;
+    }
+
+    if (tok.anchorSide === 'left' || tok.anchorSide === 'right') {
+      const side = tok.anchorSide;
+      const group = [tok];
+      let j = i + 1;
+      while (j < interactiveTokens.length && interactiveTokens[j].anchorSide === side) {
+        group.push(interactiveTokens[j]);
+        j++;
+      }
+      const phraseText = group.map(g => g.raw).join(' ');
+      segments.push({
+        type: side === 'left' ? 'left-anchor-group' : 'right-anchor-group',
+        id: `seg_${side}_${i}`,
+        side,
+        badge: classifyRoleBadge(phraseText, '', side),
+        tokens: group
+      });
+      i = j;
+      continue;
+    }
+
+    segments.push({
+      type: 'plain-token',
+      id: `seg_tok_${i}`,
+      token: tok
+    });
+    i++;
+  }
+
+  return segments;
+}
+
 function cleanTokenWord(word) {
   return String(word || '')
     .replace(/^[^a-zA-Z0-9$€£¥%]+|[^a-zA-Z0-9$€£¥%]+$/g, '')
@@ -568,112 +733,131 @@ export default function SentenceXRayCard({
       );
     }
 
-    // When submitted: Interactive POS Token Stream with exact left/right phrase anchors + clear legend
+    // When submitted: Super X-Ray Annotated Sentence + Breakdown Box (exact mockup layout)
+    const visualSegments = buildXRayVisualSegments(interactiveTokens, xray, question);
+    const leftBadgeLabel = classifyRoleBadge(xray?.left_anchor_words, '', 'left');
+    const targetBadgeLabel = classifyRoleBadge(
+      question.options?.[question.correct_answer],
+      xray?.required_grammatical_role,
+      'target'
+    );
+    const rightBadgeLabel = classifyRoleBadge(xray?.right_anchor_words, '', 'right');
+    const shortFormulaChain = [
+      xray?.left_anchor_words ? leftBadgeLabel : null,
+      targetBadgeLabel,
+      xray?.right_anchor_words ? rightBadgeLabel : null
+    ]
+      .filter(Boolean)
+      .join(' + ');
+    const anchorPairDisplay = [xray?.left_anchor_words, xray?.right_anchor_words]
+      .filter(Boolean)
+      .join(' ... ');
+    const correctWord = question.options?.[question.correct_answer] || '';
+
     return (
       <>
         {contextCard}
 
-        {/* Visual Legend & 1-Line Causal Clue Strip so learners immediately understand the highlights */}
-        <div className="toeic-xray-inline-legend">
-          <span className="toeic-xray-legend-pill left">
-            <span className="dot" /> Dấu hiệu trước
-          </span>
-          <span style={{ color: 'var(--ds-text-muted)', fontSize: '0.7rem', fontWeight: 800 }}>&rarr;</span>
-          <span className="toeic-xray-legend-pill target">
-            <span className="dot" /> Đáp án ({question.correct_answer})
-          </span>
-          <span style={{ color: 'var(--ds-text-muted)', fontSize: '0.7rem', fontWeight: 800 }}>&larr;</span>
-          <span className="toeic-xray-legend-pill right">
-            <span className="dot" /> Dấu hiệu sau
-          </span>
-          <span style={{ fontSize: '0.68rem', color: 'var(--ds-text-muted)', marginLeft: 'auto' }}>
-            (Chạm vào từ để soi)
-          </span>
-        </div>
-
-        <div className="toeic-xray-sentence-stream">
-          {interactiveTokens.map(tok => {
-            if (tok.isBlank) {
-              const correctWord = question.options?.[question.correct_answer] || '';
+        {/* 1. SUPER X-RAY ANNOTATED SENTENCE (Floating Role Badges above key chunks + Glowing Target Box) */}
+        <div className="toeic-super-xray-sentence">
+          {visualSegments.map(seg => {
+            if (seg.type === 'blank-slot') {
               return (
-                <span
-                  key={tok.id}
-                  style={{
-                    display: 'inline-block',
-                    padding: '0.08rem 0.5rem',
-                    borderRadius: '0.35rem',
-                    backgroundColor: isCorrect ? 'var(--ds-success-bg)' : 'var(--ds-accent-bg)',
-                    border: `1.5px solid ${isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)'}`,
-                    color: isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)',
-                    fontWeight: 800,
-                    lineHeight: 1.35,
-                    margin: '0 0.2rem'
-                  }}
-                >
-                  {correctWord}
+                <span key={seg.id} className="toeic-super-xray-chunk is-target">
+                  <span className="toeic-super-role-pill pill-emerald">
+                    {seg.badge}
+                  </span>
+                  <span className="toeic-super-target-box">
+                    {seg.word}
+                  </span>
                 </span>
               );
             }
 
-            const isSelected = selectedToken?.id === tok.id;
-            const anchorClass =
-              tok.anchorSide === 'left'
-                ? 'is-anchor is-left-anchor'
-                : tok.anchorSide === 'right'
-                  ? 'is-anchor is-right-anchor'
-                  : '';
+            if (
+              seg.type === 'subject-group' ||
+              seg.type === 'left-anchor-group' ||
+              seg.type === 'right-anchor-group'
+            ) {
+              const pillClass =
+                seg.type === 'left-anchor-group' ? 'pill-amber' : 'pill-blue';
+              return (
+                <span
+                  key={seg.id}
+                  className={`toeic-super-xray-chunk ${
+                    seg.type === 'left-anchor-group'
+                      ? 'is-left-anchor'
+                      : seg.type === 'right-anchor-group'
+                        ? 'is-right-anchor'
+                        : 'is-subject'
+                  }`}
+                >
+                  <span className={`toeic-super-role-pill ${pillClass}`}>
+                    {seg.badge}
+                  </span>
+                  <span className="toeic-super-chunk-words">
+                    {seg.tokens.map(tok => {
+                      const isSelected = selectedToken?.id === tok.id;
+                      return (
+                        <span
+                          key={tok.id}
+                          onClick={() => setSelectedToken(isSelected ? null : tok)}
+                          className={`toeic-pos-token ${isSelected ? 'active' : ''}`}
+                        >
+                          <span style={{ fontWeight: 800 }}>{tok.raw}</span>
+                        </span>
+                      );
+                    })}
+                  </span>
+                </span>
+              );
+            }
 
+            const tok = seg.token;
+            const isSelected = selectedToken?.id === tok.id;
             return (
               <span
-                key={tok.id}
+                key={seg.id}
                 onClick={() => setSelectedToken(isSelected ? null : tok)}
-                className={`toeic-pos-token ${anchorClass} ${isSelected ? 'active' : ''}`}
-                title={
-                  tok.anchorSide === 'left'
-                    ? 'Dấu hiệu phía trước (bấm để xem tại sao từ này quyết định đáp án)'
-                    : tok.anchorSide === 'right'
-                      ? 'Dấu hiệu phía sau (bấm để xem tại sao từ này quyết định đáp án)'
-                      : 'Click để xem phân tích từ loại & cấu trúc'
-                }
+                className={`toeic-pos-token ${isSelected ? 'active' : ''}`}
               >
-                <span
-                  style={{
-                    fontWeight: tok.isAnchor ? 800 : 500,
-                    color:
-                      tok.anchorSide === 'left'
-                        ? 'var(--ds-warning)'
-                        : tok.anchorSide === 'right'
-                          ? 'var(--ds-accent)'
-                          : 'inherit'
-                  }}
-                >
-                  {tok.raw}
-                </span>
-                {tok.pos && (
-                  <span className="toeic-pos-tag">
-                    {tok.pos}
-                  </span>
-                )}
+                <span style={{ fontWeight: 600 }}>{tok.raw}</span>
+                {tok.pos && <span className="toeic-pos-tag">{tok.pos}</span>}
               </span>
             );
           })}
         </div>
 
-        {/* Instant 1-Line "Why These Highlighted Words Choose The Answer" Summary */}
-        <div className="toeic-xray-why-highlight-strip">
-          <span className="toeic-xray-why-badge">TẠI SAO TÔ MÀU?</span>
-          <span>{causalBridge.oneLineCausalVi}</span>
-        </div>
-
-        {/* Compact Vietnamese Translation Strip (Post-Submission Only) */}
-        {(sentenceTranslationVi || isLoadingTranslation) && (
-          <div className="toeic-xray-translation-line">
-            <span className="toeic-xray-translation-badge">Dịch</span>
-            <span className="toeic-xray-translation-text">
-              {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}
-            </span>
+        {/* 2. "SIÊU QUANG PHỔ X-RAY BÓC TÁCH:" BOX (Directly under sentence, before options) */}
+        <div className="toeic-super-xray-box">
+          <div className="toeic-super-xray-box-title">
+            <span style={{ color: 'var(--ds-warning)', fontSize: '0.9rem' }}>⚡</span>
+            <span>SIÊU QUANG PHỔ X-RAY BÓC TÁCH:</span>
           </div>
-        )}
+
+          {(sentenceTranslationVi || isLoadingTranslation) && (
+            <div className="toeic-super-xray-trans-quote">
+              <span>📖 <strong>Dịch nghĩa:</strong> {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}</span>
+            </div>
+          )}
+
+          <div className="toeic-super-xray-formula-line">
+            {shortFormulaChain}
+          </div>
+
+          <div className="toeic-super-xray-pivot-text">
+            <span style={{ color: 'var(--ds-success)', fontWeight: 800 }}>&rarr; Điểm tựa:</span>{' '}
+            {anchorPairDisplay ? (
+              <>
+                Cụm <strong>&lsquo;{anchorPairDisplay}&rsquo;</strong> yêu cầu áp dụng quy tắc{' '}
+                <strong>&lsquo;{shortFormulaChain}&rsquo;</strong> ({shortenPosRole(xray?.required_grammatical_role)}). Do đó lựa chọn{' '}
+                <strong>&lsquo;{question.correct_answer}&rsquo; ({correctWord})</strong> là phương án chuẩn xác duy nhất.
+              </>
+            ) : (
+              causalBridge.oneLineCausalVi
+            )}
+          </div>
+        </div>
       </>
     );
   };
