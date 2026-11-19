@@ -202,18 +202,20 @@ export default function ToeicPracticeDirectoryPage() {
                     <Link
                       key={top.id || idx}
                       href={`/toeic/practice/${top.id}`}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block', minWidth: 0, maxWidth: '100%' }}
                     >
                       <div
                         className="toeic-topic-card"
                         style={{
                           padding: '1rem 1.05rem',
-                          height: '100%',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
                           gap: '0.65rem',
                           cursor: 'pointer',
+                          boxSizing: 'border-box',
+                          minWidth: 0,
+                          maxWidth: '100%',
                         }}
                       >
                         <div>

@@ -146,6 +146,10 @@ export default function SentenceXRayCard({
   const [twinAnswersByIdx, setTwinAnswersByIdx] = useState({});
   const [isLoadingTwin, setIsLoadingTwin] = useState(false);
   const [srsSavedWords, setSrsSavedWords] = useState({});
+  const [sentenceTranslationVi, setSentenceTranslationVi] = useState(
+    question.translation_vi || question.ai_analysis?.sentence_translation_vi || ''
+  );
+  const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
 
   const aiAnalysis = question.ai_analysis || {};
   const xray = aiAnalysis.sentence_xray || null;
@@ -169,6 +173,10 @@ export default function SentenceXRayCard({
     setActiveTwinIdx(0);
     setTwinAnswersByIdx({});
     setIsLoadingTwin(false);
+    setSentenceTranslationVi(
+      question.translation_vi || question.ai_analysis?.sentence_translation_vi || ''
+    );
+    setIsLoadingTranslation(false);
   }, [question.id, forceReview, examMode]);
 
   // Keep selectedOption synced when initialSelectedOption updates externally
@@ -293,6 +301,40 @@ export default function SentenceXRayCard({
     const raw = question.context_sentence || question.stem || '';
     return parseContextAndStem(raw);
   }, [question]);
+
+  // Fetch full Vietnamese translation of the completed sentence upon submission
+  useEffect(() => {
+    if (!isSubmitted) return;
+    if (sentenceTranslationVi) return;
+
+    const correctWord = question.options?.[question.correct_answer] || '';
+    const rawBase = question.context_sentence || question.stem || '';
+    const fullEnglishSentence = rawBase
+      .replace(/-------|_____/g, correctWord)
+      .replace(/^\[([^\]]+)\]\s*/, '$1 — ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!fullEnglishSentence) return;
+
+    let cancelled = false;
+    setIsLoadingTranslation(true);
+    fetch(`/api/translate-sentence?text=${encodeURIComponent(fullEnglishSentence)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!cancelled && data?.translationVi) {
+          setSentenceTranslationVi(data.translationVi);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setIsLoadingTranslation(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isSubmitted, question, sentenceTranslationVi]);
 
   // MX1.1: Tokenize sentence with Contiguous Phrase-Window Anchor Matching
   const interactiveTokens = useMemo(() => {
@@ -491,6 +533,16 @@ export default function SentenceXRayCard({
             );
           })}
         </div>
+
+        {/* Compact Vietnamese Translation Strip (Post-Submission Only) */}
+        {(sentenceTranslationVi || isLoadingTranslation) && (
+          <div className="toeic-xray-translation-line">
+            <span className="toeic-xray-translation-badge">Dịch nghĩa</span>
+            <span className="toeic-xray-translation-text">
+              {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}
+            </span>
+          </div>
+        )}
       </>
     );
   };

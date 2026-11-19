@@ -1541,12 +1541,12 @@ h1, h2, h3, h4, h5, h6 {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-    padding: 8px 10px;
-    background-color: var(--ds-header-bg);
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding: 6px 10px;
+    background-color: var(--ds-glass);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid var(--ds-border);
+    border-top: 1px solid var(--ds-card-border);
     box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.1);
     z-index: 65;
   }

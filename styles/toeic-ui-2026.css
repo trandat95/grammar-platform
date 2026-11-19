@@ -95,44 +95,50 @@
 
 .toeic-grid-2 {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 @media (min-width: 640px) {
   .toeic-grid-2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .toeic-grid-3 {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 @media (min-width: 640px) {
   .toeic-grid-3 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
   .toeic-grid-3 {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 .toeic-grid-4 {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 @media (min-width: 640px) {
   .toeic-grid-4 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
   .toeic-grid-4 {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -512,6 +518,12 @@
   text-decoration: none;
   color: inherit;
   transition: all 0.18s ease;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .toeic-topic-card:hover {
@@ -1034,6 +1046,52 @@
 /* ==========================================================================
    8B. SENTENCE X-RAY 2.0 ENHANCEMENTS (Milestones MX1 - MX4)
    ========================================================================== */
+.toeic-xray-translation-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  padding: 0.32rem 0.55rem;
+  border-radius: 0.45rem;
+  background-color: var(--ds-bg-elevated);
+  border-left: 2.5px solid var(--ds-accent);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ds-text-secondary);
+}
+
+.toeic-xray-translation-badge {
+  flex-shrink: 0;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.08rem 0.35rem;
+  border-radius: 0.25rem;
+  background-color: var(--ds-accent-bg);
+  color: var(--ds-accent);
+}
+
+.toeic-xray-translation-text {
+  font-style: italic;
+  color: var(--ds-text-secondary);
+  word-break: break-word;
+}
+
+@media (max-width: 767px) {
+  .toeic-xray-translation-line {
+    margin-top: 0.35rem;
+    padding: 0.25rem 0.45rem;
+    font-size: 0.74rem;
+    line-height: 1.38;
+    gap: 0.35rem;
+  }
+  .toeic-xray-translation-badge {
+    font-size: 0.6rem;
+    padding: 0.06rem 0.3rem;
+  }
+}
+
 .toeic-xray-context-card {
   padding: 0.85rem 1rem;
   border-radius: 0.85rem;
@@ -1287,12 +1345,12 @@
 .justify-end { justify-content: flex-end; }
 
 .grid { display: grid; }
-.grid-cols-1 { grid-template-columns: 1fr; }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-1 { grid-template-columns: minmax(0, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media (min-width: 1024px) {
-  .lg\:grid-cols-12 { grid-template-columns: repeat(12, 1fr); }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
   .lg\:col-span-5 { grid-column: span 5; }
   .lg\:col-span-7 { grid-column: span 7; }
   .lg\:col-span-8 { grid-column: span 8; }
