@@ -241,9 +241,9 @@ export default function SentenceXRayCard({
       );
     }
 
-    // When submitted: Interactive POS Token Stream
+    // When submitted: Interactive POS Token Stream (natural continuous sentence flow)
     return (
-      <div style={{ lineHeight: 1.8, fontSize: '1.05rem' }}>
+      <div className="toeic-xray-sentence-stream">
         {interactiveTokens.map(tok => {
           if (tok.isBlank) {
             const correctWord = question.options?.[question.correct_answer] || '';
@@ -252,13 +252,14 @@ export default function SentenceXRayCard({
                 key={tok.id}
                 style={{
                   display: 'inline-block',
-                  padding: '0.2rem 0.6rem',
-                  borderRadius: '0.4rem',
+                  padding: '0.08rem 0.45rem',
+                  borderRadius: '0.35rem',
                   backgroundColor: isCorrect ? 'var(--ds-success-bg)' : 'var(--ds-accent-bg)',
                   border: `1.5px solid ${isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)'}`,
                   color: isCorrect ? 'var(--ds-success)' : 'var(--ds-accent)',
                   fontWeight: 800,
-                  margin: '0 0.3rem'
+                  lineHeight: 1.35,
+                  margin: '0 0.18rem'
                 }}
               >
                 {correctWord}
@@ -272,7 +273,7 @@ export default function SentenceXRayCard({
             <span
               key={tok.id}
               onClick={() => setSelectedToken(isSelected ? null : tok)}
-              className={`toeic-pos-token ${isSelected ? 'active' : ''}`}
+              className={`toeic-pos-token ${tok.isAnchor ? 'is-anchor' : ''} ${isSelected ? 'active' : ''}`}
               title="Click để xem phân tích từ loại & cấu trúc"
             >
               <span style={{ fontWeight: tok.isAnchor ? 800 : 500, color: tok.isAnchor ? 'var(--ds-warning)' : 'inherit' }}>
