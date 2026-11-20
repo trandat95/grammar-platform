@@ -7320,93 +7320,60 @@ export default function Home() {
 
                 return (
                   <div
-                    className="pg-glass-panel"
+                    className="ge-hero-banner-card pg-hero--quiz"
                     style={{
-                      position: "relative",
-                      overflow: "hidden",
-                      border: `1px solid ${freeExhausted ? "var(--ds-warning)" : "var(--ds-card-border)"}`,
-                      borderRadius: "20px",
-                      padding: "1.4rem 1.5rem",
+                      padding: "1.3rem 1.4rem",
                       marginBottom: "1.5rem",
                     }}
                   >
-                    <SectionCardWatermark kind="quiz-arena" />
-                    <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
-                      <div style={{ flex: "1 1 320px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.35rem" }}>
-                          <span
-                            style={{
-                              fontSize: "0.7rem",
-                              fontWeight: 800,
-                              padding: "0.18rem 0.55rem",
-                              borderRadius: "9999px",
-                              backgroundColor: isVipOrAdmin ? "var(--ds-success-bg)" : freeExhausted ? "var(--ds-danger-bg)" : "var(--ds-warning-bg)",
-                              color: isVipOrAdmin ? "var(--ds-success)" : freeExhausted ? "var(--ds-danger)" : "var(--ds-warning)",
-                              border: `1px solid ${isVipOrAdmin ? "var(--ds-success-border)" : freeExhausted ? "var(--ds-danger-border)" : "var(--ds-warning-border)"}`,
-                            }}
-                          >
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
-                              <KitIcon name={isVipOrAdmin ? "crown" : isGuestUser ? "lock" : "bolt"} size={12} />
-                              <span>
-                                {isVipOrAdmin
-                                  ? "VIP UNLIMITED • 50 CÂU / ĐỀ"
-                                  : isGuestUser
-                                  ? "KHÁCH DÙNG THỬ • 20 / 50 CÂU (KHÔNG TRỘN ĐỀ)"
-                                  : `FREE ACCOUNT • 20 / 50 CÂU • CÒN ${shufflesLeft}/3 LƯỢT TRỘN`}
-                              </span>
-                            </span>
+                    <HeroBannerVisual kind="diagnostic" webpSrc={BANNER_PATHS.diagnostic} object3dSrc={OBJECT_3D_PATHS.quizTarget} />
+                    <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+                      <div style={{ marginBottom: "0.45rem" }}>
+                        <span className={`pg-fc-pill ${isVipOrAdmin ? "pg-fc-pill--mint" : "pg-fc-pill--gold"}`}>
+                          <KitIcon name={isVipOrAdmin ? "crown" : isGuestUser ? "lock" : "bolt"} size={12} />
+                          <span>
+                            {isVipOrAdmin
+                              ? "VIP • 50 câu / đề"
+                              : isGuestUser
+                              ? "Dùng thử • 20 / 50 câu"
+                              : `Free • Còn ${shufflesLeft}/3 lượt trộn`}
                           </span>
-                        </div>
-                        <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em", margin: 0 }}>
-                          {isVipOrAdmin
-                            ? "Bộ đề Quiz 50 câu ngẫu nhiên & Đề Thích Ứng AI"
-                            : isGuestUser
-                            ? "Bộ đề Quiz Dùng Thử (Giới hạn 20 câu cố định)"
-                            : `Bộ đề Quiz Ngẫu Nhiên (Còn ${shufflesLeft}/3 lượt trộn đề)`}
-                        </h1>
-                        <p style={{ fontSize: "0.85rem", color: T.textMuted, marginTop: "0.35rem", lineHeight: "1.5" }}>
-                          {isVipOrAdmin
-                            ? `Hệ thống rút trích trọn vẹn 50 câu từ kho 2.939+ bài tập kèm phân tích bẫy AI không giới hạn cho ${currentUser.name}.`
-                            : isGuestUser
-                            ? "Khách chưa đăng nhập chỉ làm được 20 câu mặc định và bị khóa Trộn đề mới / Đề Thích Ứng AI. Đăng nhập để mở khóa 3 lượt trộn đề!"
-                            : "Tài khoản Miễn phí chỉ mở 20 câu/đề và tối đa 3 lượt trộn đề. 30 câu bẫy điểm 8.5–9+ (Câu 21 → 50) & Mẹo giải 3 giây đang bị khóa VIP."}
-                        </p>
+                        </span>
                       </div>
 
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                      <h1 style={{ fontSize: "clamp(1.22rem, 2.2vw, 1.48rem)", fontWeight: "800", color: T.textHeading, letterSpacing: "-0.02em", margin: "0 0 0.3rem 0" }}>
+                        {isVipOrAdmin
+                          ? "Bộ Đề Quiz 50 Câu & Đề Thích Ứng AI"
+                          : isGuestUser
+                          ? "Bộ Đề Quiz Luyện Tập Nhanh"
+                          : `Bộ Đề Quiz Ngẫu Nhiên (${shufflesLeft}/3 lượt)`}
+                      </h1>
+
+                      <p style={{ fontSize: "0.84rem", color: T.textSecondary, margin: 0, lineHeight: 1.45, maxWidth: "520px" }}>
+                        {isVipOrAdmin
+                          ? "Rút ngẫu nhiên 50 câu từ kho 2.939 bài tập kèm phân tích AI không giới hạn."
+                          : isGuestUser
+                          ? "Làm ngay 20 câu mẫu • Đăng nhập để mở khóa trộn đề mới & Đề Thích Ứng AI."
+                          : "Mở 20 câu/đề & 3 lượt trộn miễn phí. Nâng cấp VIP để mở trọn bộ 50 câu."}
+                      </p>
+
+                      <div className="pg-quiz-actions-row">
                         <button
                           type="button"
                           disabled={isQuizLimitReached || adaptiveLoading}
                           onClick={() => startAdaptivePractice({ mode: "adaptive", count: isVipOrAdmin ? 50 : 20 })}
-                          style={{
-                            padding: "0.5rem 0.95rem",
-                            backgroundColor: isQuizLimitReached
-                              ? T.border
-                              : isGuestUser || freeExhausted
-                              ? "var(--ds-warning-bg)"
-                              : T.accent,
-                            border: `1px solid ${isGuestUser || freeExhausted ? "var(--ds-warning)" : T.accent}`,
-                            borderRadius: "6px",
-                            color: isQuizLimitReached
-                              ? T.textMuted
-                              : isGuestUser || freeExhausted
-                              ? "var(--ds-warning)"
-                              : "#ffffff",
-                            fontSize: "0.82rem",
-                            fontWeight: "700",
-                            cursor: isQuizLimitReached || adaptiveLoading ? "not-allowed" : "pointer",
-                          }}
+                          className={`ds-focusable pg-quiz-btn ${isGuestUser || freeExhausted ? "pg-quiz-btn--ai-locked" : "pg-quiz-btn--ai"}`}
                         >
                           {adaptiveLoading ? (
                             "Đang trộn đề..."
                           ) : isGuestUser ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Đề Thích Ứng AI (Cần Login)</span>
+                            <><KitIcon name="lock" size={14} /><span>Đề Thích Ứng AI</span></>
                           ) : freeExhausted ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Mở Khóa Đề Thích Ứng VIP</span>
+                            <><KitIcon name="lock" size={14} /><span>Mở Đề AI (VIP)</span></>
                           ) : isVipOrAdmin ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="target" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> Đề Thích Ứng (50/30/20)</span>
+                            <><KitIcon name="target" size={14} /><span>Đề Thích Ứng AI</span></>
                           ) : (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="target" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> {`Đề Thích Ứng (${shufflesLeft}/3)`}</span>
+                            <><KitIcon name="target" size={14} /><span>{`Đề AI (${shufflesLeft}/3)`}</span></>
                           )}
                         </button>
 
@@ -7414,33 +7381,16 @@ export default function Home() {
                           type="button"
                           disabled={isQuizLimitReached}
                           onClick={() => startNewQuiz(selectedQuizTopic)}
-                          style={{
-                            padding: "0.5rem 0.95rem",
-                            backgroundColor: isQuizLimitReached
-                              ? "var(--ds-bg-active)"
-                              : isGuestUser || freeExhausted
-                              ? "var(--ds-bg-elevated)"
-                              : "var(--ds-btn-primary)",
-                            border: `1px solid ${isGuestUser || freeExhausted ? "var(--ds-danger)" : "var(--ds-border-strong)"}`,
-                            borderRadius: "6px",
-                            color: isQuizLimitReached
-                              ? "var(--ds-text-muted)"
-                              : isGuestUser || freeExhausted
-                              ? "var(--ds-danger)"
-                              : "var(--ds-text-on-accent)",
-                            fontSize: "0.82rem",
-                            fontWeight: "700",
-                            cursor: isQuizLimitReached ? "not-allowed" : "pointer",
-                          }}
+                          className={`ds-focusable pg-quiz-btn ${isGuestUser || freeExhausted ? "pg-quiz-btn--shuffle-locked" : "pg-quiz-btn--shuffle"}`}
                         >
                           {isGuestUser ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Trộn đề mới (Cần Login)</span>
+                            <><KitIcon name="lock" size={14} /><span>Trộn đề mới</span></>
                           ) : freeExhausted ? (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="lock" size={14} /> Hết 3/3 lượt — Mở VIP</span>
+                            <><KitIcon name="lock" size={14} /><span>Hết lượt — VIP</span></>
                           ) : isVipOrAdmin ? (
-                            "Trộn đề mới (50 câu)"
+                            <><KitIcon name="refresh" size={14} /><span>Trộn đề (50 câu)</span></>
                           ) : (
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><KitIcon name="refresh" size={14} style={{ color: "var(--ds-text-on-accent)" }} /> {`Trộn đề mới (${shufflesLeft}/3)`}</span>
+                            <><KitIcon name="refresh" size={14} /><span>{`Trộn đề (${shufflesLeft}/3)`}</span></>
                           )}
                         </button>
 
@@ -7448,18 +7398,10 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => submitQuiz(false)}
-                            style={{
-                              padding: "0.5rem 1.25rem",
-                              backgroundColor: "var(--ds-btn-success)",
-                              border: "none",
-                              borderRadius: "6px",
-                              color: "#ffffff",
-                              fontSize: "0.825rem",
-                              fontWeight: "700",
-                              cursor: "pointer",
-                            }}
+                            className="ds-focusable pg-quiz-btn pg-quiz-btn--submit"
                           >
-                            Nộp bài chấm điểm
+                            <KitIcon name="check-circle" size={14} />
+                            <span>Nộp bài chấm điểm</span>
                           </button>
                         )}
                       </div>

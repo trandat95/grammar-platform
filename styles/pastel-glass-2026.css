@@ -1315,6 +1315,340 @@
 }
 
 /* ==========================================================================
+   7.8. COLORFUL PASTEL GLASS LEADERBOARD (PODIUM #1 GOLD / #2 SKY / #3 PEACH)
+   ========================================================================== */
+.pg-lb-card {
+  position: relative;
+  background: var(--ds-card);
+  border: 1px solid var(--pg-gold-border);
+  border-radius: 20px;
+  padding: 1.15rem 1.2rem;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--pg-card-shadow);
+  overflow: hidden;
+}
+
+.pg-lb-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b 0%, #38bdf8 50%, #a78bfa 100%);
+}
+
+.pg-lb-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid var(--ds-card-border);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  margin-bottom: 0.9rem;
+}
+
+.pg-lb-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+[data-theme="dark"] .pg-lb-tabs {
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.pg-lb-tab-btn {
+  flex: 0 0 auto;
+  padding: 0.42rem 0.82rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ds-text-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.pg-lb-tab-btn.is-active {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.42);
+}
+
+.pg-lb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.62rem 0.85rem;
+  border-radius: 14px;
+  flex-shrink: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.pg-lb-row:hover {
+  transform: translateY(-1px);
+}
+
+.pg-lb-row--1 {
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.98) 0%, rgba(253, 230, 138, 0.56) 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.58);
+  border-left: 4px solid #f59e0b;
+  box-shadow: 0 8px 20px -10px rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="dark"] .pg-lb-row--1 {
+  background: linear-gradient(135deg, rgba(69, 39, 12, 0.58) 0%, rgba(120, 53, 15, 0.36) 100%);
+  border-color: rgba(251, 191, 36, 0.45);
+  border-left: 4px solid #fbbf24;
+}
+
+.pg-lb-row--2 {
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.98) 0%, rgba(186, 230, 253, 0.52) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.50);
+  border-left: 4px solid #0ea5e9;
+  box-shadow: 0 6px 16px -10px rgba(14, 165, 233, 0.28);
+}
+
+[data-theme="dark"] .pg-lb-row--2 {
+  background: linear-gradient(135deg, rgba(12, 42, 74, 0.58) 0%, rgba(14, 62, 102, 0.36) 100%);
+  border-color: rgba(56, 189, 248, 0.40);
+  border-left: 4px solid #38bdf8;
+}
+
+.pg-lb-row--3 {
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.98) 0%, rgba(254, 215, 170, 0.56) 100%);
+  border: 1.5px solid rgba(251, 146, 60, 0.50);
+  border-left: 4px solid #f97316;
+  box-shadow: 0 6px 16px -10px rgba(249, 115, 22, 0.26);
+}
+
+[data-theme="dark"] .pg-lb-row--3 {
+  background: linear-gradient(135deg, rgba(67, 28, 18, 0.56) 0%, rgba(108, 42, 22, 0.34) 100%);
+  border-color: rgba(251, 146, 60, 0.40);
+  border-left: 4px solid #fb923c;
+}
+
+.pg-lb-row--me {
+  background: var(--pg-lavender-surface);
+  border: 1.5px solid var(--pg-lavender-border);
+  border-left: 4px solid #8b5cf6;
+}
+
+.pg-lb-row--rest {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+[data-theme="dark"] .pg-lb-row--rest {
+  background: rgba(19, 29, 50, 0.72);
+  border-color: rgba(148, 163, 184, 0.14);
+}
+
+.pg-lb-rank-chip {
+  min-width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.pg-lb-rank-chip--1 {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  color: #ffffff;
+  box-shadow: 0 4px 10px -2px rgba(217, 119, 6, 0.45);
+}
+
+.pg-lb-rank-chip--2 {
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 4px 10px -2px rgba(37, 99, 235, 0.35);
+}
+
+.pg-lb-rank-chip--3 {
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  color: #ffffff;
+  box-shadow: 0 4px 10px -2px rgba(234, 88, 12, 0.35);
+}
+
+.pg-lb-rank-chip--c0 {
+  background: var(--pg-lavender-pill-bg);
+  color: var(--pg-lavender-pill-text);
+}
+
+.pg-lb-rank-chip--c1 {
+  background: var(--pg-mint-pill-bg);
+  color: var(--pg-mint-pill-text);
+}
+
+.pg-lb-rank-chip--c2 {
+  background: var(--pg-sky-pill-bg);
+  color: var(--pg-sky-pill-text);
+}
+
+.pg-lb-score-pill {
+  padding: 0.24rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pg-lb-score-pill--1 {
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="dark"] .pg-lb-score-pill--1 {
+  color: #fde68a;
+}
+
+.pg-lb-score-pill--2 {
+  background: rgba(14, 165, 233, 0.15);
+  color: #0369a1;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+[data-theme="dark"] .pg-lb-score-pill--2 {
+  color: #7dd3fc;
+}
+
+.pg-lb-score-pill--3 {
+  background: rgba(249, 115, 22, 0.15);
+  color: #c2410c;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+}
+
+[data-theme="dark"] .pg-lb-score-pill--3 {
+  color: #fdba74;
+}
+
+.pg-lb-score-pill--c0 {
+  background: var(--pg-lavender-pill-bg);
+  color: var(--pg-lavender-pill-text);
+}
+
+.pg-lb-score-pill--c1 {
+  background: var(--pg-mint-pill-bg);
+  color: var(--pg-mint-pill-text);
+}
+
+.pg-lb-score-pill--c2 {
+  background: var(--pg-sky-pill-bg);
+  color: var(--pg-sky-pill-text);
+}
+
+/* ==========================================================================
+   7.9. QUIZ ARENA HERO — VIBRANT PASTEL PEACH-SKY GLASS + 3D TARGET
+   ========================================================================== */
+.ge-hero-banner-card.pg-hero--quiz {
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.96) 0%, rgba(238, 242, 255, 0.92) 55%, rgba(224, 242, 254, 0.92) 100%) !important;
+  border: 1.5px solid rgba(251, 146, 60, 0.42) !important;
+}
+
+.ge-hero-banner-card.pg-hero--quiz > *:not(.pg-hero-visual) {
+  position: relative;
+  z-index: 2;
+}
+
+.ge-hero-banner-card.pg-hero--quiz .pg-hero-3d-stage {
+  top: 1.25rem;
+  transform: none;
+}
+
+[data-theme="dark"] .ge-hero-banner-card.pg-hero--quiz {
+  background: linear-gradient(135deg, rgba(38, 22, 28, 0.95) 0%, rgba(22, 26, 52, 0.94) 55%, rgba(15, 32, 56, 0.92) 100%) !important;
+  border-color: rgba(251, 146, 60, 0.36) !important;
+}
+
+.pg-quiz-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.pg-quiz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0.48rem 0.95rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.pg-quiz-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.pg-quiz-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pg-quiz-btn--ai {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px -4px rgba(99, 102, 241, 0.42);
+}
+
+.pg-quiz-btn--ai-locked {
+  background: rgba(255, 251, 235, 0.88);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.48);
+}
+
+[data-theme="dark"] .pg-quiz-btn--ai-locked {
+  background: rgba(120, 53, 15, 0.35);
+  color: #fde68a;
+  border-color: rgba(251, 191, 36, 0.42);
+}
+
+.pg-quiz-btn--shuffle {
+  background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px -4px rgba(37, 99, 235, 0.38);
+}
+
+.pg-quiz-btn--shuffle-locked {
+  background: rgba(255, 241, 242, 0.90);
+  color: #be123c;
+  border: 1px solid rgba(244, 63, 94, 0.42);
+}
+
+[data-theme="dark"] .pg-quiz-btn--shuffle-locked {
+  background: rgba(136, 19, 55, 0.35);
+  color: #fda4af;
+  border-color: rgba(251, 113, 133, 0.42);
+}
+
+.pg-quiz-btn--submit {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 16px -4px rgba(5, 150, 105, 0.45);
+}
+
+/* ==========================================================================
    8. RESPONSIVE BREAKPOINTS (DESKTOP • TABLET • MOBILE)
    ========================================================================== */
 @media (min-width: 1024px) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Skeleton } from "../design-system";
-import { AVATAR_PATHS } from "../ui-2026/assetMap";
+import { AVATAR_PATHS, OBJECT_3D_PATHS } from "../ui-2026/assetMap";
 import KitIcon from "../ui-2026/KitIcon";
 
 const BOARD_TABS = [
@@ -95,16 +95,8 @@ export default function LeaderboardPanel({
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: T.card,
-        border: `1px solid ${T.cardBorder}`,
-        borderRadius: "14px",
-        padding: compact ? "1.15rem 1.25rem" : "1.25rem",
-        boxShadow: T.shadowSm,
-      }}
-    >
-      {/* Header with Animated Trophy + LIVE Pulse + Controls */}
+    <div className="pg-lb-card">
+      {/* Header with 3D Trophy + LIVE Pulse + Controls */}
       <div
         style={{
           display: "flex",
@@ -115,10 +107,17 @@ export default function LeaderboardPanel({
           marginBottom: "0.85rem",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", flexWrap: "wrap" }}>
-          <h2 style={{ margin: 0, fontSize: compact ? "1.06rem" : "1rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.45rem" }}>
-            <span className="ge-trophy-float" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="trophy" size={19} /></span>
-            <span>Bảng Xếp Hạng Thành Tích</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+          <img
+            src={OBJECT_3D_PATHS.trophyGold}
+            alt="Cúp bảng xếp hạng 3D"
+            width={34}
+            height={34}
+            loading="lazy"
+            style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }}
+          />
+          <h2 style={{ margin: 0, fontSize: compact ? "1.06rem" : "1rem", fontWeight: 800, color: T.textHeading }}>
+            Bảng Xếp Hạng
           </h2>
           <span className="ge-live-badge" title="Cập nhật thời gian thực">
             <span className="ge-live-dot" aria-hidden="true" />
@@ -148,25 +147,25 @@ export default function LeaderboardPanel({
               onClick={onOpenFullAchievements}
               style={{ fontSize: "0.74rem", padding: "0.28rem 0.65rem", minHeight: "36px" }}
             >
-              Huy hiệu &amp; Thành tích →
+              Thành tích →
             </Button>
           )}
         </div>
       </div>
 
-      {/* Mode Switcher Tabs */}
-      <div className="ge-lb-tab-row" style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "0.85rem" }}>
+      {/* Mode Switcher Tabs — Single-Row Frosted Pill Rail (No Orphan Wrap!) */}
+      <div className="pg-lb-tabs" role="tablist" aria-label="Chế độ Bảng xếp hạng">
         {BOARD_TABS.map((tb) => (
-          <Button
+          <button
             key={tb.id}
-            size="sm"
-            variant={boardType === tb.id ? "primary" : "ghost"}
-            isLight={isLight}
+            type="button"
+            role="tab"
+            aria-selected={boardType === tb.id}
             onClick={() => setBoardType(tb.id)}
-            style={{ fontSize: "0.74rem", padding: "0.32rem 0.7rem", minHeight: "36px" }}
+            className={`pg-lb-tab-btn ds-focusable ${boardType === tb.id ? "is-active" : ""}`}
           >
             {tb.label}
-          </Button>
+          </button>
         ))}
       </div>
 
@@ -190,80 +189,73 @@ export default function LeaderboardPanel({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "0.5rem",
-            ...(compact ? { maxHeight: "380px", overflowY: "auto", paddingRight: "2px" } : {}),
+            gap: "0.52rem",
+            ...(compact ? { maxHeight: "400px", overflowY: "auto", paddingRight: "3px" } : {}),
           }}
         >
           {leaderboard.entries.map((row, idx) => {
             const isTop1 = row.rank === 1;
-            const isTop3 = row.rank <= 3;
-            const rowClasses = [
-              "ge-lb-row",
-              isTop1 ? "ge-lb-row-top1" : "",
-              row.isCurrentUser ? "ge-lb-row-me" : "",
-            ]
-              .filter(Boolean)
-              .join(" ");
-
-            const rowBg = row.isCurrentUser
-              ? T.accentBg
+            const isTop2 = row.rank === 2;
+            const isTop3 = row.rank === 3;
+            const cycleIdx = (row.rank - 4) % 3;
+            const rowToneClass = row.isCurrentUser
+              ? "pg-lb-row--me ge-lb-row-me"
               : isTop1
-              ? T.warningBg
-              : T.bgElevated;
-
-            const rowBorder = row.isCurrentUser
-              ? T.accentBorder
-              : isTop1
-              ? T.warningBorder
+              ? "pg-lb-row--1 ge-lb-row-top1"
+              : isTop2
+              ? "pg-lb-row--2"
+              : isTop3
+              ? "pg-lb-row--3"
+              : "pg-lb-row--rest";
+            const rankChipClass = isTop1
+              ? "pg-lb-rank-chip--1"
+              : isTop2
+              ? "pg-lb-rank-chip--2"
+              : isTop3
+              ? "pg-lb-rank-chip--3"
+              : `pg-lb-rank-chip--c${Math.max(0, cycleIdx)}`;
+            const scorePillClass = isTop1
+              ? "pg-lb-score-pill--1"
+              : isTop2
+              ? "pg-lb-score-pill--2"
+              : isTop3
+              ? "pg-lb-score-pill--3"
+              : `pg-lb-score-pill--c${Math.max(0, cycleIdx)}`;
+            const avatarBorder = isTop1
+              ? "#f59e0b"
+              : isTop2
+              ? "#38bdf8"
+              : isTop3
+              ? "#fb923c"
+              : row.isCurrentUser
+              ? "#8b5cf6"
               : T.borderSubtle;
 
             return (
               <div
                 key={`${row.rank}-${row.display_name}`}
-                className={rowClasses}
+                className={`ge-lb-row pg-lb-row ${rowToneClass}`}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "0.75rem",
-                  padding: isTop1 ? "0.65rem 0.85rem" : "0.55rem 0.8rem",
-                  flexShrink: 0,
-                  borderRadius: "10px",
-                  backgroundColor: rowBg,
-                  border: `1px solid ${rowBorder}`,
-                  borderLeft: isTop1
-                    ? `4px solid ${T.warning}`
-                    : row.isCurrentUser
-                    ? `4px solid ${T.accent}`
-                    : `1px solid ${rowBorder}`,
-                  animationDelay: `${Math.min(idx, 9) * 45}ms`,
+                  animationDelay: `${Math.min(idx, 9) * 40}ms`,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", minWidth: 0, flex: 1 }}>
-                  <div
-                    style={{
-                      minWidth: "30px",
-                      textAlign: "center",
-                      fontSize: isTop3 ? "1.1rem" : "0.82rem",
-                      fontWeight: 800,
-                      color: isTop3 ? T.warning : T.textMuted,
-                    }}
-                  >
-                    {getRankDisplay(row.rank)}
-                  </div>
+                  <span className={`pg-lb-rank-chip ${rankChipClass}`}>
+                    {row.rank <= 3 ? row.rank : `#${row.rank}`}
+                  </span>
 
                   <img
                     src={AVATAR_PATHS[(row.rank - 1) % AVATAR_PATHS.length]}
                     alt={row.display_name}
-                    width={isTop1 ? 34 : 30}
-                    height={isTop1 ? 34 : 30}
+                    width={isTop1 ? 36 : 32}
+                    height={isTop1 ? 36 : 32}
                     loading="lazy"
                     style={{
-                      width: isTop1 ? 34 : 30,
-                      height: isTop1 ? 34 : 30,
+                      width: isTop1 ? 36 : 32,
+                      height: isTop1 ? 36 : 32,
                       borderRadius: "50%",
                       objectFit: "cover",
-                      border: `2px solid ${isTop1 ? T.warningBorder : row.isCurrentUser ? T.accentBorder : T.borderSubtle}`,
+                      border: `2px solid ${avatarBorder}`,
                       opacity: row.is_anonymous ? 0.55 : 1,
                       filter: row.is_anonymous ? "grayscale(100%)" : "none",
                       flexShrink: 0,
@@ -273,12 +265,12 @@ export default function LeaderboardPanel({
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <div
                       style={{
-                        fontSize: "0.85rem",
-                        fontWeight: row.isCurrentUser || isTop1 ? 800 : 700,
+                        fontSize: "0.86rem",
+                        fontWeight: row.isCurrentUser || row.rank <= 3 ? 800 : 700,
                         color: T.textHeading,
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.4rem",
+                        gap: "0.38rem",
                         flexWrap: "wrap",
                       }}
                     >
@@ -291,20 +283,20 @@ export default function LeaderboardPanel({
                         </Badge>
                       )}
                       {isTop1 && !row.isCurrentUser && (
-                        <Badge tone="warning" isLight={isLight}>
+                        <span className="pg-fc-pill pg-fc-pill--gold" style={{ padding: "0.12rem 0.45rem", fontSize: "0.62rem" }}>
                           Dẫn đầu
-                        </Badge>
+                        </span>
                       )}
                     </div>
-                    <div style={{ fontSize: "0.7rem", color: T.textMuted }}>
-                      Lv {row.level} • {row.title} • Acc {row.tie_breaker_accuracy}%
+                    <div style={{ fontSize: "0.7rem", color: T.textMuted, fontWeight: 600 }}>
+                      Lv {row.level} • {row.title} • {row.tie_breaker_accuracy}%
                     </div>
                   </div>
                 </div>
 
-                <Badge tone={isTop1 ? "warning" : row.isCurrentUser ? "accent" : "neutral"} isLight={isLight}>
+                <span className={`pg-lb-score-pill ${scorePillClass}`}>
                   {Number(row.score || 0).toLocaleString()} {activeUnit}
-                </Badge>
+                </span>
               </div>
             );
           })}
