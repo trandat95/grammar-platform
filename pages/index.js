@@ -5932,71 +5932,103 @@ export default function Home() {
               {/* ZONE A: TODAY FOCUS & MICRO-ACTION */}
               {dashboardZone === "today" && (
                 <div>
-                  {/* 4 ANALYTICS METRICS SNAPSHOT GRID (2x2 Compact on Mobile - UX-08 Endowed Progress) */}
-                  <div className="ge-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(205px, 1fr))", gap: "0.9rem", marginBottom: "1.35rem" }}>
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Bài học đã xong
-                      </div>
-                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {userTracker.completedLessons?.length || 0}{" "}
-                        <span className="ge-hide-mobile" style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>
-                          / {totalLessonsCount}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: "0.76rem", color: "var(--ds-success)", fontWeight: "600", lineHeight: 1.3 }}>
-                        {(userTracker.completedLessons?.length || 0) === 0
-                          ? "Bước 1/3: Khởi động (33%)"
-                          : `${overallLessonsProgress}% toàn bộ khóa học`}
-                      </div>
-                    </div>
+                  {/* 4 PASTEL GLASS KPI SNAPSHOT CARDS (Balanced 2x2 Mobile/Tablet, 4x1 Desktop + 3D Mini Icons + Micro Bars) */}
+                  {(() => {
+                    const completedLessonsCount = userTracker.completedLessons?.length || 0;
+                    const lessonBarPct = completedLessonsCount === 0 ? 33 : Math.min(100, Math.max(8, overallLessonsProgress));
+                    const completedQCount = userTracker.completedQuestions?.length || 0;
+                    const solvedTodayCount = userTracker.dailyGoal?.solvedToday || 0;
+                    const dailyTargetCount = userTracker.dailyGoal?.targetQuestions || 10;
+                    const dailyGoalPct = Math.min(100, Math.round((solvedTodayCount / Math.max(1, dailyTargetCount)) * 100));
+                    const xpBarPct = Math.min(100, Math.max(8, Math.round(((userTracker.xp || 0) / Math.max(1, userRank.nextXp || 100)) * 100)));
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Câu đã giải đúng
-                      </div>
-                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {userTracker.completedQuestions?.length || 0}{" "}
-                        <span className="ge-hide-mobile" style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>
-                          / {totalQuestionsCount}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: "0.76rem", color: "var(--ds-accent)", fontWeight: "600", lineHeight: 1.3 }}>
-                        {(userTracker.completedQuestions?.length || 0) === 0
-                          ? "Mục tiêu đầu: 5 câu nhanh (3 phút)"
-                          : "Tích lũy từ bài tập & Quiz"}
-                      </div>
-                    </div>
+                    return (
+                      <div className="pg-kpi-grid">
+                        {/* KPI 1: Bài học đã xong */}
+                        <div className="pg-kpi-card pg-kpi-card--mint">
+                          <div className="pg-kpi-top">
+                            <span className="pg-kpi-label">Bài học</span>
+                            <img src={OBJECT_3D_PATHS.grammarLibrary} alt="" width={40} height={40} loading="lazy" className="pg-kpi-3d-icon" />
+                          </div>
+                          <div className="pg-kpi-value-row">
+                            <span className="pg-kpi-value">{completedLessonsCount}</span>
+                            <span className="pg-kpi-unit">/ {totalLessonsCount}</span>
+                          </div>
+                          <div>
+                            <div className="pg-kpi-bar-track">
+                              <div className="pg-kpi-bar-fill pg-kpi-bar-fill--mint" style={{ width: `${lessonBarPct}%` }} />
+                            </div>
+                            <div className="pg-kpi-sub pg-kpi-sub--mint">
+                              {completedLessonsCount === 0 ? "Khởi động • 33%" : `${overallLessonsProgress}% khóa học`}
+                            </div>
+                          </div>
+                        </div>
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Điểm kinh nghiệm
-                      </div>
-                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {userTracker.xp} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>XP</span>
-                      </div>
-                      <div className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-warning)", fontWeight: "600" }}>
-                        {userRank.title}
-                      </div>
-                    </div>
+                        {/* KPI 2: Câu đã giải đúng */}
+                        <div className="pg-kpi-card pg-kpi-card--sky">
+                          <div className="pg-kpi-top">
+                            <span className="pg-kpi-label">Câu đúng</span>
+                            <img src={OBJECT_3D_PATHS.quizTarget} alt="" width={40} height={40} loading="lazy" className="pg-kpi-3d-icon" />
+                          </div>
+                          <div className="pg-kpi-value-row">
+                            <span className="pg-kpi-value">{completedQCount}</span>
+                            <span className="pg-kpi-unit">câu</span>
+                          </div>
+                          <div>
+                            <div className="pg-kpi-bar-track">
+                              <div className="pg-kpi-bar-fill pg-kpi-bar-fill--sky" style={{ width: `${Math.max(12, dailyGoalPct)}%` }} />
+                            </div>
+                            <div className="pg-kpi-sub pg-kpi-sub--sky">
+                              {completedQCount === 0 ? "Mục tiêu đầu: 5 câu" : `Hôm nay: ${solvedTodayCount}/${dailyTargetCount}`}
+                            </div>
+                          </div>
+                        </div>
 
-                    <div style={{ backgroundColor: "var(--ds-card)", border: "1px solid var(--ds-border)", borderRadius: "10px", padding: "1.1rem 1.2rem", boxShadow: "var(--ds-shadow-sm)" }}>
-                      <div style={{ fontSize: "0.73rem", color: "var(--ds-text-muted)", textTransform: "uppercase", fontWeight: "700" }}>
-                        Sổ tay câu sai
+                        {/* KPI 3: Điểm kinh nghiệm */}
+                        <div className="pg-kpi-card pg-kpi-card--amber">
+                          <div className="pg-kpi-top">
+                            <span className="pg-kpi-label">Kinh nghiệm</span>
+                            <img src={OBJECT_3D_PATHS.streakFlame} alt="" width={40} height={40} loading="lazy" className="pg-kpi-3d-icon" />
+                          </div>
+                          <div className="pg-kpi-value-row">
+                            <span className="pg-kpi-value">{userTracker.xp}</span>
+                            <span className="pg-kpi-unit">XP</span>
+                          </div>
+                          <div>
+                            <div className="pg-kpi-bar-track">
+                              <div className="pg-kpi-bar-fill pg-kpi-bar-fill--amber" style={{ width: `${xpBarPct}%` }} />
+                            </div>
+                            <div className="pg-kpi-sub pg-kpi-sub--amber">
+                              {userRank.badge} • Cấp {userRank.level}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* KPI 4: Sổ tay câu sai */}
+                        <div className="pg-kpi-card pg-kpi-card--rose">
+                          <div className="pg-kpi-top">
+                            <span className="pg-kpi-label">Sổ câu sai</span>
+                            <img src={OBJECT_3D_PATHS.mistakeShield} alt="" width={40} height={40} loading="lazy" className="pg-kpi-3d-icon" />
+                          </div>
+                          <div className="pg-kpi-value-row">
+                            <span className="pg-kpi-value" style={{ color: savedMistakes.length > 0 ? "var(--ds-danger)" : undefined }}>
+                              {savedMistakes.length}
+                            </span>
+                            <span className="pg-kpi-unit">câu</span>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => setCurrentView("mistakes")}
+                              className="ds-focusable pg-kpi-action-pill"
+                            >
+                              <span>{savedMistakes.length > 0 ? "Luyện lại →" : "Mở sổ tay →"}</span>
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="ge-kpi-val" style={{ fontSize: "1.65rem", fontWeight: "800", color: savedMistakes.length > 0 ? "var(--ds-danger)" : "var(--ds-text-heading)", margin: "0.35rem 0" }}>
-                        {savedMistakes.length} <span style={{ fontSize: "0.92rem", color: "var(--ds-text-muted)" }}>câu</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentView("mistakes")}
-                        className="ds-focusable ge-drawer-lesson-btn"
-                        style={{ fontSize: "0.75rem", color: "var(--ds-danger)", cursor: "pointer", textDecoration: "underline", background: "none", border: "none", padding: 0, fontWeight: "600" }}
-                      >
-                        Luyện lại →
-                      </button>
-                    </div>
-                  </div>
+                    );
+                  })()}
 
                   {/* 3. TWO-COLUMN STUDY FOCUS: DAILY LESSON + SPACED REPETITION */}
                   <div
@@ -6010,14 +6042,13 @@ export default function Home() {
                   >
                     {/* SMART DAILY RECOMMENDATION CARD */}
                     <div
+                      className="pg-glass-panel"
                       style={{
-                        backgroundColor: "var(--ds-card)",
-                        border: "1px solid var(--ds-accent-border)",
-                        borderRadius: "12px",
-                        padding: "1.35rem 1.5rem",
+                        border: "1px solid var(--pg-sky-border)",
+                        borderRadius: "20px",
+                        padding: "1.3rem 1.45rem",
                         position: "relative",
                         overflow: "hidden",
-                        boxShadow: "var(--ds-shadow-sm)",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
@@ -6114,26 +6145,27 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={() => setShowMobileHomeExtras(true)}
+                        className="pg-glass-panel ds-focusable"
                         style={{
                           width: "100%",
-                          minHeight: "46px",
-                          padding: "0.75rem 1rem",
-                          borderRadius: "10px",
-                          border: "1px solid var(--ds-border)",
-                          backgroundColor: "var(--ds-card)",
+                          minHeight: "52px",
+                          padding: "0.7rem 1rem",
+                          borderRadius: "16px",
                           color: "var(--ds-text-heading)",
                           fontSize: "0.86rem",
                           fontWeight: 700,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          gap: "0.5rem",
+                          gap: "0.65rem",
                           cursor: "pointer",
-                          boxShadow: "var(--ds-shadow-sm)",
                         }}
                       >
-                        <span>Xem Bảng Xếp Hạng Thành Tích Live (Chạm để mở)</span>
-                        <span style={{ color: "var(--ds-accent)", fontWeight: 800 }}>↓</span>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem" }}>
+                          <img src={OBJECT_3D_PATHS.trophyGold} alt="" width={28} height={28} loading="lazy" style={{ width: 28, height: 28, objectFit: "contain" }} />
+                          <span>Bảng Xếp Hạng Thành Tích Live</span>
+                        </span>
+                        <span style={{ color: "var(--ds-accent)", fontWeight: 800 }}>Mở ↓</span>
                       </button>
                     ) : (
                       <>
