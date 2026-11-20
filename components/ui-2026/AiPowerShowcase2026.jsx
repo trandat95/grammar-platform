@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import KitIcon, { StatusDot } from "./KitIcon";
-import { XRAY_PREVIEW_PATH } from "./assetMap";
+import { OBJECT_3D_PATHS, XRAY_PREVIEW_PATH } from "./assetMap";
 
 /**
  * AiPowerShowcase2026
@@ -170,19 +170,31 @@ export default function AiPowerShowcase2026({
           </div>
         </div>
 
-        <h2
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontSize: compact ? "1.28rem" : "1.55rem",
-            fontWeight: 900,
-            lineHeight: 1.3,
-            color: "var(--ds-text-heading)",
-            margin: "0 0 0.55rem 0",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Vì Sao Luyện Ngữ Pháp Với AI Giúp Bạn Hết Sai Lặp Lại?
-        </h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+            <h2
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: compact ? "1.24rem" : "1.5rem",
+                fontWeight: 900,
+                lineHeight: 1.28,
+                color: "var(--ds-text-heading)",
+                margin: "0 0 0.45rem 0",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Luyện Ngữ Pháp Với AI — Hết Sai Lặp Lại
+            </h2>
+          </div>
+          <img
+            src={OBJECT_3D_PATHS.aiSparkLens}
+            alt="Kính lúp AI phân tích ngữ pháp 3D"
+            width={68}
+            height={68}
+            loading="lazy"
+            style={{ width: "68px", height: "68px", objectFit: "contain", flexShrink: 0 }}
+          />
+        </div>
 
         <p
           style={{

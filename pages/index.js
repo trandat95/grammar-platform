@@ -23,7 +23,7 @@ import AiPowerShowcase2026 from "../components/ui-2026/AiPowerShowcase2026";
 import FocusTrapModal2026 from "../components/ui-2026/FocusTrapModal2026";
 import KitIcon from "../components/ui-2026/KitIcon";
 import { FeatureCardVisual, HeroBannerVisual, SectionCardWatermark } from "../components/ui-2026/EditorialArtwork";
-import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS } from "../components/ui-2026/assetMap";
+import { BANNER_PATHS, CHAPTER_ICON_MAP, MASCOT_PATHS, OBJECT_3D_PATHS } from "../components/ui-2026/assetMap";
 import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../lib/learning/behavioral-engine";
 import { migrateQuestionExplanation } from "../lib/explanation/explanation.migrator";
 import { generateRemedialRecommendation } from "../lib/explanation/remedial-engine";
@@ -4084,13 +4084,29 @@ export default function Home() {
           </div>
         }
       >
-        {/* Filter Search Input */}
-        <div style={{ paddingBottom: "0.85rem", borderBottom: "1px solid var(--ds-border-subtle)", marginBottom: "0.85rem" }}>
+        {/* Vocab Modal Compact 3D Flashcard Strip + Filter Search */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            paddingBottom: "0.85rem",
+            borderBottom: "1px solid var(--ds-border-subtle)",
+            marginBottom: "0.85rem",
+          }}
+        >
+          <img
+            src={OBJECT_3D_PATHS.vocabCards}
+            alt="Kho từ vựng Flashcard 3D"
+            width={44}
+            height={44}
+            style={{ width: "44px", height: "44px", objectFit: "contain", flexShrink: 0 }}
+          />
           <input
             type="text"
             value={vocabSearchFilter}
             onChange={(e) => setVocabSearchFilter(e.target.value)}
-            placeholder="Tìm kiếm trong sổ từ vựng..."
+            placeholder="Tìm từ vựng đã lưu..."
             aria-label="Tìm kiếm trong sổ từ vựng"
             style={{
               width: "100%",
@@ -4098,7 +4114,7 @@ export default function Home() {
               padding: "0 0.85rem",
               backgroundColor: "var(--ds-bg-elevated)",
               border: "1px solid var(--ds-border)",
-              borderRadius: "8px",
+              borderRadius: "10px",
               fontSize: "0.85rem",
               color: "var(--ds-text)",
               outline: "none",
@@ -5682,54 +5698,36 @@ export default function Home() {
           <div className="ge-view-container" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "980px", margin: "0 auto" }}>
               
-              {/* 1. COMPACT WELCOME STRIP (Streak, Level, 7-Day Calendar & Hero Showcase) */}
-              <div
-                className="ge-hero-banner-card"
-                style={{
-                  padding: "1.15rem 1.35rem",
-                  marginBottom: "1.1rem",
-                }}
-              >
+              {/* 1. COMPACT PASTEL GLASS WELCOME HERO (Demo 2: Less Text, 3D Owl & Atmospheric Sky) */}
+              <div className="ge-hero-banner-card pg-dashboard-hero">
                 <HeroBannerVisual kind="dashboard" webpSrc={BANNER_PATHS.dashboard} />
-                <div className="ge-hero-banner-content ge-hero-banner-content--safe" style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
-                    <img
-                      src={MASCOT_PATHS.welcome}
-                      alt="Cú Tri Thức chào mừng bạn quay lại"
-                      width={64}
-                      height={64}
-                      style={{ width: "64px", height: "64px", objectFit: "contain", flexShrink: 0 }}
-                    />
+                <div className="pg-hero-inner ge-hero-banner-content ge-hero-banner-content--safe">
+                  <div className="pg-hero-identity">
+                    <div className="pg-hero-mascot-wrap">
+                      <img
+                        src={MASCOT_PATHS.welcome}
+                        alt="Cú Tri Thức chào mừng bạn"
+                        width={92}
+                        height={92}
+                        className="pg-hero-mascot-img"
+                      />
+                    </div>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", marginBottom: "0.45rem" }}>
-                        <div className="ge-streak-orb" aria-hidden="true">
-                          <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={20} /></span>
-                        </div>
-                        <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "var(--ds-text-heading)", margin: 0 }}>
-                          Chào {currentUser.name} • Chuỗi {userTracker.streak} ngày
-                        </h1>
-                      </div>
+                      <h1 className="pg-hero-greeting">
+                        {currentUser?.isGuest || currentUser?.id === "guest"
+                          ? "Chào bạn!"
+                          : `Chào ${currentUser.name}!`}
+                      </h1>
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "5px",
-                            backgroundColor: "var(--ds-bg-elevated)",
-                            border: "1px solid var(--ds-border)",
-                            color: "var(--ds-text)",
-                            fontSize: "0.76rem",
-                            padding: "0.22rem 0.6rem",
-                            borderRadius: "6px",
-                            fontWeight: "600",
-                          }}
-                        >
+                      <div className="pg-hero-meta-row">
+                        <span className="pg-rank-pill">
                           <KitIcon name={userRank.icon} size={13} />
-                          <span>{userRank.badge} • Cấp {userRank.level} ({userRank.title})</span>
+                          <span>
+                            {userRank.badge} • Cấp {userRank.level}
+                          </span>
                         </span>
 
-                        <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)" }}>
+                        <span className="ge-mobile-hide" style={{ fontSize: "0.76rem", color: "var(--ds-text-muted)", fontWeight: 600 }}>
                           <strong style={{ color: "var(--ds-accent)" }}>{userTracker.xp} / {userRank.nextXp} XP</strong>
                         </span>
 
@@ -5737,19 +5735,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => openContextualSmartPaywall("vip_feature_click", { title: "Toàn quyền 2,939 Bài tập & Lộ trình VIP", description: "Mở khóa bài tập không giới hạn, Đề thích ứng & Báo cáo Radar 12 chuyên đề." })}
-                            className="ds-focusable ge-drawer-lesson-btn"
-                            style={{
-                              fontSize: "0.74rem",
-                              color: "var(--ds-warning)",
-                              backgroundColor: "var(--ds-warning-bg)",
-                              border: "1px solid var(--ds-warning-border)",
-                              padding: "0.22rem 0.55rem",
-                              borderRadius: "6px",
-                              cursor: "pointer",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "4px",
-                            }}
+                            className="ds-focusable pg-vip-pill-btn"
                           >
                             <KitIcon name="bolt" size={13} />
                             <span>Nâng cấp VIP</span>
@@ -5759,54 +5745,42 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* 7-Day Mini Calendar (Desktop strip cleanly inside Hero safe zone) */}
-                  <div
-                    className="ge-mobile-hide"
-                    style={{
-                      backgroundColor: "var(--ds-bg-elevated)",
-                      border: "1px solid var(--ds-border-subtle)",
-                      padding: "0.55rem 0.9rem",
-                      borderRadius: "10px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "0.75rem",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-sans)", fontWeight: 700, color: "var(--ds-text-muted)", textTransform: "uppercase" }}>
-                      Chuỗi 7 ngày gần nhất
+                  {/* 7-Day Mini Calendar (Clean Frosted Strip on Tablet & Desktop) */}
+                  <div className="ge-mobile-hide pg-hero-week-strip">
+                    <span style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                      7 ngày
                     </span>
-                    <div style={{ display: "flex", gap: "0.45rem" }}>
+                    <div style={{ display: "flex", gap: "0.4rem" }}>
                       {last7Days.map((d, i) => (
                         <div
                           key={i}
                           style={{
                             display: "flex",
+                            flexDirection: "column",
                             alignItems: "center",
-                            gap: "0.25rem",
+                            gap: "2px",
                           }}
                         >
-                          <span style={{ fontSize: "0.66rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "700" : "500" }}>
+                          <span style={{ fontSize: "0.62rem", color: d.isToday ? "var(--ds-text-heading)" : "var(--ds-text-muted)", fontWeight: d.isToday ? "800" : "600" }}>
                             {d.dayName}
                           </span>
                           <div
                             className={d.isActive ? "ge-streak-day-active" : undefined}
                             style={{
-                              width: "26px",
-                              height: "26px",
+                              width: "24px",
+                              height: "24px",
                               borderRadius: "50%",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                               backgroundColor: d.isActive ? "var(--ds-btn-warning)" : "var(--ds-card)",
                               color: d.isActive ? "var(--ds-text-on-accent)" : "var(--ds-text-muted)",
-                              fontSize: "0.74rem",
+                              fontSize: "0.7rem",
                               fontWeight: "700",
                               border: d.isToday ? "2px solid var(--ds-accent)" : "1px solid var(--ds-border-subtle)",
                             }}
                           >
-                            {d.isActive ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={12} style={{ color: "var(--ds-text-on-accent)" }} /></span> : d.dayNum}
+                            {d.isActive ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={11} style={{ color: "var(--ds-text-on-accent)" }} /></span> : d.dayNum}
                           </div>
                         </div>
                       ))}
@@ -5815,15 +5789,8 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 2. ACTION-FIRST CORE HUB (3 Seamless Theme-Aware Illustrated Feature Cards) */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(min(255px, 100%), 1fr))",
-                  gap: "0.9rem",
-                  marginBottom: "1.25rem",
-                }}
-              >
+              {/* 2. ACTION-FIRST CORE HUB (3 Pastel Glass & Soft-3D Bento Banners — Mobile 1-col / Tablet 2+1 / Desktop 3-col) */}
+              <div className="pg-overview-bento-grid">
                 {/* Core Action 1: Study Today's Lesson */}
                 <button
                   type="button"
@@ -5832,16 +5799,16 @@ export default function Home() {
                 >
                   <div className="ge-feature-card-body">
                     <div>
-                      <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-accent)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                        <KitIcon name="book" size={14} />
-                        <span>Học Tiếp Hôm Nay</span>
-                      </div>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
-                        Chương {dailyRecommendation.chapter.number}: {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
+                      <span className="pg-fc-pill pg-fc-pill--sky">
+                        <KitIcon name="book" size={12} />
+                        <span>Học tiếp</span>
+                      </span>
+                      <div className="pg-fc-title" style={{ marginTop: "0.42rem" }}>
+                        {dailyRecommendation.lesson ? dailyRecommendation.lesson.title_vi : dailyRecommendation.chapter.title_vi}
                       </div>
                     </div>
-                    <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-accent)" }}>
-                      Vào học ngay →
+                    <div className="pg-fc-cta">
+                      <span>Học ngay →</span>
                     </div>
                   </div>
                   <div className="ge-feature-card-visual">
@@ -5857,16 +5824,16 @@ export default function Home() {
                 >
                   <div className="ge-feature-card-body">
                     <div>
-                      <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-indigo)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                        <KitIcon name="target" size={14} />
-                        <span>Kiểm Tra Trình Độ (30 Câu)</span>
-                      </div>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
-                        Đo nhanh lỗ hổng ngữ pháp &amp; gợi ý bài cần ôn
+                      <span className="pg-fc-pill pg-fc-pill--lavender">
+                        <KitIcon name="target" size={12} />
+                        <span>Test 15 phút</span>
+                      </span>
+                      <div className="pg-fc-title" style={{ marginTop: "0.42rem" }}>
+                        Đo trình độ ngữ pháp
                       </div>
                     </div>
-                    <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-indigo)" }}>
-                      Làm bài test 15p →
+                    <div className="pg-fc-cta">
+                      <span>Bắt đầu →</span>
                     </div>
                   </div>
                   <div className="ge-feature-card-visual">
@@ -5884,16 +5851,16 @@ export default function Home() {
                 >
                   <div className="ge-feature-card-body">
                     <div>
-                      <div style={{ fontSize: "0.7rem", fontWeight: 800, color: "var(--ds-success)", textTransform: "uppercase", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                        <KitIcon name="trophy" size={14} />
-                        <span>Luyện Thi TOEIC 2026</span>
-                      </div>
-                      <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--ds-text-heading)", lineHeight: 1.35 }}>
-                        20 Đề thi thử, 24 dạng bài &amp; 540 đoạn nghe chép
+                      <span className="pg-fc-pill pg-fc-pill--mint">
+                        <KitIcon name="trophy" size={12} />
+                        <span>TOEIC 2026</span>
+                      </span>
+                      <div className="pg-fc-title" style={{ marginTop: "0.42rem" }}>
+                        20 Đề &amp; 24 Dạng bài
                       </div>
                     </div>
-                    <div style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--ds-success)" }}>
-                      Mở TOEIC Hub →
+                    <div className="pg-fc-cta">
+                      <span>Mở Hub →</span>
                     </div>
                   </div>
                   <div className="ge-feature-card-visual">
@@ -5902,7 +5869,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Dashboard 3-Tab Switcher (Focused Content Without Scrolling Clutter) */}
+              {/* Dashboard 3-Tab Switcher (Single-Row Compact Horizontal Segmented Bar on Mobile, Tablet & Desktop) */}
               <div className="ge-bento-zone-tabs">
                 <div className="ge-bento-zone-pills" role="tablist" aria-label="Phân vùng Tổng quan">
                   <button
@@ -5911,10 +5878,10 @@ export default function Home() {
                     aria-selected={dashboardZone === "today"}
                     onClick={() => setDashboardZone("today")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "today" ? "is-active" : ""}`}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    <KitIcon name="bolt" size={14} />
-                    <span>Hôm nay &amp; Mục tiêu</span>
+                    <KitIcon name="bolt" size={13} />
+                    <span className="pg-label-mobile">Hôm nay</span>
+                    <span className="pg-label-desktop">Hôm nay &amp; Mục tiêu</span>
                   </button>
                   <button
                     type="button"
@@ -5922,10 +5889,10 @@ export default function Home() {
                     aria-selected={dashboardZone === "analytics"}
                     onClick={() => setDashboardZone("analytics")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "analytics" ? "is-active" : ""}`}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    <KitIcon name="tool-chart" size={14} />
-                    <span>Phân tích 12 Chuyên đề</span>
+                    <KitIcon name="tool-chart" size={13} />
+                    <span className="pg-label-mobile">12 Chuyên đề</span>
+                    <span className="pg-label-desktop">Phân tích 12 Chuyên đề</span>
                   </button>
                   <button
                     type="button"
@@ -5933,13 +5900,13 @@ export default function Home() {
                     aria-selected={dashboardZone === "ai"}
                     onClick={() => setDashboardZone("ai")}
                     className={`ge-bento-zone-btn ds-focusable ${dashboardZone === "ai" ? "is-active" : ""}`}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
                   >
-                    <KitIcon name="tool-spark" size={14} />
-                    <span>Khám phá AI &amp; TOEIC</span>
+                    <KitIcon name="tool-spark" size={13} />
+                    <span className="pg-label-mobile">AI</span>
+                    <span className="pg-label-desktop">Khám phá AI &amp; TOEIC</span>
                   </button>
                 </div>
-                <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)" }}>
+                <span className="ge-mobile-hide" style={{ fontSize: "0.78rem", color: "var(--ds-text-muted)", fontWeight: 600 }}>
                   {overallLessonsProgress}% hoàn thành • {totalLessonsCount} bài học
                 </span>
               </div>
@@ -6344,71 +6311,85 @@ export default function Home() {
         {currentView === "study" && (
           <>
               
-              {/* Breadcrumbs & Header */}
-              <div style={{ marginBottom: "1.5rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.8rem", color: T.textMuted, marginBottom: "0.5rem" }}>
-                  <span>Chương {selectedChapter?.number}</span>
-                  <span>/</span>
-                  <span style={{ color: T.textSecondary }}>{selectedChapter?.title_vi}</span>
-                  {selectedLesson && (
-                    <>
-                      <span>/</span>
-                      <span style={{ color: T.text, fontWeight: "600" }}>{selectedLesson.title_vi}</span>
-                    </>
-                  )}
-                </div>
-
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-                  <div>
-                    <h1 className="ge-lesson-title-clamp" style={{ fontSize: "1.6rem", fontWeight: "700", letterSpacing: "-0.02em", color: "var(--ds-text-heading)" }}>
-                      {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập thực hành: ${selectedChapter?.title_vi}`}
-                    </h1>
-                    <div style={{ fontSize: "0.875rem", color: T.textMuted, marginTop: "0.2rem" }}>
-                      {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_en : selectedChapter?.title_en) : `${selectedChapter?.exercises?.length || 0} bài tập tổng hợp (${totalChapterExerciseQuestions} câu)`}
-                    </div>
+              {/* Breadcrumbs & Pastel Glass Lesson Hero */}
+              <div
+                className="ge-hero-banner-card"
+                style={{
+                  padding: "1.15rem 1.35rem",
+                  marginBottom: "1.35rem",
+                }}
+              >
+                <HeroBannerVisual kind="study" webpSrc={BANNER_PATHS.study} />
+                <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.76rem", color: T.textMuted, marginBottom: "0.45rem", flexWrap: "wrap" }}>
+                    <span className="pg-fc-pill pg-fc-pill--sky">Chương {selectedChapter?.number}</span>
+                    <span>•</span>
+                    <span style={{ color: T.textSecondary, fontWeight: 600 }}>{selectedChapter?.title_vi}</span>
                   </div>
 
-                  {/* Tab Switcher: Theory vs Exercises */}
-                  <div style={{ display: "flex", backgroundColor: T.bgElevated, padding: "3px", borderRadius: "6px", border: `1px solid ${T.border}` }}>
-                    <button
-                      onClick={() => setActiveTab("theory")}
+                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "0.85rem" }}>
+                    <div style={{ minWidth: 0 }}>
+                      <h1 className="ge-lesson-title-clamp" style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.55rem)", fontWeight: "800", letterSpacing: "-0.02em", color: "var(--ds-text-heading)", margin: 0 }}>
+                        {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_vi : selectedChapter?.title_vi) : `Bài tập: ${selectedChapter?.title_vi}`}
+                      </h1>
+                      <div style={{ fontSize: "0.82rem", color: T.textMuted, marginTop: "0.2rem" }}>
+                        {activeTab === "theory" ? (selectedLesson ? selectedLesson.title_en : selectedChapter?.title_en) : `${selectedChapter?.exercises?.length || 0} bài tập (${totalChapterExerciseQuestions} câu)`}
+                      </div>
+                    </div>
+
+                    {/* Tab Switcher: Theory vs Exercises */}
+                    <div
                       style={{
-                        padding: "0.35rem 0.85rem",
-                        borderRadius: "4px",
-                        border: "none",
-                        fontSize: "0.8rem",
-                        fontWeight: activeTab === "theory" ? "600" : "500",
-                        color: activeTab === "theory" ? T.text : T.textMuted,
-                        backgroundColor: activeTab === "theory" ? ("var(--ds-card)") : "transparent", boxShadow: activeTab === "theory" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                        cursor: "pointer",
+                        display: "inline-flex",
+                        backgroundColor: "var(--ds-glass)",
+                        backdropFilter: "blur(10px)",
+                        padding: "3px",
+                        borderRadius: "999px",
+                        border: "1px solid var(--ds-card-border)",
                       }}
                     >
-                      Lý thuyết & Quy tắc ({selectedLesson?.sections?.length || 0} mục)
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab("exercises");
-                        emitLearningAnalyticsEvent({
-                          userId: currentUser?.id,
-                          authToken: activeAuthToken,
-                          eventName: M47_ANALYTICS_EVENTS.EXERCISE_STARTED,
-                          feature: "grammar_study",
-                          properties: { lesson_id: selectedLesson?.id || "unknown" },
-                        });
-                      }}
-                      style={{
-                        padding: "0.35rem 0.85rem",
-                        borderRadius: "4px",
-                        border: "none",
-                        fontSize: "0.8rem",
-                        fontWeight: activeTab === "exercises" ? "600" : "500",
-                        color: activeTab === "exercises" ? T.text : T.textMuted,
-                        backgroundColor: activeTab === "exercises" ? ("var(--ds-card)") : "transparent", boxShadow: activeTab === "exercises" && isLight ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Bài tập thực hành ({selectedChapter?.exercises?.length || 0})
-                    </button>
+                      <button
+                        onClick={() => setActiveTab("theory")}
+                        style={{
+                          padding: "0.38rem 0.9rem",
+                          borderRadius: "999px",
+                          border: "none",
+                          fontSize: "0.78rem",
+                          fontWeight: activeTab === "theory" ? "700" : "600",
+                          color: activeTab === "theory" ? T.textHeading : T.textMuted,
+                          backgroundColor: activeTab === "theory" ? "var(--ds-bg-sub)" : "transparent",
+                          boxShadow: activeTab === "theory" ? "0 2px 8px rgba(15, 23, 42, 0.10)" : "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Lý thuyết ({selectedLesson?.sections?.length || 0})
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActiveTab("exercises");
+                          emitLearningAnalyticsEvent({
+                            userId: currentUser?.id,
+                            authToken: activeAuthToken,
+                            eventName: M47_ANALYTICS_EVENTS.EXERCISE_STARTED,
+                            feature: "grammar_study",
+                            properties: { lesson_id: selectedLesson?.id || "unknown" },
+                          });
+                        }}
+                        style={{
+                          padding: "0.38rem 0.9rem",
+                          borderRadius: "999px",
+                          border: "none",
+                          fontSize: "0.78rem",
+                          fontWeight: activeTab === "exercises" ? "700" : "600",
+                          color: activeTab === "exercises" ? T.textHeading : T.textMuted,
+                          backgroundColor: activeTab === "exercises" ? "var(--ds-bg-sub)" : "transparent",
+                          boxShadow: activeTab === "exercises" ? "0 2px 8px rgba(15, 23, 42, 0.10)" : "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Bài tập ({selectedChapter?.exercises?.length || 0})
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -7307,15 +7288,14 @@ export default function Home() {
 
                 return (
                   <div
+                    className="pg-glass-panel"
                     style={{
                       position: "relative",
                       overflow: "hidden",
-                      backgroundColor: T.card,
-                      border: `1px solid ${freeExhausted ? "var(--ds-warning)" : T.border}`,
-                      borderRadius: "10px",
-                      padding: "1.5rem",
-                      marginBottom: "1.75rem",
-                      boxShadow: T.shadow,
+                      border: `1px solid ${freeExhausted ? "var(--ds-warning)" : "var(--ds-card-border)"}`,
+                      borderRadius: "20px",
+                      padding: "1.4rem 1.5rem",
+                      marginBottom: "1.5rem",
                     }}
                   >
                     <SectionCardWatermark kind="quiz-arena" />
@@ -8262,24 +8242,29 @@ export default function Home() {
           <div id="mistakes-area" className="ge-view-container" data-dict-area="true" style={{ flex: 1, backgroundColor: T.bg, padding: "2rem 1.5rem" }}>
             <div style={{ maxWidth: "860px", margin: "0 auto" }}>
               
-              {/* Notebook Header Card */}
+              {/* Notebook Header Card — Pastel Glass + 3D Shield */}
               <div
+                className="pg-glass-panel"
                 style={{
-                  backgroundColor: T.card,
-                  border: `1px solid ${T.border}`,
-                  borderRadius: "8px",
-                  padding: "1.5rem",
-                  marginBottom: "1.75rem",
-                  boxShadow: T.shadow,
+                  position: "relative",
+                  overflow: "hidden",
+                  borderRadius: "20px",
+                  padding: "1.35rem 1.45rem",
+                  marginBottom: "1.5rem",
                 }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+                <SectionCardWatermark kind="spaced-rep" />
+                <div style={{ position: "relative", zIndex: 2, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", paddingRight: "72px" }}>
                   <div>
-                    <h1 style={{ fontSize: "1.35rem", fontWeight: "700", color: T.text, letterSpacing: "-0.015em" }}>
-                      Sổ tay câu hỏi cần ôn lại của {currentUser.name}
+                    <span className="pg-fc-pill pg-fc-pill--lavender" style={{ marginBottom: "0.4rem" }}>
+                      <KitIcon name="shield" size={12} />
+                      <span>Sổ tay lỗi sai</span>
+                    </span>
+                    <h1 style={{ fontSize: "1.3rem", fontWeight: "800", color: T.textHeading, letterSpacing: "-0.015em", margin: "0.2rem 0 0.3rem" }}>
+                      Câu hỏi cần ôn lại
                     </h1>
-                    <p style={{ fontSize: "0.85rem", color: "var(--ds-text-muted)", marginTop: "0.35rem" }}>
-                      Lưu trữ tự động các câu bạn đã làm chưa đúng trong phần bài tập và bài thi Quiz. Dữ liệu được lưu riêng cho tài khoản của bạn.
+                    <p style={{ fontSize: "0.84rem", color: "var(--ds-text-muted)", margin: 0 }}>
+                      Tự động lưu các câu chưa đúng để luyện lại đến khi vững.
                     </p>
                   </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
-import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import { BANNER_PATHS, OBJECT_3D_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
 import { HeroBannerVisual, BadgeCardWatermark } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
@@ -317,25 +317,27 @@ export default function GamificationHub({
 
         {/* Streak & Weekly Activity Calendar Card */}
         <div
+          className="pg-glass-panel"
           style={{
-            backgroundColor: T.card,
-            border: `1px solid ${T.cardBorder}`,
-            borderRadius: "14px",
+            borderRadius: "18px",
             padding: "1.25rem",
-            boxShadow: T.shadowSm,
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-              <div className="ge-streak-orb" aria-hidden="true">
-                <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={22} /></span>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <img
+                src={OBJECT_3D_PATHS.streakFlame}
+                alt="Ngọn lửa chuỗi ngày học 3D"
+                width={46}
+                height={46}
+                style={{ width: 46, height: 46, objectFit: "contain", flexShrink: 0 }}
+              />
               <div>
                 <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
-                  Chuỗi Học Tập: {streakState.current_streak || 0} ngày
+                  Chuỗi học: {streakState.current_streak || 0} ngày
                 </div>
                 <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
-                  Kỷ lục dài nhất: {streakState.longest_streak || 0} ngày • Freeze Tokens: {streakState.freeze_tokens ?? 1}
+                  Kỷ lục: {streakState.longest_streak || 0} ngày • Freeze: {streakState.freeze_tokens ?? 1}
                 </div>
               </div>
             </div>

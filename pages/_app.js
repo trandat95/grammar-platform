@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import "../styles/design-system.css";
 import "../styles/design-system-2026.css";
 import "../styles/toeic-ui-2026.css";
+import "../styles/pastel-glass-2026.css";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function MyApp({ Component, pageProps }) {
                   var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
                   var isLight = saved ? saved === 'light' : prefersLight;
                   document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
-                  document.documentElement.style.backgroundColor = isLight ? '#f8fafc' : '#09090b';
+                  document.documentElement.style.backgroundColor = isLight ? '#f3f6fb' : '#090d16';
                 } catch (e) {}
               })();
             `,

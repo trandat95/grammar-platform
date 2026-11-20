@@ -240,7 +240,7 @@ export default function ToeicHubPage() {
                     <Link key={fc.id} href={fc.href} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <div className="toeic-card toeic-card-interactive" style={{ position: 'relative', overflow: 'hidden', height: '100%', padding: '1.15rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.75rem' }}>
                         <SectionCardWatermark kind={wmKind} />
-                        <div style={{ position: 'relative', zIndex: 2 }}>
+                        <div style={{ position: 'relative', zIndex: 2, paddingRight: '72px' }}>
                           <div className="toeic-flex-between" style={{ marginBottom: '0.6rem' }}>
                             <span style={{ color: 'var(--ds-accent)' }}>{fc.icon}</span>
                             <ToeicBadge variant={fc.badgeVariant}>{fc.badge}</ToeicBadge>

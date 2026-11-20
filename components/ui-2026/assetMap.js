@@ -1,32 +1,52 @@
 /**
  * Canonical 2026 Visual Asset Paths (public/assets/)
+ * Unified Pastel Glass & Soft 3D Studio Kit (25 WebP Assets + Crisp Vector SVGs)
  */
 
 export const BANNER_PATHS = {
-  dashboard: "/assets/banners/01-hero-dashboard.webp",
-  diagnostic: "/assets/banners/02-diagnostic-roadmap.webp",
-  gamification: "/assets/banners/03-gamification-community.webp",
-  vip: "/assets/banners/04-vip-coach.webp",
-  toeic: "/assets/banners/05-toeic-adaptive.webp",
+  dashboard: "/assets/banners/pastel/bg-banner-hero-sky.webp",
+  study: "/assets/banners/pastel/bg-banner-study-blue.webp",
+  diagnostic: "/assets/banners/pastel/bg-banner-diagnostic-violet.webp",
+  gamification: "/assets/banners/pastel/bg-banner-vip-gold.webp",
+  vip: "/assets/banners/pastel/bg-banner-vip-gold.webp",
+  toeic: "/assets/banners/pastel/bg-banner-toeic-mint.webp",
+};
+
+export const OBJECT_3D_PATHS = {
+  grammarBook: "/assets/cards/3d/card-3d-grammar-book.webp",
+  diagnosticPrism: "/assets/cards/3d/card-3d-diagnostic-prism.webp",
+  toeicHeadphones: "/assets/cards/3d/card-3d-toeic-headphones.webp",
+  grammarLibrary: "/assets/cards/3d/card-3d-grammar-library.webp",
+  aiSparkLens: "/assets/cards/3d/card-3d-ai-spark-lens.webp",
+  quizTarget: "/assets/cards/3d/card-3d-quiz-target.webp",
+  mistakeShield: "/assets/cards/3d/card-3d-mistake-shield.webp",
+  vocabCards: "/assets/cards/3d/card-3d-vocab-cards.webp",
+  toeicExamSheet: "/assets/cards/3d/card-3d-toeic-exam-sheet.webp",
+  toeicXrayLens: "/assets/cards/3d/card-3d-toeic-xray-lens.webp",
+  dictationMic: "/assets/cards/3d/card-3d-dictation-mic.webp",
+  roadmapCompass: "/assets/cards/3d/card-3d-roadmap-compass.webp",
+  trophyGold: "/assets/cards/3d/card-3d-trophy-gold.webp",
+  streakFlame: "/assets/cards/3d/card-3d-streak-flame.webp",
+  vipDiamond: "/assets/cards/3d/card-3d-vip-diamond.webp",
 };
 
 export const CARD_ART_PATHS = {
-  grammar: "/assets/cards/card-grammar-lesson.svg",
-  diagnostic: "/assets/cards/card-diagnostic-radar.svg",
-  toeic: "/assets/cards/card-toeic-adaptive.svg",
+  grammar: OBJECT_3D_PATHS.grammarBook,
+  diagnostic: OBJECT_3D_PATHS.diagnosticPrism,
+  toeic: OBJECT_3D_PATHS.toeicHeadphones,
 };
 
 export const XRAY_PREVIEW_PATH = "/assets/banners/xray-preview.svg";
 
 export const MASCOT_PATHS = {
-  master: "/assets/mascot/master-mascot.png",
-  welcome: "/assets/mascot/mascot-welcome.png",
-  celebrate: "/assets/mascot/mascot-celebrate.png",
-  encourage: "/assets/mascot/mascot-encourage.png",
-  vip: "/assets/mascot/mascot-vip.png",
-  empty: "/assets/mascot/mascot-empty.png",
-  ai_coach: "/assets/mascot/mascot-ai-coach.png",
-  state_404: "/assets/mascot/state-404.svg",
+  master: "/assets/cards/3d/mascot-3d-owl-hero.webp",
+  welcome: "/assets/cards/3d/mascot-3d-owl-hero.webp",
+  celebrate: "/assets/cards/3d/mascot-3d-owl-celebrate.webp",
+  encourage: "/assets/cards/3d/mascot-3d-owl-encourage.webp",
+  vip: "/assets/cards/3d/mascot-3d-owl-vip.webp",
+  empty: "/assets/cards/3d/mascot-3d-owl-encourage.webp",
+  ai_coach: "/assets/cards/3d/mascot-3d-owl-ai.webp",
+  state_404: "/assets/cards/3d/mascot-3d-owl-encourage.webp",
 };
 
 export const VIP_SHOWCASE_PATHS = {

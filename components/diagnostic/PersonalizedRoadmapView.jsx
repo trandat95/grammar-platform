@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AiAdvisorDrawer from "./AiAdvisorDrawer";
 import { Button, Badge, Alert, KitIcon } from "../design-system";
+import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
+import { BANNER_PATHS } from "../ui-2026/assetMap";
 
 export default function PersonalizedRoadmapView({
   roadmap,
@@ -59,48 +61,32 @@ export default function PersonalizedRoadmapView({
         padding: "2rem 1.5rem",
       }}
     >
-      {/* Roadmap Header Card */}
+      {/* Roadmap Header Card — Pastel Glass + 3D Compass */}
       <div
+        className="ge-hero-banner-card"
         style={{
-          background: "linear-gradient(135deg, var(--ds-card) 0%, var(--ds-success-bg) 100%)",
-          borderRadius: "1.25rem",
-          padding: "2.25rem",
-          border: `1px solid ${"var(--ds-success-border)"}`,
-          boxShadow: T.shadowElevated,
-          marginBottom: "2rem",
+          padding: "1.65rem 1.75rem",
+          marginBottom: "1.75rem",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.35rem",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              padding: "0.25rem 0.75rem",
-              borderRadius: "9999px",
-              backgroundColor: "var(--ds-success-bg)",
-              color: "var(--ds-success)",
-            }}
-          >
-            <KitIcon name="map" size={13} color="var(--ds-success)" />
-            <span>Actionable Learning Roadmap</span>
+        <HeroBannerVisual kind="roadmap" webpSrc={BANNER_PATHS.study} />
+        <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.65rem", flexWrap: "wrap" }}>
+          <span className="pg-fc-pill pg-fc-pill--sky">
+            <KitIcon name="map" size={13} />
+            <span>Lộ trình cá nhân 4 tuần</span>
           </span>
           <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
-            Liên kết 100% với 53 bài học giáo trình
+            Liên kết 53 bài học giáo trình
           </span>
         </div>
 
-        <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: T.text, marginBottom: "0.5rem" }}>
+        <h1 style={{ fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)", fontWeight: 800, color: T.textHeading, margin: "0 0 0.45rem 0" }}>
           {title}
         </h1>
 
-        <p style={{ fontSize: "0.95rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1rem" }}>
-          Lộ trình được thiết kế tối ưu hóa trong 4 tuần để đưa trình độ ngữ pháp của bạn từ{" "}
-          <strong>{estimated_level}</strong> lên mục tiêu <strong>{target_level}</strong>, ưu tiên tập trung lấp đầy các lỗ hổng kiến thức trước.
+        <p style={{ fontSize: "0.9rem", color: T.textSecondary, lineHeight: 1.5, marginBottom: "1rem", maxWidth: "560px" }}>
+          Nâng trình độ từ <strong>{estimated_level}</strong> lên <strong>{target_level}</strong>, ưu tiên lấp lỗ hổng trước.
         </p>
 
         {/* Adaptive Recalibration Bar (Milestone 2.8.8) */}
@@ -205,6 +191,7 @@ export default function PersonalizedRoadmapView({
               }}
             />
           </div>
+        </div>
         </div>
       </div>
 
