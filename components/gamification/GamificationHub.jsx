@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Progress, Select, Skeleton, Switch } from "../design-system";
-import { BANNER_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
+import { BANNER_PATHS, OBJECT_3D_PATHS, getBadgeArtworkPath, getLevelIconPath } from "../ui-2026/assetMap";
 import { HeroBannerVisual, BadgeCardWatermark } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 import LeaderboardPanel, { invalidateLeaderboardCache } from "./LeaderboardPanel";
@@ -238,22 +238,22 @@ export default function GamificationHub({
         </div>
       </div>
 
-      {/* Mobile Quick-Jump Strip (1-tap access to Challenges, Badges, Leaderboard, Settings) */}
+      {/* Quick-Jump Pastel Glass Strip (1-tap access to Challenges, Badges, Leaderboard, Settings) */}
       <nav aria-label="Điều hướng nhanh Thành tích" className="ge-ach-jump-pills">
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-challenges")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
-          <KitIcon name="bolt" size={14} />
+        <button type="button" className="ge-ach-jump-btn ge-ach-jump-btn--amber ds-focusable" onClick={() => scrollToAchSection("ge-ach-challenges")}>
+          <KitIcon name="bolt" size={15} />
           <span>Thử thách</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-badges")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
-          <KitIcon name="medal" size={14} />
+        <button type="button" className="ge-ach-jump-btn ge-ach-jump-btn--lavender ds-focusable" onClick={() => scrollToAchSection("ge-ach-badges")}>
+          <KitIcon name="medal" size={15} />
           <span>Huy hiệu ({unlockedTotal}/{achievements.length})</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-leaderboard")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
-          <KitIcon name="trophy" size={14} />
+        <button type="button" className="ge-ach-jump-btn ge-ach-jump-btn--mint ds-focusable" onClick={() => scrollToAchSection("ge-ach-leaderboard")}>
+          <KitIcon name="trophy" size={15} />
           <span>Bảng XH</span>
         </button>
-        <button type="button" className="ge-ach-jump-btn" onClick={() => scrollToAchSection("ge-ach-settings")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "5px" }}>
-          <KitIcon name="settings" size={14} />
+        <button type="button" className="ge-ach-jump-btn ge-ach-jump-btn--sky ds-focusable" onClick={() => scrollToAchSection("ge-ach-settings")}>
+          <KitIcon name="settings" size={15} />
           <span>Cài đặt</span>
         </button>
       </nav>
@@ -262,13 +262,9 @@ export default function GamificationHub({
       <div className="ge-ach-top-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "1rem" }}>
         {/* Level & Authoritative XP Card */}
         <div
-          className="ge-ach-card"
+          className="ge-ach-card pg-ach-level-card"
           style={{
-            backgroundColor: T.card,
-            border: `1px solid ${T.cardBorder}`,
-            borderRadius: "14px",
-            padding: "1.2rem",
-            boxShadow: T.shadowSm,
+            padding: "1.2rem 1.25rem",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
@@ -276,16 +272,16 @@ export default function GamificationHub({
               <img
                 src={getLevelIconPath(xpState.level || 1)}
                 alt={xpState.title || "Beginner"}
-                width={40}
-                height={40}
-                style={{ width: 40, height: 40, flexShrink: 0 }}
+                width={42}
+                height={42}
+                style={{ width: 42, height: 42, flexShrink: 0 }}
               />
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
                   Level {xpState.level || 1} — {xpState.title || "Beginner"}
                 </div>
-                <div className="ge-mobile-hide-note" style={{ fontSize: "0.78rem", color: T.textMuted }}>
-                  Server-Authoritative XP Ledger (Chống cộng trùng &amp; chống gian lận)
+                <div className="ge-mobile-hide-note" style={{ fontSize: "0.76rem", color: T.textMuted }}>
+                  XP xác thực theo tiến độ học tập
                 </div>
               </div>
             </div>
@@ -305,11 +301,11 @@ export default function GamificationHub({
 
           <div style={{ marginTop: "0.85rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
             <span style={{ fontSize: "0.75rem", color: T.textMuted }}>
-              Còn <strong>{xpState.xpRemaining ?? 100} XP</strong> để thăng cấp tiếp theo
+              Còn <strong>{xpState.xpRemaining ?? 100} XP</strong> để thăng cấp
             </span>
             {onStartAdaptivePractice && (
               <Button size="sm" variant="primary" icon="target" isLight={isLight} onClick={() => onStartAdaptivePractice({ mode: "adaptive", count: 20 })}>
-                Kiếm XP (Đề 50/30/20)
+                Kiếm XP ngay
               </Button>
             )}
           </div>
@@ -317,57 +313,51 @@ export default function GamificationHub({
 
         {/* Streak & Weekly Activity Calendar Card */}
         <div
+          className="pg-ach-streak-card"
           style={{
-            backgroundColor: T.card,
-            border: `1px solid ${T.cardBorder}`,
-            borderRadius: "14px",
-            padding: "1.25rem",
-            boxShadow: T.shadowSm,
+            padding: "1.2rem 1.25rem",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-              <div className="ge-streak-orb" aria-hidden="true">
-                <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={22} /></span>
-              </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.8rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <img
+                src={OBJECT_3D_PATHS.streakFlame}
+                alt="Ngọn lửa chuỗi ngày học 3D"
+                width={48}
+                height={48}
+                style={{ width: 48, height: 48, objectFit: "contain", flexShrink: 0 }}
+              />
               <div>
-                <div style={{ fontSize: "1.05rem", fontWeight: 800, color: T.textHeading }}>
-                  Chuỗi Học Tập: {streakState.current_streak || 0} ngày
+                <div style={{ fontSize: "1.06rem", fontWeight: 800, color: T.textHeading }}>
+                  Chuỗi học: {streakState.current_streak || 0} ngày
                 </div>
-                <div style={{ fontSize: "0.78rem", color: T.textMuted }}>
-                  Kỷ lục dài nhất: {streakState.longest_streak || 0} ngày • Freeze Tokens: {streakState.freeze_tokens ?? 1}
+                <div style={{ fontSize: "0.78rem", color: T.textMuted, fontWeight: 600 }}>
+                  Kỷ lục: {streakState.longest_streak || 0} ngày • Freeze: {streakState.freeze_tokens ?? 1}
                 </div>
               </div>
             </div>
             {streakState.can_recover && (
               <Button size="sm" variant="success" icon="snowflake" isLight={isLight} onClick={() => handleServerAction({ action: "recover_streak" })}>
-                Khôi phục Chuỗi
+                Khôi phục
               </Button>
             )}
           </div>
 
-          <div className="ge-streak-week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.45rem", marginTop: "0.5rem" }}>
+          <div className="ge-streak-week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.42rem", marginTop: "0.45rem" }}>
             {weekCalendar.map((d) => (
               <div
                 key={d.iso}
-                className={d.active ? "ge-streak-day-active" : undefined}
-                style={{
-                  backgroundColor: d.active ? T.warningBg : T.bgElevated,
-                  border: `1.5px solid ${d.active ? T.warningBorder : T.borderSubtle}`,
-                  borderRadius: "10px",
-                  padding: "0.45rem 0.25rem",
-                  textAlign: "center",
-                }}
+                className={`pg-streak-day-tile ${d.active ? "is-active ge-streak-day-active" : ""}`}
               >
-                <div style={{ fontSize: "0.68rem", color: d.active ? T.warning : T.textMuted, fontWeight: 700 }}>{d.label}</div>
-                <div style={{ fontSize: "0.92rem", fontWeight: 800, color: d.active ? T.warning : T.textSecondary, marginTop: "0.15rem", display: "flex", justifyContent: "center" }}>
+                <div style={{ fontSize: "0.66rem", color: d.active ? T.warning : T.textMuted, fontWeight: 800 }}>{d.label}</div>
+                <div style={{ fontSize: "0.9rem", fontWeight: 800, color: d.active ? T.warning : T.textSecondary, marginTop: "0.15rem", display: "flex", justifyContent: "center" }}>
                   {d.active ? <span className="ge-streak-flame-live" style={{ display: "inline-flex", alignItems: "center" }}><KitIcon name="flame" size={16} /></span> : d.dayNum}
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.6rem" }}>
-            Chỉ ghi nhận Streak khi hoàn thành hoạt động học tập thực thụ (reset 00:00 UTC+7).
+          <div style={{ fontSize: "0.72rem", color: T.textMuted, marginTop: "0.62rem" }}>
+            Reset 00:00 (UTC+7) • Hoàn thành bài tập mỗi ngày để giữ chuỗi.
           </div>
         </div>
       </div>
@@ -375,25 +365,30 @@ export default function GamificationHub({
       {/* Daily & Weekly Challenges */}
       <div
         id="ge-ach-challenges"
-        className="ge-ach-card"
+        className="ge-ach-card pg-ach-challenges-card"
         style={{
-          backgroundColor: T.card,
-          border: `1px solid ${T.cardBorder}`,
-          borderRadius: "14px",
-          padding: "1.25rem",
-          boxShadow: T.shadowSm,
+          padding: "1.2rem 1.25rem",
           scrollMarginTop: "72px",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.9rem", flexWrap: "wrap", gap: "0.5rem" }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading, display: "flex", alignItems: "center", gap: "0.42rem" }}>
-              <KitIcon name="bolt" size={18} />
-              <span>Thử Thách Ngày &amp; Tuần (Daily &amp; Weekly Missions)</span>
-            </h2>
-            <p style={{ margin: "0.2rem 0 0", fontSize: "0.78rem", color: T.textMuted }}>
-              Hoàn thành mục tiêu để tự động nhận +50 XP (Ngày) hoặc +150 XP (Tuần) chống nhận thưởng kép.
-            </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.9rem", flexWrap: "wrap", gap: "0.65rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
+            <img
+              src={OBJECT_3D_PATHS.quizTarget}
+              alt="Thử thách 3D"
+              width={40}
+              height={40}
+              loading="lazy"
+              style={{ width: 40, height: 40, objectFit: "contain", flexShrink: 0 }}
+            />
+            <div>
+              <h2 style={{ margin: 0, fontSize: "1.02rem", fontWeight: 800, color: T.textHeading }}>
+                Thử thách Ngày &amp; Tuần
+              </h2>
+              <p style={{ margin: "0.15rem 0 0", fontSize: "0.76rem", color: T.textMuted }}>
+                Nhận +50 XP (Ngày) hoặc +150 XP (Tuần) khi hoàn thành.
+              </p>
+            </div>
           </div>
         </div>
 

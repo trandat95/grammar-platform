@@ -3,6 +3,7 @@ import FocusTrapModal2026 from '../ui-2026/FocusTrapModal2026';
 import AccountProfileCard from './AccountProfileCard';
 import GrammarProLogo from '../ui-2026/GrammarProLogo';
 import KitIcon from '../ui-2026/KitIcon';
+import { MASCOT_PATHS } from '../ui-2026/assetMap';
 import { supabase } from '../../lib/supabase/client';
 
 /**
@@ -152,7 +153,16 @@ export default function UnifiedAuthModal({
         </div>
       ) : (
         <div>
-          <GrammarProLogo variant="auth" />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '0.65rem' }}>
+            <img
+              src={MASCOT_PATHS.welcome}
+              alt="Cú Tri Thức GrammarPro"
+              width={68}
+              height={68}
+              style={{ width: '68px', height: '68px', objectFit: 'contain', marginBottom: '0.35rem' }}
+            />
+            <GrammarProLogo variant="auth" />
+          </div>
           {/* 1-Tap Google OAuth CTA */}
           <button
             type="button"

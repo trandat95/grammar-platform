@@ -3,6 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import { KitIcon } from '../../../components/ui-2026/KitIcon';
+import { HeroBannerVisual } from '../../../components/ui-2026/EditorialArtwork';
+import { BANNER_PATHS, OBJECT_3D_PATHS } from '../../../components/ui-2026/assetMap';
 import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
 import { ToeicBadge } from '../../../components/toeic/ui';
 
@@ -94,26 +96,25 @@ export default function ToeicPracticeDirectoryPage() {
                 <span>&larr; Quay lại TOEIC Hub</span>
               </Link>
 
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                  flexWrap: 'wrap',
-                  gap: '0.75rem',
-                }}
-              >
-                <div>
-                  <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--ds-text-heading)', margin: '0 0 0.25rem 0' }}>
-                    Chọn Dạng Bài Luyện Tập (24 Chủ Điểm X-Ray)
+              <div className="ge-hero-banner-card pg-hero--violet" style={{ padding: '1.25rem 1.4rem', marginTop: '0.25rem' }}>
+                <HeroBannerVisual kind="diagnostic" webpSrc={BANNER_PATHS.diagnostic} object3dSrc={OBJECT_3D_PATHS.toeicXrayLens} />
+                <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.45rem' }}>
+                    <span className="pg-fc-pill pg-fc-pill--lavender">
+                      <KitIcon name="tool-xray" size={12} />
+                      <span>24 Chủ Điểm X-Ray 2.0</span>
+                    </span>
+                    <ToeicBadge variant="primary">
+                      {filteredTopics.length} / {topics.length || 24} dạng bài
+                    </ToeicBadge>
+                  </div>
+                  <h1 style={{ fontSize: 'clamp(1.22rem, 2.2vw, 1.5rem)', fontWeight: 800, color: 'var(--ds-text-heading)', margin: '0 0 0.25rem 0' }}>
+                    Chọn Dạng Bài Luyện Tập TOEIC
                   </h1>
-                  <p style={{ fontSize: '0.86rem', color: 'var(--ds-text-secondary)', margin: 0 }}>
-                    Chọn chuyên đề ngữ pháp bạn muốn rèn kỹ năng soi từ khóa nhanh Part 5–6.
+                  <p style={{ fontSize: '0.84rem', color: 'var(--ds-text-secondary)', margin: 0, maxWidth: '520px' }}>
+                    Rèn phản xạ soi cấu trúc nhanh Part 5–6 theo từng chủ điểm trọng tâm.
                   </p>
                 </div>
-                <ToeicBadge variant="primary">
-                  {filteredTopics.length} / {topics.length || 24} dạng bài
-                </ToeicBadge>
               </div>
             </div>
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StorageAdapter } from "../../lib/sync/indexed-db";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Alert, Badge, Button, Input, Modal, Skeleton, Switch } from "../design-system";
-import { BANNER_PATHS, MASCOT_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
+import { BANNER_PATHS, MASCOT_PATHS, OBJECT_3D_PATHS, VIP_SHOWCASE_PATHS } from "../ui-2026/assetMap";
 import { HeroBannerVisual } from "../ui-2026/EditorialArtwork";
 import KitIcon from "../ui-2026/KitIcon";
 import { emitLearningAnalyticsEvent, M47_ANALYTICS_EVENTS } from "../../lib/learning/behavioral-engine";
@@ -541,71 +541,90 @@ export default function MonetizationHub({
         </div>
       </div>
 
-      {/* 4 Subscription Pricing Cards (Price Anchoring & Annual Savings) */}
-      <div className="ge-vip-plans-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(225px, 100%), 1fr))", gap: "1rem" }}>
+      {/* 4 Subscription Pricing Cards — Pastel Glass + 3D Showcase */}
+      <div className="ge-vip-plans-grid">
         {plans.map((p) => {
           const isYearly = p.billing_cycle === "yearly" || p.code === "VIP_YEARLY";
+          const isLifetime = p.billing_cycle === "lifetime" || String(p.code || "").includes("LIFETIME");
+          const isQuarterly = p.billing_cycle === "quarterly" || String(p.code || "").includes("QUARTER");
           const displayCompareAt = isYearly && Number(p.compare_at_vnd) === 1188000 ? 468000 : Number(p.compare_at_vnd || 0);
           const perMonth = isYearly
             ? Math.round(p.price_vnd / 12)
-            : p.billing_cycle === "quarterly"
+            : isQuarterly
             ? Math.round(p.price_vnd / 3)
             : p.price_vnd;
           const savings = displayCompareAt > p.price_vnd ? displayCompareAt - p.price_vnd : 0;
           const discountPct = displayCompareAt > p.price_vnd ? Math.round((savings / displayCompareAt) * 100) : 0;
           const displayBadge =
             isYearly && typeof p.badge_text === "string" && p.badge_text.includes("41%")
-              ? `Best Value • Tiết kiệm ${discountPct}%`
+              ? `Best Value • -${discountPct}%`
               : p.badge_text || p.billing_cycle;
+
+          const planTone = p.is_recommended || isYearly
+            ? "yearly"
+            : isLifetime
+            ? "lifetime"
+            : isQuarterly
+            ? "quarterly"
+            : "monthly";
+          const planPillTone = planTone === "yearly" ? "sky" : planTone === "lifetime" ? "gold" : planTone === "quarterly" ? "lavender" : "mint";
+          const plan3dArt =
+            planTone === "yearly"
+              ? MASCOT_PATHS.vip
+              : planTone === "lifetime"
+              ? OBJECT_3D_PATHS.vipDiamond
+              : planTone === "quarterly"
+              ? OBJECT_3D_PATHS.diagnosticPrism
+              : OBJECT_3D_PATHS.grammarBook;
 
           return (
             <div
               key={p.id}
-              className={p.is_recommended ? "ge-vip-plan-card is-recommended" : "ge-vip-plan-card"}
-              style={{
-                backgroundColor: T.card,
-                border: `2px solid ${p.is_recommended ? T.accent : T.cardBorder}`,
-                borderRadius: "14px",
-                padding: "1.15rem",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                gap: "0.8rem",
-                boxShadow: p.is_recommended ? T.shadowMd : T.shadowSm,
-              }}
+              className={`ge-vip-plan-card pg-vip-plan-card pg-vip-plan-card--${planTone} ${p.is_recommended ? "is-recommended" : ""}`}
             >
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.35rem", marginBottom: "0.5rem" }}>
-                  <Badge tone={p.is_recommended ? "accent" : "neutral"} isLight={isLight}>
+              <div className="pg-vip-plan-top">
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span className={`pg-fc-pill pg-fc-pill--${planPillTone}`} style={{ marginBottom: "0.45rem" }}>
                     {displayBadge}
-                  </Badge>
-                </div>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: T.textHeading }}>{p.name_vi}</div>
-                <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "baseline", gap: "0.4rem" }}>
-                  <span style={{ fontSize: "1.45rem", fontWeight: 900, color: p.is_recommended ? T.accent : T.textHeading }}>
-                    {Number(p.price_vnd).toLocaleString()}đ
                   </span>
-                  {displayCompareAt > p.price_vnd && (
-                    <span style={{ fontSize: "0.8rem", color: T.textMuted, textDecoration: "line-through" }}>
-                      {Number(displayCompareAt).toLocaleString()}đ
+                  <div style={{ fontSize: "1.02rem", fontWeight: 800, color: T.textHeading, lineHeight: 1.25 }}>
+                    {p.name_vi}
+                  </div>
+                  <div style={{ marginTop: "0.45rem", display: "flex", alignItems: "baseline", gap: "0.4rem", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "-0.02em", color: p.is_recommended ? T.accent : T.textHeading }}>
+                      {Number(p.price_vnd).toLocaleString()}đ
                     </span>
+                    {displayCompareAt > p.price_vnd && (
+                      <span style={{ fontSize: "0.78rem", color: T.textMuted, textDecoration: "line-through" }}>
+                        {Number(displayCompareAt).toLocaleString()}đ
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: "0.74rem", color: T.textSecondary, marginTop: "0.22rem", fontWeight: 600 }}>
+                    {isLifetime
+                      ? "Thanh toán 1 lần • Dùng vĩnh viễn"
+                      : isYearly
+                      ? `~${Number(perMonth).toLocaleString()}đ/tháng (~${Math.round(p.price_vnd / 365).toLocaleString()}đ/ngày)`
+                      : `~${Number(perMonth).toLocaleString()}đ/tháng`}
+                  </div>
+                  {savings > 0 && (
+                    <div style={{ fontSize: "0.73rem", color: T.success, fontWeight: 800, marginTop: "0.22rem" }}>
+                      Tiết kiệm {Number(savings).toLocaleString()}đ
+                    </div>
                   )}
                 </div>
-                <div style={{ fontSize: "0.75rem", color: T.textMuted, marginTop: "0.2rem" }}>
-                  {p.billing_cycle === "lifetime"
-                    ? "Thanh toán 1 lần duy nhất • Sở hữu trọn đời"
-                    : isYearly
-                    ? `Tương đương ~${Number(perMonth).toLocaleString()}đ/tháng (Chỉ ~${Math.round(p.price_vnd / 365).toLocaleString()}đ/ngày)`
-                    : `Tương đương ~${Number(perMonth).toLocaleString()}đ/tháng`}
-                </div>
-                {savings > 0 && (
-                  <div style={{ fontSize: "0.73rem", color: T.success, fontWeight: 700, marginTop: "0.2rem" }}>
-                    Tiết kiệm thực tế: {Number(savings).toLocaleString()}đ
-                  </div>
-                )}
+
+                <img
+                  src={plan3dArt}
+                  alt={p.name_vi}
+                  width={72}
+                  height={72}
+                  loading="lazy"
+                  className="pg-vip-plan-3d"
+                />
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+              <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "0.45rem" }}>
                 <Button
                   variant={p.is_recommended ? "primary" : "secondary"}
                   isLight={isLight}

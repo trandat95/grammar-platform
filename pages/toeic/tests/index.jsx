@@ -3,6 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import AppShell2026 from '../../../components/ui-2026/AppShell2026';
 import { KitIcon } from '../../../components/ui-2026/KitIcon';
+import { HeroBannerVisual } from '../../../components/ui-2026/EditorialArtwork';
+import { BANNER_PATHS, OBJECT_3D_PATHS } from '../../../components/ui-2026/assetMap';
 import { ToeicCard, ToeicButton, ToeicBadge } from '../../../components/toeic/ui';
 import useGlobalAuth from '../../../hooks/useGlobalAuth';
 import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
@@ -68,41 +70,41 @@ export default function TestsCatalogPage() {
               </Link>
             </div>
 
-            {/* HEADER HERO */}
-            <div className="toeic-card-hero" style={{ marginBottom: '2rem' }}>
-              <div className="toeic-hero-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
-                <span>Ngân Hàng 20 Đề Thi Chuẩn Hóa V3.0 (4.000 Câu)</span>
-              </div>
+            {/* HEADER HERO — Pastel Glass Mint + 3D Exam Sheet */}
+            <div className="ge-hero-banner-card pg-hero--mint" style={{ padding: '1.4rem 1.5rem', marginBottom: '1.65rem' }}>
+              <HeroBannerVisual kind="toeic" webpSrc={BANNER_PATHS.toeic} object3dSrc={OBJECT_3D_PATHS.toeicExamSheet} />
+              <div className="ge-hero-banner-content ge-hero-banner-content--safe">
+                <span className="pg-fc-pill pg-fc-pill--mint" style={{ marginBottom: '0.5rem' }}>
+                  <KitIcon name="book" size={13} />
+                  <span>20 Đề Chuẩn Hóa • 4.000 Câu</span>
+                </span>
 
-              <h1 className="toeic-hero-title">
-                Luyện Đề Chuẩn TOEIC New Format 2026
-              </h1>
+                <h1 className="toeic-hero-title" style={{ margin: '0.25rem 0 0.4rem' }}>
+                  Luyện Đề TOEIC New Format 2026
+                </h1>
 
-              <p className="toeic-hero-desc">
-                Trải nghiệm giao diện chia đôi màn hình <strong>Split-Passage Reader</strong>, tự động dò tìm dẫn chứng <strong>Auto-Highlight Evidence</strong> và phân tích quang phổ ngữ pháp <strong>Sentence X-Ray</strong>.
-              </p>
+                <p className="toeic-hero-desc" style={{ maxWidth: '540px', margin: '0 0 0.9rem' }}>
+                  Chia đôi màn hình đọc hiểu, tự bôi vàng dẫn chứng &amp; soi cấu trúc X-Ray 2.0.
+                </p>
 
-              {/* SERIES SWITCHER TABS */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1rem' }}>
-                <ToeicButton
-                  variant={selectedSeries === 'ETS2024' ? 'primary' : 'secondary'}
-                  icon="book"
-                  onClick={() => setSelectedSeries('ETS2024')}
-                >
-                  TOEIC New Format 2026 — Bộ 01 (10 Đề • Test 01 - 10)
-                </ToeicButton>
+                {/* SERIES SWITCHER TABS */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
+                  <ToeicButton
+                    variant={selectedSeries === 'ETS2024' ? 'primary' : 'secondary'}
+                    icon="book"
+                    onClick={() => setSelectedSeries('ETS2024')}
+                  >
+                    Bộ 01 (Test 01 – 10)
+                  </ToeicButton>
 
-                <ToeicButton
-                  variant={selectedSeries === 'ETS2026' ? 'primary' : 'secondary'}
-                  icon="headphones"
-                  onClick={() => setSelectedSeries('ETS2026')}
-                >
-                  TOEIC New Format 2026 — Bộ 02 (10 Đề • Kèm 540 Tracks Dictation)
-                </ToeicButton>
+                  <ToeicButton
+                    variant={selectedSeries === 'ETS2026' ? 'primary' : 'secondary'}
+                    icon="headphones"
+                    onClick={() => setSelectedSeries('ETS2026')}
+                  >
+                    Bộ 02 (Test 01 – 10 • 540 Tracks)
+                  </ToeicButton>
+                </div>
               </div>
             </div>
 

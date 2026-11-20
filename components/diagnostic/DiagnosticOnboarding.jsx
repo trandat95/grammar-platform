@@ -24,85 +24,57 @@ export default function DiagnosticOnboarding({
         padding: "2rem 1.25rem",
       }}
     >
-      {/* Single Unified Hero Card with Integrated Diagnostic Backdrop */}
+      {/* Single Unified Hero Card with Pastel Glass Violet Backdrop & 3D Prism */}
       <div
-        className="ge-hero-banner-card"
+        className="ge-hero-banner-card pg-hero--violet"
         style={{
-          padding: "1.75rem",
-          border: `1px solid ${T.accentBorder}`,
-          boxShadow: T.shadowElevated,
+          padding: "1.45rem 1.55rem",
         }}
       >
         <div
           style={{
             position: "relative",
-            marginBottom: "1.5rem",
+            marginBottom: "1.35rem",
           }}
         >
           <HeroBannerVisual kind="diagnostic" webpSrc={BANNER_PATHS.diagnostic} />
           <div className="ge-hero-banner-content ge-hero-banner-content--safe ge-hero-banner-content--wide">
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.85rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.7rem", flexWrap: "wrap", marginBottom: "0.7rem" }}>
               <img
                 src={MASCOT_PATHS.ai_coach}
                 alt="Cú Tri Thức AI Chẩn đoán"
-                width={52}
-                height={52}
-                style={{ width: "52px", height: "52px", objectFit: "contain", flexShrink: 0 }}
+                width={54}
+                height={54}
+                style={{ width: "54px", height: "54px", objectFit: "contain", flexShrink: 0 }}
               />
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", minWidth: 0 }}>
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                    padding: "0.26rem 0.68rem",
-                    borderRadius: "9999px",
-                    backgroundColor: T.accentBg,
-                    color: T.accent,
-                    border: `1px solid ${T.accentBorder}`,
-                  }}
-                >
-                  <KitIcon name="target" size={13} color={T.accent} />
-                  <span>Milestone 2.8 • Central EdTech Engine</span>
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.74rem",
-                    fontWeight: 600,
-                    color: T.textMuted,
-                  }}
-                >
-                  2-Tier Zero-Hallucination Diagnostic
-                </span>
-              </div>
+              <span className="pg-fc-pill pg-fc-pill--lavender">
+                <KitIcon name="target" size={13} />
+                <span>Test 15 phút • 30 Câu</span>
+              </span>
             </div>
 
             <h1
               style={{
-                fontSize: "clamp(1.32rem, 2.3vw, 1.72rem)",
+                fontSize: "clamp(1.28rem, 2.3vw, 1.65rem)",
                 fontWeight: 800,
                 color: T.textHeading,
-                lineHeight: 1.28,
-                margin: "0 0 0.65rem 0",
+                lineHeight: 1.25,
+                margin: "0 0 0.45rem 0",
               }}
             >
-              Khám Phá Trình Độ Ngữ Pháp &amp; Thiết Lập Lộ Trình Học Cá Nhân Hóa
+              Đo Trình Độ &amp; Tạo Lộ Trình Ngữ Pháp Cá Nhân
             </h1>
 
             <p
               style={{
-                fontSize: "0.92rem",
+                fontSize: "0.88rem",
                 color: T.textSecondary,
-                lineHeight: 1.6,
+                lineHeight: 1.55,
                 margin: 0,
+                maxWidth: "560px",
               }}
             >
-              Thay vì tự học mò mẫm trong 53 bài học, hãy để hệ thống đánh giá khách quan trình độ ngữ pháp của bạn,
-              chẩn đoán chính xác từng chuyên đề yếu và tự động thiết kế lộ trình học tập đo ni đóng giày riêng cho bạn.
+              Tìm chính xác chuyên đề yếu trong 15 phút và nhận ngay lộ trình ôn tập riêng cho bạn.
             </p>
           </div>
         </div>

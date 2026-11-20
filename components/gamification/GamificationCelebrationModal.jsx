@@ -1,7 +1,7 @@
 import React from "react";
 import { getThemeTokens } from "../../lib/tokens/design-tokens";
 import { Badge, Button, Modal } from "../design-system";
-import { getBadgeArtworkPath, getLevelIconPath, MASCOT_PATHS } from "../ui-2026/assetMap";
+import { getBadgeArtworkPath, getLevelIconPath, MASCOT_PATHS, OBJECT_3D_PATHS } from "../ui-2026/assetMap";
 import KitIcon from "../ui-2026/KitIcon";
 
 /**
@@ -89,7 +89,13 @@ export default function GamificationCelebrationModal({
               gap: "0.75rem",
             }}
           >
-            <KitIcon name="flame" size={24} />
+            <img
+              src={OBJECT_3D_PATHS.streakFlame}
+              alt="Ngọn lửa chuỗi ngày học 3D"
+              width={40}
+              height={40}
+              style={{ width: 40, height: 40, objectFit: "contain", flexShrink: 0 }}
+            />
             <div>
               <div style={{ fontWeight: 800, color: T.warning, fontSize: "0.92rem" }}>
                 Cột mốc Chuỗi {streakState.milestone_reached} Ngày Liên Tiếp!
