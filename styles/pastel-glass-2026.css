@@ -1071,6 +1071,250 @@
 }
 
 /* ==========================================================================
+   7.6. GAMIFICATION HUB — PASTEL JUMP PILLS, STREAK & CHALLENGE CARDS
+   ========================================================================== */
+.ge-ach-jump-pills {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.6rem !important;
+}
+
+@media (min-width: 768px) {
+  .ge-ach-jump-pills {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+}
+
+.ge-ach-jump-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0.55rem 0.85rem !important;
+  border-radius: 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--pg-card-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease !important;
+}
+
+.ge-ach-jump-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pg-card-shadow-hover);
+}
+
+.ge-ach-jump-btn--amber {
+  background: var(--pg-gold-surface) !important;
+  border: 1px solid var(--pg-gold-border) !important;
+  color: var(--pg-gold-pill-text) !important;
+}
+
+.ge-ach-jump-btn--lavender {
+  background: var(--pg-lavender-surface) !important;
+  border: 1px solid var(--pg-lavender-border) !important;
+  color: var(--pg-lavender-pill-text) !important;
+}
+
+.ge-ach-jump-btn--mint {
+  background: var(--pg-mint-surface) !important;
+  border: 1px solid var(--pg-mint-border) !important;
+  color: var(--pg-mint-pill-text) !important;
+}
+
+.ge-ach-jump-btn--sky {
+  background: var(--pg-sky-surface) !important;
+  border: 1px solid var(--pg-sky-border) !important;
+  color: var(--pg-sky-pill-text) !important;
+}
+
+.pg-ach-level-card {
+  background: var(--pg-sky-surface) !important;
+  border: 1px solid var(--pg-sky-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--pg-card-shadow) !important;
+  backdrop-filter: blur(14px);
+}
+
+.pg-ach-streak-card {
+  background: var(--pg-gold-surface) !important;
+  border: 1px solid var(--pg-gold-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--pg-card-shadow) !important;
+  backdrop-filter: blur(14px);
+}
+
+.pg-ach-challenges-card {
+  background: var(--ds-card) !important;
+  border: 1px solid var(--pg-lavender-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--pg-card-shadow) !important;
+  backdrop-filter: blur(14px);
+}
+
+.pg-streak-day-tile {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  padding: 0.48rem 0.2rem;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .pg-streak-day-tile {
+  background: rgba(15, 23, 42, 0.62);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.pg-streak-day-tile.is-active {
+  background: linear-gradient(145deg, rgba(254, 243, 199, 0.96) 0%, rgba(253, 230, 138, 0.88) 100%);
+  border: 1.5px solid #f59e0b;
+  box-shadow: 0 6px 14px -4px rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="dark"] .pg-streak-day-tile.is-active {
+  background: linear-gradient(145deg, rgba(120, 53, 15, 0.72) 0%, rgba(180, 83, 9, 0.55) 100%);
+  border-color: rgba(251, 191, 36, 0.72);
+  box-shadow: 0 6px 16px -4px rgba(251, 191, 36, 0.32);
+}
+
+/* ==========================================================================
+   7.7. MONETIZATION VIP PRICING CARDS — PASTEL GLASS + 3D SHOWCASE
+   ========================================================================== */
+.ge-vip-plans-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.9rem !important;
+}
+
+@media (min-width: 768px) {
+  .ge-vip-plans-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ge-vip-plans-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+.pg-vip-plan-card {
+  position: relative;
+  border-radius: 20px !important;
+  padding: 1.15rem 1.2rem !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.85rem;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: var(--pg-card-shadow) !important;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease !important;
+}
+
+.pg-vip-plan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pg-card-shadow-hover) !important;
+}
+
+.pg-vip-plan-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: right center;
+  opacity: 0.78;
+}
+
+[data-theme="dark"] .pg-vip-plan-card::before {
+  opacity: 0.42;
+  filter: brightness(0.28) saturate(1.55) contrast(1.16);
+}
+
+.pg-vip-plan-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 255, 255, 0.30) 58%, rgba(255, 255, 255, 0.04) 100%);
+}
+
+[data-theme="dark"] .pg-vip-plan-card::after {
+  background: linear-gradient(105deg, rgba(13, 20, 38, 0.88) 0%, rgba(15, 24, 44, 0.60) 60%, rgba(15, 24, 44, 0.22) 100%);
+}
+
+.pg-vip-plan-card--yearly {
+  background: var(--pg-sky-surface) !important;
+  border: 2px solid var(--ds-accent) !important;
+}
+.pg-vip-plan-card--yearly::before {
+  background-image: url("/assets/banners/pastel/bg-banner-study-blue.webp");
+}
+
+.pg-vip-plan-card--lifetime {
+  background: var(--pg-gold-surface) !important;
+  border: 1.5px solid var(--pg-gold-border) !important;
+}
+.pg-vip-plan-card--lifetime::before {
+  background-image: url("/assets/banners/pastel/bg-banner-vip-gold.webp");
+}
+
+.pg-vip-plan-card--quarterly {
+  background: var(--pg-lavender-surface) !important;
+  border: 1px solid var(--pg-lavender-border) !important;
+}
+.pg-vip-plan-card--quarterly::before {
+  background-image: url("/assets/banners/pastel/bg-banner-diagnostic-violet.webp");
+}
+
+.pg-vip-plan-card--monthly {
+  background: var(--pg-mint-surface) !important;
+  border: 1px solid var(--pg-mint-border) !important;
+}
+.pg-vip-plan-card--monthly::before {
+  background-image: url("/assets/banners/pastel/bg-banner-toeic-mint.webp");
+}
+
+.pg-vip-plan-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pg-vip-plan-3d {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 10px 16px rgba(15, 23, 42, 0.16));
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] .pg-vip-plan-3d {
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.52));
+}
+
+.pg-vip-plan-card:hover .pg-vip-plan-3d {
+  transform: translateY(-4px) scale(1.06);
+}
+
+@media (min-width: 1200px) {
+  .pg-vip-plan-3d {
+    width: 62px;
+    height: 62px;
+  }
+}
+
+/* ==========================================================================
    8. RESPONSIVE BREAKPOINTS (DESKTOP • TABLET • MOBILE)
    ========================================================================== */
 @media (min-width: 1024px) {
