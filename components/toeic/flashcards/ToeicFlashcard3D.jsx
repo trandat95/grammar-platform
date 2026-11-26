@@ -29,6 +29,7 @@ export default function ToeicFlashcard3D({
   canEditNote = true,
 }) {
   const [imgSrc, setImgSrc] = useState("");
+  const [preferSvgCard, setPreferSvgCard] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [studyMode, setStudyMode] = useState("flashcard"); // 'flashcard' | 'cloze'
   const [clozeInput, setClozeInput] = useState("");
@@ -242,7 +243,7 @@ export default function ToeicFlashcard3D({
             {/* 4-Layer Visual Media Header */}
             <div className="toeic-fc-media-wrap">
               <img
-                src={imgSrc || fallbackSvg}
+                src={preferSvgCard ? fallbackSvg : imgSrc || fallbackSvg}
                 alt={`${card.word} - ${card.visual_media?.visual_scene_keywords || ""}`}
                 onError={() => {
                   if (imgSrc !== fallbackSvg) {
@@ -320,9 +321,31 @@ export default function ToeicFlashcard3D({
                 >
                   {card.visual_media?.visual_scene_keywords}
                 </span>
-                <ToeicBadge variant={stateBadge.variant}>
-                  {stateBadge.label}
-                </ToeicBadge>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreferSvgCard((p) => !p);
+                    }}
+                    style={{
+                      border: "none",
+                      borderRadius: "0.45rem",
+                      padding: "0.2rem 0.5rem",
+                      fontSize: "0.68rem",
+                      fontWeight: 700,
+                      color: "var(--ds-text-on-accent)",
+                      backgroundColor: "rgba(15, 23, 42, 0.72)",
+                      cursor: "pointer",
+                    }}
+                    title="Chuyển giữa ảnh chủ đề và thẻ đồ họa riêng theo từ"
+                  >
+                    {preferSvgCard ? "Ảnh chủ đề" : "Thẻ SVG riêng"}
+                  </button>
+                  <ToeicBadge variant={stateBadge.variant}>
+                    {stateBadge.label}
+                  </ToeicBadge>
+                </div>
               </div>
             </div>
 
@@ -419,7 +442,8 @@ export default function ToeicFlashcard3D({
                         marginTop: "0.35rem",
                         fontSize: "1.02rem",
                         color: "var(--ds-text-secondary)",
-                        fontFamily: "monospace",
+                        fontFamily: "'Noto Sans', 'Segoe UI', 'Lucida Sans Unicode', sans-serif",
+                        letterSpacing: "0.02em",
                       }}
                     >
                       {card.ipa_us}
@@ -689,7 +713,7 @@ export default function ToeicFlashcard3D({
                   <ToeicBadge variant="primary" icon="check-circle">
                     {card.word} · {card.part_of_speech}
                   </ToeicBadge>
-                  <span style={{ fontFamily: "monospace", fontSize: "0.82rem", color: "var(--ds-text-secondary)" }}>
+                  <span style={{ fontFamily: "'Noto Sans', 'Segoe UI', 'Lucida Sans Unicode', sans-serif", fontSize: "0.84rem", color: "var(--ds-text-secondary)" }}>
                     {card.ipa_us}
                   </span>
                 </div>
