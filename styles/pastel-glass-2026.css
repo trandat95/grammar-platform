@@ -468,15 +468,12 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
   }
-  .pg-overview-bento-grid .ge-feature-card--toeic {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (min-width: 1024px) {
   .pg-overview-bento-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.05rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.95rem;
   }
 }
 
@@ -562,6 +559,15 @@
 
 .ge-feature-card--toeic::before {
   background-image: url("/assets/banners/pastel/bg-banner-toeic-mint.webp");
+}
+
+.ge-feature-card--vocab {
+  background: var(--pg-gold-surface) !important;
+  border: 1px solid var(--pg-gold-border) !important;
+}
+
+.ge-feature-card--vocab::before {
+  background-image: url("/assets/banners/pastel/bg-banner-vip-gold.webp");
 }
 
 .ge-feature-card:hover {
@@ -651,6 +657,10 @@
 
 .ge-feature-card--toeic .pg-fc-cta {
   color: var(--pg-mint-pill-text);
+}
+
+.ge-feature-card--vocab .pg-fc-cta {
+  color: var(--pg-gold-pill-text);
 }
 
 .ge-feature-card:hover .pg-fc-cta {

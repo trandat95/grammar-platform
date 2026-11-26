@@ -5867,6 +5867,33 @@ export default function Home() {
                     <FeatureCardVisual kind="toeic" />
                   </div>
                 </button>
+
+                {/* Core Action 4: 1,000 TOEIC Flashcards FSRS-4.5 */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") window.location.href = "/toeic/mistakes-srs?tab=browse";
+                  }}
+                  className="ds-focusable ge-feature-card ge-feature-card--vocab"
+                >
+                  <div className="ge-feature-card-body">
+                    <div>
+                      <span className="pg-fc-pill pg-fc-pill--gold">
+                        <KitIcon name="books" size={12} />
+                        <span>1,000 Từ TOEIC</span>
+                      </span>
+                      <div className="pg-fc-title" style={{ marginTop: "0.42rem" }}>
+                        Flashcard 3D · FSRS-4.5
+                      </div>
+                    </div>
+                    <div className="pg-fc-cta">
+                      <span>Học từ vựng →</span>
+                    </div>
+                  </div>
+                  <div className="ge-feature-card-visual">
+                    <FeatureCardVisual kind="vocab" />
+                  </div>
+                </button>
               </div>
 
               {/* Dashboard 3-Tab Switcher (Single-Row Compact Horizontal Segmented Bar on Mobile, Tablet & Desktop) */}

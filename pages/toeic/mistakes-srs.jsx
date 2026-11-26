@@ -56,6 +56,7 @@ export default function MistakesSrsPage({ initialTab = "due" }) {
   const [activeDeckCards, setActiveDeckCards] = useState([]);
   const [activeModuleId, setActiveModuleId] = useState("M01");
   const [activeTopicId, setActiveTopicId] = useState(1);
+  const [activeBandFilter, setActiveBandFilter] = useState("ALL");
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -214,16 +215,26 @@ export default function MistakesSrsPage({ initialTab = "due" }) {
 
   const currentCard = displayedDeck[currentIndex] || null;
 
-  const handleOpenTopicDeck = async (modId, topicId, jumpCardId = null) => {
+  const handleOpenTopicDeck = async (modId, topicId, jumpCardId = null, band = "ALL") => {
     setLoading(true);
     try {
       const modPayload = await loadFlashcardModule(modId);
-      let cards = (modPayload.flashcards || []).filter((c) => Number(c.topic_id) === Number(topicId));
+      let cards = topicId
+        ? (modPayload.flashcards || []).filter((c) => Number(c.topic_id) === Number(topicId))
+        : modPayload.flashcards || [];
+      if (band && band !== "ALL") {
+        cards = cards.filter((c) => c.toeic_score_band === band);
+      }
       if (!isVip && !FREE_FLASHCARD_MODULE_IDS.has(modId)) {
-        cards = cards.slice(0, 3);
+        cards = cards.slice(0, 15);
+      }
+      if (cards.length === 0) {
+        showToast(`Không có thẻ nào trong ${modId} khớp Band ${band}.`);
+        return;
       }
       setActiveModuleId(modId);
-      setActiveTopicId(topicId);
+      setActiveTopicId(topicId || cards[0]?.topic_id || null);
+      setActiveBandFilter(band || "ALL");
       setActiveDeckCards(cards);
       const idx = jumpCardId ? cards.findIndex((c) => Number(c.id) === Number(jumpCardId)) : 0;
       setCurrentIndex(idx >= 0 ? idx : 0);
@@ -233,6 +244,33 @@ export default function MistakesSrsPage({ initialTab = "due" }) {
       cardOpenTimeRef.current = Date.now();
     } catch {
       showToast("Lỗi tải chủ đề từ vựng.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenBandDeck = async (band, jumpCardId = null) => {
+    setLoading(true);
+    try {
+      const allCards = await loadAllFlashcardsForSearch();
+      let cards = band && band !== "ALL" ? allCards.filter((c) => c.toeic_score_band === band) : allCards;
+      if (!isVip) {
+        cards = cards.filter((c) => FREE_FLASHCARD_MODULE_IDS.has(c.module_id) || ((c.id - 1) % 20) + 1 <= 3);
+      }
+      if (cards.length === 0) {
+        showToast(`Không tìm thấy thẻ nào thuộc Band ${band}.`);
+        return;
+      }
+      setActiveBandFilter(band || "ALL");
+      setActiveDeckCards(cards);
+      const idx = jumpCardId ? cards.findIndex((c) => Number(c.id) === Number(jumpCardId)) : 0;
+      setCurrentIndex(idx >= 0 ? idx : 0);
+      setIsFlipped(false);
+      setOnlyMistakeLinked(false);
+      setActiveTab("due");
+      cardOpenTimeRef.current = Date.now();
+    } catch {
+      showToast("Lỗi tải danh sách từ theo Band.");
     } finally {
       setLoading(false);
     }
@@ -555,8 +593,14 @@ export default function MistakesSrsPage({ initialTab = "due" }) {
                 activeModuleId={activeModuleId}
                 activeTopicId={activeTopicId}
                 isVip={isVip}
-                onSelectTopicDeck={(mId, tId) => handleOpenTopicDeck(mId, tId)}
-                onSelectCardInDeck={(item) => handleOpenTopicDeck(item.module_id, item.topic_id, item.id)}
+                onSelectTopicDeck={(mId, tId, band) => handleOpenTopicDeck(mId, tId, null, band)}
+                onSelectModuleDeck={(mId, band) => handleOpenTopicDeck(mId, null, null, band)}
+                onSelectBandDeck={(band) => handleOpenBandDeck(band)}
+                onSelectCardInDeck={(item, band) =>
+                  band && band !== "ALL"
+                    ? handleOpenBandDeck(band, item.id)
+                    : handleOpenTopicDeck(item.module_id, item.topic_id, item.id, "ALL")
+                }
                 onOpenPaywall={() => entitlement.openPaywall("TRG_09_TOEIC_FLASHCARD_1000")}
               />
             ) : currentCard ? (
@@ -565,7 +609,7 @@ export default function MistakesSrsPage({ initialTab = "due" }) {
                 <div className="toeic-flex-between" style={{ flexWrap: "wrap", gap: "0.5rem", fontSize: "0.8rem", fontWeight: 700, color: "var(--ds-text-secondary)" }}>
                   <span>
                     Thẻ {currentIndex + 1} / {displayedDeck.length}
-                    {currentCard.topic_name_vi ? ` · ${currentCard.topic_name_vi}` : ""}
+                    {activeBandFilter !== "ALL" ? ` · Band ${activeBandFilter}` : currentCard.topic_name_vi ? ` · ${currentCard.topic_name_vi}` : ""}
                   </span>
 
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>

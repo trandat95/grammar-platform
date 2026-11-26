@@ -30,6 +30,7 @@ export default function ToeicFlashcard3D({
 }) {
   const [imgSrc, setImgSrc] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [studyMode, setStudyMode] = useState("flashcard"); // 'flashcard' | 'cloze'
   const [clozeInput, setClozeInput] = useState("");
   const [clozeChecked, setClozeChecked] = useState(null);
   const [noteOpen, setNoteOpen] = useState(false);
@@ -122,10 +123,10 @@ export default function ToeicFlashcard3D({
     const targetWord = String(card.word || "").trim().toLowerCase();
     const headWord = targetWord.split(/\s+/)[0];
     if (!cleanGuess) return;
+    // Strict match: exact target word, or headword for multi-word phrasal verbs (e.g. "abide" for "abide by" when "by" is outside blank)
     const isHit =
       cleanGuess === targetWord ||
-      cleanGuess === headWord ||
-      targetWord.startsWith(cleanGuess) && cleanGuess.length >= Math.max(3, headWord.length - 1);
+      (targetWord.includes(" ") && cleanGuess === headWord);
     setClozeChecked(isHit ? "correct" : "wrong");
   };
 
@@ -325,179 +326,339 @@ export default function ToeicFlashcard3D({
               </div>
             </div>
 
-            {/* Front Body: Word, POS, US IPA, Pronunciation, Active Recall Cloze */}
+            {/* Front Body: Mode Toggle + Word/Cloze + Audio */}
             <div className="toeic-fc-body">
-              {sourceBadgeLabel && (
-                <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.45rem" }}
+              >
+                <div
+                  style={{
+                    display: "inline-flex",
+                    padding: "0.2rem",
+                    borderRadius: "999px",
+                    backgroundColor: "var(--ds-bg-elevated)",
+                    border: "1px solid var(--ds-border)",
+                    gap: "0.2rem",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setStudyMode("flashcard")}
+                    style={{
+                      border: "none",
+                      borderRadius: "999px",
+                      padding: "0.25rem 0.7rem",
+                      fontSize: "0.73rem",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      backgroundColor: studyMode === "flashcard" ? "var(--ds-accent)" : "transparent",
+                      color: studyMode === "flashcard" ? "var(--ds-text-on-accent)" : "var(--ds-text-secondary)",
+                    }}
+                  >
+                    Xem Thẻ Từ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStudyMode("cloze")}
+                    style={{
+                      border: "none",
+                      borderRadius: "999px",
+                      padding: "0.25rem 0.7rem",
+                      fontSize: "0.73rem",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      backgroundColor: studyMode === "cloze" ? "var(--ds-accent)" : "transparent",
+                      color: studyMode === "cloze" ? "var(--ds-text-on-accent)" : "var(--ds-text-secondary)",
+                    }}
+                  >
+                    Thử Thách Điền Từ (Ẩn đáp án)
+                  </button>
+                </div>
+
+                {sourceBadgeLabel && (
                   <ToeicBadge variant="warning" icon="bolt">
                     {sourceBadgeLabel}
                     {srsRecord?.source_question_id ? ` · ${srsRecord.source_question_id}` : ""}
                   </ToeicBadge>
-                </div>
-              )}
-
-              <div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-                  <h2
-                    style={{
-                      fontSize: "clamp(1.75rem, 4vw, 2.35rem)",
-                      fontWeight: 800,
-                      margin: 0,
-                      color: "var(--ds-text-heading)",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {card.word}
-                  </h2>
-                  <span
-                    style={{
-                      fontSize: "0.82rem",
-                      fontWeight: 800,
-                      padding: "0.2rem 0.55rem",
-                      borderRadius: "0.45rem",
-                      backgroundColor: "var(--ds-accent-bg)",
-                      color: "var(--ds-accent)",
-                      border: "1px solid var(--ds-accent-border)",
-                    }}
-                  >
-                    {card.part_of_speech}
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    marginTop: "0.35rem",
-                    fontSize: "1.02rem",
-                    color: "var(--ds-text-secondary)",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  {card.ipa_us}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={(e) => playPronunciation(e, card.word, card.audio_google_tts_url)}
-                  style={{
-                    marginTop: "0.65rem",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                    padding: "0.45rem 0.95rem",
-                    minHeight: "40px",
-                    borderRadius: "999px",
-                    border: "1px solid var(--ds-accent-border)",
-                    backgroundColor: isSpeaking ? "var(--ds-accent)" : "var(--ds-accent-bg)",
-                    color: isSpeaking ? "var(--ds-text-on-accent)" : "var(--ds-accent)",
-                    fontSize: "0.8rem",
-                    fontWeight: 800,
-                    cursor: "pointer",
-                  }}
-                >
-                  <KitIcon name="tool-audio" size={15} />
-                  <span>{isSpeaking ? "Đang phát âm..." : "Nghe phát âm chuẩn Mỹ"}</span>
-                </button>
-              </div>
-
-              {/* Cloze Active Recall Challenge */}
-              <div className="toeic-fc-cloze-box" onClick={(e) => e.stopPropagation()}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.35rem",
-                    fontSize: "0.7rem",
-                    fontWeight: 800,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.04em",
-                    color: "var(--ds-text-muted)",
-                    marginBottom: "0.35rem",
-                  }}
-                >
-                  <KitIcon name="target" size={13} />
-                  <span>Thử thách điền từ theo ngữ cảnh (Cloze Recall)</span>
-                </div>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "0.92rem",
-                    fontStyle: "italic",
-                    lineHeight: 1.55,
-                    color: "var(--ds-text)",
-                  }}
-                >
-                  &ldquo;{card.cloze_sentence_en}&rdquo;
-                </p>
-
-                {/* Optional quick recall input */}
-                <div style={{ display: "flex", gap: "0.45rem", marginTop: "0.6rem", alignItems: "center" }}>
-                  <input
-                    type="text"
-                    value={clozeInput}
-                    onChange={(e) => {
-                      setClozeInput(e.target.value);
-                      if (clozeChecked) setClozeChecked(null);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleCheckCloze(e);
-                    }}
-                    placeholder="Gõ nhanh từ còn thiếu (tùy chọn)..."
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    style={{
-                      flex: 1,
-                      minWidth: 0,
-                      height: "38px",
-                      padding: "0 0.7rem",
-                      borderRadius: "0.55rem",
-                      border: `1px solid ${
-                        clozeChecked === "correct"
-                          ? "var(--ds-success)"
-                          : clozeChecked === "wrong"
-                          ? "var(--ds-danger)"
-                          : "var(--ds-border)"
-                      }`,
-                      backgroundColor: "var(--ds-card)",
-                      color: "var(--ds-text)",
-                      fontSize: "16px",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCheckCloze}
-                    style={{
-                      height: "38px",
-                      padding: "0 0.75rem",
-                      borderRadius: "0.55rem",
-                      border: "1px solid var(--ds-border)",
-                      backgroundColor: "var(--ds-card)",
-                      color: "var(--ds-accent)",
-                      fontSize: "0.78rem",
-                      fontWeight: 800,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    Kiểm tra
-                  </button>
-                </div>
-                {clozeChecked && (
-                  <div
-                    style={{
-                      marginTop: "0.4rem",
-                      fontSize: "0.78rem",
-                      fontWeight: 700,
-                      color: clozeChecked === "correct" ? "var(--ds-success)" : "var(--ds-danger)",
-                    }}
-                  >
-                    {clozeChecked === "correct"
-                      ? `Chính xác! Đáp án: ${card.word}`
-                      : `Chưa khớp — lật thẻ để xem đáp án "${card.word}"`}
-                  </div>
                 )}
               </div>
+
+              {studyMode === "flashcard" ? (
+                <>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                      <h2
+                        style={{
+                          fontSize: "clamp(1.75rem, 4vw, 2.35rem)",
+                          fontWeight: 800,
+                          margin: 0,
+                          color: "var(--ds-text-heading)",
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {card.word}
+                      </h2>
+                      <span
+                        style={{
+                          fontSize: "0.82rem",
+                          fontWeight: 800,
+                          padding: "0.2rem 0.55rem",
+                          borderRadius: "0.45rem",
+                          backgroundColor: "var(--ds-accent-bg)",
+                          color: "var(--ds-accent)",
+                          border: "1px solid var(--ds-accent-border)",
+                        }}
+                      >
+                        {card.part_of_speech}
+                      </span>
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: "0.35rem",
+                        fontSize: "1.02rem",
+                        color: "var(--ds-text-secondary)",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {card.ipa_us}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => playPronunciation(e, card.word, card.audio_google_tts_url)}
+                      style={{
+                        marginTop: "0.65rem",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        padding: "0.45rem 0.95rem",
+                        minHeight: "40px",
+                        borderRadius: "999px",
+                        border: "1px solid var(--ds-accent-border)",
+                        backgroundColor: isSpeaking ? "var(--ds-accent)" : "var(--ds-accent-bg)",
+                        color: isSpeaking ? "var(--ds-text-on-accent)" : "var(--ds-accent)",
+                        fontSize: "0.8rem",
+                        fontWeight: 800,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <KitIcon name="tool-audio" size={15} />
+                      <span>{isSpeaking ? "Đang phát âm..." : "Nghe phát âm chuẩn Mỹ"}</span>
+                    </button>
+                  </div>
+
+                  {/* Contextual Sentence Preview (No pointless input when word is visible) */}
+                  <div className="toeic-fc-cloze-box">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "0.35rem",
+                        fontSize: "0.7rem",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                        color: "var(--ds-text-muted)",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                        <KitIcon name="bulb" size={13} />
+                        <span>Ngữ cảnh trong đề TOEIC</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setStudyMode("cloze");
+                        }}
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          color: "var(--ds-accent)",
+                          fontSize: "0.72rem",
+                          fontWeight: 800,
+                          cursor: "pointer",
+                          padding: 0,
+                        }}
+                      >
+                        Thử điền từ &rarr;
+                      </button>
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "0.92rem",
+                        fontStyle: "italic",
+                        lineHeight: 1.55,
+                        color: "var(--ds-text)",
+                      }}
+                    >
+                      &ldquo;{card.example_en}&rdquo;
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* CLOZE RECALL MODE: Target word is hidden until answered or flipped */}
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                      <h2
+                        style={{
+                          fontSize: "clamp(1.6rem, 3.6vw, 2.1rem)",
+                          fontWeight: 800,
+                          margin: 0,
+                          color: clozeChecked === "correct" ? "var(--ds-success)" : "var(--ds-accent)",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        {clozeChecked === "correct" ? card.word : "[ _______ ]"}
+                      </h2>
+                      <span
+                        style={{
+                          fontSize: "0.82rem",
+                          fontWeight: 800,
+                          padding: "0.2rem 0.55rem",
+                          borderRadius: "0.45rem",
+                          backgroundColor: "var(--ds-accent-bg)",
+                          color: "var(--ds-accent)",
+                          border: "1px solid var(--ds-accent-border)",
+                        }}
+                      >
+                        {card.part_of_speech}
+                      </span>
+                    </div>
+
+                    <div style={{ marginTop: "0.45rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--ds-text)" }}>
+                      Gợi ý nghĩa: <span style={{ color: "var(--ds-accent)" }}>{card.meaning_vi}</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => playPronunciation(e, card.word, card.audio_google_tts_url)}
+                      style={{
+                        marginTop: "0.55rem",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        padding: "0.4rem 0.9rem",
+                        minHeight: "38px",
+                        borderRadius: "999px",
+                        border: "1px solid var(--ds-accent-border)",
+                        backgroundColor: isSpeaking ? "var(--ds-accent)" : "var(--ds-accent-bg)",
+                        color: isSpeaking ? "var(--ds-text-on-accent)" : "var(--ds-accent)",
+                        fontSize: "0.78rem",
+                        fontWeight: 800,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <KitIcon name="tool-audio" size={14} />
+                      <span>{isSpeaking ? "Đang phát..." : "Nghe gợi ý phát âm"}</span>
+                    </button>
+                  </div>
+
+                  <div className="toeic-fc-cloze-box" onClick={(e) => e.stopPropagation()}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.35rem",
+                        fontSize: "0.7rem",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                        color: "var(--ds-text-muted)",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      <KitIcon name="target" size={13} />
+                      <span>Điền từ tiếng Anh phù hợp vào chỗ trống</span>
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "0.92rem",
+                        fontStyle: "italic",
+                        lineHeight: 1.55,
+                        color: "var(--ds-text)",
+                      }}
+                    >
+                      &ldquo;{card.cloze_sentence_en}&rdquo;
+                    </p>
+
+                    <div style={{ display: "flex", gap: "0.45rem", marginTop: "0.6rem", alignItems: "center" }}>
+                      <input
+                        type="text"
+                        value={clozeInput}
+                        onChange={(e) => {
+                          setClozeInput(e.target.value);
+                          if (clozeChecked) setClozeChecked(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleCheckCloze(e);
+                        }}
+                        placeholder="Nhập từ tiếng Anh..."
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="none"
+                        spellCheck={false}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: "40px",
+                          padding: "0 0.7rem",
+                          borderRadius: "0.55rem",
+                          border: `1.5px solid ${
+                            clozeChecked === "correct"
+                              ? "var(--ds-success)"
+                              : clozeChecked === "wrong"
+                              ? "var(--ds-danger)"
+                              : "var(--ds-border)"
+                          }`,
+                          backgroundColor: "var(--ds-card)",
+                          color: "var(--ds-text)",
+                          fontSize: "16px",
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleCheckCloze}
+                        style={{
+                          height: "40px",
+                          padding: "0 0.85rem",
+                          borderRadius: "0.55rem",
+                          border: "none",
+                          backgroundColor: "var(--ds-accent)",
+                          color: "var(--ds-text-on-accent)",
+                          fontSize: "0.8rem",
+                          fontWeight: 800,
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        Kiểm tra
+                      </button>
+                    </div>
+                    {clozeChecked && (
+                      <div
+                        style={{
+                          marginTop: "0.45rem",
+                          fontSize: "0.8rem",
+                          fontWeight: 700,
+                          color: clozeChecked === "correct" ? "var(--ds-success)" : "var(--ds-danger)",
+                        }}
+                      >
+                        {clozeChecked === "correct"
+                          ? `Chính xác! Đáp án: ${card.word} (${card.ipa_us})`
+                          : `Chưa đúng! Gợi ý bắt đầu bằng "${card.word.slice(0, 2)}..." hoặc chạm để lật thẻ.`}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
 
               <div
                 style={{
