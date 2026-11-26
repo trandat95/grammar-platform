@@ -1,0 +1,2064 @@
+{
+  "generated_at": "2026-11-26T02:05:56.721Z",
+  "mode": "APPLY",
+  "rubric_version": "v2.1",
+  "master_paths_found": [
+    "D:\\grammarproject\\grammar-platform\\ETS_Corpus_Normalized_Enriched_Database\\ets_toeic_ai_grammar_master.json",
+    "D:\\grammarproject\\grammar-platform\\data\\toeic\\ets_toeic_ai_grammar_master.json"
+  ],
+  "dual_copy_status": "IDENTICAL",
+  "part5": {
+    "part": "Part 5",
+    "total": 951,
+    "before_distribution": {
+      "1": 264,
+      "2": 439,
+      "3": 248
+    },
+    "after_distribution": {
+      "1": 234,
+      "2": 555,
+      "3": 162
+    },
+    "after_band_distribution": {
+      "450": 28,
+      "500": 206,
+      "600": 317,
+      "650": 238,
+      "750": 114,
+      "800": 42,
+      "850": 6
+    },
+    "transition_matrix": {
+      "1->1": 75,
+      "1->2": 163,
+      "2->1": 116,
+      "2->2": 258,
+      "2->3": 65,
+      "3->1": 43,
+      "3->3": 71,
+      "3->2": 134,
+      "1->3": 26
+    },
+    "guardrails_triggered": {
+      "CAP_A1_A2_MAX_50": 1
+    },
+    "legacy_anomalies": {
+      "diff3WithLowBand": 45,
+      "diff1WithHighBand": 21,
+      "diff3WithA1A2Answer": 35,
+      "diff3WithBasicPronoun": 3
+    },
+    "after_anomalies": {
+      "diff3WithA1A2NonC1": 0,
+      "diff3WithBasicPronoun": 0,
+      "diffBandMismatch": 0
+    },
+    "major_downgrades_3_to_1_count": 43,
+    "major_upgrades_1_to_3_count": 26,
+    "sample_major_downgrades": [
+      {
+        "id": "EXP2026_PRON_CASE_Q010",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Mr. Beaumont assured the regional branch managers that he would review ------- staffing requests personally.",
+        "answer": "their",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_PRON_CASE_Q008",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Because Dr. Takahashi's laptop was being serviced, a colleague lent him ------- for the morning keynote address.",
+        "answer": "hers",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 21,
+        "prior_irt_b": -0.742,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_PRON_CASE_Q012",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "A dedicated account manager will contact ------- within twenty-four hours to confirm the freight delivery schedule.",
+        "answer": "you",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 21,
+        "prior_irt_b": -0.742,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_PRON_CASE_Q009",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "To protect client privacy, the law firm requires all associates to shred confidential drafts on ------- own.",
+        "answer": "their",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 23,
+        "prior_irt_b": -0.699,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T08_Q122",
+        "part": 5,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Mr. Davis ------- the marketing department will attend Monday's meeting with the client.",
+        "answer": "from",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 26,
+        "prior_irt_b": -0.633,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COMP_QUANT_Q025",
+        "part": 5,
+        "topic": "GRM_COMP_QUANTIFIER",
+        "stem": "Only a ------- tickets remain available for Friday's charity concert at Symphony Hall.",
+        "answer": "few",
+        "old_diff": 3,
+        "old_band": 650,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 20,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T07_Q124",
+        "part": 5,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Visitors must park in the designated parking area ------- risk having their vehicle towed.",
+        "answer": "or",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 29,
+        "prior_irt_b": -0.568,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T09_Q122",
+        "part": 5,
+        "topic": "VOC_COLLOCATION",
+        "stem": "During the off-season, the Great Mountain Amusement Park operates on ------- hours.",
+        "answer": "slow",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 30,
+        "prior_irt_b": -0.546,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q128",
+        "part": 5,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Belker Auto offers a ten-year warranty for ------- who want greater peace of mind.",
+        "answer": "those",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 31,
+        "prior_irt_b": -0.524,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_COORD_Q033",
+        "part": 5,
+        "topic": "GRM_CONN_CORRELATIVE_COORD",
+        "stem": "Not only did the pharmaceutical division expand its research facility, ------- it also secured three international paten",
+        "answer": "but",
+        "old_diff": 3,
+        "old_band": 550,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 31,
+        "prior_irt_b": -0.524,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COMP_QUANT_Q026",
+        "part": 5,
+        "topic": "GRM_COMP_QUANTIFIER",
+        "stem": "We have very ------- time left before the courier arrives to pick up the signed contract.",
+        "answer": "little",
+        "old_diff": 3,
+        "old_band": 650,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 31,
+        "prior_irt_b": -0.524,
+        "breakdown": {
+          "grammar": 20,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COMP_QUANT_Q033",
+        "part": 5,
+        "topic": "GRM_COMP_QUANTIFIER",
+        "stem": "The safety manual must be reviewed by ------- employee before operating the hydraulic press.",
+        "answer": "every",
+        "old_diff": 3,
+        "old_band": 650,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 31,
+        "prior_irt_b": -0.524,
+        "breakdown": {
+          "grammar": 20,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      }
+    ],
+    "sample_major_upgrades": [
+      {
+        "id": "EXP2026_CONN_TRANS_Q003",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "Construction on the coastal highway was delayed by severe winter storms; -------, the project was completed within the o",
+        "answer": "nevertheless",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q002",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The new downtown coworking space offers high-speed fiber internet; -------, it provides complimentary access to private ",
+        "answer": "furthermore",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 75,
+        "prior_irt_b": 0.842,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 14,
+          "lexical": 22,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q004",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "All warehouse staff must complete the forklift safety certification by Friday; -------, they will not be scheduled for n",
+        "answer": "otherwise",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 74,
+        "prior_irt_b": 0.816,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 14,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q006",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The software engineering team is finalizing the backend database migration; -------, the marketing department is prepari",
+        "answer": "meanwhile",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 74,
+        "prior_irt_b": 0.816,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 14,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_INF_Q003",
+        "part": 5,
+        "topic": "GRM_VERB_INFINITIVE_GERUND",
+        "stem": "In addition to ------- the annual financial audit, Ms.oka coordinates internal tax compliance training.",
+        "answer": "supervising",
+        "old_diff": 1,
+        "old_band": 600,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 73,
+        "prior_irt_b": 0.789,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_INF_Q009",
+        "part": 5,
+        "topic": "GRM_VERB_INFINITIVE_GERUND",
+        "stem": "By ------- an automated inventory scanner, the pharmacy cut prescription wait times in half.",
+        "answer": "implementing",
+        "old_diff": 1,
+        "old_band": 600,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 73,
+        "prior_irt_b": 0.789,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_PART_Q001",
+        "part": 5,
+        "topic": "GRM_VERB_PARTICIPLE",
+        "stem": "Attendees at the annual tech expo were ------- by the live demonstration of the holographic display.",
+        "answer": "fascinated",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 73,
+        "prior_irt_b": 0.789,
+        "breakdown": {
+          "grammar": 24,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_INF_Q004",
+        "part": 5,
+        "topic": "GRM_VERB_INFINITIVE_GERUND",
+        "stem": "Several senior engineers objected to ------- the testing schedule without adding extra quality-control staff.",
+        "answer": "shortening",
+        "old_diff": 1,
+        "old_band": 600,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 71,
+        "prior_irt_b": 0.737,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_INF_Q007",
+        "part": 5,
+        "topic": "GRM_VERB_INFINITIVE_GERUND",
+        "stem": "Most regional sales representatives are accustomed to ------- client presentations via encrypted video platforms.",
+        "answer": "conducting",
+        "old_diff": 1,
+        "old_band": 600,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 71,
+        "prior_irt_b": 0.737,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_VERB_INF_Q008",
+        "part": 5,
+        "topic": "GRM_VERB_INFINITIVE_GERUND",
+        "stem": "Thank you for ------- our customer support survey following your recent flight to Zurich.",
+        "answer": "completing",
+        "old_diff": 1,
+        "old_band": 600,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 71,
+        "prior_irt_b": 0.737,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 22,
+          "lexical": 22,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q001",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The prototype passed all thermal stress tests; -------, the engineering director approved it for mass production.",
+        "answer": "therefore",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 71,
+        "prior_irt_b": 0.737,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 14,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q007",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The hospital has implemented several energy-saving measures; -------, it replaced all corridor lighting with motion-acti",
+        "answer": "for example",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 70,
+        "prior_irt_b": 0.711,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 20,
+          "lexical": 14,
+          "syntax": 10,
+          "guardrails": []
+        }
+      }
+    ],
+    "top_15_hardest": [
+      {
+        "id": "EXP2026_COND_INV_Q040",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "Unless the contractor submits the structural engineering certificate by 5:00 P.M., the municipal permit ------- until ne",
+        "answer": "will be withheld",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 93,
+        "prior_irt_b": 1.316,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COND_INV_Q037",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "Had the research team secured the federal grant in January, clinical trials ------- three months ahead of schedule.",
+        "answer": "would have commenced",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 86,
+        "prior_irt_b": 1.132,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 20,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q003",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "Construction on the coastal highway was delayed by severe winter storms; -------, the project was completed within the o",
+        "answer": "nevertheless",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q011",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The regional airline experienced a shortage of certified mechanics last month; -------, nearly forty domestic flights ha",
+        "answer": "consequently",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q009",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The merger negotiations required four months of intensive legal review; -------, both boards signed the definitive agree",
+        "answer": "ultimately",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 82,
+        "prior_irt_b": 1.026,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 22,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q010",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "Demand for compact urban apartments has risen sharply this year; -------, sales of large suburban estates have declined ",
+        "answer": "conversely",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 82,
+        "prior_irt_b": 1.026,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 22,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q127",
+        "part": 5,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Not only has Mr. Ogbu ------- worked on the project, but he has also trained Ms. Jeong to continue the work.",
+        "answer": "diligently",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 78,
+        "prior_irt_b": 0.921,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 21,
+          "lexical": 22,
+          "syntax": 17,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COND_INV_Q031",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "City building codes mandate that every commercial elevator ------- by a licensed mechanical engineer once a year.",
+        "answer": "be certified",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 78,
+        "prior_irt_b": 0.921,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 20,
+          "lexical": 14,
+          "syntax": 12,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q014",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The municipality offers tax incentives to manufacturers that install rooftop solar arrays; -------, it provides low-inte",
+        "answer": "in addition",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 77,
+        "prior_irt_b": 0.895,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 14,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T01_Q127",
+        "part": 5,
+        "topic": "VOC_PHRASAL_PREP",
+        "stem": "As chief analytics officer, Mr. Ko has worked at Lochston Ltd. with great ------- for more than twenty years.",
+        "answer": "dedication",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 75,
+        "prior_irt_b": 0.842,
+        "breakdown": {
+          "grammar": 22,
+          "distractor": 21,
+          "lexical": 22,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_COND_INV_Q034",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "Customs regulations require that every imported agricultural crate ------- with a country-of-origin barcode.",
+        "answer": "be labeled",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 75,
+        "prior_irt_b": 0.842,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 20,
+          "lexical": 14,
+          "syntax": 9,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q002",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "The new downtown coworking space offers high-speed fiber internet; -------, it provides complimentary access to private ",
+        "answer": "furthermore",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 75,
+        "prior_irt_b": 0.842,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 14,
+          "lexical": 22,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q123",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "Anyone who still ------- to take the fire safety training should do so before the end of the month.",
+        "answer": "needing",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 74,
+        "prior_irt_b": 0.816,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 20,
+          "lexical": 14,
+          "syntax": 8,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T02_Q130",
+        "part": 5,
+        "topic": "GRM_COND_INVERSION",
+        "stem": "Employees who wish to attend the retirement dinner ------- Ms. Howell's 30 years of service should contact Mr. Lee.",
+        "answer": "will be honored",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 74,
+        "prior_irt_b": 0.816,
+        "breakdown": {
+          "grammar": 32,
+          "distractor": 20,
+          "lexical": 14,
+          "syntax": 8,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_CONN_TRANS_Q004",
+        "part": 5,
+        "topic": "GRM_CONN_TRANSITION",
+        "stem": "All warehouse staff must complete the forklift safety certification by Friday; -------, they will not be scheduled for n",
+        "answer": "otherwise",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 800,
+        "score": 74,
+        "prior_irt_b": 0.816,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 21,
+          "lexical": 14,
+          "syntax": 13,
+          "guardrails": []
+        }
+      }
+    ],
+    "top_15_easiest": [
+      {
+        "id": "ETS2024_T01_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Former Sendai Company CEO Ken Nakata spoke about ------- career experiences.",
+        "answer": "his",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 16,
+        "prior_irt_b": -0.851,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T07_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Passengers must keep ------- boarding passes and luggage with them at all times.",
+        "answer": "their",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 16,
+        "prior_irt_b": -0.851,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T09_Q105",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Mr. Kam has invited all staff members to attend ------- retirement party.",
+        "answer": "him",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 16,
+        "prior_irt_b": -0.851,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T04_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Ms. Chiu recently announced that ------- is planning to retire in September.",
+        "answer": "she",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 16,
+        "prior_irt_b": -0.851,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T10_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Sophia Hollinger was commended for ------- work on the Kala account.",
+        "answer": "her",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 16,
+        "prior_irt_b": -0.851,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T05_Q120",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "All employees should familiarize ------- with the company's policies and procedures.",
+        "answer": "their",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 18,
+        "prior_irt_b": -0.808,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T03_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Despite ------- youth, Ms. Cho is already quite popular on social media.",
+        "answer": "her",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 18,
+        "prior_irt_b": -0.808,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T06_Q103",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Although Ms. Endou was not chosen for an award, ------- achievements were praised.",
+        "answer": "her",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 18,
+        "prior_irt_b": -0.808,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T02_Q104",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Yong-Soo Cosmetics will not charge for items on back order until ------- have left our warehouse.",
+        "answer": "they",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T08_Q102",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Ms. Choi was pleased to learn that ------- is a finalist in the technology competition.",
+        "answer": "she",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T09_Q107",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "The painter Marion Settimi developed ------- distinctive style during the years she lived in Indonesia.",
+        "answer": "her",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_PRON_CASE_Q004",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "The vice president of marketing asked ------- assistant to compile the competitor pricing data before noon.",
+        "answer": "his",
+        "old_diff": 2,
+        "old_band": 600,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "EXP2026_PRON_CASE_Q010",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Mr. Beaumont assured the regional branch managers that he would review ------- staffing requests personally.",
+        "answer": "their",
+        "old_diff": 3,
+        "old_band": 750,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T06_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "The new policy allows employees to set ------- own working hours under certain conditions.",
+        "answer": "their",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 21,
+        "prior_irt_b": -0.742,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T10_Q101",
+        "part": 5,
+        "topic": "GRM_PRON_CASE",
+        "stem": "According to the department head, ------- are ready to begin work on the Arborney Bridge project.",
+        "answer": "we",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 21,
+        "prior_irt_b": -0.742,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 7,
+          "guardrails": []
+        }
+      }
+    ]
+  },
+  "part6": {
+    "part": "Part 6",
+    "total": 320,
+    "before_distribution": {
+      "1": 42,
+      "2": 94,
+      "3": 184
+    },
+    "after_distribution": {
+      "1": 50,
+      "2": 144,
+      "3": 126
+    },
+    "after_band_distribution": {
+      "450": 9,
+      "500": 41,
+      "600": 74,
+      "650": 70,
+      "750": 47,
+      "800": 52,
+      "850": 27
+    },
+    "transition_matrix": {
+      "3->3": 91,
+      "3->2": 67,
+      "2->2": 49,
+      "1->1": 13,
+      "1->2": 28,
+      "2->3": 34,
+      "3->1": 26,
+      "2->1": 11,
+      "1->3": 1
+    },
+    "guardrails_triggered": {},
+    "legacy_anomalies": {
+      "diff3WithLowBand": 0,
+      "diff1WithHighBand": 0,
+      "diff3WithA1A2Answer": 16,
+      "diff3WithBasicPronoun": 0
+    },
+    "after_anomalies": {
+      "diff3WithA1A2NonC1": 0,
+      "diff3WithBasicPronoun": 0,
+      "diffBandMismatch": 0
+    },
+    "major_downgrades_3_to_1_count": 26,
+    "major_upgrades_1_to_3_count": 1,
+    "sample_major_downgrades": [
+      {
+        "id": "ETS2026_T10_Q140",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- has been entered into our upcoming contest.",
+        "answer": "It",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 24,
+        "prior_irt_b": -0.677,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T09_Q140",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- represents your business in a slightly different way.",
+        "answer": "Each",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 26,
+        "prior_irt_b": -0.633,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T04_Q145",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "The plants' leaves are ordinarily disposed of ------ the fruit is harvested.",
+        "answer": "now",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q145",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- respond promptly to article proposals, which should be submitted as single-page outlines.",
+        "answer": "We",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T10_Q136",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "We have also received information ------- network data becoming corrupted and files not saving properly.",
+        "answer": "as",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 29,
+        "prior_irt_b": -0.568,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q141",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- you decide to close your account, no action is necessary.",
+        "answer": "Also",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 30,
+        "prior_irt_b": -0.546,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T04_Q134",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "At the grand opening, diners echoed Chef Hoang's enthusiasm for the -------.",
+        "answer": "food",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 30,
+        "prior_irt_b": -0.546,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T04_Q142",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Approximately 75 percent of all employees live within two miles of the store where they -------.",
+        "answer": "work",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 31,
+        "prior_irt_b": -0.524,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q135",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Your success ------- a team leader depends on your ability to consistently inspire your team members to perform at the h",
+        "answer": "as",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 32,
+        "prior_irt_b": -0.503,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 8,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T02_Q139",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "Specific product pricing will -------.",
+        "answer": "wait",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 33,
+        "prior_irt_b": -0.481,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 7,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T08_Q131",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "I will respond to your message when I -------.",
+        "answer": "return",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 33,
+        "prior_irt_b": -0.481,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 7,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T01_Q133",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "We are ------- equipped to construct small ponds or other water features.",
+        "answer": "also",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 34,
+        "prior_irt_b": -0.459,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 14,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      }
+    ],
+    "sample_major_upgrades": [
+      {
+        "id": "ETS2024_T09_Q141",
+        "part": 6,
+        "topic": "GRM_POS_VERB",
+        "stem": "------- for the wait, we would like to offer you a 10 percent discount on your current order.",
+        "answer": "Compensated",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 3,
+        "new_band": 750,
+        "score": 62,
+        "prior_irt_b": 0.5,
+        "breakdown": {
+          "grammar": 10,
+          "distractor": 20,
+          "lexical": 22,
+          "syntax": 10,
+          "guardrails": []
+        }
+      }
+    ],
+    "top_15_hardest": [
+      {
+        "id": "ETS2026_T05_Q136",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "Good leaders know how to find viable solutions to workplace problems and implement them accordingly. ------- . How can y",
+        "answer": "They communicate with their team regularly to keep them informed.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 89,
+        "prior_irt_b": 1.211,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 15,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q131",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "Come to the Maxley Heights Center for Horticulture and learn how to create a beautiful, eco-friendly garden for your hom",
+        "answer": "Build a set of simple patio furniture with easy-to-acquire materials.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T05_Q133",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "[132] -------, Ohale is seeking employees for its new Westside location, which is still under construction. ------- Thos",
+        "answer": "Its grand opening is scheduled for mid-November.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T07_Q132",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "[131] ------- we are moving ahead with another candidate, we would like to offer you a different position that just beca",
+        "answer": "There are several other internal applicants.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T08_Q145",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "The company's relocation from Fort Worth is expected to be complete by the end of the calendar year. ------- . \"Our deci",
+        "answer": "For example, it provides a range of services to small businesses.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T09_Q144",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "announced it will begin construction on a 500-megawatt wind-solar hybrid power [143] ------- outside of Bangalore, India",
+        "answer": "Windy conditions can cause damage to tall buildings.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T01_Q146",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "[145] ------- , you can make appointments and payments, view your medical history, review lab results, and request medic",
+        "answer": "We hope you will use this resource to manage your health-care needs.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T03_Q134",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "[133] ------- , stop by an Avanti branch for assistance. ------- . On February 1, cashback rewards will return to $2 per",
+        "answer": "Don't wait—the double-rewards promotion ends on January 31.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T09_Q141",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "Two have a classic, timeless look, while the others are minimalist and modern. ------- Once you review the sketches, let",
+        "answer": "Nonetheless, they all give an impression of trustworthiness and precision.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 87,
+        "prior_irt_b": 1.158,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 13,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T02_Q137",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "Our workers are highly qualified licensed technicians who stay up-to-date with ongoing training. -------. We promise you",
+        "answer": "Moreover, the air conditioner you chose is very popular.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T03_Q134",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "A retirement party will be held for her on that day at 4:00 P.M. in the Terey Lobby. -------",
+        "answer": "Cometti Creative will hire a replacement soon.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T05_Q136",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "To improve the effectiveness of the Ajaz Water Filter Pitcher, we [135] ------- priming the filter before the first use.",
+        "answer": "Our filtration system will be redesigned within the next year.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T02_Q145",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "[144] -------, we could remove all of the old asphalt and replace it with a porous material such as crushed gravel. ----",
+        "answer": "This approach is the one we would recommend.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T04_Q133",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "two years ago. -------. \"After receiving the award, opening a restaurant became my dream,\" he said.",
+        "answer": "He was thrilled to win that competition.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q140",
+        "part": 6,
+        "topic": "COH_P6_SENTENCE_INSERT",
+        "stem": "No doubt, you want your facilities to be comfortable and calming while enhancing your professional practice and conformi",
+        "answer": "Let us help you achieve these objectives.",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 3,
+        "new_band": 850,
+        "score": 84,
+        "prior_irt_b": 1.079,
+        "breakdown": {
+          "grammar": 26,
+          "distractor": 24,
+          "lexical": 24,
+          "syntax": 10,
+          "guardrails": []
+        }
+      }
+    ],
+    "top_15_easiest": [
+      {
+        "id": "ETS2026_T01_Q142",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Please let ------- know if you have any questions.",
+        "answer": "me",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 14,
+        "prior_irt_b": -0.895,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T01_Q134",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "With more than 40 years in the landscape–design business, ------- expertise is unmatched.",
+        "answer": "our",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 18,
+        "prior_irt_b": -0.808,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q139",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "------- must be renewed if you intend to keep your membership for the coming year.",
+        "answer": "You",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 19,
+        "prior_irt_b": -0.786,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q134",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Among other things, ------- improve drainage and protect rivers and streams.",
+        "answer": "we",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 20,
+        "prior_irt_b": -0.764,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T08_Q141",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "In particular, ------- commented on how simple it is to use the different features.",
+        "answer": "they",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 21,
+        "prior_irt_b": -0.742,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 7,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T02_Q146",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "I believe that I could reach your target audience best and that the agreement would serve ------- both very well.",
+        "answer": "us",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 22,
+        "prior_irt_b": -0.721,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 8,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T10_Q133",
+        "part": 6,
+        "topic": "GRM_CONN_PREP_MEANING",
+        "stem": "This feature minimizes the need ------- frequent",
+        "answer": "for",
+        "old_diff": 2,
+        "old_band": 550,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 24,
+        "prior_irt_b": -0.677,
+        "breakdown": {
+          "grammar": 16,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T10_Q140",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- has been entered into our upcoming contest.",
+        "answer": "It",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 24,
+        "prior_irt_b": -0.677,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T09_Q131",
+        "part": 6,
+        "topic": "GRM_PRON_CASE",
+        "stem": "Thank you for flying Sky Air First with ------- .",
+        "answer": "ours",
+        "old_diff": 1,
+        "old_band": 450,
+        "new_diff": 1,
+        "new_band": 450,
+        "score": 25,
+        "prior_irt_b": -0.655,
+        "breakdown": {
+          "grammar": 8,
+          "distractor": 8,
+          "lexical": 7,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T09_Q140",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- represents your business in a slightly different way.",
+        "answer": "Each",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 26,
+        "prior_irt_b": -0.633,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 0,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T04_Q145",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "The plants' leaves are ordinarily disposed of ------ the fruit is harvested.",
+        "answer": "now",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T04_Q136",
+        "part": 6,
+        "topic": "GRM_COMP_QUANTIFIER",
+        "stem": "Just bring your entrance ticket to ------ of these establishments.",
+        "answer": "any",
+        "old_diff": 2,
+        "old_band": 650,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 20,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 2,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2026_T05_Q145",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- respond promptly to article proposals, which should be submitted as single-page outlines.",
+        "answer": "We",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 28,
+        "prior_irt_b": -0.59,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T10_Q136",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "We have also received information ------- network data becoming corrupted and files not saving properly.",
+        "answer": "as",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 29,
+        "prior_irt_b": -0.568,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 6,
+          "lexical": 0,
+          "syntax": 5,
+          "guardrails": []
+        }
+      },
+      {
+        "id": "ETS2024_T01_Q141",
+        "part": 6,
+        "topic": "VOC_COLLOCATION",
+        "stem": "------- you decide to close your account, no action is necessary.",
+        "answer": "Also",
+        "old_diff": 3,
+        "old_band": 700,
+        "new_diff": 1,
+        "new_band": 500,
+        "score": 30,
+        "prior_irt_b": -0.546,
+        "breakdown": {
+          "grammar": 18,
+          "distractor": 8,
+          "lexical": 0,
+          "syntax": 4,
+          "guardrails": []
+        }
+      }
+    ]
+  }
+}
