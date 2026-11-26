@@ -96,3 +96,48 @@ test('Rubric v2.1 unit guardrails: basic A1-A2 & pronouns stay Easy/Medium, C1 i
   assert.equal(longCommonWord.breakdown.lexical, 8);
   assert.equal(longCommonWord.difficulty_level, 1);
 });
+
+test('ETS2024 Reading answer-key integrity & anti-permutation regression (all 10 tests)', () => {
+  const akPath = path.join(ROOT, 'ETS_Corpus_Normalized_Enriched_Database', 'ETS2024', 'answer_keys.json');
+  const ak = JSON.parse(fs.readFileSync(akPath, 'utf8'));
+  const akMap = new Map(ak.keys.map((k) => [`ETS2024_T${String(k.test).padStart(2, '0')}_Q${String(k.q).padStart(3, '0')}`, k.answer]));
+
+  const master = JSON.parse(fs.readFileSync(SECONDARY_PATH, 'utf8').replace(/^\uFEFF/, ''));
+  const masterById = new Map((master.part5_part6_grammar_bank || []).map((q) => [q.id, q]));
+
+  // Spot-verified ground-truth canaries across Part 5 & Part 7
+  const CANARIES = {
+    ETS2024_T01_Q101: 'B', // his career experiences
+    ETS2024_T01_Q147: 'C', // In a box
+    ETS2024_T02_Q200: 'B', // The lack of information about walking distances
+    ETS2024_T04_Q127: 'A', // are submitted
+    ETS2024_T08_Q102: 'D', // that your personal belongings
+    ETS2024_T08_Q112: 'C', // have already submitted
+    ETS2024_T10_Q102: 'A', // must be strictly followed
+  };
+  for (const [id, expected] of Object.entries(CANARIES)) {
+    assert.equal(akMap.get(id), expected, `Canary ${id} in answer_keys.json must be ${expected}`);
+  }
+
+  for (let t = 1; t <= 10; t++) {
+    const pad = String(t).padStart(2, '0');
+    const rPath = path.join(ROOT, 'ETS_Corpus_Normalized_Enriched_Database', 'ETS2024', `Test_${pad}`, 'reading.json');
+    const rJson = JSON.parse(fs.readFileSync(rPath, 'utf8'));
+
+    for (const q of rJson.questions || []) {
+      const expected = akMap.get(q.id);
+      assert.equal(q.correct_answer, expected, `${q.id} reading.json answer mismatch vs answer_keys.json`);
+
+      const oda = q.ai_analysis?.option_deep_analysis;
+      if (oda && oda[expected]) {
+        assert.equal(oda[expected].is_correct, true, `${q.id} option_deep_analysis[${expected}].is_correct must be true`);
+      }
+      if (q.ai_analysis?.sentence_xray && q.options?.[expected]) {
+        assert.equal(q.ai_analysis.sentence_xray.blank_slot, q.options[expected], `${q.id} sentence_xray.blank_slot mismatch`);
+      }
+      if (masterById.has(q.id)) {
+        assert.equal(masterById.get(q.id).correct_answer, expected, `${q.id} master bank mismatch`);
+      }
+    }
+  }
+});
