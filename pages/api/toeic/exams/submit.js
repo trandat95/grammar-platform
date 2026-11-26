@@ -3,6 +3,10 @@ import { attachCorrelationId, checkApiRateLimit, isValidUuid, sendSafeServerErro
 import { verifyServerSession } from '../../../../lib/supabase/middleware';
 import { getAdminClient } from '../../../../lib/supabase/server';
 import ToeicRepository from '../../../../lib/toeic/toeic-repository';
+import FlashcardRepository from '../../../../lib/toeic/flashcard-repository';
+import { buildQueuedSrsPayload } from '../../../../lib/toeic/flashcard-fsrs';
+import { resolveServerUserRole } from '../../../../lib/toeic/subscription/server-gate';
+import { FREE_TIER_LIMITS } from '../../../../lib/toeic/subscription/toeic-entitlement';
 import { analyzeUserExamPerformance } from '../../../../lib/toeic/data-science/quadrant-analyzer';
 import { DS_THRESHOLDS } from '../../../../lib/toeic/data-science/threshold-config';
 
@@ -58,6 +62,20 @@ export default async function handler(req, res) {
 
     const serverClient = getAdminClient();
     const authUser = await verifyServerSession(req);
+
+    // Cross-Link Step 4: Collect matching TOEIC Flashcards from wrong answers
+    const recommendedFlashcardsMap = new Map();
+    for (const wrongQId of analysis.wrongQuestionIds || []) {
+      const matched = FlashcardRepository.getMatchedFlashcardsForQuestion(wrongQId, 2);
+      for (const fc of matched) {
+        if (!recommendedFlashcardsMap.has(fc.id)) {
+          recommendedFlashcardsMap.set(fc.id, { ...fc, source_question_id: wrongQId });
+        }
+        if (recommendedFlashcardsMap.size >= 12) break;
+      }
+      if (recommendedFlashcardsMap.size >= 12) break;
+    }
+    const recommendedFlashcards = [...recommendedFlashcardsMap.values()];
 
     let examAttemptId = null;
     let remediationPlanId = null;
@@ -119,6 +137,58 @@ export default async function handler(req, res) {
         verificationStatus = rpcRes.verification_status || null;
         deduped = Boolean(rpcRes.deduped);
       }
+
+      // Cross-Link Step 4: Auto-queue recommended flashcards into user_toeic_flashcard_srs (LEARNING/RELEARNING)
+      if (recommendedFlashcards.length > 0 && !deduped) {
+        try {
+          const { isVip } = await resolveServerUserRole(req);
+          const { data: existingSrs } = await serverClient
+            .from('user_toeic_flashcard_srs')
+            .select('*')
+            .eq('user_id', authUser.id);
+
+          const existingMap = new Map((existingSrs || []).map(r => [Number(r.flashcard_id), r]));
+          let trackedCount = existingMap.size;
+          const srsUpserts = [];
+
+          for (const recFc of recommendedFlashcards) {
+            const existing = existingMap.get(Number(recFc.id)) || null;
+            if (!existing && !isVip && trackedCount >= FREE_TIER_LIMITS.maxSrsCards) continue;
+            const fullFc = FlashcardRepository.getById(recFc.id);
+            if (!fullFc) continue;
+            const queued = buildQueuedSrsPayload({
+              existingRecord: existing,
+              flashcard: fullFc,
+              sourceContext: 'EXAM_REMEDIATION',
+              sourceQuestionId: recFc.source_question_id || null,
+            });
+            srsUpserts.push({
+              user_id: authUser.id,
+              flashcard_id: fullFc.id,
+              srs_state: queued.srs_state,
+              reps: queued.reps,
+              lapses: queued.lapses,
+              ease_factor: queued.ease_factor,
+              stability: queued.stability,
+              difficulty: queued.difficulty,
+              interval_days: queued.interval_days,
+              source_context: queued.source_context,
+              source_question_id: queued.source_question_id,
+              due_at: queued.due_at,
+              last_reviewed_at: queued.last_reviewed_at,
+            });
+            if (!existing) trackedCount += 1;
+          }
+
+          if (srsUpserts.length > 0) {
+            await serverClient
+              .from('user_toeic_flashcard_srs')
+              .upsert(srsUpserts, { onConflict: 'user_id,flashcard_id' });
+          }
+        } catch (fcErr) {
+          console.warn('[exams/submit] flashcard auto-queue warning:', fcErr?.message || fcErr);
+        }
+      }
     }
 
     // Fetch updated Crowd Intelligence with Sample-Size Gating (Section 2.1)
@@ -172,6 +242,7 @@ export default async function handler(req, res) {
       verificationStatus,
       analysis,
       crowdStats,
+      recommendedFlashcards,
       correlationId,
     });
   } catch (err) {

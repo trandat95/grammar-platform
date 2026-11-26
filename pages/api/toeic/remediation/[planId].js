@@ -2,6 +2,7 @@ import { attachCorrelationId, checkApiRateLimit, isValidUuid, sendSafeServerErro
 import { verifyServerSession } from '../../../../lib/supabase/middleware';
 import { getAdminClient } from '../../../../lib/supabase/server';
 import ToeicRepository from '../../../../lib/toeic/toeic-repository';
+import FlashcardRepository from '../../../../lib/toeic/flashcard-repository';
 import { hasVipPrivilege } from '../../../../lib/toeic/subscription/toeic-entitlement';
 
 /**
@@ -72,6 +73,7 @@ export default async function handler(req, res) {
           return {
             ...q,
             remediationType: drillSet.has(qId) ? 'MICRO_DRILL' : 'TWIN_QUESTION',
+            matched_flashcards: FlashcardRepository.getMatchedFlashcardsForQuestion(q.id, 3),
           };
         })
         .filter(Boolean);

@@ -113,7 +113,7 @@ export default function AppShell2026({
     currentPath.startsWith("/toeic/diagnostic") ? "diagnostic" :
     currentPath.startsWith("/toeic/tests") ? "tests" :
     currentPath.startsWith("/toeic/dictation") ? "dictation" :
-    currentPath.startsWith("/toeic/mistakes") ? "srs" :
+    (currentPath.startsWith("/toeic/mistakes") || currentPath.startsWith("/toeic/flashcards")) ? "srs" :
     "hub"
   );
 

@@ -9,6 +9,7 @@ import { ToeicBadge, ToeicButton } from '../../../../components/toeic/ui';
 import useGlobalAuth from '../../../../hooks/useGlobalAuth';
 import useToeicEntitlement from '../../../../hooks/useToeicEntitlement';
 import ToeicSmartPaywallModal from '../../../../components/toeic/premium/ToeicSmartPaywallModal';
+import { queueLinkedFlashcards } from '../../../../lib/toeic/flashcard-client-store';
 
 export default function TestSimulationPage() {
   const router = useRouter();
@@ -201,6 +202,16 @@ export default function TestSimulationPage() {
       const data = await res.json();
       if (data.success) {
         setServerDsResult(data);
+        if (Array.isArray(data.recommendedFlashcards) && data.recommendedFlashcards.length > 0) {
+          queueLinkedFlashcards({
+            userId: globalAuth.currentUser?.id || 'guest',
+            authToken: globalAuth.activeAuthToken,
+            role: globalAuth.currentUser?.role || 'FREE',
+            flashcardIds: data.recommendedFlashcards.map((fc) => fc.id),
+            questionId: data.recommendedFlashcards[0]?.source_question_id || null,
+            sourceContext: 'EXAM_REMEDIATION',
+          }).catch(() => {});
+        }
       }
     } catch (err) {
       console.warn('Exam DS submit notice:', err?.message || err);
@@ -936,6 +947,59 @@ export default function TestSimulationPage() {
                   </div>
                 )}
 
+                {/* 3.5 RECOMMENDED TOEIC FLASHCARDS FROM MISTAKES (STEP 4 CROSS-LINK) */}
+                {Array.isArray(serverDsResult?.recommendedFlashcards) && serverDsResult.recommendedFlashcards.length > 0 && (
+                  <div
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '0.95rem 1.05rem',
+                      borderRadius: 'var(--ds-radius-md)',
+                      backgroundColor: 'var(--ds-accent-bg)',
+                      border: '1px solid var(--ds-accent-border)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.6rem',
+                    }}
+                  >
+                    <div className="toeic-flex-between" style={{ flexWrap: 'wrap', gap: '0.4rem' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.84rem', fontWeight: 800, color: 'var(--ds-accent)' }}>
+                        <KitIcon name="books" size={15} />
+                        <span>Từ vựng &amp; Collocations cần ôn từ lỗi sai bài thi ({serverDsResult.recommendedFlashcards.length} thẻ FSRS-4.5)</span>
+                      </div>
+                      <a
+                        href="/toeic/mistakes-srs?tab=due"
+                        style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--ds-accent)', textDecoration: 'underline' }}
+                      >
+                        Ôn ngay trong Flashcard Studio &rarr;
+                      </a>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+                      {serverDsResult.recommendedFlashcards.map((fc) => (
+                        <a
+                          key={fc.id}
+                          href={`/toeic/mistakes-srs?card=${encodeURIComponent(fc.code)}`}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.32rem 0.65rem',
+                            borderRadius: '0.5rem',
+                            backgroundColor: 'var(--ds-card)',
+                            border: '1px solid var(--ds-border)',
+                            color: 'var(--ds-text)',
+                            fontSize: '0.78rem',
+                            textDecoration: 'none',
+                          }}
+                        >
+                          <strong>{fc.word}</strong>
+                          <span style={{ color: 'var(--ds-text-muted)' }}>({fc.part_of_speech})</span>
+                          <span style={{ color: 'var(--ds-text-secondary)' }}>— {fc.meaning_vi}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                   {serverDsResult?.remediationPlanId && (
                     <a
@@ -1285,8 +1349,32 @@ export default function TestSimulationPage() {
                           examMode={examSessionMode || 'practice'}
                           initialSelectedOption={userAnswers[activePart5Question.id] || null}
                           forceReview={isReviewMode || examSubmitted}
-                          onAnswerSubmit={({ selectedOption }) => {
+                          onAnswerSubmit={({ selectedOption, isCorrect }) => {
                             handleSelectOption(activePart5Question.id, selectedOption);
+                            if (examSessionMode === 'practice' && !isCorrect && activePart5Question.matched_flashcards?.length) {
+                              queueLinkedFlashcards({
+                                userId: globalAuth.currentUser?.id || 'guest',
+                                authToken: globalAuth.activeAuthToken,
+                                role: globalAuth.currentUser?.role || 'FREE',
+                                flashcardIds: activePart5Question.matched_flashcards.map((f) => f.id),
+                                questionId: activePart5Question.id,
+                                sourceContext: 'MISTAKE_AUTO_QUEUE',
+                              }).catch(() => {});
+                            }
+                          }}
+                          onSaveToSrs={async ({ word, data }) => {
+                            const res = await queueLinkedFlashcards({
+                              userId: globalAuth.currentUser?.id || 'guest',
+                              authToken: globalAuth.activeAuthToken,
+                              role: globalAuth.currentUser?.role || 'FREE',
+                              flashcardIds: data?.flashcardId ? [data.flashcardId] : [],
+                              words: word ? [word] : [],
+                              questionId: activePart5Question.id,
+                              sourceContext: 'XRAY_SAVE',
+                            });
+                            if (res?.requiresUpgrade) {
+                              entitlement.openPaywall('TRG_09_TOEIC_FLASHCARD_1000', { word });
+                            }
                           }}
                           onNextQuestion={() => {
                             if (currentPart5Index < part5Questions.length - 1) {

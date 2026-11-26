@@ -10,6 +10,7 @@ import useGlobalAuth from '../../../hooks/useGlobalAuth';
 import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
 import ToeicSmartPaywallModal from '../../../components/toeic/premium/ToeicSmartPaywallModal';
 import { ToeicBadge } from '../../../components/toeic/ui';
+import { queueLinkedFlashcards } from '../../../lib/toeic/flashcard-client-store';
 
 export default function TopicPracticePage() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function TopicPracticePage() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState(false);
   const [aiTutorContext, setAiTutorContext] = useState({ question: null, selectedOption: null });
+  const [srsToast, setSrsToast] = useState('');
   const questionCardRef = useRef(null);
 
   const scrollToQuestionCard = () => {
@@ -485,10 +487,41 @@ export default function TopicPracticePage() {
                   </div>
                 ) : currentQ ? (
                   <div ref={questionCardRef} className="toeic-xray-card-anchor">
+                    {srsToast && (
+                      <div
+                        role="status"
+                        style={{
+                          marginBottom: '0.75rem',
+                          padding: '0.65rem 0.9rem',
+                          borderRadius: '0.75rem',
+                          border: '1px solid var(--ds-success-border)',
+                          backgroundColor: 'var(--ds-success-bg)',
+                          color: 'var(--ds-success)',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '0.5rem',
+                        }}
+                      >
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <KitIcon name="check-circle" size={15} />
+                          <span>{srsToast}</span>
+                        </span>
+                        <Link
+                          href="/toeic/mistakes-srs?tab=due"
+                          style={{ color: 'var(--ds-accent)', fontWeight: 800, textDecoration: 'underline' }}
+                        >
+                          Ôn ngay &rarr;
+                        </Link>
+                      </div>
+                    )}
                     <SentenceXRayCard
                       key={`${currentQ.id}-${sessionNonce}`}
                       question={currentQ}
-                      onAnswerSubmit={({ isCorrect, selectedOption }) => {
+                      onAnswerSubmit={async ({ isCorrect, selectedOption }) => {
                         if (isCorrect) setCorrectCount(prev => prev + 1);
                         if (typeof window !== 'undefined') {
                           try {
@@ -497,9 +530,48 @@ export default function TopicPracticePage() {
                             localStorage.setItem(`toeic_responses_${uid}`, JSON.stringify(stored));
                           } catch (e) {}
                         }
+                        if (!isCorrect) {
+                          const fcIds = (currentQ.matched_flashcards || []).map((f) => f.id);
+                          const linkedWords = (currentQ.ai_analysis?.linked_vocabulary || []).map((v) =>
+                            typeof v === 'string' ? v : v?.word
+                          );
+                          if (fcIds.length > 0 || linkedWords.length > 0) {
+                            const res = await queueLinkedFlashcards({
+                              userId: uid,
+                              authToken: globalAuth.activeAuthToken,
+                              role: globalAuth.currentUser?.role || 'FREE',
+                              flashcardIds: fcIds,
+                              words: linkedWords,
+                              questionId: currentQ.id,
+                              sourceContext: 'MISTAKE_AUTO_QUEUE',
+                            });
+                            if (res?.queued?.length > 0) {
+                              setSrsToast(`Đã tự động đưa ${res.queued.length} thẻ Flashcard từ câu sai vào lịch ôn FSRS-4.5!`);
+                              setTimeout(() => setSrsToast(''), 4000);
+                            }
+                          }
+                        }
                       }}
-                      onSaveToSrs={({ word }) => {
-                        alert(`Đã lưu "${word}" vào Sổ tay Ôn tập Ngắt quãng (SRS)!`);
+                      onSaveToSrs={async ({ word, data }) => {
+                        const res = await queueLinkedFlashcards({
+                          userId: uid,
+                          authToken: globalAuth.activeAuthToken,
+                          role: globalAuth.currentUser?.role || 'FREE',
+                          flashcardIds: data?.flashcardId ? [data.flashcardId] : [],
+                          words: word ? [word] : [],
+                          questionId: currentQ.id,
+                          sourceContext: 'XRAY_SAVE',
+                        });
+                        if (res?.requiresUpgrade) {
+                          entitlement.openPaywall('TRG_09_TOEIC_FLASHCARD_1000', { word });
+                          return;
+                        }
+                        setSrsToast(
+                          res?.queued?.length > 0
+                            ? `Đã lưu "${word}" vào Sổ Tay Flashcard FSRS-4.5!`
+                            : `Đã ghi nhận "${word}" — mở Sổ Tay Flashcard để ôn tập.`
+                        );
+                        setTimeout(() => setSrsToast(''), 3500);
                       }}
                       onOpenAiTutor={(q, opt) => {
                         setAiTutorContext({ question: q, selectedOption: opt });

@@ -1,5 +1,6 @@
 import { checkApiRateLimit, sendSafeServerError, getCorrelationId } from '../../../../lib/api/security-guard';
 import ToeicRepository from '../../../../lib/toeic/toeic-repository';
+import FlashcardRepository from '../../../../lib/toeic/flashcard-repository';
 import { resolveServerUserRole } from '../../../../lib/toeic/subscription/server-gate';
 
 export default async function handler(req, res) {
@@ -58,7 +59,11 @@ export default async function handler(req, res) {
       }
     }
 
-    const questions = ToeicRepository.getQuestionsByTopic(topicId, effectiveLimit, excludeList);
+    const rawQuestions = ToeicRepository.getQuestionsByTopic(topicId, effectiveLimit, excludeList);
+    const questions = rawQuestions.map((q) => ({
+      ...q,
+      matched_flashcards: FlashcardRepository.getMatchedFlashcardsForQuestion(q.id, 3),
+    }));
 
     return res.status(200).json({
       success: true,

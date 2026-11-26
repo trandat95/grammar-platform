@@ -47,6 +47,7 @@ scratch/
 # Agent & MCP Secrets
 .agents/
 *mcp_config.json
+.mcp.json
 
 ETS_Audio_All/
 .vercel

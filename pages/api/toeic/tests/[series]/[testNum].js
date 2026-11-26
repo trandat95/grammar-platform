@@ -1,5 +1,6 @@
 import { checkApiRateLimit, sendSafeServerError, getCorrelationId } from '../../../../../lib/api/security-guard';
 import ToeicRepository from '../../../../../lib/toeic/toeic-repository';
+import FlashcardRepository from '../../../../../lib/toeic/flashcard-repository';
 import { verifyTestServerAccess } from '../../../../../lib/toeic/subscription/server-gate';
 
 export default async function handler(req, res) {
@@ -43,6 +44,11 @@ export default async function handler(req, res) {
       return res.status(404).json({ success: false, error: `Không tìm thấy đề ${series} Test ${testNum}` });
     }
 
+    const enrichedQuestions = (testData.questions || []).map((q) => ({
+      ...q,
+      matched_flashcards: FlashcardRepository.getMatchedFlashcardsForQuestion(q.id, 3),
+    }));
+
     return res.status(200).json({
       success: true,
       series: s,
@@ -50,7 +56,7 @@ export default async function handler(req, res) {
       mode,
       passageGroups: testData.passageGroups,
       passages: testData.passages,
-      questions: testData.questions
+      questions: enrichedQuestions
     });
   } catch (err) {
     return sendSafeServerError(res, err, correlationId, 'Lỗi lấy nội dung đề thi TOEIC');

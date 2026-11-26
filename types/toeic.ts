@@ -165,3 +165,97 @@ export interface DictationTrack {
   blank_answers: string[];
   blank_count: number;
 }
+
+export interface ToeicVisualMedia {
+  visual_scene_keywords: string;
+  theme_color_hex: string;
+  accent_color_hex: string;
+  lucide_icon: string;
+  cdn_thumbnail_url: string;
+  pexels_search_endpoint: string;
+  pixabay_search_endpoint: string;
+  wikimedia_search_endpoint: string;
+  ai_generation_prompt: string;
+  offline_svg_card_data_uri?: string;
+}
+
+export interface SpacedRepetitionDefaults {
+  algorithm: "FSRS-4.5 / SM-2" | string;
+  initial_ease_factor: number;
+  initial_interval_days: number;
+  initial_stability: number;
+  initial_difficulty: number;
+}
+
+export interface ToeicFlashcardModule {
+  module_id: string;
+  module_name_en: string;
+  module_name_vi: string;
+  topic_count: number;
+  word_count: number;
+  color_hex: string;
+}
+
+export interface ToeicFlashcardTopic {
+  topic_id: number;
+  module_id: string;
+  module_name_vi?: string;
+  topic_name_en: string;
+  topic_name_vi: string;
+  word_count: number;
+  source_title: string;
+  source_url: string;
+}
+
+export interface ToeicFlashcardItem {
+  id: number;
+  code: string;
+  module_id: string;
+  module_name_en: string;
+  module_name_vi: string;
+  topic_id: number;
+  topic_name_en: string;
+  topic_name_vi: string;
+  word: string;
+  part_of_speech: string;
+  ipa_us: string;
+  meaning_vi: string;
+  definition_en: string;
+  collocation: string;
+  example_en: string;
+  example_vi: string;
+  cloze_sentence_en: string;
+  cefr_level: "A2" | "B1" | "B2" | "C1";
+  toeic_score_band: "300-450" | "450-600" | "600-750" | "750-990";
+  synonyms: string[];
+  synonyms_str: string;
+  audio_tts_lang: "en-US";
+  audio_google_tts_url: string;
+  visual_media: ToeicVisualMedia;
+  spaced_repetition_defaults: SpacedRepetitionDefaults;
+  source_title: string;
+  source_url: string;
+}
+
+export type FlashcardSrsState = "NEW" | "LEARNING" | "REVIEW" | "RELEARNING";
+
+export interface UserToeicFlashcardSrsState {
+  id?: string;
+  user_id?: string;
+  flashcard_id: number;
+  srs_state: FlashcardSrsState;
+  reps: number;
+  lapses: number;
+  ease_factor: number;
+  stability: number;
+  difficulty: number;
+  interval_days: number;
+  last_rating?: 1 | 2 | 3 | 4 | null;
+  last_response_ms?: number | null;
+  source_context?: string | null;
+  source_question_id?: string | null;
+  custom_image_url?: string | null;
+  personal_mnemonic_note?: string | null;
+  due_at: string;
+  last_reviewed_at?: string | null;
+}

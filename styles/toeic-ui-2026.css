@@ -1099,20 +1099,20 @@
   border-radius: 0.28rem;
   line-height: 1.15;
   margin-bottom: 0.18rem;
-  color: #ffffff;
+  color: var(--ds-text-on-accent);
   white-space: nowrap;
 }
 
 .toeic-super-role-pill.pill-blue {
-  background-color: #2563eb;
+  background-color: var(--ds-accent);
 }
 
 .toeic-super-role-pill.pill-amber {
-  background-color: #d97706;
+  background-color: var(--ds-btn-warning);
 }
 
 .toeic-super-role-pill.pill-emerald {
-  background-color: #059669;
+  background-color: var(--ds-success);
 }
 
 .toeic-super-chunk-words {
@@ -1562,17 +1562,19 @@
 .transition-all { transition: all 0.18s ease; }
 
 /* ==========================================================================
-   12. 3D FLASHCARD SYSTEM & ANIMATIONS (AC-U6.4)
+   12. 3D FLASHCARD SYSTEM & ANIMATIONS (AC-U6.4 + TOEIC 1,000 FSRS-4.5)
    ========================================================================== */
 .toeic-flashcard-perspective {
-  perspective: 1200px;
+  perspective: 1400px;
   width: 100%;
 }
 
 .toeic-flashcard-inner {
   position: relative;
+  display: grid;
+  grid-template-areas: "fc-face";
   width: 100%;
-  min-height: 360px;
+  min-height: 440px;
   text-align: center;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
@@ -1585,28 +1587,146 @@
 
 .toeic-flashcard-front,
 .toeic-flashcard-back {
-  position: absolute;
-  top: 0;
-  left: 0;
+  grid-area: fc-face;
   width: 100%;
-  height: 100%;
+  min-height: 440px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 1.5rem;
-  padding: 2rem 1.5rem;
+  padding: 0;
+  overflow: hidden;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--ds-card);
   border: 1.5px solid var(--ds-card-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+.toeic-flashcard-front {
+  transform: rotateY(0deg);
+  z-index: 2;
 }
 
 .toeic-flashcard-back {
   transform: rotateY(180deg);
-  background: linear-gradient(135deg, var(--ds-card) 0%, var(--ds-bg-elevated) 100%);
+  background: linear-gradient(155deg, var(--ds-card) 0%, var(--ds-bg-elevated) 100%);
   border-color: var(--ds-accent-border);
+  z-index: 1;
+}
+
+.toeic-flashcard-inner.is-flipped .toeic-flashcard-front {
+  pointer-events: none;
+}
+
+.toeic-flashcard-inner:not(.is-flipped) .toeic-flashcard-back {
+  pointer-events: none;
+}
+
+.toeic-fc-media-wrap {
+  position: relative;
+  width: 100%;
+  height: 182px;
+  background-color: var(--ds-bg-elevated);
+  overflow: hidden;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.toeic-fc-media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.toeic-fc-media-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0.04) 55%, rgba(15, 23, 42, 0.45) 100%);
+  pointer-events: none;
+}
+
+.toeic-fc-body {
+  padding: 1.25rem 1.5rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  flex: 1;
+}
+
+.toeic-fc-cloze-box {
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+  text-align: left;
+}
+
+.toeic-fc-colloc-box {
+  padding: 0.85rem 1rem;
+  border-radius: 0.9rem;
+  background-color: var(--ds-warning-bg);
+  border: 1px solid var(--ds-warning-border);
+  text-align: left;
+}
+
+.toeic-fc-example-box {
+  padding: 0.95rem 1rem;
+  border-radius: 0.9rem;
+  background-color: var(--ds-bg-elevated);
+  border: 1px solid var(--ds-border);
+  text-align: left;
+}
+
+.toeic-fc-rating-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.toeic-fc-rating-btn {
+  min-height: 54px;
+  padding: 0.65rem 0.5rem;
+  border-radius: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.toeic-fc-rating-btn:hover {
+  transform: translateY(-1px);
+}
+
+.toeic-fc-module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.toeic-fc-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 0.6rem;
+}
+
+.toeic-fc-word-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toeic-flashcard-inner {
+    transition: none;
+  }
+}
+
+@media (hover: none) {
+  .toeic-fc-kbd-hint {
+    display: none;
+  }
 }
 
 /* ==========================================================================
@@ -1958,13 +2078,26 @@
     justify-content: center;
   }
 
-  .toeic-flashcard-inner {
-    min-height: 320px;
-  }
-
+  .toeic-flashcard-inner,
   .toeic-flashcard-front,
   .toeic-flashcard-back {
-    padding: 1.5rem 1rem;
+    min-height: 410px;
+  }
+
+  .toeic-fc-media-wrap {
+    height: 152px;
+  }
+
+  .toeic-fc-body {
+    padding: 1rem 1rem 1.1rem;
+  }
+
+  .toeic-fc-rating-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toeic-fc-module-grid {
+    grid-template-columns: 1fr;
   }
 }
 

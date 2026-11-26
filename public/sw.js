@@ -4,8 +4,12 @@
  * - Never traps HTML navigation behind stale HTTP cache (cache: "no-store" Network-First)
  */
 
-const CACHE_VERSION = "grammar-engine-v2.12-sw2";
-const STATIC_SHELL = ["/manifest.json"];
+const CACHE_VERSION = "grammar-engine-v3.1-fc";
+const STATIC_SHELL = [
+  "/manifest.json",
+  "/data/toeic-flashcards/manifest.json",
+  "/data/toeic-flashcards/crosslinks.json",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

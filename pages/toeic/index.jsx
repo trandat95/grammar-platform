@@ -267,6 +267,53 @@ export default function ToeicHubPage() {
                   })}
                 </div>
 
+                {/* Quick Jump Strip: 1,000 New TOEIC Flashcards FSRS-4.5 */}
+                <div
+                  className="toeic-card"
+                  style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    marginTop: '1rem',
+                    padding: '1rem 1.2rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem',
+                    borderColor: 'var(--ds-accent-border)',
+                    background: 'linear-gradient(135deg, var(--ds-card) 0%, var(--ds-accent-bg) 100%)',
+                  }}
+                >
+                  <div style={{ position: 'relative', zIndex: 2, maxWidth: '580px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap', marginBottom: '0.25rem' }}>
+                      <KitIcon name="books" size={16} color="var(--ds-accent)" />
+                      <span style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--ds-text)' }}>
+                        Kho 1,000 Từ Vựng New TOEIC &amp; Flashcard 3D (FSRS-4.5)
+                      </span>
+                      <ToeicBadge variant="primary">10 Modules · 50 Chủ Đề</ToeicBadge>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--ds-text-secondary)', lineHeight: 1.45 }}>
+                      Thẻ lật 3D kèm ảnh 4 lớp offline, phát âm Mỹ, bài điền khuyết Cloze và tự động đồng bộ từ các câu làm sai.
+                    </div>
+                  </div>
+                  <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <Link
+                      href="/toeic/mistakes-srs?tab=browse"
+                      className="toeic-btn toeic-btn-primary"
+                      style={{ textDecoration: 'none', fontSize: '0.82rem', padding: '0.55rem 1rem' }}
+                    >
+                      Học 1,000 Từ Vựng &rarr;
+                    </Link>
+                    <Link
+                      href="/toeic/mistakes-srs?tab=due"
+                      className="toeic-btn toeic-btn-secondary"
+                      style={{ textDecoration: 'none', fontSize: '0.82rem', padding: '0.55rem 0.9rem' }}
+                    >
+                      Ôn FSRS Hôm Nay
+                    </Link>
+                  </div>
+                </div>
+
                 {/* Quick Jump Strip to 24 Topics */}
                 <div
                   className="toeic-card"

@@ -8,6 +8,7 @@ import { ToeicBadge, ToeicButton } from '../../../components/toeic/ui';
 import useGlobalAuth from '../../../hooks/useGlobalAuth';
 import useToeicEntitlement from '../../../hooks/useToeicEntitlement';
 import ToeicSmartPaywallModal from '../../../components/toeic/premium/ToeicSmartPaywallModal';
+import { queueLinkedFlashcards } from '../../../lib/toeic/flashcard-client-store';
 
 export default function RemediationPlanPage() {
   const router = useRouter();
@@ -234,7 +235,36 @@ export default function RemediationPlanPage() {
                       key={currentQuestion.id}
                       question={currentQuestion}
                       examMode="practice"
-                      onAnswerSubmit={() => handleMarkCompleted(currentQuestion.id)}
+                      onAnswerSubmit={async ({ isCorrect }) => {
+                        handleMarkCompleted(currentQuestion.id);
+                        if (!isCorrect && (currentQuestion.matched_flashcards?.length || currentQuestion.ai_analysis?.linked_vocabulary?.length)) {
+                          await queueLinkedFlashcards({
+                            userId: globalAuth.currentUser?.id || 'guest',
+                            authToken: globalAuth.activeAuthToken,
+                            role: globalAuth.currentUser?.role || 'FREE',
+                            flashcardIds: (currentQuestion.matched_flashcards || []).map((f) => f.id),
+                            words: (currentQuestion.ai_analysis?.linked_vocabulary || []).map((v) =>
+                              typeof v === 'string' ? v : v?.word
+                            ),
+                            questionId: currentQuestion.id,
+                            sourceContext: 'MISTAKE_AUTO_QUEUE',
+                          });
+                        }
+                      }}
+                      onSaveToSrs={async ({ word, data }) => {
+                        const res = await queueLinkedFlashcards({
+                          userId: globalAuth.currentUser?.id || 'guest',
+                          authToken: globalAuth.activeAuthToken,
+                          role: globalAuth.currentUser?.role || 'FREE',
+                          flashcardIds: data?.flashcardId ? [data.flashcardId] : [],
+                          words: word ? [word] : [],
+                          questionId: currentQuestion.id,
+                          sourceContext: 'XRAY_SAVE',
+                        });
+                        if (res?.requiresUpgrade) {
+                          entitlement.openPaywall('TRG_09_TOEIC_FLASHCARD_1000', { word });
+                        }
+                      }}
                       onNextQuestion={() => {
                         if (activeIdx < questions.length - 1) {
                           setActiveIdx(activeIdx + 1);

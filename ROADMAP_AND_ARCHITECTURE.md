@@ -33,13 +33,13 @@
   4. **Phân hệ Kiểm định Cuối cùng Sẵn sàng Triển khai:** Pre-Prod Verification & Release Gate (`2.11`).
   *(Ghi chú Vận hành: Mọi thao tác ghi Server-Authoritative trên Production yêu cầu bổ sung `SUPABASE_SERVICE_ROLE_KEY` vào Vercel Environment Variables của project `grammar-platform`).*
 * **Thông tin Môi trường kết nối:**
-  - 🌐 **Production URL:** [https://grammar-platform-inky.vercel.app](https://grammar-platform-inky.vercel.app) / [https://grammar-platform.vercel.app](https://grammar-platform.vercel.app)
+  - 🌐 **Production URL:** [https://grammarpro.io.vn](https://grammarpro.io.vn) / [https://grammar-platform-inky.vercel.app](https://grammar-platform-inky.vercel.app)
   - 🐙 **GitHub Repository:** [trandat95/grammar-platform](https://github.com/trandat95/grammar-platform)
-  - ⚡ **Vercel Project ID:** `prj_yfOLrVVbBV0b8O8G2ihrDhR5HLsa`
+  - ⚡ **Vercel Project ID:** `prj_AbAWavqUjNfkwSYP0lMVc8vu6awS`
   - 🐘 **Supabase Project (Active Vercel-Integrated):**
     - Project ID / Ref: `bhlhmhvzqcwqenlhioxr` *(migrated from legacy `wtvlbbcyvtqqygtojxay`)*
     - URL Endpoint: `https://bhlhmhvzqcwqenlhioxr.supabase.co`
-    - Trạng thái DB: `ACTIVE_HEALTHY` (PostgreSQL 17 • 63 Tables • 100% RLS + Server-Authoritative Triggers • Next.js `14.2.15` • React `18.3.1` • Prisma `5.22.0`)
+    - Trạng thái DB: `ACTIVE_HEALTHY` (PostgreSQL 17 • 73 Tables • 100% RLS + Server-Authoritative Triggers • Next.js `14.2.35` • React `18.3.1` • Prisma `5.22.0`)
 
 ---
 
@@ -69,6 +69,7 @@ Nhằm giảm thiểu tối đa rủi ro gián đoạn hệ thống và đảm b
 | **Data Science Engine** | **3.3 (DS-3)** | **4-Quadrant Speed×Accuracy Matrix & Cross-Test Remediation Loop (`remediation_plans`)** | **P0 (High Impact)** | ✅ Hoàn thành |
 | **Data Science Engine** | **3.4 (DS-4)** | **Empirical Bayes IRT Recalibration, Fatigue Curve Modeling & Score Trajectory Forecasting** | **P1 (Advanced DS)** | ✅ Hoàn thành |
 | **Brand & UX Phase 4** | **M4.0–M4.7 (`BRAND-UX-V3.1`)** | **Master Art Direction, Asset Governance, `QuestionExperienceEngine`, 9-Viewport QA Gate, Zero OS Emoji (`M4.6`) & FTC-Safe Conversion Analytics (`M4.7`)** *(Single UI/UX Spec: [`docs/BRAND-UX-V3.1.md`](./docs/BRAND-UX-V3.1.md))* | **P0 / P1** | ✅ **100% COMPLETE (`M4.0–M4.7`):** `M4.0–M4.5` (Gate B `7ee1b2e`) ✅ • `M4.6` (`dea4f1f` Live on Prod) ✅ • `M4.7` (FTC-Safe 8 KPIs, PII Sanitizer & Telemetry `14/14` tests PASS) ✅ • `M4.3` AI Multi-Pose Mascots: `3/5` upgraded (`celebrate`, `encourage`, `vip`), `2/5` pending quota reset (`empty`, `ai-coach`) ⏳ |
+| **TOEIC Flashcards FSRS** | **FC-1 – FC-5 (`TOEIC-1000-FSRS`)** | **1,000 New TOEIC Vocabulary Suite (10 Modules, 50 Topics), Hybrid 3-Tier JSON+Supabase+IndexedDB v3, 4-Layer Visual Fallback, 3D Flip Cloze Cards & Cross-Link Auto-Queue on Grammar/Exam Mistakes** | **P0 (Vocab & Retention)** | ✅ **Hoàn thành (Migration `021` • 73/73 RLS • FSRS-4.5 • Cross-linked `2,218` TOEIC questions)** |
 
 ---
 
@@ -3034,6 +3035,7 @@ lib/toeic/data-science/
 - [x] **Phase 3.4 (DS-4 — Remediation & Cross-Test Learning):** Bảng `remediation_plans` tách biệt `completed` (làm xong bài luyện) và `verified` (`verification_status: improved | stagnant | regressed` khi thi đề kế tiếp).
 - [x] **Phase 3.5 (DS-5 — 2PL IRT Calibration & Fatigue Model):** Ước lượng $\theta$ bằng 2PL MAP kèm Fisher Standard Error + cổng kích thước mẫu (`<50 prior_only`, `50–99 monitoring`, `100–299 experimental`, `>=300 calibrated` chỉ tính trên `exam_attempt_count`).
 - [x] **Phase 3.6 & 3.7 (DS-6 / DS-7 — Adaptive Recommendation, Trajectory & Free/VIP Boundary):** API `/api/toeic/exams/history` trả về chuỗi tiến bộ điểm số + `user_topic_mastery` và ranh giới giá trị Free (hiển thị vấn đề thật + điểm mất ước tính + 3 câu drill) vs VIP (mở khóa toàn bộ Error DNA, 4-Quadrant, Twin Questions & Cross-Test Verification).
+- [x] **TOEIC 1,000 Flashcards & FSRS-4.5 (`FC-1` → `FC-5`, Migration `021`):** Tích hợp trọn bộ 1,000 từ vựng (10 Modules, 50 Topics) qua Hybrid 3-Tier (`public/data/toeic-flashcards/` + Supabase `toeic_modules`, `toeic_topics`, `toeic_flashcards`, `user_toeic_flashcard_srs` [73/73 bảng RLS] + IndexedDB `DB_VERSION = 3`), thuật toán `flashcard-fsrs.js` (4 mức Again/Hard/Good/Easy), thẻ 3D lật kèm ảnh 4 lớp offline SVG fallback, phát âm Web Speech API + Google TTS fallback, và liên kết chéo tự động queue `LEARNING`/`RELEARNING` khi làm sai câu từ loại/từ vựng trên X-Ray Practice, Remediation & 20 Đề thi (`2,218` câu hỏi đã nối chỉ mục).
 
 ---
 

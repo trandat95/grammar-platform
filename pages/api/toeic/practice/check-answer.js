@@ -1,5 +1,6 @@
 import { checkApiRateLimit, sendSafeServerError, getCorrelationId } from '../../../../lib/api/security-guard';
 import ToeicRepository from '../../../../lib/toeic/toeic-repository';
+import FlashcardRepository from '../../../../lib/toeic/flashcard-repository';
 
 export default async function handler(req, res) {
   const correlationId = getCorrelationId(req);
@@ -36,6 +37,7 @@ export default async function handler(req, res) {
     };
 
     const twinQuestions = ToeicRepository.getTwinQuestions(questionId, 3);
+    const matchedFlashcards = FlashcardRepository.getMatchedFlashcardsForQuestion(questionId, 3);
 
     return res.status(200).json({
       success: true,
@@ -48,6 +50,7 @@ export default async function handler(req, res) {
       wordFamilyMatrix: aiAnalysis.word_family_matrix || [],
       collocationHighlights: aiAnalysis.collocation_highlights || [],
       linkedVocabulary: aiAnalysis.linked_vocabulary || [],
+      matchedFlashcards,
       twinQuestions
     });
   } catch (err) {

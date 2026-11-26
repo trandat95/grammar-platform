@@ -875,13 +875,14 @@ export default function SentenceXRayCard({
         {/* 2. X-RAY BREAKDOWN BOX (Title hidden on mobile to save vertical space) */}
         <div className="toeic-super-xray-box">
           <div className="toeic-super-xray-box-title ge-hide-mobile">
-            <span style={{ color: 'var(--ds-warning)', fontSize: '0.9rem' }}>⚡</span>
+            <KitIcon name="bolt" size={14} color="var(--ds-warning)" />
             <span>SIÊU QUANG PHỔ X-RAY BÓC TÁCH:</span>
           </div>
 
           {(sentenceTranslationVi || isLoadingTranslation) && (
-            <div className="toeic-super-xray-trans-quote">
-              <span>📖 <strong>Dịch nghĩa:</strong> {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}</span>
+            <div className="toeic-super-xray-trans-quote" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <KitIcon name="book" size={14} color="var(--ds-accent)" style={{ flexShrink: 0 }} />
+              <span><strong>Dịch nghĩa:</strong> {sentenceTranslationVi || 'Đang dịch nghĩa câu...'}</span>
             </div>
           )}
 
@@ -1562,6 +1563,105 @@ export default function SentenceXRayCard({
                               {srsSavedWords[vocKey] ? '✓ Đã lưu' : '+ SRS'}
                             </button>
                           )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4 Cross-Link: Matched New TOEIC 1,000 Flashcards */}
+              {Array.isArray(question.matched_flashcards) && question.matched_flashcards.length > 0 && (
+                <div
+                  style={{
+                    padding: '0.9rem 1rem',
+                    borderRadius: '0.75rem',
+                    border: '1px solid var(--ds-accent-border)',
+                    backgroundColor: 'var(--ds-accent-bg)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.6rem',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-accent)' }}>
+                      <KitIcon name="books" size={14} />
+                      <span>
+                        Thẻ Flashcard 1,000 TOEIC Liên Kết
+                        {state === 'ANSWERED_WRONG' ? ' (Đã gợi ý vào hàng đợi FSRS)' : ''}
+                      </span>
+                    </div>
+                    <a
+                      href="/toeic/mistakes-srs?tab=due"
+                      style={{ fontSize: '0.74rem', fontWeight: 800, color: 'var(--ds-accent)', textDecoration: 'underline' }}
+                    >
+                      Mở Sổ Tay FSRS &rarr;
+                    </a>
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {question.matched_flashcards.map((fc) => {
+                      const fcKey = `fc_${fc.id}`;
+                      const isSaved = Boolean(srsSavedWords[fcKey]) || state === 'ANSWERED_WRONG';
+                      return (
+                        <div
+                          key={fcKey}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.4rem 0.7rem',
+                            borderRadius: '0.55rem',
+                            backgroundColor: 'var(--ds-card)',
+                            border: '1px solid var(--ds-border)',
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          <span>
+                            <strong style={{ color: 'var(--ds-text)' }}>{fc.word}</strong>{' '}
+                            <span style={{ color: 'var(--ds-text-muted)', fontSize: '0.74rem' }}>
+                              ({fc.part_of_speech})
+                            </span>
+                            {': '}
+                            <span style={{ color: 'var(--ds-text-secondary)' }}>{fc.meaning_vi}</span>
+                          </span>
+                          {onSaveToSrs && (
+                            <button
+                              type="button"
+                              disabled={isSaved}
+                              onClick={() => {
+                                setSrsSavedWords(prev => ({ ...prev, [fcKey]: true }));
+                                onSaveToSrs({
+                                  type: 'FLASHCARD',
+                                  word: fc.word,
+                                  data: { flashcardId: fc.id, code: fc.code, questionId: question.id },
+                                });
+                              }}
+                              style={{
+                                border: 'none',
+                                background: isSaved ? 'var(--ds-success-bg)' : 'var(--ds-accent-bg)',
+                                color: isSaved ? 'var(--ds-success)' : 'var(--ds-accent)',
+                                borderRadius: '0.35rem',
+                                padding: '0.15rem 0.45rem',
+                                fontSize: '0.7rem',
+                                fontWeight: 800,
+                                cursor: isSaved ? 'default' : 'pointer',
+                              }}
+                            >
+                              {isSaved ? '✓ FSRS' : '+ FSRS'}
+                            </button>
+                          )}
+                          <a
+                            href={`/toeic/mistakes-srs?card=${encodeURIComponent(fc.code)}`}
+                            style={{
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              color: 'var(--ds-accent)',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            Học thẻ &rarr;
+                          </a>
                         </div>
                       );
                     })}
